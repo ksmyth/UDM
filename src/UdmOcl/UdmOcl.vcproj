@@ -4,8 +4,10 @@
 	Version="7.10"
 	Name="UdmOcl"
 	ProjectGUID="{5106C980-BC3D-48C5-A033-0D58C20F9980}"
-	SccProjectName="&quot;$/Udm/src/UdmOcl&quot;, SAPAAAAA"
-	SccLocalPath=".">
+	SccProjectName="&quot;$/MoBIESTransition/udm_ns/src/UdmOcl&quot;, INZAAAAA"
+	SccAuxPath=""
+	SccLocalPath="."
+	SccProvider="MSSCCI:Microsoft Visual SourceSafe">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
