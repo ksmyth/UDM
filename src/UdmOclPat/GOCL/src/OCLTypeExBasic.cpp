@@ -9,6 +9,7 @@
 
 #include "OCLObjectExBasic.h"
 #include "math.h"
+#include <algorithm>
 
 //--------------------------8><----------
 #ifndef _WIN32
@@ -906,7 +907,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_COLLECTION( collThis, GetThis() );
-			SetResult( CREATE_BOOLEAN( GetTypeManager(), std::find( collThis.begin(), collThis.end(), GetArgument( 0 ) ) != collThis.end() ) );
+			SetResult( CREATE_BOOLEAN( GetTypeManager(), find( collThis.begin(), collThis.end(), GetArgument( 0 ) ) != collThis.end() ) );
 		}
 	};
 

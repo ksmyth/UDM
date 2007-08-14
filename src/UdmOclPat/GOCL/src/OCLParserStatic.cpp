@@ -177,7 +177,7 @@ void InitializeTokenSets()
 TokenSet Union( const TokenSet& setTokens1, const TokenSet& setTokens2 )
 {
 	TokenSet setResult( setTokens1 );
-	for ( TokenSet::iterator i = setTokens2.begin() ; i != setTokens2.end() ; ++i )
+	for ( TokenSet::const_iterator i = setTokens2.begin() ; i != setTokens2.end() ; ++i )
 		setResult.insert( *i );
 	return setResult;
 }
@@ -302,7 +302,7 @@ std::string PrintToken( int iToken, bool bQuote )
 std::string PrintTokens( const TokenSet& setTokens )
 {
 	std::string strTokens( " " );
-	for ( TokenSet::iterator i = setTokens.begin() ; i != setTokens.end() ; i++ )
+	for ( TokenSet::const_iterator i = setTokens.begin() ; i != setTokens.end() ; i++ )
 		strTokens += PrintToken( *i, true ) + " ";
 	return strTokens;
 }
@@ -314,21 +314,21 @@ bool Contains( const TokenSet& setTokens, int iToken )
 	switch ( iToken ) {
 		case MULTIPLE :	case DIVIDE :	case DIVIDEINT : case PERCENT : case MODULO :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_MULTIPLICATIVE );
+				TokenSet::const_iterator i = setTokens.find( CLASS_MULTIPLICATIVE );
 				if ( i != setTokens.end() )
 					return true;
 				break;
 			}
 		case NOT :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_UNARY );
+				TokenSet::const_iterator i = setTokens.find( CLASS_UNARY );
 				if ( i != setTokens.end() )
 					return true;
 				break;
 			}
 		case MINUS :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_UNARY );
+				TokenSet::const_iterator i = setTokens.find( CLASS_UNARY );
 				if ( i != setTokens.end() )
 					return true;
 				i = setTokens.find( CLASS_ADDITIVE );
@@ -338,28 +338,28 @@ bool Contains( const TokenSet& setTokens, int iToken )
 			}
 		case PLUS :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_ADDITIVE );
+				TokenSet::const_iterator i = setTokens.find( CLASS_ADDITIVE );
 				if ( i != setTokens.end() )
 					return true;
 				break;
 			}
 		case LESS : case LESSEQUAL : case LESSGREATER : case EQUAL : case DOUBLEEQUAL : case NONEQUAL : case GREATER : case GREATEREQUAL :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_RELATIONAL );
+				TokenSet::const_iterator i = setTokens.find( CLASS_RELATIONAL );
 				if ( i != setTokens.end() )
 					return true;
 				break;
 			}
 		case XOR :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_LOGICAL );
+				TokenSet::const_iterator i = setTokens.find( CLASS_LOGICAL );
 				if ( i != setTokens.end() )
 					return true;
 				break;
 			}
 		case AND : case SC_AND :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_LOGICAL_AND );
+				TokenSet::const_iterator i = setTokens.find( CLASS_LOGICAL_AND );
 				if ( i != setTokens.end() )
 					return true;
 				i = setTokens.find( CLASS_LOGICAL );
@@ -369,7 +369,7 @@ bool Contains( const TokenSet& setTokens, int iToken )
 			}
 		case OR : case SC_OR :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_LOGICAL_OR );
+				TokenSet::const_iterator i = setTokens.find( CLASS_LOGICAL_OR );
 				if ( i != setTokens.end() )
 					return true;
 				i = setTokens.find( CLASS_LOGICAL );
@@ -379,7 +379,7 @@ bool Contains( const TokenSet& setTokens, int iToken )
 			}
 		case IMPLIES : case SC_IMPLIES :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_LOGICAL_IMPLIES );
+				TokenSet::const_iterator i = setTokens.find( CLASS_LOGICAL_IMPLIES );
 				if ( i != setTokens.end() )
 					return true;
 				i = setTokens.find( CLASS_LOGICAL );
@@ -389,33 +389,33 @@ bool Contains( const TokenSet& setTokens, int iToken )
 			}
 		case TRUEE: case FALSEE :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_BOOLEAN );
+				TokenSet::const_iterator i = setTokens.find( CLASS_BOOLEAN );
 				if ( i != setTokens.end() )
 					return true;
 				break;
 			}
 		case DOT : case ARROWW :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_CALLKIND );
+				TokenSet::const_iterator i = setTokens.find( CLASS_CALLKIND );
 				if ( i != setTokens.end() )
 					return true;
 				break;
 			}
 		case PRE : case POST : case DEFATTRIBUTE : case DEFMETHOD :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_PREPOST );
+				TokenSet::const_iterator i = setTokens.find( CLASS_PREPOST );
 				if ( i != setTokens.end() )
 					return true;
 			}
 		case INV :
 			{
-				TokenSet::iterator i = setTokens.find( CLASS_STEREOTYPES );
+				TokenSet::const_iterator i = setTokens.find( CLASS_STEREOTYPES );
 				if ( i != setTokens.end() )
 					return true;
 				break;
 			}
 	}
-	TokenSet::iterator i = setTokens.find( iToken );
+	TokenSet::const_iterator i = setTokens.find( iToken );
 	return i != setTokens.end();
 }
 
@@ -423,7 +423,7 @@ bool Contains( const TokenSet& setTokens1, const TokenSet& setTokens2 )
 {
 	if ( setTokens2.empty() )
 		return setTokens1.empty();
-	for ( TokenSet::iterator i = setTokens2.begin() ; i != setTokens2.end() ; ++i )
+	for ( TokenSet::const_iterator i = setTokens2.begin() ; i != setTokens2.end() ; ++i )
 		if ( ! Contains( setTokens1, *i ) )
 			return false;
 	return true;
