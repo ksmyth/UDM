@@ -6,6 +6,14 @@
 #include "childrenorderTest.h"
 #include "LampDiagram.h"
 
+#ifdef WIN32
+#include <io.h>
+#include <stdio.h>
+#else	//WIN32
+#include <unistd.h>
+#endif	//WIN32
+
+
 // Registers the fixture into the 'registry'
 
 CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::childrenorderTest );
@@ -41,6 +49,15 @@ const char * UdmTests::childrenorderTest::getRndFileName()
 
 		return t_dir_name;
 };
+
+void UdmTests::childrenorderTest::removeFile(const string &pathname)
+{
+#ifdef WIN32
+	_unlink(pathname.c_str());
+#else
+	unlink(pathname.c_str());
+#endif
+}
 
 bool UdmTests::childrenorderTest::ordertest(const char * dgr_name)
 {
@@ -146,6 +163,7 @@ void UdmTests::childrenorderTest::testDOM()
 	const char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".xml";
 	ordertest(fname_std.c_str());
+	removeFile(fname_std);
 };
 
 void UdmTests::childrenorderTest::testMEM()
@@ -153,4 +171,5 @@ void UdmTests::childrenorderTest::testMEM()
 	const char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".mem";
 	ordertest(fname_std.c_str());
+	removeFile(fname_std);
 };
