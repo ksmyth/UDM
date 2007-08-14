@@ -502,7 +502,7 @@
 		
 		<!-- Generate Java UDM API documentation --> 
 		<mkdir dir="${judm.dist.dir}/apidoc" />
-		<javadoc defaultexcludes="yes" verbose="no" destdir="${judm.dist.dir}/apidoc" windowtitle="UDM API">
+		<javadoc defaultexcludes="yes" useexternalfile="yes" verbose="no" destdir="${judm.dist.dir}/apidoc" windowtitle="UDM API">
 			<fileset dir="${util.src.dir}" defaultexcludes="yes" />
 			<fileset dir="${udmswig.src.dir}" defaultexcludes="yes" />
 			<fileset dir="${udmswiglight.src.dir}" defaultexcludes="yes" />
@@ -581,7 +581,7 @@
 		
 		<!-- Generate JavaAPI documentation for the domain specific code  -->
 		<mkdir dir="${dist.dir}/${dspackage}/apidoc" />
-		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/${dspackage}/apidoc" windowtitle="${dspackage} UDM API">
+		<javadoc defaultexcludes="yes" useexternalfile="yes" verbose="no" destdir="${dist.dir}/${dspackage}/apidoc" windowtitle="${dspackage} UDM API">
 			<fileset dir="${dist.dir}/${dspackage}/src" defaultexcludes="yes">
 			</fileset>
 		</javadoc>
