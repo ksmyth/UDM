@@ -44,7 +44,7 @@ void CGenerator::Generate()
 
 	GenerateProjectFile();
 
-	std::string cmdline = "call %UDM_3RDPARTY_PATH%\\mpc\\mpc.exe -features \"mfc=1\" -type vc71 -ti vc7dll ";
+	std::string cmdline = "call \"%UDM_3RDPARTY_PATH%\\mpc\\mpc.exe\" -features \"mfc=1\" -type vc71 -ti vc7dll ";
 	cmdline += m_strDestinationPath+_INTERPRETER_CODE_PATH+"Component.mpc";
 
 	system(cmdline.c_str());
