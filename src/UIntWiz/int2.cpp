@@ -151,8 +151,8 @@ BOOL CInterior2::OnInitDialog()
 	
 	m_bIncludeUdm=FALSE;
 	//Ananth
-	char l_strSingleVal[20];
-	if(GetEnvironmentVariable("UDM_PATH", l_strSingleVal,20)) {
+	char l_strSingleVal[255];
+	if(GetEnvironmentVariable("UDM_PATH", l_strSingleVal,255)) {
 		m_strUdmPath=l_strSingleVal;
 	}
 	//end
