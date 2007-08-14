@@ -122,23 +122,25 @@ public:
 	AttributeObject(std::string str);
 	~AttributeObject();
 //functions called by the parser
-	setName(const std::string str);
-	setType(const std::string str);
-	setOrder(const std::string str);
-	setVisib(const std::string str);
-	setVisibNp(const std::string str);
-	setVisib(const char c);
-	setVolReg(const std::string str);
+	void setName(const std::string str);
+	void setType(const std::string str);
+	void setOrder(const std::string str);
+	void setVisib(const std::string str);
+	void setVisibNp(const std::string str);
+	void setVisib(const char c);
+	void setVolReg(const std::string str);
 
-	addDefBool(const std::string str);
-	addDefNum(const std::string str);
-	addDefReal(const std::string str);
-	addDefStr(const std::string str);
+	void addDefBool(const std::string str);
+	void addDefNum(const std::string str);
+	void addDefReal(const std::string str);
+	void addDefStr(const std::string str);
 
-	
+	//what are these for ?
+	/*
 	isTypeBool() const;
 	isTypeReal() const;
 	isTypeString() const;
+	*/
 	bool CheckNum(const std::string str) const;
 
 	//parse

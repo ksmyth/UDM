@@ -78,7 +78,7 @@ CardinalityObject::CardinalityObject()
 	theInstance = this;
 };
 
-CardinalityObject::ResetInstance()
+void CardinalityObject::ResetInstance()
 {
 	theInstance = NULL;
 };

@@ -180,13 +180,13 @@ AttributeObject* AttributeObject::GetInstance()
 	return theInstance;
 };
 
-AttributeObject::setName(const std::string str)
+void AttributeObject::setName(const std::string str)
 {
 	this->name = str;
 	name_set = true;
 };
 
-AttributeObject::setType(const std::string str)
+void AttributeObject::setType(const std::string str)
 		{
 	
 	if (!str.compare(TS_INTEGER)) t = Integer;
@@ -217,7 +217,7 @@ std::string AttributeObject::strType()
 };
 
 
-AttributeObject::setOrder(const std::string str)
+void AttributeObject::setOrder(const std::string str)
 {
 	if (!str.compare(OS_ORDERED)) ordered = true;
 	else if (!str.compare(OS_UNORDERED)) ordered = false;
@@ -228,14 +228,14 @@ AttributeObject::setOrder(const std::string str)
 };
 
 
-AttributeObject::setVolReg(const std::string str)
+void AttributeObject::setVolReg(const std::string str)
 {
 	if (!str.compare(VSS_VOLATILE)) nonpersistent = true;
 	if (!str.compare(VSS_REGISTER)) reg_val = true;
 	
 };
 
-AttributeObject::setVisib(const std::string str)
+void AttributeObject::setVisib(const std::string str)
 {
 	if (!str.compare(VSS_PUBLIC))
 		vis = Public;
@@ -249,7 +249,7 @@ AttributeObject::setVisib(const std::string str)
 	else throw AttributeObjectException(std::string("Unknown visibility specifier: " ) + str);
 };
 
-AttributeObject::setVisibNp(const std::string str)
+void AttributeObject::setVisibNp(const std::string str)
 {
 	if (!str.compare(VSS_PUBLIC))
 		vis = Public;
@@ -276,7 +276,7 @@ std::string AttributeObject::strVisibility()
 	return "";
 };
 
-AttributeObject::setVisib(const char c)
+void AttributeObject::setVisib(const char c)
 {
 	switch (c)
 	{
@@ -321,7 +321,7 @@ bool AttributeObject::CheckCard() const
 
 };
 
-AttributeObject::addDefBool(const std::string str)
+void AttributeObject::addDefBool(const std::string str)
 {
 	if (t != Boolean)
 		throw AttributeObjectException("The attribute is not of boolean type!");
@@ -345,7 +345,7 @@ bool AttributeObject::CheckNum(const std::string str) const
 	else return true;
 };
 
-AttributeObject::addDefReal(const std::string str)
+void AttributeObject::addDefReal(const std::string str)
 {
 	if ((t != Integer) && (t != Real))
 		throw AttributeObjectException(std::string("The attribute is not of numerical type. Val:  ") + str + ", Attribute specifier: " + UML_attribute );
@@ -368,7 +368,7 @@ AttributeObject::addDefReal(const std::string str)
 	real_int_set = !real_int_set;
 
 };
-AttributeObject::addDefNum(const std::string str)
+void AttributeObject::addDefNum(const std::string str)
 {
 	if ((t != Integer) && (t != Real))
 		throw AttributeObjectException(std::string("The attribute is not of numerical type. Val:  ") + str + ", Attribute specifier: " + UML_attribute );
@@ -385,7 +385,7 @@ AttributeObject::addDefNum(const std::string str)
 
 };
 
-AttributeObject::addDefStr(const std::string str)
+void AttributeObject::addDefStr(const std::string str)
 {
 	//the parser should guarantee this never happens
 	if ( t != String)
