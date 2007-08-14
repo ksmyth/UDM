@@ -4,4 +4,4 @@ Created-By: 1.4.2_08-b03 (Sun Microsystems Inc.)
 Specification-Title: GeneTF Core Classes
 Specification-Vendor: Vanderbilt University, ISIS
 Implementation-Title: edu.vanderbilt.isis.genetf
-Implementation-Version: 1.0,2
+Implementation-Version: 1.0,3
