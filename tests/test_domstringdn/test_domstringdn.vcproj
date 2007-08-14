@@ -166,7 +166,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="LampDiagram.cpp">
+				RelativePath="..\..\samples\LampDiagram.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -213,23 +213,23 @@
 				RelativePath="domstringdnTest.h">
 			</File>
 			<File
-				RelativePath=".\LampDiagram.h">
+				RelativePath="..\..\samples\LampDiagram.h">
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\samples\LampDiagram.xml">
+			RelativePath="..\..\samples\LampDiagram_udm.xml">
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot; -v"
+					CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; &quot;$(InputPath)&quot; -v"
 					Outputs="$(InputName).xsd;$(InputName).cpp;$(InputName).h"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot; -v
+					CommandLine="&quot;$(UDM_PATH)\bin\UdmD.exe&quot; &quot;$(InputPath)&quot; -v
 "
 					Outputs="$(InputName).xsd;$(InputName).cpp;$(InputName).h"/>
 			</FileConfiguration>
