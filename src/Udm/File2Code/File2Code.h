@@ -10,6 +10,7 @@ public:
 protected:
   std::string m_name;
   std::string m_infname;
+  std::string m_packageName;
   GenModeType m_mode;
 protected:
   void genJavaTail(std::ostream& out);
@@ -28,7 +29,8 @@ protected:
 public:
   File2Code(const std::string& name, 
                     const std::string& infname, 
-                    const GenModeType& mode);
+                    const GenModeType& mode,
+                    const std::string& pn = "");
   void gen(std::ostream& out);
   ~File2Code(void);
 };

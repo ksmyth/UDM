@@ -8,10 +8,12 @@
 
 File2Code::File2Code(const std::string& name, // the name of the generated source file
                     const std::string& infname, // the input xsd file
-                    const GenModeType& mode):   // mode = java or cpp
+                    const GenModeType& mode,   // mode = java or cpp
+                    const std::string& pn): // package name for java
   m_name(name),
   m_infname (infname),
-  m_mode(mode)
+  m_mode(mode),
+  m_packageName(pn)
 {
 }
 
@@ -53,6 +55,7 @@ void  File2Code::genCpp(std::ostream& out)
 //==================================
 void File2Code::genJavaHeader(std::ostream& out)
 {
+      out << "package " << m_packageName << ";" << std::endl;
       out << "public class " << m_name << "{" << std::endl;
       out << "\tprivate static String str = new String("");" << std::endl << std::endl;
       out << "\tpublic static String getString()" << std::endl;
