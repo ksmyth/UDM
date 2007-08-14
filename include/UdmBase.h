@@ -1100,7 +1100,7 @@ namespace Udm
 		TempStringArrAttrItem  end()
 		{
 			vector<string> a = impl->getTempStringAttrArr(meta);
-			TempStringArrAttrItem array_indexer(a, a.size(), impl, meta);
+			TempStringArrAttrItem array_indexer(a, (int)a.size(), impl, meta);
 			return array_indexer;
 		}
 
@@ -1177,7 +1177,7 @@ namespace Udm
 		TempIntegerArrAttrItem  end()
 		{
 			vector<__int64> a = impl->getTempIntegerAttrArr(meta);
-			TempIntegerArrAttrItem array_indexer(a, a.size(), impl, meta);
+			TempIntegerArrAttrItem array_indexer(a, (int)a.size(), impl, meta);
 			return array_indexer;
 		}
 
@@ -1257,7 +1257,7 @@ namespace Udm
 		TempRealArrAttrItem  end()
 		{
 			vector<double> a = impl->getTempRealAttrArr(meta);
-			TempRealArrAttrItem array_indexer(a, a.size(), impl, meta);
+			TempRealArrAttrItem array_indexer(a, (int)a.size(), impl, meta);
 			return array_indexer;
 		}
 
@@ -1335,7 +1335,7 @@ namespace Udm
 		TempBooleanArrAttrItem  end()
 		{
 			vector<bool> a = impl->getTempBooleanAttrArr(meta);
-			TempBooleanArrAttrItem array_indexer(a, a.size(), impl, meta);
+			TempBooleanArrAttrItem array_indexer(a, (int)a.size(), impl, meta);
 			return array_indexer;
 		}
 
@@ -1426,7 +1426,7 @@ namespace Udm
 		StringArrAttrItem  end()
 		{
 			vector<string> a = impl->getStringAttrArr(meta);
-			StringArrAttrItem array_indexer(a, a.size(), impl, meta);
+			StringArrAttrItem array_indexer(a, (int)a.size(), impl, meta);
 			return array_indexer;
 		}
 	
@@ -1571,7 +1571,7 @@ namespace Udm
 		IntegerArrAttrItem end()
 		{
 			vector<__int64> a = impl->getIntegerAttrArr(meta);
-			IntegerArrAttrItem array_indexer(a, a.size(), impl, meta);
+			IntegerArrAttrItem array_indexer(a, (int)a.size(), impl, meta);
 			return array_indexer;
 		}
 
@@ -1650,7 +1650,7 @@ namespace Udm
 		RealArrAttrItem end()
 		{
 			vector<double> a = impl->getRealAttrArr(meta);
-			RealArrAttrItem  array_indexer(a, a.size(), impl, meta);
+			RealArrAttrItem  array_indexer(a, (int)a.size(), impl, meta);
 			return array_indexer;
 		}
 
