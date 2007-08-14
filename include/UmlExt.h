@@ -14,6 +14,10 @@ this software.
 /*
 CHANGELOG
 =========
+	11/24/05	-	endre
+
+					Added GetClassFromCrossDgr, which returns the corresponding class from the cross diagram
+
 	12/06/04	-	endre
 
 					Added
@@ -187,6 +191,9 @@ namespace Uml
 	UDM_DLL bool GetChildRoleChain(const Class & origin, const Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain = ChildRoleChain());
 
 	UDM_DLL Namespace GetTheOnlyNamespace(const Diagram & dgr);
+
+	// get the corresponding class from the cross diagram
+	UDM_DLL Class GetClassFromCrossDgr(const Diagram &cross_dgr, const Class &cl);
 
 	UDM_DLL Diagram GetDiagram(const Class &c);
 	UDM_DLL Diagram GetDiagram(const Association &assoc);
