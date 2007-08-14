@@ -217,7 +217,7 @@ STDMETHODIMP CComponentObj::ObjectEvent( IMgaObject * obj, unsigned long eventma
 
 			CComQIPtr<IMgaFCO> spFCO = obj;
 			if( spFCO ) {
-				GOCL_STL_NS()string strKind = GME::GetObjectKind( spFCO.p );
+				std::string strKind = GME::GetObjectKind( spFCO.p );
 				if ( strKind == "Constraint" ) {
 					CWaitCursor crsrWait;
 					OCLUML::ConstraintVector vecConstraints;
