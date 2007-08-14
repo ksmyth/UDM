@@ -14,6 +14,9 @@ this software.
 /*
 CHANGELOG:
 
+  01/11/06 - endre
+   - setup associations roles to cross diagram in InitializeDgr(dgr) and InitializeNS(ns)
+
   11/23/05 - endre
    - remove redundant call to SingleCPPNamespace from UmlClassCPPName
 
@@ -447,31 +450,29 @@ UmlCompositionInitFuncInfo GenerateCPPCompositionInitFunctions(const set< ::Uml:
 */
 void GenerateCPPCrossObjectInits(const set< ::Uml::Class> &classes, const ::Uml::Diagram & cross_dgr, ostream & output, bool isCrossDgr)
 {
-	set< ::Uml::Class>::const_iterator c;
-	if (isCrossDgr)
+	if (cross_dgr && isCrossDgr)
 	//if (cross_dgr &&(cross_dgr != diagram))
 	{
 		//		M2::meta_src = CL::M2::meta_src;		
+		set< ::Uml::Class>::const_iterator c;
 		for(c = classes.begin(); c != classes.end(); c++ )	
 		{
 			::Uml::Class cl = *c;
-			::Uml::Class cross_cl;
-			if (cross_dgr)
-			{
-				cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
-				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
-			}
+			::Uml::Class cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 			if (cross_cl)
 			{
 				set< ::Uml::AssociationRole> ar = cross_cl.associationRoles();
 				set< ::Uml::AssociationRole>::iterator ar_i = ar.begin();
 				while (ar_i != ar.end())
 				{
-					output << "\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
-					  " = " << UmlClassCPPName(cross_cl) << "::meta_" << ::Uml::theOther((*ar_i)).name() << ";" << endl;
+					string cross_cl_meta = UmlClassCPPName(cross_cl) + "::meta_" + (string) ::Uml::theOther((*ar_i)).name();
+					output << "\t\t\t" << "if (" << cross_cl_meta << ")" << endl;
+					output << "\t\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
+					  " = " << cross_cl_meta << ";" << endl;
+					output << "\t\t\telse" << endl;
+					output << "\t\t\t\t" << "throw udm_exception(\"'" << cross_cl_meta << "' is NULL!\");" << endl;
 
 					::Uml::AssociationRole zz	= ::Uml::theOther(*ar_i);
-					string aname(MakeRoleName(zz));
 
 					::Uml::Association ass = ar_i->parent();
 					::Uml::Class a_class = ass.assocClass();
@@ -479,9 +480,13 @@ void GenerateCPPCrossObjectInits(const set< ::Uml::Class> &classes, const ::Uml:
 					if(a_class) 
 					{
 						::Uml::Class cl2 = zz.target();
+						string cross_cl2_meta = UmlClassCPPName(cl2) + "::meta_" + (string) ar_i->name();
 						
-						output << "\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
-						  "_rev = " << UmlClassCPPName(cl2) << "::meta_"<<ar_i->name()<< ";" <<endl;
+						output << "\t\t\t" << "if (" << cross_cl2_meta << ")" << endl;
+						output << "\t\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
+						"_rev = " << cross_cl2_meta << ";" << endl;
+						output << "\t\t\telse" << endl;
+						output << "\t\t\t\t" << "throw udm_exception(\"'" << cross_cl2_meta << "' is NULL!\");" << endl;
 
 					}
 					ar_i++;
@@ -558,7 +563,7 @@ void GenerateCPPInitialize(const ::Uml::Diagram &dgr, const ::Uml::Diagram & cro
 		output << "\t\tInitComposition" << *comp_inits_i << "();" << endl;
 	}
 
-	//call the intializers for association roles created in the cross diagrams
+	//call the initializers for association roles created in the cross diagrams
 	GenerateCPPCrossObjectInits(dgr.classes(), cross_dgr, output, isCrossDgr);
 
 	//call the initializer for inheritence in the same namespace
@@ -608,7 +613,7 @@ void GenerateCPPInitialize(const ::Uml::Namespace &ns, const ::Uml::Diagram & cr
 		output << "\t\t\tInitComposition" << *comp_inits_i << "();" << endl;
 	}
 
-	//call the intializers for association roles created in the cross diagrams
+	//call the initializers for association roles created in the cross diagrams
 	GenerateCPPCrossObjectInits(ns.classes(), cross_dgr, output, isCrossDgr);
 
 	//call the initializer for inheritence in the same namespace
@@ -623,7 +628,7 @@ void GenerateCPPInitialize(const ::Uml::Namespace &ns, const ::Uml::Diagram & cr
 	Function building the alternate InitializeNS(const ::Uml::Namespace &ns) function
 */
 
-void GenerateCPPInitializeContainer(const set< ::Uml::Class> & classes, bool is_dgr, ostream & output, const string & macro)
+void GenerateCPPInitializeContainer(const set< ::Uml::Class> & classes, const ::Uml::Diagram &cross_dgr, bool isCrossDgr, bool is_dgr, ostream & output, const string & macro)
 {
 	set< ::Uml::Class>::const_iterator c;
 
@@ -728,7 +733,10 @@ void GenerateCPPInitializeContainer(const set< ::Uml::Class> & classes, bool is_
 		//_end_ association roles
 	};
 	output << endl;
-	
+
+	//call the initializers for association roles created in the cross diagrams
+	GenerateCPPCrossObjectInits(classes, cross_dgr, output, isCrossDgr);
+
 	output << "\t\t\t" << endl << "\t\t}" << endl; //end of InitializeNS(const ::Uml::Namespace & ns); || InitializeDgr(const ::Uml::Diagram & dgr)
 };
 
@@ -772,7 +780,7 @@ void GenerateCPPDiagram(const ::Uml::Diagram &diagram, const ::Uml::Diagram &cro
 	GenerateCPPInitialize(diagram, cross_dgr, output, macro, hname, ass_inits, comps_inits, isCrossDgr);
 			
 	//generate InitializeDgr(const ::Uml::Diagram &dgr); function
-	GenerateCPPInitializeContainer(diagram.classes(), true, output,macro);
+	GenerateCPPInitializeContainer(diagram.classes(), cross_dgr, isCrossDgr, true, output,macro);
 }
 
 void GenerateCPPNamespace(const ::Uml::Namespace &ns, const ::Uml::Diagram &cross_dgr, bool isCrossDgr, const string &fname, ostream &output, const string &macro, int source_unit)
@@ -813,7 +821,7 @@ void GenerateCPPNamespace(const ::Uml::Namespace &ns, const ::Uml::Diagram &cros
 	GenerateCPPInitialize(ns, cross_dgr, output, macro, hname, ass_inits, comps_inits, isCrossDgr);
 			
 	//generate InitializeNS(const ::Uml::Namespace &ns); function
-	GenerateCPPInitializeContainer(ns.classes(), false, output,macro);
+	GenerateCPPInitializeContainer(ns.classes(), cross_dgr, isCrossDgr, false, output,macro);
 
 	if (!single_cpp_namespace)
 		output << "\t}" << endl;	
