@@ -2665,6 +2665,19 @@ namespace Udm
 		// in the metamodel, it can be serious error. If no problem they retrieve true.
 		bool GetIntValue(string strAttrName, __int64& value) const;
 		bool GetIntValue(string strAttrName, string& value) const;
+		
+		// Himanshu: array attribute getters
+		bool GetIntValues(string strAttrName, vector<__int64>& values) const;
+		bool GetRealValues(string strAttrName, vector<double>& values) const;
+		bool GetStrValues(string strAttrName, vector<string>& values) const;
+		bool GetBoolValues(string strAttrName, vector<bool>& value) const;
+
+		// Himanshu: array attribute setters
+		bool SetIntValues(string strAttrName, const vector<__int64>& values);
+		bool SetRealValues(string strAttrName, const vector<double>& values);
+		bool SetStrValues(string strAttrName, const vector<string>& values);
+		bool SetBoolValues(string strAttrName, const vector<bool>& values);
+
 
 		// UDM TOMI Paradigm Independent Interface
 		// get the value of Attribute named strAttrName of type String
