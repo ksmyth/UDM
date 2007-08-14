@@ -3,7 +3,6 @@
 
 
 
-#include "LampDiagram.h"
 #include "UmlExt.h"
 
 #include "UdmStatic.h"

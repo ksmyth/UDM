@@ -24,7 +24,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\include"
+				AdditionalIncludeDirectories="..\..\include;..\..\samples"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -38,7 +38,10 @@
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+				Description="Copying LampDiagram.xsd"
+				CommandLine="copy ..\..\samples\LampDiagram.xsd ."
+				Outputs="LampDiagram.xsd"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib Xerces-c_2.lib zlib.lib cppunit_dll.lib"
@@ -86,7 +89,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include"
+				AdditionalIncludeDirectories="..\..\include;..\..\samples"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -101,7 +104,10 @@
 				DebugInformationFormat="4"
 				CompileAs="0"/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCCustomBuildTool"
+				Description="Copying LampDiagram.xsd"
+				CommandLine="copy ..\..\samples\LampDiagram.xsd ."
+				Outputs="LampDiagram.xsd"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib cppunitd_dll.lib"
@@ -215,29 +221,6 @@
 			</File>
 			<File
 				RelativePath="UDMTest.h">
-			</File>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
-			<File
-				RelativePath="..\..\samples\LampDiagram_udm.xml">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; &quot;$(InputPath)&quot; -v
-"
-						Outputs="$(InputName).xsd;$(InputName).cpp;$(InputName).h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="&quot;$(UDM_PATH)\bin\UdmD.exe&quot; &quot;$(InputPath)&quot; -v
-"
-						Outputs="$(InputName).xsd;$(InputName).cpp;$(InputName).h"/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>
