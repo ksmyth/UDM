@@ -91,7 +91,7 @@ namespace OclImplementation
 				THROWOCL0( ET_RUNTIME, strMessage );
 			}
 
-		friend OclMeta::TypeManager;
+		friend class OclMeta::TypeManager;
 	};
 
 //##############################################################################################################################################

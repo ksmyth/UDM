@@ -197,3 +197,4 @@ namespace OclImplementation
 }; // namespace OclImplementation
 
 #endif // OCLObject_h
+

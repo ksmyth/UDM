@@ -52,4 +52,4 @@ namespace OclCommon {
 
 }; // namespace OclCommon
 
-#endif OCLCommon_h
+#endif 

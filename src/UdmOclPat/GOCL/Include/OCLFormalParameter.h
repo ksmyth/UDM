@@ -10,7 +10,7 @@
 
 #pragma warning ( disable : 4786 )
 
-#include "OclCommon.h"
+#include "OCLCommon.h"
 
 namespace OclCommon
 {
