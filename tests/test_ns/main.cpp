@@ -11,7 +11,7 @@ void writeTest(const std::string& fname)
   out.CreateNew(fname.c_str(), "AB.xsd",	test_ns::AB::AB::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
   test_ns::AB::AB ab = test_ns::AB::AB::Cast(out.GetRootObject());
-  test_ns::test_ns::B1 b1 = test_ns::test_ns::B1::Create(ab);
+  test_ns::B::B1 b1 = test_ns::B::B1::Create(ab);
   test_ns::AB::AB1 ab1 = test_ns::AB::AB1::Create(ab);
 
 	out.CloseWithUpdate();

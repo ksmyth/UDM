@@ -25,7 +25,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;C:\MoBIESTransition\udm_ns\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;UDM_DYNAMIC_LINKING"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -37,7 +37,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=" UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib  zlibD.lib"
+				AdditionalDependencies=" UdmDllD.lib xerces-c_2D.lib  "
 				OutputFile="$(OutDir)/test_ns.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\lib"
