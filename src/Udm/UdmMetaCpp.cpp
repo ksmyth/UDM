@@ -510,7 +510,8 @@ void GenerateCPP(const ::Uml::Diagram &diagram,
 
 		output << "namespace " << fname << " {" << endl << endl;
 		output << "\t::Uml::Diagram umldiagram;" << endl << endl;
-			
+
+		bool single_cpp_namespace = SingleCPPNamespace(diagram);
 		set< ::Uml::Namespace> nses = diagram.namespaces();
 		
 		for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
