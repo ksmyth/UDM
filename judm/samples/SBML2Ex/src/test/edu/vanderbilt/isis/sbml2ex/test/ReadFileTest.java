@@ -7,7 +7,6 @@ package edu.vanderbilt.isis.sbml2ex.test;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import junit.framework.TestCase;
 import edu.vanderbilt.isis.sbml2ex.FactoryRepository;
 import edu.vanderbilt.isis.sbml2ex.math.apply;
@@ -133,9 +132,15 @@ public class ReadFileTest extends TestCase {
         fillSbml(root);
         printSBML(root);
 
+        String result = gtf.checkConstraints();
+        if (result.trim().compareTo("") == 0) {
+            System.out.println("No constraint violation found.");
+        } else {
+            System.out.println("Constraint violation found:\n" + result);
+        }
+
         gtf.save();
     }
-
 
     /**
       * Opens an existing data network from a file.
@@ -146,7 +151,7 @@ public class ReadFileTest extends TestCase {
         System.out.println("\tOpenExistingFromFile");
         System.out.println("-----------------------------------");
 
-        /*readFileTest("samples/compOutRef.xml");
+        readFileTest("samples/compOutRef.xml");
         readFileTest("samples/compUnitRef.xml");
         readFileTest("samples/delayLabelRef.xml");
         readFileTest("samples/eventUnitRef.xml");
@@ -180,11 +185,15 @@ public class ReadFileTest extends TestCase {
         readFileTest("samples/l2v1-units.xml");
 
         //jigcell
-        readFileTest("samples/yeastnew2_core.xml");
-        readFileTest("samples/frogegg.xml");
+        //readFileTest("samples/yeastnew2_core.xml");
+        //readFileTest("samples/frogegg.xml");
 
         //bc
-        readFileTest("samples/Lac_v1.2.2.xml");*/
+        readFileTest("samples/Lac_v1.2.2.xml");
+        
+        // flux
+        //readFileTest("samples/JR904.xml");
+
         //dbi, unigene 
         readFileTest("samples/demo_30_paintfb_out.xml");
     }
@@ -201,6 +210,13 @@ public class ReadFileTest extends TestCase {
         System.out.println(fileName);
 
         printSBML(root);
+
+        String result = gtf.checkConstraints();
+        if (result.trim().compareTo("") == 0) {
+            System.out.println("No constraint violation found.");
+        } else {
+            System.out.println("Constraint violation found:\n" + result);
+        }
 
         gtf.close();
     }
@@ -293,48 +309,47 @@ public class ReadFileTest extends TestCase {
                 event e_v = evA[i];
 
                 delay d_v = e_v.getdelayChild();
-
-                math[] mvA = d_v.getmathChildren();
-                for (int j = 0; j < mvA.length; j++) {
-                    math m_v = mvA[j];
-
-                    apply[] appA = m_v.getapplyChildren();
-                    for (int k = 0; k < appA.length; k++) {
-                        apply app = appA[k];
-
-                        cn[] cnA = app.getcnChildren();
-                        for (int l = 0; l < cnA.length; l++) {
-                            cn cn_v = cnA[l];
-                            System.out.println("cntype " + cn_v.gettype());
-                            System.out.println("cnval " + cn_v.getvalue());
-                        }
-
-                        ci[] ciA = app.getciChildren();
-                        for (int l = 0; l < ciA.length; l++) {
-                            ci ci_v = ciA[l];
-                            System.out.println("cival " + ci_v.getvalue());
-                        }
-                    }
-
-                    lambda[] lmA = m_v.getlambdaChildren();
-                    for (int k = 0; k < lmA.length; k++) {
-                        lambda lm_v = lmA[k];
-
-                        apply[] appA2 = lm_v.getapplyChildren();
-                        for (int l = 0; l < appA2.length; l++) {
-                            apply app = appA2[l];
+                if (d_v != null) {
+                    math m_v = d_v.getmathChild();
+                    if (m_v != null) {
+                        apply[] appA = m_v.getapplyChildren();
+                        for (int k = 0; k < appA.length; k++) {
+                            apply app = appA[k];
 
                             cn[] cnA = app.getcnChildren();
-                            for (int x = 0; x < cnA.length; x++) {
-                                cn cn_v = cnA[x];
+                            for (int l = 0; l < cnA.length; l++) {
+                                cn cn_v = cnA[l];
                                 System.out.println("cntype " + cn_v.gettype());
                                 System.out.println("cnval " + cn_v.getvalue());
                             }
 
                             ci[] ciA = app.getciChildren();
-                            for (int x = 0; x < ciA.length; x++) {
-                                ci ci_v = ciA[x];
+                            for (int l = 0; l < ciA.length; l++) {
+                                ci ci_v = ciA[l];
                                 System.out.println("cival " + ci_v.getvalue());
+                            }
+                        }
+
+                        lambda[] lmA = m_v.getlambdaChildren();
+                        for (int k = 0; k < lmA.length; k++) {
+                            lambda lm_v = lmA[k];
+
+                            apply[] appA2 = lm_v.getapplyChildren();
+                            for (int l = 0; l < appA2.length; l++) {
+                                apply app = appA2[l];
+
+                                cn[] cnA = app.getcnChildren();
+                                for (int x = 0; x < cnA.length; x++) {
+                                    cn cn_v = cnA[x];
+                                    System.out.println("cntype " + cn_v.gettype());
+                                    System.out.println("cnval " + cn_v.getvalue());
+                                }
+
+                                ci[] ciA = app.getciChildren();
+                                for (int x = 0; x < ciA.length; x++) {
+                                    ci ci_v = ciA[x];
+                                    System.out.println("cival " + ci_v.getvalue());
+                                }
                             }
                         }
                     }
