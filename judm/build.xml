@@ -79,7 +79,7 @@
 			<pathelement location="${udmswiglight.classes.dir}" />
 			<pathelement location="${genetre.classes.dir}" />
 			<pathelement location="${genetf.classes.dir}" />
-			<fileset dir="lib/junit">
+			<fileset dir="${udm_3rdparty.dir}/junit">
 				<include name="junit.jar" />
 			</fileset>
 		</path>
@@ -367,6 +367,7 @@
 		</exec>
 		
 		<!-- Generate UDM XML from the XME XML file -->
+		<echo> Run ${udm.dir}\bin\udm.exe ${dspackage}_udm.xml ${udm_options} </echo>
 		<exec dir="samples/${dspackage}/meta" executable="cmd">
 			<arg line="/c ${udm.dir}\bin\udm.exe ${dspackage}_udm.xml ${udm_options}" />
 		</exec>
@@ -396,7 +397,7 @@
 		<antcall target="copy-binaries-linux"/>
 		
 		<!-- Copy the jUnit to the distribution directory -->
-		<copy todir="${judm.dist.dir}" file="lib/junit/junit.jar" />
+		<copy todir="${judm.dist.dir}" file="${udm_3rdparty.dir}/junit/junit.jar" />
 
 		<!-- Copy the Uml.xsd to the distribution directory -->
 		<copy todir="${judm.dist.dir}" file="${udm.etc.dir}/Uml.xsd" />
@@ -458,7 +459,7 @@
 		<antcall target="copy-binaries-linux"/>
 		
 		<!-- Copy the jUnit to the distribution directory -->
-		<copy todir="${judm.dist.dir}" file="lib/junit/junit.jar" />
+		<copy todir="${judm.dist.dir}" file="${udm_3rdparty.dir}/junit/junit.jar" />
 
 		<!-- Copy the Uml.xsd to the distribution directory -->
 		<copy todir="${judm.dist.dir}" file="${udm.etc.dir}/Uml.xsd" />
