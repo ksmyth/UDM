@@ -11,24 +11,35 @@ Requirements:
 - minizip
 - cppunit
 - pccts
-- Java SDK 1.4.2 (or later)
+- gcc-java 4.x (or later) or Java SDK 1.4.2 (or later)
 - ant
 - junit
 
-Build-environment preparation (Fedora Core 4):
+Build-environment preparation (Fedora 5):
 ----------------------------------------------
-- install the following rpms from Fedora:
-  ant, ant-junit, junit, swig and xml-commons-apis
-- install the Java jdk rpm from Sun
+- install the following rpms (and required dependencies) from
+  Fedora Core/Extras:
+  ant, ant-junit, ant-trax, cppunit-devel, java-sdk, junit,
+  swig and xml-commons-apis
 - install the following rpms from our repository: xerces-c,
   xerces-c-devel, xalan-c, xalan-c-devel, minizip, minizip-devel,
-  minizip-libs, cppunit, cppunit-devel, pccts
+  minizip-libs, pccts
+
+Build-environment preparation (Fedora Core 4):
+----------------------------------------------
+- install the following rpms (and required dependencies) from
+  Fedora Core/Extras:
+  ant, ant-junit, ant-trax, cppunit-devel, java-sdk, junit,
+  swig and xml-commons-apis
+- install the following rpms from our repository: xerces-c,
+  xerces-c-devel, xalan-c, xalan-c-devel, minizip, minizip-devel,
+  minizip-libs, pccts
 
 Build-environment preparation (Fedora Core 3):
 ----------------------------------------------
 - install the pccts rpm from Fedora
 - install the following rpms from the jpackage repository:
-  java-sun-compat, ant, ant-junit, junit and xml-commons-apis
+  java-sun-compat, ant, ant-junit, ant-trax, junit and xml-commons-apis
 - install the Java jdk rpm from Sun
 - install the following rpms from our repository: xerces-c,
   xerces-c-devel, xalan-c, xalan-c-devel, minizip, minizip-devel,
