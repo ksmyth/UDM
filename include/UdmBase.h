@@ -1859,7 +1859,13 @@ namespace Udm
 		CrossAssocAttr(ObjectImpl *i, const ::Uml::AssociationRole &m) : impl(i), meta(m) { }
 
 		operator set<CLASS, Pred>() const;
-		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a);
+		CrossAssocAttr<CLASS, Pred> &operator =(const set<CLASS, Pred> &a);
+
+		CrossAssocAttr<CLASS, Pred> &operator =(const CrossAssocAttr<CLASS, Pred> &a)
+		{
+			set<CLASS, Pred> as = a;
+			return operator =(as);
+		}
 
 		const set<CLASS, Pred> operator +=(const CLASS &a) {
 			set<CLASS, Pred> xx(*this);
@@ -1904,7 +1910,7 @@ namespace Udm
 			return ret;
 		}
 
-		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a)
+		AssocAttr<CLASS, Pred> &operator =(const set<CLASS, Pred> &a)
 		{
 			vector<ObjectImpl*> b;
 
@@ -1917,7 +1923,13 @@ namespace Udm
 
 			impl->setAssociation(meta, b);
 
-			return a;
+			return *this;
+		}
+
+		AssocAttr<CLASS, Pred> &operator =(const AssocAttr<CLASS, Pred> &a)
+		{
+			set<CLASS, Pred> as = a;
+			return operator =(as);
 		}
 
 		const set<CLASS,Pred> operator +=(const CLASS &a) {
@@ -1947,6 +1959,11 @@ namespace Udm
 		operator CLASS() const;
 
 		const CLASS &operator =(const CLASS &a);
+
+		const CLASS &operator =(const CrossPointerAttr<CLASS> &a)
+		{
+			return operator =( (CLASS) a );
+		}
 	};
 
 
@@ -1983,6 +2000,11 @@ namespace Udm
 
 			return a;
 		}
+
+		const CLASS &operator =(const PointerAttr<CLASS> &a)
+		{
+			return operator =( (CLASS) a );
+		}
 	};
 
 // --------------------------- CrossAssocEndAttr
@@ -1999,6 +2021,11 @@ namespace Udm
 
 		operator CLASS() const;
 		const CLASS &operator =(const CLASS &a);
+
+		const CLASS &operator =(const CrossAssocEndAttr<CLASS> &a)
+		{
+			return operator =( (CLASS) a );
+		}
 	};
 
 
@@ -2034,6 +2061,12 @@ namespace Udm
 
 			return a;
 		}
+
+		const CLASS &operator =(const AssocEndAttr<CLASS> &a)
+		{
+			return operator =( (CLASS) a );
+		}
+
 	};
 
 // --------------------------- AClassCrossPointerAttr
@@ -2050,6 +2083,11 @@ namespace Udm
 
 		operator CLASS() const;
 		const CLASS &operator =(const CLASS &a);
+
+		const CLASS &operator =(const AClassCrossPointerAttr<CLASS, TARGETCLASS> &a)
+		{
+			return operator =( (CLASS) a );
+		}
 
 	};
 // --------------------------- AClassPointerAttr
@@ -2085,6 +2123,11 @@ namespace Udm
 			return a;
 		}
 
+		const CLASS &operator =(const AClassPointerAttr<CLASS, TARGETCLASS> &a)
+		{
+			return operator =( (CLASS) a );
+		}
+
 		CLASS SetLink(TARGETCLASS peer, Object parent, 
 			const ::Uml::Class &meta = CLASS::meta,
 			const ::Uml::CompositionChildRole &role = NULLCHILDROLE);
@@ -2105,7 +2148,13 @@ namespace Udm
 		AClassCrossAssocAttr(ObjectImpl *i, const ::Uml::AssociationRole &m, const ::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
 
 		operator set<CLASS, Pred>() const;
-		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a);
+		AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred> &operator =(const set<CLASS, Pred> &a);
+
+		AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred> &operator =(const AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred> &a)
+		{
+			set<CLASS, Pred> as = a;
+			return operator =( as );
+		}
 
 	};
 
@@ -2140,7 +2189,7 @@ namespace Udm
 			return ret;
 		}
 
-		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a)
+		AClassAssocAttr<CLASS, TARGETCLASS, Pred> &operator =(const set<CLASS, Pred> &a)
 		{
 			vector<ObjectImpl*> b;
 
@@ -2153,7 +2202,13 @@ namespace Udm
 
 			impl->setAssociation(peermeta, b, CLASSFROMTARGET);
 
-			return a;
+			return *this;
+		}
+
+		AClassAssocAttr<CLASS, TARGETCLASS, Pred> &operator =(const AClassAssocAttr<CLASS, TARGETCLASS, Pred> &a)
+		{
+			set<CLASS, Pred> as = a;
+			return operator =( as );
 		}
 
 		CLASS AddLink(TARGETCLASS peer, Object parent, 
@@ -2207,7 +2262,7 @@ namespace Udm
 
 
 
-		const set<CLASS, Pred> &operator =(const set<CLASS,Pred> &a)
+		ChildrenAttr<CLASS, Pred> &operator =(const set<CLASS,Pred> &a)
 		{
 			vector<ObjectImpl *> b;
 
@@ -2220,10 +2275,10 @@ namespace Udm
 
 			impl->setChildren(meta, b);
 
-			return a;
+			return *this;
 		}
 
-		const vector<CLASS> &operator =(const vector<CLASS> &a)
+		ChildrenAttr<CLASS, Pred> &operator =(const vector<CLASS> &a)
 		{
 			vector<ObjectImpl *> b;
 			set<CLASS, Pred> uniq;
@@ -2242,9 +2297,14 @@ namespace Udm
 
 			impl->setChildren(meta, b);
 
-			return a;
+			return *this;
 		}
 
+		ChildrenAttr<CLASS, Pred> &operator =(const ChildrenAttr<CLASS, Pred> &a)
+		{
+			vector<CLASS> av = a;
+			return operator =( av );
+		}
 
 
 
@@ -2311,6 +2371,11 @@ namespace Udm
 
 			return a;
 		}
+
+		const CLASS &operator =(const ChildAttr<CLASS> &a)
+		{
+			return operator =( (CLASS) a);
+		}
 	};
 
 // --------------------------- ParentAttr
@@ -2338,6 +2403,11 @@ namespace Udm
 			impl->setParent(a.__impl(), meta);
 
 			return a;
+		}
+
+		const CLASS &operator =(const ParentAttr<CLASS> &a)
+		{
+			return operator =( (CLASS) a );
 		}
 	};
 // -----------------------------Typed set<> container
@@ -3404,7 +3474,7 @@ public:
 	}
 
 	template<class CLASS, class Pred>
-	const set<CLASS, Pred> & CrossAssocAttr<CLASS, Pred>::operator =(const set<CLASS, Pred> &a)
+	CrossAssocAttr<CLASS, Pred> & CrossAssocAttr<CLASS, Pred>::operator =(const set<CLASS, Pred> &a)
 	{
 		UdmProject* pr = impl->__getdn()->GetProject();
 		if (pr != NULL)
@@ -3425,7 +3495,7 @@ public:
 			throw udm_exception("Project is NULL!");
 		}
 
-		return a;
+		return *this;
 	}
 
 	template<class CLASS>
@@ -3594,7 +3664,7 @@ public:
 	}
 
 	template<class CLASS, class TARGETCLASS, class Pred>
-	const set<CLASS, Pred> & AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred>::operator =(const set<CLASS, Pred> &a)
+	AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred> & AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred>::operator =(const set<CLASS, Pred> &a)
 	{
 
 		UdmProject *pr = NULL;
@@ -3619,7 +3689,7 @@ public:
 			throw udm_exception("Project is NULL!");
 		}
 
-		return a;
+		return *this;
 	}
 
 	template<class CLASS, class TARGETCLASS>
