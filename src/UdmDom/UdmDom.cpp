@@ -354,16 +354,40 @@ namespace UdmDom
 	{
 		DOMString namespaceURI = DOM3LookupNamespaceURI(node, node.getPrefix());
 		if (namespaceURI == NULL) {
-			string e_description = "Couldn't find the namespace URI for node '";
+			string e_description = "Empty namespace URIs are not allowed for node '";
 			e_description += StrX(node.getLocalName()).localForm();
-			e_description += "'.\n";
-			e_description += "Namespace URIs must be URLs with the last component being an UML namespace.";
 			throw udm_exception(e_description);
 		}
 
 		string ns_uri = StrX(namespaceURI).localForm();
-		int ns_name_loc = ns_uri.rfind('/', ns_uri.length());
-		return ns_uri.substr(ns_name_loc + 1);
+		xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.find(ns_uri);
+		if (it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end()) {
+			return it_ns_map->second;
+		} else {
+			int ns_name_loc = ns_uri.rfind('/', ns_uri.length());
+			return ns_uri.substr(ns_name_loc + 1);
+		}
+	}
+
+
+
+	UDM_DLL void AddURIToUMLNamespaceMapping(const string & namespaceURI, const string & namespaceUML)
+	{
+		xsd_ns_mapping_storage::str_str_map::value_type item(namespaceURI, namespaceUML);
+		pair<xsd_ns_mapping_storage::str_str_map::const_iterator, bool> ins_res = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.insert(item);
+		const string& tmp = ins_res.first->second;
+		if (!ins_res.second && namespaceUML.compare(tmp))
+			throw udm_exception(string("A mapping from namespace URI '" + namespaceURI + "' exists already: " + namespaceUML));
+	}
+
+	UDM_DLL void RemoveURIToUMLNamespaceMapping(const string & namespaceURI)
+	{
+		xsd_ns_mapping_storage::static_xsd_ns_mapping_container.erase(namespaceURI);
+	}
+
+	UDM_DLL void ClearURIToUMLNamespaceMappings()
+	{
+		xsd_ns_mapping_storage::static_xsd_ns_mapping_container.clear();
 	}
 
 
@@ -3236,6 +3260,8 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 	//ugly but necesarry
 	UDM_DLL str_xsd_storage::str_str_map str_xsd_storage::static_xsd_container;
+	UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_mapping_container;
+
 	
 
 	UDM_DLL void DomDataNetwork::MapExistingIDs(DOM_Node &d) 
