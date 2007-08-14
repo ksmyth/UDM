@@ -863,7 +863,7 @@ bool UdmPseudoObject::SetBoolValues(const char * name, vector<bool> values)
 bool UdmPseudoObject::GetAdjacentObjectsCount(UdmLong &value) // HN3
 {
 	CINT_TRY(dn_id, ob_id);
-	set<Udm::Object> ret = upi_o.GetAdjacentObjects();
+	multiset<Udm::Object> ret = upi_o.GetAdjacentObjects();
 	value.longVal = ret.size();
 	
 	return true;
@@ -873,8 +873,8 @@ bool UdmPseudoObject::GetAdjacentObjectsCount(UdmLong &value) // HN3
 bool UdmPseudoObject::GetAdjacentObjects(UdmPseudoObjectS &value)
 {
 	CINT_TRY(dn_id, ob_id);
-	set<Udm::Object> ret = upi_o.GetAdjacentObjects();
-	set<Udm::Object>::iterator ret_i = ret.begin();
+	multiset<Udm::Object> ret = upi_o.GetAdjacentObjects();
+	multiset<Udm::Object>::iterator ret_i = ret.begin();
 	int i = 0;
 	while (ret_i != ret.end())
 		value.SetAt(i++, UdmPseudoObject(upi_o.__impl()->__getdn()->uniqueId(), upi_o.__impl()->uniqueId()));
@@ -890,7 +890,7 @@ bool UdmPseudoObject::GetAdjacentObjectsCount(const char * dst_type, const char 
 	::Uml::Class kind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), dst_type_ns, dst_type);
 	if (!kind) throw udm_exception(string("No such kind: ") + dst_type_ns + ':' + dst_type);
 
-	set<Udm::Object> ret = upi_o.GetAdjacentObjects(kind);
+	multiset<Udm::Object> ret = upi_o.GetAdjacentObjects(kind);
 	value.longVal = ret.size();
 	
 	return true;
@@ -904,8 +904,8 @@ bool UdmPseudoObject::GetAdjacentObjects(const char * dst_type, const char * dst
 	::Uml::Class kind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), dst_type_ns, dst_type);
 	if (!kind) throw udm_exception(string("No such kind: ") + dst_type_ns + ':' + dst_type);
 
-	set<Udm::Object> ret = upi_o.GetAdjacentObjects(kind);
-	set<Udm::Object>::iterator ret_i = ret.begin();
+	multiset<Udm::Object> ret = upi_o.GetAdjacentObjects(kind);
+	multiset<Udm::Object>::iterator ret_i = ret.begin();
 	int i = 0;
 	while (ret_i != ret.end())
 	{
@@ -935,7 +935,7 @@ bool UdmPseudoObject::GetAdjacentObjectsCount(const char * dst_type, const char 
 	o_ass_info.strDstRoleName = ass.DstRolename.buffer();
 	o_ass_info.strSrcRoleName = ass.SrcRolename.buffer();
 
-	set<Udm::Object> ret = upi_o.GetAdjacentObjects(kind, o_ass_info);
+	multiset<Udm::Object> ret = upi_o.GetAdjacentObjects(kind, o_ass_info);
 	value.longVal = ret.size();
 	
 	return true;
@@ -960,8 +960,8 @@ bool UdmPseudoObject::GetAdjacentObjects(const char * dst_type, const char * dst
 	o_ass_info.strDstRoleName = ass.DstRolename.buffer();
 	o_ass_info.strSrcRoleName = ass.SrcRolename.buffer();
 
-	set<Udm::Object> ret = upi_o.GetAdjacentObjects(kind, o_ass_info);
-	set<Udm::Object>::iterator ret_i = ret.begin();
+	multiset<Udm::Object> ret = upi_o.GetAdjacentObjects(kind, o_ass_info);
+	multiset<Udm::Object>::iterator ret_i = ret.begin();
 	int i = 0;
 	while (ret_i != ret.end())
 	{

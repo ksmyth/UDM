@@ -242,7 +242,7 @@ char *_strlwr( char *string )
 				DECL_UDMOBJECT( objThis, GetThis() );
 				if ( ! objThis )
 					ThrowException( "Object is null." );
-				set<Udm::Object> setOut;
+				multiset<Udm::Object> setOut;
 				if ( ! m_class ) {
 					std::vector<Udm::ObjectImpl*> vecImpls = objThis.__impl()->getAssociation( m_assocRole, Udm::TARGETFROMPEER );
 					for ( int i = 0 ; i < vecImpls.size() ; i++ )
@@ -251,7 +251,7 @@ char *_strlwr( char *string )
 				else
 					setOut = objThis.GetAdjacentObjects( m_class );
 				OclMeta::ObjectVector vecOut;
-				for ( set<Udm::Object>::iterator it = setOut.begin() ; it != setOut.end() ; it++ )
+				for ( multiset<Udm::Object>::iterator it = setOut.begin() ; it != setOut.end() ; it++ )
 					vecOut.push_back( CREATE_UDMOBJECT( GetTypeManager(), *it ) );
 				if ( m_bCompound )
 					SetResult( CREATE_SET( GetTypeManager(), vecOut ) );

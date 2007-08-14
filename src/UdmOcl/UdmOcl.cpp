@@ -1038,7 +1038,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 	UDM_DLL EEvaluationResult Evaluator::Check( const SEvaluationOptions& sOptions ) const
 	{
 		//FacadeMap::iterator it = globalFacadeMap.find( ( (::Uml::Namespace)((::Uml::Class) m_objObject.type() ).parent()).parent() );
-		FacadeMap::iterator it = globalFacadeMap.find( ( (::Uml::Namespace)((::Uml::Class) m_objObject.type() ).parent_ns()).parent() );
+		FacadeMap::iterator it = globalFacadeMap.find( ::Uml::GetDiagram((::Uml::Class) m_objObject.type()) );
 		if ( it == globalFacadeMap.end() ) {
 			return CER_UNDEFINED;
 		}
