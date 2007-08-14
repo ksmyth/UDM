@@ -1881,11 +1881,15 @@ bool  ClearXsdStorage()
   return true;
 }
 //===========================
-bool  AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, const cint_string& namespaceUML)
+bool  AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, 
+                                  const cint_string& namespaceUML,
+                                  const cint_string& xsdName)
 {
   try
   {
-    UdmDom::AddURIToUMLNamespaceMapping((const std::string)namespaceURI.buffer(), (const string)namespaceUML.buffer());
+    UdmDom::AddURIToUMLNamespaceMapping((const std::string)namespaceURI.buffer(), 
+        (const string)namespaceUML.buffer(),
+        (const string)xsdName.buffer());
   }
   catch (const udm_exception& e) 
   {
