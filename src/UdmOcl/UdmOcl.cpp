@@ -1113,7 +1113,7 @@ _end - _start);
 			if(_end < 0) throw(udm_exception("Error defining method"));
 			std::string strMethodExpression = strExpression.substr(_start, _end - _start);
 
-			::Uml::ConstraintDefinition cd = ::Uml::ConstraintDefinition::Create(::Uml::classByName(metaDiagram, metaDiagram.name(), strClassName));
+			::Uml::ConstraintDefinition cd = ::Uml::ConstraintDefinition::Create(::Uml::classByName(metaDiagram, strClassName));
 			cd.name() = strMethodName;
 			cd.expression() = strMethodExpression;
 			cd.parameterList() = strArgList;
