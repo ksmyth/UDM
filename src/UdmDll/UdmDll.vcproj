@@ -23,7 +23,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(GME_ROOT)\bin,..\..\include,..\UdmOcl\GOCL\include"
+				AdditionalIncludeDirectories="$(GME_ROOT)\bin,..\..\include,..\UdmPat\GOCL\include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -88,7 +88,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(GME_ROOT)\bin,..\..\include,..\UdmOcl\GOCL\include"
+				AdditionalIncludeDirectories="$(GME_ROOT)\bin,..\..\include,..\UdmPat\GOCL\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -454,24 +454,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Uml.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
+				RelativePath="..\Udm\Uml.cpp">
 			</File>
 			<File
 				RelativePath="..\UdmBase\UmlExt.cpp">

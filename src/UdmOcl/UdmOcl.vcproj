@@ -24,7 +24,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include, GOCL\include"
+				AdditionalIncludeDirectories="..\..\include,..\UdmOclPat\GOCL\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;OCL_USING_STL_NAMESPACE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -75,7 +75,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\include, GOCL\include"
+				AdditionalIncludeDirectories="..\..\include, ..\UdmOclPat\GOCL\include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;OCL_USING_STL_NAMESPACE"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
