@@ -98,7 +98,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="File2CodeD.lib"
-				OutputFile=".\Debug/StrResGen.exe"
+				OutputFile="..\..\etc\StrResGenD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(UDM_PATH)/lib"

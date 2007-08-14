@@ -123,6 +123,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Uml", "Uml\Uml.vcproj", "{6
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MPCGen", "MPCGen\MPCGen.vcproj", "{7E5263AA-49FA-4EA3-89D8-427F40C5B0BC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
 		SccNumberOfProjects = 12
@@ -314,12 +318,18 @@ Global
 		{2B0484D0-D5BB-4238-BBC3-A37A20CDC493}.Release.Build.0 = Release|Win32
 		{2B0484D0-D5BB-4238-BBC3-A37A20CDC493}.Release MinDependency.ActiveCfg = Release|Win32
 		{2B0484D0-D5BB-4238-BBC3-A37A20CDC493}.Release MinDependency.Build.0 = Release|Win32
-		{6A53E343-14C2-4463-A9C8-332DAE560EAF}.Debug.ActiveCfg = BootUdmCompile Debug|Win32
-		{6A53E343-14C2-4463-A9C8-332DAE560EAF}.Debug.Build.0 = BootUdmCompile Debug|Win32
-		{6A53E343-14C2-4463-A9C8-332DAE560EAF}.Release.ActiveCfg = Release|Win32
-		{6A53E343-14C2-4463-A9C8-332DAE560EAF}.Release.Build.0 = Release|Win32
+		{6A53E343-14C2-4463-A9C8-332DAE560EAF}.Debug.ActiveCfg = Debug|Win32
+		{6A53E343-14C2-4463-A9C8-332DAE560EAF}.Debug.Build.0 = Debug|Win32
+		{6A53E343-14C2-4463-A9C8-332DAE560EAF}.Release.ActiveCfg = BootUdmCompile Release|Win32
+		{6A53E343-14C2-4463-A9C8-332DAE560EAF}.Release.Build.0 = BootUdmCompile Release|Win32
 		{6A53E343-14C2-4463-A9C8-332DAE560EAF}.Release MinDependency.ActiveCfg = Release|Win32
 		{6A53E343-14C2-4463-A9C8-332DAE560EAF}.Release MinDependency.Build.0 = Release|Win32
+		{7E5263AA-49FA-4EA3-89D8-427F40C5B0BC}.Debug.ActiveCfg = Debug|Win32
+		{7E5263AA-49FA-4EA3-89D8-427F40C5B0BC}.Debug.Build.0 = Debug|Win32
+		{7E5263AA-49FA-4EA3-89D8-427F40C5B0BC}.Release.ActiveCfg = Release|Win32
+		{7E5263AA-49FA-4EA3-89D8-427F40C5B0BC}.Release.Build.0 = Release|Win32
+		{7E5263AA-49FA-4EA3-89D8-427F40C5B0BC}.Release MinDependency.ActiveCfg = Release|Win32
+		{7E5263AA-49FA-4EA3-89D8-427F40C5B0BC}.Release MinDependency.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 	EndGlobalSection
