@@ -269,10 +269,8 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 					if ( vecDefs[ i ]->IsValid() && m_pFacade->m_pTreeManager->GetTypeManager()->IsTypeA( signature.GetTypeName(), vecDefs[ i ]->GetContextType() ) >= 0 )
 						if ( vecDefs[ i ]->GetName() == signature.GetName() && ! vecDefs[ i ]->IsMethod() )
 						{
-							const std::string name = signature.GetName();
-							const  OclCommon::FormalParameterVector fpv  = CreateFormalParameters( vecDefs[ i ]->GetFormalParameters() );
-							TypeSeq ts = CreateReturnType( vecDefs[ i ]->GetReturnType() );
-							vecFeatures.push_back( new OclMeta::Method(name , fpv , ts , new ConstraintMethod( vecDefs[ i ] ), true, true ) );
+							vecFeatures.push_back( new OclMeta::Attribute( signature.GetName(), CreateReturnType( vecDefs[ i ]->GetReturnType() ), new ConstraintAttribute( vecDefs[ i ] ), true, true ) );
+
 						}
 				}
 			}
