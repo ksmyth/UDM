@@ -27,10 +27,9 @@ this software.
 
 #include "Uml.h"
 #include "UmlExt.h"
-std::string GetTime();
 #include <time.h>
 #include <map>
-
+#include "Udm.h"
 
 // assign a name to a role
 // if name is assigned, use that name

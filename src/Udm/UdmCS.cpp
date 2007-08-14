@@ -24,7 +24,8 @@ CHANGELOG:
 #include "UmlExt.h"
 #include <time.h>
 #include <map>
-string GetTime();
+#include "Udm.h"
+
 using namespace Uml;
 // C# generators
 

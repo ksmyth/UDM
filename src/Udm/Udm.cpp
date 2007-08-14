@@ -66,10 +66,8 @@ CHANGELOG
 
 
 #include "Uml.h"
-
-#include <UdmDom.h>
-#include <UmlExt.h>
 #include "UdmBase/DTDGen.h"
+
 #include <UdmXmi.h>
 #include <fstream>
 
@@ -80,37 +78,7 @@ CHANGELOG
 #include <minizip/unzip.h>
 #endif
 
-//void GenerateDTD(const Uml::Diagram &diagram,  ostream &output);
-//void GenerateXMLSchema(const Uml::Diagram &diagram,  ostream &output, bool uxsdi = false);
-
-//cross-link-approved
-void GenerateHExport(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname, const string& macro);
-void GenerateH(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname, bool visitor_sup = false, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
-void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram, 
-                    ostream &output, string fname, 
-                    const ::Uml::Uml::Diagram& cross_dgr = NULL, 
-                    map<string, string> *ns_map = NULL, 
-                    const string& macro = "",
-                    bool integrate_xsd = false);
-
-void GenerateCPP(const ::Uml::Uml::Diagram &diagram, 
-				 ostream &output, string fname, 
-				 const ::Uml::Uml::Diagram& cross_dgr = NULL, 
-				 const string& macro = "",
-				 bool integrate_xsd = false);
-//void GenerateCORBACPP(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
-// not cross-link approved
-
-void GenerateCSInit(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname);
-void GenerateNewCSInit(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname);
-void GenerateCSApi(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname);
-void GenerateCS(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname);
-void GenerateNewCS(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname);
-void CheckDiagram(const ::Uml::Uml::Diagram & diagram);
-
-
-// declare java generation
-//void GenerateJava(const ::Uml::Uml::Diagram &diagram, const map<string, string> & ns_map, const string& inputfile);
+#include "Udm.h"
 
 
 int main(int argc, char **argv) {
@@ -137,6 +105,7 @@ int main(int argc, char **argv) {
 
       // flag to indicate java api generation
 		bool generate_java = false;
+		int source_unit = CPP_SOURCE_UNIT_DIAGRAM;
 
 
 		if (argc <= 1)
@@ -219,9 +188,25 @@ int main(int argc, char **argv) {
 					case 'i':
 							DTDGen::AddUMLNamespaceToIgnoreList(optp, ns_ignore_set);
 							break;
-          case 'q':
-              DTDGen::AddUMLNamespaceToQualifiedAttrsNSList(optp, qualifiedAtrrsNS_set);
-              break;
+					case 'q':
+							DTDGen::AddUMLNamespaceToQualifiedAttrsNSList(optp, qualifiedAtrrsNS_set);
+							break;
+					case 'w':
+							switch(*optp)
+							{
+								case 'c':
+									source_unit = CPP_SOURCE_UNIT_CLASS;
+									break;
+								case 'd':
+									source_unit = CPP_SOURCE_UNIT_DIAGRAM;
+									break;
+								case 'n':
+									source_unit = CPP_SOURCE_UNIT_NAMESPACE;
+									break;
+								default:
+									goto usage;
+							}
+							break;
 					default:
 							goto usage;
 				}
@@ -241,7 +226,6 @@ usage:
 				throw udm_exception("Usage: udm <diagramfilename> [<genfilesnamebase>] [-d <Uml.XSD searchpath>] [-m|c|s] [-v] [-t] [-l] [-x]\n");
 			}
 		}
-		//check for UDM Project input
 
 		if (uxsdi)
 		{
@@ -251,6 +235,7 @@ usage:
 			cout << " Diagram. This file might be used as input for other XML tools, like XSD code generators. " << endl;
 		}
 
+		//check for UDM Project input
 		unzFile is_zip = unzOpen(inputfile.c_str());
 		if (is_zip)
 		{
@@ -276,59 +261,27 @@ usage:
 			const ::Uml::Uml::Diagram &cross_meta = ::Uml::Uml::Diagram::Cast(cross_meta_dn.GetRootObject());
 			const ::Uml::Uml::Namespace cross_meta_ns = ::Uml::GetTheOnlyNamespace(cross_meta);
 
-			string cm_name = cross_meta.name();
-			string::iterator i;
-			for(i = cm_name.begin(); i != cm_name.end(); i++) 
-			{
-				if(!isalnum(*i)) *i = '_';
-			}
-			
+			string cm_name = NameToFilename(cross_meta.name());
+
+			GenerateDSD(cross_meta_ns, cm_name, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
+
+			GenerateHH(cross_meta, cm_name, visitor_sup, NULL, macro, source_unit);
+
+			GenerateNewCPP(cross_meta, cm_name, ns_map, cross_meta, "", integrate_xsd, source_unit);
+
 			ofstream ff;
-
-			if (generate_dtd)
-			{
-				ff.open( (cm_name+".dtd").c_str());
-				if(!ff.good()) throw udm_exception("Error opening for write " + cm_name + ".dtd");
-				else DTDGen::GenerateDTD(cross_meta_ns, ff);
-				ff.close();
-				ff.clear();
-			}
-
-			ff.open( (cm_name+".xsd").c_str());
-			if(!ff.good()) throw udm_exception("Error opening for write " + cm_name + ".xsd");
-			else DTDGen::GenerateXMLSchema(cross_meta_ns, ff, uxsdi, xsd_el_ta);
-			ff.close();
-			ff.clear();
-
-
-			ff.open( (cm_name+".h").c_str());
-			if(!ff.good()) throw udm_exception("Error opening for write " + cm_name + ".h");
-			else 
-			{
-				if (macro.size())
-				{
-					string exp_name = cm_name + "_export";
-					ofstream fff;
-					fff.open( (exp_name+".h").c_str());
-					if(!fff.good()) throw udm_exception("Error opening for write " + exp_name + ".h");
-					else GenerateHExport(cross_meta, fff, exp_name, macro);
-				};
-				GenerateH(cross_meta, ff, cm_name, visitor_sup, NULL, macro);
-			}
-			ff.close();
-			ff.clear();
-
+			/*
 			ff.open( (cm_name+".cpp").c_str());
 			if(!ff.good()) throw udm_exception("Error opening for write " + cm_name + ".h");
 			else
 			{
-				GenerateNewCPP(cross_meta, ff, cm_name, cross_meta,ns_map.empty() ? NULL : &ns_map,  "", integrate_xsd);
 // 				if(new_meta && !corba_meta) GenerateNewCPP(cross_meta, ff, cm_name, cross_meta);
 // 				else if (corba_meta) GenerateCORBACPP(cross_meta,  ff, cm_name, cross_meta, macro);
 // 				else GenerateCPP(cross_meta, ff, cm_name, cross_meta, macro);
 			}
 			ff.close();
 			ff.clear();
+			*/
 
 
 
@@ -347,62 +300,29 @@ usage:
 				for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 				{
 					::Uml::Uml::Namespace ns = *nses_i;
-					string nsname = ns.name();
-					string::iterator i;
-					for(i = nsname.begin(); i != nsname.end(); i++) 
-					{
-						if(!isalnum(*i)) *i = '_';
-					}
-					
-					ofstream ff;
+					string nsname = NameToFilename(ns.name());
+					GenerateDSD(ns, nsname, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
+				}
 
-					if(generate_dtd)
-					{
-						ff.open( (nsname+".dtd").c_str());
-						if(!ff.good()) throw udm_exception("Error opening for write " + nsname + ".dtd");
-						else DTDGen::GenerateDTD(ns, ff);
-						ff.close();
-						ff.clear();
-					}
+				// "_export.h" already generated
+				GenerateHH(dgr, sname, visitor_sup, cross_meta, "", source_unit);
 
-					ff.open( (nsname+".xsd").c_str());
-					if(!ff.good()) throw udm_exception("Error opening for write " + nsname + ".xsd");
-					else DTDGen::GenerateXMLSchema(ns, ff, uxsdi, xsd_el_ta);
+				if(new_meta && !corba_meta)
+					GenerateNewCPP(dgr, sname, ns_map, cross_meta, macro, integrate_xsd, source_unit);
+				else
+				{
+					ff.open( (sname+".cpp").c_str());
+					if(!ff.good()) throw udm_exception("Error opening for write " + sname + ".h");
+					else 
+					{
+					//GenerateNewCPP(dgr, ff, sname, cross_meta);
+					//	else if (corba_meta) GenerateCORBACPP(dgr,  ff, sname, cross_meta, macro);
+					//	else GenerateCPP(dgr,  ff, sname, cross_meta, macro);
+						GenerateCPP(dgr,  ff, sname, cross_meta, macro, integrate_xsd);
+					}
 					ff.close();
 					ff.clear();
 				}
-
-				ff.open( (sname+".h").c_str());
-				if(!ff.good()) throw udm_exception("Error opening for write " + sname + ".h");
-				else 
-				{
-					if (macro.size())
-					{
-						string exp_name = cm_name + "_export";
-						ofstream fff;
-						fff.open( (exp_name+".h").c_str());
-						if(!fff.good()) throw udm_exception("Error opening for write " + exp_name + ".h");
-						else GenerateHExport(cross_meta, fff, exp_name, macro);
-					};
-					GenerateH(dgr, ff, sname, visitor_sup, cross_meta, macro);
-				}
-				ff.close();
-				ff.clear();
-
-				ff.open( (sname+".cpp").c_str());
-				if(!ff.good()) throw udm_exception("Error opening for write " + sname + ".h");
-				else 
-				{
-					//GenerateNewCPP(dgr, ff, sname, cross_meta);
-					if(new_meta && !corba_meta) GenerateNewCPP(dgr, ff, sname, cross_meta, ns_map.empty() ? NULL : &ns_map, macro, integrate_xsd);
-				//	else if (corba_meta) GenerateCORBACPP(dgr,  ff, sname, cross_meta, macro);
-					else GenerateCPP(dgr,  ff, sname, cross_meta, macro, integrate_xsd);
-				}
-				ff.close();
-				ff.clear();
-
-		
-				
 
 				pr_dns_i++;
 
@@ -487,96 +407,59 @@ usage:
 		CheckDiagram(diagram); //it will throw an exception if stg goes wrong.
 
 		if(fname.empty()) {
-			fname = diagram.name();
-			string::iterator i;
-			for(i = fname.begin(); i != fname.end(); i++) {
-				if(!isalnum(*i)) *i = '_';
-			}
+			fname = NameToFilename(diagram.name());
 		}
-
-		ofstream ff;
 
 		set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
 		for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 		{
 			::Uml::Uml::Namespace ns = *nses_i;
 			string nsname = ns.name();
-			if (generate_dtd)
-		
-			{
-				ff.open( (nsname+".dtd").c_str());
-				if(!ff.good()) throw udm_exception("Error opening for write " + nsname + ".dtd");
-				else DTDGen::GenerateDTD(ns, ff);
-				ff.close();
-				ff.clear();
-			}
 
+			set<string>::const_iterator itf = qualifiedAtrrsNS_set.find(nsname);
+			bool qualifiedAtrrsNS = (itf != qualifiedAtrrsNS_set.end());
 
-			ff.open( (nsname+".xsd").c_str());
-			if(!ff.good()) 
-        throw udm_exception("Error opening for write " + nsname + ".xsd");
-			else 
-      {
-        set<string>::const_iterator itf = qualifiedAtrrsNS_set.find(nsname);
-        bool qualifiedAtrrsNS = (itf != qualifiedAtrrsNS_set.end());
-
-        DTDGen::GenerateXMLSchema(ns, ff, uxsdi, xsd_el_ta, ns_map.empty() ? NULL : &ns_map, ns_ignore_set.empty() ? NULL : &ns_ignore_set, qualifiedAtrrsNS);
-      }
-			ff.close();
-			ff.clear();
-
+			GenerateDSD(ns, nsname, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, qualifiedAtrrsNS);
 		}
 
-      // call java API generation
+		// call java API generation
 		if (generate_java) 
 		{
-      JavaAPIGen gen(diagram, ns_map, inputfile);
+			JavaAPIGen gen(diagram, ns_map, inputfile);
 			gen.generate();
 			return 0;
 		}
 
-      if (!c_sharp)
-		{
-			ff.open( (fname+".h").c_str());
-			if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".h");
-			else 
-			{
-				if (macro.size())
-				{
-					string exp_name = fname + "_export";
-					ofstream fff;
-					fff.open( (exp_name+".h").c_str());
-					if(!fff.good()) throw udm_exception("Error opening for write " + exp_name + ".h");
-					else GenerateHExport(diagram, fff, exp_name, macro);
-				};
-				GenerateH(diagram, ff, fname, visitor_sup, NULL, macro);
-			};
-			ff.close();
-			ff.clear();
-		}
-		
-		if (c_sharp)
+		ofstream ff;
+
+		if (c_sharp) {
 			ff.open( (fname + ".cs").c_str());
+			if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".cpp");
+			else {
+				//	if(new_meta) GenerateNewCS(diagram, ff, fname);
+				//	else GenerateCS(diagram,  ff, fname);
+			}
+			ff.close();
+			return 0;
+		}
+
+		GenerateHH(diagram, fname, visitor_sup, NULL, macro, source_unit);
+		
+		if(new_meta && !corba_meta)
+			GenerateNewCPP(diagram, fname, ns_map, NULL, macro, integrate_xsd, source_unit);
 		else
+		{
 			ff.open( (fname + ".cpp").c_str());
 
-		if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".cpp");
-		else 
-		{
-			if (c_sharp)
+			if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".cpp");
+			else 
 			{
-			//	if(new_meta) GenerateNewCS(diagram, ff, fname);
-			//	else GenerateCS(diagram,  ff, fname);
-			
+			//	if (corba_meta) GenerateCORBACPP(diagram,  ff, fname);
+			//	else GenerateCPP(diagram,  ff, fname, NULL, macro);
+				GenerateCPP(diagram,  ff, fname, NULL, macro, integrate_xsd);
 			}
-			else		// modified by LA
-			{
-				if(new_meta && !corba_meta) GenerateNewCPP(diagram, ff, fname, NULL, ns_map.empty() ? NULL : &ns_map, macro, integrate_xsd);
-			//	else if (corba_meta) GenerateCORBACPP(diagram,  ff, fname);
-				else GenerateCPP(diagram,  ff, fname, NULL, macro, integrate_xsd);
-			}
+			ff.close();
 		}
-		ff.close();
 	}
 	catch(const udm_exception &e)
 	{

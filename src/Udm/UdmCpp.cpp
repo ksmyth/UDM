@@ -31,12 +31,11 @@ CHANGELOG:
 #include <fstream>
 #include <map>
 #include "File2Code/File2Code.h"
+#include "Udm.h"
 
-string GetTime();
 using namespace Uml;
 typedef vector< ::Uml::Uml::Class> UmlClasses;
 typedef pair<set<int>, set<int> > UmlCompositionInitFuncInfo;
-typedef set< pair< ::Uml::Uml::Namespace, int> > UmlCrossNSCompositionsInit;
 
 string UmlClassCPPName(const ::Uml::Uml::Class &cl)
 {
@@ -561,6 +560,17 @@ void GenerateCPPInitializeCrossNSInheritence(const ::Uml::Uml::Namespace &ns, os
 	output << "\t\t}" << endl;
 };
 
+void GenerateCPPInitializeCrossNSCompositions(const ::Uml::Uml::Namespace &ns, const UmlCompositionInitFuncInfo &comp_inits, ostream & output)
+{
+	output << "\t\tvoid InitCrossNSCompositions()" << endl << "\t\t{" << endl;
+
+	for (set<int>::const_iterator comp_inits_i = comp_inits.second.begin(); comp_inits_i != comp_inits.second.end(); comp_inits_i++) {
+		output << "\t\t\tInitComposition" << *comp_inits_i << "();" << endl;
+	}
+
+	output << "\t\t}" << endl;
+};
+
 void GenerateCPPStaticClass(const ::Uml::Uml::Diagram &diagram, ostream & output)
 {
 	output << "\tstatic struct _regClass" << endl;
@@ -733,11 +743,68 @@ void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & 
 	output << "\t\t\t" << endl << "\t\t}" << endl; //end of Initialize(const ::Uml::Uml::Diagram & dgr);
 };
 
+void GenerateCPPPreamble(const ::Uml::Uml::Diagram &diagram, const ::Uml::Uml::Diagram &cross_dgr, bool isCrossDgr, const string &h_fname, const string &fname, ostream &output)
+{
+	output << "// cpp(meta datanetwork format) source file " << fname << ".cpp generated from diagram " << (string)diagram.name() << endl;
+	output << "// generated on " << GetTime().c_str() << endl << endl;
+	output << "#include \""<< h_fname << ".h\"" <<endl;
+	output << "#include \"UmlExt.h\"" <<endl << endl; 
+	output << "#include \"UdmStatic.h\"" << endl<<endl; 
+
+	if (isCrossDgr)
+	{
+		output << "// cross-package metainformation header file" << endl;
+		output << "#include \"" << cross_dgr.name() << ".h\"" << endl << endl; 
+	}
+}
+
+void GenerateCPPNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagram &cross_dgr, bool isCrossDgr, const string &fname, ostream &output, const string &macro, int source_unit)
+{
+	::Uml::Uml::Diagram diagram = ns.parent();
+	string hname = NameToFilename(diagram.name());
+	string ns_fname = fname + "_" + NameToFilename(ns.name());
+
+	if (source_unit == CPP_SOURCE_UNIT_NAMESPACE)
+	{
+		GenerateCPPPreamble(diagram, cross_dgr, isCrossDgr, fname, ns_fname, output);
+		output << "namespace " << hname << " {" << endl << endl;
+	}
+
+	output << "\tnamespace " << ns.name() << " {" << endl << endl;
+	output << "\t\t::Uml::Uml::Namespace meta;" << endl;
+
+	GenerateCPPDeclareMetaClasses(ns, output);
+	GenerateCPPDeclareAttributes(ns, output);
+	GenerateCPPDeclareAssociationRoles(ns, cross_dgr, output, isCrossDgr);
+	GenerateCPPDeclareCompositionRoles(ns, output);
+	GenerateCPPDeclareConstraints(ns, output);
+	GenerateCPPCreatesFunction(ns, output);
+	GenerateCPPInitClassesAttributes(ns, cross_dgr, output, isCrossDgr);
+		
+	int ass_inits = GenerateCPPAssociationInitFunctions(ns, output);
+
+	UmlCompositionInitFuncInfo comps_inits = GenerateCPPCompositionInitFunctions(ns, output);
+	GenerateCPPInitializeCrossNSCompositions(ns, comps_inits, output);
+
+	//generate inheritence initializers
+	GenerateCPPInitializeInheritence(ns, output);
+	GenerateCPPInitializeCrossNSInheritence(ns, output);
+
+	//generate Initialize() function
+	GenerateCPPInitialize(ns, cross_dgr, output, macro, hname, ass_inits, comps_inits, isCrossDgr);
+			
+	//generate Initialize(const ::Uml::Uml::Namespace &ns); function
+	GenerateCPPInitializeNamespace(ns, output,macro);
+
+	output << "\t}" << endl;	
+
+	if (source_unit == CPP_SOURCE_UNIT_NAMESPACE)
+		output << "}" << endl <<"// END " << ns_fname << ".cpp" <<endl;
+}
 
 
 void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Uml::Uml::Diagram cross_dgr, 
-                                  const UmlCrossNSCompositionsInit &cross_ns_comps_inits, 
-                                  ostream & output, map<string, string> *ns_map, 
+                                  ostream & output, const map<string, string> &ns_map, 
                                   const string & macro,
                                   bool integrate_xsd)
 {
@@ -771,39 +838,36 @@ void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Um
 	}
 	output << endl;
 
-  if (integrate_xsd)
-  {
+	if (integrate_xsd)
+	{
   
-   	for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
-  	{
-      const ::Uml::Uml::Namespace& ns = *nses_i;
-      const std::string& nsn = ns.name();
-      output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << ns.name() << ".xsd\"," << ns.name() <<"_xsd::getString());"<< endl;
-	  }
-  }
+		for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
+		{
+			const ::Uml::Uml::Namespace& ns = *nses_i;
+			const std::string& nsn = ns.name();
+			output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << ns.name() << ".xsd\"," << ns.name() <<"_xsd::getString());"<< endl;
+		}
+	}
 
-  if (ns_map)
-  {
-    output << "\n\t\t// URI namespace mapping for dom backend, udm was invoked with switch -u" << "\n";
-    map<string, string>::const_iterator it =  ns_map->begin();
-    for(;it != ns_map->end(); ++it)
-    {
-      output << "\t\t" << "UdmDom::AddURIToUMLNamespaceMapping(\""<< it->second<<"\",\""<<it->first<<"\");" << std::endl;
-    }
-  }
+	if (!ns_map.empty())
+	{
+		output << "\n\t\t// URI namespace mapping for dom backend, udm was invoked with switch -u" << "\n";
+		map<string, string>::const_iterator it =  ns_map.begin();
+		for(;it != ns_map.end(); ++it)
+		{
+			output << "\t\t" << "UdmDom::AddURIToUMLNamespaceMapping(\""<< it->second<<"\",\""<<it->first<<"\");" << std::endl;
+		}
+	}
 
-	//call cross namespace inheritence initializers
+	//call cross namespace inheritence and compositions initializers
 	for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
 		::Uml::Uml::Namespace ns = *nses_i;
 		output << "\t\t" << ns.name() << "::InitCrossNSInheritence();" << endl;
+		output << "\t\t" << ns.name() << "::InitCrossNSCompositions();" << endl;
 	}
 	output << endl;
 
-	for (UmlCrossNSCompositionsInit::const_iterator comps_inits_i = cross_ns_comps_inits.begin(); comps_inits_i != cross_ns_comps_inits.end(); comps_inits_i++)
-	{
-		output << "\t\t" << comps_inits_i->first.name() << "::InitComposition" << comps_inits_i->second << "();" << endl;
-	}
 	output << "\t};"<<endl;
 
 
@@ -816,128 +880,96 @@ void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Um
 		output << "\t\t" << ns.name() << "::Initialize(" << ns.name() << "::meta);" << endl;
 	}
 
-  if (integrate_xsd)
-  {
+	if (integrate_xsd)
+	{
   
-   	for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
-  	{
-      const ::Uml::Uml::Namespace& ns = *nses_i;
-      const std::string& nsn = ns.name();
-      std::string infname(nsn + std::string(".xsd"));
+		for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
+		{
+			const ::Uml::Uml::Namespace& ns = *nses_i;
+			const std::string& nsn = ns.name();
+			std::string infname(nsn + std::string(".xsd"));
 
-      File2Code f2c(nsn + std::string("_xsd"), infname, File2Code::CPP);
+			File2Code f2c(nsn + std::string("_xsd"), infname, File2Code::CPP);
 
-      std::string outfname(nsn + std::string("_xsd.h"));
-      std::ofstream out(outfname.c_str());
-      f2c.gen(out);
-      out.close();
-      output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << ns.name() << ".xsd\"," << ns.name() <<"_xsd::getString());"<< endl;
-	  }
-  }
+			std::string outfname(nsn + std::string("_xsd.h"));
+			std::ofstream out(outfname.c_str());
+			f2c.gen(out);
+			out.close();
+			output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << ns.name() << ".xsd\"," << ns.name() <<"_xsd::getString());"<< endl;
+		}
+	}
 
-  if (ns_map)
-  {
-    output << "\n\t\t// URI namespace mapping for dom backend, udm was invoked with switch -u" << "\n";
-    map<string, string>::const_iterator it =  ns_map->begin();
-    for(;it != ns_map->end(); ++it)
-    {
-      output << "\t\t" << "UdmDom::AddURIToUMLNamespaceMapping(\""<< it->second<<"\",\""<<it->first<<"\");" << std::endl;
-    }
-  }
+	if (!ns_map.empty())
+	{
+		output << "\n\t\t// URI namespace mapping for dom backend, udm was invoked with switch -u" << "\n";
+		map<string, string>::const_iterator it =  ns_map.begin();
+		for(;it != ns_map.end(); ++it)
+		{
+			output << "\t\t" << "UdmDom::AddURIToUMLNamespaceMapping(\""<< it->second<<"\",\""<<it->first<<"\");" << std::endl;
+		}
+	}
 	output << "\t};"<<endl;
 
 
 };
-void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname, 
-                    const ::Uml::Uml::Diagram& cross_dgr = NULL, 
-                    map<string, string> *ns_map = NULL, 
-                    const string& macro = "",
-                    bool integrate_xsd = false) 
+void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram, string fname, 
+                    const map<string, string> &ns_map, 
+                    const ::Uml::Uml::Diagram& cross_dgr, 
+                    const string& macro,
+                    bool integrate_xsd,
+		    int source_unit) 
 {
-		string hname = diagram.name();
-		string::iterator i;
-		for(i = hname.begin(); i != hname.end(); i++) 
-		{
-			if(!isalnum(*i)) *i = '_';
-		}
+		string hname = NameToFilename(diagram.name());
 
-		output << "// cpp(meta datanetwork format) source file " << fname << ".cpp generated from diagram " << (string)diagram.name() << endl;
-		output << "// generated on " << GetTime().c_str() << endl << endl;
-		output << "#include \""<< fname << ".h\"" <<endl;
-		output << "#include \"UmlExt.h\"" <<endl << endl; 
-		output << "#include \"UdmStatic.h\"" << endl<<endl; 
+		ofstream output;
+		output.open( (fname + ".cpp").c_str() );
+		if(!output.good()) throw udm_exception("Error opening for write " + fname + ".cpp");
+
+		bool isCrossDgr = (cross_dgr && (diagram != cross_dgr));
+
+		GenerateCPPPreamble(diagram, cross_dgr, isCrossDgr, fname, fname, output);
 		if (integrate_xsd)
 		{
 			output << "#include \"UdmDom.h\"" << endl; 
-   			set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
-  			for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
-	  		{
-		  		::Uml::Uml::Namespace ns = *nses_i;	
-			output << "#include \"" << ns.name() << "_xsd.h\"" << endl << endl; 
+			set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
+			for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+			{
+				::Uml::Uml::Namespace ns = *nses_i;	
+				output << "#include \"" << ns.name() << "_xsd.h\"" << endl << endl; 
 			}
 		}
 
-
-    if (ns_map != NULL) 
-      output << "#include \"UdmDom.h\"" << endl << endl; 
-
-		bool isCrossDgr = (cross_dgr && (diagram != cross_dgr));
-		if (cross_dgr && (diagram != cross_dgr))
-		{
-			output << "// cross-package metainformation header file" << endl;
-			output << "#include \"" << cross_dgr.name() << ".h\"" << endl << endl; 
-		}
-
+		if (!ns_map.empty() && !integrate_xsd) 
+			output << "#include \"UdmDom.h\"" << endl << endl; 
 
 		output << "namespace " << hname << " {" << endl << endl;
 //	::Uml::Uml::Diagram diagram;
 		output << "\t::Uml::Uml::Diagram umldiagram;" << endl << endl;
 
-		UmlCrossNSCompositionsInit cross_ns_comps_inits;
 		set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
 		for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 		{
-			::Uml::Uml::Namespace ns = *nses_i;	
-			
-			output << "\tnamespace " << ns.name() << " {" << endl << endl;
-			output << "\t\t::Uml::Uml::Namespace meta;" << endl;
-
-			GenerateCPPDeclareMetaClasses(ns, output);
-			GenerateCPPDeclareAttributes(ns, output);
-			GenerateCPPDeclareAssociationRoles(ns, cross_dgr, output, isCrossDgr);
-			GenerateCPPDeclareCompositionRoles(ns, output);
-			GenerateCPPDeclareConstraints(ns, output);
-			GenerateCPPCreatesFunction(ns, output);
-			GenerateCPPInitClassesAttributes(ns, cross_dgr, output, isCrossDgr);
-		
-			int ass_inits = GenerateCPPAssociationInitFunctions(ns, output);		
-			UmlCompositionInitFuncInfo comps_inits = GenerateCPPCompositionInitFunctions(ns, output);
-			for (set<int>::iterator i = comps_inits.second.begin(); i != comps_inits.second.end(); i++) {
-				pair< ::Uml::Uml::Namespace, int> ci;
-				ci.first = ns;
-				ci.second = *i;
-				cross_ns_comps_inits.insert(ci);
+			if (source_unit == CPP_SOURCE_UNIT_NAMESPACE)
+			{
+				ofstream output;
+				string ns_fname = fname + "_" + NameToFilename(nses_i->name());
+				output.open( (ns_fname + ".cpp").c_str() );
+				if(!output.good()) throw udm_exception("Error opening for write " + ns_fname + ".cpp");
+				GenerateCPPNamespace(*nses_i, cross_dgr, isCrossDgr, fname, output, macro, source_unit);
+				output.close();
 			}
-
-			//generate inheritence initializers
-			GenerateCPPInitializeInheritence(ns, output);
-			GenerateCPPInitializeCrossNSInheritence(ns, output);			
-			//generate Initialize() function
-			GenerateCPPInitialize(ns, cross_dgr, output, macro, hname, ass_inits, comps_inits, isCrossDgr);
-			
-			//generate Initialize(const ::Uml::Uml::Namespace &ns); function
-			GenerateCPPInitializeNamespace(ns, output,macro);
-
-			output << "\t}" << endl;	
+			else
+				GenerateCPPNamespace(*nses_i, cross_dgr, isCrossDgr, fname, output, macro, source_unit);
 		}
 		
-		GenerateCPPDiagramInitialize(diagram, cross_dgr, cross_ns_comps_inits, output, ns_map, macro, integrate_xsd);
+		GenerateCPPDiagramInitialize(diagram, cross_dgr, output, ns_map, macro, integrate_xsd);
 		//Udm::UdmDiagram diagram = { &umldiagram, Initialize };
 		output << "\t" << macro << " Udm::UdmDiagram diagram = { &umldiagram, Initialize };" << endl;
 		//generate the registering static class
 		GenerateCPPStaticClass(diagram, output);
 		//end of the namespace
 		output << "}" << endl <<"// END " << hname << ".cpp" <<endl;
+		output.close();
 }
 
 

@@ -160,9 +160,8 @@ CHANGELOG:
 
 #include "Uml.h"
 #include "UmlExt.h"
-#include <time.h>
 #include <map>
-
+#include "Udm.h"
 
 // assign a name to a role
 // if name is assigned, use that name
@@ -172,14 +171,6 @@ CHANGELOG:
 
 using namespace Uml;
 	
-string GetTime()	{
-		time_t t;
-		time(&t);
-		char *c = ctime(&t);
-
-		c[24] = '\0';
-		return c;
-}
 void CheckClass(const ::Uml::Uml::Class & cl)
 {
 	set<string> unique_names;

@@ -16,7 +16,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\..\bin.net"
+			OutputDirectory=".\..\bin"
 			IntermediateDirectory=".\Debug"
 			ConfigurationType="1"
 			UseOfMFC="0"
@@ -82,7 +82,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\..\bin.net"
+			OutputDirectory=".\..\bin"
 			IntermediateDirectory=".\Release"
 			ConfigurationType="1"
 			UseOfMFC="0"
@@ -171,7 +171,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\UdmBase\UdmBase.cpp">
+				RelativePath=".\Udm.rc">
 			</File>
 			<File
 				RelativePath=".\UdmCpp.cpp">
@@ -203,6 +203,9 @@
 			<File
 				RelativePath=".\UdmMetaCpp.cpp">
 			</File>
+			<File
+				RelativePath=".\UdmUtil.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -211,9 +214,33 @@
 				RelativePath="..\include\ErrHand.h">
 			</File>
 			<File
+				RelativePath=".\resource1.h">
+			</File>
+			<File
+				RelativePath=".\Udm.h">
+			</File>
+			<File
 				RelativePath="..\include\UdmBase.h">
 			</File>
 		</Filter>
+		<File
+			RelativePath="Uml.dtd">
+		</File>
+		<File
+			RelativePath="uml.xsd">
+			<FileConfiguration
+				Name="Debug|Win32"
+				ExcludedFromBuild="TRUE">
+				<Tool
+					Name="VCXMLDataGeneratorTool"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="TRUE">
+				<Tool
+					Name="VCXMLDataGeneratorTool"/>
+			</FileConfiguration>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
