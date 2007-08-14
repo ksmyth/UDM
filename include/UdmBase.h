@@ -2849,7 +2849,7 @@ namespace Udm
 		//general accept function
 		virtual void Accept(const BaseVisitor&){};
 
-		string getPath( const std::string& strDelimiter = "./.", bool bReverseOrder = false, bool bNeedRootFolder = false, const string att_name = "name") const;
+		string getPath( const std::string& strDelimiter = "./.", bool bReverseOrder = false, bool bNeedRootFolder = false, const string att_name = "name", bool omit_lead_delim = false) const;
 
 
 	};
