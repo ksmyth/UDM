@@ -788,7 +788,7 @@ namespace UdmDom
 				
 		}
 
-		bool is_attribute_desynched(const string &myname)
+		bool is_attribute_desynched(const string &myname) const
 		{
 			
 			//DOMString pa = dom_element.getAttribute(DOMString("desynched_atts"));
@@ -1237,6 +1237,24 @@ namespace UdmDom
 			dom_element.setAttribute(DOMString(name.c_str()), DOMString(astr));
 			*/
 			
+		}
+
+		long getAttrStatus(const ::Uml::Attribute &meta) const
+		{
+			long status = Udm::ATTSTATUS_HERE;
+
+			ObjectImpl * archetype = getArchetype();
+			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
+			{
+				// for now just set a value telling that the attribute value
+				// is not changed here
+				if (!is_attribute_desynched(meta.name()))
+					status = Udm::ATTSTATUS_IN_ARCHETYPE1;
+
+				archetype->release();
+			}
+
+			return status;
 		}
 
 	
