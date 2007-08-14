@@ -375,21 +375,45 @@ namespace UdmDom
 	{
 		xsd_ns_mapping_storage::str_str_map::value_type item(namespaceURI, namespaceUML);
 		pair<xsd_ns_mapping_storage::str_str_map::const_iterator, bool> ins_res = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.insert(item);
-		const string& tmp = ins_res.first->second;
-		if (!ins_res.second && namespaceUML.compare(tmp))
+		
+		if (!ins_res.second && namespaceUML.compare(ins_res.first->second))
 			throw udm_exception(string("A mapping from namespace URI '" + namespaceURI + "' exists already: " + namespaceUML));
+
+		xsd_ns_mapping_storage::str_str_map::value_type item1(namespaceUML, namespaceURI);
+		pair<xsd_ns_mapping_storage::str_str_map::const_iterator, bool> ins_res1 = xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.insert(item1);
+		
+		if (!ins_res1.second && namespaceURI.compare(ins_res1.first->second))
+			throw udm_exception(string("A mapping from UML namespace '"  + namespaceUML + "' exists already: " + namespaceURI));
+
 	}
 
 	UDM_DLL void RemoveURIToUMLNamespaceMapping(const string & namespaceURI)
 	{
 		xsd_ns_mapping_storage::static_xsd_ns_mapping_container.erase(namespaceURI);
+    xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.erase(namespaceURI);
 	}
 
 	UDM_DLL void ClearURIToUMLNamespaceMappings()
 	{
 		xsd_ns_mapping_storage::static_xsd_ns_mapping_container.clear();
+    xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.clear();
 	}
 
+  //=================================
+  const string getNSURI(const string& ns_name )
+  {
+    string ns_uri;
+   	xsd_ns_mapping_storage::str_str_map::const_iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.find(ns_name);
+  	if (it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.end()) 
+	  	ns_uri = it_ns_map->second.c_str();
+    else
+    {
+      ns_uri = string(UDM_DOM_URI_PREFIX);
+			//ns_uri += "/";
+			ns_uri += ns_name;
+    }
+    return ns_uri;
+  }
 
 	DOM_Element getElementNamed(DOM_Element parent, const DOMString &name, const DOMString &ns_name, bool create = false, int no = 1)
 	{
@@ -412,9 +436,7 @@ namespace UdmDom
 		}
 		if (create)
 		{
-			DOMString ns_uri(UDM_DOM_URI_PREFIX);
-			ns_uri += "/";
-			ns_uri += ns_name;
+			DOMString ns_uri(getNSURI(StrX(ns_name).localForm()).c_str());
 
 			DOMString qualified_name(ns_name);
 			qualified_name += ":";
@@ -2091,7 +2113,8 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 					throw udm_exception("Invalid child specified: " + casestr);
 				}
 				DOMString nodename = DOMString((string(::Uml::Uml::Namespace(meta.parent()).name()) + ':' +  string(meta.name())).c_str());
-				DOMString ns_uri = DOMString((string(UDM_DOM_URI_PREFIX) + '/' +  string(::Uml::Uml::Namespace(meta.parent()).name())).c_str());
+				//DOMString ns_uri = DOMString((string(UDM_DOM_URI_PREFIX) + '/' +  string(::Uml::Uml::Namespace(meta.parent()).name())).c_str());
+        DOMString ns_uri(getNSURI(string(::Uml::Uml::Namespace(meta.parent()).name())).c_str());
 				DomObject *dep = 
 					new DomObject(meta, dom_element.getOwnerDocument().createElementNS(ns_uri, nodename), mydn);
 				//dep does not have at this moment an archetype!!!
@@ -3261,6 +3284,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 	//ugly but necesarry
 	UDM_DLL str_xsd_storage::str_str_map str_xsd_storage::static_xsd_container;
 	UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_mapping_container;
+  UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container;
 
 	
 
@@ -3333,6 +3357,19 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		parser.setExpandEntityReferences(true);
 		parser.setIncludeIgnorableWhitespace(false);
 		parser.setEntityResolver(&resolver);
+
+
+    string all_ns;
+  	xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.begin();
+		for(;it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end();++it_ns_map)
+    {
+      
+			const string& uri = it_ns_map->first;
+      const string& ns = it_ns_map->second;
+      all_ns += uri + " " + ns + ".xsd ";
+
+    }
+    parser.setExternalSchemaLocation(all_ns.c_str());
 
 		MobiesErrorHandler errhand;
 		parser.setErrorHandler(&errhand);
@@ -3448,6 +3485,18 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		parser.setIncludeIgnorableWhitespace(false);
 		parser.setEntityResolver(&resolver);
 
+    string all_ns;
+  	xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.begin();
+		for(;it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end();++it_ns_map)
+    {
+      
+			const string& uri = it_ns_map->first;
+      const string& ns = it_ns_map->second;
+      all_ns += uri + " " + ns + ".xsd ";
+
+    }
+    parser.setExternalSchemaLocation(all_ns.c_str());
+
 		MobiesErrorHandler errhand;
 		parser.setErrorHandler(&errhand);
 
@@ -3543,7 +3592,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 	};
 
 
-
+//================================================
 	UDM_DLL void DomDataNetwork::CreateNew(const string &systemname, 
 									const string &metalocator, const ::Uml::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem) 
@@ -3654,7 +3703,9 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 			string root_ns_name = ::Uml::Uml::Namespace(rootclass.parent()).name();
 			string root_qualified_name = root_ns_name + ":" + rootname;
-			string root_ns_uri = string(UDM_DOM_URI_PREFIX) + root_ns_name;
+
+      string root_ns_uri = getNSURI(root_ns_name);
+			//string root_ns_uri = string(UDM_DOM_URI_PREFIX) + root_ns_name;
 
 
 
@@ -3707,7 +3758,8 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 						
 						string ns_name = nses_i->name();
-						string ns_uri = string(UDM_DOM_URI_PREFIX) + ns_name;
+            string ns_uri = getNSURI(ns_name);
+						//string ns_uri = string(UDM_DOM_URI_PREFIX) + ns_name;
 						
 						if (schemalocations.size()) schemalocations += ' ';
 						schemalocations += ns_uri;
@@ -3737,7 +3789,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		CATCH_XML_EXCEPTION("DomDataNetwork::CreateNew()") 
 		
 	}
-
+//======================================================
 	UDM_DLL void DomDataNetwork::CommitEditSequence() { ; }
 	UDM_DLL void DomDataNetwork::AbortEditSequence() { ; }
 
