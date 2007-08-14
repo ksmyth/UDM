@@ -8,7 +8,7 @@
 #ifndef OCLFormalParameter_h
 #define OCLFormalParameter_h
 
-#include "OclCommon.h"
+#include "OCLCommon.h"
 
 namespace OclCommon
 {

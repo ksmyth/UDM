@@ -10,7 +10,9 @@
 
 #include "OCLCommon.h"
 #include "OCLRefCount.h"
+#ifdef _WIN32
 #include "unknwn.h"
+#endif
 
 namespace OclMeta {
 	class Object;
@@ -66,7 +68,9 @@ namespace OclMeta
 			bool 							IsUndefined() const;
 			OclImplementation::Object* 	GetImplementation() const;
 			std::string						Print() const;
+#ifdef _WIN32
 			virtual IUnknown*				GetObject() const;
+#endif
 	};
 
 }; // namespace OclMeta
@@ -116,12 +120,12 @@ namespace OclImplementation
 			{
 				return false;
 			}
-			
+
 			virtual bool IsComparable() const
 			{
 				if (m_strTypeName == "ocl::Integer"  ||  m_strTypeName == "ocl::Real"  ||
 					m_strTypeName == "ocl::String")
-					return true; 
+					return true;
 				return false;
 			}
 
@@ -136,7 +140,9 @@ namespace OclImplementation
 			}
 
 			virtual std::string Print() const = 0;
+#ifdef _WIN32
 			virtual IUnknown* GetObject() const {return NULL;};
+#endif
 
 			virtual bool IsUndefined() const
 			{

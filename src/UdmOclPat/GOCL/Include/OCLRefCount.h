@@ -41,7 +41,7 @@ namespace OclCommon
 			{
 			}
 
-		friend RCSmart< TRefCount >;
+		friend class RCSmart< TRefCount >;
 	};
 
 //###############################################################################################################################################
@@ -62,7 +62,7 @@ namespace OclCommon
 
 		public :
 			RCSmart()
-				: m_p( NULL )
+				: m_p( 0 )
 			{
 			}
 
@@ -136,7 +136,7 @@ namespace OclCommon
 
 			bool IsNull() const
 			{
-				return m_p == NULL;
+				return m_p == 0;
 			}
 
 		private :
@@ -151,7 +151,7 @@ namespace OclCommon
 				if ( m_p )
 					if ( --m_p->m_iRefCount == 0 ) {
 						delete m_p;
-						m_p = NULL;
+						m_p = 0;
 					}
 			}
 	};
@@ -174,7 +174,7 @@ namespace OclCommon
 
 		public :
 			Smart()
-				: m_p( NULL )
+				: m_p( 0 )
 			{
 			}
 
@@ -231,7 +231,7 @@ namespace OclCommon
 
 			bool IsNull() const
 			{
-				return m_p == NULL;
+				return m_p == 0;
 			}
 	};
 

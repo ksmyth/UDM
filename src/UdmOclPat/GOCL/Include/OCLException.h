@@ -312,7 +312,8 @@ namespace OclCommon
 				else {
 					ExceptionVector vecTemp( m_vecExceptions );
 					m_vecExceptions.clear();
-					for ( int i = 0 ; i < from ; i++ )
+					int i;
+					for ( i = 0 ; i < from ; i++ )
 						m_vecExceptions.push_back( vecTemp[ i ] );
 					for ( i = to ; i < (int) vecTemp.size() ; i++ )
 						m_vecExceptions.push_back( vecTemp[ i ] );

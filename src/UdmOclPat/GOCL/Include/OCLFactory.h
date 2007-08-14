@@ -52,7 +52,7 @@ namespace OclImplementation
 				return m_pTypeManager;
 			}
 
-		friend OclMeta::TypeManager;
+		friend class OclMeta::TypeManager;
 	};
 
 	typedef FeatureFactory< OclSignature::Attribute , OclMeta::AttributeVector > AttributeFactory;
@@ -89,7 +89,7 @@ namespace OclImplementation
 				return m_pTypeManager;
 			}
 
-		friend OclMeta::TypeManager;
+		friend class OclMeta::TypeManager;
 	};
 
 	//##############################################################################################################################################
@@ -125,9 +125,9 @@ namespace OclImplementation
 				return m_pTypeManager;
 			}
 
-		friend OclMeta::TypeManager;
+		friend class OclMeta::TypeManager;
 	};
 
 }; // namespace OclImplementation
 
-#endif OCLFactory_h
+#endif //OCLFactory_h

@@ -113,7 +113,11 @@ namespace OclCommon
 					return false;
 				item.object = object;
 				item.bAssignable = bAssignable;
+#if (_MSC_VER == 1200)
 				m_mapVariables.insert( TMap::value_type( strName, item ) );
+#else
+				m_mapVariables.insert( typename TMap::value_type( strName, item ) );
+#endif
 				return true;
 			}
 
@@ -143,7 +147,11 @@ namespace OclCommon
 					return false;
 				m_mapVariables.erase( strName );
 				item.object = object;
+#if (_MSC_VER == 1200)
 				m_mapVariables.insert( TMap::value_type( strName, item ) );
+#else
+				m_mapVariables.insert( typename TMap::value_type( strName, item ) );
+#endif			
 				return true;
 			}
 

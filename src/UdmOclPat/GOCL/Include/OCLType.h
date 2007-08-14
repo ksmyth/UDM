@@ -143,7 +143,7 @@ namespace OclMeta
 		protected :
 					TypeManager* 		GetTypeManager() const;
 
-		friend TypeManager;
+		friend class TypeManager;
 	};
 
 //##############################################################################################################################################
@@ -173,7 +173,7 @@ namespace OclMeta
 	//	protected :
 			virtual 	CallResult 				GetResults( const OclSignature::Iterator& signature );
 
-		friend TypeManager;
+		friend class TypeManager;
 	};
 
 }; // namespace OclMeta

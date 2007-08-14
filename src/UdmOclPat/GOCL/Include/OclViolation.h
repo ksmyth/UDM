@@ -2,6 +2,7 @@
 #define OclViolation_h
 
 #include "OCLCommon.h"
+#ifdef _WIN32
 #include "unknwn.h"
 // cannot use _com_ptr_t instead of IUnknown *
 // because of incluse mess
@@ -54,7 +55,7 @@ public:
 		EraseAll();
 	}
 
-	void clear() 
+	void clear()
 	{
 		EraseAll();
 		vector<IUnknown *>::clear();
@@ -102,6 +103,7 @@ public:
 
 };
 }; // namespace std
+#endif //_WIN32
 
 namespace OclTree
 {
@@ -113,7 +115,9 @@ namespace OclTree
 		Position					position;
 		StringVector				vecVariables;
 		StringVector				vecObjects;
+#ifdef _WIN32
 		std::PtrVector				vecObjectsPtr;
+#endif
 	};
 
 	typedef std::vector< Violation >	ViolationVector;

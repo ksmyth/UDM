@@ -340,10 +340,10 @@ namespace OclTree
 //
 //##############################################################################################################################################
 
-	class LevelCounter 
+	class LevelCounter
 	{
 		public:
-			LevelCounter(int *count) 
+			LevelCounter(int *count)
 			{
 				if (count)
 				{
@@ -686,8 +686,8 @@ namespace OclTree
 						EnumerationNode*				CreateEnumerationNode() const;
 //udmoclpat changes>
 
-		friend ObjectNode;
-		friend CollectionNode;
+		friend class ObjectNode;
+		friend class CollectionNode;
 	};
 
 //<udmoclpat changes

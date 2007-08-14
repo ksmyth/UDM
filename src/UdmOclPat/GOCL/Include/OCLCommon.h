@@ -9,12 +9,15 @@
 #define OCLCommon_h
 
 /*
-in case of VC 7.x we use MSVC's own STL
-
+in case of GME STLport is used (under VC 7.x)
+in case of UDM MSVC's own STL
 */
+
+#ifndef FOR_GME
 #ifdef _WIN32
 #if (_MSC_VER == 1200)
 #include <stl_user_config.h>
+#endif
 #endif
 #endif
 #include <vector>
@@ -49,4 +52,4 @@ namespace OclCommon {
 
 }; // namespace OclCommon
 
-#endif OCLCommon_h
+#endif //OCLCommon_h
