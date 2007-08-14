@@ -809,7 +809,7 @@ namespace UdmDom
 		void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct)
 		{
 			//for String attibutes we have the same behaviour
-			if ((string)meta.type() !=  "Text") ObjectImpl::setStringAttrArr(meta, a, direct);
+			if ((string)meta.type() !=  "Text") return ObjectImpl::setStringAttrArr(meta, a, direct);
 			
 			string name = meta.name();
 
