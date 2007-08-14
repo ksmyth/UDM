@@ -489,7 +489,10 @@ namespace UdmDom
 			if (mcc_i != ((DomDataNetwork *)mydn)->meta_class_cache.end())
 				return mcc_i->second;
 
-			throw udm_exception("Not found");
+			string e_description = "Couldn't find in cache the class of element '";
+			e_description += key.localForm();
+			e_description += "'";
+			throw udm_exception(e_description);
 		}; //eo findClass()
 
 
@@ -3479,19 +3482,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			InputSource *pp = mr.resolveEntity(ml.rawBuffer(),ml.rawBuffer());
 
 
-			//XSD
-			/*
-			if(!pp &&
-					(metalocator.size() < 4 || 
-					strnicmp(metalocator.c_str() + metalocator.size() - 4, ".dtd",4) != 0)) 
-			{
-					DOMString ml2((metalocator + string(".dtd")).c_str());
-					pp = mr.resolveEntity(ml2.rawBuffer(),ml2.rawBuffer());
-				
-					ml = ml2;	
-			}
-			*/
-
+			
 	
 			//XSD
 			string xsd_file = metalocator;
@@ -3525,10 +3516,8 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			DOM_DocumentType dtd;
 
 			string rootname = rootclass.name();
-			string ns_name = ::Uml::Uml::Namespace(rootclass.parent()).name();
-			string qualified_name = ns_name + ":" + rootname;
-			string ns_uri = string(UDM_DOM_URI_PREFIX) + ns_name;
 
+			
 			//XSD
 			//dtd= impl.createDocumentType(DOMString(rootname.c_str()),DOMString(), ml);
 
@@ -3543,12 +3532,15 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			}
 
 
+			string root_ns_name = ::Uml::Uml::Namespace(rootclass.parent()).name();
+			string root_qualified_name = root_ns_name + ":" + rootname;
+			string root_ns_uri = string(UDM_DOM_URI_PREFIX) + root_ns_name;
 
 
 
 			doc = impl.createDocument(
-					ns_uri.c_str(),                    // root element namespace URI.
-					qualified_name.c_str(),            // root element name
+					root_ns_uri.c_str(),                    // root element namespace URI.
+					root_qualified_name.c_str(),            // root element name
 					dtd);  // document type object (DTD).
 		
 			
@@ -3573,13 +3565,46 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 				// set XML Schema
 				DOM_Element de = static_cast<DomObject *>(GetRootObject().__impl())->dom_element;
 				
-				de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
-					DOMString((string("xmlns:") + ns_name).c_str()), DOMString(ns_uri.c_str()));
-				
+				set<::Uml::Uml::Namespace> nses = metaroot.dgr->namespaces();
 				de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
 						  DOMString("xmlns:xsi"), DOMString("http://www.w3.org/2001/XMLSchema-instance"));
-				de.setAttributeNS(DOMString("http://www.w3.org/2001/XMLSchema-instance"),
-						  DOMString("xsi:schemaLocation"), DOMString((ns_uri + ' ' + fname_pathless).c_str()));
+
+				if (nses.size() == 1)
+				{
+					de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
+					DOMString((string("xmlns:") + root_ns_name).c_str()), DOMString(root_ns_uri.c_str()));
+					
+					de.setAttributeNS(DOMString("http://www.w3.org/2001/XMLSchema-instance"),
+						  DOMString("xsi:schemaLocation"), DOMString((root_ns_uri + ' ' + fname_pathless).c_str()));
+				}
+				else
+				{
+					set<::Uml::Uml::Namespace>::iterator nses_i = nses.begin();
+					string schemalocations;
+
+					while (nses_i != nses.end())
+					{
+
+						
+						string ns_name = nses_i->name();
+						string ns_uri = string(UDM_DOM_URI_PREFIX) + ns_name;
+						
+						if (schemalocations.size()) schemalocations += ' ';
+						schemalocations += ns_uri;
+						schemalocations += ' ';
+						schemalocations += ns_name;
+						schemalocations += ".xsd";
+
+						de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
+							DOMString((string("xmlns:") + ns_name).c_str()), DOMString(ns_uri.c_str()));
+
+						nses_i++;
+
+
+					};
+					de.setAttributeNS(DOMString("http://www.w3.org/2001/XMLSchema-instance"),
+						  DOMString("xsi:schemaLocation"), DOMString(schemalocations.c_str()) );
+				}
 			}
 
 
