@@ -1280,9 +1280,14 @@ namespace OclTree
 
 		// Remove Implicit variable if it was
 
-		if ( m_vecDeclarators[ 0 ].substr( 0, 1 ) == "!" ) {
+		if ( m_vecDeclarators[ 0 ].substr( 0, 1 ) == "!" ) 
+		{
+			/*
 			StringVector::iterator it = context.m_vecImplicits.end();
 			context.m_vecImplicits.erase( it-- );
+			*/
+			context.m_vecImplicits.pop_back();
+
 		}
 
 		return ! m_vecType.empty();
@@ -1529,8 +1534,11 @@ namespace OclTree
 				// Remove the newly created implicit iterator
 
 				contextIterator.m_ctxTypes.RemoveVariable( std::string( chBuffer ) );
+				/*
 				StringVector::iterator it = contextIterator.m_vecImplicits.end();
 				contextIterator.m_vecImplicits.erase( it-- );
+				*/
+				contextIterator.m_vecImplicits.pop_back();
 
 			TypeSeq vecTypeIterator = m_vecArguments[ 0 ]->m_vecType;
 
