@@ -41,7 +41,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib UdmIntD.lib libcint.lib"
+				AdditionalDependencies="UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib UdmIntD.lib libcint.lib UdmOCLD.lib GOCL_vc7D.lib"
 				OutputFile=".\..\..\bin/test_cintudmpseudo.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -105,7 +105,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBase.lib cppunit.lib testrunner.lib UdmUtil.lib zlib.lib UdmDom.lib xerces-c_2.lib UdmInt.lib libcint.lib"
+				AdditionalDependencies="UdmBase.lib cppunit.lib testrunner.lib UdmUtil.lib zlib.lib UdmDom.lib xerces-c_2.lib UdmInt.lib libcint.lib UdmOcl.lib  GOCL_vc7.lib"
 				OutputFile=".\..\..\bin/test_cintudmpseudo.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
