@@ -74,15 +74,15 @@ namespace UdmDom
 	public:
 		static UDM_DLL string DTDPath;
 		//meta type-cache-by-name
-		map<string, ::Uml::Uml::Class> meta_class_cache;
+		map<string, ::Uml::Class> meta_class_cache;
 
 		UDM_DLL DomDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* pr = NULL);
 		UDM_DLL ~DomDataNetwork();
 		UDM_DLL void CreateNew(const string &systemname, 
-									const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+									const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 
-		UDM_DLL void CreateNewToString(const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+		UDM_DLL void CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 
 

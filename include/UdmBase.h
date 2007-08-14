@@ -226,22 +226,19 @@ this software.
 
 namespace Uml
 {
-	namespace Uml 
-	{
 
-		class UDM_DLL Diagram;
-		class UDM_DLL Namespace;
-		class UDM_DLL Class;
-		class UDM_DLL Attribute;
-		class UDM_DLL Association;
-		class UDM_DLL AssociationRole;
-		class UDM_DLL Composition;
-		class UDM_DLL CompositionParentRole;
-		class UDM_DLL CompositionChildRole;
-		class UDM_DLL Constraint;
-		class UDM_DLL ConstraintDefinition;
-	};
-	const UDM_DLL Uml::AssociationRole &theOther1(const Uml::AssociationRole &role);
+	class UDM_DLL Diagram;
+	class UDM_DLL Namespace;
+	class UDM_DLL Class;
+	class UDM_DLL Attribute;
+	class UDM_DLL Association;
+	class UDM_DLL AssociationRole;
+	class UDM_DLL Composition;
+	class UDM_DLL CompositionParentRole;
+	class UDM_DLL CompositionChildRole;
+	class UDM_DLL Constraint;
+	class UDM_DLL ConstraintDefinition;
+	const UDM_DLL AssociationRole &theOther1(const AssociationRole &role);
 };
 
 class UDM_DLL cint_string;
@@ -263,7 +260,7 @@ namespace Udm
 	class udmvariant;
 
 	typedef map<string, udmvariant> tmap;
-	bool UDM_DLL IsDerivedFrom(const ::Uml::Uml::Class &derived, const ::Uml::Uml::Class &base);
+	bool UDM_DLL IsDerivedFrom(const ::Uml::Class &derived, const ::Uml::Class &base);
 	
 	class UDM_DLL ObjectImpl
 	{
@@ -277,7 +274,7 @@ namespace Udm
 	// --- type
 
 	public:
-		virtual const ::Uml::Uml::Class &type() const = 0;
+		virtual const ::Uml::Class &type() const = 0;
 
 	// --- order
 
@@ -291,31 +288,31 @@ namespace Udm
 
 	public:
 		//no array versions
-		virtual string getStringAttr(const ::Uml::Uml::Attribute &meta) const = 0;
-		virtual void setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct = true) = 0;
+		virtual string getStringAttr(const ::Uml::Attribute &meta) const = 0;
+		virtual void setStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct = true) = 0;
 
-		virtual bool getBooleanAttr(const ::Uml::Uml::Attribute &meta) const = 0;
-		virtual void setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a, const bool direct = true) = 0;
+		virtual bool getBooleanAttr(const ::Uml::Attribute &meta) const = 0;
+		virtual void setBooleanAttr(const ::Uml::Attribute &meta, bool a, const bool direct = true) = 0;
 
-		virtual __int64 getIntegerAttr(const ::Uml::Uml::Attribute &meta) const = 0;
-		virtual void setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a, const bool direct = true) = 0;
+		virtual __int64 getIntegerAttr(const ::Uml::Attribute &meta) const = 0;
+		virtual void setIntegerAttr(const ::Uml::Attribute &meta, __int64 a, const bool direct = true) = 0;
 
-		virtual double getRealAttr(const ::Uml::Uml::Attribute &meta) const = 0;
-		virtual void setRealAttr(const ::Uml::Uml::Attribute &meta, double a, const bool direct = true) = 0;
+		virtual double getRealAttr(const ::Uml::Attribute &meta) const = 0;
+		virtual void setRealAttr(const ::Uml::Attribute &meta, double a, const bool direct = true) = 0;
 
 		//array versions
 
-		virtual vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		virtual void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct = true);
+		virtual vector<string> getStringAttrArr(const ::Uml::Attribute &meta) const;
+		virtual void setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct = true);
 
-		virtual vector<bool> getBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		virtual void setBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true);
+		virtual vector<bool> getBooleanAttrArr(const ::Uml::Attribute &meta) const;
+		virtual void setBooleanAttrArr(const ::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true);
 
-		virtual vector<__int64> getIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		virtual void setIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true) ;
+		virtual vector<__int64> getIntegerAttrArr(const ::Uml::Attribute &meta) const;
+		virtual void setIntegerAttrArr(const ::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true) ;
 
-		virtual vector<double> getRealAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		virtual void setRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
+		virtual vector<double> getRealAttrArr(const ::Uml::Attribute &meta) const;
+		virtual void setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
 
 
 
@@ -326,7 +323,7 @@ namespace Udm
 
 // get the parent object or null if object has no parent
 // if role is not NULLROLE, return parent only if the role actually applies
-		virtual ObjectImpl *getParent(const ::Uml::Uml::CompositionParentRole &role) const = 0;	// can return NULL
+		virtual ObjectImpl *getParent(const ::Uml::CompositionParentRole &role) const = 0;	// can return NULL
 
 // role must be specified unless a is null, or child role in the new parent is unambigious
 // if a was already the parent, existing other childroles are not deleted
@@ -334,7 +331,7 @@ namespace Udm
 //		object will keep its existing role(s) as well if not moved to a new parent
 //		if a = NULL and role != null, the role is removed from the containment relation (if it was there), 
 //									   but the object will only be deleted, if the role specified was its only one
-		virtual void setParent(ObjectImpl *a, const ::Uml::Uml::CompositionParentRole &role, const bool direct = true) = 0;
+		virtual void setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct = true) = 0;
 
 // set parent to null; equivalent to setParent(NULL, NULL);
 		virtual void detach() = 0;
@@ -342,7 +339,7 @@ namespace Udm
 // if role is given, return only those children that have that role (ignore kind)
 // else if kind is not null, return all children which are compatible with kind
 // else if kind is null, return all children
-		virtual vector<ObjectImpl*> getChildren(const ::Uml::Uml::CompositionChildRole &role, const ::Uml::Uml::Class &kind) const = 0;
+		virtual vector<ObjectImpl*> getChildren(const ::Uml::CompositionChildRole &role, const ::Uml::Class &kind) const = 0;
 
 // if role is non-null. 
 //		All children omitted from the list lose this role and may also
@@ -353,7 +350,7 @@ namespace Udm
 
 // direct specifies if the call is coming from user code (true), or is a recursive call
 // which was invoked because this operation was invoked on an archetype
-		virtual void setChildren(const ::Uml::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct = true) = 0;
+		virtual void setChildren(const ::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct = true) = 0;
 
 
 // role must be specified unless child role in the new parent is unambigious
@@ -368,8 +365,8 @@ namespace Udm
 				upon createChild() of the parent, because the parent is an instace/derived
 				of an archetype which has children
 		*/
-		virtual ObjectImpl *createChild(const ::Uml::Uml::CompositionChildRole &role, 
-			const ::Uml::Uml::Class &meta,
+		virtual ObjectImpl *createChild(const ::Uml::CompositionChildRole &role, 
+			const ::Uml::Class &meta,
 			const ObjectImpl* arch = NULL, 
 			const bool subtype = false,
 			const bool real_archetype = true,
@@ -390,7 +387,7 @@ namespace Udm
 	public:
 // arole must be non-null. 
 // Associations with names on both sides are navigable from both directions.
-		virtual vector<ObjectImpl*> getAssociation(const ::Uml::Uml::AssociationRole &arole, int mode = TARGETFROMPEER) const = 0;
+		virtual vector<ObjectImpl*> getAssociation(const ::Uml::AssociationRole &arole, int mode = TARGETFROMPEER) const = 0;
 // arole must be non-null. 
 // Existing associations omitted from the new list are 
 // deleted, along with their association classes.
@@ -398,7 +395,7 @@ namespace Udm
 
 
 		virtual void setAssociation(
-			const ::Uml::Uml::AssociationRole &arole, 
+			const ::Uml::AssociationRole &arole, 
 			const vector<ObjectImpl*> &a, 
 			int mode = TARGETFROMPEER,
 			const bool direct = true) = 0;	
@@ -417,25 +414,25 @@ namespace Udm
 
 		//single value attributes
 
-		string getTempStringAttr(const ::Uml::Uml::Attribute &meta) const;
-		void setTempStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct = true);
-		__int64 getTempIntegerAttr(const ::Uml::Uml::Attribute &meta) const;
-		void setTempIntegerAttr(const ::Uml::Uml::Attribute &meta, const __int64 &a, const bool direct = true);
-		double getTempRealAttr(const ::Uml::Uml::Attribute &meta) const;
-		void setTempRealAttr(const ::Uml::Uml::Attribute &meta, const double &a, const bool direct = true);
-		bool getTempBooleanAttr(const ::Uml::Uml::Attribute &meta) const;
-		void setTempBooleanAttr(const ::Uml::Uml::Attribute &meta, const bool &a, const bool direct = true);
+		string getTempStringAttr(const ::Uml::Attribute &meta) const;
+		void setTempStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct = true);
+		__int64 getTempIntegerAttr(const ::Uml::Attribute &meta) const;
+		void setTempIntegerAttr(const ::Uml::Attribute &meta, const __int64 &a, const bool direct = true);
+		double getTempRealAttr(const ::Uml::Attribute &meta) const;
+		void setTempRealAttr(const ::Uml::Attribute &meta, const double &a, const bool direct = true);
+		bool getTempBooleanAttr(const ::Uml::Attribute &meta) const;
+		void setTempBooleanAttr(const ::Uml::Attribute &meta, const bool &a, const bool direct = true);
 
 		//multiple value attributes
 
-		vector<string> getTempStringAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		void setTempStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct = true);
-		vector<__int64> getTempIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		void setTempIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true);
-		vector<double> getTempRealAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		void setTempRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
-		vector<bool> getTempBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		void setTempBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true);
+		vector<string> getTempStringAttrArr(const ::Uml::Attribute &meta) const;
+		void setTempStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct = true);
+		vector<__int64> getTempIntegerAttrArr(const ::Uml::Attribute &meta) const;
+		void setTempIntegerAttrArr(const ::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true);
+		vector<double> getTempRealAttrArr(const ::Uml::Attribute &meta) const;
+		void setTempRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
+		vector<bool> getTempBooleanAttrArr(const ::Uml::Attribute &meta) const;
+		void setTempBooleanAttrArr(const ::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true);
 
 		//for new Objects, set the default values for attributes
 		//this will be invoked whenever creating a new ObjectImpl instance
@@ -445,9 +442,9 @@ namespace Udm
 		void setDefaultAttributes(const bool all = true);
 
 		//atribute copier functions
-		void CopyAttributeFrom(const ::Uml::Uml::Attribute& which, const ObjectImpl* from, bool direct = true);
+		void CopyAttributeFrom(const ::Uml::Attribute& which, const ObjectImpl* from, bool direct = true);
 		void CopyAttributesFrom(const ObjectImpl*  from, bool direct = true);
-		void CopyAttributeFromArchetype(const ::Uml::Uml::Attribute& which);
+		void CopyAttributeFromArchetype(const ::Uml::Attribute& which);
 		void CopyAttributesFromArchetype();
 		
 		
@@ -461,10 +458,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		TempStringAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		TempStringAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator string() const { return impl->getTempStringAttr(meta); }
 		const string &operator =(const string &a) { impl->setTempStringAttr(meta, a); return a; }
@@ -476,10 +473,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		TempIntegerAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		TempIntegerAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator __int64() const { return impl->getTempIntegerAttr(meta); }
 		const __int64 &operator =(const __int64 &a) { impl->setTempIntegerAttr(meta, a); return a; }
@@ -490,10 +487,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		TempRealAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		TempRealAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator double() const { return impl->getTempRealAttr(meta); }
 		const double &operator =(const double &a) { impl->setTempRealAttr(meta, a); return a; }
@@ -504,10 +501,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		TempBooleanAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		TempBooleanAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator bool() const { return impl->getTempBooleanAttr(meta); }
 		const bool &operator =(const bool &a) { impl->setTempBooleanAttr(meta, a); return a; }
@@ -534,52 +531,52 @@ namespace Udm
 		virtual void release() { } 
 		virtual DataNetwork *__getdn() { throw e; }
 
-		virtual const ::Uml::Uml::Class &type() const { throw e; }
+		virtual const ::Uml::Class &type() const { throw e; }
 
-		virtual string getStringAttr(const ::Uml::Uml::Attribute &meta) const { throw e; }
-		virtual void setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct = true) { throw e; }
+		virtual string getStringAttr(const ::Uml::Attribute &meta) const { throw e; }
+		virtual void setStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct = true) { throw e; }
 
-		virtual bool getBooleanAttr(const ::Uml::Uml::Attribute &meta) const { throw e; }
-		virtual void setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a, const bool direct = true) { throw e; }
+		virtual bool getBooleanAttr(const ::Uml::Attribute &meta) const { throw e; }
+		virtual void setBooleanAttr(const ::Uml::Attribute &meta, bool a, const bool direct = true) { throw e; }
 
-		virtual __int64 getIntegerAttr(const ::Uml::Uml::Attribute &meta) const { throw e; }
-		virtual void setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a, const bool direct = true) { throw e; }
+		virtual __int64 getIntegerAttr(const ::Uml::Attribute &meta) const { throw e; }
+		virtual void setIntegerAttr(const ::Uml::Attribute &meta, __int64 a, const bool direct = true) { throw e; }
 
-		virtual double getRealAttr(const ::Uml::Uml::Attribute &meta) const { throw e; }
-		virtual void setRealAttr(const ::Uml::Uml::Attribute &meta, double a, const bool direct = true) { throw e; }
+		virtual double getRealAttr(const ::Uml::Attribute &meta) const { throw e; }
+		virtual void setRealAttr(const ::Uml::Attribute &meta, double a, const bool direct = true) { throw e; }
 
-		virtual vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const {throw e;};
-		virtual void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct = true) {throw e;};
+		virtual vector<string> getStringAttrArr(const ::Uml::Attribute &meta) const {throw e;};
+		virtual void setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct = true) {throw e;};
 
-		virtual vector<bool> getBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const {throw e;};
-		virtual void setBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true) {throw e;};
+		virtual vector<bool> getBooleanAttrArr(const ::Uml::Attribute &meta) const {throw e;};
+		virtual void setBooleanAttrArr(const ::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true) {throw e;};
 
-		virtual vector<__int64> getIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const {throw e;};
-		virtual void setIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true) {throw e;};
+		virtual vector<__int64> getIntegerAttrArr(const ::Uml::Attribute &meta) const {throw e;};
+		virtual void setIntegerAttrArr(const ::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true) {throw e;};
 
-		virtual vector<double> getRealAttrArr(const ::Uml::Uml::Attribute &meta) const {throw e;};
-		virtual void setRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct = true) {throw e;};
-
-
+		virtual vector<double> getRealAttrArr(const ::Uml::Attribute &meta) const {throw e;};
+		virtual void setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct = true) {throw e;};
 
 
-		virtual ObjectImpl *getParent(const ::Uml::Uml::CompositionParentRole &role) const { throw e; }
-		virtual void setParent(ObjectImpl *a, const ::Uml::Uml::CompositionParentRole &role, const bool direct = true) { throw e; }
+
+
+		virtual ObjectImpl *getParent(const ::Uml::CompositionParentRole &role) const { throw e; }
+		virtual void setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct = true) { throw e; }
 		virtual void detach() { throw e; }
 
-		virtual vector<ObjectImpl*> getChildren(const ::Uml::Uml::CompositionChildRole &meta, const ::Uml::Uml::Class &kind) const { throw e; }
-		virtual void setChildren(const ::Uml::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct = true) { throw e; }
+		virtual vector<ObjectImpl*> getChildren(const ::Uml::CompositionChildRole &meta, const ::Uml::Class &kind) const { throw e; }
+		virtual void setChildren(const ::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct = true) { throw e; }
 
-		virtual ObjectImpl *createChild(const ::Uml::Uml::CompositionChildRole &role,
-			const ::Uml::Uml::Class &meta,
+		virtual ObjectImpl *createChild(const ::Uml::CompositionChildRole &role,
+			const ::Uml::Class &meta,
 			const ObjectImpl* archetype = NULL,
 			const bool subtype = false,
 			const bool real_archetype = true,
 			const bool need_safetype = false) { throw e; }
 
-		virtual vector<ObjectImpl*> getAssociation(const ::Uml::Uml::AssociationRole &meta, int mode = TARGETFROMPEER) const { throw e; }
+		virtual vector<ObjectImpl*> getAssociation(const ::Uml::AssociationRole &meta, int mode = TARGETFROMPEER) const { throw e; }
 		virtual void setAssociation(
-			const ::Uml::Uml::AssociationRole &meta, 
+			const ::Uml::AssociationRole &meta, 
 			const vector<ObjectImpl*> &a, 
 			int mode = TARGETFROMPEER, 
 			const bool direct = true) { throw e; }
@@ -600,8 +597,8 @@ namespace Udm
 
 	inline NullObject::NullObject() { ASSERT(this == &_null); } 
 
-	extern UDM_DLL const ::Uml::Uml::CompositionChildRole NULLCHILDROLE;
-	extern UDM_DLL const ::Uml::Uml::CompositionParentRole NULLPARENTROLE;
+	extern UDM_DLL const ::Uml::CompositionChildRole NULLCHILDROLE;
+	extern UDM_DLL const ::Uml::CompositionParentRole NULLPARENTROLE;
 
 // single-value(no-array) versions of Attribute objects
 
@@ -611,10 +608,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		StringAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		StringAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator string() const { return impl->getStringAttr(meta); }
 		const string &operator =(const string &a) { impl->setStringAttr(meta, a); return a; }
@@ -628,10 +625,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		BooleanAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		BooleanAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator bool() const { return impl->getBooleanAttr(meta); }
 		bool operator =(bool a) { impl->setBooleanAttr(meta, a); return a; }
@@ -643,10 +640,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		IntegerAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		IntegerAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		//operator long() const { return impl->getIntegerAttr(meta); }
 		operator __int64() const { return impl->getIntegerAttr(meta); }
@@ -660,10 +657,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		RealAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		RealAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator double() const { return impl->getRealAttr(meta); }
 		double operator =(double a) { impl->setRealAttr(meta, a); return a; }
@@ -675,7 +672,7 @@ namespace Udm
 	implementing the basic cast and assignment operators
 */	
 
-	bool UDM_DLL CheckAttributeOrdering(const ::Uml::Uml::Attribute & att);
+	bool UDM_DLL CheckAttributeOrdering(const ::Uml::Attribute & att);
 
 	template <class CLASS>
 	class ArrAttrItem
@@ -683,7 +680,7 @@ namespace Udm
 		
 	protected:
 		
-		const ::Uml::Uml::Attribute & meta;			//attribute to be altered
+		const ::Uml::Attribute & meta;			//attribute to be altered
 		vector<CLASS> array;		//vector with array elements
 		ObjectImpl * object;	//object this array attribute belongs to
 		unsigned int index;					//iterators can not be stored
@@ -692,7 +689,7 @@ namespace Udm
 	
 	public:
 		
-		ArrAttrItem(const vector<CLASS>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m):  meta(m), array(array_ref), index (a_i)
+		ArrAttrItem(const vector<CLASS>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m):  meta(m), array(array_ref), index (a_i)
 		{
 			object = oi;
 			if (!object)
@@ -759,7 +756,7 @@ namespace Udm
 	class AdditiveArrAttrItem : public ArrAttrItem<CLASS>
 	{
 	public:
-		AdditiveArrAttrItem(const vector<CLASS>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+		AdditiveArrAttrItem(const vector<CLASS>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m)
 			:ArrAttrItem<CLASS>(array_ref, a_i, oi, m){};
 		
 		virtual AdditiveArrAttrItem& operator +=(const CLASS &a)
@@ -788,7 +785,7 @@ namespace Udm
 	class StringArrAttrItem : public AdditiveArrAttrItem<string>
 	{
 	public:	
-		StringArrAttrItem(const vector<string>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+		StringArrAttrItem(const vector<string>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m)
 			:AdditiveArrAttrItem<string>(array_ref, a_i, oi, m){};
 		void set()
 		{
@@ -816,7 +813,7 @@ namespace Udm
 	class RealArrAttrItem : public AdditiveArrAttrItem<double>
 	{
 	public:	
-		RealArrAttrItem(const vector<double>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+		RealArrAttrItem(const vector<double>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m)
 			:AdditiveArrAttrItem<double>(array_ref, a_i, oi, m){};
 		void set()
 		{
@@ -841,7 +838,7 @@ namespace Udm
 	class IntegerArrAttrItem : public AdditiveArrAttrItem<__int64>
 	{
 	public:
-		IntegerArrAttrItem(const vector<__int64>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+		IntegerArrAttrItem(const vector<__int64>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m)
 			:AdditiveArrAttrItem<__int64>(array_ref, a_i, oi, m){};
 		void set()
 		{
@@ -866,7 +863,7 @@ namespace Udm
 	class BooleanArrAttrItem : public ArrAttrItem<bool>
 	{
 	public:
-		BooleanArrAttrItem(const vector<bool>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+		BooleanArrAttrItem(const vector<bool>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m)
 			:ArrAttrItem<bool>(array_ref, a_i, oi, m){};
 		void set()
 		{
@@ -894,7 +891,7 @@ namespace Udm
 	class TempStringArrAttrItem : public AdditiveArrAttrItem<string>
 	{
 	public:	
-		TempStringArrAttrItem(const vector<string>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+		TempStringArrAttrItem(const vector<string>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m)
 			:AdditiveArrAttrItem<string>(array_ref, a_i, oi, m){};
 		void set()
 		{
@@ -922,7 +919,7 @@ namespace Udm
 	class TempRealArrAttrItem : public AdditiveArrAttrItem<double>
 	{
 	public:	
-		TempRealArrAttrItem(const vector<double>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+		TempRealArrAttrItem(const vector<double>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m)
 			:AdditiveArrAttrItem<double>(array_ref, a_i, oi, m){};
 		void set()
 		{
@@ -947,7 +944,7 @@ namespace Udm
 	class TempIntegerArrAttrItem : public AdditiveArrAttrItem<__int64>
 	{
 	public:
-		TempIntegerArrAttrItem(const vector<__int64>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+		TempIntegerArrAttrItem(const vector<__int64>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m)
 			:AdditiveArrAttrItem<__int64>(array_ref, a_i, oi, m){};
 		void set()
 		{
@@ -972,7 +969,7 @@ namespace Udm
 	class TempBooleanArrAttrItem : public ArrAttrItem<bool>
 	{
 	public:
-		TempBooleanArrAttrItem(const vector<bool>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+		TempBooleanArrAttrItem(const vector<bool>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m)
 			:ArrAttrItem<bool>(array_ref, a_i, oi, m){};
 		void set()
 		{
@@ -1024,10 +1021,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		TempStringAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		TempStringAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<string>() const { return impl->getTempStringAttrArr(meta); }
 		const vector<string> &operator =(const vector<string> &a) 
@@ -1111,10 +1108,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		TempIntegerAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		TempIntegerAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<__int64>() const { return impl->getTempIntegerAttrArr(meta); }
 		const vector<__int64> &operator =(const vector<__int64> &a) 
@@ -1190,10 +1187,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		TempRealAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		TempRealAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<double>() const { return impl->getTempRealAttrArr(meta); }
 		const vector<double> &operator =(const vector<double> &a) 
@@ -1268,10 +1265,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		TempBooleanAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		TempBooleanAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<bool>() const { return impl->getTempBooleanAttrArr(meta); }
 		const vector<bool> &operator =(const vector<bool> &a) 
@@ -1349,10 +1346,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		StringAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		StringAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<string>() const { return impl->getStringAttrArr(meta); }
 		const vector<string> &operator =(const vector<string> &a) 
@@ -1440,10 +1437,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		BooleanAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		BooleanAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<bool>() const { return impl->getBooleanAttrArr(meta); }
 		const vector<bool>& operator =(const vector<bool>& a) 
@@ -1505,10 +1502,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		IntegerAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		IntegerAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<__int64>() const { return impl->getIntegerAttrArr(meta); }
 		const vector<__int64>& operator =(const vector<__int64>& a) 
@@ -1583,10 +1580,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::Attribute &meta;
+		const ::Uml::Attribute &meta;
 
 	public:
-		RealAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+		RealAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<double>() const { return impl->getRealAttrArr(meta); }
 		const vector<double>& operator =(const vector<double> &a) 
@@ -1662,10 +1659,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::AssociationRole &meta;
+		const ::Uml::AssociationRole &meta;
 
 	public:
-		CrossAssocAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+		CrossAssocAttr(ObjectImpl *i, const ::Uml::AssociationRole &m) : impl(i), meta(m) { }
 
 		operator set<CLASS, Pred>() const;
 		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a);
@@ -1691,10 +1688,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::AssociationRole &meta;
+		const ::Uml::AssociationRole &meta;
 
 	public:
-		AssocAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+		AssocAttr(ObjectImpl *i, const ::Uml::AssociationRole &m) : impl(i), meta(m) { }
 
 		operator set<CLASS, Pred>() const 
 		{
@@ -1748,10 +1745,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::AssociationRole &meta;
+		const ::Uml::AssociationRole &meta;
 
 	public:
-		CrossPointerAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+		CrossPointerAttr(ObjectImpl *i, const ::Uml::AssociationRole &m) : impl(i), meta(m) { }
 
 		operator CLASS() const;
 
@@ -1767,10 +1764,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::AssociationRole &meta;
+		const ::Uml::AssociationRole &meta;
 
 	public:
-		PointerAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+		PointerAttr(ObjectImpl *i, const ::Uml::AssociationRole &m) : impl(i), meta(m) { }
 
 		operator CLASS() const 
 		{
@@ -1801,10 +1798,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::AssociationRole &meta;
+		const ::Uml::AssociationRole &meta;
 
 	public:
-		CrossAssocEndAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+		CrossAssocEndAttr(ObjectImpl *i, const ::Uml::AssociationRole &m) : impl(i), meta(m) { }
 
 		operator CLASS() const;
 		const CLASS &operator =(const CLASS &a);
@@ -1818,10 +1815,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::AssociationRole &meta;
+		const ::Uml::AssociationRole &meta;
 
 	public:
-		AssocEndAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+		AssocEndAttr(ObjectImpl *i, const ::Uml::AssociationRole &m) : impl(i), meta(m) { }
 
 		operator CLASS() const 
 		{
@@ -1852,10 +1849,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::AssociationRole &peermeta, &selfmeta;
+		const ::Uml::AssociationRole &peermeta, &selfmeta;
 
 	public:
-		AClassCrossPointerAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m, const ::Uml::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
+		AClassCrossPointerAttr(ObjectImpl *i, const ::Uml::AssociationRole &m, const ::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
 
 		operator CLASS() const;
 		const CLASS &operator =(const CLASS &a);
@@ -1868,10 +1865,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::AssociationRole &peermeta, &selfmeta;
+		const ::Uml::AssociationRole &peermeta, &selfmeta;
 
 	public:
-		AClassPointerAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m, const ::Uml::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
+		AClassPointerAttr(ObjectImpl *i, const ::Uml::AssociationRole &m, const ::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
 
 		operator CLASS() const 
 		{
@@ -1895,8 +1892,8 @@ namespace Udm
 		}
 
 		CLASS SetLink(TARGETCLASS peer, Object parent, 
-			const ::Uml::Uml::Class &meta = CLASS::meta,
-			const ::Uml::Uml::CompositionChildRole &role = NULLCHILDROLE);
+			const ::Uml::Class &meta = CLASS::meta,
+			const ::Uml::CompositionChildRole &role = NULLCHILDROLE);
 	};
 
 	// --------------------------- AClassCrossAssocAttr
@@ -1908,10 +1905,10 @@ namespace Udm
 		ObjectImpl *impl;
 // selfmeta is the role pointing towards the owner
 // the peer points to the other
-		const ::Uml::Uml::AssociationRole &peermeta, &selfmeta;
+		const ::Uml::AssociationRole &peermeta, &selfmeta;
 
 	public:
-		AClassCrossAssocAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m, const ::Uml::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
+		AClassCrossAssocAttr(ObjectImpl *i, const ::Uml::AssociationRole &m, const ::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
 
 		operator set<CLASS, Pred>() const;
 		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a);
@@ -1929,10 +1926,10 @@ namespace Udm
 		ObjectImpl *impl;
 // selfmeta is the role pointing towards the owner
 // the peer points to the other
-		const ::Uml::Uml::AssociationRole &peermeta, &selfmeta;
+		const ::Uml::AssociationRole &peermeta, &selfmeta;
 
 	public:
-		AClassAssocAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m, const ::Uml::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
+		AClassAssocAttr(ObjectImpl *i, const ::Uml::AssociationRole &m, const ::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
 
 		operator set<CLASS, Pred>() const 
 		{
@@ -1966,8 +1963,8 @@ namespace Udm
 		}
 
 		CLASS AddLink(TARGETCLASS peer, Object parent, 
-			const ::Uml::Uml::Class &meta = CLASS::meta,
-			const ::Uml::Uml::CompositionChildRole &role = NULLCHILDROLE);
+			const ::Uml::Class &meta = CLASS::meta,
+			const ::Uml::CompositionChildRole &role = NULLCHILDROLE);
 	};
 
 // --------------------------- ChildrenAttr
@@ -1977,10 +1974,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::CompositionChildRole &meta;
+		const ::Uml::CompositionChildRole &meta;
 
 	public:
-		ChildrenAttr(ObjectImpl *i, const ::Uml::Uml::CompositionChildRole &m) : impl(i), meta(m) { }
+		ChildrenAttr(ObjectImpl *i, const ::Uml::CompositionChildRole &m) : impl(i), meta(m) { }
 
 		operator set<CLASS, Pred>() const 
 		{
@@ -2095,10 +2092,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::CompositionChildRole &meta;
+		const ::Uml::CompositionChildRole &meta;
 
 	public:
-		ChildAttr(ObjectImpl *i, const ::Uml::Uml::CompositionChildRole &m) : impl(i), meta(m) { }
+		ChildAttr(ObjectImpl *i, const ::Uml::CompositionChildRole &m) : impl(i), meta(m) { }
 
 		operator CLASS() const 
 		{
@@ -2129,10 +2126,10 @@ namespace Udm
 	{
 	private:
 		ObjectImpl *impl;
-		const ::Uml::Uml::CompositionParentRole &meta;
+		const ::Uml::CompositionParentRole &meta;
 
 	public:
-		ParentAttr(ObjectImpl *i, const ::Uml::Uml::CompositionParentRole &m) : impl(i), meta(m) { }
+		ParentAttr(ObjectImpl *i, const ::Uml::CompositionParentRole &m) : impl(i), meta(m) { }
 
 		operator CLASS() const {
 			return CLASS::Cast(impl->getParent(meta));
@@ -2263,15 +2260,15 @@ namespace Udm
 			return a;
 		}
 
-		static Object Cast(const Object &a, const ::Uml::Uml::Class &meta) { return __Cast(a, meta); }
+		static Object Cast(const Object &a, const ::Uml::Class &meta) { return __Cast(a, meta); }
 		
 		//only dummy. ;) This is needed because when ParentAttr is invoked with Udm::Object template 
 		//parameter, some method of that template class CLASS require the existence of a static method
 		// CLASS::Cast(Object &) 
 
 		static Object Cast(const Object &a) { return a; }	
-		static Object Create(const ::Uml::Uml::Class &meta, const Object &parent, 
-			const ::Uml::Uml::CompositionChildRole &role, 
+		static Object Create(const ::Uml::Class &meta, const Object &parent, 
+			const ::Uml::CompositionChildRole &role, 
 			const ObjectImpl * archetype = &_null,
 			const bool subtype = false) 
 		{ 
@@ -2279,9 +2276,9 @@ namespace Udm
 		}
 
 	protected:
-		static ObjectImpl *__Cast(const Object &a, const ::Uml::Uml::Class &meta);
-		static ObjectImpl *__Create(const ::Uml::Uml::Class &meta, const Object &parent,
-			const ::Uml::Uml::CompositionChildRole &role,
+		static ObjectImpl *__Cast(const Object &a, const ::Uml::Class &meta);
+		static ObjectImpl *__Create(const ::Uml::Class &meta, const Object &parent,
+			const ::Uml::CompositionChildRole &role,
 			const ObjectImpl *  archetype = &_null,
 			const bool subtype = false);
 
@@ -2289,30 +2286,30 @@ namespace Udm
 	public:
 		// --- non-array/single value attributes
 
-		string getStringAttr(const ::Uml::Uml::Attribute &meta) const { return impl->getStringAttr(meta); }
-		void setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a) { impl->setStringAttr(meta, a); }
+		string getStringAttr(const ::Uml::Attribute &meta) const { return impl->getStringAttr(meta); }
+		void setStringAttr(const ::Uml::Attribute &meta, const string &a) { impl->setStringAttr(meta, a); }
 
-		bool getBooleanAttr(const ::Uml::Uml::Attribute &meta) const { return impl->getBooleanAttr(meta); }
-		void setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a) { impl->setBooleanAttr(meta, a); }
+		bool getBooleanAttr(const ::Uml::Attribute &meta) const { return impl->getBooleanAttr(meta); }
+		void setBooleanAttr(const ::Uml::Attribute &meta, bool a) { impl->setBooleanAttr(meta, a); }
 
-		__int64 getIntegerAttr(const ::Uml::Uml::Attribute &meta) const { return impl->getIntegerAttr(meta); }
-		void setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a) { impl->setIntegerAttr(meta, a); }
+		__int64 getIntegerAttr(const ::Uml::Attribute &meta) const { return impl->getIntegerAttr(meta); }
+		void setIntegerAttr(const ::Uml::Attribute &meta, __int64 a) { impl->setIntegerAttr(meta, a); }
 
-		double getRealAttr(const ::Uml::Uml::Attribute &meta) const { return impl->getRealAttr(meta); }
-		void setRealAttr(const ::Uml::Uml::Attribute &meta, double a) { impl->setRealAttr(meta, a); }
+		double getRealAttr(const ::Uml::Attribute &meta) const { return impl->getRealAttr(meta); }
+		void setRealAttr(const ::Uml::Attribute &meta, double a) { impl->setRealAttr(meta, a); }
 
 		// --- multiple value /array attributes
-		vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const { return impl->getStringAttrArr(meta); }
-		void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a) { impl->setStringAttrArr(meta, a); }
+		vector<string> getStringAttrArr(const ::Uml::Attribute &meta) const { return impl->getStringAttrArr(meta); }
+		void setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a) { impl->setStringAttrArr(meta, a); }
 
-		vector<bool> getBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const { return impl->getBooleanAttrArr(meta); }
-		void setBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a) { impl->setBooleanAttrArr(meta, a); }
+		vector<bool> getBooleanAttrArr(const ::Uml::Attribute &meta) const { return impl->getBooleanAttrArr(meta); }
+		void setBooleanAttrArr(const ::Uml::Attribute &meta, const vector<bool> &a) { impl->setBooleanAttrArr(meta, a); }
 
-		vector<__int64> getIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const { return impl->getIntegerAttrArr(meta); }
-		void setIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a) { impl->setIntegerAttrArr(meta, a); }
+		vector<__int64> getIntegerAttrArr(const ::Uml::Attribute &meta) const { return impl->getIntegerAttrArr(meta); }
+		void setIntegerAttrArr(const ::Uml::Attribute &meta, const vector<__int64> &a) { impl->setIntegerAttrArr(meta, a); }
 
-		vector<double> getRealAttrArr(const ::Uml::Uml::Attribute &meta) const { return impl->getRealAttrArr(meta); }
-		void setRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a) { impl->setRealAttrArr(meta, a); }
+		vector<double> getRealAttrArr(const ::Uml::Attribute &meta) const { return impl->getRealAttrArr(meta); }
+		void setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a) { impl->setRealAttrArr(meta, a); }
 
 
 
@@ -2328,7 +2325,7 @@ namespace Udm
   a.bs_Classes().bs_end
   a.bs_Classes().as_end
 */
-		set<Object> getAssociation(const ::Uml::Uml::AssociationRole &meta, int mode = TARGETFROMPEER) const
+		set<Object> getAssociation(const ::Uml::AssociationRole &meta, int mode = TARGETFROMPEER) const
 		{
 			set<Object> ret;
 
@@ -2345,7 +2342,7 @@ namespace Udm
 
 		
 
-		void setAssociation(const ::Uml::Uml::AssociationRole &meta, const set<Object> &a, int mode = TARGETFROMPEER)
+		void setAssociation(const ::Uml::AssociationRole &meta, const set<Object> &a, int mode = TARGETFROMPEER)
 		{
 			vector<ObjectImpl*> b;
 
@@ -2362,7 +2359,7 @@ namespace Udm
 	// --- type
 
 	public:
-		const ::Uml::Uml::Class &type() const { return impl->type(); }
+		const ::Uml::Class &type() const { return impl->type(); }
 
 	// --- order
 
@@ -2384,10 +2381,10 @@ namespace Udm
 		struct AssociationInfo
 		{
 			// clsAssociation can be empty (ClassType(NULL)) - simple association.
-			const ::Uml::Uml::Class & clsAssociation;
+			const ::Uml::Class & clsAssociation;
 			string strSrcRoleName;
 			string strDstRoleName;
-			AssociationInfo(const ::Uml::Uml::Class & ref) : clsAssociation(ref){};
+			AssociationInfo(const ::Uml::Class & ref) : clsAssociation(ref){};
 		};
 
 
@@ -2405,13 +2402,13 @@ namespace Udm
 		// Retrieves the adjacent objects of an object. The adjacent objects 
 		// are of the type of clsType or derived from it. The returned set can 
 		// be empty. Composition relationships are not considered here.
-		set<Object> GetAdjacentObjects(const ::Uml::Uml::Class & clsDstType);
+		set<Object> GetAdjacentObjects(const ::Uml::Class & clsDstType);
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves the adjacent objects of an object via link instance of ascType. 
 		// The adjacent objects are of the type of clsType or derived from it. 
 		// The returned set can be empty. Composition relationships are not considered here. 
 		// Parameter clsType can be null.
-		set<Object> GetAdjacentObjects(const ::Uml::Uml::Class & clsDstType, const AssociationInfo& ascType);
+		set<Object> GetAdjacentObjects(const ::Uml::Class & clsDstType, const AssociationInfo& ascType);
 		// UDM TOMI Paradigm Independent Interface
 		// Get attributes by name. These are INEFFICIENT functions using iteration.
 		// These functions return false if the attribute with the specified type
@@ -2474,11 +2471,11 @@ namespace Udm
 		set<Object> GetChildObjects() const;
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves all children considering child types but not role names.
-		set<Object> GetChildObjects(const ::Uml::Uml::Class & clsType);
+		set<Object> GetChildObjects(const ::Uml::Class & clsType);
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves all children considering role names and child types.
 		// To ignore child types set clsChildType to ClassType(NULL).
-		set<Object> GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Uml::Class & clsChildType);
+		set<Object> GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Class & clsChildType);
 		
 		// Functions for associations and links
 		// UDM TOMI Paradigm Independent Interface
@@ -2491,9 +2488,9 @@ namespace Udm
 		// Functions for creating Udm entities
 		// UDM TOMI Paradigm Independent Interface
 		// Creates an object of clsType
-		Object CreateObject(const ::Uml::Uml::Class & clsType, const Udm::Object& archetype = &Udm::_null, const bool subtype = false);
+		Object CreateObject(const ::Uml::Class & clsType, const Udm::Object& archetype = &Udm::_null, const bool subtype = false);
 
-		Object CreateObject(const ::Uml::Uml::Class & clsType, const CompositionInfo& compType, const Udm::Object& archetype = &Udm::_null, const bool subtype = false);
+		Object CreateObject(const ::Uml::Class & clsType, const CompositionInfo& compType, const Udm::Object& archetype = &Udm::_null, const bool subtype = false);
 		// UDM TOMI Paradigm Independent Interface
 		// Creates a link of a simple association or an association with association class. 
 		// If ascType.clsAssociation is not valid a simple association will be tried.
@@ -2598,7 +2595,7 @@ namespace Udm
 		//general container class
 		Object container() const;
 
-		set<Object> getChildrenByChildRoleChain(const ::Uml::Uml::Class& meta, vector< ::Uml::Uml::CompositionChildRole> chain) const;
+		set<Object> getChildrenByChildRoleChain(const ::Uml::Class& meta, vector< ::Uml::CompositionChildRole> chain) const;
 
 		//general accept function
 		virtual void Accept(const BaseVisitor&){};
@@ -2656,7 +2653,7 @@ enum BackendSemantics {
 								// Close, CloseAs, or SaveAs are used
 
 struct UdmDiagram { 
-	::Uml::Uml::Diagram *dgr; 
+	::Uml::Diagram *dgr; 
 		void (*init)(void);
 };
 
@@ -2691,7 +2688,7 @@ public:
 	virtual UDM_DLL ~DataNetwork() { if(rootobject) throw udm_exception("Dirty abort!"); }
 // Load/Persist
 	virtual void CreateNew(const string &systemname, 
-									const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+									const string &metalocator, const ::Uml::Class &rootclass, 
 									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) = 0;
 	virtual void OpenExisting(const string &systemname, 
 									const string &metalocator = "", 
@@ -2721,7 +2718,7 @@ public:
 	virtual Object ObjectById(Object::uniqueId_type) { 
 		throw udm_exception("This backend does not support ObjectByID!!"); 
 	}
-	const ::Uml::Uml::Diagram &GetRootMeta() const { 
+	const ::Uml::Diagram &GetRootMeta() const { 
 		return *metaroot.dgr;
 	}
 
@@ -2739,14 +2736,14 @@ public:
 // we override this for Static and Smart
 	virtual UDM_DLL bool IsTypeSafe() {return true;};
 //string support
-	virtual	UDM_DLL void CreateNewToString(const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+	virtual	UDM_DLL void CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS){throw udm_exception("Unsupported method");};
 	virtual UDM_DLL void OpenExistingFromString(string &str, 
 									const string &metalocator, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS){throw udm_exception("Unsupported method");};
 	virtual UDM_DLL const string & Str(){throw udm_exception("Unsupported method");};
 
-	virtual UDM_DLL set<Object> GetAllInstancesOf(const ::Uml::Uml::Class& meta);
+	virtual UDM_DLL set<Object> GetAllInstancesOf(const ::Uml::Class& meta);
 
 };
 
@@ -2805,7 +2802,7 @@ public:
 	};
 	
 	virtual void CreateNew(const string &systemname, 
-									const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+									const string &metalocator, const ::Uml::Class &rootclass, 
 									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) {
 		if(dn) throw udm_exception("DataNetwork is already open"); 
 		DataNetwork *dn1 = CreateBackend(systemname, metaroot, pr);
@@ -2875,7 +2872,7 @@ public:
 	virtual Object ObjectById(Object::uniqueId_type t) { 
 		return testdn()->ObjectById(t); 
 	}
-	const ::Uml::Uml::Diagram &GetRootMeta() const { 
+	const ::Uml::Diagram &GetRootMeta() const { 
 		return testdn()->GetRootMeta(); 
 	}
 	virtual bool IsTypeSafe() { return testdn()->IsTypeSafe();};
@@ -2897,7 +2894,7 @@ public:
 
 
 	//string support
-	virtual	void CreateNewToString(const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+	virtual	void CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS)
 	{
 		if(dn) throw udm_exception("DataNetwork is already open"); 
@@ -2921,7 +2918,7 @@ public:
 		str_based = true;
 	};
 	virtual const string & Str(){return str;};
-	virtual set<Object> GetAllInstancesOf(const ::Uml::Uml::Class& meta){return testdn()->GetAllInstancesOf(meta);};
+	virtual set<Object> GetAllInstancesOf(const ::Uml::Class& meta){return testdn()->GetAllInstancesOf(meta);};
 
 };
 
@@ -2947,15 +2944,15 @@ public:
 	{
 		string _filename;
 		string _metalocator;
-		::Uml::Uml::Class& _rootclass;
+		::Uml::Class& _rootclass;
 		
 	public:
 		
-		UDM_DLL DataNetworkSpecifier( string fn,  string ml, ::Uml::Uml::Class& rc);
+		UDM_DLL DataNetworkSpecifier( string fn,  string ml, ::Uml::Class& rc);
 		UDM_DLL DataNetworkSpecifier& operator=(const DataNetworkSpecifier &a);
 		UDM_DLL const string filename();
 		UDM_DLL const string metalocator();
-		UDM_DLL const ::Uml::Uml::Class& rootclass();
+		UDM_DLL const ::Uml::Class& rootclass();
 
 	};
 
@@ -3073,7 +3070,7 @@ public:
 		
 
 		//get all the metadiagrams
-		UDM_DLL vector< ::Uml::Uml::Diagram> GetMetaDiagrams() const;
+		UDM_DLL vector< ::Uml::Diagram> GetMetaDiagrams() const;
 
 		/*
 			A Udm Project will have either a Cross Meta Specifier(if the project is the result of
@@ -3095,29 +3092,29 @@ public:
 		//crucial part -- simple cross-network association
 
 		//setting simple associations
-		void UDM_DLL setSimpleAssociation(Udm::Object& peer, set<Udm::Object>& peers,const ::Uml::Uml::AssociationRole& meta);
+		void UDM_DLL setSimpleAssociation(Udm::Object& peer, set<Udm::Object>& peers,const ::Uml::AssociationRole& meta);
 
 		//getting simple associations
-		UDM_DLL set<Udm::Object> getSimpleAssociation(Udm::Object& peer,const ::Uml::Uml::AssociationRole& meta);
+		UDM_DLL set<Udm::Object> getSimpleAssociation(Udm::Object& peer,const ::Uml::AssociationRole& meta);
 
 		//even more crucial part -- assoc. class cross-network associations
 		
 
 		//setting the links (objects in the middle) from either end
-		void UDM_DLL setLinks(Udm::Object& peer, set<Udm::Object>& links, const ::Uml::Uml::AssociationRole& meta);
+		void UDM_DLL setLinks(Udm::Object& peer, set<Udm::Object>& links, const ::Uml::AssociationRole& meta);
 		//setting either end-point from the middle 
-		void UDM_DLL setEnd(Udm::Object& link, Udm::Object& peer, const ::Uml::Uml::AssociationRole& meta);
+		void UDM_DLL setEnd(Udm::Object& link, Udm::Object& peer, const ::Uml::AssociationRole& meta);
 
 
 
 		//getting the links (objects in the middle) from either end
-		UDM_DLL set<Udm::Object> getLinks(Udm::Object& peer, const ::Uml::Uml::AssociationRole &meta);
+		UDM_DLL set<Udm::Object> getLinks(Udm::Object& peer, const ::Uml::AssociationRole &meta);
 
 		//getting either end from the object in the middle
-		UDM_DLL Udm::Object getEnd(Udm::Object& link, const ::Uml::Uml::AssociationRole &meta);
+		UDM_DLL Udm::Object getEnd(Udm::Object& link, const ::Uml::AssociationRole &meta);
 		
 		//getting the other end from one end
-		UDM_DLL Udm::Object getPeer(Udm::Object& peer, const ::Uml::Uml::AssociationRole &meta);
+		UDM_DLL Udm::Object getPeer(Udm::Object& peer, const ::Uml::AssociationRole &meta);
 
 
 		/*Remote ID validation mechanism
@@ -3413,8 +3410,8 @@ public:
 
 	template<class CLASS, class TARGETCLASS>
 	CLASS AClassPointerAttr<CLASS, TARGETCLASS>::SetLink(TARGETCLASS peer, Object parent, 
-		const ::Uml::Uml::Class &meta,
-		const ::Uml::Uml::CompositionChildRole &role)
+		const ::Uml::Class &meta,
+		const ::Uml::CompositionChildRole &role)
 	{
 
 		if(!IsDerivedFrom(meta, CLASS::meta)) {
@@ -3430,8 +3427,8 @@ public:
 
 	template<class CLASS, class TARGETCLASS, class Pred>
 	CLASS AClassAssocAttr<CLASS, TARGETCLASS, Pred>::AddLink(TARGETCLASS peer, Object parent, 
-		const ::Uml::Uml::Class &meta,
-		const ::Uml::Uml::CompositionChildRole &role)
+		const ::Uml::Class &meta,
+		const ::Uml::CompositionChildRole &role)
 	{
 
 		if(!IsDerivedFrom(meta, CLASS::meta)) {
