@@ -1,12 +1,19 @@
 #ifndef MOBIES_UML_H
 #define MOBIES_UML_H
 // header file Uml.h generated from diagram Uml
-// generated on Sat Jul 02 23:17:40 2005
+// generated on Tue Jul 19 15:10:54 2005
 
 #ifndef MOBIES_UDMBASE_H
 #include "UdmBase.h"
 #endif
 
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
+#endif
 #include "Uml_export.h"
 namespace Uml {
 	extern UDM_DLL Udm::UdmDiagram diagram;
