@@ -1203,9 +1203,7 @@ UDM_DLL pair<Object,Object> Object::GetPeersFromAssociationClassObject()
 {
 	//objassocclass is this
 	pair<Udm::Object,Udm::Object> objsRet;
-
-	::Uml::Association Assoc =type();
-	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(type());
 	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 				p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
