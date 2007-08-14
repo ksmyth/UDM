@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
-import edu.vanderbilt.isis.util.Resource;
+
+import edu.vanderbilt.isis.udm.meta.Uml_xsd;
 
 
 /**
@@ -19,13 +20,12 @@ import edu.vanderbilt.isis.util.Resource;
 */
 public abstract class UdmFactory {
     private static String JUDM_CINT_LIB_PATH = null;
-    private static final String udmPackagePath = "/edu/vanderbilt/isis/udm/";
+    //private static final String udmPackagePath = "/edu/vanderbilt/isis/udm/";
     private static final String umlXsdFile = "Uml.xsd";
     private String xmlMetaFile;
     private String xsdMetaFile;
     private String metaName;
     private String packagePath;
-    private String xmlMetaFileInString;
     protected Diagram metaDiagram;
     protected UdmPseudoDataNetwork dataNetwork;
 
@@ -80,7 +80,7 @@ public abstract class UdmFactory {
             System.load(JUDM_CINT_LIB_PATH);
         }
         // store the Uml.xsd file
-        UdmHelper.StoreXsd(umlXsdFile, Resource.copyResourceToStr(udmPackagePath + umlXsdFile));
+        UdmHelper.StoreXsd(umlXsdFile, Uml_xsd.getString());
         this.xmlMetaFile = xmlMetaFile;
         this.xsdMetaFile = xsdMetaFile;
         this.metaName = metaName;
@@ -105,56 +105,18 @@ public abstract class UdmFactory {
     }
 
     private void init() throws UdmException {
-        initResources();
         loadDiagram();
     }
 
-    private void initResources() {
-        xmlMetaFileInString = Resource.copyResourceToStr(packagePath + xmlMetaFile);
-
-        //System.out.println("xmlMetaFile = " + xmlMetaFile);
-        //System.out.println("xmlMetaFileInString = " + xmlMetaFileInString.charAt(0));
-        //Resource.copyResourceToTempDir(packagePath + xsdMetaFile);
-        //Resource.copyResourceToTempDir(udmPackagePath + umlXsdFile);
-        //String tempDir = Resource.getTempDir();
-        //xmlMetaFile = tempDir + xmlMetaFile;
-        //  xsdMetaFile = tempDir + xsdMetaFile;
-    }
-
-    private void loadDiagram() throws UdmException {
-        //metaDiagram = new Diagram(xmlMetaFile);
-        metaDiagram = new Diagram(xmlMetaFile, xmlMetaFileInString);
-    }
+    protected abstract void loadDiagram() throws UdmException;
+/*  {
+         metaDiagram = new Diagram(xmlMetaFile, "cica");
+    }*/
 
     protected void createDataNetwork() throws UdmException {
         dataNetwork = new UdmPseudoDataNetwork(metaName);
-
-        //dataNetwork = new UdmPseudoDataNetwork("SBML2Ex");
     }
 
-    /*private void initAPIsXSDResources(String instanceFileName)
-    {
-     try{
-      File f = new File(instanceFileName);
-      if (f.exists())
-      {
-              File dir = new File(f.getParent());
-              if (dir.exists() && dir.isDirectory())
-                 Resource.copyResourceToDir(packagePath + xsdMetaFile, dir.getAbsolutePath());
-              else
-                 System.out.println("Parent dir does not exist");
-
-              xsdMetaFile = dir.getAbsolutePath()+ File.separator+xsdMetaFile;
-      }
-     } catch (Throwable t)
-         {
-         System.out.println("initAPIsXSDResources: " + t.getMessage());
-         }
-    }*/
-    private void initStrXSDResources() throws UdmException {
-        String xsd = Resource.copyResourceToStr(packagePath + xsdMetaFile);
-        UdmHelper.StoreXsd(xsdMetaFile, xsd);
-    }
 
     protected UdmPseudoObject openExistingDN(String instanceFileName)
         throws UdmException {
@@ -165,8 +127,6 @@ public abstract class UdmFactory {
         throws UdmException {
         createDataNetwork();
 
-        //initAPIsXSDResources(instanceFileName);
-        //initStrXSDResources();
         dataNetwork.openExisting(
             instanceFileName, xsdMetaFile, UdmHelper.UPDN_CHANGES_LOST_DEFAULT);
         return dataNetwork.getRootObject();
@@ -176,7 +136,6 @@ public abstract class UdmFactory {
         throws UdmException {
         createDataNetwork();
 
-        //initStrXSDResources();
         dataNetwork.openExistingFromString(xml, xsdMetaFile);
         return dataNetwork.getRootObject();
     }
@@ -213,8 +172,6 @@ public abstract class UdmFactory {
         throws UdmException {
         createDataNetwork();
 
-        //initAPIsXSDResources(instanceFileName);
-        //initStrXSDResources();
         dataNetwork.createNew(
             instanceFileName, xsdMetaFile, rootMetaClass, UdmHelper.UPDN_CHANGES_LOST_DEFAULT);
         return dataNetwork.getRootObject();
@@ -224,7 +181,6 @@ public abstract class UdmFactory {
         throws UdmException {
         createDataNetwork();
 
-        //initStrXSDResources();
         dataNetwork.createNewToString(xsdMetaFile, rootMetaClass);
         return dataNetwork.getRootObject();
     }

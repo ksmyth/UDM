@@ -11,7 +11,7 @@ import java.io.InputStream;
  * @author nsomogyi
  *
  */
-public class UdmStringFactory extends ExtendedUdmFactory {
+public abstract class UdmStringFactory extends ExtendedUdmFactory {
     /**
      *
      * @param xmlMetaFile
