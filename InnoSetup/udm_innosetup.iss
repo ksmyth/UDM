@@ -218,7 +218,7 @@ begin
 					continue;
 				// if installing, abort because dir was already in path
 				end else begin
-					abort;
+					exit;
 				end;
 			end;
 
