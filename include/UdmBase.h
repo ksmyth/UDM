@@ -1,0 +1,3440 @@
+/*
+Copyright (c) Vanderbilt University, 2000-2001
+ALL RIGHTS RESERVED
+Vanderbilt University disclaims all warranties with regard to this
+software, including all implied warranties of merchantability
+and fitness.  In no event shall Vanderbilt University be liable for
+any special, indirect or consequential damages or any damages
+whatsoever resulting from loss of use, data or profits, whether
+in an action of contract, negligence or other tortious action,
+arising out of or in connection with the use or performance of
+this software.
+*/
+/*
+12/12/04	-	endre
+
+		-	G++ 3 porting issues.
+
+12/07/04	-	endre
+
+		fixed trivial bugs in SmartDataNetwork CreateNewFromStr and OpenExistingFromString function.
+
+12/06/04	-	endre
+
+		added 
+			-	GetAllInstances() function to Udm::DataNetwork class
+			-	getChildrenByChildRoleChain() function to Udm::Object class
+
+			See the descriptions of the files in the apropiate .cpp (UdmTomi.cpp, UdmBase.cpp) files.
+
+
+22/09/04	-	endre
+
+		added the DOM string functions to DataNetwork and SmartDataNetwork, so they are
+		available for those using the SmartDataNetwork class to handle DOM datanetworks.
+
+06/04/04	-	endre
+		
+		  addedd class BaseVisitor, and an Udm::Object::Accept(cont BaseVisitor&);
+
+05/31/04	-	endre
+			porting issues to Linux/GCC
+
+05/24/04	-	endre
+
+		added UDM_DLL to forward declarations of classes fromthe Uml namespace
+04/22/04	-	endre
+
+		added sorter template parameters on template classes Childrenattr<CLASS>, AssocAttr<CLASS>, ...
+		The default parameter is class Pred = less<CLASS>
+
+04/14/04	-	endre
+
+		on Feng's request, changed the Udm::Object::CreateObject functions to support creating of instantiated/derived objects.
+
+04/07/04	-	endre
+
+		Added the Tomi functions to Udm::Object
+		
+		- GetStrValue() to _int64 -  
+		- SetStrValue() from _int64 -
+		- GetIntValue() to _string - 
+		- SetIntValue() from string -
+
+
+03/29/04	-	endre
+
+		Made UdmProject: GetRealObject public because of TOMI access requirement
+
+03/24/04	-	endre
+
+		-	changed the signature of createchild(), added the bool flag need_safetype.
+			If this bool flag is true, (and the object to be created has an archetype)
+			the backend should create a safe copy of the type for each object
+
+03/15/04	-	endre
+
+		- added constants with the names of the internal attributes used in the Udm Dom backend
+
+03/03/04 - endre
+		
+		- added Close() to StaticUdmproject, the project must be Closed before Individual Datanetworks are closed
+		- added a StaticDataNetwork specifier which also expect DataNetwork (and not just StaticDataNetwork)
+
+02/10/04 - endre
+
+		added the generic container() function to class Udm::Object  
+
+01/26/04 - endre
+
+		Mainly porting issues to g++ 2.96, specially the compress/decompress stuff.
+  		void type had to be add to all the functions declared with no return type
+
+01/07/04	-	endre
+
+		Changed Udm::StaticDataNetworkSpecifier to accept only SmartDataNetworks,
+		this was required because of the difference between a SmartDataNetwork address
+		and the address of a DataNetwork inside a SmartDataNetwork. 
+		This problem was reported by Feng on 01/07/04
+
+
+12/12/03	-	endre
+
+		Udm::UdmProject::cross_delimiter - delimiter string for
+		string delimiting the class name from the diagram name in the
+		cross-class name
+
+08/01/02	-	endre
+
+		TOMI Paradigm Independent API ported from Tihamer's
+		graph rewriting engine. See documentation for API description.
+
+		Headers of API calls are added as member functions to 
+		class Udm::Object
+
+07/31/02	-	endre
+
+
+		ChildrenAttr:
+				
+					- added cast operator for vector<CLASS> to preserve 
+						the order of the children. This leaves all previous
+						set<> assignments intact, except this note:
+
+					
+					- +=, -= operators on children now return vectors instead
+						of sets. This should not be a problem when using a syntax 
+						like this:
+
+							lamp.children() += new_bulb;
+
+						because there is a ChildrenAttr assignment operator 
+						which takes a vector of object as input. 
+
+						However, if any of these syntax is used, 
+						the code will not compile:
+
+						1:
+							[...]
+							set<Bulb> bulbs = lamp.children() += new_bulb;
+							[...]
+						
+						2:
+							[...]
+							set<Bulb> AddBulbFunc(Bulb newBulb, Lamp hostLamp)
+							{
+								return hostLamp.children() += new_bulb;
+							}
+							[...]
+
+		
+
+						the sets should be changed to vectors, when using 
+						the return value of the operators
+
+						The change would be:
+						
+						1:
+							[...]
+							lamp.children() += new_bulb;
+							set<Bulb> bulbs = lamp.children();
+							[...]
+						
+						2:
+
+							[...]
+							set<Bulb> AddBulbFunc(Bulb newBulb, Lamp hostLamp)
+							{
+								lamp.children() += new_bulb;
+								return lamp.children();
+							}
+							[...]
+
+
+													
+
+					
+
+06/19/02	-	endre
+	
+	  Attribute array support: 
+	  
+		Added Attribute Array classes for both persistent and non-persistent
+		attributes.
+
+		Added array attribute setter/getter declarations for ObjectImpl, for both
+		persistent and non-persistent attributes
+
+		However, the persistent array attribute setters/getters
+		are not abstract functions, a basic functionality is 
+		provided at ObjectImpl level, but it can be overriden with
+		a more performant one in the backend specific ObjectImpl class.
+		See comments in UdmBase.cpp
+
+*/
+#ifndef MOBIES_UDMBASE_H
+#define MOBIES_UDMBASE_H
+
+#ifdef _WIN32
+//stupid win32 warnings
+#pragma warning ( disable : 4786 )
+#pragma warning( disable : 4290 ) //C++ Exception Specification Ignored warning
+#pragma warning( disable : 4503 ) //Decorated name length exceeded
+#pragma warning( disable : 4103 ) //used #pragma pack to change alignment
+
+#ifndef TYPENAME
+#define TYPENAME
+#endif
+#else
+#ifndef TYPENAME
+#define TYPENAME typename
+#endif
+
+#endif
+
+#ifndef MOBIES_ERRHAND_H
+#include "ErrHand.h"
+#endif
+
+
+
+#include <set>
+#include <vector>
+#include <list>
+#include <string>
+#include <map>
+
+namespace Uml
+{
+	namespace Uml 
+	{
+
+		class UDM_DLL Diagram;
+		class UDM_DLL Namespace;
+		class UDM_DLL Class;
+		class UDM_DLL Attribute;
+		class UDM_DLL Association;
+		class UDM_DLL AssociationRole;
+		class UDM_DLL Composition;
+		class UDM_DLL CompositionParentRole;
+		class UDM_DLL CompositionChildRole;
+		class UDM_DLL Constraint;
+		class UDM_DLL ConstraintDefinition;
+	};
+	const UDM_DLL Uml::AssociationRole &theOther1(const Uml::AssociationRole &role);
+};
+
+class UDM_DLL cint_string;
+
+namespace Udm
+{
+// --------------------------- ObjectImpl
+
+	// NOTE: All returned ObjectImpl pointers are refCounted (if not NULL),
+	// they must be released, or passed to the Object constructor.
+
+	static const int TARGETFROMPEER = 0;
+	static const int TARGETFROMCLASS = 1;
+	static const int CLASSFROMTARGET = 2;
+
+	class DataNetwork;
+	class UdmProject;
+	class StaticUdmProject;
+	class udmvariant;
+
+	typedef map<string, udmvariant> tmap;
+	bool UDM_DLL IsDerivedFrom(const ::Uml::Uml::Class &derived, const ::Uml::Uml::Class &base);
+	
+	class UDM_DLL ObjectImpl
+	{
+	// --- reference counting
+
+	public:
+		virtual ObjectImpl *clone() = 0;
+		virtual void release() = 0;
+		virtual DataNetwork *__getdn() = 0;
+
+	// --- type
+
+	public:
+		virtual const ::Uml::Uml::Class &type() const = 0;
+
+	// --- order
+
+	public:
+		// every object in one project must return a unique uniqueId
+		typedef long uniqueId_type;
+
+		virtual uniqueId_type uniqueId() const = 0;
+
+	// --- attributes
+
+	public:
+		//no array versions
+		virtual string getStringAttr(const ::Uml::Uml::Attribute &meta) const = 0;
+		virtual void setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct = true) = 0;
+
+		virtual bool getBooleanAttr(const ::Uml::Uml::Attribute &meta) const = 0;
+		virtual void setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a, const bool direct = true) = 0;
+
+		virtual __int64 getIntegerAttr(const ::Uml::Uml::Attribute &meta) const = 0;
+		virtual void setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a, const bool direct = true) = 0;
+
+		virtual double getRealAttr(const ::Uml::Uml::Attribute &meta) const = 0;
+		virtual void setRealAttr(const ::Uml::Uml::Attribute &meta, double a, const bool direct = true) = 0;
+
+		//array versions
+
+		virtual vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		virtual void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct = true);
+
+		virtual vector<bool> getBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		virtual void setBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true);
+
+		virtual vector<__int64> getIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		virtual void setIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true) ;
+
+		virtual vector<double> getRealAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		virtual void setRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
+
+
+
+
+	// --- containment
+
+	public:
+
+// get the parent object or null if object has no parent
+// if role is not NULLROLE, return parent only if the role actually applies
+		virtual ObjectImpl *getParent(const ::Uml::Uml::CompositionParentRole &role) const = 0;	// can return NULL
+
+// role must be specified unless a is null, or child role in the new parent is unambigious
+// if a was already the parent, existing other childroles are not deleted
+// XML: if multiple roles are enabled, 
+//		object will keep its existing role(s) as well if not moved to a new parent
+//		if a = NULL and role != null, the role is removed from the containment relation (if it was there), 
+//									   but the object will only be deleted, if the role specified was its only one
+		virtual void setParent(ObjectImpl *a, const ::Uml::Uml::CompositionParentRole &role, const bool direct = true) = 0;
+
+// set parent to null; equivalent to setParent(NULL, NULL);
+		virtual void detach() = 0;
+
+// if role is given, return only those children that have that role (ignore kind)
+// else if kind is not null, return all children which are compatible with kind
+// else if kind is null, return all children
+		virtual vector<ObjectImpl*> getChildren(const ::Uml::Uml::CompositionChildRole &role, const ::Uml::Uml::Class &kind) const = 0;
+
+// if role is non-null. 
+//		All children omitted from the list lose this role and may also
+//		become detached if this was their only role.
+// if role is null
+//		All existing children are removed and new children are added only if their containment role is unambigious
+//	XML: if multiple roles are enabled, new children with this role may already have other roles as well.
+
+// direct specifies if the call is coming from user code (true), or is a recursive call
+// which was invoked because this operation was invoked on an archetype
+		virtual void setChildren(const ::Uml::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct = true) = 0;
+
+
+// role must be specified unless child role in the new parent is unambigious
+
+		/*
+				if there is an archetype, the 3rd argument is not null
+				if arg exists,
+					if subtype is false, instance is created (default behaviour)
+					if subtype is true, subtype/derived object is created
+
+				if real_archetype is false, the child being created is created automatically,
+				upon createChild() of the parent, because the parent is an instace/derived
+				of an archetype which has children
+		*/
+		virtual ObjectImpl *createChild(const ::Uml::Uml::CompositionChildRole &role, 
+			const ::Uml::Uml::Class &meta,
+			const ObjectImpl* arch = NULL, 
+			const bool subtype = false,
+			const bool real_archetype = true,
+			const bool need_safetype = false) = 0;
+
+
+		/* 
+			should be invoked when an object has an archetype
+			returns false if the object is there because one of the parent inherited it
+			returns true if the object was instantiated/derived directly, from an archetype
+		*/
+		virtual bool hasRealArchetype() const = 0;
+
+		virtual bool isSubtype() const = 0;
+		virtual bool isInstance() const = 0;
+	// --- associations
+
+	public:
+// arole must be non-null. 
+// Associations with names on both sides are navigable from both directions.
+		virtual vector<ObjectImpl*> getAssociation(const ::Uml::Uml::AssociationRole &arole, int mode = TARGETFROMPEER) const = 0;
+// arole must be non-null. 
+// Existing associations omitted from the new list are 
+// deleted, along with their association classes.
+// Associations created from either side are considered equal
+
+
+		virtual void setAssociation(
+			const ::Uml::Uml::AssociationRole &arole, 
+			const vector<ObjectImpl*> &a, 
+			int mode = TARGETFROMPEER,
+			const bool direct = true) = 0;	
+
+		//if direct is false, the link to be created is an inherited link
+		//that exists between the children of my parent's archetype
+		//and needs to be copied here 
+
+	//archetype/derived relationships
+		virtual vector<ObjectImpl*> getDerived() const = 0;
+		virtual vector<ObjectImpl*> getInstances() const = 0;
+		virtual ObjectImpl* getArchetype() const = 0;
+	
+// temporary values
+		tmap &locatemap(bool create) const;
+
+		//single value attributes
+
+		string getTempStringAttr(const ::Uml::Uml::Attribute &meta) const;
+		void setTempStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct = true);
+		__int64 getTempIntegerAttr(const ::Uml::Uml::Attribute &meta) const;
+		void setTempIntegerAttr(const ::Uml::Uml::Attribute &meta, const __int64 &a, const bool direct = true);
+		double getTempRealAttr(const ::Uml::Uml::Attribute &meta) const;
+		void setTempRealAttr(const ::Uml::Uml::Attribute &meta, const double &a, const bool direct = true);
+		bool getTempBooleanAttr(const ::Uml::Uml::Attribute &meta) const;
+		void setTempBooleanAttr(const ::Uml::Uml::Attribute &meta, const bool &a, const bool direct = true);
+
+		//multiple value attributes
+
+		vector<string> getTempStringAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		void setTempStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct = true);
+		vector<__int64> getTempIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		void setTempIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true);
+		vector<double> getTempRealAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		void setTempRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
+		vector<bool> getTempBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		void setTempBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true);
+
+		//for new Objects, set the default values for attributes
+		//this will be invoked whenever creating a new ObjectImpl instance
+		//in each backend
+		//if all is false, only non-persistent attributes are set to default values
+		//MEM backend has an optimized version for default values.
+		void setDefaultAttributes(const bool all = true);
+
+		//atribute copier functions
+		void CopyAttributeFrom(const ::Uml::Uml::Attribute& which, const ObjectImpl* from);
+		void CopyAttributesFrom(const ObjectImpl*  from);
+		void CopyAttributeFromArchetype(const ::Uml::Uml::Attribute& which);
+		void CopyAttributesFromArchetype();
+		
+		
+	};
+
+
+	typedef map<ObjectImpl::uniqueId_type, tmap> ttmap;
+	
+	//non-persistent, single-value attribute objects
+	class UDM_DLL TempStringAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		TempStringAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator string() const { return impl->getTempStringAttr(meta); }
+		const string &operator =(const string &a) { impl->setTempStringAttr(meta, a); return a; }
+	};
+
+
+
+	class UDM_DLL TempIntegerAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		TempIntegerAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator __int64() const { return impl->getTempIntegerAttr(meta); }
+		const __int64 &operator =(const __int64 &a) { impl->setTempIntegerAttr(meta, a); return a; }
+	};
+
+
+	class UDM_DLL TempRealAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		TempRealAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator double() const { return impl->getTempRealAttr(meta); }
+		const double &operator =(const double &a) { impl->setTempRealAttr(meta, a); return a; }
+	};
+
+
+	class UDM_DLL TempBooleanAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		TempBooleanAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator bool() const { return impl->getTempBooleanAttr(meta); }
+		const bool &operator =(const bool &a) { impl->setTempBooleanAttr(meta, a); return a; }
+	};
+	
+
+
+
+
+// --------------------------- null;
+
+	class Object;
+	extern UDM_DLL Object null;
+
+	class NullObject : public ObjectImpl
+	{
+	protected:
+		static udm_exception e;
+
+	public:
+		inline NullObject();  
+		// in Object::Object(...) we assume this refererence counting behaviour
+		virtual ObjectImpl *clone() { return this; }
+		virtual void release() { } 
+		virtual DataNetwork *__getdn() { throw e; }
+
+		virtual const ::Uml::Uml::Class &type() const { throw e; }
+
+		virtual string getStringAttr(const ::Uml::Uml::Attribute &meta) const { throw e; }
+		virtual void setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct = true) { throw e; }
+
+		virtual bool getBooleanAttr(const ::Uml::Uml::Attribute &meta) const { throw e; }
+		virtual void setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a, const bool direct = true) { throw e; }
+
+		virtual __int64 getIntegerAttr(const ::Uml::Uml::Attribute &meta) const { throw e; }
+		virtual void setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a, const bool direct = true) { throw e; }
+
+		virtual double getRealAttr(const ::Uml::Uml::Attribute &meta) const { throw e; }
+		virtual void setRealAttr(const ::Uml::Uml::Attribute &meta, double a, const bool direct = true) { throw e; }
+
+		virtual vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const {throw e;};
+		virtual void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct = true) {throw e;};
+
+		virtual vector<bool> getBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const {throw e;};
+		virtual void setBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true) {throw e;};
+
+		virtual vector<__int64> getIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const {throw e;};
+		virtual void setIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true) {throw e;};
+
+		virtual vector<double> getRealAttrArr(const ::Uml::Uml::Attribute &meta) const {throw e;};
+		virtual void setRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct = true) {throw e;};
+
+
+
+
+		virtual ObjectImpl *getParent(const ::Uml::Uml::CompositionParentRole &role) const { throw e; }
+		virtual void setParent(ObjectImpl *a, const ::Uml::Uml::CompositionParentRole &role, const bool direct = true) { throw e; }
+		virtual void detach() { throw e; }
+
+		virtual vector<ObjectImpl*> getChildren(const ::Uml::Uml::CompositionChildRole &meta, const ::Uml::Uml::Class &kind) const { throw e; }
+		virtual void setChildren(const ::Uml::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct = true) { throw e; }
+
+		virtual ObjectImpl *createChild(const ::Uml::Uml::CompositionChildRole &role,
+			const ::Uml::Uml::Class &meta,
+			const ObjectImpl* archetype = NULL,
+			const bool subtype = false,
+			const bool real_archetype = true,
+			const bool need_safetype = false) { throw e; }
+
+		virtual vector<ObjectImpl*> getAssociation(const ::Uml::Uml::AssociationRole &meta, int mode = TARGETFROMPEER) const { throw e; }
+		virtual void setAssociation(
+			const ::Uml::Uml::AssociationRole &meta, 
+			const vector<ObjectImpl*> &a, 
+			int mode = TARGETFROMPEER, 
+			const bool direct = true) { throw e; }
+
+		virtual uniqueId_type uniqueId() const { return 0; }
+		
+		virtual vector<ObjectImpl*> getDerived() const {throw e;};
+		virtual vector<ObjectImpl*> getInstances() const {throw e;};
+		virtual ObjectImpl* getArchetype() const {throw e;};
+		virtual bool hasRealArchetype() const {throw e;};
+		virtual bool isSubtype() const {throw e;};
+		virtual bool isInstance() const {throw e;};
+	
+
+	};
+
+	extern UDM_DLL NullObject _null;
+
+	inline NullObject::NullObject() { ASSERT(this == &_null); } 
+
+	extern UDM_DLL const ::Uml::Uml::CompositionChildRole NULLCHILDROLE;
+	extern UDM_DLL const ::Uml::Uml::CompositionParentRole NULLPARENTROLE;
+
+// single-value(no-array) versions of Attribute objects
+
+// --------------------------- StringAttr
+
+	class UDM_DLL StringAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		StringAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator string() const { return impl->getStringAttr(meta); }
+		const string &operator =(const string &a) { impl->setStringAttr(meta, a); return a; }
+		typedef const char * charp;
+//		operator charp() const { return string().c_str(); } 
+	};
+
+// --------------------------- BooleanAttr
+
+	class UDM_DLL BooleanAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		BooleanAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator bool() const { return impl->getBooleanAttr(meta); }
+		bool operator =(bool a) { impl->setBooleanAttr(meta, a); return a; }
+	};
+
+// --------------------------- IntegerAttr
+
+	class UDM_DLL IntegerAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		IntegerAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		//operator long() const { return impl->getIntegerAttr(meta); }
+		operator __int64() const { return impl->getIntegerAttr(meta); }
+		//long operator =(long a) { impl->setIntegerAttr(meta, a); return a; }
+		__int64 operator =(__int64 a) { impl->setIntegerAttr(meta, a); return a; }
+	};
+
+// --------------------------- RealAttr
+
+	class UDM_DLL RealAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		RealAttr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator double() const { return impl->getRealAttr(meta); }
+		double operator =(double a) { impl->setRealAttr(meta, a); return a; }
+	};
+
+// multiple-value(array) versions of Attribute objects
+/*
+	Array element template class to be returned by [] op,
+	implementing the basic cast and assignment operators
+*/	
+
+	bool UDM_DLL CheckAttributeOrdering(const ::Uml::Uml::Attribute & att);
+
+	template <class CLASS>
+	class ArrAttrItem
+	{
+		
+	protected:
+		
+		const ::Uml::Uml::Attribute & meta;			//attribute to be altered
+		vector<CLASS> array;		//vector with array elements
+		ObjectImpl * object;	//object this array attribute belongs to
+		unsigned int index;					//iterators can not be stored
+									//however, most of the code is not duplicated
+		virtual void set() = 0;
+	
+	public:
+		
+		ArrAttrItem(const vector<CLASS>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m):  meta(m), array(array_ref), index (a_i)
+		{
+			object = oi;
+			if (!object)
+				throw udm_exception("Object pointer is NULL");
+		};
+		operator CLASS() const 
+		{
+			if (array.size() > index) return array.at(index); 
+			else return CLASS();
+		};
+
+		CLASS operator*(){return (CLASS)*this;};
+		
+
+		virtual ArrAttrItem& operator =(const CLASS &a)
+		{
+			//pad with CLASS() if array is smaller than index
+			while (array.size() <=index)
+				array.push_back(CLASS());
+
+			CLASS & i = (CLASS&)array.at(index);
+			i = a;
+			set();
+			return *this;
+		};
+
+
+		virtual bool operator==(const ArrAttrItem<CLASS>& a)
+		{
+			if (array != a.array)
+				throw udm_exception("Comparision of two unrelated iterators!");
+			
+			return (index == a.index);
+		};
+
+		virtual bool operator!=(const ArrAttrItem<CLASS>& a)
+		{
+			
+			return !(*this == a);
+		};
+
+
+
+
+		//iterator-like mechanism, inline postfix routine
+		virtual ArrAttrItem& operator++(int){index++; return *this;};
+
+		
+		void CheckOrdering()
+		{
+			if (CheckAttributeOrdering(meta))
+					throw udm_exception("Items at a specified position in ordered attributes can not be set directly!");
+		}
+
+		virtual ~ArrAttrItem(){};
+
+	};
+
+	/*
+		Array element template class which also implements the
+		+= operator for long, string, real types
+	*/
+	template <class CLASS>
+	class AdditiveArrAttrItem : public ArrAttrItem<CLASS>
+	{
+	public:
+		AdditiveArrAttrItem(const vector<CLASS>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+			:ArrAttrItem<CLASS>(array_ref, a_i, oi, m){};
+		
+		virtual AdditiveArrAttrItem& operator +=(const CLASS &a)
+		{
+			//pad with CLASS() if array is smaller than index
+			while (array.size() <=index)
+				array.push_back(CLASS());
+
+			CLASS & i = array.at(index);
+			i += a;
+			this->set();
+			return *this;
+		};
+
+		virtual ArrAttrItem<CLASS>& operator = (const CLASS &a)
+		{
+			ArrAttrItem<CLASS>::operator =(a);
+			return *this;
+		}
+
+		virtual ~AdditiveArrAttrItem(){};
+	};
+
+	//persistent array attribute element(iterator) classes
+	// string array element providing operations with const char *
+	class StringArrAttrItem : public AdditiveArrAttrItem<string>
+	{
+	public:	
+		StringArrAttrItem(const vector<string>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+			:AdditiveArrAttrItem<string>(array_ref, a_i, oi, m){};
+		void set()
+		{
+			CheckOrdering();		//this will crash if array is ordered
+			//ordered attributes are not supposed to be changed in a by-item fashion
+
+			object->setStringAttrArr(meta, array);
+		};
+		
+		//provide these operators for const char * as well
+		StringArrAttrItem& operator =(const char * a)
+		{
+			AdditiveArrAttrItem<string>::operator=(string(a));
+			return *this;
+		};
+
+		StringArrAttrItem& operator += (const char * a)
+		{
+			AdditiveArrAttrItem<string>::operator +=(string(a));
+			return *this;
+		};
+		
+	};
+
+	class RealArrAttrItem : public AdditiveArrAttrItem<double>
+	{
+	public:	
+		RealArrAttrItem(const vector<double>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+			:AdditiveArrAttrItem<double>(array_ref, a_i, oi, m){};
+		void set()
+		{
+			CheckOrdering();		//this will crash if array is ordered
+			//ordered attributes are not supposed to be changed in a by-item fashion
+
+			object->setRealAttrArr(meta, array);
+		};
+		
+		//provide these operators for long, int, float, char as well
+		RealArrAttrItem& operator=  (const int a)	{AdditiveArrAttrItem<double>::operator =((double)a); return *this;};
+		RealArrAttrItem& operator+= (const int a)	{AdditiveArrAttrItem<double>::operator +=((double)a);return *this;};
+		RealArrAttrItem& operator=  (const long a)	{AdditiveArrAttrItem<double>::operator =((double)a);return *this;};
+		RealArrAttrItem& operator+= (const long a)	{AdditiveArrAttrItem<double>::operator +=((double)a);return *this;};
+		RealArrAttrItem& operator=  (const char a)	{AdditiveArrAttrItem<double>::operator =((double)a);return *this;};
+		RealArrAttrItem& operator+= (const char a)	{AdditiveArrAttrItem<double>::operator +=((double)a);return *this;};
+		RealArrAttrItem& operator=  (const float a)	{AdditiveArrAttrItem<double>::operator =((double)a);return *this;};
+		RealArrAttrItem& operator+= (const float a) {AdditiveArrAttrItem<double>::operator +=((double)a);return *this;};
+		
+	};
+
+	class IntegerArrAttrItem : public AdditiveArrAttrItem<__int64>
+	{
+	public:
+		IntegerArrAttrItem(const vector<__int64>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+			:AdditiveArrAttrItem<__int64>(array_ref, a_i, oi, m){};
+		void set()
+		{
+			CheckOrdering();		//this will crash if array is ordered
+			//ordered attributes are not supposed to be changed in a by-item fashion
+
+			object->setIntegerAttrArr(meta, array);
+		};
+		
+		//provide these operators for long, int, float, char as well
+		IntegerArrAttrItem& operator =(const double a)		{AdditiveArrAttrItem<__int64>::operator =((__int64)a); return *this;};
+		IntegerArrAttrItem& operator += (const double  a)	{AdditiveArrAttrItem<__int64>::operator +=((__int64)a);return *this;};
+		IntegerArrAttrItem& operator = (const int  a)		{AdditiveArrAttrItem<__int64>::operator =((__int64)a);return *this;};
+		IntegerArrAttrItem& operator += (const int  a)		{AdditiveArrAttrItem<__int64>::operator +=((__int64)a);return *this;};
+		IntegerArrAttrItem& operator = (const char  a)		{AdditiveArrAttrItem<__int64>::operator =((__int64)a);return *this;};
+		IntegerArrAttrItem& operator += (const char  a)		{AdditiveArrAttrItem<__int64>::operator +=((__int64)a);return *this;};
+		IntegerArrAttrItem& operator = (const float  a)		{AdditiveArrAttrItem<__int64>::operator =((__int64)a);return *this;};
+		IntegerArrAttrItem& operator += (const float  a)	{AdditiveArrAttrItem<__int64>::operator +=((__int64)a);return *this;};
+		
+	};
+
+	class BooleanArrAttrItem : public ArrAttrItem<bool>
+	{
+	public:
+		BooleanArrAttrItem(const vector<bool>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+			:ArrAttrItem<bool>(array_ref, a_i, oi, m){};
+		void set()
+		{
+			CheckOrdering();		//this will crash if array is ordered
+			//ordered attributes are not supposed to be changed in a by-item fashion
+
+			object->setBooleanAttrArr(meta, array);
+		};
+		
+		//provide these operators for long, int, float, char as well
+		BooleanArrAttrItem& operator =(const double a)	{ArrAttrItem<bool>::operator =(a != 0.0);return *this;};
+		BooleanArrAttrItem& operator = (const long  a)	{ArrAttrItem<bool>::operator =(a != 0);return *this;};
+		BooleanArrAttrItem& operator = (const char  a)	{ArrAttrItem<bool>::operator =(a != 0);return *this;};
+		BooleanArrAttrItem& operator = (const float  a)	{ArrAttrItem<bool>::operator =(a != (float)0.0);return *this;};
+		
+	};
+
+	
+
+
+	//non-persistent, array attribute iterators
+
+		//persistent array attribute element(iterator) classes
+	// string array element providing operations with const char *
+	class TempStringArrAttrItem : public AdditiveArrAttrItem<string>
+	{
+	public:	
+		TempStringArrAttrItem(const vector<string>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+			:AdditiveArrAttrItem<string>(array_ref, a_i, oi, m){};
+		void set()
+		{
+			CheckOrdering();		//this will crash if array is ordered
+			//ordered attributes are not supposed to be changed in a by-item fashion
+
+			object->setTempStringAttrArr(meta, array);
+		};
+		
+		//provide these operators for const char * as well
+		TempStringArrAttrItem& operator =(const char * a)
+		{
+			AdditiveArrAttrItem<string>::operator=(string(a));
+			return *this;
+		};
+
+		TempStringArrAttrItem& operator += (const char * a)
+		{
+			AdditiveArrAttrItem<string>::operator +=(string(a));
+			return *this;
+		};
+		
+	};
+
+	class TempRealArrAttrItem : public AdditiveArrAttrItem<double>
+	{
+	public:	
+		TempRealArrAttrItem(const vector<double>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+			:AdditiveArrAttrItem<double>(array_ref, a_i, oi, m){};
+		void set()
+		{
+			CheckOrdering();		//this will crash if array is ordered
+			//ordered attributes are not supposed to be changed in a by-item fashion
+
+			object->setTempRealAttrArr(meta, array);
+		};
+		
+		//provide these operators for long, int, float, char as well
+		TempRealArrAttrItem& operator =(const int a)	{AdditiveArrAttrItem<double>::operator =((double)a);return *this;};
+		TempRealArrAttrItem& operator += (const int  a)	{AdditiveArrAttrItem<double>::operator +=((double)a);return *this;};
+		TempRealArrAttrItem& operator = (const long  a)	{AdditiveArrAttrItem<double>::operator =((double)a);return *this;};
+		TempRealArrAttrItem& operator += (const long  a){AdditiveArrAttrItem<double>::operator +=((double)a);return *this;};
+		TempRealArrAttrItem& operator = (const char  a)	{AdditiveArrAttrItem<double>::operator =((double)a);return *this;};
+		TempRealArrAttrItem& operator += (const char  a){AdditiveArrAttrItem<double>::operator +=((double)a);return *this;};
+		TempRealArrAttrItem& operator = (const float a) {AdditiveArrAttrItem<double>::operator =((double)a);return *this;};
+		TempRealArrAttrItem& operator += (const float a){AdditiveArrAttrItem<double>::operator +=((double)a);return *this;};
+		
+	};
+
+	class TempIntegerArrAttrItem : public AdditiveArrAttrItem<__int64>
+	{
+	public:
+		TempIntegerArrAttrItem(const vector<__int64>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+			:AdditiveArrAttrItem<__int64>(array_ref, a_i, oi, m){};
+		void set()
+		{
+			CheckOrdering();		//this will crash if array is ordered
+			//ordered attributes are not supposed to be changed in a by-item fashion
+
+			object->setTempIntegerAttrArr(meta, array);
+		};
+		
+		//provide these operators for long, int, float, char as well
+		TempIntegerArrAttrItem& operator =(const double a)		{AdditiveArrAttrItem<__int64>::operator =((__int64)a);return *this;};
+		TempIntegerArrAttrItem& operator += (const double  a)	{AdditiveArrAttrItem<__int64>::operator +=((__int64)a);return *this;};
+		TempIntegerArrAttrItem& operator = (const int  a)	{AdditiveArrAttrItem<__int64>::operator =((__int64)a);return *this;};
+		TempIntegerArrAttrItem& operator += (const int  a)	{AdditiveArrAttrItem<__int64>::operator +=((__int64)a);return *this;};
+		TempIntegerArrAttrItem& operator = (const char  a)	{AdditiveArrAttrItem<__int64>::operator =((__int64)a);return *this;};
+		TempIntegerArrAttrItem& operator += (const char  a)	{AdditiveArrAttrItem<__int64>::operator +=((__int64)a);return *this;};
+		TempIntegerArrAttrItem& operator = (const float  a)	{AdditiveArrAttrItem<__int64>::operator =((__int64)a);return *this;};
+		TempIntegerArrAttrItem& operator += (const float  a)	{AdditiveArrAttrItem<__int64>::operator +=((__int64)a);return *this;};
+		
+	};
+
+	class TempBooleanArrAttrItem : public ArrAttrItem<bool>
+	{
+	public:
+		TempBooleanArrAttrItem(const vector<bool>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Uml::Attribute & m)
+			:ArrAttrItem<bool>(array_ref, a_i, oi, m){};
+		void set()
+		{
+			CheckOrdering();		//this will crash if array is ordered
+			//ordered attributes are not supposed to be changed in a by-item fashion
+
+			object->setTempBooleanAttrArr(meta, array);
+		};
+		
+		//provide these operators for long, int, float, char as well
+		TempBooleanArrAttrItem& operator =(const double a)	{ArrAttrItem<bool>::operator =(a != 0.0);return *this;};
+		TempBooleanArrAttrItem& operator = (const long  a)	{ArrAttrItem<bool>::operator =(a != 0);return *this;};
+		TempBooleanArrAttrItem& operator = (const char  a)	{ArrAttrItem<bool>::operator =(a != 0);return *this;};
+		TempBooleanArrAttrItem& operator = (const float  a)	{ArrAttrItem<bool>::operator =(a != (float)0.0);return *this;};
+		
+	};
+
+
+	//non-persistent, array attribute objects
+
+	
+
+	template <class CLASS>
+	vector<CLASS> SortArrAttr(const vector<CLASS> &a)
+	{
+		multiset<CLASS> b;
+		vector<CLASS> c;
+		b.insert(a.begin(), a.end());
+		TYPENAME multiset<CLASS>::iterator i = b.begin();
+		while (i != b.end()) c.push_back(*i++);
+		return c;
+	};
+
+	vector<string> UDM_DLL SortStrArrAttr(const vector<string> &a);
+
+	/*
+		These are needed because defvalue on Attribute is 
+		always declared as a string array, but it's real type
+		can be just about anything.
+	*/
+
+	vector<__int64> UDM_DLL StrToLongArrAttr(const vector<string> &a);
+	vector<double> UDM_DLL StrToRealArrAttr(const vector<string> &a);
+	vector<bool> UDM_DLL StrToBoolArrAttr(const vector<string> &a);
+	
+
+
+	class TempStringAttrArr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		TempStringAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator vector<string>() const { return impl->getTempStringAttrArr(meta); }
+		const vector<string> &operator =(const vector<string> &a) 
+		{ 
+			if (CheckAttributeOrdering(meta))
+				impl->setTempStringAttrArr(meta, SortStrArrAttr(a)); 
+			else
+				impl->setTempStringAttrArr(meta, a); 
+			return a; 
+		}
+
+		//on write-operations the array is ordered if requested
+		const vector<string> operator +=(const vector<string> &a) 
+		{
+			vector<string> b = impl->getTempStringAttrArr(meta);
+			
+			vector<string>::const_iterator ci_a = a.begin();
+			while (ci_a != a.end())
+				b.push_back(*ci_a++);
+
+			//impl->setTempStringAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+		
+		const vector<string> operator +=(const string &a) 
+		{
+			vector<string> b = impl->getTempStringAttrArr(meta);
+			b.push_back(a);
+			//impl->setTempStringAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+		const vector<string> operator +=(const char * a) 
+		{
+			vector<string> b = impl->getTempStringAttrArr(meta);
+			b.push_back(string(a));
+			//impl->setTempStringAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+		bool operator !() const 
+		{ 
+			vector<string> b = impl->getTempStringAttrArr(meta);
+			return  (b.size() == 0);
+		};
+		operator bool()  const 
+		{ 
+			vector<string> b = impl->getTempStringAttrArr(meta);
+			return  (b.size() != 0); 
+		};
+
+
+		TempStringArrAttrItem  operator[](const int index)
+		{
+			vector<string> a = impl->getTempStringAttrArr(meta);
+			TempStringArrAttrItem array_indexer(a, index, impl, meta);
+			return array_indexer;
+		}
+
+		TempStringArrAttrItem  begin()
+		{
+			vector<string> a = impl->getTempStringAttrArr(meta);
+			TempStringArrAttrItem array_indexer(a, 0, impl, meta);
+			return array_indexer;
+		}
+
+		TempStringArrAttrItem  end()
+		{
+			vector<string> a = impl->getTempStringAttrArr(meta);
+			TempStringArrAttrItem array_indexer(a, a.size(), impl, meta);
+			return array_indexer;
+		}
+
+
+	};
+
+	class TempIntegerAttrArr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		TempIntegerAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator vector<__int64>() const { return impl->getTempIntegerAttrArr(meta); }
+		const vector<__int64> &operator =(const vector<__int64> &a) 
+		{ 
+			
+			if (CheckAttributeOrdering(meta))
+				impl->setTempIntegerAttrArr(meta, SortArrAttr<__int64>(a)); 
+			else
+				impl->setTempIntegerAttrArr(meta, a); 
+			return a; 
+		}
+		const vector<__int64> operator +=(const vector<__int64> &a) 
+		{
+			vector<__int64> b = impl->getTempIntegerAttrArr(meta);
+			
+			vector<__int64>::const_iterator ci_a = a.begin();
+			while (ci_a != a.end())
+				b.push_back(*ci_a++);
+			//impl->setTempIntegerAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+
+		const vector<__int64> operator +=(const long a) 
+		{
+			vector<__int64> b = impl->getTempIntegerAttrArr(meta);
+			b.push_back(a);
+			//impl->setTempIntegerAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+
+		bool operator !() const 
+		{ 
+			vector<__int64> b = impl->getTempIntegerAttrArr(meta);
+			return  (b.size() == 0);
+		};
+		operator bool()  const 
+		{ 
+			vector<__int64> b = impl->getTempIntegerAttrArr(meta);
+			return  (b.size() != 0); 
+		};
+
+		TempIntegerArrAttrItem  operator[](const int index)
+		{
+			vector<__int64> a = impl->getTempIntegerAttrArr(meta);
+			TempIntegerArrAttrItem array_indexer(a, index, impl, meta);
+			return array_indexer;
+		}
+
+		TempIntegerArrAttrItem  begin()
+		{
+			vector<__int64> a = impl->getTempIntegerAttrArr(meta);
+			TempIntegerArrAttrItem array_indexer(a, 0, impl, meta);
+			return array_indexer;
+		}
+	
+		TempIntegerArrAttrItem  end()
+		{
+			vector<__int64> a = impl->getTempIntegerAttrArr(meta);
+			TempIntegerArrAttrItem array_indexer(a, a.size(), impl, meta);
+			return array_indexer;
+		}
+
+
+
+	};
+
+
+	class TempRealAttrArr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		TempRealAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator vector<double>() const { return impl->getTempRealAttrArr(meta); }
+		const vector<double> &operator =(const vector<double> &a) 
+		{ 
+			
+			if (CheckAttributeOrdering(meta))
+				impl->setTempRealAttrArr(meta, SortArrAttr<double>(a)); 
+			else
+				impl->setTempRealAttrArr(meta, a); 
+
+			return a; 
+		}
+		const vector<double> operator +=(const vector<double> &a) 
+		{
+			vector<double> b = impl->getTempRealAttrArr(meta);
+			
+			vector<double>::const_iterator ci_a = a.begin();
+			while (ci_a != a.end())
+				b.push_back(*ci_a++);
+
+			*this = b;    //call the above operator
+			return b;
+		}
+
+
+		const vector<double> operator +=(const double a) 
+		{
+			vector<double> b = impl->getTempRealAttrArr(meta);
+			b.push_back(a);
+			*this = b;    //call the above operator
+			return b;
+		}
+
+
+		bool operator !() const 
+		{ 
+			vector<double> b = impl->getTempRealAttrArr(meta);
+			return  (b.size() == 0);
+		};
+		operator bool()  const 
+		{ 
+			vector<double> b = impl->getTempRealAttrArr(meta);
+			return  (b.size() != 0); 
+		};
+
+
+		TempRealArrAttrItem  operator[](const int index)
+		{
+			vector<double> a = impl->getTempRealAttrArr(meta);
+			TempRealArrAttrItem array_indexer(a, index, impl, meta);
+			return array_indexer;
+		}
+
+		TempRealArrAttrItem  begin()
+		{
+			vector<double> a = impl->getTempRealAttrArr(meta);
+			TempRealArrAttrItem array_indexer(a, 0, impl, meta);
+			return array_indexer;
+		}
+
+		TempRealArrAttrItem  end()
+		{
+			vector<double> a = impl->getTempRealAttrArr(meta);
+			TempRealArrAttrItem array_indexer(a, a.size(), impl, meta);
+			return array_indexer;
+		}
+
+	};
+
+
+	class TempBooleanAttrArr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		TempBooleanAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator vector<bool>() const { return impl->getTempBooleanAttrArr(meta); }
+		const vector<bool> &operator =(const vector<bool> &a) 
+		{ 
+			if (CheckAttributeOrdering(meta))
+				impl->setTempBooleanAttrArr(meta, SortArrAttr(a));
+			else
+				impl->setTempBooleanAttrArr(meta, a); 
+			return a; 
+		}
+
+		const vector<bool> operator +=(const vector<bool> &a) 
+		{
+			vector<bool> b = impl->getTempBooleanAttrArr(meta);
+			
+			vector<bool>::const_iterator ci_a = a.begin();
+			while (ci_a != a.end())
+				b.push_back(*ci_a++);
+			//impl->setTempBooleanAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+
+		const vector<bool> operator +=(const bool a) 
+		{
+			vector<bool> b = impl->getTempBooleanAttrArr(meta);
+			b.push_back(a);
+			//impl->setTempBooleanAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+
+		bool operator !() const 
+		{ 
+			vector<bool> b = impl->getTempBooleanAttrArr(meta);
+			return  (b.size() == 0);
+		};
+		operator bool()  const 
+		{ 
+			vector<bool> b = impl->getTempBooleanAttrArr(meta);
+			return  (b.size() != 0); 
+		};
+
+
+		TempBooleanArrAttrItem  operator[](const int index)
+		{
+			vector<bool> a = impl->getTempBooleanAttrArr(meta);
+			TempBooleanArrAttrItem array_indexer(a, index, impl, meta);
+			return array_indexer;
+		}
+
+		TempBooleanArrAttrItem  begin()
+		{
+			vector<bool> a = impl->getTempBooleanAttrArr(meta);
+			TempBooleanArrAttrItem array_indexer(a, 0, impl, meta);
+			return array_indexer;
+		}
+
+		TempBooleanArrAttrItem  end()
+		{
+			vector<bool> a = impl->getTempBooleanAttrArr(meta);
+			TempBooleanArrAttrItem array_indexer(a, a.size(), impl, meta);
+			return array_indexer;
+		}
+
+	};
+
+
+
+// --------------------------- StringAttrArr
+
+	class StringAttrArr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		StringAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator vector<string>() const { return impl->getStringAttrArr(meta); }
+		const vector<string> &operator =(const vector<string> &a) 
+		{ 
+			if (CheckAttributeOrdering(meta))
+				impl->setStringAttrArr(meta, SortStrArrAttr(a));
+			else
+				impl->setStringAttrArr(meta, a); 
+
+			return a; 
+
+		}
+		const vector<string> operator +=(const vector<string> &a) 
+		{
+			vector<string> b = impl->getStringAttrArr(meta);
+			
+			vector<string>::const_iterator ci_a = a.begin();
+			while (ci_a != a.end())
+				b.push_back(*ci_a++);
+			//impl->setStringAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+		
+		const vector<string> operator +=(const string &a) 
+		{
+			vector<string> b = impl->getStringAttrArr(meta);
+			b.push_back(a);
+			//impl->setStringAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+		const vector<string> operator +=(const char * a) 
+		{
+			vector<string> b = impl->getStringAttrArr(meta);
+			b.push_back(string(a));
+			//impl->setStringAttrArr(meta,b);	
+			*this = b;
+			return b;
+
+		}
+
+		bool operator !() const 
+		{ 
+			vector<string> b = impl->getStringAttrArr(meta);
+			return  (b.size() == 0);
+		};
+		operator bool()  const 
+		{ 
+			vector<string> b = impl->getStringAttrArr(meta);
+			return  (b.size() != 0); 
+		};
+
+
+		StringArrAttrItem  operator[](const int index)
+		{
+			vector<string> a = impl->getStringAttrArr(meta);
+			StringArrAttrItem array_indexer(a, index, impl, meta);
+			return array_indexer;
+		}
+
+
+		StringArrAttrItem  begin()
+		{
+			vector<string> a = impl->getStringAttrArr(meta);
+			StringArrAttrItem array_indexer(a, 0, impl, meta);
+			return array_indexer;
+		}
+
+		StringArrAttrItem  end()
+		{
+			vector<string> a = impl->getStringAttrArr(meta);
+			StringArrAttrItem array_indexer(a, a.size(), impl, meta);
+			return array_indexer;
+		}
+	
+		
+		
+	};
+
+// --------------------------- BooleanAttrArr
+
+	class BooleanAttrArr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		BooleanAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator vector<bool>() const { return impl->getBooleanAttrArr(meta); }
+		const vector<bool>& operator =(const vector<bool>& a) 
+		{ 
+			if (CheckAttributeOrdering(meta))
+				impl->setBooleanAttrArr(meta, SortArrAttr<bool>(a));
+			else
+				impl->setBooleanAttrArr(meta, a); 
+			return a; 
+		}
+
+		const vector<bool> operator +=(const vector<bool> &a) 
+		{
+			vector<bool> b = impl->getBooleanAttrArr(meta);
+			
+			vector<bool>::const_iterator ci_a = a.begin();
+			while (ci_a != a.end())
+				b.push_back(*ci_a++);
+			//impl->setBooleanAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+
+		const vector<bool> operator +=(const bool a) 
+		{
+			vector<bool> b = impl->getBooleanAttrArr(meta);
+			b.push_back(a);
+			//impl->setBooleanAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+
+		bool operator !() const 
+		{ 
+			vector<bool> b = impl->getBooleanAttrArr(meta);
+			return  (b.size() == 0);
+		};
+		operator bool()  const 
+		{ 
+			vector<bool> b = impl->getBooleanAttrArr(meta);
+			return  (b.size() != 0); 
+		};
+
+
+		BooleanArrAttrItem  operator[](const int index)
+		{
+			vector<bool> a = impl->getBooleanAttrArr(meta);
+			BooleanArrAttrItem array_indexer(a, index, impl, meta);
+			return array_indexer;
+		}
+
+	};
+
+// --------------------------- IntegerAttrArr
+
+	class IntegerAttrArr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		IntegerAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator vector<__int64>() const { return impl->getIntegerAttrArr(meta); }
+		const vector<__int64>& operator =(const vector<__int64>& a) 
+		{
+			if (CheckAttributeOrdering(meta))
+				impl->setIntegerAttrArr(meta, SortArrAttr<__int64>(a)); 
+			else
+				impl->setIntegerAttrArr(meta, a); 
+
+			return a; 
+		}
+		const vector<__int64> operator +=(const vector<__int64> &a) 
+		{
+			vector<__int64> b = impl->getIntegerAttrArr(meta);
+			
+			vector<__int64>::const_iterator ci_a = a.begin();
+			while (ci_a != a.end())
+				b.push_back(*ci_a++);
+			//impl->setIntegerAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+
+		const vector<__int64> operator +=(const __int64 a) 
+		{
+			vector<__int64> b = impl->getIntegerAttrArr(meta);
+			b.push_back(a);
+			//impl->setIntegerAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+
+		bool operator !() const 
+		{ 
+			vector<__int64> b = impl->getIntegerAttrArr(meta);
+			return  (b.size() == 0);
+		};
+		operator bool()  const 
+		{ 
+			vector<__int64> b = impl->getIntegerAttrArr(meta);
+			return  (b.size() != 0); 
+		};
+
+		IntegerArrAttrItem  operator[](const int index)
+		{
+			vector<__int64> a = impl->getIntegerAttrArr(meta);
+			IntegerArrAttrItem array_indexer(a, index, impl, meta);
+			return array_indexer;
+		}
+
+		IntegerArrAttrItem begin()
+		{
+			vector<__int64> a = impl->getIntegerAttrArr(meta);
+			IntegerArrAttrItem array_indexer(a, 0, impl, meta);
+			return array_indexer;
+		}
+
+		IntegerArrAttrItem end()
+		{
+			vector<__int64> a = impl->getIntegerAttrArr(meta);
+			IntegerArrAttrItem array_indexer(a, a.size(), impl, meta);
+			return array_indexer;
+		}
+
+	};
+
+// --------------------------- RealAttrArr
+
+	class RealAttrArr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::Attribute &meta;
+
+	public:
+		RealAttrArr(ObjectImpl *i, const ::Uml::Uml::Attribute &m) : impl(i), meta(m) { }
+
+		operator vector<double>() const { return impl->getRealAttrArr(meta); }
+		const vector<double>& operator =(const vector<double> &a) 
+		{
+			if (CheckAttributeOrdering(meta))
+				impl->setRealAttrArr(meta, SortArrAttr<double>(a)); 
+			else
+				impl->setRealAttrArr(meta, a); 
+			return a; 
+		}
+
+		const vector<double> operator +=(const vector<double> &a) 
+		{
+			vector<double> b = impl->getRealAttrArr(meta);
+			
+			vector<double>::const_iterator ci_a = a.begin();
+			while (ci_a != a.end())
+				b.push_back(*ci_a++);
+			//impl->setRealAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+
+		const vector<double> operator +=(const double a) 
+		{
+			vector<double> b = impl->getRealAttrArr(meta);
+			b.push_back(a);
+			//	impl->setRealAttrArr(meta,b);	
+			*this = b;
+			return b;
+		}
+
+
+		bool operator !() const 
+		{ 
+			vector<double> b = impl->getRealAttrArr(meta);
+			return  (b.size() == 0);
+		};
+		operator bool()  const 
+		{ 
+			vector<double> b = impl->getRealAttrArr(meta);
+			return  (b.size() != 0); 
+		};
+
+
+		RealArrAttrItem  operator[](const int index)
+		{
+			vector<double> a = impl->getRealAttrArr(meta);
+			RealArrAttrItem array_indexer(a, index, impl, meta);
+			return array_indexer;
+		}
+
+		RealArrAttrItem begin()
+		{
+			vector<double> a = impl->getRealAttrArr(meta);
+			RealArrAttrItem array_indexer(a, 0, impl, meta);
+			return array_indexer;
+		}
+
+		RealArrAttrItem end()
+		{
+			vector<double> a = impl->getRealAttrArr(meta);
+			RealArrAttrItem  array_indexer(a, a.size(), impl, meta);
+			return array_indexer;
+		}
+
+
+	};
+// --------------------------- CrossAssocAttr
+	template<class CLASS, class Pred = less<CLASS> >
+	class CrossAssocAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::AssociationRole &meta;
+
+	public:
+		CrossAssocAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+
+		operator set<CLASS, Pred>() const 
+		{
+			
+			set<CLASS, Pred> ret;
+
+			UdmProject* pr = NULL;
+			if (impl && impl->__getdn())
+				pr = impl->__getdn()->GetProject();
+			if (pr != NULL)
+			{
+				Object peer = impl->clone();
+				set<Object> peers = pr->getSimpleAssociation(peer, meta);
+				set<Object>::iterator peers_i = peers.begin();
+				while (peers_i != peers.end())
+				{
+					ret.insert(CLASS::Cast(*peers_i));
+					peers_i++;
+				};
+			}
+			else
+			{
+				throw udm_exception("Project is NULL!");
+			}
+			return ret;
+		}
+
+		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a)
+		{
+			UdmProject* pr = impl->__getdn()->GetProject();
+			if (pr != NULL)
+			{
+				Object peer = impl->clone();
+				set<Object> peers;
+				TYPENAME set<CLASS, Pred>::const_iterator i = a.begin();
+				while( i != a.end() )
+				{
+					peers.insert((*i));
+					++i;
+				}
+				
+				pr->setSimpleAssociation(peer,peers,meta);
+			}
+			else
+			{
+				throw udm_exception("Project is NULL!");
+			}
+
+			return a;
+		}
+
+		const set<CLASS, Pred> operator +=(const CLASS &a) {
+			set<CLASS, Pred> xx(*this);
+			xx.insert(a);
+			return *this = xx;
+		}
+		const set<CLASS, Pred> operator -=(const CLASS &a) {
+			set<CLASS, Pred> xx(*this);
+			xx.erase(a);
+			return *this = xx;
+		}
+	};
+
+
+// --------------------------- AssocAttr
+
+
+	template<class CLASS, class Pred = less<CLASS> >
+	class AssocAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::AssociationRole &meta;
+
+	public:
+		AssocAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+
+		operator set<CLASS, Pred>() const 
+		{
+			
+			set<CLASS, Pred> ret;
+
+			vector<ObjectImpl*> a = impl->getAssociation(meta);
+			vector<ObjectImpl*>::iterator i = a.begin();
+			while( i != a.end() )
+			{
+				// TODO: assert the type of the object
+				ret.insert(*i);
+				++i;
+			}
+			
+			return ret;
+		}
+
+		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a)
+		{
+			vector<ObjectImpl*> b;
+
+			TYPENAME set<CLASS, Pred>::const_iterator i = a.begin();
+			while( i != a.end() )
+			{
+				b.push_back((*i).__impl());
+				++i;
+			}
+
+			impl->setAssociation(meta, b);
+
+			return a;
+		}
+
+		const set<CLASS,Pred> operator +=(const CLASS &a) {
+			set<CLASS,Pred> xx(*this);
+			xx.insert(a);
+			return *this = xx;
+		}
+		const set<CLASS,Pred> operator -=(const CLASS &a) {
+			set<CLASS,Pred> xx(*this);
+			xx.erase(a);
+			return *this = xx;
+		}
+	};
+
+// --------------------------- CrossPointerAttr
+
+	template<class CLASS>
+	class CrossPointerAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::AssociationRole &meta;
+
+	public:
+		CrossPointerAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+
+		operator CLASS() const 
+		{
+			UdmProject* pr = NULL;
+			set<Object> peers;
+			if (impl && impl->__getdn())
+				pr = impl->__getdn()->GetProject();
+			if (pr != NULL)
+			{
+				Object peer = impl->clone();
+				peers = pr->getSimpleAssociation(peer, meta);
+				if (peers.begin() != peers.end())
+					return CLASS::Cast(*(peers.begin()));
+				
+			}
+			else
+			{
+				throw udm_exception("Project is NULL!");
+			}
+
+			return &_null;
+			
+		}
+
+		const CLASS &operator =(const CLASS &a)
+		{
+			UdmProject* pr = impl->__getdn()->GetProject();
+			if (pr != NULL)
+			{
+				Object peer = impl->clone();
+				set<Object> peers;
+				peers.insert(a);
+				
+				pr->setSimpleAssociation(peer,peers,meta);
+			}
+			else
+			{
+				throw udm_exception("Project is NULL!");
+			}
+
+			return a;			
+		}
+	};
+
+
+
+// --------------------------- PointerAttr
+
+	template<class CLASS>
+	class PointerAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::AssociationRole &meta;
+
+	public:
+		PointerAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+
+		operator CLASS() const 
+		{
+			vector<ObjectImpl*> a = impl->getAssociation(meta);
+			ASSERT( a.size() <= 1 );
+
+			// TODO: assert the type of the object
+			return a.empty() ? &_null : a.front();
+		}
+
+		const CLASS &operator =(const CLASS &a)
+		{
+			vector<ObjectImpl*> b;
+
+			if( a != null )
+				b.push_back(a.__impl());
+
+			impl->setAssociation(meta, b);
+
+			return a;
+		}
+	};
+
+// --------------------------- CrossAssocEndAttr
+
+	template<class CLASS>
+	class CrossAssocEndAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::AssociationRole &meta;
+
+	public:
+		CrossAssocEndAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+
+		operator CLASS() const 
+		{
+			UdmProject *pr = NULL;
+			CLASS ret;
+			if (impl && impl->__getdn())
+				pr = impl->__getdn()->GetProject();
+
+			if (pr != NULL)
+			{
+				Object link = impl->clone();
+				ret = CLASS::Cast(pr->getEnd(link, meta));
+			}
+			else
+			{
+				throw udm_exception("Project is NULL!");
+			}
+
+			return ret;
+		}
+
+		const CLASS &operator =(const CLASS &a)
+		{
+			UdmProject *pr = NULL;
+			
+			if (impl && impl->__getdn())
+				pr = impl->__getdn()->GetProject();
+
+			Object a_obj(a.__impl()->clone());
+			if (pr != NULL)
+			{
+				Object link = impl->clone();
+				pr->setEnd(link, a_obj, meta);
+			}
+			else
+			{
+				throw udm_exception("Project is NULL!");
+			}
+
+			return a;
+			
+		}
+	};
+
+
+// --------------------------- AssocEndAttr
+
+	template<class CLASS>
+	class AssocEndAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::AssociationRole &meta;
+
+	public:
+		AssocEndAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
+
+		operator CLASS() const 
+		{
+			vector<ObjectImpl*> a = impl->getAssociation(meta, TARGETFROMCLASS);
+			ASSERT( a.size() <= 1 );
+
+			// TODO: assert the type of the object
+			return a.empty() ? &_null : a.front();
+		}
+
+		const CLASS &operator =(const CLASS &a)
+		{
+			vector<ObjectImpl*> b;
+
+			if( a != null )
+				b.push_back(a.__impl());
+
+			impl->setAssociation(meta, b, TARGETFROMCLASS);
+
+			return a;
+		}
+	};
+
+// --------------------------- AClassCrossPointerAttr
+
+	template<class CLASS, class TARGETCLASS>
+	class AClassCrossPointerAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::AssociationRole &peermeta, &selfmeta;
+
+	public:
+		AClassCrossPointerAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m, const ::Uml::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
+
+		operator CLASS() const 
+		{
+			CLASS ret;
+			UdmProject *pr = NULL;
+			
+			if (impl && impl->__getdn())
+				pr = impl->__getdn()->GetProject();
+
+			if (pr != NULL)
+			{
+				Object peer = impl->clone();
+				set<Object> links = pr->getLinks(peer, peermeta);
+				if (!links.empty())
+					return CLASS::Cast(*(links.begin()));
+				
+			}
+			else
+			{
+				throw udm_exception("Project is NULL!");
+			}
+
+			return ret;
+
+		}
+
+		const CLASS &operator =(const CLASS &a)
+		{
+			UdmProject *pr = NULL;
+			
+			if (impl && impl->__getdn())
+				pr = impl->__getdn()->GetProject();
+
+			if (pr != NULL)
+			{
+				Object peer = impl->clone();
+				set<Object> links;
+				links.insert(a);
+				pr->setLinks(peer, links, peermeta);
+			}
+			else
+			{
+				throw udm_exception("Project is NULL!");
+			}
+
+			return a;
+			
+		}
+
+	};
+// --------------------------- AClassPointerAttr
+
+	template<class CLASS, class TARGETCLASS>
+	class AClassPointerAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::AssociationRole &peermeta, &selfmeta;
+
+	public:
+		AClassPointerAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m, const ::Uml::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
+
+		operator CLASS() const 
+		{
+			vector<ObjectImpl*> a = impl->getAssociation(peermeta, CLASSFROMTARGET);
+			ASSERT( a.size() <= 1 );
+
+			// TODO: assert the type of the object
+			return a.empty() ? &_null : a.front();
+		}
+
+		const CLASS &operator =(const CLASS &a)
+		{
+			vector<ObjectImpl*> b;
+
+			if( a != null )
+				b.push_back(a.__impl());
+
+			impl->setAssociation(peermeta, b, CLASSFROMTARGET);
+
+			return a;
+		}
+
+		CLASS SetLink(TARGETCLASS peer, Object parent, 
+			const ::Uml::Uml::Class &meta = CLASS::meta,
+			const ::Uml::Uml::CompositionChildRole &role = NULLCHILDROLE) {
+				
+			if(!IsDerivedFrom(meta, CLASS::meta)) {
+						throw udm_exception("Invalid type for assoc class");
+			}
+
+			CLASS nn = CLASS::Cast(Object::Create(meta, parent, role));
+			AssocEndAttr<TARGETCLASS> zz = AssocEndAttr<TARGETCLASS>(nn.__impl(), peermeta);
+			zz = peer;
+			*this = nn;
+			return nn;
+		}	
+	};
+
+	// --------------------------- AClassCrossAssocAttr
+
+	template<class CLASS, class TARGETCLASS, class Pred = less<CLASS> >
+	class AClassCrossAssocAttr
+	{
+	private:
+		ObjectImpl *impl;
+// selfmeta is the role pointing towards the owner
+// the peer points to the other
+		const ::Uml::Uml::AssociationRole &peermeta, &selfmeta;
+
+	public:
+		AClassCrossAssocAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m, const ::Uml::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
+
+		operator set<CLASS, Pred>() const 
+		{
+			set<CLASS, Pred> ret;
+			
+			UdmProject *pr = NULL;
+			
+			if (impl && impl->__getdn())
+				pr = impl->__getdn()->GetProject();
+
+			if (pr != NULL)
+			{
+				Object peer = impl->clone();
+				set<Object> links = pr->getLinks(peer, peermeta);
+				set<Object>::iterator l_i = links.begin();
+				while (l_i != links.end())
+				{
+					ret.insert(CLASS::Cast(*l_i));
+					l_i++;
+				};
+			}
+			else
+			{
+				throw udm_exception("Project is NULL!");
+			}
+
+			return ret;
+		}
+
+		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a)
+		{
+			
+			UdmProject *pr = NULL;
+			
+			if (impl && impl->__getdn())
+				pr = impl->__getdn()->GetProject();
+
+			if (pr != NULL)
+			{
+				Object peer = impl->clone();
+				set<Object> links;
+				TYPENAME set<CLASS, Pred>::const_iterator a_i = a.begin();
+				while (a_i != a.end())
+				{
+					links.insert(*a_i);
+					a_i++;
+				};
+				pr->setLinks(peer, links, peermeta);
+			}
+			else
+			{
+				throw udm_exception("Project is NULL!");
+			}
+
+			return a;
+		}
+
+	};
+
+
+
+// --------------------------- AClassAssocAttr
+
+	template<class CLASS, class TARGETCLASS, class Pred=less<CLASS> >
+	class AClassAssocAttr
+	{
+	private:
+		ObjectImpl *impl;
+// selfmeta is the role pointing towards the owner
+// the peer points to the other
+		const ::Uml::Uml::AssociationRole &peermeta, &selfmeta;
+
+	public:
+		AClassAssocAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m, const ::Uml::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
+
+		operator set<CLASS, Pred>() const 
+		{
+			set<CLASS, Pred> ret;
+
+			vector<ObjectImpl*> a = impl->getAssociation(peermeta, CLASSFROMTARGET);
+			vector<ObjectImpl*>::iterator i = a.begin();
+			while( i != a.end() )
+			{
+				ret.insert(*i);
+				++i;
+			}
+
+			return ret;
+		}
+
+		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a)
+		{
+			vector<ObjectImpl*> b;
+
+			TYPENAME set<CLASS, Pred>::const_iterator i = a.begin();
+			while( i != a.end() )
+			{
+				b.push_back((*i).__impl());
+				++i;
+			}
+
+			impl->setAssociation(peermeta, b, CLASSFROMTARGET);
+
+			return a;
+		}
+
+		CLASS AddLink(TARGETCLASS peer, Object parent, 
+			const ::Uml::Uml::Class &meta = CLASS::meta,
+			const ::Uml::Uml::CompositionChildRole &role = NULLCHILDROLE) {
+				
+			if(!IsDerivedFrom(meta, CLASS::meta)) {
+						throw udm_exception("Invalid type for assoc class");
+			}
+
+			CLASS nn = CLASS::Cast(Object::Create(meta, parent, role));
+			AssocEndAttr<TARGETCLASS> zz = AssocEndAttr<TARGETCLASS>(nn.__impl(), peermeta);
+			zz = peer;
+			set<CLASS, Pred> b = *this;
+			b.insert(nn);
+			*this = b;
+			return nn;
+		}	
+	};
+
+// --------------------------- ChildrenAttr
+
+	template<class CLASS, class Pred = less<CLASS> >
+	class ChildrenAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::CompositionChildRole &meta;
+
+	public:
+		ChildrenAttr(ObjectImpl *i, const ::Uml::Uml::CompositionChildRole &m) : impl(i), meta(m) { }
+
+		operator set<CLASS, Pred>() const 
+		{
+			set<CLASS, Pred> ret;
+
+			vector<ObjectImpl*> a = impl->getChildren(meta, CLASS::meta);
+			vector<ObjectImpl*>::iterator i = a.begin();
+			while( i != a.end() )
+			{
+				// TODO: assert the type of the object
+				ret.insert(*i);
+				++i;
+			}
+
+			return ret;
+		}
+
+		operator vector<CLASS>() const 
+		{
+			vector<CLASS> ret;
+
+			vector<ObjectImpl*> a = impl->getChildren(meta, CLASS::meta);
+			vector<ObjectImpl*>::iterator i = a.begin();
+			while( i != a.end() )
+			{
+				// TODO: assert the type of the object
+				ret.push_back(*i);
+				++i;
+			}
+
+			return ret;
+		}
+
+
+
+		const set<CLASS, Pred> &operator =(const set<CLASS,Pred> &a)
+		{
+			vector<ObjectImpl *> b;
+
+			TYPENAME set<CLASS, Pred>::const_iterator i = a.begin();
+			while( i != a.end() )
+			{
+				b.push_back((*i).__impl());
+				++i;
+			}
+
+			impl->setChildren(meta, b);
+
+			return a;
+		}
+
+		const vector<CLASS> &operator =(const vector<CLASS> &a)
+		{
+			vector<ObjectImpl *> b;
+			set<CLASS, Pred> uniq;
+
+			TYPENAME vector<CLASS>::const_iterator i = a.begin();
+			while( i != a.end() )
+			{
+				pair<TYPENAME set<CLASS, Pred>::iterator, bool> ins_res = uniq.insert(*i);
+				if (ins_res.second)
+				{
+					//object is unique
+					b.push_back((*i).__impl());
+					++i;
+				}
+			}
+
+			impl->setChildren(meta, b);
+
+			return a;
+		}
+
+
+
+
+
+
+		const vector<CLASS> operator +=(const CLASS &a) 
+		{
+			//set<CLASS> xx(*this);
+			//xx.insert(a);
+			vector<CLASS> xx(*this);
+			xx.push_back(a);
+			return *this = xx;
+			
+		}
+
+		const vector<CLASS> operator -=(const CLASS &a) 
+		{
+			//set<CLASS> xx(*this);
+			//xx.erase(a);
+			vector<CLASS> xx(*this);
+			TYPENAME vector<CLASS>::iterator i = xx.begin();
+			while ( i != xx.end())
+			{
+				if (*i == a)
+				{
+					i = xx.erase(i);
+				}
+				else
+					++i;
+			}
+			return *this = xx;
+		}
+	};
+
+// --------------------------- ChildAttr
+
+	template<class CLASS>
+	class ChildAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::CompositionChildRole &meta;
+
+	public:
+		ChildAttr(ObjectImpl *i, const ::Uml::Uml::CompositionChildRole &m) : impl(i), meta(m) { }
+
+		operator CLASS() const 
+		{
+			vector<ObjectImpl*> a = impl->getChildren(meta, CLASS::meta);
+			ASSERT( a.size() <= 1 );
+
+			// TODO: assert the type of the object
+			return a.empty() ? &_null : a.front();
+		}
+
+		const CLASS &operator =(const CLASS &a)
+		{
+			vector<ObjectImpl*> b;
+
+			if( a != null )
+				b.push_back(a.__impl());
+
+			impl->setChildren(meta, b);
+
+			return a;
+		}
+	};
+
+// --------------------------- ParentAttr
+
+	template<class CLASS>
+	class ParentAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::Uml::CompositionParentRole &meta;
+
+	public:
+		ParentAttr(ObjectImpl *i, const ::Uml::Uml::CompositionParentRole &m) : impl(i), meta(m) { }
+
+		operator CLASS() const {
+			return CLASS::Cast(impl->getParent(meta));
+		}
+
+		// we should speed this up using some iterator class
+		const CLASS &operator =(const CLASS &a)
+		{
+// CYT4 - to allow the effective removal of node by setting parent to null
+//			ASSERT( a != null );
+
+			impl->setParent(a.__impl(), meta);
+
+			return a;
+		}
+	};
+// -----------------------------Typed set<> container
+
+	template<class CLASS, class Pred = less<CLASS> >
+	class DerivedAttr
+	{
+		private:
+			ObjectImpl *impl;
+		public:
+			DerivedAttr(ObjectImpl *i) : impl(i) {}
+			operator set<CLASS, Pred>() const 
+			{
+				set<CLASS, Pred> ret;
+				vector<ObjectImpl*> a = impl->getDerived();
+				vector<ObjectImpl*>::iterator i = a.begin();
+				while( i != a.end() )
+				{
+					// TODO: assert the type of the object
+					ret.insert(*i);
+					++i;
+				}
+
+				return ret;
+			}
+	};
+
+
+	template<class CLASS, class Pred = less<CLASS> >
+	class InstantiatedAttr
+	{
+		private:
+			ObjectImpl *impl;
+		public:
+			InstantiatedAttr(ObjectImpl *i) : impl(i) {}
+			operator set<CLASS, Pred>() const 
+			{
+				set<CLASS,Pred> ret;
+				vector<ObjectImpl*> a = impl->getInstances();
+				vector<ObjectImpl*>::iterator i = a.begin();
+				while( i != a.end() )
+				{
+					// TODO: assert the type of the object
+					ret.insert(*i);
+					++i;
+				}
+
+				return ret;
+			}
+	};
+
+	template<class CLASS>
+	class ArchetypeAttr
+	{
+		private:
+			ObjectImpl * impl;
+		public:
+			ArchetypeAttr(ObjectImpl *i) : impl(i) {}
+			operator CLASS() const
+			{
+				return CLASS::Cast(impl->getArchetype());
+			};
+	};
+
+// --------------------------- BaseVisitor
+
+	class UDM_DLL BaseVisitor
+	{
+	public:
+		virtual void Visit___BaseVisitor(const BaseVisitor&){};
+		virtual ~BaseVisitor(){};
+	};
+// --------------------------- Object
+
+	class UDM_DLL Object
+	{
+	// --- friends
+
+		friend void Initialize();
+		friend void Terminate();
+		
+	protected:
+		ObjectImpl *impl;	// this is never a NULL pointer
+
+	public:
+		ObjectImpl *__impl() const { return impl; }
+
+	// --- construction
+
+	public:
+		Object() : impl(&_null) { ASSERT(impl != NULL); }
+		Object(ObjectImpl *i) : impl(i != NULL ? i : &_null) { ASSERT(impl != NULL); }
+		
+		Object(const Object &a) : impl(a.impl->clone()) { ASSERT(impl != NULL); }
+		~Object() 
+		{
+			ASSERT(impl != NULL);
+			impl->release(); 
+#ifdef _DEBUG
+			impl = NULL;
+#endif
+		}
+
+		const Object &operator =(const Object &a)
+		{
+
+			ASSERT(a.impl != NULL);
+			ObjectImpl *t = a.impl->clone();
+
+			ASSERT(impl != NULL);
+			impl->release();
+
+			impl = t;
+			return a;
+		}
+
+		static Object Cast(const Object &a, const ::Uml::Uml::Class &meta) { return __Cast(a, meta); }
+		
+		//only dummy. ;) This is needed because when ParentAttr is invoked with Udm::Object template 
+		//parameter, some method of that template class CLASS require the existence of a static method
+		// CLASS::Cast(Object &) 
+
+		static Object Cast(const Object &a) { return a; }	
+		static Object Create(const ::Uml::Uml::Class &meta, const Object &parent, 
+			const ::Uml::Uml::CompositionChildRole &role, 
+			const ObjectImpl * archetype = &_null,
+			const bool subtype = false) 
+		{ 
+			return  __Create(meta, parent, role, archetype, subtype); 
+		}
+
+	protected:
+		static ObjectImpl *__Cast(const Object &a, const ::Uml::Uml::Class &meta);
+		static ObjectImpl *__Create(const ::Uml::Uml::Class &meta, const Object &parent,
+			const ::Uml::Uml::CompositionChildRole &role,
+			const ObjectImpl *  archetype = &_null,
+			const bool subtype = false);
+
+	
+	public:
+		// --- non-array/single value attributes
+
+		string getStringAttr(const ::Uml::Uml::Attribute &meta) const { return impl->getStringAttr(meta); }
+		void setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a) { impl->setStringAttr(meta, a); }
+
+		bool getBooleanAttr(const ::Uml::Uml::Attribute &meta) const { return impl->getBooleanAttr(meta); }
+		void setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a) { impl->setBooleanAttr(meta, a); }
+
+		__int64 getIntegerAttr(const ::Uml::Uml::Attribute &meta) const { return impl->getIntegerAttr(meta); }
+		void setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a) { impl->setIntegerAttr(meta, a); }
+
+		double getRealAttr(const ::Uml::Uml::Attribute &meta) const { return impl->getRealAttr(meta); }
+		void setRealAttr(const ::Uml::Uml::Attribute &meta, double a) { impl->setRealAttr(meta, a); }
+
+		// --- multiple value /array attributes
+		vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const { return impl->getStringAttrArr(meta); }
+		void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a) { impl->setStringAttrArr(meta, a); }
+
+		vector<bool> getBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const { return impl->getBooleanAttrArr(meta); }
+		void setBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a) { impl->setBooleanAttrArr(meta, a); }
+
+		vector<__int64> getIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const { return impl->getIntegerAttrArr(meta); }
+		void setIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a) { impl->setIntegerAttrArr(meta, a); }
+
+		vector<double> getRealAttrArr(const ::Uml::Uml::Attribute &meta) const { return impl->getRealAttrArr(meta); }
+		void setRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a) { impl->setRealAttrArr(meta, a); }
+
+
+
+	// --- associations
+
+	public:
+/*
+		template
+		class AssocClass
+
+  a.bs()
+  a.bs_Classes().Class
+  a.bs_Classes().bs_end
+  a.bs_Classes().as_end
+*/
+		set<Object> getAssociation(const ::Uml::Uml::AssociationRole &meta, int mode = TARGETFROMPEER) const
+		{
+			set<Object> ret;
+
+			vector<ObjectImpl*> a = impl->getAssociation(meta, mode);
+			vector<ObjectImpl*>::const_iterator i = a.begin();
+			while( i != a.end() )
+			{
+				ret.insert(*i);
+				++i;
+			}
+
+			return ret;
+		}
+
+		
+
+		void setAssociation(const ::Uml::Uml::AssociationRole &meta, const set<Object> &a, int mode = TARGETFROMPEER)
+		{
+			vector<ObjectImpl*> b;
+
+			set<Object>::const_iterator i = a.begin();
+			while( i != a.end() )
+			{
+				b.push_back((*i).impl);
+				++i;
+			}
+
+			impl->setAssociation(meta, b, mode);
+		}
+
+	// --- type
+
+	public:
+		const ::Uml::Uml::Class &type() const { return impl->type(); }
+
+	// --- order
+
+	public:
+		typedef ObjectImpl::uniqueId_type uniqueId_type;
+
+		uniqueId_type uniqueId() const { return impl->uniqueId(); }
+
+		bool operator ==(const Object &a) const { return uniqueId() == a.uniqueId(); }
+		bool operator !=(const Object &a) const { return uniqueId() != a.uniqueId(); }
+		bool operator <(const Object &a) const { return uniqueId() < a.uniqueId(); }
+		bool operator >(const Object &a) const { return uniqueId() > a.uniqueId(); }
+		bool operator <=(const Object &a) const { return uniqueId() <= a.uniqueId(); }
+		bool operator >=(const Object &a) const { return uniqueId() >= a.uniqueId(); }
+		bool operator !() const { return uniqueId() == 0; }
+		operator bool()  const { return  uniqueId() != 0; }
+
+		// UDM TOMI Paradigm Independent Interface
+		struct AssociationInfo
+		{
+			// clsAssociation can be empty (ClassType(NULL)) - simple association.
+			const ::Uml::Uml::Class & clsAssociation;
+			string strSrcRoleName;
+			string strDstRoleName;
+			AssociationInfo(const ::Uml::Uml::Class & ref) : clsAssociation(ref){};
+		};
+
+
+		// UDM TOMI Paradigm Independent Interface
+		struct CompositionInfo
+		{	
+			string strParentRoleName;
+			string strChildRoleName;
+		};
+		// UDM TOMI Paradigm Independent Interface
+		// Retrieves the adjacent objects of an object associated via simple association or association class. 
+		// The returned set can be empty. Composition relationships are not considered here.
+		set<Object> GetAdjacentObjects();
+		// UDM TOMI Paradigm Independent Interface
+		// Retrieves the adjacent objects of an object. The adjacent objects 
+		// are of the type of clsType or derived from it. The returned set can 
+		// be empty. Composition relationships are not considered here.
+		set<Object> GetAdjacentObjects(const ::Uml::Uml::Class & clsDstType);
+		// UDM TOMI Paradigm Independent Interface
+		// Retrieves the adjacent objects of an object via link instance of ascType. 
+		// The adjacent objects are of the type of clsType or derived from it. 
+		// The returned set can be empty. Composition relationships are not considered here. 
+		// Parameter clsType can be null.
+		set<Object> GetAdjacentObjects(const ::Uml::Uml::Class & clsDstType, const AssociationInfo& ascType);
+		// UDM TOMI Paradigm Independent Interface
+		// Get attributes by name. These are INEFFICIENT functions using iteration.
+		// These functions return false if the attribute with the specified type
+		// and attribute name does not exist. Hence these parameters are specified
+		// in the metamodel, it can be serious error. If no problem they retrieve true.
+		bool GetIntValue(string strAttrName, __int64& value) const;
+		bool GetIntValue(string strAttrName, string& value) const;
+
+		// UDM TOMI Paradigm Independent Interface
+		// get the value of Attribute named strAttrName of type String
+		// return false if not found,true if ok
+		bool GetStrValue( string strAttrName, string& value) const;
+		bool GetStrValue( string strAttrName, __int64& value) const;
+
+		// UDM TOMI Paradigm Independent Interface
+		// get the value of Attribute named strAttrName of type Real
+		// return false if not found,true if ok
+		bool GetRealValue( string strAttrName, double& value) const;
+		// UDM TOMI Paradigm Independent Interface
+		// get the value of Attribute named strAttrName of type Bool
+		// return false if not found,true if ok
+		bool GetBoolValue( string strAttrName, bool& value) const;
+		// UDM TOMI Paradigm Independent Interface
+		// get the value of Attribute named strAttrName of type Int
+		// return false if not found,true if ok
+		bool SetIntValue( string strAttrName, const __int64& value);
+		bool SetIntValue( string strAttrName, const string& value);
+		// UDM TOMI Paradigm Independent Interface
+		// set the value of Attribute named strAttrName of type String
+		// return false if not found,true if ok
+		bool SetStrValue(string strAttrName, const __int64& value);
+		bool SetStrValue(string strAttrName, const string& value);
+		// UDM TOMI Paradigm Independent Interface
+		// set the value of Attribute named strAttrName of type Real
+		// return false if not found,true if ok
+		bool SetRealValue( string strAttrName, double value);
+		// UDM TOMI Paradigm Independent Interface
+		// set the value of Attribute named strAttrName of type Bool
+		// return false if not found,true if ok
+		bool SetBoolValue( string strAttrName, bool value);
+		// UDM TOMI Paradigm Independent Interface
+		// Functions for composition
+		// Returns the parent object.
+		Object GetParent() const;
+		// UDM TOMI Paradigm Independent Interface
+		// Retrieves all children not considering types and role names.
+		set<Object> GetChildObjects() const;
+		// UDM TOMI Paradigm Independent Interface
+		// Retrieves all children considering child types but not role names.
+		set<Object> GetChildObjects(const ::Uml::Uml::Class & clsType);
+		// UDM TOMI Paradigm Independent Interface
+		// Retrieves all children considering role names and child types.
+		// To ignore child types set clsChildType to ClassType(NULL).
+		set<Object> GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Uml::Class & clsChildType);
+		
+		// Functions for associations and links
+		// UDM TOMI Paradigm Independent Interface
+		// Gets the objects of the association class from between two objects. 
+		// ascType.clsAssociation  should be NULL to be ignored.
+		set<Object> GetAssociationClassObjects(Object dstObject, const AssociationInfo& ascType, bool tryCrossLink = false);
+		// UDM TOMI Paradigm Independent Interface
+		// Gets the two peers from an object of association class type
+		pair<Object,Object> GetPeersFromAssociationClassObject();
+		// Functions for creating Udm entities
+		// UDM TOMI Paradigm Independent Interface
+		// Creates an object of clsType
+		Object CreateObject(const ::Uml::Uml::Class & clsType, const Udm::Object& archetype = &Udm::_null, const bool subtype = false);
+
+		Object CreateObject(const ::Uml::Uml::Class & clsType, const CompositionInfo& compType, const Udm::Object& archetype = &Udm::_null, const bool subtype = false);
+		// UDM TOMI Paradigm Independent Interface
+		// Creates a link of a simple association or an association with association class. 
+		// If ascType.clsAssociation is not valid a simple association will be tried.
+		// On error results in false, true otherwise.
+		bool CreateLink(Object dstObject, const AssociationInfo& ascType);
+		// Removes a link of a simple association or an association with association class
+		// if AscType.clsAssociation is not valid a simple association will be attempted
+		// On error or when there is no such link false, otherwise true is returned.	
+		bool DeleteLink(Object dstObject, const AssociationInfo& ascType);
+		// Removes an object from the persistent storage.
+		void DeleteObject();
+		//get one specific end of an association class object
+		Object GetAssociationEnd(string roleName);
+
+		//UdmPseudoLike API
+
+		bool GetIntVal( const cint_string &cstrAttrName, long &value) const;
+		bool GetRealVal( const cint_string &cstrAttrName, double& value) const;
+		bool GetStrVal( const cint_string &cstrAttrName, cint_string &value) const;
+		bool GetBoolVal( const cint_string &cstrAttrName, bool& value) const;
+		bool GetBoolVal( const cint_string &cstrAttrName, long& value) const;
+
+		bool SetIntVal( const cint_string &cstrAttrName, long value);
+		bool SetRealVal( const cint_string &cstrAttrName, double value);
+		bool SetStrVal( const cint_string &cstrAttrName, cint_string &value);
+		bool SetStrVal( const cint_string &cstrAttrName, char *value);
+		bool SetBoolVal( const cint_string &cstrAttrName, bool value);
+
+
+
+
+
+		//archetype/derived/instances relationship
+
+		Object archetype() const;
+		set<Object> derived() const;
+		set<Object> instances() const;
+		bool hasRealArchetype() const;
+		bool isInstance() const;
+		bool isSubtype() const;
+
+
+		//some tomi extension functions
+		
+		// find the (first, there should be only one) child (only first-level children)Object in 
+		// where, which is an inherited subtype of this(it's there because the 
+		// parent(where) is directly(Primary) derived)
+		//throws exception if not found
+		Object FindCorrespondingObjectInSubtypes(const Object & where, const bool prim_derived = false) const;
+
+
+		// find the (first, there should be only one) child (only first-level children)Object in 
+		// where, which is an inherited instance of this(it's there because the 
+		// parent(where) is directly(Primary) instantiated)
+		//throws exception if not found
+		Object FindCorrespondingObjectInInstances(const Object & where, const bool prim_derived = false) const;
+
+
+		// find the (first, there should be only one) child (recursive, whole three)Object in 
+		// where, which is an inherited subtype of this(it's there because the 
+		// parent(where) is directly(Primary) derived)
+		//return Udm::_null, if none found
+		//Object reqFindCorrespondingObjectInSubtypes(const Object& where, const bool prim_derived = false) const;
+
+		// find the (first, there should be only one) child (recursive, whole three)Object in 
+		// where, which is an inherited instance of this(it's there because the 
+		// parent(where) is directly(Primary) derived)
+		//return Udm::_null, if none found
+		//Object reqFindCorrespondingObjectInInstances(const Object& where, const bool prim_derived = false) const;
+
+		//functions which invoke the above 2 functions,
+		//and throw exception if they return Udm::_null
+		Object FindCorrespondingObjectInInstancesTree(const Object& where, const bool prim_derived = false) const;
+		Object FindCorrespondingObjectInSubtypesTree(const Object& where, const bool prim_derived = false) const;
+
+		//get the set of my parent's (primary derived)instances/subtypes
+		set<Object> GetMyParentsSubtypes(const bool only_primary_derived = false) const;
+		set<Object> GetMyParentsInstances(const bool only_primary_derived = false) const;	
+		
+		//check if an object has derived or instantiated objects
+		bool HasObjectSubtypes(const bool only_primary_derived = false) const;
+		bool HasObjectInstances(const bool only_primary_derived = false) const;
+		
+		//find the closest parent, which is primarily derived(has a real archetye);
+		Object FindClosestPrimarilyDerivedParent() const;
+
+		//finds a derived object in of this in where
+		Object getDerivedObjectInTree(const Udm::Object &where) const;
+		//check if which is within the same derived/instantiated block
+		Object getDerivedObjectInPrimarilyDerivedBlock(const Udm::Object &where) const;
+
+
+		//finds an instantied object in of this in where
+		Object getInstantiatedObjectInTree(const Udm::Object &where) const;
+		//check if which is within the same derived/instantiated block
+		Object getInstantiatedObjectInPrimarilyDerivedBlock(const Udm::Object &where) const;
+
+
+		Object getReferencedObject(const string refrole = "ref") const;
+
+
+		//general container class
+		Object container() const;
+
+		set<Object> getChildrenByChildRoleChain(const ::Uml::Uml::Class& meta, vector<::Uml::Uml::CompositionChildRole> chain) const;
+
+		//general accept function
+		virtual void Accept(const BaseVisitor&){};
+
+		string getPath( const std::string& strDelimiter = "./.", bool bReverseOrder = false, bool bNeedRootFolder = false, const string att_name = "name") const;
+
+
+	};
+
+	class udmvariant {
+	public: 
+		//simple attribute values
+		udmvariant(const string &a) : strval(a) { ; }
+		udmvariant(const __int64 &a) : longval(a) { ; }
+		udmvariant(const double &a) : doubleval(a) { ; }
+		udmvariant(const bool &a) : boolval(a) { ; }
+
+		//array attribute values
+		udmvariant(const vector<string> &a) : strarrval(a) { ; }
+		udmvariant(const vector<__int64> &a) : longarrval(a) { ; }
+		udmvariant(const vector<double> &a) : doublearrval(a) { ; }
+		udmvariant(const vector<bool> &a) : boolarrval(a) { ; }
+
+		udmvariant(const Object &a) : objval(a) { ; }
+		udmvariant(const set<Object> &a) : setval(a) { ; }
+		//enum udmt type;			//what's this? 
+		
+		set<Object> setval;
+		Object  objval;
+		
+		//simple attributes
+		string strval;
+		__int64    longval;
+		double  doubleval;
+		bool   boolval;
+		//array attributes
+		vector<string>	strarrval;
+		vector<__int64>    longarrval;
+		vector<double>  doublearrval;
+		vector<bool>	boolarrval;
+		
+
+	};
+
+
+
+// --------------------------- DataNetwork
+
+enum BackendSemantics { 
+	CHANGES_PERSIST_ALWAYS,		// committed sequences are recorded in original backend
+								// no CloseNoUpdate,  CloseAs, SaveAs will be used
+	CHANGES_PERSIST_DEFAULT,	// committed sequences are recorded in current backed unless
+								// CloseNoUpdate,  CloseAs, or SaveAs is used
+	CHANGES_LOST_DEFAULT };		// committed sequences are lost until 
+								// Close, CloseAs, or SaveAs are used
+
+struct UdmDiagram { 
+	::Uml::Uml::Diagram *dgr; 
+		void (*init)(void);
+};
+
+class DataNetwork {
+	friend class ObjectImpl;
+public:
+	UDM_DLL DataNetwork & operator=(DataNetwork &a); // enable assignment (was disable assignment)
+
+protected:
+// Non-persistent attributes
+	ttmap tempvarmap;
+	Object rootobject;
+	UdmProject * pr;
+	bool _static_pr;			//true if belongs to a static project
+	const Udm::UdmDiagram &metaroot;
+	UDM_DLL DataNetwork(const Udm::UdmDiagram &metainfo, UdmProject * project = NULL);
+
+public:
+	typedef struct bt {
+		string sig, ext;
+		DataNetwork *(*crea)(const UdmDiagram &, UdmProject*);
+		struct bt *next;
+	} backendtabt;
+private: 
+	
+	static backendtabt *backendtab;
+	static map <const unsigned long, DataNetwork *> dntab;
+	static unsigned long dn_id_gen;
+	unsigned long dn_id;
+
+public:
+	virtual UDM_DLL ~DataNetwork() { if(rootobject) throw udm_exception("Dirty abort!"); }
+// Load/Persist
+	virtual void CreateNew(const string &systemname, 
+									const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) = 0;
+	virtual void OpenExisting(const string &systemname, 
+									const string &metalocator = "", 
+									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) = 0;
+	virtual void CloseWithUpdate() = 0;
+	virtual void CloseNoUpdate()			{  throw udm_exception("Unsupported method"); }
+	virtual void SaveAs(string systemname) {  throw udm_exception("Unsupported method"); }
+	virtual void CloseAs(string systemname) {  throw udm_exception("Unsupported method"); }
+
+
+	bool isOpen() { return rootobject; }
+	unsigned long uniqueId(){return dn_id;};
+// transaction control
+	virtual void CommitEditSequence() = 0;
+	virtual void AbortEditSequence() = 0;
+
+// basic access
+	virtual Object GetRootObject() const { 
+//		if(!rootobject) throw udm_exception("Null rootobject!!"); 
+		return rootobject; 
+	}
+
+	virtual UdmProject* GetProject() {return pr;};
+	virtual void UDM_DLL setStaticUdmProject(StaticUdmProject* _pr);
+	virtual void resetStaticUdmProject() { if (!(pr && _static_pr)) throw("Datanetwork is either not part of a project or is part of a non-static project!"); pr = NULL; };
+
+	virtual Object ObjectById(Object::uniqueId_type) { 
+		throw udm_exception("This backend does not support ObjectByID!!"); 
+	}
+	const ::Uml::Uml::Diagram &GetRootMeta() const { 
+		return *metaroot.dgr;
+	}
+
+	static void UDM_DLL RegisterBackend(const string &sig, const string &ext, DataNetwork *(*crea)(const UdmDiagram &, UdmProject*));
+	static void UDM_DLL UnRegisterBackends();
+	static UDM_DLL string DumpBackendNames();
+	static UDM_DLL DataNetwork *CreateBackend(string backendID, const UdmDiagram &metainfo, UdmProject* project = NULL);
+	static UDM_DLL DataNetwork *GetDnById(const unsigned long id);
+
+//type safe
+// StaticObjects do not copy the types in constructors
+// They instead just reference it
+// so care needs to be taken when using them
+// DOM&GME are TypeSafe Data Networks
+// we override this for Static and Smart
+	virtual UDM_DLL bool IsTypeSafe() {return true;};
+//string support
+	virtual	UDM_DLL void CreateNewToString(const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS){throw udm_exception("Unsupported method");};
+	virtual UDM_DLL void OpenExistingFromString(string &str, 
+									const string &metalocator, 
+									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS){throw udm_exception("Unsupported method");};
+	virtual UDM_DLL const string & Str(){throw udm_exception("Unsupported method");};
+
+	virtual UDM_DLL set<Object> GetAllInstancesOf(const ::Uml::Uml::Class& meta);
+
+};
+
+
+
+class SmartDataNetwork : public DataNetwork 
+{
+	DataNetwork *dn;
+	bool str_based;
+	string str;
+
+public:
+	//made public for CORBA to reach the inside Static DN
+	DataNetwork *testdn() const 
+	{
+		if(dn) return dn;
+		throw udm_exception("Missing data network");
+	}
+
+	SmartDataNetwork(const UdmDiagram &metainfo, UdmProject * pr = NULL) :
+	  	DataNetwork(metainfo, pr) 
+	{	
+			dn = NULL;	
+			str_based = false;
+	}
+
+	~SmartDataNetwork() 
+	{ 
+		delete dn;
+	}
+	
+	SmartDataNetwork & operator=(SmartDataNetwork &a)
+	{
+		if (dn && a.dn)
+		{
+			*dn = *(a.dn);
+		}
+		else 
+		{
+			throw udm_exception("Either the source or the destination SmartDataNetwork does not exist.");
+		}
+		return *this;
+	};
+
+	SmartDataNetwork & operator=(DataNetwork &a)
+	{
+		if (dn )
+		{
+			*dn = a;
+		}
+		else 
+		{
+			throw udm_exception("The destination SmartDataNetwork does not exist.");
+		}
+		return *this;
+	};
+	
+	virtual void CreateNew(const string &systemname, 
+									const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) {
+		if(dn) throw udm_exception("DataNetwork is already open"); 
+		DataNetwork *dn1 = CreateBackend(systemname, metaroot, pr);
+		if(!dn1) throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"
+									 "Available backends: " + DumpBackendNames().c_str());
+		dn1->CreateNew(systemname, metalocator, rootclass, sem);
+		dn = dn1;
+	}
+
+	virtual void OpenExisting(const string &systemname, 
+									const string &metalocator = "", 
+									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) {
+		if(dn) throw udm_exception("DataNetwork is already open"); 
+		DataNetwork *dn1 = CreateBackend(systemname, metaroot,pr);
+		if(!dn1) throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"
+									 "Available backends: " + DumpBackendNames().c_str());
+		dn1->OpenExisting(systemname, metalocator, sem);
+		dn = dn1;
+	}
+	virtual void CloseWithUpdate() 
+	{
+		testdn()->CloseWithUpdate();
+
+		if (str_based)
+		{
+			str = dn->Str();
+			str_based = false;
+		}
+		delete dn;
+		dn = NULL;
+	}
+
+	virtual void CloseNoUpdate()	
+	{  
+		testdn()->CloseNoUpdate();
+		
+		if (str_based)
+		{
+			str = dn->Str();
+			str_based = false;
+		}
+	
+		delete dn; 
+		dn = NULL; 
+	}
+	virtual void SaveAs(string systemname) {  testdn()->SaveAs(systemname); }
+	virtual void CloseAs(string systemname)
+	{
+		testdn()->CloseAs(systemname); 
+		if (str_based)
+		{
+			str = dn->Str();
+			str_based = false;
+		}
+	
+		delete dn; 
+		dn = NULL;
+	}
+
+	bool isOpen() { return dn ? dn->isOpen() : false; }
+// transaction control
+	virtual void CommitEditSequence() { testdn()->CommitEditSequence(); }
+	virtual void AbortEditSequence() { testdn()->AbortEditSequence(); }
+
+// basic access
+	Object GetRootObject() const { return testdn()->GetRootObject(); }
+	virtual Object ObjectById(Object::uniqueId_type t) { 
+		return testdn()->ObjectById(t); 
+	}
+	const ::Uml::Uml::Diagram &GetRootMeta() const { 
+		return testdn()->GetRootMeta(); 
+	}
+	virtual bool IsTypeSafe() { return testdn()->IsTypeSafe();};
+
+	virtual UdmProject* GetProject() 
+	{
+		return testdn()->GetProject();
+	};
+	
+	virtual void setStaticUdmProject(StaticUdmProject* _pr)
+	{
+		testdn()->setStaticUdmProject(_pr);
+	};
+
+	virtual void resetStaticUdmProject() 
+	{ 
+		testdn()->resetStaticUdmProject();
+	};
+
+
+	//string support
+	virtual	void CreateNewToString(const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS)
+	{
+		if(dn) throw udm_exception("DataNetwork is already open"); 
+		DataNetwork *dn1 = CreateBackend("string_dom.xml", metaroot, pr);//the name can be anything, which ends in .xml. String backend is supported only by DOM
+		if(!dn1) throw udm_exception(string("Cannot deduce Udm backend type .xml from available backends: ") + DumpBackendNames().c_str());
+		
+		dn1->CreateNewToString(metalocator, rootclass,sem);
+		dn = dn1;
+		str_based = true;
+	};
+	virtual void OpenExistingFromString(string &str, 
+									const string &metalocator, 
+									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS)
+	{
+		if(dn) throw udm_exception("DataNetwork is already open"); 
+		DataNetwork *dn1 = CreateBackend("string_dom.xml", metaroot, pr);//the name can be anything, which ends in .xml. String backend is supported only by DOM
+		if(!dn1) throw udm_exception(string("Cannot deduce Udm backend type .xml from available backends: ") + DumpBackendNames().c_str());
+
+		dn1->OpenExistingFromString(str,metalocator,sem);
+		dn = dn1;
+		str_based = true;
+	};
+	virtual const string & Str(){return str;};
+	virtual set<Object> GetAllInstancesOf(const ::Uml::Uml::Class& meta){return testdn()->GetAllInstancesOf(meta);};
+
+};
+
+	class UDM_DLL  MetaDepository
+	{
+		//we need to use pointers here because reference to reference is illegal
+
+		static map<string, const UdmDiagram*>* meta_dep;
+	public:
+
+		//but we can handle the diagrams as references
+		static const  UdmDiagram & LocateDiagram(const string& DgrName);
+		static bool StoreDiagram(const string& DgrName, const UdmDiagram& dgr);
+		static void RemoveDiagram(const string& DgrName);
+	};
+
+	
+
+
+	
+	//structure to specify a datanetwork inside a project
+	class DataNetworkSpecifier
+	{
+		string _filename;
+		string _metalocator;
+		::Uml::Uml::Class& _rootclass;
+		
+	public:
+		
+		UDM_DLL DataNetworkSpecifier( string fn,  string ml, ::Uml::Uml::Class& rc);
+		UDM_DLL DataNetworkSpecifier& operator=(const DataNetworkSpecifier &a);
+		UDM_DLL const string filename();
+		UDM_DLL const string metalocator();
+		UDM_DLL const ::Uml::Uml::Class& rootclass();
+
+	};
+
+	//structure to specify an existing datanetwork inside a static project
+	class StaticDataNetworkSpecifier
+	{
+		string _filename;
+		//one of these must be NULL
+		SmartDataNetwork * datanetwork;
+		DataNetwork *simpledatanetwork;
+
+	public:
+		
+		UDM_DLL DataNetwork* GetDataNetwork();
+		UDM_DLL StaticDataNetworkSpecifier(string fn, SmartDataNetwork * dn);
+		UDM_DLL StaticDataNetworkSpecifier(string fn, DataNetwork * dn);
+		UDM_DLL const string filename();
+		
+	};
+
+
+
+	class DynamicMetaSpecifier
+	{
+	public:
+		const string metalocator;
+		const Udm::UdmDiagram& dgr;
+		UDM_DLL DynamicMetaSpecifier(const string& ml, const UdmDiagram& d) : metalocator(ml), dgr(d) {};
+	};
+
+
+	//These should be the same with the delimiter defined in the UML2XML interpretter!
+	static const char * cross_delimiter = "_cross_ph_";
+	
+	class UdmProject
+	{
+			
+	private:
+		string temp_path;
+		//file I/O routins doing the ZIP compression
+		//here we expect that zipFile is not empty
+		void DeCompress();
+		void Compress();
+
+		
+	protected:		
+		//bidirectional mapping
+		map<string, DataNetwork*> datanetworks;
+		map<const DataNetwork*, string> rev_datanetworks;
+
+		//semantics - as defined for Udm::Datanetworks
+		Udm::BackendSemantics sem;
+		
+		//the name of the project file
+		string zipfile;
+
+		//this will be the project datanetwork
+		Udm::DataNetwork * project_dn;
+
+		// this will be an ::UdmProject::Project object - the roo object of the Project data network
+		Object Project; 
+
+		//projects containing metainformation for cross-data links
+		DataNetwork* cross_meta_dn;	
+
+		//metainformation for projects containing cross-data links
+		UdmDiagram* cross_meta;		
+
+		//the project containing crosslinks
+		DataNetwork * cross_links;	
+
+		//vector holding UdmDiagram objects which were allocated on the heap during the CreateNew process
+		//vector<DynamicMetaSpecifier>  dms;
+		map<const string, const UdmDiagram*> dms;
+
+		
+		/*
+		 *functions which handle the "placeholders" - that is - a reference in the 
+		 *datanetwork containg the cross links to the real object
+		 * we needed to make GetPlaceHolder them public because of the CreateLink Udm TOMI function
+		 * which needed to be cross-link compatible
+		 */
+
+	public:
+		//obtaing a reference to a real object. (if create is true, the reference is created)
+		Udm::Object GetPlaceHolder(const Udm::Object& o, bool create = true);	
+		//get the real object from a place holder object
+		Udm::Object GetRealObject(const Udm::Object& ph);
+
+	protected:
+		//private function which attempts to look up the requested meta
+		//dynamically and if the lookup failed will use the static
+		//metadepository
+		const  UdmDiagram & LocateDiagram(const string& DgrName);
+
+
+	public:
+		//constructor
+		UDM_DLL UdmProject(bool static_pr = false);
+
+		//this will automatically open the datenetwork containing the cross links
+		virtual void UDM_DLL OpenExisting(const string & project_file, enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
+
+		//create new Udm project
+		virtual void UDM_DLL CreateNew(const string & project_file, vector<DataNetworkSpecifier>, const Udm::UdmDiagram& cross_diag , enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
+
+		// Returns true if project is open.
+		bool IsOpen() { return Project;}
+
+		//get all the datanetworks inside a project
+		UDM_DLL vector<DataNetwork*> GetDataNetworks();
+
+		//get a specific datanetwork (by it's systemname)
+		UDM_DLL Udm::DataNetwork&  GetDataNetwork(const string &which);
+		
+
+		//get all the metadiagrams
+		UDM_DLL vector<::Uml::Uml::Diagram> GetMetaDiagrams() const;
+
+		/*
+			A Udm Project will have either a Cross Meta Specifier(if the project is the result of
+			the interpreter or a cross meta information.
+			if IsCrossMetaSpecifier() returns true, GetCrossNetwork() can be called.
+			if HassCrosMeta() returns true, GetCrossMeta() can be called.
+			
+		*/
+		UDM_DLL bool IsCrossMetaSpecifier() const;
+		UDM_DLL bool HasCrossMeta() const;
+		
+		UDM_DLL DataNetwork& GetCrossMetaNetwork();
+		UDM_DLL UdmDiagram& GetCrossMeta() const;
+
+
+		virtual UDM_DLL ~UdmProject();
+
+
+		//crucial part -- simple cross-network association
+
+		//setting simple associations
+		void UDM_DLL setSimpleAssociation(Udm::Object& peer, set<Udm::Object>& peers,const ::Uml::Uml::AssociationRole& meta);
+
+		//getting simple associations
+		UDM_DLL set<Udm::Object> getSimpleAssociation(Udm::Object& peer,const ::Uml::Uml::AssociationRole& meta);
+
+		//even more crucial part -- assoc. class cross-network associations
+		
+
+		//setting the links (objects in the middle) from either end
+		void UDM_DLL setLinks(Udm::Object& peer, set<Udm::Object>& links, const ::Uml::Uml::AssociationRole& meta);
+		//setting either end-point from the middle 
+		void UDM_DLL setEnd(Udm::Object& link, Udm::Object& peer, const ::Uml::Uml::AssociationRole& meta);
+
+
+
+		//getting the links (objects in the middle) from either end
+		UDM_DLL set<Udm::Object> getLinks(Udm::Object& peer, const ::Uml::Uml::AssociationRole &meta);
+
+		//getting either end from the object in the middle
+		UDM_DLL Udm::Object getEnd(Udm::Object& link, const ::Uml::Uml::AssociationRole &meta);
+		
+		//getting the other end from one end
+		UDM_DLL Udm::Object getPeer(Udm::Object& peer, const ::Uml::Uml::AssociationRole &meta);
+
+
+		/*Remote ID validation mechanism
+		Problem: ObjectIDs of UDM objects are stored in the cross-link datanetwork.
+		In some backends (MEM for example) the ID of the objects are changed whenever 
+		the datanetwork is loaded, so they need to be updated. 
+		This function will be called the backend, after loading a datanetwork file which
+		is part of a project.
+		 */
+		virtual void UDM_DLL ValidateIDs(const string& sysname, const map<const unsigned long, const unsigned long> &tr_map);
+
+		/* Dynamic meta support */
+		//add dynamic meta specifier
+		virtual void UDM_DLL AddDynamicMeta(const DynamicMetaSpecifier&);
+
+		//reset dynamic meta specifiers
+		virtual void UDM_DLL ResetDynamicMetas();
+		
+
+	};
+
+	/*
+		A non-persistent UdmProject which is constructed from existing datanetworks
+	*/
+	class StaticUdmProject : public UdmProject
+	{
+	public:
+
+		UDM_DLL ~StaticUdmProject();		// just a normal clean-up, no persistence issues
+		void UDM_DLL Close();					//StaticUdmProjects must be closed before destruction
+
+
+		
+		UDM_DLL StaticUdmProject(vector<StaticDataNetworkSpecifier> sdns, const Udm::UdmDiagram& cross_diag);
+
+
+		//all of these will throw an exception because they are not suitable for Static projects
+		UDM_DLL StaticUdmProject();		//this will throw an exception - StaticUdmProject is constructed from existing datanetworks
+		UDM_DLL StaticUdmProject(const string & project_file, vector<DataNetworkSpecifier>, const Udm::UdmDiagram& cross_diag , enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
+		void UDM_DLL OpenExisting(const string & project_file, enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
+		void UDM_DLL ValidateIDs(const string& sysname, const map<const unsigned long, const unsigned long> &tr_map);
+		void UDM_DLL AddDynamicMeta(const DynamicMetaSpecifier&);
+		void UDM_DLL ResetDynamicMetas();
+
+
+
+	};
+
+
+
+
+}
+
+//static constants for UdmDom internal attributes
+namespace UdmDom
+{
+	static const char * _udm_dom_ia_archetype = "_archetype";
+	static const char * _udm_dom_ia_derived = "_derived";
+	static const char * _udm_dom_ia_instances = "_instances";
+	static const char * _udm_dom_ia_desynched_atts = "_desynched_atts";
+	static const char * _udm_dom_ia_real_archetype = "_real_archetype";
+	static const char * _udm_dom_ia_subtype = "_subtype";
+
+};
+
+//the biggest i64 integer is 20 characters long in decimal format.
+#ifdef _WIN32
+#if (_MSC_VER == 1200)
+inline UDM_DLL ostream & operator<< (ostream &o, __int64 i) { char k[30];sprintf(k,"%I64d", i);	o << k; return o;};
+#endif
+#endif
+
+
+inline UDM_DLL ostream & operator<< (ostream &o, Udm::StringAttr c) { o << (string)c; return o; };
+
+//defines for using backends
+#define UDM_USE_DOM namespace UdmDom{extern UDM_DLL int DummyFL;static int *Dummy_For_Linker = &DummyFL; static struct _use_var{_use_var(){Dummy_For_Linker++;}} __unused;};
+#define UDM_USE_MGA namespace UdmGme{extern UDM_DLL int DummyFL;static int *Dummy_For_Linker = &DummyFL; static struct _use_var{_use_var(){Dummy_For_Linker++;}} __unused;};
+
+
+
+
+//versionining
+#define UDM_VERSION_MAJOR 2
+#define UDM_VERSION_MINOR 19
+#define UDM_VERSION UDM_VERSION_MAJOR*100 + UDM_VERSION_MAJOR
+#endif//MOBIES_UDMBASE_H
