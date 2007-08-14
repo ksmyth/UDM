@@ -3040,7 +3040,22 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 		CATCH_XML_EXCEPTION("DomDataNetwork::~DataNetwork()")
 	}
-
+//========================================================
+  void setDomParserExternalSchemaLocation(DOMParser& parser)
+  {
+      string all_ns;
+  	xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.begin();
+		for(;it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end();++it_ns_map)
+    {
+      
+			const string& uri = it_ns_map->first;
+      const string& ns = it_ns_map->second;
+      all_ns += uri + " " + ns + ".xsd ";
+    }
+    all_ns.resize(all_ns.size()-2);//cut the space
+    parser.setExternalSchemaLocation(all_ns.c_str());
+  }
+//========================================================
 
 	class MyEntityResolver : public EntityResolver 
 	{
@@ -3064,6 +3079,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			DOMParser parser;
 
 			parser.setValidationScheme(DOMParser::Val_Never);
+      setDomParserExternalSchemaLocation(parser);
 
 			try 
 			{
@@ -3359,17 +3375,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		parser.setEntityResolver(&resolver);
 
 
-    string all_ns;
-  	xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.begin();
-		for(;it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end();++it_ns_map)
-    {
-      
-			const string& uri = it_ns_map->first;
-      const string& ns = it_ns_map->second;
-      all_ns += uri + " " + ns + ".xsd ";
-
-    }
-    parser.setExternalSchemaLocation(all_ns.c_str());
+    setDomParserExternalSchemaLocation(parser);
 
 		MobiesErrorHandler errhand;
 		parser.setErrorHandler(&errhand);
@@ -3485,17 +3491,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		parser.setIncludeIgnorableWhitespace(false);
 		parser.setEntityResolver(&resolver);
 
-    string all_ns;
-  	xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.begin();
-		for(;it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end();++it_ns_map)
-    {
-      
-			const string& uri = it_ns_map->first;
-      const string& ns = it_ns_map->second;
-      all_ns += uri + " " + ns + ".xsd ";
-
-    }
-    parser.setExternalSchemaLocation(all_ns.c_str());
+    setDomParserExternalSchemaLocation(parser);
 
 		MobiesErrorHandler errhand;
 		parser.setErrorHandler(&errhand);
@@ -3974,6 +3970,8 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		parser.setExpandEntityReferences(true);
 		parser.setIncludeIgnorableWhitespace(false);
 		parser.setEntityResolver(&resolver);
+
+    setDomParserExternalSchemaLocation(parser);
 
 		MobiesErrorHandler errhand;
 		parser.setErrorHandler(&errhand);
