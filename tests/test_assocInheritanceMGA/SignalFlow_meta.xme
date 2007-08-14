@@ -255,15 +255,6 @@
 		</regnode>
 		<model id="id-0065-00000001" kind="ParadigmSheet" relid="0x1" childrelidcntr="0x36">
 			<name>ParadigmSheet</name>
-			<attribute kind="AuthorInformation" status="meta">
-				<value></value>
-			</attribute>
-			<attribute kind="DisplayedName" status="meta">
-				<value></value>
-			</attribute>
-			<attribute kind="VersionInformation" status="meta">
-				<value></value>
-			</attribute>
 			<atom id="id-0066-00000001" kind="Connector" role="Connector" relid="0x17">
 				<name>Connector</name>
 				<regnode name="PartRegs" isopaque="yes">
