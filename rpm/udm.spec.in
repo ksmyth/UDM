@@ -57,7 +57,7 @@ export CXX=g++3
 %else
 export CXX=g++
 %endif
-%configure --with-swig=%{swig} --with-antlr=%{antlr}
+%configure --enable-static --with-swig=%{swig} --with-antlr=%{antlr}
 make %{_smp_mflags}
 
 #%check
