@@ -42,7 +42,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=" UdmOcld.lib GOCL_vc7d.lib cppunitd.lib testrunnerd.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib zlibd.lib libcint.lib"
+				AdditionalDependencies=" UdmOcld.lib GOCL_vc7d.lib cppunitd.lib testrunnerd.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib UmlD.lib UdmUtilD.lib zlibd.lib "
 				OutputFile=".\Debug/testUdmCint.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -171,13 +171,7 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath=".\GeneTFxsd.h">
-			</File>
-			<File
 				RelativePath=".\Test.h">
-			</File>
-			<File
-				RelativePath=".\Umlxsd.h">
 			</File>
 		</Filter>
 		<Filter
@@ -190,11 +184,10 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTFxsd.h getGeneTFxsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe ..\..\etc\Uml.xsd Umlxsd.h getUmlxsd
-"
-					Outputs="GeneTF.cpp;GeneTF.h;GeneTF.xsd;GeneTFxsd.h"/>
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\UdmD.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTF_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe ..\..\src\Uml\Uml.xsd Uml_xsd"
+					Outputs="GeneTF.cpp;GeneTF.h;"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">

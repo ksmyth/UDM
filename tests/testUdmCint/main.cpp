@@ -8,8 +8,8 @@
 #define CS_IN_UDMCINT
 #include <UdmCintSwig.h>
 #include <fstream>
-#include "GeneTFxsd.h"
-#include "Umlxsd.h"
+#include "GeneTF_xsd.h"
+#include "Uml_xsd.h"
 
 void UdmTests::Test::readFromFile(std::istream& in, std::string& str)
 {
@@ -40,7 +40,7 @@ void UdmTests::Test::testRead(const std::string& result)
   char diagram_file[] = "GeneTF_udm.xml";
   char xsd_name[] = "GeneTF.xsd";
 
-  StoreXsd("Uml.xsd",cint_string (getUmlxsd().c_str()));
+  StoreXsd("Uml.xsd",cint_string (Uml_xsd::getString().c_str()));
   UdmPseudoObject diagram;
 
   std::ifstream ind(diagram_file);
@@ -85,7 +85,7 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
   UdmPseudoDataNetwork dn(metaname, b);
 
   cint_string xsdn(xsd_name);
-  cint_string xsd(getGeneTFxsd().c_str());
+  cint_string xsd(GeneTF_xsd::getString().c_str());
 /*
   if(!StoreXsd(xsdn,xsd))
    {
@@ -289,7 +289,7 @@ void UdmTests::Test::testWrite(std::string& result)
      
    }
 
-   if(!  StoreXsd("Uml.xsd",cint_string (getUmlxsd().c_str())))
+   if(!  StoreXsd("Uml.xsd",cint_string (Uml_xsd::getString().c_str())))
    {
      cint_string str;
      diagram.GetLastError(str);
@@ -312,7 +312,7 @@ void UdmTests::Test::testWrite(std::string& result)
 
 
   cint_string xsdn(xsd_name);
-  cint_string xsd(getGeneTFxsd().c_str());
+  cint_string xsd(GeneTF_xsd::getString().c_str());
 
   StoreXsd(xsdn,xsd);
   

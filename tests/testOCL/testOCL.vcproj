@@ -25,7 +25,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="$(UDM_PATH)/include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE,UDM_DYNAMIC_LINKING"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -37,7 +37,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="GOCL_vc7d.lib UdmOcld.lib cppunitd.lib testrunnerd.lib UdmIntD.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib zlibd.lib libcint.lib"
+				AdditionalDependencies="UdmDllD.lib cppunitd.lib testrunnerd.lib Xalan-C_1d.lib xerces-c_2d.lib "
 				OutputFile="$(OutDir)/testOCL.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(UDM_PATH)/lib"
@@ -76,7 +76,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="$(UDM_PATH)/include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;UDM_DYNAMIC_LINKING"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -86,7 +86,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="GOCL_vc7.lib UdmOcl.lib  cppunit.lib testrunner.lib UdmInt.lib Xalan-C_1.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib libcint.lib"
+				AdditionalDependencies="UdmDll.lib cppunit.lib testrunner.lib xerces-c_2.lib "
 				OutputFile="$(OutDir)/testOCL.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(UDM_PATH)/lib"
@@ -140,13 +140,7 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\mathxsd.h">
-			</File>
-			<File
 				RelativePath=".\SBML2.h">
-			</File>
-			<File
-				RelativePath=".\sbmlxsd.h">
 			</File>
 			<File
 				RelativePath=".\Test.h">
@@ -163,21 +157,17 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe sbml.xsd sbmlxsd.h getsbmlxsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe math.xsd mathxsd.h getmathxsd
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\UdmD.exe $(InputPath) -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g
 "
-					Outputs="SBML2.cpp;SBML2.h;sbml.xsd;sbmlxsd.h"/>
+					Outputs="SBML2.cpp;SBML2.h"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe sbml.xsd sbmlxsd.h getsbmlxsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe math.xsd mathxsd.h getmathxsd
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g
 "
-					Outputs="SBML2.cpp;SBML2.h;sbml.xsd;sbmlxsd.h"/>
+					Outputs="SBML2.cpp;SBML2.h"/>
 			</FileConfiguration>
 		</File>
 		<File
