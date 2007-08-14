@@ -77,9 +77,12 @@ Building:
 - clean judm and use "Clean solution" to clean the tests and udm
 - copy or share the tree obtained above to your Linux installation
 - in the top directory run
+  autoreconf -i
+  ./configure
   make clean
   make
 - to run the tests launch the following command in the top directory:
   make check
-- to build a rpm launch the following command in the top directory:
-  make rpm
+- to build the binary and source rpms launch the following command in
+  the top directory:
+  make rpms
