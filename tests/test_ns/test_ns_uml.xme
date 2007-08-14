@@ -16,9 +16,6 @@
 				<name>B</name>
 				<model id="id-0065-00000003" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x3">
 					<name>B</name>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000003" kind="Class" role="Class" relid="0x2">
 						<name>B1</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -93,9 +90,6 @@
 				<name>AB</name>
 				<model id="id-0065-00000004" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x7">
 					<name>AB</name>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000005" kind="Class" role="Class" relid="0x1">
 						<name>AB</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -249,9 +243,6 @@
 				<name>A</name>
 				<model id="id-0065-00000002" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x9">
 					<name>A</name>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000001" kind="Class" role="Class" relid="0x1">
 						<name>A</name>
 						<regnode name="PartRegs" isopaque="yes">
