@@ -1963,7 +1963,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 					{
 						if( n.getNodeType() == DOM_Node::ELEMENT_NODE )
 						{
-							StrX name = n.getNodeName();
+							StrX name = n.getLocalName();
 
 							
 							char * child_type_name = new char[((string)((*i)->type().name())).size() + 1];
