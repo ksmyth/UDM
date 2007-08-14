@@ -479,5 +479,8 @@ zip.exe -r UdmInterpreter.zip UdmInterpreter -x *.scc
 		</Filter>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="UIntWiz.rc"/>
 	</Globals>
 </VisualStudioProject>

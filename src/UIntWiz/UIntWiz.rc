@@ -1,4 +1,4 @@
-//Microsoft Developer Studio generated resource script.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
@@ -27,18 +27,18 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE DISCARDABLE 
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE DISCARDABLE 
+2 TEXTINCLUDE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE DISCARDABLE 
+3 TEXTINCLUDE 
 BEGIN
     "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
     "#define _AFX_NO_OLE_RESOURCES\r\n"
@@ -63,8 +63,8 @@ END
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 241, 74
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_ABOUTBOX DIALOG  0, 0, 241, 74
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About Udm Interpreter Wizard"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -78,8 +78,8 @@ BEGIN
     ICON            IDI_MAINFRAME,IDC_STATIC,7,7,20,20
 END
 
-IDD_COMPLETION_NEW DIALOG DISCARDABLE  0, 0, 317, 193
-STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
+IDD_COMPLETION_NEW DIALOG  0, 0, 317, 193
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Udm Interpreter Wizard"
 FONT 8, "MS Shell Dlg"
 BEGIN
@@ -90,8 +90,9 @@ BEGIN
                     14
 END
 
-IDD_INTERIOR1_NEW DIALOG DISCARDABLE  0, 0, 317, 143
-STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+IDD_INTERIOR1_NEW DIALOG  0, 0, 317, 143
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
 CAPTION "Udm Interpreter Wizard"
 FONT 8, "MS Shell Dlg"
 BEGIN
@@ -113,7 +114,8 @@ BEGIN
 END
 
 IDD_INTERIOR2_NEW DIALOGEX 0, 0, 318, 127
-STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
 CAPTION "Udm Interpreter Wizard"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -146,8 +148,9 @@ BEGIN
     LTEXT           "C++ File Path:",IDC_STATIC_CPP,35,92,45,8
 END
 
-IDD_INTRO_NEW DIALOG DISCARDABLE  0, 0, 317, 193
-STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+IDD_INTRO_NEW DIALOG  0, 0, 317, 193
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
 CAPTION "Udm Interpreter Wizard"
 FONT 8, "MS Shell Dlg"
 BEGIN
@@ -158,15 +161,15 @@ BEGIN
     ICON            IDI_MAINFRAME,IDC_STATIC,199,101,20,20
 END
 
-IDD_INTERIOR3_NEW DIALOG DISCARDABLE  0, 0, 313, 174
-STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
+IDD_INTERIOR3_NEW DIALOGEX 0, 0, 313, 174
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "UDM Interpreter Wizard"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
     EDITTEXT        IDC_COMPNAME,34,16,88,12,ES_AUTOHSCROLL
     EDITTEXT        IDC_PROGID,196,16,88,12,ES_AUTOHSCROLL
     EDITTEXT        IDC_PARNAME,196,37,88,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "Browse...",IDC_BROWSE_GME_INTERFACES,262,72,40,14
+    PUSHBUTTON      "Browse...",IDC_BROWSE_GME_INTERFACES,207,73,40,14
     EDITTEXT        IDC_CLASSNAME,30,117,98,12,ES_AUTOHSCROLL
     EDITTEXT        IDC_CLASSUUID,159,117,149,12,ES_AUTOHSCROLL
     PUSHBUTTON      "New UUIDs",IDC_REGEN,194,132,71,14
@@ -179,8 +182,8 @@ BEGIN
     LTEXT           "Name:",IDC_STATIC,6,151,22,8
     LTEXT           "UUID:",IDC_STATIC,135,151,21,8
     GROUPBOX        "Component",IDC_STATIC,0,0,313,97
-    EDITTEXT        IDC_IFPATH,133,73,121,13,ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "Location of GME interface files:",IDC_STATIC,9,74,116,8
+    EDITTEXT        IDC_IFPATH,73,74,121,13,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Location of GME:",IDC_STATIC,13,76,58,8
     CONTROL         "Display Icon on GME Toolbar",IDC_TBICON,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,8,35,109,10
     LTEXT           "Name:",IDC_STATIC,8,18,22,10
@@ -192,8 +195,8 @@ BEGIN
     LTEXT           "Tooltip:",IDC_STATIC,6,51,26,8
 END
 
-IDD_INTERIOR4_NEW DIALOG DISCARDABLE  0, 0, 320, 161
-STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
+IDD_INTERIOR4_NEW DIALOG  0, 0, 320, 161
+STYLE DS_SETFONT | WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Udm Interpreter Wizard"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -208,7 +211,6 @@ BEGIN
 END
 
 
-#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
@@ -231,18 +233,15 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "Udm-Based Interpreter Wizard Application for Generic Modeling Environment by Tihamér Levendovszky, Árpád Bakay, Tamás Páka (Graphics)\0"
-            VALUE "CompanyName", "Institute for Software Integrated Systems, Vanderbilt University\0"
-            VALUE "FileDescription", "Udm Interpreter Wizard Application\0"
-            VALUE "FileVersion", "1, 0, 0, 1\0"
-            VALUE "InternalName", "UIntWiz\0"
-            VALUE "LegalCopyright", "Copyright © 2002 ISIS Vanderbilt University\0"
-            VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "UIntWiz.exe\0"
-            VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "Udm Interpreter Wizard Application\0"
-            VALUE "ProductVersion", "1, 0, 0, 1\0"
-            VALUE "SpecialBuild", "\0"
+            VALUE "Comments", "Udm-Based Interpreter Wizard Application for Generic Modeling Environment by Tihamér Levendovszky, Árpád Bakay, Tamás Páka (Graphics)"
+            VALUE "CompanyName", "Institute for Software Integrated Systems, Vanderbilt University"
+            VALUE "FileDescription", "Udm Interpreter Wizard Application"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "UIntWiz"
+            VALUE "LegalCopyright", "Copyright © 2002 ISIS Vanderbilt University"
+            VALUE "OriginalFilename", "UIntWiz.exe"
+            VALUE "ProductName", "Udm Interpreter Wizard Application"
+            VALUE "ProductVersion", "1, 0, 0, 1"
         END
     END
     BLOCK "VarFileInfo"
@@ -251,8 +250,6 @@ BEGIN
     END
 END
 
-#endif    // !_MAC
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -260,7 +257,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
+GUIDELINES DESIGNINFO 
 BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
@@ -283,19 +280,19 @@ END
 // ARCHIVE
 //
 
-IDR_SOURCES             ARCHIVE DISCARDABLE     "res\\UdmInterpreter.zip"
+IDR_SOURCES             ARCHIVE                 "res\\UdmInterpreter.zip"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
 //
 
-IDB_WELCOME             BITMAP  DISCARDABLE     "res\\welcometext.bmp"
-IDB_THANKS              BITMAP  DISCARDABLE     "res\\thanktext.bmp"
-IDB_WATERMARK           BITMAP  DISCARDABLE     "res\\wizardleft.bmp"
-IDB_HEADER              BITMAP  DISCARDABLE     "res\\wizardtop.bmp"
-IDB_BITMAP1             BITMAP  DISCARDABLE     "res\\wizardiconsmall.ico"
-IDB_BITMAP2             BITMAP  DISCARDABLE     "res\\wizardicon.ico"
+IDB_WELCOME             BITMAP                  "res\\welcometext.bmp"
+IDB_THANKS              BITMAP                  "res\\thanktext.bmp"
+IDB_WATERMARK           BITMAP                  "res\\wizardleft.bmp"
+IDB_HEADER              BITMAP                  "res\\wizardtop.bmp"
+IDB_BITMAP1             BITMAP                  "res\\wizardiconsmall.ico"
+IDB_BITMAP2             BITMAP                  "res\\wizardicon.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -304,26 +301,26 @@ IDB_BITMAP2             BITMAP  DISCARDABLE     "res\\wizardicon.ico"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_MAINFRAME           ICON    DISCARDABLE     "res\\wizico.ico"
+IDI_MAINFRAME           ICON                    "res\\wizico.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
 //
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDS_ABOUTBOX            "&About Udm Interpreter Wizard..."
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     IDS_SAMPLEWIZARD        "Udm Interpreter Wizard"
     IDS_HEADERTITLE         "Udm Interpreter Wizard for GME"
     IDS_HEADERSUBTITLE      "Wizard Configuration"
 END
 
-STRINGTABLE DISCARDABLE 
+STRINGTABLE 
 BEGIN
     AFX_IDS_APP_TITLE       "Udm Interpreter Wizard"
     IDS_HEADERSUBTITLE1     "Configure Meta Loading and Cache Facilities"
