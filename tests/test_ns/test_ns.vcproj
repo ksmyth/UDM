@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="test_ns"
 	ProjectGUID="{546D0AC9-934F-472D-B443-27FCF4AF2471}"
+	RootNamespace="test_ns"
 	SccProjectName="SAK"
 	SccAuxPath="SAK"
 	SccLocalPath="SAK"
@@ -39,6 +40,7 @@
 				AdditionalDependencies=" UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib  zlibD.lib"
 				OutputFile="$(OutDir)/test_ns.exe"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\..\lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/test_ns.pdb"
 				SubSystem="1"
@@ -46,7 +48,8 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="$(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -85,6 +88,7 @@
 				AdditionalDependencies="UdmBase.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib zlib.lib $(NOINHERIT)"
 				OutputFile="$(OutDir)/test_ns.exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\..\lib"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -93,7 +97,8 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="$(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
