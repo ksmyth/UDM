@@ -42,6 +42,14 @@ namespace UdmUtil
 	//using stupid heuristics and assuming odd things like
 	//the name of the name attribute is "name". Anyway, it might be useful.
 	UDM_DLL string ExtractName(Udm::Object ob, const string att_name = "name");
+
+
+	//note: escape_char is not escaped unless it is contained in to_escape_chars
+	UDM_DLL string escape_chars(const string &src, const char escape_char, const string &to_escape_chars);
+
+	//convert array of strings to string and back; used by backends that store array attributes as strings
+	UDM_DLL string vector_to_string(const vector<string> &v, const char separator, bool add_sep_at_end = false, bool unquote_strings = false);
+	UDM_DLL vector<string> string_to_vector(const string &src, const char separator);
 };
 
 #endif //MOBIES_UDMUTIL_H
