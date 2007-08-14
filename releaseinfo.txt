@@ -4,7 +4,7 @@
 
 1. Windows Operating system (preferably NT, 2000, XP)
 
-2. GME 4, R5.09.21 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 5, R5.09.21 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 7.1
