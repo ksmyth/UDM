@@ -1,4 +1,4 @@
-<GeneTRE:Container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:GeneTRE="http://www.isis.vanderbilt.edu/2004/schemas/GeneTRE" xsi:schemaLocation="http://www.isis.vanderbilt.edu/2004/schemas/GeneTRE GeneTRE.xsd">
+<GeneTRE:Container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:GeneTRE="http://www.isis.vanderbilt.edu/2004/schemas/GeneTRE" xsi:schemaLocation="http://www.isis.vanderbilt.edu/2004/schemas/GeneTRE GeneTRE_GeneTRE.xsd">
 	<GeneTRE:Gene _id="id24" name="gene1" site="id34"/>
 	<GeneTRE:Gene _id="id3b" name="gene2" site="id3e"/>
 	<GeneTRE:Gene _id="id3f" name="gene3" site="id42"/>
