@@ -12,6 +12,7 @@
 #define UDMDLLD "UdmDll_3_0_1D.dll"
 #define UDMVER "3.0.2"
 #define GMEVER "5.11.18"
+#define OutputFileBase "Udm_setup"
 
 [Setup]
 AppName=UDM {#UDMVER}
@@ -21,12 +22,12 @@ AppPublisher=ISIS, Vanderbilt University
 AppPublisherURL=http://www.escherinstitute.org/Plone/tools/suites/mic/udm
 AppSupportURL=http://www.escherinstitute.org/Plone/tools/suites/mic/udm
 AppUpdatesURL=http://www.escherinstitute.org/Plone/tools/suites/mic/udm
-DefaultDirName=C:\Program Files\ISIS\UDM
+DefaultDirName={pf}\ISIS\UDM
 DefaultGroupName=UDM
 LicenseFile={#UDMPATH}\license.txt
 InfoBeforeFile={#UDMPATH}\releaseinfo.txt
 OutputDir={#UDMPATH}\InnoSetup
-OutputBaseFilename=Udm_setup
+OutputBaseFilename={#OutputFileBase}
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=true
@@ -200,7 +201,8 @@ begin
 
 		// Get current path, split into an array
 		RegQueryStringValue(HKEY_CURRENT_USER, 'Environment', ValueName, oldpath);
-		oldpath := oldpath + ';';
+		if oldpath <> '' then
+			oldpath := oldpath + ';';
 		i := 0;
 		while (Pos(';', oldpath) > 0) do begin
 			SetArrayLength(pathArr, i+1);
@@ -227,9 +229,13 @@ begin
 			end;
 		end;
 
-		// Append app dir to path if not already included
-		if IsUninstaller() = false then
-			newpath := newpath + ';' + pathdir;
+		if IsUninstaller() = false then begin
+			if newpath <> '' then begin
+				newpath := newpath + ';' + pathdir;
+			end else begin
+				newpath := pathdir;
+			end;
+		end;
 
 		// Write new path
 		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', ValueName, newpath);
@@ -239,8 +245,8 @@ end;
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
 	if CurStep = ssInstall then begin
-		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_PATH', {app}+'');
-		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_3RDPARTY_PATH', {app}+'3rdparty');
+//		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_PATH', {app}+'');
+//		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_3RDPARTY_PATH', {app}+'3rdparty');
 		ModPath('PATH', '%UDM_PATH%\bin');
 		ModPath('PATH', '%UDM_PATH%\etc');
 		ModPath('PATH', '%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\bin');
