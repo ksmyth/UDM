@@ -446,6 +446,28 @@ namespace Uml
 
 		return roles;
 	}
+
+	UDM_DLL bool IsCrossNSAssociation(const Association &a)
+	{
+		set<AssociationRole> roles = a.roles();
+		ASSERT( roles.size() == 2 );
+
+		set<AssociationRole>::iterator i = roles.begin();
+		Class tg1 = i->target();
+		i++;
+		Class tg2 = i->target();
+
+		if ((Namespace) tg1.parent_ns() != (Namespace) tg2.parent_ns())
+			return true;
+
+		Class c = a.assocClass();
+		if (c && (Namespace) c.parent_ns() != (Namespace) tg1.parent_ns())
+			return true;
+
+		return false;
+		
+	}
+
 	UDM_DLL set<CompositionChildRole> CompositionPeerChildRoles(const Class &c)
 	{
 		set<CompositionChildRole> roles;
