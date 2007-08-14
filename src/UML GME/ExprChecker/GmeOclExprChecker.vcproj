@@ -124,7 +124,7 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib\"
-				IgnoreDefaultLibraryNames="nafxcw.lib msvcrtd.lib"
+				IgnoreDefaultLibraryNames="nafxcw.lib;msvcrtd.lib"
 				ModuleDefinitionFile=".\GmeOclExprChecker.def"
 				ProgramDatabaseFile=".\ReleaseMinDependency/GmeOclExprChecker.pdb"
 				SubSystem="2"
