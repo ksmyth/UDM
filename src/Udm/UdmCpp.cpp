@@ -724,6 +724,10 @@ void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & 
 				output << "\t\t\t" << UmlClassCPPName(theot) << "::meta_" << revrolename <<" = " << cl.name() << "::meta_" << rolename <<";" << endl;
 			}
 		};
+	}
+	for (c = classes.begin(); c != classes.end(); c++)
+	{
+		::Uml::Uml::Class cl = *c;
 
 		::Uml::Uml::Association as = cl.association();
 		if (as)
