@@ -75,7 +75,7 @@ namespace UmlOcl
 					bool 	operator==( const Object& object ) const;
 					bool 	operator!=( const Object& object ) const;
 
-			virtual GOCL_STL_NS()string 	Print() const;
+			virtual std::string 	Print() const;
 	};
 
 //##############################################################################################################################################
@@ -105,7 +105,7 @@ namespace UmlOcl
 					bool 	operator==( const DataNetwork& object ) const;
 					bool 	operator!=( const DataNetwork& object ) const;
 
-			virtual GOCL_STL_NS()string 	Print() const;
+			virtual std::string 	Print() const;
 	};
 
 }; // namespace UmlOcl

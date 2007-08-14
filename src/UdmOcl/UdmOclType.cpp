@@ -57,11 +57,11 @@ char *_strlwr( char *string )
 #endif
 
 
-	GOCL_STL_NS()string LowerFirst( const GOCL_STL_NS()string& strValue )
+	std::string LowerFirst( const std::string& strValue )
 	{
 		if ( strValue.empty() )
 			return strValue;
-		return GOCL_STL_NS()string( _strlwr( (char*)strValue.substr( 0, 1 ).c_str() ) ) + strValue.substr( 1 );
+		return std::string( _strlwr( (char*)strValue.substr( 0, 1 ).c_str() ) ) + strValue.substr( 1 );
 	}
 
 //##############################################################################################################################################
@@ -123,19 +123,19 @@ char *_strlwr( char *string )
 				if ( ! signature.GetAcceptableTypeName().empty() )
 					return;
 
-				GOCL_STL_NS()vector< ::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
+				std::vector< ::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
 				for( int j = 0; j < vecNamespaces.size(); j++)
 				{
 
-					GOCL_STL_NS()vector< ::Uml::Class> vecClasses = vecNamespaces[j].classes();
+					std::vector< ::Uml::Class> vecClasses = vecNamespaces[j].classes();
 					for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
 					{
-						GOCL_STL_NS()string strClass = vecClasses[ i ].name();
-						GOCL_STL_NS()string strNs = ((::Uml::Namespace)vecClasses[ i ].parent()).name();
-						GOCL_STL_NS()string strRole = LowerFirst( strClass );
-						GOCL_STL_NS()string strRole_Ns = LowerFirst( strNs ) +"::" + strClass ;
-						GOCL_STL_NS()string strSig = signature.GetName();
-						bool bHasNamespace = strSig.find( "::" ) != GOCL_STL_NS()string::npos; // true if qualified type, false if local type
+						std::string strClass = vecClasses[ i ].name();
+						std::string strNs = ((::Uml::Namespace)vecClasses[ i ].parent()).name();
+						std::string strRole = LowerFirst( strClass );
+						std::string strRole_Ns = LowerFirst( strNs ) +"::" + strClass ;
+						std::string strSig = signature.GetName();
+						bool bHasNamespace = strSig.find( "::" ) != std::string::npos; // true if qualified type, false if local type
 						
 
 						if ((bHasNamespace && ( strRole_Ns == signature.GetName())) || ( (!bHasNamespace) && (strRole == signature.GetName()) ) )
@@ -244,7 +244,7 @@ char *_strlwr( char *string )
 					ThrowException( "Object is null." );
 				set<Udm::Object> setOut;
 				if ( ! m_class ) {
-					GOCL_STL_NS()vector<Udm::ObjectImpl*> vecImpls = objThis.__impl()->getAssociation( m_assocRole, Udm::TARGETFROMPEER );
+					std::vector<Udm::ObjectImpl*> vecImpls = objThis.__impl()->getAssociation( m_assocRole, Udm::TARGETFROMPEER );
 					for ( int i = 0 ; i < vecImpls.size() ; i++ )
 						setOut.insert( Udm::Object( vecImpls[ i ] ) );
 				}
@@ -278,7 +278,7 @@ char *_strlwr( char *string )
 				DECL_UDMOBJECT( objThis, GetThis() );
 				if ( ! objThis )
 					ThrowException( "Object is null." );
-				GOCL_STL_NS()vector<Udm::ObjectImpl*> vecImpls = objThis.__impl()->getAssociation( m_assocRole, Udm::CLASSFROMTARGET );
+				std::vector<Udm::ObjectImpl*> vecImpls = objThis.__impl()->getAssociation( m_assocRole, Udm::CLASSFROMTARGET );
 				OclMeta::ObjectVector vecOut;
 				for ( int i = 0 ; i < vecImpls.size() ; i++ )
 					vecOut.push_back( CREATE_UDMOBJECT( GetTypeManager(), Udm::Object( vecImpls[ i ] ) ) );
@@ -306,7 +306,7 @@ char *_strlwr( char *string )
 				DECL_UDMOBJECT( objThis, GetThis() );
 				if ( ! objThis )
 					ThrowException( "Object is null." );
-				GOCL_STL_NS()vector<Udm::ObjectImpl*> vecImpls = objThis.__impl()->getAssociation( m_assocRole, Udm::TARGETFROMCLASS );
+				std::vector<Udm::ObjectImpl*> vecImpls = objThis.__impl()->getAssociation( m_assocRole, Udm::TARGETFROMCLASS );
 				SetResult( CREATE_UDMOBJECT( GetTypeManager(), Udm::Object( vecImpls[ 0 ] ) ) );
 			}
 	};
@@ -338,17 +338,17 @@ char *_strlwr( char *string )
 		 		if ( ! signature.GetAcceptableTypeName().empty() )
 					return;
 
-				GOCL_STL_NS()string strName = signature.GetName();
+				std::string strName = signature.GetName();
 				set< ::Uml::Class> setAncestors = ::Uml::AncestorClasses( m_class );
 				bool bClassAccessFound = false;
 				for ( set< ::Uml::Class>::iterator itClass =  setAncestors.begin() ; itClass != setAncestors.end() ; itClass++ ) {
 					set< ::Uml::CompositionChildRole> setChildRoles = (*itClass).childRoles();
 					for ( set< ::Uml::CompositionChildRole>::iterator itChild = setChildRoles.begin() ; itChild != setChildRoles.end() ; itChild++ ) {
 						::Uml::CompositionParentRole parentRole = ( (::Uml::Composition)(*itChild).parent() ).parentRole();
-			 			GOCL_STL_NS()string strRole = parentRole.name();
+			 			std::string strRole = parentRole.name();
 			 			::Uml::Class parent = parentRole.target();
-			 			GOCL_STL_NS()string strClass = parent.name();
-						GOCL_STL_NS()string strNs = ((::Uml::Namespace)parent.parent()).name();
+			 			std::string strClass = parent.name();
+						std::string strNs = ((::Uml::Namespace)parent.parent()).name();
 			 			TypeSeq vecType( 1, strNs + "::" + strClass );
 			 			if ( ! strRole.empty() && strRole == strName )
 			 				vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, new TObjectDerived_Parent( parentRole, parent ), true ) );
@@ -365,15 +365,15 @@ char *_strlwr( char *string )
 		 		if ( ! signature.GetAcceptableTypeName().empty() )
 					return;
 
-				GOCL_STL_NS()string strName = signature.GetName();
+				std::string strName = signature.GetName();
 				set< ::Uml::CompositionParentRole> setParentRoles = m_class.parentRoles();
 				for ( set< ::Uml::CompositionParentRole>::iterator itParent = setParentRoles.begin() ; itParent != setParentRoles.end() ; itParent++ ) {
 					::Uml::Composition composition = (*itParent).parent();
 					::Uml::CompositionChildRole childRole = composition.childRole();
-		 			GOCL_STL_NS()string strRole = childRole.name();
+		 			std::string strRole = childRole.name();
 		 			::Uml::Class child = childRole.target();
-		 			GOCL_STL_NS()string strClass = child.name();
-					GOCL_STL_NS()string strNs = ((::Uml::Namespace)child.parent()).name();
+		 			std::string strClass = child.name();
+					std::string strNs = ((::Uml::Namespace)child.parent()).name();
 
 					if ( ! strRole.empty() && strRole == strName || strName == LowerFirst( strClass ) ) {
 		 				TypeSeq vecType;
@@ -395,17 +395,17 @@ char *_strlwr( char *string )
 		 		if ( ! signature.GetAcceptableTypeName().empty() )
 					return;
 
-				GOCL_STL_NS()string strName = signature.GetName();
+				std::string strName = signature.GetName();
 				set< ::Uml::AssociationRole> setFromRoles = m_class.associationRoles();
 				for ( set< ::Uml::AssociationRole>::iterator itFrom = setFromRoles.begin() ; itFrom != setFromRoles.end() ; itFrom++ ) {
 					::Uml::Association association = (*itFrom).parent();
 					set< ::Uml::AssociationRole> setToRoles = association.roles();
 					for ( set< ::Uml::AssociationRole>::iterator itTo = setToRoles.begin() ; itTo != setToRoles.end() ; itTo++ ) {
 						if ( *itTo != *itFrom ) {
-							GOCL_STL_NS()string strRole = (*itTo).name();
+							std::string strRole = (*itTo).name();
 							::Uml::Class peer = (*itTo).target();
-							GOCL_STL_NS()string strClass = peer.name();
-							GOCL_STL_NS()string strNs = ((::Uml::Namespace)peer.parent()).name();
+							std::string strClass = peer.name();
+							std::string strNs = ((::Uml::Namespace)peer.parent()).name();
 							if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == LowerFirst( strClass ) ) {
 								TypeSeq vecType;
 		 						if ( (*itTo).max() > 1 ||  (*itTo).max() == -1 )
@@ -421,18 +421,18 @@ char *_strlwr( char *string )
 
 		 	void GetAssociationClasses( const OclSignature::Association& signature, OclMeta::AssociationVector& vecFeatures )
 		 	{
-				GOCL_STL_NS()string strName = signature.GetName();
-				GOCL_STL_NS()string strAcceptable = signature.GetAcceptableTypeName();
+				std::string strName = signature.GetName();
+				std::string strAcceptable = signature.GetAcceptableTypeName();
 
 				set< ::Uml::AssociationRole> setFromRoles = m_class.associationRoles();
 				for ( set< ::Uml::AssociationRole>::iterator itFrom = setFromRoles.begin() ; itFrom != setFromRoles.end() ; itFrom++ ) {
 					::Uml::Association association = (*itFrom).parent();
 					::Uml::Class assocClass = association.assocClass();
 					if ( assocClass ) {
-						GOCL_STL_NS()string strClass = assocClass.name();
-						GOCL_STL_NS()string strNs = ((::Uml::Namespace)assocClass.parent()).name();
-						GOCL_STL_NS()string strRole = (*itFrom).name();
-						GOCL_STL_NS()string strClassRole = LowerFirst( strClass );
+						std::string strClass = assocClass.name();
+						std::string strNs = ((::Uml::Namespace)assocClass.parent()).name();
+						std::string strRole = (*itFrom).name();
+						std::string strClassRole = LowerFirst( strClass );
 						if ( strAcceptable.empty() && strClassRole == strName || ! strAcceptable.empty() && ! strRole.empty() && strRole == strName && strAcceptable == strClassRole ) {
 							set< ::Uml::AssociationRole> setToRoles = association.roles();
 							TypeSeq vecType;
@@ -458,15 +458,15 @@ char *_strlwr( char *string )
 		 		if ( ! signature.GetAcceptableTypeName().empty() )
 					return;
 
-		 		GOCL_STL_NS()string strName = signature.GetName();
+		 		std::string strName = signature.GetName();
 				::Uml::Association association = m_class.association();
 		 		if ( association ) {
 					set< ::Uml::AssociationRole> setRoles = association.roles();
 					for ( set< ::Uml::AssociationRole>::iterator it = setRoles.begin() ; it != setRoles.end() ; it++ ) {
 			 			::Uml::Class target = (*it).target();
-			 			GOCL_STL_NS()string strClass = target.name();
-						GOCL_STL_NS()string strNs = ((::Uml::Namespace)target.parent()).name();
-			 			GOCL_STL_NS()string strRole = (*it).name();
+			 			std::string strClass = target.name();
+						std::string strNs = ((::Uml::Namespace)target.parent()).name();
+			 			std::string strRole = (*it).name();
 			 			if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == LowerFirst( strClass ) ) {
 			 				TypeSeq vecType( 1, strNs + "::" + strClass );
 			 				vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, new TObjectDerived_Targets( *it ), true ) );
@@ -494,12 +494,12 @@ char *_strlwr( char *string )
 				DECL_UDMOBJECT( objThis, GetThis() );
 				if ( ! objThis )
 					ThrowException( "Object is null." );
-				GOCL_STL_NS()string strType = m_attribute.type();
+				std::string strType = m_attribute.type();
 				if ( strType == "ocl::Boolean" || strType == "Boolean" ) {
 					if ( m_iCompound == 0 )
 						SetResult( CREATE_BOOLEAN( GetTypeManager(), objThis.getBooleanAttr( m_attribute ) ) );
 					else {
-						GOCL_STL_NS()vector<bool> vec = objThis.getBooleanAttrArr( m_attribute );
+						std::vector<bool> vec = objThis.getBooleanAttrArr( m_attribute );
 						OclMeta::ObjectVector vecOut;
 						for ( int i = 0 ; i< vec.size() ; i++ )
 							vecOut.push_back( CREATE_BOOLEAN( GetTypeManager(), vec[ i ] ) );
@@ -513,7 +513,7 @@ char *_strlwr( char *string )
 					if ( m_iCompound == 0 )
 						SetResult( CREATE_INTEGER( GetTypeManager(), objThis.getIntegerAttr( m_attribute ) ) );
 					else {
-						GOCL_STL_NS()vector<__int64> vec = objThis.getIntegerAttrArr( m_attribute );
+						std::vector<__int64> vec = objThis.getIntegerAttrArr( m_attribute );
 						OclMeta::ObjectVector vecOut;
 						for ( int i = 0 ; i< vec.size() ; i++ )
 							vecOut.push_back( CREATE_INTEGER( GetTypeManager(), vec[ i ] ) );
@@ -527,7 +527,7 @@ char *_strlwr( char *string )
 					if ( m_iCompound == 0 )
 						SetResult( CREATE_REAL( GetTypeManager(), objThis.getRealAttr( m_attribute ) ) );
 					else {
-						GOCL_STL_NS()vector<double> vec = objThis.getRealAttrArr( m_attribute );
+						std::vector<double> vec = objThis.getRealAttrArr( m_attribute );
 						OclMeta::ObjectVector vecOut;
 						for ( int i = 0 ; i< vec.size() ; i++ )
 							vecOut.push_back( CREATE_REAL( GetTypeManager(), vec[ i ] ) );
@@ -541,7 +541,7 @@ char *_strlwr( char *string )
 					if ( m_iCompound == 0 )
 						SetResult( CREATE_STRING( GetTypeManager(), objThis.getStringAttr( m_attribute ) ) );
 					else {
-						GOCL_STL_NS()vector<GOCL_STL_NS()string> vec = objThis.getStringAttrArr( m_attribute );
+						std::vector<std::string> vec = objThis.getStringAttrArr( m_attribute );
 						OclMeta::ObjectVector vecOut;
 						for ( int i = 0 ; i< vec.size() ; i++ )
 							vecOut.push_back( CREATE_STRING( GetTypeManager(), vec[ i ] ) );
@@ -569,11 +569,11 @@ char *_strlwr( char *string )
 		 public :
 			virtual void GetFeatures( const OclSignature::Attribute& signature, OclMeta::AttributeVector& vecFeatures )
 			{
-				GOCL_STL_NS()string strName = signature.GetName();
+				std::string strName = signature.GetName();
 
 				set< ::Uml::Attribute> setAttribs = m_class.attributes();
 				for ( set< ::Uml::Attribute>::iterator it = setAttribs.begin() ; it != setAttribs.end() ; it++ ) {
-					if ( strName == (GOCL_STL_NS()string) (*it).name() ) {
+					if ( strName == (std::string) (*it).name() ) {
 						TypeSeq vecType;
 			 			int iCompound = ( (*it).max() > 1 || (*it).max() == -1 ) ? 1 : 0;
 						if ( iCompound ) {
@@ -581,7 +581,7 @@ char *_strlwr( char *string )
 								iCompound = 2;
 							vecType.push_back( ( iCompound == 2 ) ? "ocl::Sequence" : "ocl::Set" );
 						}
-						GOCL_STL_NS()string strType = (*it).type();
+						std::string strType = (*it).type();
 						if ( strType == "ocl::Boolean" || strType == "Boolean" )
 							vecType.push_back( "ocl::Boolean" );
 						else if ( strType == "ocl::Integer" || strType == "Integer" )
@@ -604,7 +604,7 @@ char *_strlwr( char *string )
 		public :
 			virtual void GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures )
 			{
-				GOCL_STL_NS()string strName = signature.GetName();
+				std::string strName = signature.GetName();
 				int iCount = signature.GetParameterCount();
 				TypeSeq vecType;
 				OclCommon::FormalParameterVector vecParams;
@@ -633,9 +633,9 @@ char *_strlwr( char *string )
 	{
 	}
 
-	void TypeFactory::GetTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes )
+	void TypeFactory::GetTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes )
 	{
-		bool bHasNamespace = strName.find( "::" ) != GOCL_STL_NS()string::npos; // true if qualified type, false if local type
+		bool bHasNamespace = strName.find( "::" ) != std::string::npos; // true if qualified type, false if local type
 
 		GetDynamicTypes( strName, vecTypes );				//get the types from UML meta
 		if ( ! bHasNamespace && ! vecTypes.empty() )		//if local type, and results not empty - return the results
@@ -651,52 +651,52 @@ char *_strlwr( char *string )
 		( ( OclBasic::TypeFactory ) *this ).GetTypes( strName, vecTypes );	//search & return the OCL types
 	}
 
-	void TypeFactory::GetDynamicTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes )
+	void TypeFactory::GetDynamicTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes )
 	{
-		bool bHasNamespace = strName.find( "::" ) != GOCL_STL_NS()string::npos; // true if qualified type, false if local type
+		bool bHasNamespace = strName.find( "::" ) != std::string::npos; // true if qualified type, false if local type
 
-		GOCL_STL_NS()string strNsName, strClassName;
+		std::string strNsName, strClassName;
 
 		if (bHasNamespace) 
 		{
-			strClassName = strName.substr(strName.find("::")+2, GOCL_STL_NS()string::npos);
+			strClassName = strName.substr(strName.find("::")+2, std::string::npos);
 			strNsName = strName.substr(0, strName.find("::"));
 		}
 		else
 			strClassName = strName;
 /*
-		GOCL_STL_NS()string strRealName = strName;
+		std::string strRealName = strName;
 		if ( strName.size() > 6 && strName.substr( 0, 6 ) == "meta::" )
 			strRealName = strName.substr( 6 );
 */
 
-		GOCL_STL_NS()vector< ::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
+		std::vector< ::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
 		for ( int j = 0; j < vecNamespaces.size(); j++)
 		{
 			//if type is qualified, we search it only in the corresponding namespace
 			//if type is not qualified, we search it in all namespaces 
-			if ( (!bHasNamespace) || ( strNsName == (GOCL_STL_NS()string) vecNamespaces[ j ].name() ) )
+			if ( (!bHasNamespace) || ( strNsName == (std::string) vecNamespaces[ j ].name() ) )
 			{
-				GOCL_STL_NS()vector< ::Uml::Class> vecClasses = vecNamespaces[j].classes();
+				std::vector< ::Uml::Class> vecClasses = vecNamespaces[j].classes();
 				for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
 				{
-					if ( strClassName == (GOCL_STL_NS()string) vecClasses[ i ].name() ) 
+					if ( strClassName == (std::string) vecClasses[ i ].name() ) 
 					{
 						StringVector vecSuperTypes;
 						set< ::Uml::Class> setBases = vecClasses[ i ].baseTypes();
 						for ( set< ::Uml::Class>::iterator it = setBases.begin(); it != setBases.end() ; it++ )
-							vecSuperTypes.push_back( (GOCL_STL_NS()string)((::Uml::Namespace)it->parent()).name() + "::" + (GOCL_STL_NS()string) (*it).name() );
+							vecSuperTypes.push_back( (std::string)((::Uml::Namespace)it->parent()).name() + "::" + (std::string) (*it).name() );
 						if ( setBases.empty() )
 							vecSuperTypes.push_back( "udm::Object" );
 						::Uml::Class theClass = vecClasses[ i ];
-						vecTypes.push_back( new OclMeta::Type( (GOCL_STL_NS()string)((::Uml::Namespace)theClass.parent()).name() + "::" + strClassName, vecSuperTypes, new TObjectDerived_AttributeFactory( theClass ), new TObjectDerived_AssociationFactory( theClass ), new TObjectDerived_MethodFactory(), true ) );
+						vecTypes.push_back( new OclMeta::Type( (std::string)((::Uml::Namespace)theClass.parent()).name() + "::" + strClassName, vecSuperTypes, new TObjectDerived_AttributeFactory( theClass ), new TObjectDerived_AssociationFactory( theClass ), new TObjectDerived_MethodFactory(), true ) );
 					}
 				}
 			}
 		}
 	}
 
-	void TypeFactory::GetPredefinedTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes )
+	void TypeFactory::GetPredefinedTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes )
 	{
 		if ( strName == "udm::DataNetwork" || strName == "DataNetwork" ) {
 			StringVector vecSupers;
