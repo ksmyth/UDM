@@ -445,8 +445,8 @@ namespace Udm
 		void setDefaultAttributes(const bool all = true);
 
 		//atribute copier functions
-		void CopyAttributeFrom(const ::Uml::Uml::Attribute& which, const ObjectImpl* from);
-		void CopyAttributesFrom(const ObjectImpl*  from);
+		void CopyAttributeFrom(const ::Uml::Uml::Attribute& which, const ObjectImpl* from, bool direct = true);
+		void CopyAttributesFrom(const ObjectImpl*  from, bool direct = true);
 		void CopyAttributeFromArchetype(const ::Uml::Uml::Attribute& which);
 		void CopyAttributesFromArchetype();
 		
