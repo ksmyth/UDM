@@ -246,8 +246,8 @@ public:
 
 	bool GetChildObjectsCount(const char * type, const char * type_ns, UdmLong& count); // HN6
 	bool GetChildObjects(const char * type, const char * type_ns, UdmPseudoObjectS &value);
-	bool GetChildObjectsCount(const CompositionInfo &ci, const char * type, const char * type_ns, UdmLong& count); // HN7
-	bool GetChildObjects(const CompositionInfo &ci, const char * type, const char * type_ns, UdmPseudoObjectS &value);
+	bool GetChildObjectsCount(const CompositionInfo &ci, const cint_string & type, const cint_string & type_ns, UdmLong& count); // HN7
+	bool GetChildObjects(const CompositionInfo &ci, const cint_string & type, const cint_string & type_ns, UdmPseudoObjectS &value);
 	
 	bool GetAssociationClassObjectsCount(const UdmPseudoObject &dstObject, const AssociationInfo & ai, UdmLong& count); // HN8
 	bool GetAssociationClassObjects(const UdmPseudoObject &dstObject, const AssociationInfo & ai, UdmPseudoObjectS &value);
@@ -278,13 +278,16 @@ public:
 	UdmPseudoDataNetwork(const char * meta_name, UdmBool & retval);
 	~UdmPseudoDataNetwork();
 	bool OpenExisting(const char * sys_name, const char * meta_locator, const int backendsemantics = UPDN_CHANGES_PERSIST_ALWAYS);
+  bool OpenExistingFromString(const char * sys_name, const char * meta_locator);
 	bool CreateNew(const char * sys_name, const char * meta_locator, const UdmPseudoObject& rootclass, const int backendsemantics = UPDN_CHANGES_PERSIST_ALWAYS);
+  bool CreateNewToString(const char * meta_locator, const UdmPseudoObject& rootclass); 
 	bool GetRootObject(UdmPseudoObject & value);
 	bool GetRootMeta(UdmPseudoObject &value);			//a Uml::Diagram should be returned
 	
 	bool CloseWithUpdate();
 	bool CloseNoUpdate();
 	bool SaveAs(const char * systemname);
+  bool SaveAsString(cint_string& buffer);
 	bool CloseAs(const char * systemname);
 	bool isOpen(UdmBool &value);
 	bool uniqueId(UdmLong &value);
@@ -303,6 +306,8 @@ bool UDM_DLL UPO_SetAttribute(UdmPseudoObject &attr_what, UdmPseudoObject &class
 bool UDM_DLL UPO_SetChildRole(UdmPseudoObject &ccr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char *  orole_name);
 bool UDM_DLL UPO_SetParentRole(UdmPseudoObject &cpr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char * orole_name);
 bool UDM_DLL UPO_SetAssocRole(UdmPseudoObject &ar_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char *target_name);
+bool UDM_DLL StoreXsd(const cint_string& key, const cint_string& xsd_str);
+bool UDM_DLL RemoveXsd(const cint_string& key);
 
 #endif
 
