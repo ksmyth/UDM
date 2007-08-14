@@ -14,6 +14,9 @@ this software.
 /*
 CHANGELOG:
 
+	11/13/05	-	endre
+		declare static members individually, to prevent VC++ compiler error C2487
+
 	12/20/04	-	endre
 
 		took the functions from UdmCppH.cpp
@@ -729,7 +732,8 @@ void GenerateHClassAssociations(const ::Uml::Class& cl, const ::Uml::Class& cros
 		}
 		else 
 		{
-			output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << ", meta_" << aname << "_rev;" << endl;
+			output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << ";" << endl;
+			output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << "_rev;" << endl;
 			if(Uml::theOther(*i).isNavigable()) 
 			{
 				if (Uml::theOther(*i).max() == 1)
@@ -812,7 +816,8 @@ void GenerateHClassAssociations(const ::Uml::Class& cl, const ::Uml::Class& cros
 				if (!SingleCPPNamespace(::Uml::diagramByName(dgr, GetDgrfromFromStr(from_str))))
 					cl_dgr += "::" + GetNsfromFromStr(from_str);
 
-				output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << ", meta_" << aname << "_rev;" << endl;
+				output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << ";" << endl;
+				output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << "_rev;" << endl;
 				if(Uml::theOther(*i).isNavigable()) 
 				{
 					if (Uml::theOther(*i).max() == 1)
