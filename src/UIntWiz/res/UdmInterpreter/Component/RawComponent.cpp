@@ -127,7 +127,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 		try
 		{
 			// Opening backend
-			dngBackend.OpenExisting(ccpProject);
+			dngBackend.OpenExisting(ccpProject, Udm::CHANGES_LOST_DEFAULT);
 
 
 			CComPtr<IMgaFCO> ccpFocus(currentobj);
