@@ -31,6 +31,7 @@ char *_strlwr( char *string )
 	};
 	return string;
 };
+#endif
 //--------------------------8><----------
 
 namespace OclBasic
@@ -568,7 +569,7 @@ namespace OclBasic
 		{
 			DECL_REAL( dArg1, GetArgument( 0 ) );
 			DECL_REAL( dArg2, GetArgument( 1 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), std::max( dArg1, dArg2 ) ) );
+			SetResult( CREATE_REAL( GetTypeManager(), max( dArg1, dArg2 ) ) );
 		}
 	};
 
@@ -578,7 +579,7 @@ namespace OclBasic
 		{
 			DECL_REAL( dArg1, GetArgument( 0 ) );
 			DECL_REAL( dArg2, GetArgument( 1 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), std::min( dArg1, dArg2 ) ) );
+			SetResult( CREATE_REAL( GetTypeManager(), min( dArg1, dArg2 ) ) );
 		}
 	};
 
@@ -616,7 +617,7 @@ namespace OclBasic
 		{
 			DECL_REAL( dThis, GetThis() );
 			DECL_REAL( dArg, GetArgument( 0 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), std::max( dThis, dArg ) ) );
+			SetResult( CREATE_REAL( GetTypeManager(), max( dThis, dArg ) ) );
 		}
 	};
 
@@ -626,7 +627,7 @@ namespace OclBasic
 		{
 			DECL_REAL( dThis, GetThis() );
 			DECL_REAL( dArg, GetArgument( 0 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), std::min( dThis, dArg ) ) );
+			SetResult( CREATE_REAL( GetTypeManager(), min( dThis, dArg ) ) );
 		}
 	};
 
@@ -790,7 +791,7 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lArg1, GetArgument( 0 ) );
 			DECL_INTEGER( lArg2, GetArgument( 1 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), std::max( lArg1, lArg2 ) ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), max( lArg1, lArg2 ) ) );
 		}
 	};
 
@@ -800,7 +801,7 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lArg1, GetArgument( 0 ) );
 			DECL_INTEGER( lArg2, GetArgument( 1 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), std::min( lArg1, lArg2 ) ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), min( lArg1, lArg2 ) ) );
 		}
 	};
 
@@ -819,7 +820,7 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lThis, GetThis() );
 			DECL_INTEGER( lArg, GetArgument( 0 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), std::max( lThis, lArg ) ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), max( lThis, lArg ) ) );
 		}
 	};
 
@@ -829,7 +830,7 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lThis, GetThis() );
 			DECL_INTEGER( lArg, GetArgument( 0 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), std::min( lThis, lArg ) ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), min( lThis, lArg ) ) );
 		}
 	};
 
