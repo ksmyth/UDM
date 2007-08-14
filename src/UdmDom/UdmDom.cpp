@@ -11,7 +11,7 @@ arising out of or in connection with the use or performance of
 this software.
 
   04/22/05 - kalmar
-   - getChildren fixed: the findClass tried to find elements belonging to a Text attribute
+
    - added setDomParserExternalSchemaLocation, which allows the parser to use 
         other xsd files to parse using different xsd's from 
         those being defined in the xml instance
@@ -1824,32 +1824,12 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				compname = GetANameFor(::Uml::Uml::Composition(role.parent())).c_str();
 			}
 
-        set<string> textAttrNames;
-        set< ::Uml::Uml::Attribute> atts = ::Uml::AncestorAttributes(kind);
-		    for (set< ::Uml::Uml::Attribute>::iterator ai = atts.begin(); ai != atts.end(); ai++)
-			  if ( ((string)(ai->type()) == "Text"))
-        {
-            textAttrNames.insert((string)(ai->name()));
-        }
-
-
-
 			
 			for(DOM_Node n = dom_element.getFirstChild(); n != (DOM_NullPtr *)NULL;n = n.getNextSibling())	
 			{
 				if( n.getNodeType() == DOM_Node::ELEMENT_NODE )
 				{
 					DOM_Element e = static_cast<DOM_Element&>(n);
-
-
-    			StrX cl_name(e.getLocalName());		//class name
-          set<string>::const_iterator itf = textAttrNames.find(cl_name.localForm());
-          if (itf != textAttrNames.end())
-          {
-            continue;
-          }
-          
-
 					::Uml::Uml::Class m = findClass( e);
 
 					if(role &&  Uml::IsDerivedFrom(m, target) ) 
