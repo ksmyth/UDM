@@ -15,10 +15,41 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
-03/30/06		Release 3.0.1
+04/06/06		Release 3.0.1
 
 		-	GME 5.11.18 support
 		-	Upgraded to Visual studio 8
+		-	Fix UdmProject to work when the name of root folders is 
+			longer than 50 characters.
+		-	The UML2XML interpreter now sets the association and composition
+			names even if they have not been changed from the default
+			"Association", "Composition" respectively.
+		- 	The UML2XML interpreter has been rewritten to use UdmDom data
+  			networks and UdmProjects.
+		-	Fix naming of cross classes in crosslink diagrams.
+		-	Optimize Udm to speed up the generation of C code.
+		-	Namespace related speed improvements in UdmDom backend.
+		-	Enhanced UdmGme backend to support references that have an 
+			abstract UML class.
+		-	DataNetwork::GetAllInstancesOf() detects loops in the fast traversal
+			mode and switches to a slower mode.
+		-	OCL fixes related to the naming of OCL types.
+		-	When interpreting UML models, the name of the diagrams can be
+			overridden by the "alias" attribute of the corresponding Package.
+Known bugs:
+
+There is a small problem with the registration of the MetaGME2UML.dll interpreter (used 
+in the MetaGME paradigm to convert from MetaGME-style metamodels to UML-style metamodels 
+that are used with Udm).  After installation, the interpreter may appear in the GME 
+toolbar as 2 question marks (??) instead of being displayed with the proper icon.  
+
+To remedy this situation, do the following:
+
+1. Open a command prompt.
+2. Change the working directory to %UDM_PATH%/bin (cd "%UDM_PATH%/bin") 
+3. Run the command: >regsvr32 MetaGME2Uml.dll
+
+The icon will now be properly displayed in GME.
 
 
 11/07/05		Release 3.00

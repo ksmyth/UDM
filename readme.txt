@@ -65,9 +65,26 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
-03/30/06		Release 3.0.1
+04/06/06		Release 3.0.1
 
-		-	upgraded with GME 5.11.18
+		-	GME 5.11.18 support
+		-	Fix UdmProject to work when the name of root folders is 
+			longer than 50 characters.
+		-	The UML2XML interpreter now sets the association and composition
+			names even if they have not been changed from the default
+			"Association", "Composition" respectively.
+		- 	The UML2XML interpreter has been rewritten to use UdmDom data
+  			networks and UdmProjects.
+		-	Fix naming of cross classes in crosslink diagrams.
+		-	Optimize Udm to speed up the generation of C code.
+		-	Namespace related speed improvements in UdmDom backend.
+		-	Enhanced UdmGme backend to support references that have an 
+			abstract UML class.
+		-	DataNetwork::GetAllInstancesOf() detects loops in the fast traversal
+			mode and switches to a slower mode.
+		-	OCL fixes related to the naming of OCL types.
+		-	When interpreting UML models, the name of the diagrams can be
+			overridden by the "alias" attribute of the corresponding Package.
 
 11/07/05		Release 3.00
 
