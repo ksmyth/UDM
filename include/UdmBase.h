@@ -2879,6 +2879,8 @@ namespace Udm
 		virtual void Accept(const BaseVisitor&){};
 
 		string getPath( const std::string& strDelimiter = "./.", bool bReverseOrder = false, bool bNeedRootFolder = false, const string att_name = "name", bool omit_lead_delim = false) const;
+		// root folder is added by default, no reverse order suport, delimiter is never added to the front
+		string getPath2( const std::string& strDelimiter = "./.", bool bNeedRootFolder = true ) const;
 
 
 	};

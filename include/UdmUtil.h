@@ -50,6 +50,8 @@ namespace UdmUtil
 	//convert array of strings to string and back; used by backends that store array attributes as strings
 	UDM_DLL string vector_to_string(const vector<string> &v, const char separator, bool add_sep_at_end = false, bool unquote_strings = false);
 	UDM_DLL vector<string> string_to_vector(const string &src, const char separator);
+
+	UDM_DLL string replace_delimiter(const string &s, const string &old_d, const string &new_d);
 };
 
 #endif //MOBIES_UDMUTIL_H

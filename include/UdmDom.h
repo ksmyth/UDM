@@ -72,6 +72,7 @@ namespace UdmDom
 		string str;
 
 		void AddToMetaClassesCache(const set< ::Uml::Class> &classes);
+		void MapNamespaces(DOM_Node &d);
 
 	public:
 		static UDM_DLL string DTDPath;
@@ -142,7 +143,7 @@ namespace UdmDom
 		{
 			str_str_map::value_type item(key, xsd_str);
 			pair<str_str_map::const_iterator, bool> ins_res = static_xsd_container.insert(item);
-      if (!ins_res.second && (xsd_str!=ins_res.first->second)) // only if it differs from the stored one Kalmar
+			if (!ins_res.second && (xsd_str!=ins_res.first->second)) // only if it differs from the stored one Kalmar
 				throw udm_exception(string("An XSD by that name is already stored with a different content: ") + key);
 
 
@@ -169,8 +170,8 @@ namespace UdmDom
 	{
 		typedef map<const string, const string> str_str_map;
 		static UDM_DLL str_str_map static_xsd_ns_mapping_container;
-    static UDM_DLL str_str_map static_xsd_ns_back_mapping_container;
-    static UDM_DLL str_str_map uri2xsdname;
+		static UDM_DLL str_str_map static_xsd_ns_back_mapping_container;
+		static UDM_DLL str_str_map uri2xsdname;
 	};
 
 	UDM_DLL void AddURIToUMLNamespaceMapping(const string & namespaceURI, const string & namespaceUML, const string & xsdName);

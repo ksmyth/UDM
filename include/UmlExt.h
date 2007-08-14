@@ -76,6 +76,8 @@ CHANGELOG
 #include "Uml.h"
 #endif
 
+#include <stack>
+
 namespace Uml
 {
 // Get the other end of two-legged Uml classes 
@@ -94,6 +96,8 @@ namespace Uml
 	UDM_DLL Class classByName(const Diagram &d, const string &name);
 // find a class by name in a Namespace
 	UDM_DLL Class classByName(const Namespace &ns, const string &name);
+// find a class by path
+	UDM_DLL Class classByPath(const Diagram &d, const string &path, const string &delim = "::");
 
 // find association by name in a Namespace
 	UDM_DLL Association associationByName(const Namespace &ns, const string &name);
@@ -107,8 +111,14 @@ namespace Uml
 
 // find a diagram by name
 	UDM_DLL Diagram diagramByName(const Diagram &d, const string &name);
+
 // find a namespace by name
 	UDM_DLL Namespace namespaceByName(const Diagram &d, const string &name);
+// find a namespace by name in a Namespace
+	UDM_DLL Namespace namespaceByName(const Namespace &ns, const string &name);
+// find a namespace by path
+	UDM_DLL Namespace namespaceByPath(const Diagram &d, const string &path, const string &delim = "::");
+
 // Get all the classes specified as ancestors, including self
 	UDM_DLL set<Class> AncestorClasses(const Class &c);
 // Get all the classes specified as descendants, including self
@@ -131,8 +141,6 @@ namespace Uml
 	UDM_DLL set<Class> AncestorContainedClasses(const Class &c);
 // Get classes this object can contain (ancestors in parent and descendants in children are extracted)
 	UDM_DLL set<Class> AncestorContainedDescendantClasses(const Class &c);
-// Get the target namespaces of children having the parent in this namespace
-	UDM_DLL set<Namespace> TargetNSForAllContainerClasses(const Namespace &ns);
 
 	// All the other ends of associations (ancestors are ignored)
 	UDM_DLL set<AssociationRole> AssociationTargetRoles(const Class &c);
@@ -198,6 +206,257 @@ namespace Uml
 	UDM_DLL Diagram GetDiagram(const Class &c);
 	UDM_DLL Diagram GetDiagram(const Association &assoc);
 	UDM_DLL Diagram GetDiagram(const Composition &comp);
+	UDM_DLL Diagram GetDiagram(const Namespace &ns);
+
+	UDM_DLL vector<Namespace> GetParentNamespaces(const Namespace &ns);
+
+	template<class CONTAINER, class CONTAINED>
+	class ElemCollection {
+	public:
+		typedef Udm::ChildrenAttr<CONTAINED> (CONTAINER::*GetTopItems)() const;
+		typedef Udm::ChildrenAttr<CONTAINED> (Namespace::*GetItems)() const;
+
+		ElemCollection(const CONTAINER &container, GetTopItems getTopItems, GetItems getItems) : m_container(container) {
+			m_top_items_getter = getTopItems;
+			m_items_getter = getItems;
+		};
+
+		class iterator : public std::iterator<std::input_iterator_tag, CONTAINED> {
+		public:
+			iterator(const CONTAINER &container, GetTopItems getTopItems = NULL, GetItems getItems = NULL) {
+				if (container) {
+					m_items = (container.*getTopItems)();
+					m_items_i = m_items.begin();
+					m_namespaces = container.namespaces();
+					m_namespaces_i = m_namespaces.begin();
+					m_end_reached = false;
+					m_items_getter = getItems;
+
+					if (m_items_i == m_items.end() && !find_next())
+						m_end_reached = true;
+				} else
+					m_end_reached = true;
+			}
+
+			iterator& operator=(const iterator& other) {
+				if (!other.m_end_reached) {
+					m_items = other.m_items;
+					m_items_i = m_items.find(*other.m_items_i);
+					m_namespaces = other.m_namespaces;
+					m_namespaces_i = m_namespaces.find(*other.m_namespaces_i);
+					m_namespaces_stack = other.m_namespaces_stack;
+				}
+				m_end_reached = other.m_end_reached;
+
+				return *this;
+			}
+
+			bool operator==(const iterator& other) { return m_end_reached == other.m_end_reached; }
+			bool operator!=(const iterator& other) { return m_end_reached != other.m_end_reached; }
+
+			iterator& operator++() {
+				if (!m_end_reached) {
+					m_items_i++;
+					if (m_items_i == m_items.end() && !find_next())
+						m_end_reached = true;
+				}
+
+				return *this;
+			}
+			iterator& operator++(int) {
+				++(*this);
+				return *this;
+			}
+			CONTAINED& operator*() const {
+				return (CONTAINED &) *m_items_i;
+			}
+
+			CONTAINED* operator->() {
+				return &**this;
+			}
+
+		protected:
+			stack< pair< set<Namespace>, Namespace > > m_namespaces_stack;
+			set<Namespace> m_namespaces;
+			set<Namespace>::const_iterator m_namespaces_i;
+			set<CONTAINED> m_items;
+			typename set<CONTAINED>::const_iterator m_items_i;
+			bool m_end_reached;
+			GetItems m_items_getter;
+
+			bool find_next() {
+				if (m_namespaces_i != m_namespaces.end()) {
+					m_namespaces_stack.push(make_pair(set<Namespace>(m_namespaces), *m_namespaces_i));
+
+					m_items = (*m_namespaces_i.*m_items_getter)();
+					m_items_i = m_items.begin();
+
+					m_namespaces = m_namespaces_i->namespaces();
+					m_namespaces_i = m_namespaces.begin();
+
+					if (m_items_i != m_items.end())
+						return true;
+					return find_next();
+				}
+
+				if (m_namespaces_stack.size() > 0) {
+					const pair< set<Namespace>, Namespace > &p = m_namespaces_stack.top();
+					m_namespaces = p.first;
+					m_namespaces_i = m_namespaces.find(p.second);
+					m_namespaces_i++;
+
+					m_namespaces_stack.pop();
+
+					return find_next();
+				}
+
+				return false;
+			}
+		};
+
+		iterator begin() { return iterator(m_container, m_top_items_getter, m_items_getter); };
+		iterator end() { return iterator(NULL); };
+
+	protected:
+		const CONTAINER &m_container;
+		GetTopItems m_top_items_getter;
+		GetItems m_items_getter;
+	};
+
+	class UDM_DLL DiagramAssociations : public ElemCollection<Diagram, Association> {
+	public:
+		DiagramAssociations(const Diagram &diagram) : ElemCollection<Diagram, Association>(diagram, &Diagram::associations, &Namespace::associations) {}
+	};
+
+	class UDM_DLL DiagramClasses : public ElemCollection<Diagram, Class> {
+	public:
+		DiagramClasses(const Diagram &diagram) : ElemCollection<Diagram, Class>(diagram, &Diagram::classes, &Namespace::classes) {}
+	};
+
+	class UDM_DLL DiagramCompositions : public ElemCollection<Diagram, Composition> {
+	public:
+		DiagramCompositions(const Diagram &diagram) : ElemCollection<Diagram, Composition>(diagram, &Diagram::compositions, &Namespace::compositions) {}
+	};
+
+	class UDM_DLL NamespaceAssociations : public ElemCollection<Namespace, Association> {
+	public:
+		NamespaceAssociations(const Namespace &ns) : ElemCollection<Namespace, Association>(ns, &Namespace::associations, &Namespace::associations) {}
+	};
+
+	class UDM_DLL NamespaceClasses : public ElemCollection<Namespace, Class> {
+	public:
+		NamespaceClasses(const Namespace &ns) : ElemCollection<Namespace, Class>(ns, &Namespace::classes, &Namespace::classes) {}
+	};
+
+	class UDM_DLL NamespaceCompositions : public ElemCollection<Namespace, Composition> {
+	public:
+		NamespaceCompositions(const Namespace &ns) : ElemCollection<Namespace, Composition>(ns, &Namespace::compositions, &Namespace::compositions) {}
+	};
+
+	template<class CONTAINER>
+	class NamespaceCollection {
+	public:
+		NamespaceCollection(const CONTAINER &container) : m_container(container) {}
+
+		class iterator : public std::iterator<std::input_iterator_tag, Namespace> {
+		public:
+			iterator(const CONTAINER &container) {
+				if (container) {
+					m_namespaces = container.namespaces();
+					m_namespaces_i = m_namespaces.begin();
+					m_end_reached = false;
+
+					if (m_namespaces_i == m_namespaces.end())
+						m_end_reached = true;
+				} else
+					m_end_reached = true;
+			}
+
+			iterator& operator=(const iterator& other) {
+				if (!other.m_end_reached) {
+					m_namespaces = other.m_namespaces;
+					m_namespaces_i = m_namespaces.find(*other.m_namespaces_i);
+					m_namespaces_stack = other.m_namespaces_stack;
+				}
+				m_end_reached = other.m_end_reached;
+
+				return *this;
+			}
+
+			bool operator==(const iterator& other) { return m_end_reached == other.m_end_reached; }
+			bool operator!=(const iterator& other) { return m_end_reached != other.m_end_reached; }
+			iterator& operator++() {
+				if (!m_end_reached) {
+					if (!find_next())
+						m_end_reached = true;
+				}
+
+				return *this;
+			}
+			iterator& operator++(int) {
+				++(*this);
+				return *this;
+			}
+			Namespace& operator*() const {
+				return (Namespace &) *m_namespaces_i;
+			}
+
+			Namespace* operator->() {
+				return &**this;
+			}
+
+		protected:
+			stack< pair< set<Namespace>, Namespace > > m_namespaces_stack;
+			set<Namespace> m_namespaces;
+			set<Namespace>::const_iterator m_namespaces_i;
+			bool m_end_reached;
+
+			bool find_next() {
+				if (m_namespaces_i != m_namespaces.end()) {
+					m_namespaces_stack.push(make_pair(set<Namespace>(m_namespaces), *m_namespaces_i));
+
+					m_namespaces = m_namespaces_i->namespaces();
+					m_namespaces_i = m_namespaces.begin();
+
+					if (m_namespaces_i != m_namespaces.end())
+						return true;
+					return find_next();
+				}
+
+				if (m_namespaces_stack.size() > 0) {
+					pair< set<Namespace>, Namespace > &p = m_namespaces_stack.top();
+					m_namespaces = p.first;
+					m_namespaces_i = m_namespaces.find(p.second);
+					m_namespaces_i++;
+
+					m_namespaces_stack.pop();
+
+					if (m_namespaces_i != m_namespaces.end())
+						return true;
+					return find_next();
+				}
+
+				return false;
+			}
+		};
+
+		iterator begin() { return iterator(m_container); };
+		iterator end() { return iterator(NULL); };
+
+	protected:
+		const CONTAINER &m_container;
+	};
+
+	class UDM_DLL DiagramNamespaces : public NamespaceCollection<Diagram> {
+	public:
+		DiagramNamespaces(const Diagram &diagram) : NamespaceCollection<Diagram>(diagram) {}
+	};
+
+	class UDM_DLL NamespaceNamespaces : public NamespaceCollection<Namespace> {
+	public:
+		NamespaceNamespaces(const Namespace &ns) : NamespaceCollection<Namespace>(ns) {}
+	};
+
 
 // Safe type mechanism
 
@@ -344,6 +603,7 @@ UDM_DLL ConstraintDefinition CreateConstraintDefinition();
 
 UDM_DLL void InitDiagram(const Diagram &obj, const char *name, const char * version = "1.00");
 UDM_DLL void InitNamespace(const Namespace &obj, const Diagram &parent, const char *name);
+UDM_DLL void InitNamespace(const Namespace &obj, const Namespace &parent, const char *name);
 UDM_DLL void InitClass(const Class &obj, const Namespace &parent, const char *name, bool isAbstract, const char *stereo = NULL, const char * from = NULL);
 UDM_DLL void InitClass(const Class &obj, const Diagram &parent, const char *name, bool isAbstract, const char *stereo = NULL, const char * from = NULL);
 UDM_DLL void InitAttribute(const Attribute &obj, const Class &parent, const char *name, const char *type, bool np, bool reg, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval = vector<string>());
@@ -379,6 +639,7 @@ CompositionChildRole CreateCORBACompositionChildRole();
 
 void InitCORBADiagram(const Diagram &obj, const char *name, const char * version = "1.00");
 void InitCORBANamespace(const Namespace &obj, const Diagram &parent, const char *name);
+void InitCORBANamespace(const Namespace &obj, const Namespace &parent, const char *name);
 void InitCORBAClass(const Class &obj, const Diagram &parent, const char *name, bool isAbstract, const char *stereo = NULL);
 void InitCORBAClass(const Class &obj, const Namespace &parent, const char *name, bool isAbstract, const char *stereo = NULL);
 void InitCORBAAttribute(const Attribute &obj, const Class &parent, const char *name, const char *type, bool np, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval = vector<string>());
@@ -396,6 +657,7 @@ void AddCORBAInheritance(const Class &baseType, const Class &subType);
 // ---------------------------- Dynamic Meta Initialization
 // used to set the static API member variables to 
 
+	UDM_DLL void SetNamespace(Namespace &what, const Namespace &what_ns, const char *target_name);
 	UDM_DLL void SetNamespace(Namespace &what, const Diagram &what_dgr, const char *target_name);
 	UDM_DLL void SetClass(Class &what, const Namespace &what_ns, const char *target_name);
 	UDM_DLL void SetClass(Class &what, const Diagram &what_dgr, const char *target_name);
