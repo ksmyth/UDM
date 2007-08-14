@@ -12,6 +12,29 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+6/29/07		-	Release 3.1.2
+
+		-	GME 7.6.29 support
+		- 	GME namespaces are supported genuinely by the MGA backend
+		- 	If no name is defined for the child role of a composition that has
+			the parent and child classes in different namespaces, then the generated name 
+			for the child role will contain the full path of the child class, instead of 
+			the name of the child class. Things affected by this change:
+		    	- results returned by UML::MakeRoleName() and UML::MakeShortRoleName()
+		    	- name of kind_children() and kind_children_sorted() methods in generated C++ code
+		    	- values of "__child_as" attribute in DOM backend
+  		- 	Diagram initialization from another diagram works correctly
+		- 	Generated C++ code initializes meta objects correctly when there are associations 
+			with ends in different namespaces
+		- 	Order of elements in DOM data networks match again the order defined by the 
+			corresponding XML Schema
+		- 	XML Schema generation bug fixes related to namespace support
+		- 	UdmOclPat interpreter improvements:
+			- fixed some bugs that caused crashes
+			- line numbers in error messages are accurate now
+			- fix determination of method implementation to call when a polymorphic method is invoked
+
+
 11/22/06	-	Release 3.1.1
 
 		-	GME 6.11.9 support
