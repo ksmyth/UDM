@@ -101,6 +101,7 @@ CHANGELOG
   		void GatherSheets(CBuilderFolder *folder,CClassDiagramList &sheets, bool rp_too = false);
   		void GatherAllSheets(CClassDiagramList &sheets);
   		void GatherPackageSheets(CPackageBuilder *package,CClassDiagramList &sheets);
+		void GatherModelSheets(const CBuilderModelList *roots, CClassDiagramList &sheets);
     	void BuildInheritance();
     	bool CheckInheritance();
     	void BuildCompositions();
@@ -133,6 +134,7 @@ CHANGELOG
     public:
 		CString GetNamespace() const;
     	void Build(CCompositeClassList &compositeClasses);
+		CPackageBuilder * GetPackage();
     };
     
 	
