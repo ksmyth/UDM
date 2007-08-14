@@ -43,7 +43,8 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="&quot;$(TargetPath)&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -92,7 +93,8 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="&quot;$(TargetPath)&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -163,7 +165,8 @@
 						Name="VCCustomBuildTool"
 						Description="Converting $(InputPath) to $(InputDir)$(InputName)_udm.udm"
 						CommandLine="cd &quot;$(InputDir)&quot;
-&quot;$(UDM_PATH)\etc\Xme2UdmXml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;"
+&quot;$(UDM_PATH)\etc\Xme2UdmXml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
 						Outputs="$(InputDir)$(InputName).mga;$(InputDir)$(InputName)_udm.udm"/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -172,7 +175,8 @@
 						Name="VCCustomBuildTool"
 						Description="Converting $(InputPath) to $(InputDir)$(InputName)_udm.udm"
 						CommandLine="cd &quot;$(InputDir)&quot;
-&quot;$(UDM_PATH)\etc\Xme2UdmXml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;"
+&quot;$(UDM_PATH)\etc\Xme2UdmXml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
 						Outputs="$(InputDir)$(InputName).mga;$(InputDir)$(InputName)_udm.udm"/>
 				</FileConfiguration>
 			</File>
@@ -183,7 +187,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating UDM API files..."
-						CommandLine="%UDM_PATH%\bin\udmd.exe $(InputPath)"
+						CommandLine="%UDM_PATH%\bin\udmd.exe $(InputPath)
+"
 						Outputs="PackageA.cpp;PackageA.h;PackageB.cpp;PackageB.h;testAssociationScenartios.cpp;testAssociationScenartios.h"/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -191,7 +196,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating UDM API files..."
-						CommandLine="%UDM_PATH%\bin\udm.exe $(InputPath)"
+						CommandLine="%UDM_PATH%\bin\udm.exe $(InputPath)
+"
 						Outputs="PackageA.cpp;PackageA.h;PackageB.cpp;PackageB.h;testAssociationScenartios.cpp;testAssociationScenartios.h"/>
 				</FileConfiguration>
 			</File>
