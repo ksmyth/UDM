@@ -2477,17 +2477,20 @@ namespace Udm
 		// Retrieves the adjacent objects of an object associated via simple association or association class. 
 		// The returned set can be empty. Composition relationships are not considered here.
 		multiset<Object> GetAdjacentObjects();
+		set<Object> GetAdjacentUniqueObjects();
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves the adjacent objects of an object. The adjacent objects 
 		// are of the type of clsType or derived from it. The returned set can 
 		// be empty. Composition relationships are not considered here.
 		multiset<Object> GetAdjacentObjects(const ::Uml::Class & clsDstType);
+		set<Object> GetAdjacentUniqueObjects(const ::Uml::Class & clsDstType);
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves the adjacent objects of an object via link instance of ascType. 
 		// The adjacent objects are of the type of clsType or derived from it. 
 		// The returned set can be empty. Composition relationships are not considered here. 
 		// Parameter clsType can be null.
 		multiset<Object> GetAdjacentObjects(const ::Uml::Class & clsDstType, const AssociationInfo& ascType);
+		set<Object> GetAdjacentUniqueObjects(const ::Uml::Class & clsDstType, const AssociationInfo& ascType);
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves the adjacent objects, together with the association class, of an object via link instance of ascType. 
 		// The adjacent objects are of the type of clsType or derived from it. 
