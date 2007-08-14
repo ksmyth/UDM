@@ -1555,7 +1555,7 @@ namespace Udm
 			}
 		}
 
-		UDM_DLL void ObjectImpl::CopyAttributeFrom(const ::Uml::Uml::Attribute& which, const ObjectImpl*  from)
+		UDM_DLL void ObjectImpl::CopyAttributeFrom(const ::Uml::Uml::Attribute& which, const ObjectImpl*  from, bool direct)
 		{
 			string attrType=which.type();
 			bool attrArray = ((which.max() != 0) && (which.max() != 1));
@@ -1565,59 +1565,59 @@ namespace Udm
 			{
 				if(attrArray)
 					if (!np_attr)
-						setStringAttrArr(which,from->getStringAttrArr(which), false);
+						setStringAttrArr(which,from->getStringAttrArr(which), direct);
 					else
-						setTempStringAttrArr(which,from->getTempStringAttrArr(which), false);
+						setTempStringAttrArr(which,from->getTempStringAttrArr(which), direct);
 
 				else
 					if (!np_attr)
-						setStringAttr(which,from->getStringAttr(which), false);
+						setStringAttr(which,from->getStringAttr(which), direct);
 					else
-						setTempStringAttr(which,from->getTempStringAttr(which), false);			
+						setTempStringAttr(which,from->getTempStringAttr(which), direct);			
 
 			}
 			else if(attrType=="Integer")
 			{
 				if (attrArray)
 					if (!np_attr)
-						setIntegerAttrArr(which,from->getIntegerAttrArr(which), false);
+						setIntegerAttrArr(which,from->getIntegerAttrArr(which), direct);
 					else
-						setTempIntegerAttrArr(which,from->getTempIntegerAttrArr(which), false);
+						setTempIntegerAttrArr(which,from->getTempIntegerAttrArr(which), direct);
 
 				else
 					if (!np_attr)
-						setIntegerAttr(which,from->getIntegerAttr(which), false);
+						setIntegerAttr(which,from->getIntegerAttr(which), direct);
 					else
-						setTempIntegerAttr(which,from->getTempIntegerAttr(which), false);
+						setTempIntegerAttr(which,from->getTempIntegerAttr(which), direct);
 
 			}
 			else if(attrType=="Real")
 			{
 				if (attrArray)
 					if (!np_attr)
-						setRealAttrArr(which,from->getRealAttrArr(which), false);
+						setRealAttrArr(which,from->getRealAttrArr(which), direct);
 					else
-						setTempRealAttrArr(which,from->getTempRealAttrArr(which), false);
+						setTempRealAttrArr(which,from->getTempRealAttrArr(which), direct);
 
 				else
 					if (!np_attr)
-						setRealAttr(which,from->getRealAttr(which), false);
+						setRealAttr(which,from->getRealAttr(which), direct);
 					else
-						setTempRealAttr(which,from->getTempRealAttr(which), false);
+						setTempRealAttr(which,from->getTempRealAttr(which), direct);
 			}
 			else if(attrType=="Boolean")
 			{
 				if (attrArray)
 					if (!np_attr)
-						setBooleanAttrArr(which,from->getBooleanAttrArr(which), false);
+						setBooleanAttrArr(which,from->getBooleanAttrArr(which), direct);
 					else
-						setTempBooleanAttrArr(which,from->getTempBooleanAttrArr(which), false);
+						setTempBooleanAttrArr(which,from->getTempBooleanAttrArr(which), direct);
 
 				else
 					if (!np_attr)
-						setBooleanAttr(which,from->getBooleanAttr(which), false);
+						setBooleanAttr(which,from->getBooleanAttr(which), direct);
 					else
-						setTempBooleanAttr(which,from->getTempBooleanAttr(which), false);
+						setTempBooleanAttr(which,from->getTempBooleanAttr(which), direct);
 
 					
 			}
@@ -1629,12 +1629,12 @@ namespace Udm
 
 		};
 
-		UDM_DLL void ObjectImpl::CopyAttributesFrom(const ObjectImpl*  from)
+		UDM_DLL void ObjectImpl::CopyAttributesFrom(const ObjectImpl*  from, bool direct)
 		{
 			set <::Uml::Uml::Attribute> attributes = Uml::AncestorAttributes(type());
 			set <::Uml::Uml::Attribute>::iterator attr_i = attributes.begin();
 			while (attr_i != attributes.end())
-				CopyAttributeFrom(*attr_i++, from);
+				CopyAttributeFrom(*attr_i++, from, direct);
 		};
 
 		UDM_DLL void ObjectImpl::CopyAttributeFromArchetype(const ::Uml::Uml::Attribute& which)
