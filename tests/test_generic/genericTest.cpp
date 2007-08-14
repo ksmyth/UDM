@@ -6,6 +6,14 @@
 #include "genericTest.h"
 #include "LampDiagram.h"
 
+#ifdef WIN32
+#include <io.h>
+#include <stdio.h>
+#else	//WIN32
+#include <unistd.h>
+#endif	//WIN32
+
+
 // Registers the fixture into the 'registry'
 
 CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::genericTest );
@@ -48,6 +56,15 @@ const char * UdmTests::genericTest::getRndFileName()
 
 		return t_dir_name;
 };
+
+void UdmTests::genericTest::removeFile(const string &pathname)
+{
+#ifdef WIN32
+	_unlink(pathname.c_str());
+#else
+	unlink(pathname.c_str());
+#endif
+}
 
 bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 {
@@ -589,6 +606,8 @@ void UdmTests::genericTest::testDOMMGA()
 	std::string fname_std = std::string(fname) + ".xml";
 	std::string fname_std_1 = std::string(fname) + ".mga";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	removeFile(fname_std);
+	removeFile(fname_std_1);
 };
 
 void UdmTests::genericTest::testMEMMGA()
@@ -598,6 +617,8 @@ void UdmTests::genericTest::testMEMMGA()
 	std::string fname_std = std::string(fname) + ".mem";
 	std::string fname_std_1 = std::string(fname) + ".mga";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	removeFile(fname_std);
+	removeFile(fname_std_1);
 };
 
 void UdmTests::genericTest::testMGAMGA()
@@ -607,6 +628,8 @@ void UdmTests::genericTest::testMGAMGA()
 	std::string fname_std = std::string(fname) + ".mga";
 	std::string fname_std_1 = std::string(fname) + "1.mga";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	removeFile(fname_std);
+	removeFile(fname_std_1);
 };
 
 void UdmTests::genericTest::testMGADOM()
@@ -616,6 +639,8 @@ void UdmTests::genericTest::testMGADOM()
 	std::string fname_std = std::string(fname) + ".mga";
 	std::string fname_std_1 = std::string(fname) + ".xml";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	removeFile(fname_std);
+	removeFile(fname_std_1);
 };
 
 void UdmTests::genericTest::testMGAMEM()
@@ -625,6 +650,8 @@ void UdmTests::genericTest::testMGAMEM()
 	std::string fname_std = std::string(fname) + ".mga";
 	std::string fname_std_1 = std::string(fname) + ".mem";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	removeFile(fname_std);
+	removeFile(fname_std_1);
 };
 #endif // _WIN32
 
@@ -635,6 +662,8 @@ void UdmTests::genericTest::testDOMDOM()
 	std::string fname_std = std::string(fname) + ".xml";
 	std::string fname_std_1 = std::string(fname) + "1.xml";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	removeFile(fname_std);
+	removeFile(fname_std_1);
 };
 
 void UdmTests::genericTest::testDOMMEM()
@@ -644,6 +673,8 @@ void UdmTests::genericTest::testDOMMEM()
 	std::string fname_std = std::string(fname) + ".xml";
 	std::string fname_std_1 = std::string(fname) + ".mem";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	removeFile(fname_std);
+	removeFile(fname_std_1);
 };
 
 void UdmTests::genericTest::testMEMMEM()
@@ -653,6 +684,8 @@ void UdmTests::genericTest::testMEMMEM()
 	std::string fname_std = std::string(fname) + ".mem";
 	std::string fname_std_1 = std::string(fname) + "1.mem";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	removeFile(fname_std);
+	removeFile(fname_std_1);
 };
 
 void UdmTests::genericTest::testMEMDOM()
@@ -662,4 +695,6 @@ void UdmTests::genericTest::testMEMDOM()
 	std::string fname_std = std::string(fname) + ".mem";
 	std::string fname_std_1 = std::string(fname) + ".xml";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	removeFile(fname_std);
+	removeFile(fname_std_1);
 };
