@@ -231,7 +231,21 @@ namespace Udm
 		_static_pr = true;
 	};
 
-	
+
+	void recurseGetAllInstancesOf(const ::Uml::Class &meta, const Object &parent, set<Object> &ret)
+	{
+		vector<Udm::ObjectImpl*> a = parent.__impl()->getChildren(NULL, NULL);
+		vector<Udm::ObjectImpl*>::iterator i = a.begin();
+		while( i != a.end() )
+		{
+			Udm::Object obj(*i);
+			if (::Uml::IsDerivedFrom(obj.type(), meta))
+				ret.insert(obj);
+			recurseGetAllInstancesOf(meta, obj, ret);
+			++i;
+		}
+	}
+
 	/*
 		Returns all instances of a certain class in a Data Network
 	*/
@@ -240,16 +254,25 @@ namespace Udm
 		set<Object> ret;
 		const ::Uml::Class root_meta = rootobject.type();
 		vector<Uml::ChildRoleChain> chains;
-		Uml::GetChildRoleChain(root_meta, meta, chains);
-		while (chains.size())
+		if (Uml::GetChildRoleChain(root_meta, meta, chains))
 		{
-			Uml::ChildRoleChain chain = *(chains.rbegin());
+			while (chains.size())
+			{
+				Uml::ChildRoleChain chain = *(chains.rbegin());
 
-			chains.pop_back();
+				chains.pop_back();
 
-			set<Object> ret_set = rootobject.getChildrenByChildRoleChain(meta, chain);
-			if (ret_set.size()) ret.insert(ret_set.begin(), ret_set.end());
-		};
+				set<Object> ret_set = rootobject.getChildrenByChildRoleChain(meta, chain);
+				if (ret_set.size()) ret.insert(ret_set.begin(), ret_set.end());
+			};
+		}
+		else
+		{
+			if (::Uml::IsDerivedFrom(rootobject.type(), meta))
+				ret.insert(rootobject);
+
+			recurseGetAllInstancesOf(meta, rootobject, ret);
+		}
 		return ret;
 	};
 

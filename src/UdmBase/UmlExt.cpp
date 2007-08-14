@@ -785,10 +785,12 @@ namespace Uml
 	};
 
 	/*
-		returns all the possibile composition child role chains(paths), how 'what' can be contained in 'origin'
-		the results are vectors of CompositionChildRoles
+		fills vector chains with all possibile composition child
+		role chains(paths), how 'what' can be contained in 'origin'
+		the results are vectors of CompositionChildRoles;
+		returns true if successful, false if a loop was detected
 	*/
-	UDM_DLL void GetChildRoleChain(const Class & origin, const Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain)
+	bool GetChildRoleChain(const Class &origin, const Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain, set<CompositionChildRole> &roles_seen)
 	{
 		set<CompositionParentRole> cprs = origin.parentRoles();
 		if (cprs.size())
@@ -797,19 +799,33 @@ namespace Uml
 			while (cprs_i != cprs.end())
 			{
 				const CompositionChildRole ccr = theOther(*cprs_i);
-				curr_chain.insert(curr_chain.begin(), ccr);
-				
 				const Class new_orig  = ccr.target();
+
+				if (roles_seen.find(ccr) != roles_seen.end())
+					return false;	// loop detected
+
+				curr_chain.insert(curr_chain.begin(), ccr);
+				roles_seen.insert(ccr);
+
 				set<Class> new_orig_descs = DescendantClasses(new_orig);
 				
 				for (set<Class>::iterator nod_i = new_orig_descs.begin(); nod_i != new_orig_descs.end(); nod_i++)
-					GetChildRoleChain(*nod_i, what, chains, curr_chain);
-				
+					if (!GetChildRoleChain(*nod_i, what, chains, curr_chain, roles_seen))
+						return false;	// loop detected
+
 				cprs_i++;
 				curr_chain.erase(curr_chain.begin());
+				roles_seen.erase(ccr);
 			};
 		}
 		else if(::Uml::IsDerivedFrom(origin, what)) chains.push_back(curr_chain);
+		return true;
+	}
+
+	UDM_DLL bool GetChildRoleChain(const Class & origin, const Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain)
+	{
+		set<CompositionChildRole> roles_seen;
+		return GetChildRoleChain(origin, what, chains, curr_chain, roles_seen);
 	};
 
 	UDM_DLL Namespace GetTheOnlyNamespace(const Diagram & dgr)
