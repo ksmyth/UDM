@@ -192,7 +192,7 @@ public class ReadFileTest extends TestCase {
         readFileTest("samples/Lac_v1.2.2.xml");
         
         // flux
-        //readFileTest("samples/JR904.xml");
+        readFileTest("samples/JR904.xml");
 
         //dbi, unigene 
         readFileTest("samples/demo_30_paintfb_out.xml");

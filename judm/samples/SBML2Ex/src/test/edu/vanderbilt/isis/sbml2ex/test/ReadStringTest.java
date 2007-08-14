@@ -192,7 +192,7 @@ public class ReadStringTest extends TestCase {
         readStringTest("samples/Lac_v1.2.2.xml");
 
         // flux
-        //readStringTest("samples/JR904.xml");
+        readStringTest("samples/JR904.xml");
 
         //dbi, unigene 
         readStringTest("samples/demo_30_paintfb_out.xml");
