@@ -418,8 +418,11 @@ void FactoryGen::initializeMetaClasses( )
 
     for(; ns_iter != m_ns_map.end(); ++ns_iter )
     {
-      m_output << "\t\tUdmHelper.AddURIToUMLNamespaceMapping(\"" << ns_iter->second << "\", \"";
-      m_output << ns_iter->first << "\");" << endl;
+      const std::string& ns = ns_iter->first;
+      const std::string& uri = ns_iter->second;
+      std::string xsdname = (string)m_diagram.name() + "_" + ns + ".xsd";
+
+      m_output << "\t\tUdmHelper.AddURIToUMLNamespaceMapping(\""<< uri<<"\",\""<<ns<<"\",\""<<xsdname<<"\" );" << std::endl;
     }
   }
 

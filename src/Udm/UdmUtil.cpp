@@ -114,6 +114,25 @@ bool SingleCPPNamespace(const ::Uml::Class &cl)
 	return ::Uml::classByName(cross_dgr, cross_cl_name);
 }
 
+void CPPSetURIMapping(const ::Uml::Diagram &diagram, 
+                      const map<string, string>& ns_map,
+                      ostream &output)
+{
+	if (!ns_map.empty())
+	{
+		output << "\n\t\t// URI namespace mapping for dom backend, udm was invoked with switch -u" << "\n";
+		map<string, string>::const_iterator it =  ns_map.begin();
+		for(;it != ns_map.end(); ++it)
+		{
+      const std::string& ns=it->first;
+      const std::string& uri=it->second;
+      std::string xsdname = (string)diagram.name() + "_" + ns + ".xsd";
+
+			output << "\t\t" << "UdmDom::AddURIToUMLNamespaceMapping(\""<< uri<<"\",\""<<ns<<"\",\""<<xsdname<<"\" );" << std::endl;
+		}
+	}
+}
+
 void CPPSetXsdStorage(const ::Uml::Diagram &diagram, ostream &output)
 {
 	set< ::Uml::Namespace> nses = diagram.namespaces();
@@ -123,20 +142,14 @@ void CPPSetXsdStorage(const ::Uml::Diagram &diagram, ostream &output)
 		const std::string& nsn = (string)diagram.name() + "_" + (string)ns.name();
 		std::string infname(nsn + std::string(".xsd"));
 
-		File2Code f2c(nsn + std::string("_xsd"), infname, File2Code::CPP);
-		std::string outfname(nsn + std::string("_xsd.h"));
-		std::ofstream out(outfname.c_str());
-		f2c.gen(out);
-		out.close();
+		File2Code f2c(".//", nsn + std::string("_xsd"), infname, File2Code::CPP);
+		f2c.gen();
 		output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << nsn << ".xsd\", " << nsn <<"_xsd::getString());"<< endl;
 	}
 	const string& dgrn = diagram.name();
 	string infname(dgrn + ".xsd");
-	File2Code f2c(dgrn + "_xsd", infname, File2Code::CPP);
-	string outfname(dgrn + "_xsd.h");
-	std::ofstream out(outfname.c_str());
-	f2c.gen(out);
-	out.close();
+	File2Code f2c(".//", dgrn + "_xsd", infname, File2Code::CPP);
+	f2c.gen();
 	output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << dgrn << ".xsd\", " << dgrn <<"_xsd::getString());"<< endl << endl;
 }
 

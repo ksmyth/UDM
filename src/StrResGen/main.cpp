@@ -17,9 +17,9 @@ int main(int argc, char **argv)
 	{
 
     std::string infname(argv[1]);
-    std::string outfname = std::string(argv[2]);
+
     std::string pn;
-    std::string ext(".h");
+
     File2Code::GenModeType mode(File2Code::CPP);
     if (argc >= 4)
     {
@@ -32,27 +32,16 @@ int main(int argc, char **argv)
           return(-1);
         }
         pn = argv[4];
-        ext = ".java";
         mode = File2Code::JAVA;
       }
       else
       if (ar == "CPP")
       {
-        ext = ".h";
         mode = File2Code::CPP;
       }
     }
-    outfname += ext;
-
-    std::ofstream out(outfname.c_str());
-    if (!out.good())
-    {
-      std::string err = outfname + std::string(" could not open.");
-      throw std::runtime_error(err);
-    }
-
-    File2Code f2c(argv[2], infname, mode, pn);
-    f2c.gen(out);
+    File2Code f2c(".//", argv[2], infname, mode, pn);
+    f2c.gen();
 
 	}
  	catch(const std::exception &e)

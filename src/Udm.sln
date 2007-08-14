@@ -132,6 +132,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UIntWiz", "UIntWiz\UIntWiz.
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccLocalPath0 = .
+		CanCheckoutShared = false
+		SolutionUniqueID = {2DFFE7B3-B81B-40FC-931E-49F8FC071E92}
+		SccProjectUniqueName1 = StrResGen\\StrResGen.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = false
+		SccProjectFilePathRelativizedFromConnection1 = StrResGen\\
+	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		BootUdmCompile Debug = BootUdmCompile Debug
 		BootUdmCompile Release = BootUdmCompile Release
@@ -348,65 +358,5 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
-	EndGlobalSection
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 14
-		SccLocalPath0 = .
-		CanCheckoutShared = false
-		SolutionUniqueID = {2DFFE7B3-B81B-40FC-931E-49F8FC071E92}
-		SccProjectUniqueName1 = UdmOcl\\UdmOcl.vcproj
-		SccProjectName1 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl\u0022,\u0020INZAAAAA
-		SccLocalPath1 = UdmOcl
-		CanCheckoutShared = false
-		SccProjectUniqueName2 = UML\u0020GME\\ExprChecker\\GmeOclExprChecker.vcproj
-		SccProjectName2 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/ExprChecker\u0022,\u0020WOZAAAAA
-		SccLocalPath2 = UML\u0020GME\\ExprChecker
-		CanCheckoutShared = false
-		SccProjectUniqueName3 = UdmOclPat\\UDMOclPat.vcproj
-		SccProjectName3 = \u0022$/MoBIESTransition/udm_ns/src/UdmOclPat\u0022,\u0020QNZAAAAA
-		SccLocalPath3 = UdmOclPat
-		CanCheckoutShared = false
-		SccProjectUniqueName4 = Udm\\File2Code\\File2Code.vcproj
-		SccProjectName4 = \u0022$/MoBIESTransition/udm_ns/src/Udm/File2Code\u0022,\u0020PBCBAAAA
-		SccLocalPath4 = Udm\\File2Code
-		CanCheckoutShared = false
-		SccProjectUniqueName5 = Udm\\JavaAPIGen\\JavaAPIGen.vcproj
-		SccProjectName5 = \u0022$/MoBIESTransition/udm_ns/src/Udm/JavaAPIGen\u0022,\u0020YBCBAAAA
-		SccLocalPath5 = Udm\\JavaAPIGen
-		CanCheckoutShared = false
-		SccProjectUniqueName6 = UdmPOI\\UdmPOI.vcproj
-		SccProjectName6 = \u0022$/MoBIESTransition/udm_ns/src/UdmPOI\u0022,\u0020HDCBAAAA
-		SccLocalPath6 = UdmPOI
-		CanCheckoutShared = false
-		SccProjectUniqueName7 = UdmSwig\\UdmSwig.vcproj
-		SccProjectName7 = \u0022$/MoBIESTransition/udm_ns/src/UdmSwig\u0022,\u0020MDCBAAAA
-		SccLocalPath7 = UdmSwig
-		CanCheckoutShared = false
-		SccProjectUniqueName8 = UML\u0020GME\\Interpreter\\BONComponent.vcproj
-		SccProjectName8 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/Interpreter\u0022,\u0020XOZAAAAA
-		SccLocalPath8 = UML\u0020GME\\Interpreter
-		CanCheckoutShared = false
-		SccProjectUniqueName9 = StrResGen\\StrResGen.vcproj
-		SccLocalPath9 = .
-		CanCheckoutShared = false
-		SccProjectFilePathRelativizedFromConnection9 = StrResGen\\
-		SccProjectUniqueName10 = Udm\\Udm.vcproj
-		SccProjectName10 = \u0022$/MoBIESTransition/udm_ns/src/Udm\u0022,\u0020OBCBAAAA
-		SccLocalPath10 = .
-		CanCheckoutShared = false
-		SccProjectFilePathRelativizedFromConnection10 = Udm\\
-		SccProjectUniqueName11 = Uml\\Uml.vcproj
-		SccProjectName11 = \u0022$/MoBIESTransition/udm_ns/src/Uml\u0022,\u0020HJCBAAAA
-		SccLocalPath11 = ..
-		CanCheckoutShared = false
-		SccProjectFilePathRelativizedFromConnection11 = src\\Uml\\
-		SccProjectUniqueName12 = MPCGen\\MPCGen.vcproj
-		SccProjectName12 = \u0022$/MoBIESTransition/udm_ns/src/MPCGen\u0022,\u0020WLCBAAAA
-		SccLocalPath12 = MPCGen
-		CanCheckoutShared = false
-		SccProjectUniqueName13 = UIntWiz\\UIntWiz.vcproj
-		SccProjectName13 = \u0022$/MoBIES/InterpreterWizard/Uintwiz\u0022,\u0020RKLAAAAA
-		SccLocalPath13 = UIntWiz
-		CanCheckoutShared = false
 	EndGlobalSection
 EndGlobal

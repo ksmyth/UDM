@@ -120,16 +120,10 @@ string Utils::toPackagePath ( const string & packageName )
 */
 void Utils::XML2Java( const string & java_file_name, const string & input_xml, const string & dest_dir )
 {
-  File2Code f2c_udm(java_file_name, input_xml, File2Code::JAVA, Utils::toPackageName(dest_dir));
+  File2Code f2c_udm(dest_dir, java_file_name, input_xml, File2Code::JAVA, Utils::toPackageName(dest_dir));
 
-  ofstream f2c_udm_output;
-  f2c_udm_output.open( ( dest_dir + "//" + java_file_name + ".java" ).c_str( ) );
-  if ( !f2c_udm_output.good() )
-  {
-      throw udm_exception("Error opening file for writing " + java_file_name + ".java");
-  }
+  f2c_udm.gen();
 
-  f2c_udm.gen(f2c_udm_output);
 }
 
 //! The current date.

@@ -84,6 +84,10 @@ bool SingleCPPNamespace(const ::Uml::Namespace &ns);
 bool SingleCPPNamespace(const ::Uml::Class &cl);
 ::Uml::Class GetCrossClass(const ::Uml::Diagram &cross_dgr, const ::Uml::Class &cl);
 void CPPSetXsdStorage(const ::Uml::Diagram &diagram, ostream &output);
+void CPPSetURIMapping(const ::Uml::Diagram &diagram, 
+                      const map<string, string>& ns_map,
+                      ostream &output);
+
 void CPPIncludeXsdHeaders(const ::Uml::Diagram &diagram, ostream &output);
 
 #endif //MOBIES_UDM_H

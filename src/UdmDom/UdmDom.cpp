@@ -391,7 +391,9 @@ namespace UdmDom
 
 
 
-	UDM_DLL void AddURIToUMLNamespaceMapping(const string & namespaceURI, const string & namespaceUML)
+	UDM_DLL void AddURIToUMLNamespaceMapping(const string & namespaceURI, 
+                              const string& namespaceUML,
+                              const string& xsdName)
 	{
 		xsd_ns_mapping_storage::str_str_map::value_type item(namespaceURI, namespaceUML);
 		pair<xsd_ns_mapping_storage::str_str_map::const_iterator, bool> ins_res = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.insert(item);
@@ -405,18 +407,27 @@ namespace UdmDom
 		if (!ins_res1.second && namespaceURI.compare(ins_res1.first->second))
 			throw udm_exception(string("A mapping from UML namespace '"  + namespaceUML + "' exists already: " + namespaceURI));
 
+ 		xsd_ns_mapping_storage::str_str_map::value_type item2(namespaceURI, xsdName);
+		pair<xsd_ns_mapping_storage::str_str_map::const_iterator, bool> ins_res2 = xsd_ns_mapping_storage::uri2xsdname.insert(item2);
+		
+		if (!ins_res1.second && namespaceURI.compare(ins_res2.first->second))
+			throw udm_exception(string("A mapping from UML namespace '"  + namespaceUML + "' exists already: " + namespaceURI));
+
 	}
 
 	UDM_DLL void RemoveURIToUMLNamespaceMapping(const string & namespaceURI)
 	{
 		xsd_ns_mapping_storage::static_xsd_ns_mapping_container.erase(namespaceURI);
 		xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.erase(namespaceURI);
+    xsd_ns_mapping_storage::uri2xsdname.erase(namespaceURI);
+    
 	}
 
 	UDM_DLL void ClearURIToUMLNamespaceMappings()
 	{
 		xsd_ns_mapping_storage::static_xsd_ns_mapping_container.clear();
 		xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.clear();
+    xsd_ns_mapping_storage::uri2xsdname.clear();
 	}
 
 	//=================================
@@ -3022,16 +3033,16 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 	void setDomParserExternalSchemaLocation(DOMParser& parser)
 	{
 		string all_ns;
-		if (xsd_ns_mapping_storage::static_xsd_ns_mapping_container.empty())
+		if (xsd_ns_mapping_storage::uri2xsdname.empty())
 			return;
    
-		xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.begin();
-		for(;it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end();++it_ns_map)
+		xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::uri2xsdname.begin();
+		for(;it_ns_map != xsd_ns_mapping_storage::uri2xsdname.end();++it_ns_map)
 		{
       
 			const string& uri = it_ns_map->first;
-			const string& ns = it_ns_map->second;
-			all_ns += uri + " " + ns + ".xsd ";
+			const string& xsdname = it_ns_map->second;
+			all_ns += uri + " " + xsdname + " ";
 		}
    
 		all_ns.resize(all_ns.size()-2);//cut the space
@@ -3282,7 +3293,8 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 	//ugly but necesarry
 	UDM_DLL str_xsd_storage::str_str_map str_xsd_storage::static_xsd_container;
-	UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_mapping_container;
+  UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::uri2xsdname;
+  UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_mapping_container;
 	UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container;
 
 	
