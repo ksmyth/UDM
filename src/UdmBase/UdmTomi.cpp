@@ -1802,7 +1802,12 @@ UDM_DLL string Object::getPath( const std::string& strDelimiter , bool bReverseO
 			if (bReverseOrder)
 				return UdmUtil::ExtractName(*this,att_name) + strDelimiter;
 			else
-				return strDelimiter + UdmUtil::ExtractName(*this, att_name);
+			{
+				if (omit_lead_delim) 
+					return UdmUtil::ExtractName(*this, att_name);
+				else
+					return strDelimiter + UdmUtil::ExtractName(*this, att_name);
+			}
 		}
 		else 
 		{
