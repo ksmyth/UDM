@@ -84,7 +84,7 @@ namespace Uml
 
 // find a class by name
 	UDM_DLL Class classByName(const Diagram &d, const string &ns_name,const string &name );
-	
+	UDM_DLL Class classByName(const Diagram &d, const string &name );
 // find a namespace by name
 	UDM_DLL Namespace namespaceByName(const Diagram &d, const string &name);
 // find a class by name
