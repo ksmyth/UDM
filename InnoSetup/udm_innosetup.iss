@@ -5,9 +5,9 @@
 #pragma option -v+
 #pragma verboselevel 9
 
-#define UDMPATH "E:\MoBIESTransition\udm_ns2"
-#define UDM3rdPartyPATH "E:\MoBIESTransition\udm_ns_3rdparty"
-#define GREATPATH "E:\MoBIESTransition\GReAT"
+#define UDMPATH "C:\Mobies\udm_ns2"
+#define UDM3rdPartyPATH "C:\Mobies\udm_ns2\udm_ns_3rdparty"
+#define GREATPATH "C:\Mobies\GReAT"
 #define UDMDLL "UdmDll_3_0_1.dll"
 #define UDMDLLD "UdmDll_3_0_1D.dll"
 #define UDMVER "3.0.2"
@@ -143,7 +143,7 @@ Source: {#UDMPATH}\lib\GOCL.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\lib\UdmGmeD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\lib\UdmOclD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\lib\UdmBase.lib; DestDir: {app}\lib; Flags: ignoreversion
-Source: {#UDMPATH}\lib\UdmDllD.pdb; DestDir: {app}\lib; Flags: ignoreversion
+Source: {#UDMPATH}\lib\UdmDllD.lib; DestDir: {app}\lib; Flags: ignoreversion
 ;Udm Samples folder
 Source: {#UDMPATH}\samples\LampDiagramGME.xme; DestDir: {app}\samples\C++; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\samples\LampDiagramUML.xme; DestDir: {app}\samples\C++; Components: C; Flags: ignoreversion
