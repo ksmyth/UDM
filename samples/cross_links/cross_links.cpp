@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
 */			
 
 
-			set<Uml::AssociationRole> asr = Uml::AncestorCrossAssociationRoles(CD3::MM3::meta, Uml::GetTheOnlyNamespace(*CL::diagram.dgr));
+			set<Uml::AssociationRole> asr = Uml::AncestorCrossAssociationRoles(CD3::MM3::meta, *CL::diagram.dgr);
 			cout << asr.size() << endl;
 
 
