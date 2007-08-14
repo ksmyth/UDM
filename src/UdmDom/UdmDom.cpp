@@ -223,6 +223,14 @@ CHANGELOG
 
 namespace UdmDom
 {	
+	/*
+		hack: To be GME-backend conformant,
+		this tells whether a link is a GME reference
+	*/
+	bool isRefLink(const ::Uml::AssociationRole &meta, const int mode, const vector<Udm::ObjectImpl*>& nvect)
+	{
+		return ( ((string)(meta.name()) == "ref") && (mode == Udm::TARGETFROMPEER) && nvect.size()==1);
+	};
 	
 // --------------------------- DomObject
 	//typedefs for maps for enhancing DomObject::Search
@@ -2504,7 +2512,7 @@ namespace UdmDom
 			DomObject * do_parent = (DomObject*)getParent(NULL);
 			if (do_parent && ((ObjectImpl*)do_parent != &Udm::_null))
 			{
-				if (do_parent->isInstance() && direct)
+				if (do_parent->isInstance() && direct && !isRefLink(role, mode, nvect))
 				{
 					throw udm_exception("Links can not be added/removed to/from children of instance objects!");				
 				}
@@ -2619,7 +2627,7 @@ namespace UdmDom
 			//  4. invoke recursively setAssociation() for the corresponding objects, direct will be false
 
 			//check if we are setting up references
-			if ((string)(role.name()) == "ref" && mode == Udm::TARGETFROMPEER && (nvect.size() == 1))
+			if (isRefLink(role, mode, nvect))
 			{
 				vector<ObjectImpl*> instances = getInstances();
 				vector<ObjectImpl*>::iterator instances_i = instances.begin();
