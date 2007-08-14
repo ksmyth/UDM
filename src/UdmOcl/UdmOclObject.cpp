@@ -52,7 +52,7 @@ namespace UmlOcl
 	{
 		// WARNING : m_Value not null
 		if ( (bool) m_Value )
-			m_strTypeName = (GOCL_STL_NS()string) ((::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (GOCL_STL_NS()string) m_Value.type().name();
+			m_strTypeName = (std::string) ((::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (std::string) m_Value.type().name();
 	}
 
 	Any* Object::Clone() const
@@ -72,7 +72,7 @@ namespace UmlOcl
 		m_Value = value;
 		// WARNING : m_Value not null
 		if ( (bool) m_Value )
-			m_strTypeName = (GOCL_STL_NS()string) ((::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (GOCL_STL_NS()string) m_Value.type().name();
+			m_strTypeName = (std::string) ((::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (std::string) m_Value.type().name();
 			
 	}
 
@@ -90,14 +90,14 @@ namespace UmlOcl
 		return ! ( *this == object );
 	}
 
-	GOCL_STL_NS()string Object::Print() const
+	std::string Object::Print() const
 	{
 		/* WARNING: m_Value is NULL */
 		if ( ! m_Value )
 			return "null";
 		char chBuffer[ 300 ];
 		_ltoa( m_Value.uniqueId(), chBuffer, 10 );
-		return (GOCL_STL_NS()string) ((::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (GOCL_STL_NS()string) m_Value.type().name() + " { id : " + GOCL_STL_NS()string( chBuffer ) + " }";
+		return (std::string) ((::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (std::string) m_Value.type().name() + " { id : " + std::string( chBuffer ) + " }";
 		
 	}
 
@@ -143,7 +143,7 @@ namespace UmlOcl
 		return ! ( *this == object );
 	}
 
-	GOCL_STL_NS()string DataNetwork::Print() const
+	std::string DataNetwork::Print() const
 	{
 		return "udm::DataNetwork";
 	}

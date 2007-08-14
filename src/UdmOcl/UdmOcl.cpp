@@ -41,9 +41,9 @@ char *_itoa( int value, char *string, int radix )
 #include "UdmOclType.h"
 
 
-#define LINE_END GOCL_STL_NS()string( "\r\n" )
-#define LARGE_DELIMITER GOCL_STL_NS()string( "##############################################################" ) + LINE_END
-#define SMALL_DELIMITER GOCL_STL_NS()string( "--------------------------------------------------------------" ) + LINE_END
+#define LINE_END std::string( "\r\n" )
+#define LARGE_DELIMITER std::string( "##############################################################" ) + LINE_END
+#define SMALL_DELIMITER std::string( "--------------------------------------------------------------" ) + LINE_END
 
 
 namespace Ocl
@@ -56,11 +56,11 @@ namespace Ocl
 	class Facade;
 
 	typedef OclCommon::RCSmart<Facade> SpFacade;
-	typedef GOCL_STL_NS()vector< OclMeta::DependencySet > DependencySetVector;
+	typedef std::vector< OclMeta::DependencySet > DependencySetVector;
 
-	typedef GOCL_STL_NS()map< ::Uml::Constraint, ConstraintEx* > ConstraintMap;
-	typedef GOCL_STL_NS()vector< ConstraintDefEx* > ConstraintDefVector;
-	typedef GOCL_STL_NS()map< ::Uml::Diagram , SpFacade > FacadeMap;
+	typedef std::map< ::Uml::Constraint, ConstraintEx* > ConstraintMap;
+	typedef std::vector< ConstraintDefEx* > ConstraintDefVector;
+	typedef std::map< ::Uml::Diagram , SpFacade > FacadeMap;
 
 	FacadeMap globalFacadeMap;
 
@@ -70,11 +70,11 @@ namespace Ocl
 //
 //###############################################################################################################################################
 
-void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const GOCL_STL_NS()string& str2 )
+void inReplace( std::string& str, const std::string& str1, const std::string& str2 )
 {
 	int iPos = 0;
 	int iPosFrom = 0;
-	while ( ( iPos = str.find( str1, iPosFrom ) ) != GOCL_STL_NS()string::npos ) {
+	while ( ( iPos = str.find( str1, iPosFrom ) ) != std::string::npos ) {
 		str = str.substr( iPosFrom, iPos ) + str2 + str.substr( iPos + str1.length() );
 		iPosFrom = iPos + str1.length();
 	}
@@ -98,9 +98,9 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		public :
 			virtual ~ConstraintBase() {}
 
-			GOCL_STL_NS()string				PrintCompilationErrors( bool bWithSelf = true ) const;
-			GOCL_STL_NS()string 				PrintEvaluationViolations( bool bWithSelf = true ) const;
-			virtual GOCL_STL_NS()string		Print( bool bOnlyIdentity = false ) const = 0;
+			std::string				PrintCompilationErrors( bool bWithSelf = true ) const;
+			std::string 				PrintEvaluationViolations( bool bWithSelf = true ) const;
+			virtual std::string		Print( bool bOnlyIdentity = false ) const = 0;
 	};
 
 //###############################################################################################################################################
@@ -118,11 +118,11 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 		public :
 			ConstraintEx( Facade* pFacade, const ::Uml::Constraint& objConstraint );
-			ConstraintEx( Facade* pFacade, const GOCL_STL_NS()string& _strContext, const GOCL_STL_NS()string& _strExpression );
+			ConstraintEx( Facade* pFacade, const std::string& _strContext, const std::string& _strExpression );
 
 			bool				Compile( const SErrorNotification& sEN );
 			EEvaluationResult	Evaluate( const Udm::Object& context, const SEvaluationOptions& sEO );
-			virtual GOCL_STL_NS()string		Print( bool bOnlyIdentity = false ) const;
+			virtual std::string		Print( bool bOnlyIdentity = false ) const;
 	};
 
 //###############################################################################################################################################
@@ -141,7 +141,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		public :
 			ConstraintDefEx( Facade* pFacade, const ::Uml::ConstraintDefinition& objDefinition );
 
-			virtual GOCL_STL_NS()string		Print( bool bOnlyIdentity = false ) const;
+			virtual std::string		Print( bool bOnlyIdentity = false ) const;
 			bool				IsMethod() const;
 	};
 
@@ -173,7 +173,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			bool LoadConstraintDefinitions( const SErrorNotification& sEN );
 			bool CompileConstraintDefinitions( const SErrorNotification& sEN );
 			bool CompileConstraints( const SErrorNotification& sEN );
-			GOCL_STL_NS()string GetSignature( ConstraintDefEx* pDefinition );
+			std::string GetSignature( ConstraintDefEx* pDefinition );
 
 			set<ConstraintEx*> GetAll( const ::Uml::Class& objClass );
 			set<ConstraintEx*> GetAll( const set< ::Uml::Constraint>& setConstraints );
@@ -292,7 +292,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			}
 
 		private :
-			TypeSeq CreateReturnType( const GOCL_STL_NS()string& strType )
+			TypeSeq CreateReturnType( const std::string& strType )
 			{
 				TypeSeq vecType;
 				OclCommon::Convert( strType, vecType );
@@ -322,9 +322,9 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 	{
 	}
 
-	GOCL_STL_NS()string ConstraintBase::PrintCompilationErrors( bool bWithSelf ) const
+	std::string ConstraintBase::PrintCompilationErrors( bool bWithSelf ) const
 	{
-		GOCL_STL_NS()string strResult = Print( ! bWithSelf ) + SMALL_DELIMITER;
+		std::string strResult = Print( ! bWithSelf ) + SMALL_DELIMITER;
 		OclCommon::ExceptionPool poolExceptions = (( ConstraintBase* const ) this )->GetExceptions();
 		for ( int i = 0 ; i < poolExceptions.Size() ; i++ ) {
 			OclCommon::Exception ex = poolExceptions.GetAt( i );
@@ -333,14 +333,14 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			else {
 				char chBuffer[ 300 ];
 				_itoa( ex.GetLine(), chBuffer, 10 );
-				strResult += "Line: " + GOCL_STL_NS()string( chBuffer );
+				strResult += "Line: " + std::string( chBuffer );
 			}
 			if ( ex.GetCode() == -1 )
 				strResult += " Code: ? ";
 			else {
 				char chBuffer[ 300 ];
 				_itoa( ex.GetCode(), chBuffer, 10 );
-				strResult += " Code: " + GOCL_STL_NS()string( chBuffer );
+				strResult += " Code: " + std::string( chBuffer );
 			}
 			strResult += " Message: " + ex.GetErrorMessage() + LINE_END;
 		}
@@ -348,9 +348,9 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		return strResult;
 	}
 
-	GOCL_STL_NS()string ConstraintBase::PrintEvaluationViolations( bool bWithSelf ) const
+	std::string ConstraintBase::PrintEvaluationViolations( bool bWithSelf ) const
 	{
-		GOCL_STL_NS()string strResult = Print( ! bWithSelf ) + SMALL_DELIMITER;
+		std::string strResult = Print( ! bWithSelf ) + SMALL_DELIMITER;
 		OclTree::ViolationVector vecViolations = (( ConstraintBase* const ) this )->GetViolations();
 		for ( int i = 0 ; i < vecViolations.size() ; i++ ) {
 			OclTree::Violation vi = vecViolations[ i ];
@@ -359,7 +359,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			else {
 				char chBuffer[ 300 ];
 				_itoa( vi.position.iLine, chBuffer, 10 );
-				strResult += "Line: " + GOCL_STL_NS()string( chBuffer );
+				strResult += "Line: " + std::string( chBuffer );
 			}
 			strResult += " Message: " + vi.strMessage + "[ " + vi.strSignature + " ]" + LINE_END;
 			for ( int j = 0 ; j < vi.vecVariables.size() ; j++ )
@@ -381,9 +381,9 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		: ConstraintBase( pFacade ), m_objConstraint( objConstraint )
 	{
 		::Uml::Class context = objConstraint.parent();
-		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
-		GOCL_STL_NS()string strName = objConstraint.name();
-		GOCL_STL_NS()string strExpression = objConstraint.expression();
+		std::string strType = (std::string) ((::Uml::Namespace)context.parent()).name() + "::" + (std::string) context.name();
+		std::string strName = objConstraint.name();
+		std::string strExpression = objConstraint.expression();
 
 		Define( strType + "::" + strName, "context " + strType + " inv " + strName + " : " + LINE_END + LINE_END + strExpression, true );
 		//printf( ("context " + strType + " inv " + strName + " : " + strExpression + "\n").c_str());
@@ -391,14 +391,14 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		b_PatProcessing = false;
 	}
 
-	ConstraintEx::ConstraintEx( Facade* pFacade, const GOCL_STL_NS()string& _strContext, const GOCL_STL_NS()string& _strExpression )
+	ConstraintEx::ConstraintEx( Facade* pFacade, const std::string& _strContext, const std::string& _strExpression )
 		: ConstraintBase( pFacade )
 	{
 		char chBuffer[ 30 ];
 		sprintf( chBuffer, "UdmPatConstraint%d", lCounter++ );
-		GOCL_STL_NS()string strType = /*"meta::" + */_strContext;	//strContext should be fullt qualified!
-		GOCL_STL_NS()string strName = chBuffer;
-		GOCL_STL_NS()string strExpression = _strExpression;
+		std::string strType = /*"meta::" + */_strContext;	//strContext should be fullt qualified!
+		std::string strName = chBuffer;
+		std::string strExpression = _strExpression;
 		Define( strType + "::" + strName, "context " + strType + " inv " + strName + " : " + LINE_END + LINE_END + strExpression, true );
 		//printf( ("context " + strType + " inv " + strName + " : " + strExpression + "\n").c_str());
 		Register( m_pFacade->m_pTreeManager );
@@ -412,7 +412,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		Constraint::State eState = Parse();
 		if ( eState != Ocl::Constraint::CS_PARSE_SUCCEEDED ) {
 
-			GOCL_STL_NS()string strErr = LARGE_DELIMITER + "SYNTAX ERROR >> " + PrintCompilationErrors();
+			std::string strErr = LARGE_DELIMITER + "SYNTAX ERROR >> " + PrintCompilationErrors();
 			if ( sEN.bStdOutEnabled )
 				cout << strErr << endl;
 			if ( sEN.eExceptionKind != ENT_NONE )
@@ -426,7 +426,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		context.AddVariable( "dn", TypeSeq( 1, "udm::DataNetwork" ) );
 		eState = Check( context );
 		if ( eState != Ocl::Constraint::CS_CHECK_SUCCEEDED ) {
-			GOCL_STL_NS()string strErr = LARGE_DELIMITER + "SEMANTICAL ERROR >> " + PrintCompilationErrors();
+			std::string strErr = LARGE_DELIMITER + "SEMANTICAL ERROR >> " + PrintCompilationErrors();
 			if ( sEN.bStdOutEnabled )
 				cout << strErr << endl;
 			if ( sEN.eExceptionKind != ENT_NONE )
@@ -439,7 +439,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		OclMeta::DependencySet setDependencies = GetDependencySet();
 		eState = SetDependencyResult( setDependencies );
 		if ( eState != Ocl::Constraint::CS_CHECK_DEPENDENCY_SUCCEEDED ) {
-			GOCL_STL_NS()string strErr = LARGE_DELIMITER + "DEPENDENCY ERROR >> " + PrintCompilationErrors();
+			std::string strErr = LARGE_DELIMITER + "DEPENDENCY ERROR >> " + PrintCompilationErrors();
 			if ( sEN.bStdOutEnabled )
 				cout << strErr << endl;
 			if ( sEN.eExceptionKind != ENT_NONE )
@@ -461,7 +461,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		OclMeta::Object spResult = Constraint::Evaluate( context, options.bLogicalShortCircuit, options.bIteratorShortCircuit, options.bTrackingEnabled );
 
 		if ( spResult.IsUndefined() ) {
-			GOCL_STL_NS()string strErr = LARGE_DELIMITER + "CONSTRAINT FAILURE >> " + PrintEvaluationViolations();
+			std::string strErr = LARGE_DELIMITER + "CONSTRAINT FAILURE >> " + PrintEvaluationViolations();
 			if ( options.sErrorNotification.bStdOutEnabled )
 				cout << strErr << endl;
 			if ( options.sErrorNotification.eExceptionKind != ENT_NONE )
@@ -473,7 +473,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		EEvaluationResult eResult = CER_TRUE;
 		if ( ! bResult ) {
 			eResult = CER_FALSE;
-			GOCL_STL_NS()string strErr = LARGE_DELIMITER + "CONSTRAINT VIOLATION >> " + PrintEvaluationViolations();
+			std::string strErr = LARGE_DELIMITER + "CONSTRAINT VIOLATION >> " + PrintEvaluationViolations();
 			if ( options.sErrorNotification.bStdOutEnabled )
 				cout << strErr << endl;
 			if ( options.sErrorNotification.eExceptionKind != ENT_NONE )
@@ -483,30 +483,30 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		return eResult;
 	}
 
-	GOCL_STL_NS()string ConstraintEx::Print( bool bOnlyIdentity ) const
+	std::string ConstraintEx::Print( bool bOnlyIdentity ) const
 	{
-		GOCL_STL_NS()string strType = "";
-		GOCL_STL_NS()string strName = "";
+		std::string strType = "";
+		std::string strName = "";
 		::Uml::Class context;
 		if(!b_PatProcessing) {
 			context = m_objConstraint.parent();
-			strType = (GOCL_STL_NS()string) ((::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
-			strName = (GOCL_STL_NS()string) m_objConstraint.name();
+			strType = (std::string) ((::Uml::Namespace)context.parent()).name() + "::" + (std::string) context.name();
+			strName = (std::string) m_objConstraint.name();
 		} else {
 			strType = "Failure in pattern file";
 			strName = "";
 		}
-		GOCL_STL_NS()string strResult = strType + "::" + strName + LINE_END;
+		std::string strResult = strType + "::" + strName + LINE_END;
 		if ( ! bOnlyIdentity ) {
 			strResult += SMALL_DELIMITER;
 			if(!b_PatProcessing)
-				strResult += "==> Description : " + LINE_END + (GOCL_STL_NS()string) m_objConstraint.description() + LINE_END;
+				strResult += "==> Description : " + LINE_END + (std::string) m_objConstraint.description() + LINE_END;
 			else
 				strResult += "==> Description : Some constraint in the pat.";
 			strResult += "==> Expression : " + LINE_END;
 			strResult += strType + "::" + strName + " context " + strType + " inv " + strName + " : " + LINE_END + LINE_END;
 			if(!b_PatProcessing)
-				strResult += (GOCL_STL_NS()string) m_objConstraint.expression() + LINE_END;
+				strResult += (std::string) m_objConstraint.expression() + LINE_END;
 			else
 				strResult += " The Expression. ";
 		}
@@ -515,7 +515,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 //###############################################################################################################################################
 //
-// CLASS : ConstraintDefEx - IMPLEMENTATION
+// CLASS : ConstraintEx - IMPLEMENTATION
 //
 //###############################################################################################################################################
 
@@ -523,27 +523,27 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		: ConstraintBase( pFacade ), m_objDefinition( objDefinition )
 	{
 		::Uml::Class context = objDefinition.parent();
-		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
-		GOCL_STL_NS()string strName = objDefinition.name();
-		GOCL_STL_NS()string strExpression = objDefinition.expression();
-		GOCL_STL_NS()string strParameterList = objDefinition.parameterList();
-		m_bIsMethod = (GOCL_STL_NS()string) objDefinition.stereotype() == "method";
-		GOCL_STL_NS()string strReturnType = objDefinition.returnType();
-		GOCL_STL_NS()string strStereotype = ( m_bIsMethod ) ? " defmethod " : " defattribute ";
+		std::string strType = (std::string) ((::Uml::Namespace)context.parent()).name() + "::" + (std::string) context.name();
+		std::string strName = objDefinition.name();
+		std::string strExpression = objDefinition.expression();
+		std::string strParameterList = objDefinition.parameterList();
+		m_bIsMethod = (std::string) objDefinition.stereotype() == "method";
+		std::string strReturnType = objDefinition.returnType();
+		std::string strStereotype = ( m_bIsMethod ) ? " defmethod " : " defattribute ";
 
 		Define( strType + "::" + strName, "context " + strType + "::" + strName + "( " + strParameterList + " ) : " + strReturnType + strStereotype + strName + " : " + LINE_END + LINE_END+ strExpression, true );
 		Register( m_pFacade->m_pTreeManager );
 	}
 
-	GOCL_STL_NS()string ConstraintDefEx::Print( bool bOnlyIdentity ) const
+	std::string ConstraintDefEx::Print( bool bOnlyIdentity ) const
 	{
 		::Uml::Class context = m_objDefinition.parent();
-		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
-		GOCL_STL_NS()string strName = (GOCL_STL_NS()string) m_objDefinition.name();
-		GOCL_STL_NS()string strParameterList = m_objDefinition.parameterList();
-		GOCL_STL_NS()string strReturnType = m_objDefinition.returnType();
-		GOCL_STL_NS()string strStereotype = ( m_bIsMethod ) ? " defmethod " : " defattribute ";
-		GOCL_STL_NS()string strResult = strType + "::" + strName;
+		std::string strType = (std::string) ((::Uml::Namespace)context.parent()).name() + "::" + (std::string) context.name();
+		std::string strName = (std::string) m_objDefinition.name();
+		std::string strParameterList = m_objDefinition.parameterList();
+		std::string strReturnType = m_objDefinition.returnType();
+		std::string strStereotype = ( m_bIsMethod ) ? " defmethod " : " defattribute ";
+		std::string strResult = strType + "::" + strName;
 		if ( m_bIsMethod )
 			strResult += "( " + strParameterList + " )";
 		strResult += " : " + strType + LINE_END;
@@ -551,7 +551,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			strResult += SMALL_DELIMITER;
 			strResult += "==> Expression : " + LINE_END;
 			strResult += strType + "::" + strName + "context " + strType + "::" + strName + "( " + strParameterList + " ) : " + strReturnType + strStereotype + strName + " : " + LINE_END + LINE_END;
-			strResult += (GOCL_STL_NS()string) m_objDefinition.expression() + LINE_END;
+			strResult += (std::string) m_objDefinition.expression() + LINE_END;
 		}
 		return strResult;
 	}
@@ -589,7 +589,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 	bool Facade::LoadConstraintDefinitions( const SErrorNotification& sEN )
 	{
 			//printf("UDMOCL: LoadConstraintDefinitions\t");
-		GOCL_STL_NS()string strErrAll( "" );
+		std::string strErrAll( "" );
 		bool bResult = true;
 
 		set< ::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
@@ -608,7 +608,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 					Constraint::State eState = pDefinition->Parse();
 					if ( eState != Constraint::CS_PARSE_SUCCEEDED ) {
 
-						GOCL_STL_NS()string strErr = LARGE_DELIMITER + "SYNTAX ERROR >> " + pDefinition->PrintCompilationErrors();
+						std::string strErr = LARGE_DELIMITER + "SYNTAX ERROR >> " + pDefinition->PrintCompilationErrors();
 						if ( sEN.bStdOutEnabled )
 							cout << strErr << endl;
 						delete pDefinition;
@@ -631,7 +631,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 						eState = pDefinition->CheckContext();
 						if ( eState != Constraint::CS_CTX_CHECK_SUCCEEDED ) {
 
-							GOCL_STL_NS()string strErr = LARGE_DELIMITER + "SEMANTICAL ERROR >> " + pDefinition->PrintCompilationErrors();
+							std::string strErr = LARGE_DELIMITER + "SEMANTICAL ERROR >> " + pDefinition->PrintCompilationErrors();
 							if ( sEN.bStdOutEnabled )
 								cout << strErr << endl;
 							delete pDefinition;
@@ -660,7 +660,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 	bool Facade::CompileConstraintDefinitions( const SErrorNotification& sEN )
 	{
 			//printf("UDMOCL: CompileConstraintDefinitions\t");
-		GOCL_STL_NS()string strErrAll( "" );
+		std::string strErrAll( "" );
 		bool bResult = true;
 
 		ConstraintDefVector vecFailed;
@@ -672,7 +672,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			OclTree::TypeContextStack context;
 			context.AddVariable( "dn", TypeSeq( 1, "udm::DataNetwork" ) );
 			if ( m_vecConstraintDefs[ i ]->Check( context ) != Constraint::CS_CHECK_SUCCEEDED ) {
-				GOCL_STL_NS()string strErr = LARGE_DELIMITER + "SEMANTICAL ERROR >> " + m_vecConstraintDefs[ i ]->PrintCompilationErrors();
+				std::string strErr = LARGE_DELIMITER + "SEMANTICAL ERROR >> " + m_vecConstraintDefs[ i ]->PrintCompilationErrors();
 				if ( sEN.bStdOutEnabled )
 					cout << strErr << endl;
 				vecFailed.push_back( m_vecConstraintDefs[ i ] );
@@ -703,7 +703,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 		StringVector vecErrors;
 		for ( i = 0 ; i < vecFailed.size() ; i++ ) {
-			GOCL_STL_NS()string strSignature;
+			std::string strSignature;
 			try {
 				strSignature = GetSignature( vecFailed[ i ] );
 			}
@@ -719,7 +719,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 				OclMeta::Dependency dep = OclMeta::Dependency::LookUp( vecDependencySets[ j ], vecErrors[ i ] );
 				if ( ! ( dep.m_strSignature == "#" ) ) {
 					OclMeta::Dependency::SetChecked( vecDependencySets[ j ], dep, true );
-					GOCL_STL_NS()string strSignature = GetSignature( m_vecConstraintDefs[ j ] );
+					std::string strSignature = GetSignature( m_vecConstraintDefs[ j ] );
 					/*
 						// this find function could not be compiled with VC7.x .NET'w own STL
 						// c:\MobiesTransition\Udm.Net\src\UdmOcl\UdmOcl.cpp(701): error C2784: 'bool std::operator ==(const std::list<_Ty,_Alloc> &,const std::list<_Ty,_Alloc> &)' : could not deduce template argument for 'const std::list<_Ty,_Ax> &' from ''unknown-type''
@@ -745,7 +745,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 		for ( i = 0 ; i < m_vecConstraintDefs.size() ; i++ ) {
 			if ( m_vecConstraintDefs[ i ]->SetDependencyResult( vecDependencySets[ i ] ) != Constraint::CS_CHECK_DEPENDENCY_SUCCEEDED ) {
-				GOCL_STL_NS()string strErr = LARGE_DELIMITER + "DEPENDENCY ERROR >> " + m_vecConstraintDefs[ i ]->PrintCompilationErrors();
+				std::string strErr = LARGE_DELIMITER + "DEPENDENCY ERROR >> " + m_vecConstraintDefs[ i ]->PrintCompilationErrors();
 				if ( sEN.bStdOutEnabled )
 					cout << strErr << endl;
 				delete m_vecConstraintDefs[ i ];
@@ -772,7 +772,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		return bResult;
 	}
 
-	GOCL_STL_NS()string Facade::GetSignature( ConstraintDefEx* pDefinition )
+	std::string Facade::GetSignature( ConstraintDefEx* pDefinition )
 	{
 		if ( ! pDefinition->IsMethod() ) {
 			OclSignature::Attribute signature( pDefinition->GetName(), pDefinition->GetContextType() );
@@ -793,7 +793,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 	bool Facade::CompileConstraints( const SErrorNotification& sEN )
 	{
-		GOCL_STL_NS()string strErrAll( "" );
+		std::string strErrAll( "" );
 		bool bResult = true;
 
 		set< ::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
@@ -816,7 +816,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 						throw udm_exception( ex.what() );
 					}
 					bResult = false;
-					strErrAll += LINE_END + (GOCL_STL_NS()string) ex.what();
+					strErrAll += LINE_END + (std::string) ex.what();
 				}
 
 				m_mapConstraints.insert( ConstraintMap::value_type( *itConstraint, pConstraint ) );
@@ -830,7 +830,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 	bool Facade::Initialize( const SErrorNotification& sEN )
 	{
-		GOCL_STL_NS()string strErrAll( "" );
+		std::string strErrAll( "" );
 		bool bResult = true;
 		try {
 			bResult = LoadConstraintDefinitions( sEN );
@@ -839,7 +839,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			if ( sEN.eExceptionKind == ENT_FIRST )
 				throw udm_exception( ex.what() );
 			bResult = false;
-			strErrAll += LINE_END + (GOCL_STL_NS()string) ex.what();
+			strErrAll += LINE_END + (std::string) ex.what();
 		}
 
 		try {
@@ -849,7 +849,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			if ( sEN.eExceptionKind == ENT_FIRST )
 				throw udm_exception( ex.what() );
 			bResult = false;
-			strErrAll += LINE_END + (GOCL_STL_NS()string) ex.what();
+			strErrAll += LINE_END + (std::string) ex.what();
 		}
 
 		try {
@@ -859,7 +859,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			if ( sEN.eExceptionKind == ENT_FIRST )
 				throw udm_exception( ex.what() );
 			bResult = false;
-			strErrAll += LINE_END + (GOCL_STL_NS()string) ex.what();
+			strErrAll += LINE_END + (std::string) ex.what();
 		}
 
 		if ( ! strErrAll.empty() && sEN.eExceptionKind == ENT_ALL )
@@ -897,13 +897,13 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 	{
 		set<ConstraintEx*> setConstraintsClass = GetAll( objObject.type() );
 		EEvaluationResult eResult = CER_TRUE;
-		GOCL_STL_NS()string strErrAll( "" );
+		std::string strErrAll( "" );
 
 		for ( set<ConstraintEx*>::iterator it = setConstraintsClass.begin() ; it != setConstraintsClass.end() ; it++ ) {
 			if ( setConstraints.empty() || setConstraints.find( *it ) != setConstraints.end() ) {
 				if ( ! (*it)->IsValid() ) {
 					if ( ! options.bSkipInvalids ) {
-						GOCL_STL_NS()string strErr = LARGE_DELIMITER + "CONSTRAINT IS UNCOMPILED >> " + (*it)->PrintCompilationErrors();
+						std::string strErr = LARGE_DELIMITER + "CONSTRAINT IS UNCOMPILED >> " + (*it)->PrintCompilationErrors();
 						if ( options.sErrorNotification.bStdOutEnabled )
 							cout << strErr << endl;
 						switch ( options.sErrorNotification.eExceptionKind  ) {
@@ -935,7 +935,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 								throw udm_exception( ex.what() );
 								break;
 							case ENT_ALL :
-								strErrAll += LINE_END + (GOCL_STL_NS()string) ex.what();
+								strErrAll += LINE_END + (std::string) ex.what();
 								break;
 						}
 					}
@@ -950,7 +950,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 	EEvaluationResult Facade::CheckAll( Udm::Object objObject, const set<ConstraintEx*>& setConstraints, const SEvaluationOptions& options, int iDepth )
 	{
 		EEvaluationResult eResult = CER_TRUE;
-		GOCL_STL_NS()string strErrAll( "" );
+		std::string strErrAll( "" );
 
 		try {
 			eResult = CheckAll( objObject, setConstraints, options );
@@ -960,7 +960,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 					throw udm_exception( ex.what() );
 					break;
 				case ENT_ALL :
-					strErrAll += LINE_END + (GOCL_STL_NS()string) ex.what();
+					strErrAll += LINE_END + (std::string) ex.what();
 					break;
 			}
 		}
@@ -984,7 +984,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 							throw udm_exception( ex.what() );
 							break;
 						case ENT_ALL :
-							strErrAll += LINE_END + (GOCL_STL_NS()string) ex.what();
+							strErrAll += LINE_END + (std::string) ex.what();
 							break;
 					}
 				}
@@ -1065,58 +1065,16 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 	{
 		std::string strContext = (string)objContext.type().name();
 		SErrorNotification en = SErrorNotification();
-		Constraint::setPatProcessFlag(true);
-		size_t _pos = 0;
-		size_t _start = strExpression.find("<:$", _pos);
-		size_t _end;
-		size_t _exprStart = 0;
-		const std::string strWhitespace = "\n\r\t ";
-		while (_start != -1) {
-			_pos = _start+3;
-			_start = strExpression.find_first_not_of(strWhitespace, _pos);
-			_end = strExpression.find("::", _start);
-			if(_end < 0) throw(udm_exception("Error defining method"));
-			std::string strClassName = strExpression.substr(_start, _end - _start);
-
-			_start = _end + 2;
-			_end = strExpression.find('(', _start);
-			if(_end < 0) throw(udm_exception("Error defining method"));
-			std::string strMethodName = strExpression.substr(_start, _end - _start);
-
-			_start = _end + 1;
-			_end = strExpression.find(')', _start);
-			if(_end < 0) throw(udm_exception("Error defining method"));
-			std::string strArgList = strExpression.substr(_start, _end - _start);
-
-			_pos = strExpression.find(':', _end);
-			_start = strExpression.find_first_not_of(strWhitespace, _pos + 1);
-			_end = strExpression.find_first_of(strWhitespace, _start);
-			std::string strReturnType = strExpression.substr(_start, _end - _start);
-
-			_pos = strExpression.find("defmethod", _end);
-			_start = strExpression.find(':', _pos) + 1;
-			_end = strExpression.find("$:>", _start);
-			if(_end < 0) throw(udm_exception("Error defining method"));
-			std::string strMethodExpression = strExpression.substr(_start, _end - _start);
-
-			::Uml::ConstraintDefinition cd = ::Uml::ConstraintDefinition::Create(::Uml::classByName(metaDiagram, metaDiagram.name(), strClassName));
-			cd.name() = strMethodName;
-			cd.expression() = strMethodExpression;
-			cd.parameterList() = strArgList;
-			cd.stereotype() = "method";
-			cd.returnType() = strReturnType;
-
-			_exprStart = _end + 4;
-			_start = strExpression.find("<:$",_end);
-		}
 		Initialize( metaDiagram, en );
 		Constraint::setPatProcessFlag(true);
-		ConstraintEx cons = ConstraintEx( globalFacadeMap[ metaDiagram ], strContext, "{:>"+strExpression.substr(_exprStart)+"<:}");
+		//Constraint::setPatOutputFile("testoutput.out");
+		ConstraintEx cons = ConstraintEx( globalFacadeMap[ metaDiagram ], strContext, strExpression);
 		SEvaluationOptions options = SEvaluationOptions();
 		cons.Compile(en);
 		EEvaluationResult eResult = cons.Evaluate( objContext, options );
 		OclTree::PatHelper::clean();
 		Constraint::setPatProcessFlag(false);
+		//Constraint::closePatOutputFile();
 		return true;
 	}
 
