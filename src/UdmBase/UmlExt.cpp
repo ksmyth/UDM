@@ -460,9 +460,14 @@ namespace Uml
 			set<CompositionChildRole> comps_c = CompositionPeerChildRoles(*i);
 			for (set<CompositionChildRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++) {
 				Class theother = j->target();
-				Namespace theother_ns = (Namespace)theother.parent();
-				if (ns != theother_ns)
-					ret.insert(theother_ns);
+				set<Class> theother_descs = DescendantClasses(theother);
+				theother_descs.insert(theother);
+				for (set<Class>::iterator descs_i = theother_descs.begin(); descs_i != theother_descs.end(); descs_i++) {
+					Namespace theother_ns = (Namespace)descs_i->parent();
+					if (ns != theother_ns)
+						ret.insert(theother_ns);
+				}
+
 			}
 		}
 
