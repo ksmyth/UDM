@@ -74,10 +74,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmViz", "UdmViz\UdmViz.vcp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UDMPat", "UdmOclPat\UDMOclPat.vcproj", "{EF8C7C28-568A-4335-9861-84ED3917E1A6}"
 	ProjectSection(ProjectDependencies) = postProject
+		{E663042B-F135-4502-B7A1-D62F21126E3B} = {E663042B-F135-4502-B7A1-D62F21126E3B}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GOCL", "UdmOclPat\GOCL\src\GOCL.vcproj", "{EE407066-7819-4AE2-B0F5-E64FC5E54415}"
 	ProjectSection(ProjectDependencies) = postProject
+		{E663042B-F135-4502-B7A1-D62F21126E3B} = {E663042B-F135-4502-B7A1-D62F21126E3B}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "File2Code", "Udm\File2Code\File2Code.vcproj", "{51A35FC8-1D28-4B8A-9592-CE334FFA7539}"
@@ -133,6 +135,66 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UIntWiz", "UIntWiz\UIntWiz.
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 14
+		SccLocalPath0 = .
+		CanCheckoutShared = false
+		SolutionUniqueID = {2DFFE7B3-B81B-40FC-931E-49F8FC071E92}
+		SccProjectUniqueName1 = StrResGen\\StrResGen.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = false
+		SccProjectFilePathRelativizedFromConnection1 = StrResGen\\
+		SccProjectUniqueName2 = UML\u0020GME\\Interpreter\\BONComponent.vcproj
+		SccProjectName2 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/Interpreter\u0022,\u0020XOZAAAAA
+		SccLocalPath2 = UML\u0020GME\\Interpreter
+		CanCheckoutShared = false
+		SccProjectUniqueName3 = UdmOcl\\UdmOcl.vcproj
+		SccProjectName3 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl\u0022,\u0020INZAAAAA
+		SccLocalPath3 = UdmOcl
+		CanCheckoutShared = false
+		SccProjectUniqueName4 = UML\u0020GME\\ExprChecker\\GmeOclExprChecker.vcproj
+		SccProjectName4 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/ExprChecker\u0022,\u0020WOZAAAAA
+		SccLocalPath4 = UML\u0020GME\\ExprChecker
+		CanCheckoutShared = false
+		SccProjectUniqueName5 = UdmOclPat\\UDMOclPat.vcproj
+		SccProjectName5 = \u0022$/MoBIESTransition/udm_ns/src/UdmOclPat\u0022,\u0020QNZAAAAA
+		SccLocalPath5 = UdmOclPat
+		CanCheckoutShared = false
+		SccProjectUniqueName6 = Udm\\File2Code\\File2Code.vcproj
+		SccProjectName6 = \u0022$/MoBIESTransition/udm_ns2/src/Udm/File2Code\u0022,\u0020HVDBAAAA
+		SccLocalPath6 = Udm\\File2Code
+		CanCheckoutShared = false
+		SccProjectUniqueName7 = Udm\\JavaAPIGen\\JavaAPIGen.vcproj
+		SccProjectName7 = \u0022$/MoBIESTransition/udm_ns2/src/Udm/JavaAPIGen\u0022,\u0020NVDBAAAA
+		SccLocalPath7 = Udm\\JavaAPIGen
+		CanCheckoutShared = false
+		SccProjectUniqueName8 = UdmPOI\\UdmPOI.vcproj
+		SccProjectName8 = \u0022$/MoBIESTransition/udm_ns2/src/UdmPOI\u0022,\u0020UBEBAAAA
+		SccLocalPath8 = UdmPOI
+		CanCheckoutShared = false
+		SccProjectUniqueName9 = UdmSwig\\UdmSwig.vcproj
+		SccProjectName9 = \u0022$/MoBIESTransition/udm_ns2/src/UdmSwig\u0022,\u0020ACEBAAAA
+		SccLocalPath9 = UdmSwig
+		CanCheckoutShared = false
+		SccProjectUniqueName10 = Udm\\Udm.vcproj
+		SccProjectName10 = \u0022$/MoBIESTransition/udm_ns/src/Udm\u0022,\u0020OBCBAAAA
+		SccLocalPath10 = .
+		CanCheckoutShared = false
+		SccProjectFilePathRelativizedFromConnection10 = Udm\\
+		SccProjectUniqueName11 = Uml\\Uml.vcproj
+		SccProjectName11 = \u0022$/MoBIESTransition/udm_ns/src/Uml\u0022,\u0020HJCBAAAA
+		SccLocalPath11 = ..
+		CanCheckoutShared = false
+		SccProjectFilePathRelativizedFromConnection11 = src\\Uml\\
+		SccProjectUniqueName12 = MPCGen\\MPCGen.vcproj
+		SccProjectName12 = \u0022$/MoBIESTransition/udm_ns2/src/MPCGen\u0022,\u0020NUDBAAAA
+		SccLocalPath12 = MPCGen
+		CanCheckoutShared = false
+		SccProjectUniqueName13 = UIntWiz\\UIntWiz.vcproj
+		SccProjectName13 = \u0022$/MoBIES/InterpreterWizard/Uintwiz\u0022,\u0020RKLAAAAA
+		SccLocalPath13 = UIntWiz
+		CanCheckoutShared = false
+	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		BootUdmCompile Debug = BootUdmCompile Debug
 		BootUdmCompile Release = BootUdmCompile Release
@@ -349,15 +411,5 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
-	EndGlobalSection
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 2
-		SccLocalPath0 = .
-		CanCheckoutShared = false
-		SolutionUniqueID = {2DFFE7B3-B81B-40FC-931E-49F8FC071E92}
-		SccProjectUniqueName1 = StrResGen\\StrResGen.vcproj
-		SccLocalPath1 = .
-		CanCheckoutShared = false
-		SccProjectFilePathRelativizedFromConnection1 = StrResGen\\
 	EndGlobalSection
 EndGlobal
