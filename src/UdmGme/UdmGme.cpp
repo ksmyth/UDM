@@ -286,27 +286,233 @@ namespace UdmGme
 	}
 	
 	
-	
+
+	typedef pair<bool, string> RpHelperID;	// pair<role_is_navigable, object_id>
+	typedef vector<RpHelperID> RpHelperIDs;
+
+	RpHelperIDs StringToList(const string &src)
+	{
+		RpHelperIDs ret;
+
+		int begin, end;
+		begin = src.find_first_not_of(' ');
+		if (begin != string::npos)
+		{
+			end = src.find_first_of(' ', begin);
+			string id = src.substr(begin, end - begin);
+			while (id.length())
+			{
+				ret.push_back( RpHelperID((id.substr(0, 1) == "1"), id.substr(1)) );
+				begin = src.find_first_not_of(' ', end);
+				if (begin == string::npos) break;
+				end = src.find_first_of(' ', begin);
+				id = src.substr(begin, end - begin);
+			}
+		}
+
+		return ret;
+	}
+
+	string ListToString(const RpHelperIDs &ids)
+	{
+		string ret;
+		for (RpHelperIDs::const_iterator i = ids.begin(); i != ids.end(); i++)
+		{
+			if (ret.length()) ret += " ";
+			ret += i->first ? "1" : "0";
+			ret += i->second;
+		}
+		return ret;
+	}
+
+	// removes the ID of peer_toRemove from fco's registry
+	// to clear peer_toRemove's registry too, call it again with arguments reversed and the other role name
+	void RpHelperRemoveFromRegistry(const IMgaFCOPtr &fco, const IMgaFCOPtr &peer_toRemove, const string &role_name)
+	{
+		SmartBSTR co_ids = fco->RegistryValue[role_name.c_str()];
+		if (!(!co_ids))
+		{
+			RpHelperIDs ids = StringToList(string(co_ids));
+			for (RpHelperIDs::iterator i = ids.begin(); i != ids.end(); i++)
+			{
+				if (i->second.compare(peer_toRemove->GetID()) == 0)
+					ids.erase(i);
+			}
+			if (ids.size())
+				COMTHROW(fco->put_RegistryValue(SmartBSTR(role_name.c_str()), SmartBSTR(ListToString(ids).c_str())));
+			else
+				COMTHROW(fco->put_RegistryValue(SmartBSTR(role_name.c_str()), NULL));
+		}
+	}
+
+	void RpHelperAddToRegistry(const IMgaFCOPtr &fco, const IMgaFCOPtr &peer_toAdd, const string &role_name, bool role_isNavigable)
+	{
+		SmartBSTR co_ids = fco->RegistryValue[role_name.c_str()];
+		RpHelperIDs ids;
+		if (!(!co_ids))
+			ids = StringToList(string(co_ids));
+
+		bool already_exists = false;
+		for (RpHelperIDs::const_iterator i = ids.begin(); i != ids.end(); i++)
+		{
+			if (i->second.compare(peer_toAdd->GetID()) == 0)
+			{
+				already_exists = true;
+				break;
+			}
+		}
+		if (!already_exists)
+		{
+			ids.push_back( RpHelperID(role_isNavigable, string(peer_toAdd->GetID())) );
+			COMTHROW(fco->put_RegistryValue(SmartBSTR(role_name.c_str()), SmartBSTR(ListToString(ids).c_str())));
+		}
+	}
+
+	IMgaFCOsPtr RpHelperFindPeerFCOsFromRegistry(const IMgaFCOPtr &self, const string &role_name, bool only_ifNavigable, const GmeDataNetwork *dn)
+	{
+		IMgaFCOsPtr ret;
+		ret.CreateInstance("Mga.MgaFCOs");
+
+		SmartBSTR co_ids = self->RegistryValue[role_name.c_str()];
+		if (!(!co_ids))
+		{
+			RpHelperIDs ids = StringToList(string(co_ids));
+			for (RpHelperIDs::const_iterator i = ids.begin(); i != ids.end(); i++)
+			{
+				if (!only_ifNavigable || i->first)
+				{
+					//extra check if the obtained value is an ID
+					string co_id_str = i->second;
+					if ((co_id_str.length() > 3) && ( co_id_str.substr(0, 3).compare("id-") == 0))
+					{
+						IMgaFCOPtr obj = dn->priv.project->GetObjectByID(co_id_str.c_str());
+						COMTHROW(ret->Append(obj));
+					}
+				}
+			}
+		};
+
+		return ret;
+	}
+
+	IMgaFCOsPtr RpHelperFindPeerFCOs(const IMgaFCOPtr &self,
+		const string &role_name, bool role_isNavigable,
+		const string &other_role_name, bool other_role_isNavigable,
+		const GmeDataNetwork *dn, bool only_ifNavigable, bool set_registry = true);
+
+	IMgaFCOsPtr RpHelperFindPeerFCOsFromModel(const IMgaFCOPtr &self,
+		const string &role_name, bool role_isNavigable,
+		const string &other_role_name, bool other_role_isNavigable,
+		const GmeDataNetwork *dn, bool only_ifNavigable, bool set_registry)
+	{
+		IMgaFCOsPtr ret;
+		ret.CreateInstance("Mga.MgaFCOs");
+
+		if (self->GetObjType() == OBJTYPE_CONNECTION)
+		{
+			// we are the connection, find the reference (the first reference from
+			// the chain of references linking the connection to the source or
+			// destination
+			IMgaSimpleConnectionPtr conn(self);
+			SmartBSTR src_role_name = conn->RegistryValue["sRefParent"];
+
+			try
+			{
+				IMgaFCOsPtr references = role_name.compare(src_role_name) == 0 ? conn->GetSrcReferences() : conn->GetDstReferences();
+				if (references->GetCount() > 0)
+				{
+					IMgaFCOPtr fco = references->GetItem(1);
+
+					if (!only_ifNavigable || (only_ifNavigable && role_isNavigable))
+						COMTHROW(ret->Append(fco));
+
+					if (set_registry)
+					{
+						RpHelperAddToRegistry(self, fco, role_name, role_isNavigable);
+						RpHelperAddToRegistry(fco, self, other_role_name, other_role_isNavigable);
+					}
+				}
+			}
+			catch (udm_exception &)
+			{
+			}
+		}
+		else if (self->GetObjType() == OBJTYPE_REFERENCE)
+		{
+			// we are the reference, find the connection (the first connection to
+			// this reference for which RpHelperFindPeerFCOs()
+			// returns the same reference)
+			IMgaReferencePtr reference(self);
+			IMgaConnPointsPtr cp = reference->GetUsedByConns();
+			MGACOLL_ITERATE(IMgaConnPoint, cp)
+			{
+				IMgaSimpleConnectionPtr conn = MGACOLL_ITER->Owner;
+				IMgaFCOsPtr references = RpHelperFindPeerFCOs(conn, other_role_name, other_role_isNavigable, role_name, role_isNavigable, dn, true, false);
+				MGACOLL_ITERATE(IMgaFCO, references)
+				{
+					if (reference->GetIsEqual(MGACOLL_ITER) == VARIANT_TRUE)
+					{
+						if (!only_ifNavigable || (only_ifNavigable && role_isNavigable))
+							COMTHROW(ret->Append(conn));
+						if (set_registry)
+						{
+							RpHelperAddToRegistry(self, conn, role_name, role_isNavigable);
+							RpHelperAddToRegistry(conn, self, other_role_name, other_role_isNavigable);
+						}
+					};
+				}
+				MGACOLL_ITERATE_END;
+			}
+			MGACOLL_ITERATE_END;
+		}
+
+		return ret;
+	}
+
+	IMgaFCOsPtr RpHelperFindPeerFCOs(const IMgaFCOPtr &self,
+		const string &role_name, bool role_isNavigable,
+		const string &other_role_name, bool other_role_isNavigable,
+		const GmeDataNetwork *dn, bool only_ifNavigable, bool set_registry)
+	{
+		IMgaFCOsPtr ret;
+		ret.CreateInstance("Mga.MgaFCOs");
+
+		set<string> seen_fcos;
+
+		IMgaFCOsPtr fcos = RpHelperFindPeerFCOsFromRegistry(self, role_name, only_ifNavigable, dn);
+		MGACOLL_ITERATE(IMgaFCO, fcos)
+		{
+			if (seen_fcos.find(string(MGACOLL_ITER->GetID())) == seen_fcos.end())
+			{
+				COMTHROW(ret->Append(MGACOLL_ITER));
+				seen_fcos.insert(string(MGACOLL_ITER->GetID()));
+			}
+		}
+		MGACOLL_ITERATE_END;
+
+		fcos = RpHelperFindPeerFCOsFromModel(self, role_name, role_isNavigable, other_role_name, other_role_isNavigable, dn, only_ifNavigable, set_registry);
+		MGACOLL_ITERATE(IMgaFCO, fcos)
+		{
+			if (seen_fcos.find(string(MGACOLL_ITER->GetID())) == seen_fcos.end())
+			{
+				COMTHROW(ret->Append(MGACOLL_ITER));
+				seen_fcos.insert(string(MGACOLL_ITER->GetID()));
+			}
+		}
+		MGACOLL_ITERATE_END;
+
+		return ret;
+	}
+
 	IMgaFCOPtr getPrefferedSrcRef(const IMgaSimpleConnectionPtr& conn, const GmeDataNetwork * dn)
 	{
 		SmartBSTR regrolename = conn->RegistryValue["sRefParent"];
 		IMgaFCOPtr ret;
 		if (!(!regrolename))
 		{
-			SmartBSTR co_id = conn->RegistryValue[regrolename];
-			if (!(!co_id))
-			{
-				const char * co_id_str = (const char *)co_id;
-				if ((strlen(co_id_str) > 3) && ( strncmp(co_id_str, "id-",3) == 0))
-				{
-				
-						IMgaObjectPtr obj = dn->priv.project->GetObjectByID(co_id);
-						ret = obj;
-						if (ret) return ret;
-						
-				}
-
-			};
+			IMgaFCOsPtr references = RpHelperFindPeerFCOs(conn, string(regrolename), true, "", false, dn, true, false);
+			if (references->GetCount() == 1)
+					ret = references->GetItem(1);
 		};
 		return ret;
 	};
@@ -317,20 +523,9 @@ namespace UdmGme
 		IMgaFCOPtr ret;
 		if (!(!regrolename))
 		{
-			SmartBSTR co_id = conn->RegistryValue[regrolename];
-			if (!(!co_id))
-			{
-				const char * co_id_str = (const char *)co_id;
-				if ((strlen(co_id_str) > 3) && ( strncmp(co_id_str, "id-",3) == 0))
-				{
-				
-						IMgaObjectPtr obj = dn->priv.project->GetObjectByID(co_id);
-						ret = obj;
-						if (ret) return ret;
-						
-				}
-
-			};
+			IMgaFCOsPtr references = RpHelperFindPeerFCOs(conn, string(regrolename), true, "", false, dn, true, false);
+			if (references->GetCount() == 1)
+					ret = references->GetItem(1);
 		};
 		return ret;
 
@@ -414,6 +609,7 @@ namespace UdmGme
 		return NULL;
 	}
 
+
 	IMgaFCOsPtr GmeObject::FindReferencesToFCO(const IMgaFCOPtr& peer, const IMgaFCOPtr& preffered_ref ) const
 	{
 		if (self->GetObjType() != OBJTYPE_CONNECTION)
@@ -430,7 +626,7 @@ namespace UdmGme
 		((GmeDataNetwork*)mydn)->CountWriteOps();
 
 		::Uml::Association assoc = meta.parent();
-string rname = meta.name();
+		string rname = meta.name();
 
 //		cout << "MGA BACKEND DEBUG: Self in setAssociation() is:" << (char *) self->GetName() << endl;
 
@@ -620,22 +816,24 @@ bbreak:			;
 				{
 					
 
-					if (kvect.size() > 1) throw udm_exception("In case of np_helper connection there should be maximum one connectiong object!");
-					if (kvect.size() && (bool)meta.isNavigable() ) 
+					if (kvect.size() > 1 && self->GetObjType() != OBJTYPE_REFERENCE) throw udm_exception("In case of np_helper connection there should be maximum one connecting object!");
+					if (kvect.size())
 					{
-										
-						
-						IMgaFCOPtr connecting_object = static_cast<GmeObject *>(*(kvect.begin()))->self;				
-						COMTHROW(connecting_object->put_RegistryValue(SmartBSTR(((string)(meta.name())).c_str()), self->GetID()));
-						COMTHROW(self->put_RegistryValue(SmartBSTR(((string)(meta.name())).c_str()), connecting_object->GetID()));
-						
+						for (vector<ObjectImpl*>::const_iterator i = kvect.begin(); i != kvect.end(); i++)
+						{
+                            IMgaFCOPtr connecting_object = static_cast<GmeObject *>(*i)->self;
+							RpHelperAddToRegistry(self, connecting_object, meta.name(), meta.isNavigable());
+							RpHelperAddToRegistry(connecting_object, self, ::Uml::theOther(meta).name(), ::Uml::theOther(meta).isNavigable());
+						}
 					} else
-					if (pvect.size() && (bool)meta.isNavigable())
+					if (pvect.size())
 					{
-						
-						IMgaFCOPtr connecting_object = static_cast<GmeObject *>(*(pvect.begin()))->self;				
-						COMTHROW(connecting_object->put_RegistryValue(SmartBSTR(((string)(meta.name())).c_str()), NULL));
-						COMTHROW(self->put_RegistryValue(SmartBSTR(((string)(meta.name())).c_str()), NULL));
+						for (vector<ObjectImpl*>::const_iterator i = pvect.begin(); i != pvect.end(); i++)
+						{
+                            IMgaFCOPtr connecting_object = static_cast<GmeObject *>(*i)->self;
+							RpHelperRemoveFromRegistry(self, connecting_object, meta.name());
+							RpHelperRemoveFromRegistry(connecting_object, self, ::Uml::theOther(meta).name());
+						}
 					};
 				}//if (nn.rp_helper)
 				else
@@ -854,26 +1052,15 @@ bbreak:			;
 			{
 				if (nn.rp_helper)
 				{
-					string name = nn.primary.name();
-					bool isnav = nn.primary.isNavigable();
-					SmartBSTR co_id = self->RegistryValue[name.c_str()];
-
-						
-					if (!(!co_id))//_bstr_t why does not have a bool operator ?
+					IMgaFCOsPtr fcos = RpHelperFindPeerFCOs(self,
+						meta.name(), meta.isNavigable(),
+						::Uml::theOther(meta).name(), ::Uml::theOther(meta).isNavigable(),
+						(GmeDataNetwork *)mydn, true);
+					MGACOLL_ITERATE(IMgaFCO, fcos)
 					{
-						//extra check if the obtained vlue is an ID
-						const char * co_id_str = (const char *)co_id;
-						if ((strlen(co_id_str) > 3) && ( strncmp(co_id_str, "id-",3) == 0))
-						{
-							IMgaObjectPtr obj = ((GmeDataNetwork *)mydn)->priv.project->GetObjectByID(co_id);
-							IMgaFCOPtr fco(obj);
-							if (fco)
-							{
-								
-								ret.push_back(new GmeObject( fco, mydn));
-							};
-						};
-					};
+						ret.push_back(new GmeObject(MGACOLL_ITER, mydn));
+					}
+					MGACOLL_ITERATE_END;
 				}
 				else if(mode == Udm::TARGETFROMCLASS) 
 				{
@@ -1365,28 +1552,24 @@ bbreak:			;
 			for (ars_i = all_roles.begin(); ars_i != all_roles.end(); ars_i++)
 			{
 				string oar_name = ars_i->name();
-				SmartBSTR co_id = self->RegistryValue[oar_name.c_str()];
-
-					
-				if (!(!co_id))//_bstr_t why does not have a bool operator ?
+				::Uml::Association assoc = ars_i->parent();
+				assocmapitem nn = ((GmeDataNetwork *)__getdn())->amap.find(assoc.uniqueId())->second;
+				if (nn.ot == OBJTYPE_CONNECTION && nn.rp_helper)
 				{
-					//extra check if the obtained vlue is an ID
-					const char * co_id_str = (const char *)co_id;
-					if ((strlen(co_id_str) > 3) && ( strncmp(co_id_str, "id-",3) == 0))
+					IMgaFCOsPtr fcos = RpHelperFindPeerFCOs(self,
+						ars_i->name(), ars_i->isNavigable(),
+						::Uml::theOther(*ars_i).name(), ::Uml::theOther(*ars_i).isNavigable(),
+						(GmeDataNetwork *)__getdn(), false, false);
+					MGACOLL_ITERATE(IMgaFCO, fcos)
 					{
-						IMgaObjectPtr obj = ((GmeDataNetwork *)__getdn())->priv.project->GetObjectByID(co_id);
-						IMgaFCOPtr fco(obj);
-						if (fco)
-						{
-							//this should be removed instead of clearing it.
-							fco->put_RegistryValue(SmartBSTR(oar_name.c_str()), NULL);
-						};
-					};
+						RpHelperRemoveFromRegistry(MGACOLL_ITER, self, ars_i->name());
+					}
+					MGACOLL_ITERATE_END;
 				};
 			};
 		};
-
 	};
+
 	void GmeObject::setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct) 
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
@@ -2009,7 +2192,7 @@ bbreak:			;
 	
 
 
-	Udm::DataNetwork * GmeObject::__getdn() 
+	Udm::DataNetwork * GmeObject::__getdn()
 	{ 
 		if (mydn) return const_cast<Udm::DataNetwork*>(mydn);
 		throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
@@ -2260,7 +2443,7 @@ bbreak:			;
 			}
 			if((nn.metaobj != NULL) || (nn.metaobjs != NULL) )
 			{	
-				//association already resolved - it's either a conenction or a reference or a set-member relationship
+				//association already resolved - it's either a connection or a reference or a set-member relationship
 				reservednamesinUML = true;
 			}
 			else 
