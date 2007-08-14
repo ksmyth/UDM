@@ -33,7 +33,7 @@ public:
 	BOOL GenerateComponentConfig();	
 	void FileFilter(CString strFileName,bool & bSkip,bool&bReadOnly,bool bIsDir);	
 	BOOL UnzipSources();
-	UnZip(const char * szMemFileName, const char *szPath);
+	int UnZip(const char * szMemFileName, const char *szPath);
 	void Generate();
 	CGenerator();
 	virtual ~CGenerator();
