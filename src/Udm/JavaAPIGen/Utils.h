@@ -33,18 +33,18 @@ class Utils
     static string Utils::getTime();
 
     //! The possible root objects of the given namespace.
-    static vector< ::Uml::Uml::Class> getPossibleRootClasses( const ::Uml::Uml::Namespace & ns );
+    static vector< ::Uml::Class> getPossibleRootClasses( const ::Uml::Namespace & ns );
 
     //! Returns the package signature for the specific class.
-    static string getPackageSignature(const ::Uml::Uml::Class &cl
+    static string getPackageSignature(const ::Uml::Class &cl
       , const string & current_ns
       , const string & pckg_hierarcy);
 
     //! Returns the first non-abstract ancestor of the class specified by the parameter
-    static ::Uml::Uml::Class getFirstNonAbstractAncestor( const ::Uml::Uml::Class &cl );
+    static ::Uml::Class getFirstNonAbstractAncestor( const ::Uml::Class &cl );
 
     //! Returns the composition child role string for the given role.
-    static string getCCRString( const ::Uml::Uml::CompositionChildRole& ccr );
+    static string getCCRString( const ::Uml::CompositionChildRole& ccr );
 
   private:
     //! The copyright text for the generated Java API.

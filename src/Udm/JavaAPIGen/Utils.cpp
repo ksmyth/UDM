@@ -151,17 +151,17 @@ string Utils::getTime()
   Returns the possible root objects of the namespace specified
   by the parameter.
 */
-vector< ::Uml::Uml::Class> Utils::getPossibleRootClasses (const ::Uml::Uml::Namespace & ns)
+vector< ::Uml::Class> Utils::getPossibleRootClasses (const ::Uml::Namespace & ns)
 {
-  vector< ::Uml::Uml::Class> globalElements;
-  set< ::Uml::Uml::Class> classes = ns.classes();
-  set< ::Uml::Uml::Class>::iterator i = classes.begin();
+  vector< ::Uml::Class> globalElements;
+  set< ::Uml::Class> classes = ns.classes();
+  set< ::Uml::Class>::iterator i = classes.begin();
 
   while ( i != classes.end() )
   {
     if ( !(bool)i->isAbstract() )
     {
-      set< ::Uml::Uml::Class> p_c = Uml::AncestorContainerClasses(*i); //all possible containers
+      set< ::Uml::Class> p_c = Uml::AncestorContainerClasses(*i); //all possible containers
 
       //the condition: It's not contained or it's only container is itself
       if ( (p_c.size() == 0) || ((p_c.size() == 1) && (*(p_c.begin()) == *i)) )
@@ -180,7 +180,7 @@ vector< ::Uml::Uml::Class> Utils::getPossibleRootClasses (const ::Uml::Uml::Name
   parameter current_ns, then it returns the the abolute path 
   (package signature) of cl.
 */
-string Utils::getPackageSignature(const ::Uml::Uml::Class &cl
+string Utils::getPackageSignature(const ::Uml::Class &cl
   , const string & current_ns
   , const string & pckg_hierarcy)
 
@@ -188,7 +188,7 @@ string Utils::getPackageSignature(const ::Uml::Uml::Class &cl
   string ret;
 
   string ns = Utils::toLower(current_ns);
-  string parent_ns = Utils::toLower( (string)( ( ::Uml::Uml::Namespace )cl.parent( ) ).name() );
+  string parent_ns = Utils::toLower( (string)( ( ::Uml::Namespace )cl.parent( ) ).name() );
 
   if ( ns != parent_ns )
   {
@@ -201,13 +201,13 @@ string Utils::getPackageSignature(const ::Uml::Uml::Class &cl
 }
 
 //! Returns the first non-abstract ancestor of the class specified by the parameter
-::Uml::Uml::Class Utils::getFirstNonAbstractAncestor( const ::Uml::Uml::Class &cl )
+::Uml::Class Utils::getFirstNonAbstractAncestor( const ::Uml::Class &cl )
 {
-  set< ::Uml::Uml::Class> ancs = cl.baseTypes();
+  set< ::Uml::Class> ancs = cl.baseTypes();
   if ( ancs.size() )
   {
-    ::Uml::Uml::Class anc = *(ancs.begin());
-    ::Uml::Uml::Class ret = getFirstNonAbstractAncestor(anc);
+    ::Uml::Class anc = *(ancs.begin());
+    ::Uml::Class ret = getFirstNonAbstractAncestor(anc);
 
     if ( ret )
       return ret;
@@ -225,7 +225,7 @@ string Utils::getPackageSignature(const ::Uml::Uml::Class &cl
 } 
 
 //! Returns the composition child role string for the given role.
-string Utils::getCCRString(const ::Uml::Uml::CompositionChildRole& ccr)
+string Utils::getCCRString(const ::Uml::CompositionChildRole& ccr)
 {
   return ( (string)ccr.name() ) + "_ccr";
 };

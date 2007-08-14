@@ -10,7 +10,7 @@ class JavaAPIGen
 {
   public:
     //! Constructor.
-    JavaAPIGen( const ::Uml::Uml::Diagram &diagram
+    JavaAPIGen( const ::Uml::Diagram &diagram
       , const map<string, string>& ns_map
       , const string& inputfile );
 
@@ -36,13 +36,13 @@ class JavaAPIGen
     void  closeFactoryRepository( );
 
     //! Generate the JAVA API source code.
-    void generateJava( const ::Uml::Uml::Diagram &diagram
+    void generateJava( const ::Uml::Diagram &diagram
       , const map<string, string> & ns_map
       , const string& inputfile) ;
 
   private:
     //! The UDM UML diagram.
-    const ::Uml::Uml::Diagram & m_diagram;
+    const ::Uml::Diagram & m_diagram;
 
     //! Namespace direcotry.
     const map<string, string>& m_ns_map;

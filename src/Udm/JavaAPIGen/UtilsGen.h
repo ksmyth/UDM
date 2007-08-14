@@ -10,7 +10,7 @@ class UtilsGen
 {
   public:
     //! Constructor.
-    UtilsGen(const ::Uml::Uml::Namespace &ns
+    UtilsGen(const ::Uml::Namespace &ns
       , const string & package_name
       , const map<string, string> & ns_map);
 
@@ -33,7 +33,7 @@ class UtilsGen
 
   private:
     //! The namespace of this factory.
-    const ::Uml::Uml::Namespace & m_ns;
+    const ::Uml::Namespace & m_ns;
 
     //! The name of the package for the generated Java file.
     const string m_package_name;

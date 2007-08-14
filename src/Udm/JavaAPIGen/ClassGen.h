@@ -10,7 +10,7 @@ class ClassGen
 {
   public:
     //! Constructor.
-    ClassGen(const ::Uml::Uml::Class &cl
+    ClassGen(const ::Uml::Class &cl
       , const string & pckg_name
       , const string &  diag_name);
 
@@ -51,7 +51,7 @@ class ClassGen
 
   private:
     //! The UML representation of this class.
-    const ::Uml::Uml::Class & m_cl;
+    const ::Uml::Class & m_cl;
 
     //! The name of the package for the generated Java file.
     const string m_package_name;

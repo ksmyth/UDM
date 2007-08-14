@@ -5,13 +5,13 @@
 #include "UtilsGen.h"
 #include "ClassGen.h"
 
-void GenerateJavaClass(const ::Uml::Uml::Class &cl, const string & pckg_hierarcy, const string& diagName);
+void GenerateJavaClass(const ::Uml::Class &cl, const string & pckg_hierarcy, const string& diagName);
 
 //! Constructor.
 /*!
   Creates and initializes the Java API generation.
 */
-JavaAPIGen::JavaAPIGen( const ::Uml::Uml::Diagram &diagram
+JavaAPIGen::JavaAPIGen( const ::Uml::Diagram &diagram
                        , const map<string, string>& ns_map
                        , const string& inputfile )
 :   m_diagram( diagram ), m_ns_map( ns_map ), m_inputfile( inputfile )
@@ -190,14 +190,14 @@ void  JavaAPIGen::closeFactoryRepository( )
   Generate the factory classes to create UDM object models and the
   JAVA representation of the corresponding UML diagram.
 */
-void JavaAPIGen::generateJava( const ::Uml::Uml::Diagram &diagram
+void JavaAPIGen::generateJava( const ::Uml::Diagram &diagram
   , const map<string, string> & ns_map
   , const string& inputfile)
 {
   // the namespaces in the diagram
-  set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
+  set< ::Uml::Namespace> nses = diagram.namespaces();
 
-  for( set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++ )
+  for( set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++ )
   {
     // the current namespace
     string ns_name = (*nses_i).name();
@@ -210,8 +210,8 @@ void JavaAPIGen::generateJava( const ::Uml::Uml::Diagram &diagram
     Utils::XML2Java( ns_name + "_xsd", ns_name + ".xsd", m_meta_dir );
 
     // the possible root objects of this namespace
-    vector< ::Uml::Uml::Class> roots = Utils::getPossibleRootClasses( *nses_i );
-    vector< ::Uml::Uml::Class>::iterator r_i = roots.begin();
+    vector< ::Uml::Class> roots = Utils::getPossibleRootClasses( *nses_i );
+    vector< ::Uml::Class>::iterator r_i = roots.begin();
 
     // generate the specific factories
     for(; r_i != roots.end(); r_i++ )
@@ -233,8 +233,8 @@ void JavaAPIGen::generateJava( const ::Uml::Uml::Diagram &diagram
 
     // generate java classes in the namespace
     string diagName = nses_i->name();
-    set< ::Uml::Uml::Class> uml_classes = nses_i->classes();
-    for( set< ::Uml::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
+    set< ::Uml::Class> uml_classes = nses_i->classes();
+    for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
     {
       //GenerateJavaClass(*uc_i, package_name, diagName);
       ClassGen class_gen( *uc_i, package_name, diagName );

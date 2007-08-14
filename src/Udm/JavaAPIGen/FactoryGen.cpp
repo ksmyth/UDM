@@ -8,7 +8,7 @@
 /*!
   Creates and initializes the Java API generation.
 */
-FactoryGen::FactoryGen( const ::Uml::Uml::Namespace &ns
+FactoryGen::FactoryGen( const ::Uml::Namespace &ns
                       , const string &  m_package_name 
                       , const string & m_root_name
                       , const map<string, string> & ns_map
@@ -395,12 +395,12 @@ void FactoryGen::initializeMetaClasses( )
   m_output << "\tprivate void initializeMetaClasses() \n\t\t throws UdmException " << endl;
   m_output << "\t{" << endl;
 
-  set< ::Uml::Uml::Class>::iterator classes_i;
-  set< ::Uml::Uml::Class> classes = m_ns.classes();
+  set< ::Uml::Class>::iterator classes_i;
+  set< ::Uml::Class> classes = m_ns.classes();
 
   for( classes_i = classes.begin(); classes_i != classes.end(); classes_i++ )
   {
-    ::Uml::Uml::Class cl = *classes_i;
+    ::Uml::Class cl = *classes_i;
 
     if ( cl.isAbstract() == false )
     {
@@ -424,8 +424,8 @@ void FactoryGen::initializeMetaClasses( )
 
   // load XSDs
   m_output << "\t\t// load XSDs" << endl;
-  set< ::Uml::Uml::Namespace> nses = m_diagram.namespaces();
-  set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin();
+  set< ::Uml::Namespace> nses = m_diagram.namespaces();
+  set< ::Uml::Namespace>::iterator nses_i = nses.begin();
   for ( ; nses_i != nses.end(); nses_i++)
   {
     string n = nses_i->name();

@@ -10,7 +10,7 @@ class FactoryGen
 {
   public:
     //! Constructor.
-    FactoryGen(const ::Uml::Uml::Namespace &ns
+    FactoryGen(const ::Uml::Namespace &ns
       , const string & package_name
       , const string & root_name
       , const map<string, string> & ns_map
@@ -77,10 +77,10 @@ class FactoryGen
 
   private:
     //! The namespace of this factory.
-    const ::Uml::Uml::Namespace & m_ns;
+    const ::Uml::Namespace & m_ns;
 
     //! The UDM UML diagram.
-    const ::Uml::Uml::Diagram m_diagram;
+    const ::Uml::Diagram m_diagram;
 
     //! Namespace direcotry.
     const map<string, string>& m_ns_map;

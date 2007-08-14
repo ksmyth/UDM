@@ -8,7 +8,7 @@
 /*!
   Creates and initializes the Java API generation.
 */
-UtilsGen::UtilsGen( const ::Uml::Uml::Namespace &ns
+UtilsGen::UtilsGen( const ::Uml::Namespace &ns
       , const string & package_name
       , const map<string, string> & ns_map)
 :   m_ns( ns ), m_ns_map( ns_map )
@@ -97,8 +97,8 @@ void UtilsGen::header( )
 //! Generate function that wraps a pseudoobject in a domain specific object.
 void UtilsGen::wrapper( )
 {
-  set< ::Uml::Uml::Class> classes = m_ns.classes();
-  set< ::Uml::Uml::Class>::iterator classes_i;
+  set< ::Uml::Class> classes = m_ns.classes();
+  set< ::Uml::Class>::iterator classes_i;
 
   // generate a static function that wraps a pseudoobject in a domain specific object
   m_output << "\t/**" << endl;
