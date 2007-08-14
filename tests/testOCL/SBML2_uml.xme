@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{9680D913-9669-4389-BD04-315A2A483D03}" cdate="Fri Apr 08 16:17:28 2005" mdate="Fri Apr 08 16:17:28 2005" version="" metaguid="{F9663D62-3422-4A2B-A613-2E8453675A03}" metaversion="" metaname="UML">
+<project guid="{DEB9088C-5D90-4C1A-9F47-D264615342E5}" cdate="Fri Apr 22 15:20:07 2005" mdate="Fri Apr 22 15:20:07 2005" version="" metaguid="{F9663D62-3422-4A2B-A613-2E8453675A03}" metaversion="" metaname="UML">
 	<name>SBML2_uml</name>
 	<comment></comment>
 	<author></author>
@@ -3005,7 +3005,7 @@ math:Text</value>
 					<connpoint role="src" target="id-0067-0000000a"/>
 				</connection>
 			</model>
-			<model id="id-0065-0000000a" kind="ClassDiagram" role="ClassDiagram" relid="0xe" childrelidcntr="0x19">
+			<model id="id-0065-0000000a" kind="ClassDiagram" role="ClassDiagram" relid="0xe" childrelidcntr="0x1b">
 				<name>math</name>
 				<regnode name="PartRegs" isopaque="yes">
 					<value></value>
@@ -3319,6 +3319,33 @@ value: String</value>
 						<value></value>
 					</attribute>
 				</atom>
+				<atom id="id-0066-00000047" kind="Class" role="Class" relid="0x1a">
+					<name>species</name>
+					<regnode name="PartRegs">
+						<value></value>
+						<regnode name="Constraints">
+							<value></value>
+							<regnode name="Position" isopaque="yes">
+								<value>121,93</value>
+							</regnode>
+						</regnode>
+						<regnode name="UML">
+							<value></value>
+							<regnode name="Position" isopaque="yes">
+								<value>121,93</value>
+							</regnode>
+						</regnode>
+					</regnode>
+					<attribute kind="Attributes" status="meta">
+						<value></value>
+					</attribute>
+					<attribute kind="IsAbstract" status="meta">
+						<value>false</value>
+					</attribute>
+					<attribute kind="Stereotype" status="meta">
+						<value></value>
+					</attribute>
+				</atom>
 				<connection id="id-0068-0000004b" kind="Composition" role="Composition" relid="0x9">
 					<name>Composition</name>
 					<regnode name="autorouterPref" isopaque="yes">
@@ -3440,8 +3467,8 @@ value: String</value>
 					<attribute kind="ParentRole" status="meta">
 						<value></value>
 					</attribute>
-					<connpoint role="src" target="id-0066-0000003d"/>
 					<connpoint role="dst" target="id-0066-0000003d"/>
+					<connpoint role="src" target="id-0066-0000003d"/>
 				</connection>
 				<connection id="id-0068-00000053" kind="Composition" role="Composition" relid="0x13">
 					<name>Composition</name>
@@ -3527,6 +3554,20 @@ value: String</value>
 					</attribute>
 					<connpoint role="src" target="id-0066-0000003d"/>
 					<connpoint role="dst" target="id-0066-00000044"/>
+				</connection>
+				<connection id="id-0068-00000059" kind="Composition" role="Composition" relid="0x1b">
+					<name>Composition</name>
+					<attribute kind="Cardinality" status="meta">
+						<value>0..*</value>
+					</attribute>
+					<attribute kind="ChildRole" status="meta">
+						<value></value>
+					</attribute>
+					<attribute kind="ParentRole" status="meta">
+						<value></value>
+					</attribute>
+					<connpoint role="dst" target="id-0066-0000003c"/>
+					<connpoint role="src" target="id-0066-00000047"/>
 				</connection>
 			</model>
 			<model id="id-0065-0000000b" kind="ClassDiagram" role="ClassDiagram" relid="0xf" childrelidcntr="0x3">
