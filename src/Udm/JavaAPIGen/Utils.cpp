@@ -188,7 +188,7 @@ string Utils::getPackageSignature(const ::Uml::Class &cl
   string ret;
 
   string ns = Utils::toLower(current_ns);
-  string parent_ns = Utils::toLower( (string)( ( ::Uml::Namespace )cl.parent( ) ).name() );
+  string parent_ns;// /*to be done for udm_ns2*/ = Utils::toLower( (string)( ( ::Uml::Namespace )cl.parent( ) ).name() );
 
   if ( ns != parent_ns )
   {
