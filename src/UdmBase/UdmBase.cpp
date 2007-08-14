@@ -12,6 +12,10 @@ this software.
 */
 /*
 CHANGELOG
+	03/22/06	-	Feng
+
+		Add the code for set the attribute "name" with the object class name.
+
 	12/08/04	-	endre
 
 		Small bugfix: CopyAttributes fucntion could not handle "Text" Attributes.
@@ -1432,7 +1436,8 @@ namespace Udm
 				::Uml::Attribute att = *c_i++;
 				if (att.defvalue() || (att.min() > 0))
 				{
-
+					if((string)att.name()=="name") setStringAttr(att,type().name(), false);
+				
 					//has a default value specified in the MetaModel
 					//so we set it's default value to this
 					string attrType=att.type();
