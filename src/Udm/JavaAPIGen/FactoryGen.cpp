@@ -2,7 +2,8 @@
 
 #include "Utils.h"
 #include <Uml.h>
-#include <UdmDom.h>
+#include <UmlExt.h>
+#include <UdmUtil.h>
 
 //! Constructor.
 /*!
@@ -421,7 +422,7 @@ void FactoryGen::initializeMetaClasses( )
     {
       const std::string& ns = ns_iter->first;
       const std::string& uri = ns_iter->second;
-      std::string xsdname = (string)m_diagram.name() + "_" + ns + ".xsd";
+      std::string xsdname = (string)m_diagram.name() + "_" + UdmUtil::replace_delimiter(ns, "::", "_") + ".xsd";
 
       m_output << "\t\tUdmHelper.AddURIToUMLNamespaceMapping(\""<< uri<<"\",\""<<ns<<"\",\""<<xsdname<<"\" );" << std::endl;
     }
@@ -430,12 +431,12 @@ void FactoryGen::initializeMetaClasses( )
   // load XSDs
   m_output << "\t\t// load XSDs" << endl;
   m_output << "\t\tUdmHelper.StoreXsd(\"" << m_diag_name << ".xsd\", edu.vanderbilt.isis.meta." << m_diag_name << "_xsd.getString());" << endl;
-  set< ::Uml::Namespace> nses = m_diagram.namespaces();
-  set< ::Uml::Namespace>::iterator nses_i = nses.begin();
+  ::Uml::DiagramNamespaces nses(m_diagram);
+  ::Uml::DiagramNamespaces::iterator nses_i = nses.begin();
   for ( ; nses_i != nses.end(); nses_i++)
   {
-    string n = nses_i->name();
-    m_output << "\t\tUdmHelper.StoreXsd(\"" << m_diag_name << "_" << n << ".xsd\", edu.vanderbilt.isis.meta." << m_diag_name << "_" << n << "_xsd.getString());" << endl;
+    string nsn = nses_i->getPath2("_");
+    m_output << "\t\tUdmHelper.StoreXsd(\"" << nsn << ".xsd\", edu.vanderbilt.isis.meta." << nsn << "_xsd.getString());" << endl;
   }
 
   m_output << "\t}" << endl;
@@ -714,7 +715,7 @@ void FactoryGen::closeDN( )
 string FactoryGen::namespaceOrDiagramName( )
 {
   if ( m_ns != ::Uml::Namespace( NULL ) )
-    return m_ns.name();
+    return m_ns.getPath2("_", false);
   return m_diag_name;
 }
 
@@ -722,7 +723,7 @@ string FactoryGen::namespaceOrDiagramName( )
 string FactoryGen::containerDescriptionDoc( )
 {
   if ( m_ns != ::Uml::Namespace( NULL ) )
-    return "\t * in namespace <code>" + (string) m_ns.name() + "</code>.";
+    return "\t * in namespace <code>" + (string) m_ns.getPath2("::", false) + "</code>.";
   return "\t * in diagram <code>" + m_diag_name + "</code>.";
 }
 
@@ -730,6 +731,6 @@ string FactoryGen::containerDescriptionDoc( )
 string FactoryGen::containerDescriptionFunc( )
 {
   if ( m_ns != ::Uml::Namespace( NULL ) )
-    return m_diag_name + "_" + (string) m_ns.name();
+    return m_ns.getPath2("_");
   return m_diag_name;
 }

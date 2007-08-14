@@ -53,7 +53,7 @@ void JavaAPIGen::generate()
   // Generate and open example file
   openExample(); 
 
-  // Generate and open facotry repository file
+  // Generate and open factory repository file
   openFactoryRepository(); 
 
   // Generate java code
@@ -233,19 +233,17 @@ void JavaAPIGen::generateJava( const ::Uml::Diagram &diagram
 
 
   // the namespaces in the diagram
-  set< ::Uml::Namespace> nses = diagram.namespaces();
+  ::Uml::DiagramNamespaces nses(diagram);
 
-  for( set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++ )
+  for( ::Uml::DiagramNamespaces::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++ )
   {
-    // the current namespace
-    string ns_name = (*nses_i).name();
     // the corresponding JAVA package name
-    string package_name = m_diag_dir + "/" + Utils::toLower(ns_name);
+	string package_name = m_diag_dir + "/" + Utils::toLower(nses_i->getPath2("/", false));
     // create the directory corresponding to the JAVA package name
     Utils::makeDir(package_name);
 
     // generate JAVA from XSD
-    Utils::XML2Java( (string) m_diagram.name() + "_" + ns_name + "_xsd", (string) m_diagram.name() + "_" + ns_name + ".xsd", m_meta_dir );
+	Utils::XML2Java( nses_i->getPath2("_") + "_xsd", nses_i->getPath2("_") + ".xsd", m_meta_dir );
 
     // the possible root objects of this namespace
     vector< ::Uml::Class> roots = Utils::getPossibleRootClasses( nses_i->classes() );
@@ -270,12 +268,11 @@ void JavaAPIGen::generateJava( const ::Uml::Diagram &diagram
     utils_gen.generate( );
 
     // generate java classes in the namespace
-    string nsName = nses_i->name();
     set< ::Uml::Class> uml_classes = nses_i->classes();
     for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
     {
       //GenerateJavaClass(*uc_i, package_name, diagName);
-      ClassGen class_gen( *uc_i, package_name, m_diagram.name(), nsName );
+      ClassGen class_gen( *uc_i, package_name, m_diagram.name(), nses_i->getPath2("::", false) );
       class_gen.generate( );
     }
   }

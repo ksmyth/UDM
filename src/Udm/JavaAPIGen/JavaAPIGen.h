@@ -2,6 +2,7 @@
 #define JavaAPIGen_H
 
 #include <Uml.h>
+#include <UmlExt.h>
 #include <fstream>
 
 using namespace std;
@@ -44,7 +45,7 @@ class JavaAPIGen
     //! The UDM UML diagram.
     const ::Uml::Diagram & m_diagram;
 
-    //! Namespace direcotry.
+    //! Namespace directory.
     const map<string, string>& m_ns_map;
 
     //! The input UDM XML file.

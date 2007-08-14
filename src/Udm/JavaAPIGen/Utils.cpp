@@ -3,6 +3,7 @@
 #include "../File2Code/File2Code.h"
 #include <time.h>
 #include <UmlExt.h>
+#include <UdmUtil.h>
 
 #ifdef _WIN32
 
@@ -169,27 +170,26 @@ vector< ::Uml::Class> Utils::getPossibleRootClasses (const set< ::Uml::Class> & 
 
 //! Returns the package signature for the specific class.
 /*!
-  If the namespace of cl differs form the namespace specified by the 
-  parameter current_ns, then it returns the the abolute path 
+  If the namespace path of cl differs form the namespace path specified by the 
+  parameter current_ns_path, then it returns the the abolute path 
   (package signature) of cl.
 */
 string Utils::getPackageSignature(const ::Uml::Class &cl
-  , const string & current_ns
+  , const string & current_ns_path
   , const string & pckg_hierarcy)
 
 {
   string ret;
 
-  string ns = Utils::toLower(current_ns);
-  string parent_ns;
-  if ( (::Uml::Namespace) cl.parent_ns() != ::Uml::Namespace(NULL) )
-    parent_ns = Utils::toLower( (string)( ( ::Uml::Namespace )cl.parent_ns( ) ).name() );
+  ::Uml::Namespace cl_ns = cl.parent_ns();
+  string cl_ns_path = cl_ns ? cl_ns.getPath2("::", false) : "";
+  cl_ns_path = Utils::toLower(cl_ns_path);
 
-  if ( ns != parent_ns )
+  if ( cl_ns_path != Utils::toLower(current_ns_path) )
   {
     string pck_name = Utils::toPackageName( pckg_hierarcy );
-    pck_name.resize( pck_name.length( ) - current_ns.length( ) );
-    ret = pck_name + parent_ns + ".";
+    pck_name.resize( pck_name.length( ) - current_ns_path.length( ) );
+	ret = pck_name + UdmUtil::replace_delimiter(cl_ns_path, "::", ".") + ".";
   }
 
   return ret;

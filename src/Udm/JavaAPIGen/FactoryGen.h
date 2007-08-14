@@ -92,7 +92,7 @@ class FactoryGen
     //! The UDM UML diagram.
     const ::Uml::Diagram m_diagram;
 
-    //! Namespace direcotry.
+    //! Namespace directory.
     const map<string, string>& m_ns_map;
 
     //! The input UDM XML file.

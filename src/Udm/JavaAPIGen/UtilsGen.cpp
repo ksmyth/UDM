@@ -87,7 +87,7 @@ void UtilsGen::header( )
   // generate class documentation
   m_output << "/**" << endl;
   if ( m_ns != ::Uml::Namespace( NULL ) )
-    m_output << " * Utility class for namespace <code>" << m_ns.name() << "</code>." << endl;
+    m_output << " * Utility class for namespace <code>" << m_ns.getPath2("::", false) << "</code>." << endl;
   else
     m_output << " * Utility class for diagram <code>" << m_diagram.name() << "</code>." << endl;
   m_output << " */ " << endl;
