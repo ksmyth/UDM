@@ -376,10 +376,12 @@ namespace UdmGme
 		if (!(!co_ids))
 		{
 			RpHelperIDs ids = StringToList(string(co_ids));
-			for (RpHelperIDs::iterator i = ids.begin(); i != ids.end(); i++)
+			for (RpHelperIDs::iterator i = ids.begin(); i != ids.end(); )
 			{
 				if (i->second.compare(peer_toRemove->GetID()) == 0)
-					ids.erase(i);
+					i = ids.erase(i);
+				else
+					i++;
 			}
 			if (ids.size())
 				COMTHROW(fco->put_RegistryValue(SmartBSTR(role_name.c_str()), SmartBSTR(ListToString(ids).c_str())));
@@ -707,7 +709,7 @@ namespace UdmGme
 				{
 					(*j)->release();	//pvect is obtained by getAssociation()!!
 					pvect.erase(j);
-					kvect.erase(i);
+					i = kvect.erase(i);
 					goto bbreak;
 				}
 			}
