@@ -66,13 +66,13 @@ namespace UdmUtil
 	UDM_DLL string ExtractName(Udm::Object ob,  const string att_name )
 	{
 		::Uml::Uml::Class cls= ob.type();				
-		set<::Uml::Uml::Attribute> attrs=cls.attributes();		
+		set< ::Uml::Uml::Attribute> attrs=cls.attributes();		
 		
 		// Adding parent attributes
-		set<::Uml::Uml::Attribute> aattrs=::Uml::AncestorAttributes(cls);
+		set< ::Uml::Uml::Attribute> aattrs=::Uml::AncestorAttributes(cls);
 		attrs.insert(aattrs.begin(),aattrs.end());
 
-		for(set<::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+		for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 		{
 			if(string(ai->type())=="String")
 			{
@@ -236,15 +236,15 @@ namespace UdmUtil
 
 		
 
-		set<::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+		set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
 
-		for(set<::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); p_currClass!=ancestorClasses.end(); p_currClass++)
+		for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); p_currClass!=ancestorClasses.end(); p_currClass++)
 		{
 			
 			// Traversing the containtment hierarchy
-			set<::Uml::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
-			for(set<::Uml::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
+			set< ::Uml::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
+			for(set< ::Uml::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
 				p_currRole!=compParentRoles.end(); p_currRole++)
 			{
 				::Uml::Uml::Class childClass=theOther(*p_currRole).target();
@@ -439,14 +439,14 @@ namespace UdmUtil
 		// Root objects are of incompatible type
 		if(srcClass!=dstClass) return -1;
 
-		set<::Uml::Uml::Class> ancestorClasses=AncestorClasses(srcClass);
+		set< ::Uml::Uml::Class> ancestorClasses=AncestorClasses(srcClass);
 
-		for(set<::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+		for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 						p_currClass!=ancestorClasses.end(); p_currClass++)
 		{
 			// Getting the association roles and iterating through them
-			set<::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
-			for(set<::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();p_currAssocRole!=assocRoles.end();p_currAssocRole++)
+			set< ::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+			for(set< ::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 			{
 				::Uml::Uml::AssociationRole o_role = ::Uml::theOther(*p_currAssocRole);
 

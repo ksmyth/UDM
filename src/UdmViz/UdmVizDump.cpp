@@ -110,14 +110,14 @@ void UdmVizDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 	cout<<"label="<<"\"<"<<'f'<<i++<<">"<<umlName;
 
 
-	set<::Uml::Uml::Attribute> attrs=cls.attributes();	
+	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set<::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 	
 	
-	for(set<::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		if(string(ai->type())=="String")
 		{
@@ -156,13 +156,13 @@ void UdmVizDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 string UdmVizDump::ExtractName(Udm::Object ob)
 {
 	::Uml::Uml::Class cls= ob.type();				
-	set<::Uml::Uml::Attribute> attrs=cls.attributes();		
+	set< ::Uml::Uml::Attribute> attrs=cls.attributes();		
 	
 	// Adding parent attributes
-	set<::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
-	for(set<::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		if(string(ai->type())=="String")
 		{
@@ -189,14 +189,14 @@ int UdmVizDump::VisitLinks(Udm::ObjectImpl* p_srcObjectImpl)
 	int ret=0;
 
 	::Uml::Uml::Class srcClass= p_srcObjectImpl->type();
-	set<::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+	set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
-	for(set<::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+	for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 					p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
 		// Getting the association roles and iterating through them
-		set<::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
-		for(set<::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
+		set< ::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+		for(set< ::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
 							p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
 			::Uml::Uml::Class assocClass=::Uml::Uml::Association(p_currAssocRole->parent()).assocClass();
