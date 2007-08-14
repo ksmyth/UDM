@@ -80,6 +80,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 	}
 }
 
+
 //###############################################################################################################################################
 //
 // CLASS : ConstraintBase
@@ -381,7 +382,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		: ConstraintBase( pFacade ), m_objConstraint( objConstraint )
 	{
 		::Uml::Class context = objConstraint.parent();
-		std::string strType = (std::string) ((::Uml::Namespace)context.parent_ns()).name() + "::" + (std::string) context.name();
+		std::string strType = ::UdmOcl::GetQualifiedName( context );
 		std::string strName = objConstraint.name();
 		std::string strExpression = objConstraint.expression();
 
@@ -490,7 +491,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		::Uml::Class context;
 		if(!b_PatProcessing) {
 			context = m_objConstraint.parent();
-			strType = (std::string) ((::Uml::Namespace)context.parent_ns()).name() + "::" + (std::string) context.name();
+			strType = ::UdmOcl::GetQualifiedName( context );
 			strName = (std::string) m_objConstraint.name();
 		} else {
 			strType = "Failure in pattern file";
@@ -523,7 +524,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		: ConstraintBase( pFacade ), m_objDefinition( objDefinition )
 	{
 		::Uml::Class context = objDefinition.parent();
-		std::string strType = (std::string) ((::Uml::Namespace)context.parent_ns()).name() + "::" + (std::string) context.name();
+		std::string strType = ::UdmOcl::GetQualifiedName( context );
 		std::string strName = objDefinition.name();
 		std::string strExpression = objDefinition.expression();
 		std::string strParameterList = objDefinition.parameterList();
@@ -538,7 +539,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 	std::string ConstraintDefEx::Print( bool bOnlyIdentity ) const
 	{
 		::Uml::Class context = m_objDefinition.parent();
-		std::string strType = (std::string) ((::Uml::Namespace)context.parent_ns()).name() + "::" + (std::string) context.name();
+		std::string strType = ::UdmOcl::GetQualifiedName( context );
 		std::string strName = (std::string) m_objDefinition.name();
 		std::string strParameterList = m_objDefinition.parameterList();
 		std::string strReturnType = m_objDefinition.returnType();
@@ -592,12 +593,17 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		std::string strErrAll( "" );
 		bool bResult = true;
 
+		set< ::Uml::Class> setClasses;
+		set< ::Uml::Class> setDgrClasses = m_objDiagram.classes();
+		setClasses.insert(setDgrClasses.begin(), setDgrClasses.end());
 		set< ::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
-		for(set< ::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++)
+		for(set< ::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++) {
+			set< ::Uml::Class> setNsClasses = itNamespace->classes();
+			setClasses.insert(setNsClasses.begin(), setNsClasses.end());
+		}
+
+		for ( set< ::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) 
 		{
-			set< ::Uml::Class> setClasses = itNamespace->classes();
-			for ( set< ::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) 
-			{
 				set< ::Uml::ConstraintDefinition> setConstraintDefs = (*itClass).definitions();
 				for ( set< ::Uml::ConstraintDefinition>::iterator itDefinition = setConstraintDefs.begin() ; itDefinition != setConstraintDefs.end() ; itDefinition++ ) {
 
@@ -649,7 +655,6 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 							m_vecConstraintDefs.push_back( pDefinition );
 					}
 				}
-			}
 
 		}
 		if ( ! strErrAll.empty() && sEN.eExceptionKind != ENT_NONE )
@@ -800,11 +805,16 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		std::string strErrAll( "" );
 		bool bResult = true;
 
+		set< ::Uml::Class> setClasses;
+		set< ::Uml::Class> setDgrClasses = m_objDiagram.classes();
+		setClasses.insert(setDgrClasses.begin(), setDgrClasses.end());
 		set< ::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
-		for(set< ::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++)
-		{
-			set< ::Uml::Class> setClasses = itNamespace->classes();
-			for ( set< ::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
+		for(set< ::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++) {
+			set< ::Uml::Class> setNsClasses = itNamespace->classes();
+			setClasses.insert(setNsClasses.begin(), setNsClasses.end());
+		}
+
+		for ( set< ::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
 			set< ::Uml::Constraint> setConstraints = (*itClass).constraints();
 			for ( set< ::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ ) {
 
@@ -825,7 +835,6 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 
 				m_mapConstraints.insert( ConstraintMap::value_type( *itConstraint, pConstraint ) );
 			}
-		}
 		}
 		if ( ! strErrAll.empty() && sEN.eExceptionKind == ENT_ALL )
 			throw udm_exception( strErrAll );
@@ -1037,7 +1046,6 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 
 	UDM_DLL EEvaluationResult Evaluator::Check( const SEvaluationOptions& sOptions ) const
 	{
-		//FacadeMap::iterator it = globalFacadeMap.find( ( (::Uml::Namespace)((::Uml::Class) m_objObject.type() ).parent()).parent() );
 		FacadeMap::iterator it = globalFacadeMap.find( ::Uml::GetDiagram((::Uml::Class) m_objObject.type()) );
 		if ( it == globalFacadeMap.end() ) {
 			return CER_UNDEFINED;
@@ -1094,3 +1102,41 @@ namespace UdmPat {
 
 
 }; // namespace UdmPat
+
+namespace UdmOcl {
+
+#ifndef _WIN32 // clash from gocl under linux
+
+	char *_strlwr( char *string )
+	{
+		if (string)
+		{
+			for (int i = 0; i< strlen(string); i++)
+				*(string + i) = tolower(*(string+i));
+		};
+		return string;
+	};
+
+#endif
+
+
+	std::string LowerFirst( const std::string& strValue )
+	{
+		if ( strValue.empty() )
+			return strValue;
+		return std::string( _strlwr( (char*)strValue.substr( 0, 1 ).c_str() ) ) + strValue.substr( 1 );
+	}
+
+	std::string GetQualifiedName(const ::Uml::Class &c)
+	{
+		std::string q_name;
+		::Uml::Diagram dgr = ::Uml::GetDiagram(c);
+		::Uml::Namespace ns = c.parent_ns();
+		q_name += (std::string) dgr.name() + "::";
+		if (ns)
+			q_name += (std::string) ns.name() + "::";
+		q_name += LowerFirst( c.name() );
+		return q_name;
+	}
+
+}; // namespace UdmOcl

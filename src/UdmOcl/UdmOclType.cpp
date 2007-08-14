@@ -36,33 +36,10 @@
 
 #include "Uml.h"
 #include "UmlExt.h"
+#include "UdmOcl.h"
 
 namespace UmlOcl
 {
-  #ifndef _WIN32 // clash from gocl under linux
-
-char *_strlwr( char *string )
-{
-	if (string)
-	{
-		for (int i = 0; i< strlen(string); i++)
-			*(string + i) = tolower(*(string+i));
-	};
-	return string;
-};
-
-
-
-
-#endif
-
-
-	std::string LowerFirst( const std::string& strValue )
-	{
-		if ( strValue.empty() )
-			return strValue;
-		return std::string( _strlwr( (char*)strValue.substr( 0, 1 ).c_str() ) ) + strValue.substr( 1 );
-	}
 
 //##############################################################################################################################################
 //
@@ -112,6 +89,25 @@ char *_strlwr( char *string )
 		private :
 			const ::Uml::Diagram m_diagram;
 
+			void GetFeatures( const std::vector< ::Uml::Class>& vecClasses, const OclSignature::Association& signature, OclMeta::AssociationVector& vecFeatures )
+			{
+				for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
+				{
+					std::string strClass = vecClasses[ i ].name();
+					std::string strRole = ::UdmOcl::LowerFirst( strClass );
+					std::string strRole_Q = ::UdmOcl::GetQualifiedName( vecClasses[ i ] );
+					std::string strSig = signature.GetName();
+					bool bIsQualified = strSig.find( "::" ) != std::string::npos; // true if qualified type, false if local type
+						
+					if ((bIsQualified && ( strRole_Q == signature.GetName())) || ( (!bIsQualified) && (strRole == signature.GetName()) ) )
+					{
+						TypeSeq vecType( 1, "ocl::Set" );
+						vecType.push_back( ::UdmOcl::GetQualifiedName( vecClasses[ i ] ) );
+						vecFeatures.push_back( new OclMeta::Association( strRole, "", vecType, new TDataNetworkDerived_Classes( vecClasses[ i ] ), true ) );
+					}
+				}
+			}
+
 		 public :
 			 TDataNetwork_AssociationFactory( const ::Uml::Diagram& diagram )
 		 		: m_diagram( diagram )
@@ -123,29 +119,11 @@ char *_strlwr( char *string )
 				if ( ! signature.GetAcceptableTypeName().empty() )
 					return;
 
+				GetFeatures( m_diagram.classes(), signature, vecFeatures );
+
 				std::vector< ::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
 				for( int j = 0; j < vecNamespaces.size(); j++)
-				{
-
-					std::vector< ::Uml::Class> vecClasses = vecNamespaces[j].classes();
-					for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
-					{
-						std::string strClass = vecClasses[ i ].name();
-						std::string strNs = ((::Uml::Namespace)vecClasses[ i ].parent_ns()).name();
-						std::string strRole = LowerFirst( strClass );
-						std::string strRole_Ns = LowerFirst( strNs ) +"::" + strClass ;
-						std::string strSig = signature.GetName();
-						bool bHasNamespace = strSig.find( "::" ) != std::string::npos; // true if qualified type, false if local type
-						
-
-						if ((bHasNamespace && ( strRole_Ns == signature.GetName())) || ( (!bHasNamespace) && (strRole == signature.GetName()) ) )
-						{
-							TypeSeq vecType( 1, "ocl::Set" );
-							vecType.push_back( strNs + "::" + strClass );
-							vecFeatures.push_back( new OclMeta::Association( strRole, "", vecType, new TDataNetworkDerived_Classes( vecClasses[ i ] ), true ) );
-						}
-					}
-				}
+					GetFeatures( vecNamespaces[ j ].classes(), signature, vecFeatures );
 			}
 	};
 
@@ -348,11 +326,10 @@ char *_strlwr( char *string )
 			 			std::string strRole = parentRole.name();
 			 			::Uml::Class parent = parentRole.target();
 			 			std::string strClass = parent.name();
-						std::string strNs = ((::Uml::Namespace)parent.parent_ns()).name();
-			 			TypeSeq vecType( 1, strNs + "::" + strClass );
+			 			TypeSeq vecType( 1, ::UdmOcl::GetQualifiedName( parent ) );
 			 			if ( ! strRole.empty() && strRole == strName )
 			 				vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, new TObjectDerived_Parent( parentRole, parent ), true ) );
-			 			else if ( strName == LowerFirst( strClass ) && ! bClassAccessFound && *itClass == m_class ) {
+			 			else if ( strName == ::UdmOcl::LowerFirst( strClass ) && ! bClassAccessFound && *itClass == m_class ) {
 		 					bClassAccessFound = true;
 							vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, new TObjectDerived_Parent( ::Uml::CompositionParentRole( NULL ), parent ), true ) );
 		 				}
@@ -373,13 +350,12 @@ char *_strlwr( char *string )
 		 			std::string strRole = childRole.name();
 		 			::Uml::Class child = childRole.target();
 		 			std::string strClass = child.name();
-					std::string strNs = ((::Uml::Namespace)child.parent_ns()).name();
 
-					if ( ! strRole.empty() && strRole == strName || strName == LowerFirst( strClass ) ) {
+					if ( ! strRole.empty() && strRole == strName || strName == ::UdmOcl::LowerFirst( strClass ) ) {
 		 				TypeSeq vecType;
 		 				if ( childRole.max() > 1 || childRole.max() == -1 )
 		 					vecType.push_back( "ocl::Set" );
-		 				vecType.push_back( strNs + "::" + strClass );
+		 				vecType.push_back( ::UdmOcl::GetQualifiedName( child ) );
 		 				Udm::Object::CompositionInfo info;
 		 				if ( ! strRole.empty() && strRole == strName ) {
 		 					info.strParentRoleName = (*itParent).name();
@@ -405,13 +381,12 @@ char *_strlwr( char *string )
 							std::string strRole = (*itTo).name();
 							::Uml::Class peer = (*itTo).target();
 							std::string strClass = peer.name();
-							std::string strNs = ((::Uml::Namespace)peer.parent_ns()).name();
-							if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == LowerFirst( strClass ) ) {
+							if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == ::UdmOcl::LowerFirst( strClass ) ) {
 								TypeSeq vecType;
 		 						if ( (*itTo).max() > 1 ||  (*itTo).max() == -1 )
 		 							vecType.push_back( "ocl::Set" );
-		 						vecType.push_back( strNs + "::" + strClass );
-		 						TObjectDerived_Peers* pAssociation = new TObjectDerived_Peers( *itTo,  ( strRole.empty() && strName == LowerFirst( strClass ) ) ? m_class : ::Uml::Class( NULL ), vecType.size() > 1 );
+		 						vecType.push_back( ::UdmOcl::GetQualifiedName( peer ) );
+		 						TObjectDerived_Peers* pAssociation = new TObjectDerived_Peers( *itTo,  ( strRole.empty() && strName == ::UdmOcl::LowerFirst( strClass ) ) ? m_class : ::Uml::Class( NULL ), vecType.size() > 1 );
 		 						vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, pAssociation , true ) );
 		 					}
 		 				}
@@ -430,9 +405,8 @@ char *_strlwr( char *string )
 					::Uml::Class assocClass = association.assocClass();
 					if ( assocClass ) {
 						std::string strClass = assocClass.name();
-						std::string strNs = ((::Uml::Namespace)assocClass.parent_ns()).name();
 						std::string strRole = (*itFrom).name();
-						std::string strClassRole = LowerFirst( strClass );
+						std::string strClassRole = ::UdmOcl::LowerFirst( strClass );
 						if ( strAcceptable.empty() && strClassRole == strName || ! strAcceptable.empty() && ! strRole.empty() && strRole == strName && strAcceptable == strClassRole ) {
 							set< ::Uml::AssociationRole> setToRoles = association.roles();
 							TypeSeq vecType;
@@ -446,7 +420,7 @@ char *_strlwr( char *string )
 			 						}
 			 					}
 		 					}
-		 					vecType.push_back( strNs + "::" + strClass );
+		 					vecType.push_back( ::UdmOcl::GetQualifiedName( assocClass ) );
 		 					vecFeatures.push_back( new OclMeta::Association( strName, strAcceptable, vecType, new TObjectDerived_AssocClasses( *itTo, vecType.size() > 1 ), true ) );
 		 				}
 		 			}
@@ -465,10 +439,9 @@ char *_strlwr( char *string )
 					for ( set< ::Uml::AssociationRole>::iterator it = setRoles.begin() ; it != setRoles.end() ; it++ ) {
 			 			::Uml::Class target = (*it).target();
 			 			std::string strClass = target.name();
-						std::string strNs = ((::Uml::Namespace)target.parent_ns()).name();
 			 			std::string strRole = (*it).name();
-			 			if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == LowerFirst( strClass ) ) {
-			 				TypeSeq vecType( 1, strNs + "::" + strClass );
+			 			if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == ::UdmOcl::LowerFirst( strClass ) ) {
+							TypeSeq vecType( 1, ::UdmOcl::GetQualifiedName( target ) );
 			 				vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, new TObjectDerived_Targets( *it ), true ) );
 			 			}
 			 		}
@@ -635,14 +608,14 @@ char *_strlwr( char *string )
 
 	void TypeFactory::GetTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes )
 	{
-		bool bHasNamespace = strName.find( "::" ) != std::string::npos; // true if qualified type, false if local type
+		bool bIsQualified = strName.find( "::" ) != std::string::npos; // true if qualified type, false if local type
 
 		GetDynamicTypes( strName, vecTypes );				//get the types from UML meta
-		if ( ! bHasNamespace && ! vecTypes.empty() )		//if local type, and results not empty - return the results
+		if ( ! bIsQualified && ! vecTypes.empty() )		//if local type, and results not empty - return the results
 			return;
 
 		GetPredefinedTypes( strName, vecTypes );			//get the predefined types
-		if ( ! bHasNamespace && ! vecTypes.empty() )		//if local type, and resulst not empty - return the results
+		if ( ! bIsQualified && ! vecTypes.empty() )		//if local type, and resulst not empty - return the results
 			return;
 
 		// WARNING :
@@ -653,14 +626,25 @@ char *_strlwr( char *string )
 
 	void TypeFactory::GetDynamicTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes )
 	{
-		bool bHasNamespace = strName.find( "::" ) != std::string::npos; // true if qualified type, false if local type
+		bool bIsQualified = strName.find( "::" ) != std::string::npos; // true if qualified type, false if local type
 
-		std::string strNsName, strClassName;
+		std::string strDgrName, strNsName, strClassName;
 
-		if (bHasNamespace) 
+		if (bIsQualified) 
 		{
-			strClassName = strName.substr(strName.find("::")+2, std::string::npos);
-			strNsName = strName.substr(0, strName.find("::"));
+			unsigned int loc1 = strName.find("::");
+			unsigned int loc2 = strName.find("::", loc1 + 2);
+			if (loc2 != std::string::npos)
+			{
+				strDgrName = strName.substr(0, loc1);
+				strNsName = strName.substr(loc1 + 2, loc2 - loc1 - 2);
+				strClassName = strName.substr(loc2 + 2);
+			}
+			else
+			{
+				strDgrName = strName.substr(0, loc1);
+				strClassName = strName.substr(loc1 + 2);
+			}
 		}
 		else
 			strClassName = strName;
@@ -670,28 +654,39 @@ char *_strlwr( char *string )
 			strRealName = strName.substr( 6 );
 */
 
+		//if type is qualified, we search it only in the diagram or
+		//the corresponding namespace
+		//if type is not qualified, we search it in the diagram and
+		//all namespaces 
+		if ( (!bIsQualified) || ( strNsName == "" ) )
+		{
+			GetDynamicTypes( m_diagram.classes(), strClassName, vecTypes );
+		}
+
 		std::vector< ::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
 		for ( int j = 0; j < vecNamespaces.size(); j++)
 		{
-			//if type is qualified, we search it only in the corresponding namespace
-			//if type is not qualified, we search it in all namespaces 
-			if ( (!bHasNamespace) || ( strNsName == (std::string) vecNamespaces[ j ].name() ) )
+			if ( (!bIsQualified) || ( strNsName == (std::string) vecNamespaces[ j ].name() ) )
 			{
-				std::vector< ::Uml::Class> vecClasses = vecNamespaces[j].classes();
-				for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
-				{
-					if ( strClassName == (std::string) vecClasses[ i ].name() ) 
-					{
-						StringVector vecSuperTypes;
-						set< ::Uml::Class> setBases = vecClasses[ i ].baseTypes();
-						for ( set< ::Uml::Class>::iterator it = setBases.begin(); it != setBases.end() ; it++ )
-							vecSuperTypes.push_back( (std::string)((::Uml::Namespace)it->parent_ns()).name() + "::" + (std::string) (*it).name() );
-						if ( setBases.empty() )
-							vecSuperTypes.push_back( "udm::Object" );
-						::Uml::Class theClass = vecClasses[ i ];
-						vecTypes.push_back( new OclMeta::Type( (std::string)((::Uml::Namespace)theClass.parent_ns()).name() + "::" + strClassName, vecSuperTypes, new TObjectDerived_AttributeFactory( theClass ), new TObjectDerived_AssociationFactory( theClass ), new TObjectDerived_MethodFactory(), true ) );
-					}
-				}
+				GetDynamicTypes( vecNamespaces[ j ].classes(), strClassName, vecTypes );
+			}
+		}
+	}
+
+	void TypeFactory::GetDynamicTypes( const std::vector< ::Uml::Class>& vecClasses, const std::string& strClassName, std::vector<OclMeta::Type*>& vecTypes )
+	{
+		for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
+		{
+			if ( strClassName == ::UdmOcl::LowerFirst( vecClasses[ i ].name() ) ) 
+			{
+				StringVector vecSuperTypes;
+				set< ::Uml::Class> setBases = vecClasses[ i ].baseTypes();
+				for ( set< ::Uml::Class>::iterator it = setBases.begin(); it != setBases.end() ; it++ )
+					vecSuperTypes.push_back( ::UdmOcl::GetQualifiedName( *it ) );
+				if ( setBases.empty() )
+					vecSuperTypes.push_back( "udm::Object" );
+				::Uml::Class theClass = vecClasses[ i ];
+				vecTypes.push_back( new OclMeta::Type( ::UdmOcl::GetQualifiedName( theClass ), vecSuperTypes, new TObjectDerived_AttributeFactory( theClass ), new TObjectDerived_AssociationFactory( theClass ), new TObjectDerived_MethodFactory(), true ) );
 			}
 		}
 	}

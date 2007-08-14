@@ -27,6 +27,7 @@
 namespace Uml
 {
 	class Diagram;
+	class Class;
 };
 
 namespace UmlOcl
@@ -54,6 +55,7 @@ namespace UmlOcl
 			virtual  void 	GetTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes );
 		private :
 					void 	GetDynamicTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes );
+					void 	GetDynamicTypes( const std::vector< ::Uml::Class>& vecClasses, const std::string& strClassName, std::vector<OclMeta::Type*>& vecTypes );
 					void 	GetPredefinedTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes );
 	};
 

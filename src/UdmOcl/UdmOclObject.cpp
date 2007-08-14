@@ -29,6 +29,8 @@
 
 #include "UdmBase.h"
 #include "Uml.h"
+#include "UmlExt.h"
+#include "UdmOcl.h"
 
 #ifndef _WIN32
 char *_ltoa( long value, char *string, int radix )
@@ -52,11 +54,7 @@ namespace UmlOcl
 	{
 		// WARNING : m_Value not null
 		if ( (bool) m_Value ) {
-			::Uml::Namespace ns = m_Value.type().parent_ns();
-			if (ns != ::Uml::Namespace(NULL))
-				m_strTypeName = (std::string) ns.name() + "::" + (std::string) m_Value.type().name();
-			else
-				m_strTypeName = (std::string) m_Value.type().name();
+			m_strTypeName = ::UdmOcl::GetQualifiedName( m_Value.type() );
 		}
 	}
 
@@ -77,11 +75,7 @@ namespace UmlOcl
 		m_Value = value;
 		// WARNING : m_Value not null
 		if ( (bool) m_Value ) {
-			::Uml::Namespace ns = m_Value.type().parent_ns();
-			if (ns != ::Uml::Namespace(NULL))
-				m_strTypeName = (std::string) ns.name() + "::" + (std::string) m_Value.type().name();
-			else
-				m_strTypeName = (std::string) m_Value.type().name();
+			m_strTypeName = ::UdmOcl::GetQualifiedName( m_Value.type() );
 		}
 			
 	}
@@ -107,12 +101,7 @@ namespace UmlOcl
 			return "null";
 		char chBuffer[ 300 ];
 		_ltoa( m_Value.uniqueId(), chBuffer, 10 );
-		std::string to_print;
-		::Uml::Namespace ns = m_Value.type().parent_ns();
-		if (ns != ::Uml::Namespace(NULL))
-			to_print = (std::string) ns.name() + "::" + (std::string) m_Value.type().name();
-		else
-			to_print = (std::string) m_Value.type().name();
+		std::string to_print = ::UdmOcl::GetQualifiedName( m_Value.type() );
 		return to_print + " { id : " + std::string( chBuffer ) + " }";
 		
 	}
