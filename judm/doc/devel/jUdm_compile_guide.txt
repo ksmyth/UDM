@@ -30,6 +30,7 @@ Step-by-step guide:
 		  - Set the JAVA_HOME environment variable to the directory 
 		    where JDK (< 1.4.2) is installed
 		  - Add the tools.jar to the classpath
+		  - Add the %ANT_HOME%\lib to the classpath
 		
 		    Example: Windows OS
 		             Ant is installed in c:\ant\
@@ -37,7 +38,7 @@ Step-by-step guide:
 		             set ANT_HOME=c:\ant
 		             set JAVA_HOME=c:\jdk1.4.2
 		             set PATH=%PATH%;%ANT_HOME%\bin
-		             set CLASSPATH=%CLASSPATH%;%JAVA_HOME%\lib\tools.jar
+		             set CLASSPATH=%CLASSPATH%;%JAVA_HOME%\lib\tools.jar;%ANT_HOME%\lib
 
 	5. Open a command shell and go to the directory <udm_ns>\judm. 
 		Using ANT you can run the following targets:
