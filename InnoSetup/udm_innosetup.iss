@@ -5,9 +5,9 @@
 #pragma option -v+
 #pragma verboselevel 9
 
-#define UDMPATH "E:\MoBIESTransition\udm_ns2"
-#define UDM3rdPartyPATH "E:\MoBIESTransition\udm_ns_3rdparty"
-#define GREATPATH "E:\MoBIESTransition\GReAT"
+#define UDMPATH "C:\Projects\udm_ns2"
+#define UDM3rdPartyPATH "C:\Projects\udm_ns_3rdparty"
+#define GREATPATH "C:\Projects\GReAT"
 #define UDMDLL "UdmDll_3_0_1.dll"
 #define UDMDLLD "UdmDll_3_0_1D.dll"
 #define UDMVER "3.0.2"
