@@ -13,7 +13,7 @@ import org.biospice.datatypes.impl.BiodataFileType;
  *
  */
 public class @DSPACKAGE@DataType extends BiodataFileType {
-    private static String @DSPACKAGE@_MIME_TYPE = "application/x-biodata-file";
+    private static String @DSPACKAGE@_MIME_TYPE = "application/x-@DSPACKAGELOWER@+xml";
 
     /**
      * Constructor.
