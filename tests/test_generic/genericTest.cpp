@@ -20,7 +20,7 @@ UDM_USE_DOM
 UDM_USE_MGA
 #endif
 
-using namespace LampDiagram::LampDiagram;
+using namespace LampDiagram;
 
 const char * UdmTests::genericTest::getRndFileName()
 {
@@ -400,7 +400,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 
 
 			
-				set<ControlLink> lks = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
+				set<ControlLink> lks = doubleBulbLamp.ControlLink_kind_children();
 				set<ControlLink>::iterator l1;
 
 				for(l1 = lks.begin(); l1 != lks.end(); l1++) 
@@ -425,7 +425,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				}
 				
 
-				set<Bulb> s_bulb = doubleBulbLamp.LampDiagram_Bulb_kind_children();
+				set<Bulb> s_bulb = doubleBulbLamp.Bulb_kind_children();
 				CPPUNIT_ASSERT (s_bulb.size() == 3);
 
 				for(set<Bulb>::iterator s_bulb_i = s_bulb.begin(); s_bulb_i != s_bulb.end(); s_bulb_i++)
@@ -445,7 +445,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				}
 
 				//deleting by omission from the new set of children
-				set<ControlLink> cl_test_set = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
+				set<ControlLink> cl_test_set = doubleBulbLamp.ControlLink_kind_children();
 				CPPUNIT_ASSERT( cl_test_set.size() == 3);				
 				cl_test_set.erase(cl_test_set.begin(), cl_test_set.end());
 				cl_test_set.insert(cl1);
@@ -457,7 +457,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				{
 					cout << e.what() << endl;
 				};
-				cl_test_set = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
+				cl_test_set = doubleBulbLamp.ControlLink_kind_children();
 				CPPUNIT_ASSERT( cl_test_set.size() == 1);
 				CPPUNIT_ASSERT(*(cl_test_set.begin()) == cl1);
 
@@ -467,7 +467,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				//deleting by setting the parent to NULL
 				//this is  way to delete cl1
 				cl1.parent() = NULL;
-				cl_test_set = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
+				cl_test_set = doubleBulbLamp.ControlLink_kind_children();
 				CPPUNIT_ASSERT( cl_test_set.size() == 0);
 				
 
@@ -487,7 +487,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				cl3.dst_end() = switch3;
 				cl3.name() = "Halogen Bulb  switcher";
 
-				cl_test_set = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
+				cl_test_set = doubleBulbLamp.ControlLink_kind_children();
 				CPPUNIT_ASSERT( cl_test_set.size() == 3);
 				CPPUNIT_ASSERT( Bulb(cl2.src_end()) == bulb2);
 				CPPUNIT_ASSERT( Switch(cl2.dst_end()) == switch2);
@@ -509,7 +509,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 
 			
 				//cl1 points to bulb2 and cl2 points to bulb1
-				lks = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
+				lks = doubleBulbLamp.ControlLink_kind_children();
 				for(l1 = lks.begin(); l1 != lks.end(); l1++) 
 				{
 					bool bvar11 = ((*l1 == cl1) && (Bulb(l1->src_end()) == bulb2));
@@ -560,7 +560,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 			
 
 			//testing child roles
-			set<ElectricDevice> ed_s = doubleBulbLamp.LampDiagram_ElectricDevice_kind_children();
+			set<ElectricDevice> ed_s = doubleBulbLamp.ElectricDevice_kind_children();
 			CPPUNIT_ASSERT(ed_s.size() == 8); //all the devices: 3 Bulb, 3 switch, 1 plug, 1 lamp
 			
 
