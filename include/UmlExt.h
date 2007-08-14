@@ -18,7 +18,7 @@ CHANGELOG
 
 					Added
 					
-					  UDM_DLL void GetChildRoleChain(const Uml::Class & origin, const Uml::Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain = ChildRoleChain());
+					  UDM_DLL void GetChildRoleChain(const Class & origin, const Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain = ChildRoleChain());
 
 					which returns the possible containments paths of class what in class origin, at any level
 					
@@ -55,8 +55,8 @@ CHANGELOG
 
 	04/13/04	-	endre
 
-		Added SafeTypeContainer::IsSafeType(const Uml::Class &a)
-		to indicate if a Uml::Class was obtained through SafeTypeContainer.
+		Added SafeTypeContainer::IsSafeType(const Class &a)
+		to indicate if a Class was obtained through SafeTypeContainer.
 
 
 	24/02/04	-	endre
@@ -75,112 +75,112 @@ CHANGELOG
 namespace Uml
 {
 // Get the other end of two-legged Uml classes 
-	UDM_DLL const Uml::AssociationRole theOther(const Uml::AssociationRole &role);
-	UDM_DLL const Uml::CompositionChildRole theOther(const Uml::CompositionParentRole &role);
-	UDM_DLL const Uml::CompositionParentRole theOther(const Uml::CompositionChildRole &role);
+	UDM_DLL const AssociationRole theOther(const AssociationRole &role);
+	UDM_DLL const CompositionChildRole theOther(const CompositionParentRole &role);
+	UDM_DLL const CompositionParentRole theOther(const CompositionChildRole &role);
 
 // find an assoc.Class by name
-	UDM_DLL Uml::Class assocClassByName(const Uml::Namespace &d, const string &name);
+	UDM_DLL Class assocClassByName(const Namespace &d, const string &name);
 
 // find a class by name
-	UDM_DLL Uml::Class classByName(const Uml::Diagram &d, const string &ns_name,const string &name );
+	UDM_DLL Class classByName(const Diagram &d, const string &ns_name,const string &name );
 	
 // find a namespace by name
-	UDM_DLL Uml::Namespace namespaceByName(const Uml::Diagram &d, const string &name);
+	UDM_DLL Namespace namespaceByName(const Diagram &d, const string &name);
 // find a class by name
-	UDM_DLL Uml::Class classByName(const Uml::Namespace &d, const string &name);
+	UDM_DLL Class classByName(const Namespace &d, const string &name);
 // find association by name
-	UDM_DLL Uml::Association associationByName(const Uml::Namespace &d, const string &name);
+	UDM_DLL Association associationByName(const Namespace &d, const string &name);
 //find composition by name
-	UDM_DLL Uml::Composition compositionByName(const Uml::Namespace &d, const string &name);
+	UDM_DLL Composition compositionByName(const Namespace &d, const string &name);
 // Get all the classes specified as ancestors, including self
-	UDM_DLL set<Uml::Class> AncestorClasses(const Uml::Class &c);
+	UDM_DLL set<Class> AncestorClasses(const Class &c);
 // Get all the classes specified as descendants, including self
-	UDM_DLL set<Uml::Class> DescendantClasses(const Uml::Class &c);
+	UDM_DLL set<Class> DescendantClasses(const Class &c);
 // Get classes directly specified for this class as parents  (both ancestors and descendants are ignored)
-	UDM_DLL set<Uml::Class> ContainerClasses(const Uml::Class &c);
+	UDM_DLL set<Class> ContainerClasses(const Class &c);
 // Get classes directly specified for this class as children  (both ancestors and descendants are ignored)
-	UDM_DLL set<Uml::Class> ContainedClasses(const Uml::Class &c);
+	UDM_DLL set<Class> ContainedClasses(const Class &c);
 //for association classes, there is only one attached association,
 //but it can be either directly attached or inherited from a base association class
 //returns NULL if the class does not have an Association attached
-	UDM_DLL Uml::Association GetAncestorAssociation(const Uml::Class &c);
+	UDM_DLL Association GetAncestorAssociation(const Class &c);
 
 // Get classes that are ancestors of all the classes in a set
-	UDM_DLL set<Uml::Class> CommonAncestorClasses(const set<Uml::Class> &cs);
+	UDM_DLL set<Class> CommonAncestorClasses(const set<Class> &cs);
 
 // Get classes this object or its ancestors specify as parents (ancestors in child are extracted, decendants of parents are ignored)
-	UDM_DLL set<Uml::Class> AncestorContainerClasses(const Uml::Class &c);
+	UDM_DLL set<Class> AncestorContainerClasses(const Class &c);
 // Get classes this object or its ancestors specify as children (ancestors in parent are extracted, decendants of children are ignored)
-	UDM_DLL set<Uml::Class> AncestorContainedClasses(const Uml::Class &c);
+	UDM_DLL set<Class> AncestorContainedClasses(const Class &c);
 // Get classes this object can contain (ancestors in parent and descendants in children are extracted)
-	UDM_DLL set<Uml::Class> AncestorContainedDescendantClasses(const Uml::Class &c);
+	UDM_DLL set<Class> AncestorContainedDescendantClasses(const Class &c);
 // Get the target namespaces of children having the parent in this namespace
-	UDM_DLL set<Uml::Namespace> TargetNSForAllContainerClasses(const Uml::Namespace &ns);
+	UDM_DLL set<Namespace> TargetNSForAllContainerClasses(const Namespace &ns);
 
 	// All the other ends of associations (ancestors are ignored)
-	UDM_DLL set<Uml::AssociationRole> AssociationTargetRoles(const Uml::Class &c);
+	UDM_DLL set<AssociationRole> AssociationTargetRoles(const Class &c);
 	// All the other ends of associations this class can have (including those defined in ancestors)
-	UDM_DLL set<Uml::AssociationRole> AncestorAssociationTargetRoles(const Uml::Class &c);
+	UDM_DLL set<AssociationRole> AncestorAssociationTargetRoles(const Class &c);
 
 	// All the other ends of associations this class can have (including those defined in ancestors)
-	UDM_DLL set<Uml::AssociationRole> AncestorCrossAssociationTargetRoles(const Uml::Class &c, const Uml::Namespace & ns);
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Namespace & ns);
 
 	// All local ends of associations this class can have (including those defined in ancestors)
-	UDM_DLL set<Uml::AssociationRole> AncestorAssociationRoles(const Uml::Class &c);
+	UDM_DLL set<AssociationRole> AncestorAssociationRoles(const Class &c);
 
 	// All local ends of associations this class can have (including those defined in ancestors)
-	UDM_DLL set<Uml::AssociationRole> AncestorCrossAssociationRoles(const Uml::Class &c, const Uml::Namespace& cross_ns);
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Namespace& cross_ns);
 
 	// returns all the Text Attributes for class C
-	UDM_DLL set<Uml::Attribute> TextAttributes(const Uml::Class &c);
+	UDM_DLL set<Attribute> TextAttributes(const Class &c);
 
 	//returns true if class c has any Text Attribute (should be faster:)
-	UDM_DLL bool HasTextAttributes(const Uml::Class &c);
+	UDM_DLL bool HasTextAttributes(const Class &c);
 
 
 // All the other ends of of compositions defined for this class as child (ancestors are ignored)
-	UDM_DLL set<Uml::CompositionParentRole> CompositionPeerParentRoles(const Uml::Class &c);
+	UDM_DLL set<CompositionParentRole> CompositionPeerParentRoles(const Class &c);
 // All the parent ends of compositions this class can participate in (including those defined for ancestors)
-	UDM_DLL set<Uml::CompositionParentRole> AncestorCompositionPeerParentRoles(const Uml::Class &c);
+	UDM_DLL set<CompositionParentRole> AncestorCompositionPeerParentRoles(const Class &c);
 // The namespaces of all the other ends of the compositions defined for this class as child; the set does not include the namespace of this class
-	UDM_DLL set<Uml::Namespace> OtherCompositionPeerParentRolesNamespaces(const Uml::Class &c);
+	UDM_DLL set<Namespace> OtherCompositionPeerParentRolesNamespaces(const Class &c);
 
 // All the child ends of compositions defined for this class as parent (ancestors are ignored)
-	UDM_DLL set<Uml::CompositionChildRole> CompositionPeerChildRoles(const Uml::Class &c);
+	UDM_DLL set<CompositionChildRole> CompositionPeerChildRoles(const Class &c);
 // All the child ends of compositions this class can participate in (including those defined for ancestors)
-	UDM_DLL set<Uml::CompositionChildRole> AncestorCompositionPeerChildRoles(const Uml::Class &c);
+	UDM_DLL set<CompositionChildRole> AncestorCompositionPeerChildRoles(const Class &c);
 // The namespaces of all the child ends of all compositions defined for all classes from this namespace that are parent
-	UDM_DLL set<Uml::Namespace> CompositionPeerChildNamespaces(const Uml::Namespace &ns);
+	UDM_DLL set<Namespace> CompositionPeerChildNamespaces(const Namespace &ns);
 
 // Returns true if the parent and the child of this composition are in different namespaces
-	UDM_DLL bool IsCrossNSComposition(const Uml::Composition &c);
+	UDM_DLL bool IsCrossNSComposition(const Composition &c);
 	
 // All attributes this class can have (including those defined in ancestors)
-	UDM_DLL set<Uml::Attribute> AncestorAttributes(const Uml::Class &c);
+	UDM_DLL set<Attribute> AncestorAttributes(const Class &c);
 
 // find the single way a class can be contained by another, return NULL none or if multiple roles are found
-	UDM_DLL Uml::Composition matchChildToParent(Uml::Class c, Uml::Class p);
+	UDM_DLL Composition matchChildToParent(Class c, Class p);
 
 // returns true if derived = base
-	UDM_DLL bool IsDerivedFrom(const Uml::Class &derived, const Uml::Class &base);
-	UDM_DLL bool IsAssocClass(const Uml::Class &cl);
-	UDM_DLL bool IsAssocClass(const Uml::Association &ass);
+	UDM_DLL bool IsDerivedFrom(const Class &derived, const Class &base);
+	UDM_DLL bool IsAssocClass(const Class &cl);
+	UDM_DLL bool IsAssocClass(const Association &ass);
 
 // The namespaces of all the base classes having derived classes in this namespace
-	UDM_DLL set<Uml::Namespace> BaseTypesNamespaces(const Uml::Namespace &ns);
+	UDM_DLL set<Namespace> BaseTypesNamespaces(const Namespace &ns);
 
-	UDM_DLL string MakeRoleName(const Uml::GenericRole &r);
-	UDM_DLL string MakeShortRoleName(const Uml::GenericRole &r);
+	UDM_DLL string MakeRoleName(const GenericRole &r);
+	UDM_DLL string MakeShortRoleName(const GenericRole &r);
 
 //returns true if childrole's target has more than one non-abstract derivate, including itself
-	UDM_DLL bool HasChildRoleMultipleTargets(const Uml::CompositionChildRole & ccr);
+	UDM_DLL bool HasChildRoleMultipleTargets(const CompositionChildRole & ccr);
 
-	typedef vector<Uml::CompositionChildRole> ChildRoleChain;
+	typedef vector<CompositionChildRole> ChildRoleChain;
 	//returns the possible containments paths of class what in class origin, at any level
-	UDM_DLL void GetChildRoleChain(const Uml::Class & origin, const Uml::Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain = ChildRoleChain());
+	UDM_DLL void GetChildRoleChain(const Class & origin, const Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain = ChildRoleChain());
 
-	UDM_DLL Uml::Namespace GetTheOnlyNamespace(const Uml::Diagram & dgr);
+	UDM_DLL Namespace GetTheOnlyNamespace(const Diagram & dgr);
 
 // Safe type mechanism
 
@@ -190,30 +190,30 @@ namespace Uml
 			safe-type mechanism for StaticObject's
 			their m_type variable is a reference
 			so there need to be a way 
-			which would guarantee that the referenced Uml::Class objects
+			which would guarantee that the referenced Class objects
 			are not freed until th referees
 
 		*/
 		typedef Udm::ObjectImpl::uniqueId_type uniquedId_type;
 		
-		typedef map<uniquedId_type, const Uml::Class *>			type_map_t;
-		typedef pair<uniquedId_type const, const Uml::Class *>	type_map_t_item;
+		typedef map<uniquedId_type, const Class *>			type_map_t;
+		typedef pair<uniquedId_type const, const Class *>	type_map_t_item;
 		typedef pair<type_map_t::iterator, bool>				type_map_t_ires;
 
 
-		typedef map<const Uml::Class *, long>					ref_map_t;
-		typedef pair<const Uml::Class * const, long>			ref_map_t_item;
+		typedef map<const Class *, long>					ref_map_t;
+		typedef pair<const Class * const, long>			ref_map_t_item;
 		typedef pair<ref_map_t::iterator, bool>			ref_map_t_ires;
 
 		
-		static type_map_t type_map;				//this will hold a uniqueID->Uml::Class * mapping
+		static type_map_t type_map;				//this will hold a uniqueID->Class * mapping
 		static ref_map_t ref_map;				//this will hold the references for the types created in here
 
 
 		
 public:
 		
-		UDM_DLL static const Uml::Class & GetSafeType(const Uml::Class &a) 
+		UDM_DLL static const Class & GetSafeType(const Class &a) 
 		{
 			//check if we already have a type equivalent with this
 			type_map_t::const_iterator i = type_map.find(a.uniqueId());
@@ -222,10 +222,10 @@ public:
 
 				//we don't haven an equivalent type, so we create one
 				//I believe this must be referenced, since we create an object from a pointer
-				//make sure we don't mix the references to ObjectImpl's and references to Uml::ClassS ;-)
+				//make sure we don't mix the references to ObjectImpl's and references to ClassS ;-)
 
 
-				const Uml::Class * new_type = new Uml::Class(a.__impl()->clone());
+				const Class * new_type = new Class(a.__impl()->clone());
 				if (!new_type) throw udm_exception(" new() failed in GetSafeType()");
 				
 				//insert in the type_map with it's unique ID as key,
@@ -246,7 +246,7 @@ public:
 			}
 			else
 			{
-				const Uml::Class * found = (*i).second;
+				const Class * found = (*i).second;
 				
 				ref_map_t::iterator ref_i = ref_map.find(found);
 				if (ref_i == ref_map.end())
@@ -259,7 +259,7 @@ public:
 			}
 		};
 
-		UDM_DLL static void RemoveSafeType(const Uml::Class &a )
+		UDM_DLL static void RemoveSafeType(const Class &a )
 		{
 			//since we will invoke this in every static Object  destructor.
 			// it might happen the type of a StaticObect was not obtained
@@ -269,7 +269,7 @@ public:
 			//we first check our reference map
 			//if it's found there, it means that this type was obtaind thru this class
 
-			const Uml::Class * pointer = &a;
+			const Class * pointer = &a;
 			ref_map_t::iterator ref_i = ref_map.find(pointer);
 			if (ref_i != ref_map.end())
 			{
@@ -297,9 +297,9 @@ public:
 			};
 		}
 
-		UDM_DLL static bool IsSafeType(const Uml::Class &a)
+		UDM_DLL static bool IsSafeType(const Class &a)
 		{
-			const Uml::Class * pointer = &a;
+			const Class * pointer = &a;
 			ref_map_t::iterator ref_i = ref_map.find(pointer);
 			return  (ref_i != ref_map.end());
 			
@@ -311,74 +311,74 @@ public:
 
 // --------------------------- Construction
 
-UDM_DLL Uml::Diagram CreateDiagram();
-UDM_DLL Uml::Namespace CreateNamespace();
-UDM_DLL Uml::Class CreateClass();
-UDM_DLL Uml::Attribute CreateAttribute();
-UDM_DLL Uml::Association CreateAssociation();
-UDM_DLL Uml::AssociationRole CreateAssociationRole();
-UDM_DLL Uml::Composition CreateComposition();
-UDM_DLL Uml::CompositionParentRole CreateCompositionParentRole();
-UDM_DLL Uml::CompositionChildRole CreateCompositionChildRole();
-UDM_DLL Uml::Constraint CreateConstraint();
-UDM_DLL Uml::ConstraintDefinition CreateConstraintDefinition();
+UDM_DLL Diagram CreateDiagram();
+UDM_DLL Namespace CreateNamespace();
+UDM_DLL Class CreateClass();
+UDM_DLL Attribute CreateAttribute();
+UDM_DLL Association CreateAssociation();
+UDM_DLL AssociationRole CreateAssociationRole();
+UDM_DLL Composition CreateComposition();
+UDM_DLL CompositionParentRole CreateCompositionParentRole();
+UDM_DLL CompositionChildRole CreateCompositionChildRole();
+UDM_DLL Constraint CreateConstraint();
+UDM_DLL ConstraintDefinition CreateConstraintDefinition();
 
 // ---------------------------- Static Meta Initialization
 
-UDM_DLL void InitDiagram(const Uml::Diagram &obj, const char *name, const char * version = "1.00");
-UDM_DLL void InitNamespace(const Uml::Namespace &obj, const Uml::Diagram &parent, const char *name);
-UDM_DLL void InitClass(const Uml::Class &obj, const Uml::Namespace &parent, const char *name, bool isAbstract, const char *stereo = NULL, const char * from = NULL);
-UDM_DLL void InitAttribute(const Uml::Attribute &obj, const Uml::Class &parent, const char *name, const char *type, bool np, bool reg, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval = vector<string>());
-UDM_DLL void InitAssociation(const Uml::Association &obj, const Uml::Namespace &parent, const char *name);
-UDM_DLL void InitAssociationClass(const Uml::Association &aobj, const Uml::Class &cobj);
-UDM_DLL void InitAssociationRole(const Uml::AssociationRole &obj, const Uml::Association &parent, 
-								 const char *name, bool navigable, bool primary, long min, long max, const Uml::Class &target);
-UDM_DLL void InitComposition(const Uml::Composition &obj, const Uml::Namespace &parent, const char *name);
-UDM_DLL void InitCompositionParentRole(const Uml::CompositionParentRole &obj, 
-									   const Uml::Composition &parent, const char *name, bool navigable, const Uml::Class &target);
-UDM_DLL void InitCompositionChildRole(const Uml::CompositionChildRole &obj,
-									  const Uml::Composition &parent, const char *name, bool navigable, long min, long max, const Uml::Class &target);
+UDM_DLL void InitDiagram(const Diagram &obj, const char *name, const char * version = "1.00");
+UDM_DLL void InitNamespace(const Namespace &obj, const Diagram &parent, const char *name);
+UDM_DLL void InitClass(const Class &obj, const Namespace &parent, const char *name, bool isAbstract, const char *stereo = NULL, const char * from = NULL);
+UDM_DLL void InitAttribute(const Attribute &obj, const Class &parent, const char *name, const char *type, bool np, bool reg, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval = vector<string>());
+UDM_DLL void InitAssociation(const Association &obj, const Namespace &parent, const char *name);
+UDM_DLL void InitAssociationClass(const Association &aobj, const Class &cobj);
+UDM_DLL void InitAssociationRole(const AssociationRole &obj, const Association &parent, 
+								 const char *name, bool navigable, bool primary, long min, long max, const Class &target);
+UDM_DLL void InitComposition(const Composition &obj, const Namespace &parent, const char *name);
+UDM_DLL void InitCompositionParentRole(const CompositionParentRole &obj, 
+									   const Composition &parent, const char *name, bool navigable, const Class &target);
+UDM_DLL void InitCompositionChildRole(const CompositionChildRole &obj,
+									  const Composition &parent, const char *name, bool navigable, long min, long max, const Class &target);
 
-UDM_DLL void InitConstraint(const Uml::Constraint &obj, const Uml::Class &parent, const char * name, const char * description, const char * expression);
-UDM_DLL void InitConstraintDefinition(const Uml::ConstraintDefinition &obj, const Uml::Class &parent, const char * name, const char * stereotype, const char * parameterList, const char * expression, const char * returnType);
-UDM_DLL void AddInheritance(const Uml::Class &baseType, const Uml::Class &subType);
+UDM_DLL void InitConstraint(const Constraint &obj, const Class &parent, const char * name, const char * description, const char * expression);
+UDM_DLL void InitConstraintDefinition(const ConstraintDefinition &obj, const Class &parent, const char * name, const char * stereotype, const char * parameterList, const char * expression, const char * returnType);
+UDM_DLL void AddInheritance(const Class &baseType, const Class &subType);
 
 	
 
 // --------------------------- Static Corba Initialization 
 
-Uml::Diagram CreateCORBADiagram();
-Uml::Class CreateCORBAClass();
-Uml::Attribute CreateCORBAAttribute();
-Uml::Association CreateCORBAAssociation();
-Uml::AssociationRole CreateCORBAAssociationRole();
-Uml::Composition CreateCORBAComposition();
-Uml::CompositionParentRole CreateCORBACompositionParentRole();
-Uml::CompositionChildRole CreateCORBACompositionChildRole();
+Diagram CreateCORBADiagram();
+Class CreateCORBAClass();
+Attribute CreateCORBAAttribute();
+Association CreateCORBAAssociation();
+AssociationRole CreateCORBAAssociationRole();
+Composition CreateCORBAComposition();
+CompositionParentRole CreateCORBACompositionParentRole();
+CompositionChildRole CreateCORBACompositionChildRole();
 
-void InitCORBADiagram(const Uml::Diagram &obj, const char *name, const char * version = "1.00");
-void InitCORBAClass(const Uml::Class &obj, const Uml::Diagram &parent, const char *name, bool isAbstract, const char *stereo = NULL);
-void InitCORBAAttribute(const Uml::Attribute &obj, const Uml::Class &parent, const char *name, const char *type, bool np, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval = vector<string>());
-void InitCORBAAssociation(const Uml::Association &obj, const Uml::Diagram &parent, const char *name);
-void InitCORBAAssociationClass(const Uml::Association &aobj, const Uml::Class &cobj);
-void InitCORBAAssociationRole(const Uml::AssociationRole &obj, const Uml::Association &parent, const char *name, bool navigable, bool primary, long min, long max, const Uml::Class &target);
-void InitCORBAComposition(const Uml::Composition &obj, const Uml::Diagram &parent, const char *name);
-void InitCORBACompositionParentRole(const Uml::CompositionParentRole &obj, const Uml::Composition &parent, const char *name, bool navigable, const Uml::Class &target);
-void InitCORBACompositionChildRole(const Uml::CompositionChildRole &obj,const Uml::Composition &parent, const char *name, bool navigable, long min, long max, const Uml::Class &target);
-void AddCORBAInheritance(const Uml::Class &baseType, const Uml::Class &subType);
+void InitCORBADiagram(const Diagram &obj, const char *name, const char * version = "1.00");
+void InitCORBAClass(const Class &obj, const Diagram &parent, const char *name, bool isAbstract, const char *stereo = NULL);
+void InitCORBAAttribute(const Attribute &obj, const Class &parent, const char *name, const char *type, bool np, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval = vector<string>());
+void InitCORBAAssociation(const Association &obj, const Diagram &parent, const char *name);
+void InitCORBAAssociationClass(const Association &aobj, const Class &cobj);
+void InitCORBAAssociationRole(const AssociationRole &obj, const Association &parent, const char *name, bool navigable, bool primary, long min, long max, const Class &target);
+void InitCORBAComposition(const Composition &obj, const Diagram &parent, const char *name);
+void InitCORBACompositionParentRole(const CompositionParentRole &obj, const Composition &parent, const char *name, bool navigable, const Class &target);
+void InitCORBACompositionChildRole(const CompositionChildRole &obj,const Composition &parent, const char *name, bool navigable, long min, long max, const Class &target);
+void AddCORBAInheritance(const Class &baseType, const Class &subType);
 
 
 // ---------------------------- Dynamic Meta Initialization
 // used to set the static API member variables to 
 
-	UDM_DLL void SetNamespace(Uml::Namespace &what, const Uml::Diagram &what_dgr, const char *target_name);
-	UDM_DLL void SetClass(Uml::Class &what, const Uml::Namespace &what_ns, const char *target_name);
-	//UDM_DLL void SetClass(Uml::Class &what, Uml::Diagram &what_dgr, const char *target_name);
-	UDM_DLL void SetAttribute(Uml::Attribute &what, Uml::Class &what_class,  const char *target_name);
+	UDM_DLL void SetNamespace(Namespace &what, const Diagram &what_dgr, const char *target_name);
+	UDM_DLL void SetClass(Class &what, const Namespace &what_ns, const char *target_name);
+	//UDM_DLL void SetClass(Class &what, Diagram &what_dgr, const char *target_name);
+	UDM_DLL void SetAttribute(Attribute &what, Class &what_class,  const char *target_name);
 
-	UDM_DLL void SetChildRole(Uml::CompositionChildRole &what, Uml::Class &what_target_class, Uml::Class &what_theo_target_class, const char *role_name, const char * orole_name);
-	UDM_DLL void SetParentRole(Uml::CompositionParentRole &what, Uml::Class &what_target_class, Uml::Class &what_theo_target_class, const char *role_name, const char * orole_name);
-	UDM_DLL void SetAssocRole(Uml::AssociationRole &what, Uml::Class &what_target_class, Uml::Class &what_theo_target_class, const char *target_name);
+	UDM_DLL void SetChildRole(CompositionChildRole &what, Class &what_target_class, Class &what_theo_target_class, const char *role_name, const char * orole_name);
+	UDM_DLL void SetParentRole(CompositionParentRole &what, Class &what_target_class, Class &what_theo_target_class, const char *role_name, const char * orole_name);
+	UDM_DLL void SetAssocRole(AssociationRole &what, Class &what_target_class, Class &what_theo_target_class, const char *target_name);
 }
 
 #endif//MOBIES_UMLEXT_H
