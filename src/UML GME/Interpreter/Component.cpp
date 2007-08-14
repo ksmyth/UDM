@@ -13,6 +13,12 @@
  */
 
 /*
+	-	03/20/06	-	endre
+
+		- set association and composition names even if they have not
+		  been changed from the default "Association", respectively
+		  "Composition"
+
 	-	12/31/05	-	endre
 
 		- use UdmDom data networks and UdmProjects to build the result of interpretation
@@ -1222,7 +1228,7 @@ void CCompositionBuilder::BuildUML()
 	else
 		uml_comp = ::Uml::Composition::Create(GetPackage()->GetUmlDiagram());
 
-	if(!nm.IsEmpty() && nm != "Composition")
+	if(!nm.IsEmpty())
 		uml_comp.name() = (LPCTSTR) nm;
 
 	::Uml::CompositionChildRole crole = ::Uml::CompositionChildRole::Create(uml_comp);
@@ -1351,7 +1357,7 @@ void CAssociationBase::_BuildUML(::Uml::Association &ass, bool is_cross)
 	}
 
 	CString nm = association;
-	if(!nm.IsEmpty() && nm != "Association")
+	if(!nm.IsEmpty())
 		ass.name() = (LPCTSTR) nm;
 
 	if(associationClass)
