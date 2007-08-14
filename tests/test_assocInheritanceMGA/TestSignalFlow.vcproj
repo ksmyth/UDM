@@ -4,8 +4,10 @@
 	Version="7.10"
 	Name="TestSignalFlow"
 	RootNamespace="TestSignalFlow"
-	SccProjectName=""
-	SccLocalPath="">
+	SccProjectName="SAK"
+	SccAuxPath="SAK"
+	SccLocalPath="SAK"
+	SccProvider="SAK">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
