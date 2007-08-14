@@ -136,7 +136,8 @@ BOOL CSyntacticSemanticDialog::OnInitDialog()
 	// Fill Constraint List
 
 	int iDefinitions = m_vecConstraintDefinitions.size();
-	for ( int i = 0 ; i < iDefinitions ; i++ )
+	int i;
+	for ( i = 0 ; i < iDefinitions ; i++ )
 		AddConstraintRow( i );
 
 	for ( i = 0 ; i < m_vecConstraints.size() ; i++ )
@@ -344,7 +345,8 @@ void CSyntacticSemanticDialog::OnClickConstraintsColumn( NMHDR* pNMHDR, LRESULT*
 		} while ( iFPos != -1 );
 
 		LVITEM lvItem;
-		for ( int i = 0 ; i < arrText.GetSize() ; i++ ) {
+		int i;
+		for ( i = 0 ; i < arrText.GetSize() ; i++ ) {
 
 			// Add Line
 
