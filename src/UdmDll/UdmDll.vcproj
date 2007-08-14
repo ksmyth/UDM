@@ -23,7 +23,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(GME_ROOT)\bin,..\..\include,..\UdmOCLPat\GOCL\include"
+				AdditionalIncludeDirectories="$(GME_ROOT),..\..\include,..\UdmOCLPat\GOCL\include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -89,7 +89,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(GME_ROOT)\bin,..\..\include,..\UdmOCLPat\GOCL\include"
+				AdditionalIncludeDirectories="$(GME_ROOT),..\..\include,..\UdmOCLPat\GOCL\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
