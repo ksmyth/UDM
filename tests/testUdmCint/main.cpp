@@ -280,7 +280,7 @@ void UdmTests::Test::testWrite(std::string& result)
   UdmPseudoObject diagram;
 
 
-    if(! AddURIToUMLNamespaceMapping("http://kutykuruty.khm.edu", "GeneTF"))
+    if(! AddURIToUMLNamespaceMapping("http://kutykuruty.khm.edu", "GeneTF", "GeneTF.xsd"))
    {
      cint_string str;
      diagram.GetLastError(str);
@@ -497,16 +497,18 @@ void UdmTests::Test::test()
  
 // testWrite(result);
 // testRead(result);
- testReadSBML2Ex("versionCheck.xml");
+ //testReadSBML2Ex("versionCheck.xml");
+ testReadSBML2Ex("Lac_v1.2.2.xml");
 
 }
-
+/*
 int main(int argc, char* argv[])
 {
   UdmTests::Test test;
   test.test();
 }
-/*
+*/
+
 int main(int argc, char* argv[])
 {
 	CPPUNIT_NS::Test *suite = CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest();
@@ -525,4 +527,4 @@ int main(int argc, char* argv[])
 	return wasSucessful ? 0 : 1;
 	
 }
-*/
+

@@ -35,13 +35,14 @@ void StoreXSD(const std::string& nn, const std::string& xsd)
    }
 }
 
- void AddURI(const std::string& uri, const std::string& ns)
+ void AddURI(const std::string& uri, const std::string& ns,  const std::string& xn)
  {
 
    cint_string xsdn(uri.c_str());
    cint_string cxsd(ns.c_str());
+   cint_string xsdname(xn.c_str());
 
-  if(!AddURIToUMLNamespaceMapping(xsdn,cxsd))
+  if(!AddURIToUMLNamespaceMapping(xsdn,cxsd, xsdname))
    {
      std::cout << uri <<std::endl;
      std::cout << __LINE__ <<std::endl;
@@ -111,15 +112,25 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
   StoreXSD("SBML2Ex_jd.xsd", SBML2Ex_jd_xsd::getString().c_str());
   StoreXSD("SBML2Ex_bc.xsd", SBML2Ex_bc_xsd::getString().c_str());
   StoreXSD("SBML2Ex.xsd", SBML2Ex_xsd::getString().c_str());
+/*
+  AddURI("http://www.sbml.org/2001/ns/biocharon","SBML2Ex_bc");
+  AddURI("http://www.dbi.tju.edu/xmlns/dbi","SBML2Ex_dbi");
+  AddURI("http://arep.med.harvard.edu/fluxns","SBML2Ex_flux");
+  AddURI("http://mpf.biol.vt.edu/ns","SBML2Ex_jigcell");
+  AddURI("http://www.w3.org/1998/Math/MathML","SBML2Ex_math");
+  AddURI("http://www.sbml.org/sbml/level2","SBML2Ex_sbml");
+  AddURI("http://www.dbi.tju.edu/xmlns/unigene","SBML2Ex_unigene");
+  AddURI("http://www.w3.org/1999/xhtml","SBML2Ex_xhtml");
+*/
 
-  AddURI("http://www.sbml.org/2001/ns/biocharon","bc");
-  AddURI("http://www.dbi.tju.edu/xmlns/dbi","dbi");
-  AddURI("http://arep.med.harvard.edu/fluxns","flux");
-  AddURI("http://mpf.biol.vt.edu/ns","jigcell");
-  AddURI("http://www.w3.org/1998/Math/MathML","math");
-  AddURI("http://www.sbml.org/sbml/level2","sbml");
-  AddURI("http://www.dbi.tju.edu/xmlns/unigene","unigene");
-  AddURI("http://www.w3.org/1999/xhtml","xhtml");
+  AddURI("http://www.sbml.org/2001/ns/biocharon","bc","SBML2Ex_bc.xsd");
+  AddURI("http://www.dbi.tju.edu/xmlns/dbi","dbi","SBML2Ex_dbi.xsd");
+  AddURI("http://arep.med.harvard.edu/fluxns","flux","SBML2Ex_fluxns.xsd");
+  AddURI("http://mpf.biol.vt.edu/ns","jigcell","SBML2Ex_jigcell.xsd");
+  AddURI("http://www.w3.org/1998/Math/MathML","math","SBML2Ex_mathml.xsd");
+  AddURI("http://www.sbml.org/sbml/level2","sbml","SBML2Ex_sbml.xsd");
+  AddURI("http://www.dbi.tju.edu/xmlns/unigene","unigene","SBML2Ex_unigene.xsd");
+  AddURI("http://www.w3.org/1999/xhtml","xhtml","SBML2Ex_xhtml.xsd");
 
  string xml;
  std::ifstream inxml(fname.c_str());
