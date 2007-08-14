@@ -768,7 +768,7 @@ void GenerateCPPDiagram(const ::Uml::Diagram &diagram, const ::Uml::Diagram &cro
 	//generate Initialize() function
 	GenerateCPPInitialize(diagram, cross_dgr, output, macro, hname, ass_inits, comps_inits, isCrossDgr);
 			
-	//generate InitializeNS(const ::Uml::Namespace &ns); function
+	//generate InitializeDgr(const ::Uml::Diagram &dgr); function
 	GenerateCPPInitializeContainer(diagram.classes(), true, output,macro);
 }
 
@@ -879,6 +879,8 @@ void GenerateCPPDiagramInitialize(const ::Uml::Diagram &diagram, const ::Uml::Di
 
 	output << "\t" << macro << " void Initialize(const ::Uml::Diagram &dgr)" << endl << "\t{" << endl; //begin of Initialize()
 	output << "\t\t" << "umldiagram = dgr;" << endl;
+	output << "\t\t" << "InitializeDgr(dgr);" << endl;
+
 	for (set< ::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
 		::Uml::Namespace ns = *nses_i;
