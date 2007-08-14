@@ -151,7 +151,7 @@ public class ReadStringTest extends TestCase {
         System.out.println("\tOpenExistingFromString");
         System.out.println("-----------------------------------");
 
-        readStringTest("samples/compOutRef.xml");
+        /*readStringTest("samples/compOutRef.xml");
         readStringTest("samples/compUnitRef.xml");
         readStringTest("samples/delayLabelRef.xml");
         readStringTest("samples/eventUnitRef.xml");
@@ -182,17 +182,17 @@ public class ReadStringTest extends TestCase {
         readStringTest("samples/l2v1-events.xml");
         readStringTest("samples/l2v1-functions.xml");
         readStringTest("samples/l2v1-mc-ode.xml");
-        readStringTest("samples/l2v1-units.xml");
+        readStringTest("samples/l2v1-units.xml");*/
 
         //jigcell
         //readStringTest("samples/yeastnew2_core.xml");
         //readStringTest("samples/frogegg.xml");
 
         //bc
-        readStringTest("samples/Lac_v1.2.2.xml");
+        //readStringTest("samples/Lac_v1.2.2.xml");
 
         // flux
-        readStringTest("samples/JR904.xml");
+        //readStringTest("samples/JR904.xml");
 
         //dbi, unigene 
         readStringTest("samples/demo_30_paintfb_out.xml");

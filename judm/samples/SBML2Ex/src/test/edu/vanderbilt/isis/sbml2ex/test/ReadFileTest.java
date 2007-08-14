@@ -151,7 +151,7 @@ public class ReadFileTest extends TestCase {
         System.out.println("\tOpenExistingFromFile");
         System.out.println("-----------------------------------");
 
-        readFileTest("samples/compOutRef.xml");
+        /*readFileTest("samples/compOutRef.xml");
         readFileTest("samples/compUnitRef.xml");
         readFileTest("samples/delayLabelRef.xml");
         readFileTest("samples/eventUnitRef.xml");
@@ -182,21 +182,23 @@ public class ReadFileTest extends TestCase {
         readFileTest("samples/l2v1-events.xml");
         readFileTest("samples/l2v1-functions.xml");
         readFileTest("samples/l2v1-mc-ode.xml");
-        readFileTest("samples/l2v1-units.xml");
+        readFileTest("samples/l2v1-units.xml");*/
 
         //jigcell
         //readFileTest("samples/yeastnew2_core.xml");
         //readFileTest("samples/frogegg.xml");
 
         //bc
-        readFileTest("samples/Lac_v1.2.2.xml");
+        //readFileTest("samples/Lac_v1.2.2.xml");
         
         // flux
-        readFileTest("samples/JR904.xml");
+        //readFileTest("samples/JR904.xml");
 
         //dbi, unigene 
         readFileTest("samples/demo_30_paintfb_out.xml");
     }
+    
+    //export LD_LIBRARY_PATH=../judm
 
     /**
      * Opens an existing data network from a file.
@@ -209,7 +211,9 @@ public class ReadFileTest extends TestCase {
         System.out.println("\n------------\n");
         System.out.println(fileName);
 
+        System.out.println("Start printing...");
         printSBML(root);
+        System.out.println("Printing done");
 
         String result = gtf.checkConstraints();
         if (result.trim().compareTo("") == 0) {
@@ -240,6 +244,7 @@ public class ReadFileTest extends TestCase {
 
         // species
         listOfSpecies ls = m.getlistOfSpeciesChild();
+        System.out.println("species in model " + m.getid());
         if (ls != null) {
             species[] sa = ls.getspeciesChildren();
             for (int i = 0; i < sa.length; i++) {
@@ -250,6 +255,7 @@ public class ReadFileTest extends TestCase {
 
         // function defs
         listOfFunctionDefinitions fDefs = m.getlistOfFunctionDefinitionsChild();
+        System.out.println("function definitions in model " + m.getid());
         if (fDefs != null) {
             functionDefinition[] fDefA = fDefs.getfunctionDefinitionChildren();
             for (int i = 0; i < fDefA.length; i++) {
@@ -257,6 +263,7 @@ public class ReadFileTest extends TestCase {
                 System.out.println("functionDefinition " + fd.getid());
 
                 math m_v = fd.getmathChild();
+                System.out.println("math in function definition " + fd.getid());
 
                 apply[] appA = m_v.getapplyChildren();
                 for (int k = 0; k < appA.length; k++) {
@@ -303,6 +310,7 @@ public class ReadFileTest extends TestCase {
 
         // listOfEvents
         listOfEvents lEv = m.getlistOfEventsChild();
+        System.out.println("list of events in model " + m.getid());
         if (lEv != null) {
             event[] evA = lEv.geteventChildren();
             for (int i = 0; i < evA.length; i++) {
