@@ -361,19 +361,30 @@ namespace GME {
 
 		std::string strKind = GetObjectKind( ( CComPtr<IMgaObject> ) spModel );
 
-		if ( strKind == "Package" )
+		if ( strKind == "Package" ) {
+			std::string alias = GetStringAttribute( ( CComPtr<IMgaFCO> ) spModel, "alias" );
+			if ( alias.length() )
+				return alias;
 			return GetObjectName( ( CComPtr<IMgaObject> ) spModel );
+		}
 
 		return GetDiagramName( ( CComPtr<IMgaFCO> ) spModel );
 	}
 
-	std::string GetQualifiedName( CComPtr<IMgaFCO> spFCO )
+	std::string GetQualifiedName( CComPtr<IMgaFCO> spFCO, bool isAssocRole )
 	{
-		std::string strName = GetDiagramName( spFCO.p ) + "::";
+		std::string strName;
+
+		if ( isAssocRole )
+			strName += LowerFirst( GetDiagramName( spFCO.p ) ) + "::";
+		else
+			strName += GetDiagramName( spFCO.p ) + "::";
+
 		std::string strNs = GetNamespaceName( spFCO.p );
 		if ( !strNs.empty() )
 			strName += strNs + "::";
-		strName += LowerFirst( GetObjectName( spFCO.p ) );
+
+		strName += GetObjectName( spFCO.p );
 		return strName;
 	}
 
