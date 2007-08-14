@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
 * @author Himanshu Neema
 */
 public abstract class UdmFactory {
-    private static String JUDM_CINT_LIB_PATH = null;
+    private static String SWIG_LIB_PATH = null;
     //private static final String udmPackagePath = "/edu/vanderbilt/isis/udm/";
     //private static final String umlXsdFile = "Uml.xsd";
     private String xmlMetaFile;
@@ -27,15 +27,15 @@ public abstract class UdmFactory {
     protected Diagram metaDiagram;
     protected UdmPseudoDataNetwork dataNetwork;
 
-    private static void findJUDM_PATH() {
+    private void findSwigDll() {
         String judm_path = null;
-        String cint_lib = "UdmSwig.dll";
+        String swig_lib = "UdmSwig.dll";
         try {
             String os_name = System.getProperty("os.name");
             String exec = "cmd /c set";
             if (os_name.indexOf("Windows") == -1) {
                 // linux specific
-                cint_lib = "libUdmSwig.so";
+                swig_lib = "libUdmSwig.so";
                 exec = "/bin/bash -c set";
             }
 
@@ -47,7 +47,7 @@ public abstract class UdmFactory {
                 StringTokenizer st = new StringTokenizer(line, "=");
                 while (st.hasMoreTokens()) {
                     String key = st.nextToken();
-                    if (key.compareTo("JUDM_PATH") == 0) {
+                    if (key.compareTo("UDM_PATH") == 0) {
                         if (st.hasMoreTokens()) {
                             judm_path = st.nextToken();
                         }
@@ -59,9 +59,9 @@ public abstract class UdmFactory {
         }
 
         if (judm_path == null) {
-            throw new UnsatisfiedLinkError("No JUDM_PATH environment variable defined");
+            throw new UnsatisfiedLinkError("No UDM_PATH environment variable defined");
         }
-        JUDM_CINT_LIB_PATH = judm_path + "/" + cint_lib;
+        SWIG_LIB_PATH = judm_path + "/bin/" + swig_lib;
     }
 
     protected UdmFactory(
@@ -71,12 +71,12 @@ public abstract class UdmFactory {
             System.loadLibrary("UdmSwig");
             //System.out.println("library path: UdmSwig");
         } catch (UnsatisfiedLinkError linkEx) {
-            if (JUDM_CINT_LIB_PATH == null) {
-                findJUDM_PATH();
+            if (SWIG_LIB_PATH == null) {
+                findSwigDll();
             }
 
-            //System.out.println("judm path: " + JUDM_CINT_LIB_PATH);
-            System.load(JUDM_CINT_LIB_PATH);
+            //System.out.println("judm path: " + SWIG_LIB_PATH);
+            System.load(SWIG_LIB_PATH);
         }
         // store the Uml.xsd file
         //UdmHelper.StoreXsd(umlXsdFile, Uml_xsd.getString());
