@@ -15,7 +15,10 @@ CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::genericTest );
 
 
 UDM_USE_DOM
+
+#ifdef _WIN32
 UDM_USE_MGA
+#endif
 
 using namespace LampDiagram::LampDiagram;
 
@@ -63,7 +66,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 
 				
 				vector<__int64> a;
-				a.push_back(0x1234567890abcdef);	//64bit integer
+				a.push_back(0x1234567890abcdefLL);	//64bit integer
 				a.push_back(7);
 				a.push_back(1);
 				
@@ -73,7 +76,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				//testing already set attributes
 				CPPUNIT_ASSERT(doubleBulbLamp.ArrayInt()[0] == 1);
 				CPPUNIT_ASSERT(doubleBulbLamp.ArrayInt()[1] == 7);
-				CPPUNIT_ASSERT(doubleBulbLamp.ArrayInt()[2] == 0x1234567890abcdef);
+				CPPUNIT_ASSERT(doubleBulbLamp.ArrayInt()[2] == 0x1234567890abcdefLL);
 				//getting non-existing items - they should be zero
 				CPPUNIT_ASSERT(doubleBulbLamp.ArrayInt()[4] == 0);
 			
@@ -86,7 +89,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				//test
 				CPPUNIT_ASSERT(a[0] == 1);
 				CPPUNIT_ASSERT(a[1] == 7);
-				CPPUNIT_ASSERT(a[2] == 0x1234567890abcdef);
+				CPPUNIT_ASSERT(a[2] == 0x1234567890abcdefLL);
 				//getting non-existing items - they should be zero
 				CPPUNIT_ASSERT(doubleBulbLamp.TempArrayInt()[4] == 0);
 			
@@ -397,7 +400,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 
 
 			
-				set<ControlLink> lks = doubleBulbLamp.ControlLink_kind_children();
+				set<ControlLink> lks = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
 				set<ControlLink>::iterator l1;
 
 				for(l1 = lks.begin(); l1 != lks.end(); l1++) 
@@ -422,7 +425,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				}
 				
 
-				set<Bulb> s_bulb = doubleBulbLamp.Bulb_kind_children();
+				set<Bulb> s_bulb = doubleBulbLamp.LampDiagram_Bulb_kind_children();
 				CPPUNIT_ASSERT (s_bulb.size() == 3);
 
 				for(set<Bulb>::iterator s_bulb_i = s_bulb.begin(); s_bulb_i != s_bulb.end(); s_bulb_i++)
@@ -442,7 +445,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				}
 
 				//deleting by omission from the new set of children
-				set<ControlLink> cl_test_set = doubleBulbLamp.ControlLink_kind_children();
+				set<ControlLink> cl_test_set = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
 				CPPUNIT_ASSERT( cl_test_set.size() == 3);				
 				cl_test_set.erase(cl_test_set.begin(), cl_test_set.end());
 				cl_test_set.insert(cl1);
@@ -454,7 +457,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				{
 					cout << e.what() << endl;
 				};
-				cl_test_set = doubleBulbLamp.ControlLink_kind_children();
+				cl_test_set = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
 				CPPUNIT_ASSERT( cl_test_set.size() == 1);
 				CPPUNIT_ASSERT(*(cl_test_set.begin()) == cl1);
 
@@ -464,7 +467,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				//deleting by setting the parent to NULL
 				//this is  way to delete cl1
 				cl1.parent() = NULL;
-				cl_test_set = doubleBulbLamp.ControlLink_kind_children();
+				cl_test_set = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
 				CPPUNIT_ASSERT( cl_test_set.size() == 0);
 				
 
@@ -484,7 +487,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				cl3.dst_end() = switch3;
 				cl3.name() = "Halogen Bulb  switcher";
 
-				cl_test_set = doubleBulbLamp.ControlLink_kind_children();
+				cl_test_set = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
 				CPPUNIT_ASSERT( cl_test_set.size() == 3);
 				CPPUNIT_ASSERT( Bulb(cl2.src_end()) == bulb2);
 				CPPUNIT_ASSERT( Switch(cl2.dst_end()) == switch2);
@@ -506,7 +509,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 
 			
 				//cl1 points to bulb2 and cl2 points to bulb1
-				lks = doubleBulbLamp.ControlLink_kind_children();
+				lks = doubleBulbLamp.LampDiagram_ControlLink_kind_children();
 				for(l1 = lks.begin(); l1 != lks.end(); l1++) 
 				{
 					bool bvar11 = ((*l1 == cl1) && (Bulb(l1->src_end()) == bulb2));
@@ -557,7 +560,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 			
 
 			//testing child roles
-			set<ElectricDevice> ed_s = doubleBulbLamp.ElectricDevice_kind_children();
+			set<ElectricDevice> ed_s = doubleBulbLamp.LampDiagram_ElectricDevice_kind_children();
 			CPPUNIT_ASSERT(ed_s.size() == 8); //all the devices: 3 Bulb, 3 switch, 1 plug, 1 lamp
 			
 
@@ -578,15 +581,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 	return false;
 };
 
-void UdmTests::genericTest::testDOMDOM()
-{
-	cout << endl << "generic tests and copy DOM to DOM:";
-	const char * fname = getRndFileName();
-	std::string fname_std = std::string(fname) + ".xml";
-	std::string fname_std_1 = std::string(fname) + "1.xml";
-	generictest(fname_std.c_str(),fname_std_1.c_str());
-};
-
+#ifdef _WIN32
 void UdmTests::genericTest::testDOMMGA()
 {
 	cout << endl << "generic tests and copy DOM to MGA";
@@ -596,32 +591,6 @@ void UdmTests::genericTest::testDOMMGA()
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 };
 
-void UdmTests::genericTest::testDOMMEM()
-{
-	cout << endl << "generic tests and copy DOM to MEM:";
-	const char * fname = getRndFileName();
-	std::string fname_std = std::string(fname) + ".xml";
-	std::string fname_std_1 = std::string(fname) + ".mem";
-	generictest(fname_std.c_str(),fname_std_1.c_str());
-};
-
-void UdmTests::genericTest::testMEMMEM()
-{
-	cout << endl << "generic tests and copy MEM to MEM:";
-	const char * fname = getRndFileName();
-	std::string fname_std = std::string(fname) + ".mem";
-	std::string fname_std_1 = std::string(fname) + "1.mem";
-	generictest(fname_std.c_str(),fname_std_1.c_str());
-};
-
-void UdmTests::genericTest::testMEMDOM()
-{
-	cout << endl << "generic tests and copy MEM to DOM:";
-	const char * fname = getRndFileName();
-	std::string fname_std = std::string(fname) + ".mem";
-	std::string fname_std_1 = std::string(fname) + ".xml";
-	generictest(fname_std.c_str(),fname_std_1.c_str());
-};
 void UdmTests::genericTest::testMEMMGA()
 {
 	cout << endl << "generic tests and copy MEM to MGA:";
@@ -655,5 +624,42 @@ void UdmTests::genericTest::testMGAMEM()
 	const char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".mga";
 	std::string fname_std_1 = std::string(fname) + ".mem";
+	generictest(fname_std.c_str(),fname_std_1.c_str());
+};
+#endif // _WIN32
+
+void UdmTests::genericTest::testDOMDOM()
+{
+	cout << endl << "generic tests and copy DOM to DOM:";
+	const char * fname = getRndFileName();
+	std::string fname_std = std::string(fname) + ".xml";
+	std::string fname_std_1 = std::string(fname) + "1.xml";
+	generictest(fname_std.c_str(),fname_std_1.c_str());
+};
+
+void UdmTests::genericTest::testDOMMEM()
+{
+	cout << endl << "generic tests and copy DOM to MEM:";
+	const char * fname = getRndFileName();
+	std::string fname_std = std::string(fname) + ".xml";
+	std::string fname_std_1 = std::string(fname) + ".mem";
+	generictest(fname_std.c_str(),fname_std_1.c_str());
+};
+
+void UdmTests::genericTest::testMEMMEM()
+{
+	cout << endl << "generic tests and copy MEM to MEM:";
+	const char * fname = getRndFileName();
+	std::string fname_std = std::string(fname) + ".mem";
+	std::string fname_std_1 = std::string(fname) + "1.mem";
+	generictest(fname_std.c_str(),fname_std_1.c_str());
+};
+
+void UdmTests::genericTest::testMEMDOM()
+{
+	cout << endl << "generic tests and copy MEM to DOM:";
+	const char * fname = getRndFileName();
+	std::string fname_std = std::string(fname) + ".mem";
+	std::string fname_std_1 = std::string(fname) + ".xml";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 };

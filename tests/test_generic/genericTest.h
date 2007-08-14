@@ -9,15 +9,17 @@ namespace UdmTests
 	class genericTest : public CPPUNIT_NS::TestFixture
 	{
 		CPPUNIT_TEST_SUITE( genericTest );
-		CPPUNIT_TEST( testDOMDOM );
+#ifdef _WIN32
 		CPPUNIT_TEST( testDOMMGA );
-		CPPUNIT_TEST( testDOMMEM );
 		CPPUNIT_TEST( testMGADOM );
 		CPPUNIT_TEST( testMGAMGA );
 		CPPUNIT_TEST( testMGAMEM );
+		CPPUNIT_TEST( testMEMMGA );
+#endif
+		CPPUNIT_TEST( testDOMDOM );
+		CPPUNIT_TEST( testDOMMEM );
 		CPPUNIT_TEST( testMEMMEM );
 		CPPUNIT_TEST( testMEMDOM );
-		CPPUNIT_TEST( testMEMMGA );
 		CPPUNIT_TEST_SUITE_END();
 
 		
@@ -25,15 +27,17 @@ namespace UdmTests
 		const char * getRndFileName();
 		bool generictest(const char *, const char *);	//returns false if failed
 		public:
-		void testDOMDOM();
+#ifdef _WIN32
 		void testDOMMGA();
-		void testDOMMEM();
-		void testMEMDOM();
 		void testMEMMGA();
-		void testMEMMEM();
 		void testMGADOM();
 		void testMGAMGA();
 		void testMGAMEM();
+#endif
+		void testDOMDOM();
+		void testDOMMEM();
+		void testMEMDOM();
+		void testMEMMEM();
 	};
 };
 #endif  // GENERICTEST_H
