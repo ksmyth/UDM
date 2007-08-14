@@ -20,7 +20,7 @@
 */
 
 //###############################################################################################################################################
-
+  
 #ifndef _WIN32
 #include <stdio.h>
 char *_itoa( int value, char *string, int radix )
@@ -40,12 +40,15 @@ char *_itoa( int value, char *string, int radix )
 #include "UdmOclObject.h"
 #include "UdmOclType.h"
 
+
 #define LINE_END GOCL_STL_NS()string( "\r\n" )
 #define LARGE_DELIMITER GOCL_STL_NS()string( "##############################################################" ) + LINE_END
 #define SMALL_DELIMITER GOCL_STL_NS()string( "--------------------------------------------------------------" ) + LINE_END
 
+
 namespace Ocl
 {
+
 	class ConstraintBase;
 	class ConstraintEx;
 	class ConstraintDefEx;

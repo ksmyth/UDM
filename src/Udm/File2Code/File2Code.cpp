@@ -70,22 +70,24 @@ void File2Code::genJavaTail(std::ostream& out)
 //==================================
 void File2Code::genCppHeader(std::ostream& out)
 {
-  /*
-      out << "#ifndef " <<  m_name << "_H" << std::endl;
-      out << "#define " << getter_func_name << "_H" << std::endl;
-      out << "#include <string>" << std::endl;
-      out << "#pragma warning( disable : 4010)" << std::endl << std::endl;
-      out << "const std::string& " << getter_func_name << "()" << std::endl;
-      out << "{" << std::endl;
-      out << "static std::string str;" << std::endl;
-      out << "if (str.empty())" << std::endl;
-      out << "{" << std::endl;
-      */
+  
+    out << "#ifndef " <<  m_name << "_H" << std::endl;
+    out << "#define " << m_name << "_H" << std::endl;
+    out << "#include <string>" << std::endl;
+    out << "#pragma warning( disable : 4010)" << std::endl << std::endl;
+    out << "namespace " << m_name << std::endl;
+    out << "{" << std::endl;
+    out << "const std::string& getString()" << std::endl;
+    out << "{" << std::endl;
+    out << "\tstatic std::string str;" << std::endl;
+    out << "\tif (str.empty())" << std::endl;
+    out << "\t{" << std::endl;
+  
 }
 //==================================
 void File2Code::genCppTail(std::ostream& out)
 {
-    out << "}" << std::endl;
+    out << "} //namespace" << std::endl;
     out << "#endif" << std::endl;
 }
 //==================================

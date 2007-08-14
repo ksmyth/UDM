@@ -23,7 +23,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(GME_ROOT)\bin,..\..\include,..\UdmPat\GOCL\include"
+				AdditionalIncludeDirectories="$(GME_ROOT)\bin,..\..\include,..\UdmOCLPat\GOCL\include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -40,7 +40,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="xerces-c_2.lib zlib.lib GOCL_vc7.lib"
+				AdditionalDependencies="UDMPOI.lib UdmOcl.lib Uml.lib UdmDom.lib UdmGme.lib UdmXMI.lib UdmUtil.lib  Xalan-C_1.lib xerces-c_2.lib zlib.lib GOCL_vc7.lib"
 				OutputFile="..\..\bin.net\UdmDll.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -88,11 +88,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(GME_ROOT)\bin,..\..\include,..\UdmPat\GOCL\include"
+				AdditionalIncludeDirectories="$(GME_ROOT)\bin,..\..\include,..\UdmOCLPat\GOCL\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/UdmDll.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
@@ -105,13 +105,15 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="xerces-c_2D.lib zlibD.lib GOCL_vc7D.lib"
+				AdditionalDependencies="UDMPOID.lib UdmOclD.lib UmlD.lib UdmDomD.lib UdmGmeD.lib UdmXMID.lib UdmUtilD.lib  Xalan-C_1d.lib xerces-c_2d.lib zlibD.lib GOCL_vc7D.lib"
+				ShowProgress="0"
 				OutputFile="..\..\bin.net\UdmDllD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\..\..\lib/UdmDllD.pdb"
+				OptimizeReferences="1"
 				ImportLibrary=".\..\..\lib/UdmDllD.lib"
 				TargetMachine="1"/>
 			<Tool
@@ -151,350 +153,18 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="..\UdmBase\cint_string.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
+				RelativePath=".\UdmDll.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmDom\DOMPrint.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmBase\DTDGen.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmGme\imports.cpp">
-			</File>
-			<File
-				RelativePath="..\UdmBase\Project.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmBase\UdmBase.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmCopy\UdmCopy.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmDom\UdmDom.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmGme\UdmGme.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmOcl\UdmOcl.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmOcl\UdmOclObject.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmOcl\UdmOclType.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmBase\UdmProject.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmBase\UdmStatic.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmBase\UdmTomi.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\UdmUtil\UdmUtil.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\Udm\Uml.cpp">
-			</File>
-			<File
-				RelativePath="..\UdmBase\UmlExt.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_MBCS;_USRDLL;UDM_DLL_EXPORT;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;$(NoInherit)"
-						BasicRuntimeChecks="3"/>
+						GeneratePreprocessedFile="0"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
-			<File
-				RelativePath="..\..\include\UdmCint.h">
-			</File>
-			<File
-				RelativePath="..\..\include\UdmGme.h">
-			</File>
-			<File
-				RelativePath="..\..\include\UdmInt.h">
-			</File>
-			<File
-				RelativePath="..\..\include\UdmOcl.h">
-			</File>
-			<File
-				RelativePath="..\..\include\UdmXmi.h">
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

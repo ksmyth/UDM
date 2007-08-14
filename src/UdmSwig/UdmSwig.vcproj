@@ -41,7 +41,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="GOCL_vc7d.lib UdmOcld.lib jvm.lib jawt.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib  UdmUtilD.lib zlibd.lib"
+				AdditionalDependencies="UmlD.lib GOCL_vc7d.lib UdmOcld.lib jvm.lib jawt.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib  UdmUtilD.lib zlibd.lib"
 				OutputFile="..\..\bin.net\UdmSwigD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -107,11 +107,12 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="GOCL_vc7.lib UdmOcl.lib jvm.lib jawt.lib UdmPOI.lib Xalan-C_1.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmUtil.lib zlib.lib"
+				AdditionalDependencies="Uml.lib GOCL_vc7.lib UdmOcl.lib jvm.lib jawt.lib UdmPOI.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmUtil.lib zlib.lib"
 				OutputFile="..\..\bin.net\UdmSwig.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(UDM_PATH)/lib"
+				IgnoreAllDefaultLibraries="FALSE"
 				ProgramDatabaseFile=".\Release/UdmSwig.pdb"
 				ImportLibrary=".\Release/UdmSwig.lib"
 				TargetMachine="1"/>
@@ -168,25 +169,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="UdmSwig_wrap.cpp">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_MBCS;_USRDLL;UdmSwigJNI_EXPORTS;$(NoInherit)"
-					BasicRuntimeChecks="3"
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;$(NoInherit)"/>
-			</FileConfiguration>
+			RelativePath=".\UdmSwig_wrap.cpp">
 		</File>
 		<File
 			RelativePath="UdmSwigMain.cpp">

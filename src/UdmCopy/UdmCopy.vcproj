@@ -41,7 +41,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmDom.lib UdmGme.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
+				AdditionalDependencies="Uml.lib UdmDom.lib UdmGme.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
 				OutputFile="../../bin.net/UdmCopy.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -102,7 +102,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib zlibD.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib zlibD.lib"
 				OutputFile="..\..\bin.net\UdmCopyD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
