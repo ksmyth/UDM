@@ -188,18 +188,20 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTFxsd.h getGeneTFxsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe &quot;%UDM_PATH%&quot;\etc\Uml.xsd Umlxsd.h getUmlxsd"
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe &quot;%UDM_PATH%&quot;\etc\Uml.xsd Umlxsd.h getUmlxsd
+"
 					Outputs="GeneTF.cpp;GeneTF.h;GeneTF.xsd;GeneTFxsd.h"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v -u GeneTF=http://kutykuruty.khm.edu
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTFxsd.h getGeneTFxsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe &quot;%UDM_PATH%&quot;\etc\Uml.xsd Umlxsd.h getUmlxsd"
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe &quot;%UDM_PATH%&quot;\etc\Uml.xsd Umlxsd.h getUmlxsd
+"
 					Outputs="GeneTF.cpp;GeneTF.h;GeneTF.xsd;GeneTFxsd.h"/>
 			</FileConfiguration>
 		</File>
@@ -212,7 +214,7 @@
 					CommandLine="cd &quot;$(InputDir)&quot;
 &quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
 "
-					Outputs="$(InputDir)\$(InputName).mga;$(InputDir)\SBML2_udm.xml"/>
+					Outputs="$(InputDir)\$(InputName).mga;$(InputDir)\GeneTF_udm.xml"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">

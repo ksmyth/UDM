@@ -36,8 +36,13 @@ void UdmTests::Test::testRead(const std::string& result)
   char diagram_file[] = "GeneTF_udm.xml";
   char xsd_name[] = "GeneTF.xsd";
 
+  StoreXsd("Uml.xsd",cint_string (getUmlxsd().c_str()));
   UdmPseudoObject diagram;
-  
+
+
+
+
+
   if(!UPO_LoadDiagram(diagram_file,diagram))
   {
      cint_string str;
@@ -46,6 +51,7 @@ void UdmTests::Test::testRead(const std::string& result)
      std::cout << str.buffer() <<std::endl;
      exit(1);
    }
+
 
   /*
   UdmPseudoObject swigNewUPO = new UdmPseudoObject();
@@ -240,7 +246,26 @@ void UdmTests::Test::testWrite(std::string& result)
 
   UdmPseudoObject diagram;
 
-  StoreXsd("Uml.xsd",cint_string (getUmlxsd().c_str()));
+
+    if(! AddURIToUMLNamespaceMapping("http://kutykuruty.khm.edu", "GeneTF"))
+   {
+     cint_string str;
+     diagram.GetLastError(str);
+     std::cout << __LINE__ <<std::endl;
+     std::cout << str.buffer() <<std::endl;
+     exit(1);
+     
+   }
+
+   if(!  StoreXsd("Uml.xsd",cint_string (getUmlxsd().c_str())))
+   {
+     cint_string str;
+     diagram.GetLastError(str);
+     std::cout << __LINE__ <<std::endl;
+     std::cout << str.buffer() <<std::endl;
+     exit(1);
+   }
+
 
   if(!  UPO_LoadDiagram(diagram_file,diagram))
    {
@@ -251,7 +276,8 @@ void UdmTests::Test::testWrite(std::string& result)
      exit(1);
      
    }
-  
+   
+
 
   cint_string xsdn(xsd_name);
   cint_string xsd(getGeneTFxsd().c_str());
@@ -447,9 +473,14 @@ void UdmTests::Test::test()
  testWrite(result);
  testRead(result);
 
- 
 }
 
+int main(int argc, char* argv[])
+{
+  UdmTests::Test test;
+  test.test();
+}
+/*
 int main(int argc, char* argv[])
 {
 	CPPUNIT_NS::Test *suite = CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest();
@@ -468,3 +499,4 @@ int main(int argc, char* argv[])
 	return wasSucessful ? 0 : 1;
 	
 }
+*/
