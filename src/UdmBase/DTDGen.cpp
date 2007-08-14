@@ -626,7 +626,7 @@ namespace DTDGen
 
 	void GenerateDTD(const ::Uml::Namespace &ns,  ostream &output)	
 	{
-		::Uml::Diagram dgr = ns.parent();
+		::Uml::Diagram dgr = ::Uml::GetDiagram(ns);
 			output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
 			output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
 			output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
@@ -643,9 +643,9 @@ namespace DTDGen
 
 	// --------------------------- XML Schema generation
 
-	string UmlNameToURI(const string &nsn, const bool isDiagram, const map<string, string> &ns_map)
+	static string XMLNamespaceURI(const ::Uml::Diagram &dgr, const map<string, string> &ns_map)
 	{
-		string name = isDiagram ? "__dgr_" + nsn : nsn;
+		string name = "__dgr_" + (string)dgr.name();
 		if (!ns_map.empty())
 		{
 			map<string, string>::const_iterator i = ns_map.find(name);
@@ -654,6 +654,20 @@ namespace DTDGen
 		}
 		string uri("http://www.isis.vanderbilt.edu/2004/schemas/");
 		uri += name;
+		return uri;
+	}
+
+	static string XMLNamespaceURI(const ::Uml::Namespace &ns, const map<string, string> &ns_map)
+	{
+		string name = ns.getPath2("::", false);
+		if (!ns_map.empty())
+		{
+			map<string, string>::const_iterator i = ns_map.find(name);
+			if (i != ns_map.end())
+				return i->second;
+		}
+		string uri("http://www.isis.vanderbilt.edu/2004/schemas/");
+		uri += ns.getPath2("/", false);
 		return uri;
 	}
 
@@ -678,17 +692,33 @@ namespace DTDGen
 		string opt(optp);
 		int loc = opt.find('=');
 		if (loc != string::npos) {
-			string uml_ns = opt.substr(0, loc);
+			string uml_ns_path = opt.substr(0, loc);
 			string uri = opt.substr(loc + 1);
 
-			if (uml_ns.length() == 0 || uri.length() == 0)
-				throw udm_exception("UML container name and the URI must not be empty in argument \"" + opt + "\" of \"-u\" switch");
+			if (uml_ns_path.length() == 0 || uri.length() == 0)
+				throw udm_exception("UML container path and the URI must not be empty in argument \"" + opt + "\" of \"-u\" switch");
 
-			map<string, string>::value_type item(uml_ns, uri);
+			map<string, string>::value_type item(uml_ns_path, uri);
 			ns_map.insert(item);
 		} else {
-			throw udm_exception("argument \"" + opt + "\" of \"-u\" switch must be in this form: uml_container_name=URI");
+			throw udm_exception("argument \"" + opt + "\" of \"-u\" switch must be in this form: uml_container_path=URI");
 		}
+	}
+
+	static bool IsIgnored(const ::Uml::Namespace &ns, const set<string> &ns_ignore_set)
+	{
+		if (ns)
+		{
+			set<string>::const_iterator i = ns_ignore_set.find(ns.getPath2("::", false));
+			return i != ns_ignore_set.end();
+		}
+		return false;
+	}
+
+	static bool IsIgnored(const ::Uml::Diagram &dgr, const set<string> &ns_ignore_set)
+	{
+		set<string>::const_iterator i = ns_ignore_set.find(string("__dgr_") + (string)dgr.name());
+		return i != ns_ignore_set.end();
 	}
 
 	void GenerateXMLSchemaAttributes(const ::Uml::Class &c,  ostream &output, bool uxsdi)	
@@ -929,7 +959,7 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 		output << "\t\t\t<xsd:extension base=\"";
 		::Uml::Namespace only_base_ns = only_base.parent_ns();
 		if (only_base_ns != ::Uml::Namespace(NULL))
-			output << only_base_ns.name() << ":";
+			output << only_base_ns.getPath2("_", false) << ":";
 		output << only_base.name() <<"Type\">" << endl;
 	}
 	
@@ -949,13 +979,11 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 		{
 			string i_name = cwcps_i->first.name();
 			::Uml::Namespace i_ns = cwcps_i->first.parent_ns();
-			::Uml::Diagram i_dgr = ::Uml::GetDiagram(cwcps_i->first);
 
 			bool ignore = false;
 			{
-				set<string>::const_iterator sit_ns = i_ns != ::Uml::Namespace(NULL) ? ns_ignore_set.find(i_ns.name()) : ns_ignore_set.end();
-				set<string>::const_iterator sit_dgr = ns_ignore_set.find(string("__dgr_") + string(i_dgr.name()));
-				if (sit_ns != ns_ignore_set.end() || sit_dgr != ns_ignore_set.end())
+				if (IsIgnored(i_ns, ns_ignore_set) ||
+					(i_ns == ::Uml::Namespace(NULL) && IsIgnored(::Uml::GetDiagram(cwcps_i->first), ns_ignore_set)))
 				{
 					if (!any_is_there)
 					{
@@ -972,7 +1000,7 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 				if (ns == i_ns)
 					output << " name=\"" << i_name << "\" type=\"" <<	i_name << "Type\"";
 				else if (i_ns != ::Uml::Namespace(NULL))
-					output << " ref=\"" << i_ns.name() << ":" << i_name << "\"";
+					output << " ref=\"" << i_ns.getPath2("_", false) << ":" << i_name << "\"";
 				else
 					output << " ref=\"" << i_name << "\"";
 				if (cwcps_i->second.first != 1)
@@ -1110,10 +1138,11 @@ static void GenerateXMLSchemaForClasses(const ::Uml::Diagram &dgr,
 {
 
 	if (xml_import_info.first)
-		output << " xmlns=\"" << UmlNameToURI(dgr.name(), true, ns_map) << "\"" << endl;
+		output << " xmlns=\"" << XMLNamespaceURI(dgr, ns_map) << "\"" << endl;
 
 	for (set< ::Uml::Namespace>::const_iterator other_ns_i = xml_import_info.second.begin(); other_ns_i != xml_import_info.second.end(); other_ns_i++) {
-		output << " xmlns:" << other_ns_i->name() << "=\"" << UmlNameToURI(other_ns_i->name(), false, ns_map) << "\"" << endl;
+		if (!IsIgnored(*other_ns_i, ns_ignore_set))
+			output << " xmlns:" << other_ns_i->getPath2("_", false) << "=\"" << XMLNamespaceURI(*other_ns_i, ns_map) << "\"" << endl;
 	}
 
 	output << " elementFormDefault=\"qualified\" " << endl;
@@ -1129,7 +1158,8 @@ static void GenerateXMLSchemaForClasses(const ::Uml::Diagram &dgr,
 		output << "<xsd:include schemaLocation=\"" << dgr.name() << ".xsd\">" << endl;
 
 	for (set< ::Uml::Namespace>::const_iterator other_ns_i = xml_import_info.second.begin(); other_ns_i != xml_import_info.second.end(); other_ns_i++) {
-		output << "<xsd:import namespace=\"" << UmlNameToURI(other_ns_i->name(), false, ns_map) << "\" schemaLocation=\"" << dgr.name() << "_" << other_ns_i->name() << ".xsd\"/>" << endl;
+		if (!IsIgnored(*other_ns_i, ns_ignore_set))
+			output << "<xsd:import namespace=\"" << XMLNamespaceURI(*other_ns_i, ns_map) << "\" schemaLocation=\"" << other_ns_i->getPath2("_") << ".xsd\"/>" << endl;
 	}
 	output << endl;
 
@@ -1175,15 +1205,15 @@ void GenerateXMLSchema(const ::Uml::Namespace &ns,  ostream &output,
 		       bool uxsdi, bool xsd_el_ta, 
                        bool qualified_attrs_ns)
 {
-	::Uml::Diagram dgr = ns.parent();
+	::Uml::Diagram dgr = ::Uml::GetDiagram(ns);
 
 	output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
 	output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
 
 	pair<bool, set< ::Uml::Namespace> > xml_import_info = XMLNamespacesToImport(ns, uxsdi);
 
-	output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"" << UmlNameToURI(ns.name(), false, ns_map) << "\"" <<endl;
-	output << " xmlns:" << ns.name() << "=\"" << UmlNameToURI(ns.name(), false, ns_map) << "\"" << endl;
+	output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"" << XMLNamespaceURI(ns, ns_map) << "\"" <<endl;
+	output << " xmlns:" << ns.getPath2("_", false) << "=\"" << XMLNamespaceURI(ns, ns_map) << "\"" << endl;
 
 	GenerateXMLSchemaForClasses(dgr, output, ns.classes(), xml_import_info, ns_map, ns_ignore_set, uxsdi, xsd_el_ta, qualified_attrs_ns);
 
@@ -1204,7 +1234,6 @@ void GenerateXMLSchema(const ::Uml::Diagram &dgr,  ostream &output,
 	xml_import_info.second = XMLNamespacesToImport(dgr, uxsdi);
 
 	output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" <<endl;
-	//XXX2 output << " xmlns=\"" << UmlNameToURI(dgr.name(), true, ns_map) << "\"" << endl;
 
 	GenerateXMLSchemaForClasses(dgr, output, dgr.classes(), xml_import_info, ns_map, ns_ignore_set, uxsdi, xsd_el_ta, qualified_attrs_ns);
 

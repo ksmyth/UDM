@@ -1994,6 +1994,30 @@ UDM_DLL string Object::getPath( const std::string& strDelimiter , bool bReverseO
 
 };
 
+UDM_DLL string Object::getPath2( const std::string& strDelimiter , bool bNeedRootFolder ) const
+{
+		
+	if ((impl->__getdn() && *this == impl->__getdn()->GetRootObject()) || GetParent() == &Udm::_null)
+	{
+		if (bNeedRootFolder)
+			return UdmUtil::ExtractName(*this, "name");
+		else 
+			return "";
+	}
+	else 
+	{
+		string path = GetParent().getPath2(strDelimiter, bNeedRootFolder);
+		if (path.length())
+			path += strDelimiter;	// parent could be the root folder, if bNeedRootFolder is
+									// false then path to parent is empty and delimiter must not be added
+
+		path += UdmUtil::ExtractName(*this, "name");
+		return path;
+
+	}
+
+};
+
 /*
 	recursively obtains objects of a certain type down in the hierarchi rooted at this.
 	The function uses a CompositionChildRole chain which was previously obtained by Uml::GetChildRoleChain() function.

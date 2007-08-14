@@ -2612,6 +2612,7 @@ namespace UdmStatic
 			if (t != 0x00) throw udm_exception("MEM file corrupt!");
 			read += strlen(type_name) + 1;
 			stl_type_name = type_name;
+			if (stl_type_name.at(0) == ':') stl_type_name.erase(0, 1);
 			
 			//now we have the type name.
 			//find out type by searching my meta diagram's classes -- it must be there ;-)
@@ -2635,11 +2636,7 @@ namespace UdmStatic
 					2. Then the class
 					we will separate them by colon
 				*/
-				string comp_tn = type_name;
-				string ns_name = comp_tn.substr(0, comp_tn.find(':'));
-				string cl_name = comp_tn.substr(comp_tn.find(':') + 1, string::npos);//+1 because ':' has to be skipped
-
-				type = ::Uml::classByName(*metaroot.dgr, ns_name, cl_name);
+				type = ::Uml::classByPath(*metaroot.dgr, stl_type_name, ":");
 				if (!type) throw udm_exception(string("No meta information could be located for ") + stl_type_name);
 				
 
@@ -3607,15 +3604,11 @@ namespace UdmStatic
 		//m_type
 		//write the name of my type to file
 		//namespacename:classname
-		string ns_name("");
-		if ((::Uml::Namespace) m_type.parent_ns() != ::Uml::Namespace(NULL))
-			ns_name = ((::Uml::Namespace) m_type.parent_ns()).name();
-		long type_str_length = ns_name.size() + 1 + ((string)m_type.name()).size();
-		char * m_type_name = new char[type_str_length + 1];
-		strcpy(m_type_name, (ns_name + ':' + (string)m_type.name()).c_str());
-		fwrite(m_type_name, type_str_length + 1, 1, f);
-		length += (type_str_length + 1);	
-		delete [] m_type_name;
+		string m_type_path = m_type.getPath2(":", false);
+		if (!((::Uml::Namespace) m_type.parent_ns()))
+			m_type_path.insert(0, ":");		// backward compatible with ":class" identifiers (no namespace)
+		fwrite(m_type_path.c_str(), m_type_path.size() + 1, 1, f);
+		length += (m_type_path.size() + 1);
 
 
 		//here we should write two things:
@@ -4479,7 +4472,13 @@ namespace Uml
 		UdmStatic::CreateComposition(parent, Diagram::meta_namespaces, obj, Namespace::meta_parent);
 
 		obj.name() = name;
+	}
 
+	void InitNamespace(const Namespace &obj, const Namespace &parent, const char *name)
+	{
+		UdmStatic::CreateComposition(parent, Namespace::meta_namespaces, obj, Namespace::meta_parent_ns);
+
+		obj.name() = name;
 	}
 
 	void InitClass(const Class &obj, const Namespace &parent, const char *name, bool isAbstract, const char *stereo, const char * from)
@@ -4642,6 +4641,11 @@ namespace Uml
 	UDM_DLL void SetNamespace(Namespace &what, const Diagram &what_dgr, const char *target_name)
 	{
 		what = namespaceByName(what_dgr, target_name);
+	};
+
+	UDM_DLL void SetNamespace(Namespace &what, const Namespace &what_ns, const char *target_name)
+	{
+		what = namespaceByName(what_ns, target_name);
 	};
 
 	UDM_DLL void SetAttribute(Attribute &what, Class &what_class,  const char *target_name)

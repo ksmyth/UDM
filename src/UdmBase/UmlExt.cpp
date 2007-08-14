@@ -358,27 +358,6 @@ namespace Uml
 		return ret;
 	}
 
-	UDM_DLL set<Namespace> TargetNSForAllContainerClasses(const Namespace &ns)
-	{
-		set<Namespace> ret;
-
-		set<Class> classes = ns.classes();
-		set<Class>::iterator c;
-	
-		for(c = classes.begin(); c != classes.end(); c++ ) {
-			Class cl = *c;
-			set<CompositionParentRole> children = cl.parentRoles();
-			for(set<CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++) {
-				Class theother = (Class)(theOther(*i)).target();
-				Namespace theother_ns = (Namespace)theother.parent_ns();
-				if (theother_ns != Namespace(NULL) && ns != theother_ns)
-					ret.insert(theother_ns);
-			}
-		}
-
-		return ret;
-	}
-
 	UDM_DLL set<AssociationRole> AssociationTargetRoles(const Class &c)
 	{
 		set<AssociationRole> roles;
@@ -830,11 +809,8 @@ namespace Uml
 
 	// get the corresponding class from the cross diagram
 	UDM_DLL Class GetClassFromCrossDgr(const Diagram &cross_dgr, const Class &cl) {
-		//The classname in cross diagram is: classname + cross_delimiter + diagramname [ + cross_delimiter + namespacename ]
-		string cross_cl_name = string(cl.name()) + string(Udm::cross_delimiter) + string(GetDiagram(cl).name());
-		Namespace ns = cl.parent_ns();
-		if (ns)
-			cross_cl_name += string(Udm::cross_delimiter) + (string)ns.name();
+		//The classname in cross diagram is: classname + cross_delimiter + diagramname ( + cross_delimiter + namespacename )*
+		string cross_cl_name = string(cl.name()) + string(Udm::cross_delimiter) + cl.GetParent().getPath2(Udm::cross_delimiter);
 		return classByName(cross_dgr, cross_cl_name);
 	}
 
@@ -848,6 +824,30 @@ namespace Uml
 		else return Class();
 	};
 
+	// find a class by path
+	UDM_DLL Class classByPath(const Diagram &d, const string &path, const string &delim)
+	{
+		string::size_type i = path.rfind(delim);
+		if (i == string::npos)
+			return classByName(d, path);
+
+		string ns_path = path.substr(0, i);
+		string class_name = path.substr(i + delim.size());
+		if (ns_path.length())
+		{
+			Namespace ns = namespaceByPath(d, ns_path, delim);
+			if (ns)
+				return classByName(ns, class_name);
+		}
+		else
+		{
+			// path = "" + delim + "class_name"
+			return classByName(d, class_name);
+		}
+
+		return Class();
+	};
+
 
 // find a namespace by name
 	UDM_DLL Namespace namespaceByName(const Diagram &d, const string &name)
@@ -856,6 +856,47 @@ namespace Uml
 		for (set<Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 			if ((string)(nses_i->name()) == name) return *nses_i;
 		
+		return Namespace();
+	};
+
+// find a namespace by name in a Namespace
+	UDM_DLL Namespace namespaceByName(const Namespace &ns, const string &name)
+	{
+		set<Namespace> nses = ns.namespaces();
+		for (set<Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+			if ((string)(nses_i->name()) == name) return *nses_i;
+		
+		return Namespace();
+	};
+
+// find a namespace by path
+	UDM_DLL Namespace namespaceByPath(const Diagram &d, const string &path, const string &delim)
+	{
+		string::size_type i = path.rfind(delim);
+		if (i == string::npos)
+			return namespaceByName(d, path);
+
+		Namespace p_ns;
+		string ns_path = path;
+		while(!path.empty()) {
+			string ns_name;
+			i = ns_path.find(delim);
+			if (i == string::npos) {
+				ns_name = ns_path;
+				ns_path.clear();
+			} else {
+				ns_name = ns_path.substr(0, i);
+				ns_path = ns_path.substr(i + delim.size());
+			}
+
+			Namespace ns = p_ns ? namespaceByName(p_ns, ns_name) : namespaceByName(d, ns_name);
+
+			if (ns_path.empty() || !ns)
+				return ns;
+
+			p_ns = ns;
+		}
+
 		return Namespace();
 	};
 
@@ -884,29 +925,54 @@ namespace Uml
 
 	UDM_DLL Diagram GetDiagram(const Class &c)
 	{
-		Namespace ns = c.parent_ns();
-		if (ns)
-			return ns.parent();
+		Diagram dgr = c.parent();
+		if (dgr)
+			return dgr;
 		else
-			return c.parent();
+			return GetDiagram(c.parent_ns());
 	}
 
 	UDM_DLL Diagram GetDiagram(const Association &assoc)
 	{
-		Namespace ns = assoc.parent_ns();
-		if (ns)
-			return ns.parent();
+		Diagram dgr = assoc.parent();
+		if (dgr)
+			return dgr;
 		else
-			return assoc.parent();
+			return GetDiagram(assoc.parent_ns());
 	}
 
 	UDM_DLL Diagram GetDiagram(const Composition &comp)
 	{
-		Namespace ns = comp.parent_ns();
-		if (ns)
-			return ns.parent();
+		Diagram dgr = comp.parent();
+		if (dgr)
+			return dgr;
 		else
-			return comp.parent();
+			return GetDiagram(comp.parent_ns());
+	}
+
+	UDM_DLL Diagram GetDiagram(const Namespace &ns)
+	{
+		Diagram dgr = ns.parent();
+		Namespace p_ns = ns.parent_ns();
+		while (!dgr) {
+			dgr = p_ns.parent();
+			p_ns = p_ns.parent_ns();
+			ASSERT(dgr || p_ns);
+		}
+		return dgr;
+	}
+
+
+	UDM_DLL vector<Namespace> GetParentNamespaces(const Namespace &ns)
+	{
+		vector<Namespace> ret;
+		Namespace p_ns = ns.parent_ns();
+		while (p_ns) {
+			ret.push_back(p_ns);
+			p_ns = p_ns.parent_ns();
+		}
+
+		return vector<Namespace>(ret.rbegin(), ret.rend());
 	}
 
 }
