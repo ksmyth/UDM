@@ -5,9 +5,6 @@
  */
 package edu.vanderbilt.isis.sbml2ex.test;
 
-import java.io.IOException;
-import java.io.InputStream;
-import junit.framework.TestCase;
 import edu.vanderbilt.isis.sbml2ex.FactoryRepository;
 import edu.vanderbilt.isis.sbml2ex.math.apply;
 import edu.vanderbilt.isis.sbml2ex.math.ci;
@@ -34,6 +31,12 @@ import edu.vanderbilt.isis.sbml2ex.unigene.cluster_id;
 import edu.vanderbilt.isis.sbml2ex.xhtml.head;
 import edu.vanderbilt.isis.udm.UdmException;
 
+import junit.framework.TestCase;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+
 
 /**
  * Test for SBML2Ex simple instance creation from file.
@@ -43,6 +46,8 @@ import edu.vanderbilt.isis.udm.UdmException;
  */
 public class ReadFileTest extends TestCase {
     private static final String NEW_INSTANCE_FILE = "samples/NewEmptyInstanceFile.xml";
+    private static final String TEST_FILE = "samples/file_test.log";
+    private String tesLog = new String();
 
     /**
      * Fills the root object with some dummy data.
@@ -73,15 +78,13 @@ public class ReadFileTest extends TestCase {
         acc _acc = acc.create(ann);
         _acc.setvalue("AA017353");
 
-        edu.vanderbilt.isis.sbml2ex.unigene.title t =
-            edu.vanderbilt.isis.sbml2ex.unigene.title.create(ann);
+        edu.vanderbilt.isis.sbml2ex.unigene.title t = edu.vanderbilt.isis.sbml2ex.unigene.title.create(ann);
         t.setvalue("7-dehydrocholesterol reductase");
 
         cluster_id cid = cluster_id.create(ann);
         cid.setvalue("Hs.11806");
 
-        edu.vanderbilt.isis.sbml2ex.unigene.gene g =
-            edu.vanderbilt.isis.sbml2ex.unigene.gene.create(ann);
+        edu.vanderbilt.isis.sbml2ex.unigene.gene g = edu.vanderbilt.isis.sbml2ex.unigene.gene.create(ann);
         g.setvalue("DHCR7");
 
         // create funtions with some math 
@@ -102,8 +105,10 @@ public class ReadFileTest extends TestCase {
     protected void printInputStream(InputStream is) throws UdmException {
         java.io.DataInputStream din = new java.io.DataInputStream(is);
         String xml = new String("");
+
         try {
             String line = null;
+
             while ((line = din.readLine()) != null) {
                 xml += (line + "\n");
             }
@@ -123,6 +128,7 @@ public class ReadFileTest extends TestCase {
      * @throws UdmException
      */
     public void testCreateBlankInstance() throws UdmException {
+        long time1 = System.currentTimeMillis();
         sbmlFileFactory gtf = FactoryRepository.getsbmlsbmlFileFactory();
         sbml root = gtf.create(NEW_INSTANCE_FILE);
 
@@ -133,6 +139,7 @@ public class ReadFileTest extends TestCase {
         printSBML(root);
 
         String result = gtf.checkConstraints();
+
         if (result.trim().compareTo("") == 0) {
             System.out.println("No constraint violation found.");
         } else {
@@ -140,6 +147,10 @@ public class ReadFileTest extends TestCase {
         }
 
         gtf.save();
+
+        long time2 = (System.currentTimeMillis() - time1) / 1000;
+        tesLog += ("Create blank instance in file " + NEW_INSTANCE_FILE + ": " +
+        time2 + "s\n");
     }
 
     /**
@@ -190,14 +201,21 @@ public class ReadFileTest extends TestCase {
 
         //bc
         //readFileTest("samples/Lac_v1.2.2.xml");
-        
+
         // flux
         //readFileTest("samples/JR904.xml");
 
         //dbi, unigene 
         readFileTest("samples/demo_30_paintfb_out.xml");
+
+        /*try {
+            RandomAccessFile raf = new RandomAccessFile(TEST_FILE, "rw");
+            raf.writeBytes(tesLog);
+            raf.close();
+        } catch (Exception ex) {
+        }*/
     }
-    
+
     //export LD_LIBRARY_PATH=../judm
 
     /**
@@ -205,6 +223,7 @@ public class ReadFileTest extends TestCase {
      * @throws UdmException
      */
     public void readFileTest(String fileName) throws UdmException {
+        long time1 = System.currentTimeMillis();
         sbmlFileFactory gtf = FactoryRepository.getsbmlsbmlFileFactory();
         sbml root = gtf.open(fileName);
 
@@ -216,6 +235,7 @@ public class ReadFileTest extends TestCase {
         System.out.println("Printing done");
 
         String result = gtf.checkConstraints();
+
         if (result.trim().compareTo("") == 0) {
             System.out.println("No constraint violation found.");
         } else {
@@ -223,6 +243,9 @@ public class ReadFileTest extends TestCase {
         }
 
         gtf.close();
+
+        long time2 = (System.currentTimeMillis() - time1) / 1000;
+        tesLog += ("Read from file " + fileName + ": " + time2 + "s\n");
     }
 
     private void printSBML(sbml root) throws UdmException {
@@ -231,8 +254,10 @@ public class ReadFileTest extends TestCase {
 
         // note child
         notes n = m.getnotesChild();
+
         if (n != null) {
             head h = n.getheadChild();
+
             if (h != null) {
                 edu.vanderbilt.isis.sbml2ex.xhtml.title t = h.gettitleChild();
 
@@ -245,19 +270,24 @@ public class ReadFileTest extends TestCase {
         // species
         listOfSpecies ls = m.getlistOfSpeciesChild();
         System.out.println("species in model " + m.getid());
+
         if (ls != null) {
             species[] sa = ls.getspeciesChildren();
+
             for (int i = 0; i < sa.length; i++) {
                 System.out.print(sa[i].getid() + " ");
             }
+
             System.out.println();
         }
 
         // function defs
         listOfFunctionDefinitions fDefs = m.getlistOfFunctionDefinitionsChild();
         System.out.println("function definitions in model " + m.getid());
+
         if (fDefs != null) {
             functionDefinition[] fDefA = fDefs.getfunctionDefinitionChildren();
+
             for (int i = 0; i < fDefA.length; i++) {
                 functionDefinition fd = fDefA[i];
                 System.out.println("functionDefinition " + fd.getid());
@@ -266,10 +296,12 @@ public class ReadFileTest extends TestCase {
                 System.out.println("math in function definition " + fd.getid());
 
                 apply[] appA = m_v.getapplyChildren();
+
                 for (int k = 0; k < appA.length; k++) {
                     apply app = appA[k];
 
                     cn[] cnA = app.getcnChildren();
+
                     for (int l = 0; l < cnA.length; l++) {
                         cn cn_v = cnA[l];
                         System.out.println("cntype " + cn_v.gettype());
@@ -277,6 +309,7 @@ public class ReadFileTest extends TestCase {
                     }
 
                     ci[] ciA = app.getciChildren();
+
                     for (int l = 0; l < ciA.length; l++) {
                         ci ci_v = ciA[l];
                         System.out.println("cival " + ci_v.getvalue());
@@ -284,14 +317,17 @@ public class ReadFileTest extends TestCase {
                 }
 
                 lambda[] lmA = m_v.getlambdaChildren();
+
                 for (int k = 0; k < lmA.length; k++) {
                     lambda lm_v = lmA[k];
 
                     apply[] appA2 = lm_v.getapplyChildren();
+
                     for (int l = 0; l < appA2.length; l++) {
                         apply app = appA2[l];
 
                         cn[] cnA = app.getcnChildren();
+
                         for (int x = 0; x < cnA.length; x++) {
                             cn cn_v = cnA[x];
                             System.out.println("cntype " + cn_v.gettype());
@@ -299,6 +335,7 @@ public class ReadFileTest extends TestCase {
                         }
 
                         ci[] ciA = app.getciChildren();
+
                         for (int x = 0; x < ciA.length; x++) {
                             ci ci_v = ciA[x];
                             System.out.println("cival " + ci_v.getvalue());
@@ -311,20 +348,26 @@ public class ReadFileTest extends TestCase {
         // listOfEvents
         listOfEvents lEv = m.getlistOfEventsChild();
         System.out.println("list of events in model " + m.getid());
+
         if (lEv != null) {
             event[] evA = lEv.geteventChildren();
+
             for (int i = 0; i < evA.length; i++) {
                 event e_v = evA[i];
 
                 delay d_v = e_v.getdelayChild();
+
                 if (d_v != null) {
                     math m_v = d_v.getmathChild();
+
                     if (m_v != null) {
                         apply[] appA = m_v.getapplyChildren();
+
                         for (int k = 0; k < appA.length; k++) {
                             apply app = appA[k];
 
                             cn[] cnA = app.getcnChildren();
+
                             for (int l = 0; l < cnA.length; l++) {
                                 cn cn_v = cnA[l];
                                 System.out.println("cntype " + cn_v.gettype());
@@ -332,6 +375,7 @@ public class ReadFileTest extends TestCase {
                             }
 
                             ci[] ciA = app.getciChildren();
+
                             for (int l = 0; l < ciA.length; l++) {
                                 ci ci_v = ciA[l];
                                 System.out.println("cival " + ci_v.getvalue());
@@ -339,24 +383,31 @@ public class ReadFileTest extends TestCase {
                         }
 
                         lambda[] lmA = m_v.getlambdaChildren();
+
                         for (int k = 0; k < lmA.length; k++) {
                             lambda lm_v = lmA[k];
 
                             apply[] appA2 = lm_v.getapplyChildren();
+
                             for (int l = 0; l < appA2.length; l++) {
                                 apply app = appA2[l];
 
                                 cn[] cnA = app.getcnChildren();
+
                                 for (int x = 0; x < cnA.length; x++) {
                                     cn cn_v = cnA[x];
-                                    System.out.println("cntype " + cn_v.gettype());
-                                    System.out.println("cnval " + cn_v.getvalue());
+                                    System.out.println("cntype " +
+                                        cn_v.gettype());
+                                    System.out.println("cnval " +
+                                        cn_v.getvalue());
                                 }
 
                                 ci[] ciA = app.getciChildren();
+
                                 for (int x = 0; x < ciA.length; x++) {
                                     ci ci_v = ciA[x];
-                                    System.out.println("cival " + ci_v.getvalue());
+                                    System.out.println("cival " +
+                                        ci_v.getvalue());
                                 }
                             }
                         }

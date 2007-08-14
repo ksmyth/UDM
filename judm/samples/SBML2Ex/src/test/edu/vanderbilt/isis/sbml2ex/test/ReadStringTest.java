@@ -43,6 +43,10 @@ import edu.vanderbilt.isis.udm.UdmException;
  *
  */
 public class ReadStringTest extends TestCase {
+    private static final String TEST_FILE = "samples/string_test.log";
+    
+    private String tesLog = new String();
+
     /**
      * Fills the root object with some dummy data.
      * @param root
@@ -122,6 +126,7 @@ public class ReadStringTest extends TestCase {
      * @throws UdmException
      */
     public void testCreateBlankInstance() throws UdmException {
+        long time1 = System.currentTimeMillis();
         sbmlStringFactory gtf = FactoryRepository.getsbmlsbmlStringFactory();
         sbml root = gtf.create();
 
@@ -140,6 +145,8 @@ public class ReadStringTest extends TestCase {
 
         String res = gtf.save();
         System.out.println(res);
+        long time2 = (System.currentTimeMillis() - time1) / 1000;
+        tesLog += "Create blank instance in string: " + time2 + "s\n";
     }
 
     /**
@@ -196,6 +203,13 @@ public class ReadStringTest extends TestCase {
 
         //dbi, unigene 
         readStringTest("samples/demo_30_paintfb_out.xml");
+ 
+        /*try {
+            RandomAccessFile raf = new RandomAccessFile(TEST_FILE, "rw");
+            raf.writeBytes(tesLog);
+            raf.close();
+        } catch (Exception ex) {
+        }*/
     }
 
     /**
@@ -203,6 +217,7 @@ public class ReadStringTest extends TestCase {
       * @throws UdmException
       */
     public void readStringTest(String fileName) throws UdmException {
+        long time1 = System.currentTimeMillis();
         sbmlStringFactory gtf = FactoryRepository.getsbmlsbmlStringFactory();
 
         StringBuffer xmlString = new StringBuffer();
@@ -231,6 +246,8 @@ public class ReadStringTest extends TestCase {
         }
 
         gtf.close();
+        long time2 = (System.currentTimeMillis() - time1) / 1000;
+        tesLog += "Read from string" + fileName + ": " + time2 + "s\n";
     }
 
     private void printSBML(sbml root) throws UdmException {
