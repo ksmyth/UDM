@@ -9,6 +9,10 @@ CHANGELOG
 		- Added a new type, 'Text'. It's the same as String but it gets persisted differently in DOM backend.
 */
 
+#ifdef UML2XML
+#include "Uml.h"
+#endif
+
 //Visibility specifiers
 
 class AttributeObjectException : public exception
@@ -149,8 +153,10 @@ public:
 	static AttributeObject * GetInstance();
 
 	
-	std::strstream& operator >>(std::strstream& out);
 
+#ifdef UML2XML
+	void BuildUML(::Uml::Class &uml_cls);
+#endif
 	/*
 		Get Methods Implemented By Paka
 	*/
