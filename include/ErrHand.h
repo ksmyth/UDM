@@ -71,8 +71,12 @@ long long _atoi64(const char *x);
 #define _NOTHREADS
 
 //USE STLPort when using VC6.x
+
 #if (_MSC_VER == 1200)
 #include <stl_user_config.h>
+#define UDM_OBJECT Object
+#else
+#define UDM_OBJECT Udm::Object
 #endif
 
 #include <cassert>
