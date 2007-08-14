@@ -80,7 +80,7 @@
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/UdmOcl.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"

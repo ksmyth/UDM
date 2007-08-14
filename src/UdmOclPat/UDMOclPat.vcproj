@@ -30,7 +30,7 @@
 				StringPooling="TRUE"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/UDMOclPat.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"

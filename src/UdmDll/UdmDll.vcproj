@@ -28,7 +28,7 @@
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/UdmDll.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
@@ -40,7 +40,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UDMPOI.lib UdmOcl.lib Uml.lib UdmDom.lib UdmGme.lib UdmXMI.lib UdmUtil.lib  Xalan-C_1.lib xerces-c_2.lib zlib.lib GOCL_vc7.lib"
+				AdditionalDependencies="UdmUtil.lib UdmBase.lib UDMPOI.lib UdmOcl.lib Uml.lib UdmDom.lib UdmGme.lib UdmXMI.lib UdmUtil.lib  Xalan-C_1.lib xerces-c_2.lib zlib.lib GOCL_vc7.lib"
 				OutputFile="..\..\bin.net\UdmDll.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -106,7 +106,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmOclD.lib UdmPOID.lib UmlD.lib UdmDomD.lib UdmGmeD.lib UdmXMID.lib UdmUtilD.lib  Xalan-C_1d.lib xerces-c_2d.lib zlibD.lib GOCL_vc7D.lib"
+				AdditionalDependencies="UdmBaseD.lib UdmOclD.lib UdmPOID.lib UmlD.lib UdmDomD.lib UdmGmeD.lib UdmXMID.lib UdmUtilD.lib  Xalan-C_1d.lib xerces-c_2d.lib zlibD.lib GOCL_vc7D.lib"
 				ShowProgress="0"
 				OutputFile="..\..\bin.net\UdmDllD.dll"
 				LinkIncremental="1"
@@ -161,6 +161,9 @@
 						Name="VCCLCompilerTool"
 						GeneratePreprocessedFile="0"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\UdmOcl\UdmOcl.cpp">
 			</File>
 		</Filter>
 		<Filter
