@@ -31,9 +31,9 @@ namespace OCLUML
 //
 //##############################################################################################################################################
 
-	Constraint::Constraint( const GOCL_STL_NS()string& strContextType, CComPtr<IMgaFCO> spFCO )
+	Constraint::Constraint( const std::string& strContextType, CComPtr<IMgaFCO> spFCO )
 	{
-		GOCL_STL_NS()string strName = GME::GetObjectName( spFCO.p );
+		std::string strName = GME::GetObjectName( spFCO.p );
 		Trim( strName );
 
 		m_strExpression = GME::GetStringAttribute( spFCO, "ConstraintEqn" );
@@ -46,7 +46,7 @@ namespace OCLUML
 	{
 	}
 
-	GOCL_STL_NS()string Constraint::GetExpression() const
+	std::string Constraint::GetExpression() const
 	{
 		return m_strExpression;
 	}
@@ -57,9 +57,9 @@ namespace OCLUML
 //
 //##############################################################################################################################################
 
-	ConstraintDef::ConstraintDef( const GOCL_STL_NS()string& strContextType, CComPtr<IMgaFCO> spFCO )
+	ConstraintDef::ConstraintDef( const std::string& strContextType, CComPtr<IMgaFCO> spFCO )
 	{
-		GOCL_STL_NS()string strName = GME::GetObjectName( spFCO.p );
+		std::string strName = GME::GetObjectName( spFCO.p );
 		Trim( strName );
 
 		m_strExpression = GME::GetStringAttribute( spFCO, "DefinitionEqn" );
@@ -70,7 +70,7 @@ namespace OCLUML
 
 		m_strStereotype = GME::GetStringAttribute( spFCO, "DefinitionStereo" );
 
-		GOCL_STL_NS()string strReturnType = GME::GetStringAttribute( spFCO, "DefinitionRetType" );
+		std::string strReturnType = GME::GetStringAttribute( spFCO, "DefinitionRetType" );
 		Trim( strReturnType );
 
 		Define( strContextType + "::" + strName, "context " + strContextType + "::" + strName + "( " + m_strParameterList + " ) : " + strReturnType + " def" + m_strStereotype + " " + strName + " :\r\n\r\n" + m_strExpression );
@@ -80,17 +80,17 @@ namespace OCLUML
 	{
 	}
 
-	GOCL_STL_NS()string ConstraintDef::GetExpression() const
+	std::string ConstraintDef::GetExpression() const
 	{
 		return m_strExpression;
 	}
 
-	GOCL_STL_NS()string ConstraintDef::GetParameterList() const
+	std::string ConstraintDef::GetParameterList() const
 	{
 		return m_strParameterList;
 	}
 
-	GOCL_STL_NS()string ConstraintDef::GetStereotype() const
+	std::string ConstraintDef::GetStereotype() const
 	{
 		return m_strStereotype;
 	}

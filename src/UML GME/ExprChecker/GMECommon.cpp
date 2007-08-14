@@ -29,41 +29,41 @@ namespace GME {
 //
 //##############################################################################################################################################
 
-	GOCL_STL_NS()string Convert( const CString& strIn )
+	std::string Convert( const CString& strIn )
 	{
 		CString strTemp( strIn );
-		GOCL_STL_NS()string strOut( strTemp.GetBuffer( strTemp.GetLength() ) );
+		std::string strOut( strTemp.GetBuffer( strTemp.GetLength() ) );
 		strTemp.ReleaseBuffer();
 		return strOut;
 	}
 
-	CString Convert( const GOCL_STL_NS()string& strIn )
+	CString Convert( const std::string& strIn )
 	{
 		return CString( strIn.c_str() );
 	}
 
-	GOCL_STL_NS()string GetConnPointRole( CComPtr<IMgaConnPoint> spCP )
+	std::string GetConnPointRole( CComPtr<IMgaConnPoint> spCP )
 	{
 		CComBSTR strRole;
 		COMTHROW( spCP->get_ConnRole( &strRole ) );
 		return Convert( CString( strRole ) );
 	}
 
-	GOCL_STL_NS()string GetObjectName( CComPtr<IMgaObject> spObject )
+	std::string GetObjectName( CComPtr<IMgaObject> spObject )
 	{
 		CComBSTR strName;
 		COMTHROW( spObject->get_Name( &strName ) );
 		return Convert( CString( strName ) );
 	}
 
-	GOCL_STL_NS()string GetObjectName( CComPtr<IMgaMetaBase> spObject )
+	std::string GetObjectName( CComPtr<IMgaMetaBase> spObject )
 	{
 		CComBSTR strName;
 		COMTHROW( spObject->get_Name( &strName ) );
 		return Convert( CString( strName ) );
 	}
 
-	GOCL_STL_NS()string GetObjectKind( CComPtr<IMgaObject> spObject )
+	std::string GetObjectKind( CComPtr<IMgaObject> spObject )
 	{
 		CString strKind;
 		CComPtr<IMgaMetaBase> spMeta;
@@ -77,7 +77,7 @@ namespace GME {
 		return GetObjectName( spMeta );
 	}
 
-	GOCL_STL_NS()string GetFCORole( CComPtr<IMgaFCO> spFCO )
+	std::string GetFCORole( CComPtr<IMgaFCO> spFCO )
 	{
 		CComPtr<IMgaMetaRole> spMetaRole;
 		COMTHROW( spFCO->get_MetaRole( &spMetaRole ) );
@@ -98,7 +98,7 @@ namespace GME {
 		return eType;
 	}
 
-		GOCL_STL_NS()string ObjectTypeToString( objtype_enum eType )
+		std::string ObjectTypeToString( objtype_enum eType )
 	{
 		switch ( eType ) {
 			case OBJTYPE_ATOM : return "Atom";
@@ -111,7 +111,7 @@ namespace GME {
 		}
 	}
 
-	objtype_enum StringToObjectType( const GOCL_STL_NS()string& strType )
+	objtype_enum StringToObjectType( const std::string& strType )
 	{
 		if ( strType == "Atom" )
 			return OBJTYPE_ATOM;
@@ -128,18 +128,18 @@ namespace GME {
 		return OBJTYPE_NULL;
 	}
 
-	GOCL_STL_NS()string LowerFirst( const GOCL_STL_NS()string& strValue )
+	std::string LowerFirst( const std::string& strValue )
 	{
 		if ( strValue.empty() )
 			return strValue;
-		return GOCL_STL_NS()string( _strlwr( (char*)strValue.substr( 0, 1 ).c_str() ) ) + strValue.substr( 1 );
+		return std::string( _strlwr( (char*)strValue.substr( 0, 1 ).c_str() ) ) + strValue.substr( 1 );
 	}
 
-	GOCL_STL_NS()string UpperFirst( const GOCL_STL_NS()string& strValue )
+	std::string UpperFirst( const std::string& strValue )
 	{
 		if ( strValue.empty() )
 			return strValue;
-		return GOCL_STL_NS()string( _strupr( (char*)strValue.substr( 0, 1 ).c_str() ) ) + strValue.substr( 1 );
+		return std::string( _strupr( (char*)strValue.substr( 0, 1 ).c_str() ) ) + strValue.substr( 1 );
 	}
 
 	CString LowerFirst( const CString& strValue )
@@ -160,7 +160,7 @@ namespace GME {
 		return strTemp + strValue.Mid( 1 );
 	}
 
-	GOCL_STL_NS()string GetStringAttribute( CComPtr<IMgaFCO> spFCO, const GOCL_STL_NS()string& strName )
+	std::string GetStringAttribute( CComPtr<IMgaFCO> spFCO, const std::string& strName )
 	{
 		CComBSTR bstrField;
 		COMTHROW( spFCO->get_StrAttrByName( CComBSTR( Convert( strName ) ), &bstrField ) );
@@ -205,9 +205,9 @@ namespace GME {
 		return false;
 	}
 
-	void GetAssociationEnds( CComPtr<IMgaFCO> spFCO, const GOCL_STL_NS()string& strRole, const GOCL_STL_NS()string& strKind, FCOVector& vecFCOs )
+	void GetAssociationEnds( CComPtr<IMgaFCO> spFCO, const std::string& strRole, const std::string& strKind, FCOVector& vecFCOs )
 	{
-		GOCL_STL_NS()string strCPRole, strCKind;
+		std::string strCPRole, strCKind;
 		CComPtr<IMgaConnPoints> spStartCPs;
 		COMTHROW( spFCO->get_PartOfConns( &spStartCPs ) );
 		MGACOLL_ITERATE( IMgaConnPoint , spStartCPs ) {
@@ -233,7 +233,7 @@ namespace GME {
 		} MGACOLL_ITERATE_END;
 	}
 
-	void GetMetaObjectsR( CComPtr<IMgaMetaBase> spMeta, const GOCL_STL_NS()string& strName, objtype_enum eType, MetaBaseVector& vecMetaBases )
+	void GetMetaObjectsR( CComPtr<IMgaMetaBase> spMeta, const std::string& strName, objtype_enum eType, MetaBaseVector& vecMetaBases )
 	{
 		if ( ( eType == OBJTYPE_NULL || eType == GetObjectType( spMeta ) ) && ( strName.empty() || strName == GetObjectName( spMeta ) ) )
 			vecMetaBases.push_back( spMeta.p );
@@ -260,14 +260,14 @@ namespace GME {
 		}
 	}
 
-	void GetMetaObjects( CComPtr<IMgaMetaProject> spProject, const GOCL_STL_NS()string& strName, objtype_enum eType, MetaBaseVector& vecMetaBases )
+	void GetMetaObjects( CComPtr<IMgaMetaProject> spProject, const std::string& strName, objtype_enum eType, MetaBaseVector& vecMetaBases )
 	{
 		CComPtr<IMgaMetaFolder> spRootFolder;
 		COMTHROW( spProject->get_RootFolder( &spRootFolder ) );
 		GetMetaObjectsR( spRootFolder.p, strName, eType, vecMetaBases );
 	};
 
-	void GetKindFolders( CComPtr<IMgaFolder> spFolder, const GOCL_STL_NS()string& strKind, bool bKind, ObjectVector& vecObjects )
+	void GetKindFolders( CComPtr<IMgaFolder> spFolder, const std::string& strKind, bool bKind, ObjectVector& vecObjects )
 	{
 		if ( strKind.empty() || ( ( bKind ) ? GetObjectKind( spFolder.p ) : GetObjectName( spFolder.p ) ) == strKind )
 			AddObject( spFolder.p, vecObjects );
@@ -278,7 +278,7 @@ namespace GME {
 		} MGACOLL_ITERATE_END;
 	}
 
-	void GetKindObjects( CComPtr<IMgaProject> spProject, const GOCL_STL_NS()string& strKind, ObjectVector& vecObjects )
+	void GetKindObjects( CComPtr<IMgaProject> spProject, const std::string& strKind, ObjectVector& vecObjects )
 	{
 		CComPtr<IMgaMetaProject> spMetaProject;
 		COMTHROW( spProject->get_RootMeta( &spMetaProject ) );
@@ -325,8 +325,8 @@ namespace GME {
 
 	void GetInheritances( CComPtr<IMgaFCO> spFCO, bool bIsParent, FCOVector& vecFCOs )
 	{
-		GOCL_STL_NS()string strKind1 = ( bIsParent ) ? "Sub" : "Base";
-		GOCL_STL_NS()string strKind2 = ( bIsParent ) ? "Base" : "Sub";
+		std::string strKind1 = ( bIsParent ) ? "Sub" : "Base";
+		std::string strKind2 = ( bIsParent ) ? "Base" : "Sub";
 
 		FCOVector vecInheritances;
 		GetAssociationEnds( spFCO, "", strKind1, vecInheritances );
@@ -334,14 +334,14 @@ namespace GME {
 			GetAssociationEnds( vecInheritances[ i ].p, "", strKind2, vecFCOs );
 	}
 
-	GOCL_STL_NS()string GetNamespace( CComPtr<IMgaFCO> spFCO )
+	std::string GetNamespace( CComPtr<IMgaFCO> spFCO )
 	{
 		CComPtr<IMgaModel> spModel;
 		COMTHROW( spFCO->get_ParentModel( &spModel ) );
 		ASSERT( spModel.p != NULL );
 
-		GOCL_STL_NS()string strKind = GetObjectKind( ( CComPtr<IMgaObject> ) spModel );
-		GOCL_STL_NS()string strName = GetObjectName( ( CComPtr<IMgaObject> ) spModel );
+		std::string strKind = GetObjectKind( ( CComPtr<IMgaObject> ) spModel );
+		std::string strName = GetObjectName( ( CComPtr<IMgaObject> ) spModel );
 
 		if ( strKind == "ClassDiagram" )
 			return GetNamespace( ( CComPtr<IMgaFCO> ) spModel );
@@ -359,14 +359,14 @@ namespace GME {
 		return bInLib == VARIANT_TRUE;
 	}
 
-	GOCL_STL_NS()string ParseLibraryName( const GOCL_STL_NS()string& strFullName )
+	std::string ParseLibraryName( const std::string& strFullName )
 	{
-		GOCL_STL_NS()string strName;
+		std::string strName;
 		int iPos = strFullName.rfind( "\\" );
-		if ( iPos != GOCL_STL_NS()string::npos )
+		if ( iPos != std::string::npos )
 			strName = strFullName.substr( iPos + 1 );
 		iPos = strName.rfind( "." );
-		if ( iPos != GOCL_STL_NS()string::npos )
+		if ( iPos != std::string::npos )
 			strName = strName.substr( 0, iPos );
 		Trim( strName );
 		return strName;
@@ -421,7 +421,7 @@ namespace GME {
 		return vecPath;
 	}
 
-	GOCL_STL_NS()string CreateType( const GOCL_STL_NS()string& strKind, objtype_enum eType )
+	std::string CreateType( const std::string& strKind, objtype_enum eType )
 	{
 		if ( eType == OBJTYPE_NULL )
 			return "meta::" + strKind;
@@ -429,19 +429,19 @@ namespace GME {
 			return "meta::" + LowerFirst( ObjectTypeToString( eType ) ) + "::" + strKind;
 	}
 
-	bool ResolveType( const GOCL_STL_NS()string& strFullName, GOCL_STL_NS()string& strKind, objtype_enum& eType )
+	bool ResolveType( const std::string& strFullName, std::string& strKind, objtype_enum& eType )
 	{
 		eType = OBJTYPE_NULL;
 		strKind = "";
 		int iPos = strFullName.find( "::" );
-		if ( iPos == GOCL_STL_NS()string::npos ) {
+		if ( iPos == std::string::npos ) {
 			strKind = strFullName;
 			return true;
 		}
 		if ( strFullName.substr( 0, iPos ) == "meta" ) {
-			GOCL_STL_NS()string strTemp = strFullName.substr( iPos + 2 );
+			std::string strTemp = strFullName.substr( iPos + 2 );
 			iPos = strTemp.find( "::" );
-			if ( iPos == GOCL_STL_NS()string::npos ) {
+			if ( iPos == std::string::npos ) {
 				strKind = strTemp;
 				return true;
 			}
@@ -502,7 +502,7 @@ namespace GME {
 
 	bool IsAbstract( CComPtr<IMgaFCO> spFCO )
 	{
-		GOCL_STL_NS()string strKind = GetObjectKind( spFCO.p );
+		std::string strKind = GetObjectKind( spFCO.p );
 		if ( strKind == "Folder" )
 			return false;
 		if ( strKind == "FCO" )
@@ -527,9 +527,9 @@ namespace GME {
 		return true;
 	}
 
-	void GetAssociationEnds( CComPtr<IMgaFCO> spFCO, const GOCL_STL_NS()string& strRole, const GOCL_STL_NS()string& strKind, FCOVector& vecFCOs )
+	void GetAssociationEnds( CComPtr<IMgaFCO> spFCO, const std::string& strRole, const std::string& strKind, FCOVector& vecFCOs )
 	{
-		GOCL_STL_NS()string strCPRole, strCKind;
+		std::string strCPRole, strCKind;
 		CComPtr<IMgaConnPoints> spStartCPs;
 		COMTHROW( spFCO->get_PartOfConns( &spStartCPs ) );
 		MGACOLL_ITERATE( IMgaConnPoint , spStartCPs ) {
@@ -555,7 +555,7 @@ namespace GME {
 		} MGACOLL_ITERATE_END;
 	}
 
-	void GetAssociationEnds( CComPtr<IMgaFCO> spFCO, const GOCL_STL_NS()string& strRole, const GOCL_STL_NS()string& strKind, FCOVector& vecFCOs, FCOVector& vecConnections )
+	void GetAssociationEnds( CComPtr<IMgaFCO> spFCO, const std::string& strRole, const std::string& strKind, FCOVector& vecFCOs, FCOVector& vecConnections )
 	{
 		CComPtr<IMgaConnPoints> spStartCPs;
 		COMTHROW( spFCO->get_PartOfConns( &spStartCPs ) );
@@ -581,11 +581,11 @@ namespace GME {
 		} MGACOLL_ITERATE_END;
 	}
 
-	void GetEquivalences( CComPtr<IMgaFCO> spFCO, const GOCL_STL_NS()string& strEquivalencesType, bool bToLeft, FCOVector& vecFCOs )
+	void GetEquivalences( CComPtr<IMgaFCO> spFCO, const std::string& strEquivalencesType, bool bToLeft, FCOVector& vecFCOs )
 	{
 		AddObject( spFCO, vecFCOs );
-		GOCL_STL_NS()string strKind1;
-		GOCL_STL_NS()string strKind2;
+		std::string strKind1;
+		std::string strKind2;
 
 		if ( strEquivalencesType == "Aspect" ) {
 			strKind1 = ( bToLeft ) ? "SameAspectLeft" : "SameAspectRight";
@@ -606,7 +606,7 @@ namespace GME {
 			GetAssociationEnds( vecEquivalences[ i ].p, "", strKind2, vecFCOs );
 	}
 
-	void GetMetaObjectsR( CComPtr<IMgaMetaBase> spMeta, const GOCL_STL_NS()string& strName, objtype_enum eType, MetaBaseVector& vecMetaBases )
+	void GetMetaObjectsR( CComPtr<IMgaMetaBase> spMeta, const std::string& strName, objtype_enum eType, MetaBaseVector& vecMetaBases )
 	{
 		if ( ( eType == OBJTYPE_NULL || eType == OclCommonEx::GetObjectType( spMeta ) ) && ( strName.empty() || strName == GetObjectName( spMeta ) ) )
 			vecMetaBases.push_back( spMeta.p );
@@ -633,14 +633,14 @@ namespace GME {
 		}
 	}
 
-	void GetMetaObjects( CComPtr<IMgaMetaProject> spProject, const GOCL_STL_NS()string& strName, objtype_enum eType, MetaBaseVector& vecMetaBases )
+	void GetMetaObjects( CComPtr<IMgaMetaProject> spProject, const std::string& strName, objtype_enum eType, MetaBaseVector& vecMetaBases )
 	{
 		CComPtr<IMgaMetaFolder> spRootFolder;
 		COMTHROW( spProject->get_RootFolder( &spRootFolder ) );
 		GetMetaObjectsR( spRootFolder.p, strName, eType, vecMetaBases );
 	};
 
-	GOCL_STL_NS()string GetPointerRole( CComPtr<IMgaMetaPointerSpec> spPointer )
+	std::string GetPointerRole( CComPtr<IMgaMetaPointerSpec> spPointer )
 	{
 		CString strName;
 		COMTHROW( spPointer->get_Name( PutOut( strName ) ) );
@@ -679,19 +679,19 @@ namespace GME {
 		StringVector vecKinds;
 		for ( int i = 0 ; i < vecDescriptions.size() ; i++ ) {
 			int iPos = vecDescriptions[ i ].find( ' ' );
-			if ( iPos == GOCL_STL_NS()string::npos ) {
+			if ( iPos == std::string::npos ) {
 				if ( find( vecKinds.begin(), vecKinds.end(), vecDescriptions[ i ] ) == vecKinds.end() )
 					vecKinds.push_back( vecDescriptions[ i ] );
 			}
 			else {
-				GOCL_STL_NS()string strModel = vecDescriptions[ i ].substr( 0, iPos );
-				GOCL_STL_NS()string strRole = vecDescriptions[ i ].substr( iPos + 1 );
+				std::string strModel = vecDescriptions[ i ].substr( 0, iPos );
+				std::string strRole = vecDescriptions[ i ].substr( iPos + 1 );
 				ModelMap::iterator iModel = mapModels.find( strModel );
 				CComPtr<IMgaMetaRole> spRole;
 				COMTHROW( (*iModel).second->get_RoleByName( CComBSTR( Convert( strRole ) ), &spRole ) );
 				CComPtr<IMgaMetaFCO> spFCO;
 				COMTHROW( spRole->get_Kind( &spFCO ) );
-				GOCL_STL_NS()string strKind = GetObjectName( spFCO.p );
+				std::string strKind = GetObjectName( spFCO.p );
 				if ( find( vecKinds.begin(), vecKinds.end(), strKind ) == vecKinds.end() )
 					vecKinds.push_back( strKind );
 			}
@@ -711,7 +711,7 @@ namespace GME {
 		}
 	}
 
-	void GetDerivedObjects( CComPtr<IMgaProject> spProject, const GOCL_STL_NS()string& strType, ObjectVector& vecObjects )
+	void GetDerivedObjects( CComPtr<IMgaProject> spProject, const std::string& strType, ObjectVector& vecObjects )
 	{
 		CComPtr<IMgaFCOs> spFCOs;
 		CComPtr<IMgaFilter> spFilter;
@@ -725,7 +725,7 @@ namespace GME {
 
 
 
-	void GetObjectPathR( CComPtr<IMgaObject> spObject, GOCL_STL_NS()string& strPath )
+	void GetObjectPathR( CComPtr<IMgaObject> spObject, std::string& strPath )
 	{
 		CComPtr<IMgaObject> spParent;
 		COMTHROW( spObject->GetParent( &spParent ) );
@@ -735,24 +735,24 @@ namespace GME {
 		}
 	}
 
-	GOCL_STL_NS()string GetObjectPath( CComPtr<IMgaObject> spObject )
+	std::string GetObjectPath( CComPtr<IMgaObject> spObject )
 	{
-		GOCL_STL_NS()string strPath;
+		std::string strPath;
 		GetObjectPathR( spObject, strPath );
 		return ( strPath.empty() ) ? "/" : strPath;
 	}
 
-	GOCL_STL_NS()string GetObjectDescription( CComPtr<IMgaObject> spObject )
+	std::string GetObjectDescription( CComPtr<IMgaObject> spObject )
 	{
 		if ( ! spObject.p )
 			return "null";
 
-		GOCL_STL_NS()string strName = GetObjectName( spObject );
-		GOCL_STL_NS()string strKind = GetObjectKind( spObject );
+		std::string strName = GetObjectName( spObject );
+		std::string strKind = GetObjectKind( spObject );
 		objtype_enum eType = GetObjectType( spObject );
-		GOCL_STL_NS()string strMetaKind = "gme::" + ObjectTypeToString( eType );
+		std::string strMetaKind = "gme::" + ObjectTypeToString( eType );
 
-		GOCL_STL_NS()string strContainmentRole;
+		std::string strContainmentRole;
 		CComQIPtr<IMgaFCO> spFCO = spObject;
 		if ( spFCO.p ) {
 			strContainmentRole = GetFCORole( spFCO.p );
@@ -762,9 +762,9 @@ namespace GME {
 				strContainmentRole = "";
 		}
 
-		GOCL_STL_NS()string strPath = GetObjectPath( spObject );
+		std::string strPath = GetObjectPath( spObject );
 
-		GOCL_STL_NS()string strOut = strName + " { ";
+		std::string strOut = strName + " { ";
 
 		switch ( eType ) {
 			case OBJTYPE_FOLDER :
@@ -810,14 +810,14 @@ namespace GME {
 		}
 	}
 
-	GOCL_STL_NS()string GetConnectionPointDescription( CComPtr<IMgaConnPoint> spCP )
+	std::string GetConnectionPointDescription( CComPtr<IMgaConnPoint> spCP )
 	{
 		if ( ! spCP.p )
 			return "null";
 
-		GOCL_STL_NS()string strOut = "gme::ConnectionPoint { ";
+		std::string strOut = "gme::ConnectionPoint { ";
 
-		GOCL_STL_NS()string strRole = GetConnPointRole( spCP );
+		std::string strRole = GetConnPointRole( spCP );
 		if ( ! strRole.empty() )
 			strOut += "role: " + strRole + "; ";
 

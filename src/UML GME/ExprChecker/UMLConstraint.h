@@ -33,12 +33,12 @@ namespace OCLUML
 	class Constraint;
 
 	typedef OclCommon::RCSmart<Constraint> 	SpConstraint;
-	typedef GOCL_STL_NS()vector<SpConstraint>				ConstraintVector;
+	typedef std::vector<SpConstraint>				ConstraintVector;
 
 	class ConstraintDef;
 
 	typedef OclCommon::RCSmart<ConstraintDef> 	SpConstraintDef;
-	typedef GOCL_STL_NS()vector<SpConstraintDef>				ConstraintDefVector;
+	typedef std::vector<SpConstraintDef>				ConstraintDefVector;
 
 
 // Declarations
@@ -57,12 +57,12 @@ namespace OCLUML
 		: public Ocl::Constraint, public OclCommon::ReferenceCountable< Constraint >
 	{
 		private :
-			GOCL_STL_NS()string	m_strExpression;
+			std::string	m_strExpression;
 
 		public :
-										Constraint( const GOCL_STL_NS()string& strContextType, CComPtr<IMgaFCO> spFCO );
+										Constraint( const std::string& strContextType, CComPtr<IMgaFCO> spFCO );
 				virtual					~Constraint();
-						GOCL_STL_NS()string			GetExpression() const;
+						std::string			GetExpression() const;
 	};
 
 //##############################################################################################################################################
@@ -79,16 +79,16 @@ namespace OCLUML
 		: public Ocl::Constraint, public OclCommon::ReferenceCountable< ConstraintDef >
 	{
 		private :
-			GOCL_STL_NS()string	m_strExpression;
-			GOCL_STL_NS()string	m_strParameterList;
-			GOCL_STL_NS()string	m_strStereotype;
+			std::string	m_strExpression;
+			std::string	m_strParameterList;
+			std::string	m_strStereotype;
 
 		public :
-										ConstraintDef( const GOCL_STL_NS()string& strContextType, CComPtr<IMgaFCO> spFCO );
+										ConstraintDef( const std::string& strContextType, CComPtr<IMgaFCO> spFCO );
 				virtual					~ConstraintDef();
-						GOCL_STL_NS()string			GetExpression() const;
-						GOCL_STL_NS()string 			GetParameterList() const;
-						GOCL_STL_NS()string			GetStereotype() const;
+						std::string			GetExpression() const;
+						std::string 			GetParameterList() const;
+						std::string			GetStereotype() const;
 	};
 
 

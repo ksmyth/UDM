@@ -281,10 +281,10 @@ void CSyntacticSemanticDialog::OnClickConstraintsColumn( NMHDR* pNMHDR, LRESULT*
 	void CSyntacticSemanticDialog::GetConstraintRow( int iPos, int& eType, CString& strContext, CString& strName )
 	{
 		int iDefinitions = m_vecConstraintDefinitions.size();
-		GOCL_STL_NS()string strDName = ( iPos >= iDefinitions ) ? m_vecConstraints[ iPos - iDefinitions ]->GetDefinedName() : m_vecConstraintDefinitions[ iPos ]->GetDefinedName();
+		std::string strDName = ( iPos >= iDefinitions ) ? m_vecConstraints[ iPos - iDefinitions ]->GetDefinedName() : m_vecConstraintDefinitions[ iPos ]->GetDefinedName();
 		int iColonPos = strDName.rfind( "::" );
 
-		if ( iColonPos == GOCL_STL_NS()string::npos ) {
+		if ( iColonPos == std::string::npos ) {
 			strContext = "?";
 			strName = GME::Convert( strDName );
 		}
