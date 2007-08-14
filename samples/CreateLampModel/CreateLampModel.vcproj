@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="CreateLampModel"
+	RootNamespace="CreateLampModel"
 	SccProjectName="&quot;$/MoBIESTransition/UDM/samples/CreateLampModel&quot;, GBYAAAAA"
 	SccAuxPath=""
 	SccLocalPath="."
@@ -42,11 +43,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib UdmIntD.lib libcint.lib Xerces-c_2D.lib zlibD.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib"
 				OutputFile="..\..\bin\CreateLampModel.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../../Lib,../../3rdParty/xerces/xerces-c_2_5_0-windows_nt-msvc_60/lib,../../3rdParty/zlib,../../3rdParty/Cint"
+				AdditionalLibraryDirectories="../../Lib,$(UDM_3RDPARTY_PATH)/xerces-c_2_5_0/lib,$(UDM_3RDPARTY_PATH)/zlib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/CreateLampModel.pdb"
 				SubSystem="1"
@@ -105,11 +106,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib UdmInt.lib libcint.lib zlib.lib"
+				AdditionalDependencies="Uml.lib Xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib"
 				OutputFile="..\..\..\bin\CreateLampModel.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../../Lib,../../3rdParty/xerces/xerces-c_2_5_0-windows_nt-msvc_60/lib,../../3rdParty/zlib,../../3rdParty/Cint"
+				AdditionalLibraryDirectories="../../Lib,$(UDM_3RDPARTY_PATH)/xerces-c_2_5_0/lib,$(UDM_3RDPARTY_PATH)/zlib"
 				ProgramDatabaseFile=".\Release/CreateLampModel.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
@@ -224,9 +225,6 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
-		<File
-			RelativePath="LampDiagram.xsd">
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

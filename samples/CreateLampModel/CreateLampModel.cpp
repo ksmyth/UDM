@@ -15,9 +15,7 @@ UDM_USE_MGA
 #include <UdmStatic.h>
 #include <UmlExt.h>
 #include <UdmBase.h>
-#include <UdmInt.h>
 #include <cint_string.h>
-#include <UdmCint.h>
 #include <UdmDom.h>
 
 using namespace LampDiagram;
