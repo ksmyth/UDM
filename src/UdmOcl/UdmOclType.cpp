@@ -26,7 +26,13 @@
 #include "UmlExt.h"
 
 
-#ifndef _WIN32
+
+
+using namespace Uml;
+
+namespace UmlOcl
+{
+  #ifndef _WIN32 // clash from gocl under linux
 
 char *_strlwr( char *string )
 {
@@ -43,11 +49,6 @@ char *_strlwr( char *string )
 
 #endif
 
-
-using namespace Uml;
-
-namespace UmlOcl
-{
 
 	GOCL_STL_NS()string LowerFirst( const GOCL_STL_NS()string& strValue )
 	{
