@@ -49,6 +49,15 @@ TokenSet First_multiplicativeExpression = TokenSet();
 TokenSet First_expression = TokenSet();
 TokenSet First_qualifiers = TokenSet();
 
+//<udmoclpat changes
+TokenSet First_fileNode = TokenSet();
+TokenSet First_handleNode = TokenSet();
+TokenSet First_printNode = TokenSet();
+TokenSet First_textNode = TokenSet();
+TokenSet First_enumeratedExpression = TokenSet();
+TokenSet First_extendedExpression = TokenSet();
+//udmoclpat changes>
+
 TokenSet Last_primaryExpression = TokenSet();
 TokenSet Last_featureCall = TokenSet();
 TokenSet Last_featureCallParametersHelper = TokenSet();
@@ -147,6 +156,24 @@ void InitializeTokenSets()
 		First_expressionListOrRange = First_expression;
 
 		First_qualifiers.insert( LEFT_BRACKET );
+
+
+//<udmoclpat changes
+		First_fileNode.insert( PAT_OPEN );
+
+		First_handleNode.insert( PAT_SWITCH );
+
+		First_printNode.insert( PAT_PRINT );
+
+		First_textNode.insert( SEPARATOR );
+
+		First_extendedExpression = Union( First_expression, First_fileNode );
+		First_extendedExpression = Union( First_extendedExpression, First_handleNode );
+		First_extendedExpression = Union( First_extendedExpression, First_printNode );
+
+		First_enumeratedExpression = Union( First_expression, First_left_brace );
+//udmoclpat changes>
+
 
 		bTokenSetInitialized = true;
 
