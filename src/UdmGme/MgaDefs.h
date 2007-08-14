@@ -58,5 +58,6 @@ static void comthrow(HRESULT res, char *e, int l)
 #define objself (folderself? (IMgaObject *) folderself : (IMgaObject *)self)
 #define testself (self ? self : (COMTHROW(("Invalid method on folders", -1)), NULL))
 #define NAMEGET(x) (((string)((x).name())).c_str())
+#define PATHGET(x) (((x).getPath2("::", false)).c_str())
 #define foldiffold (folderself ? folderself : self)
 #endif
