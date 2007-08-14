@@ -87,7 +87,7 @@ namespace Uml
 	// find a class by name
 	UDM_DLL Class classByName(const Namespace &d, const string &name) 
 	{
-		set<::Uml::Class> ts = d.classes();
+		set<Uml::Class> ts = d.classes();
 			{
 				for(set<Uml::Class>::iterator i = ts.begin(); i != ts.end(); i++) {
 					if(string(i->name()) == name) return(*i);
@@ -303,6 +303,27 @@ namespace Uml
 		return ret;
 	}
 
+	UDM_DLL set<Uml::Namespace> TargetNSForAllContainerClasses(const Uml::Namespace &ns)
+	{
+		set<Uml::Namespace> ret;
+
+		set<Uml::Class> classes = ns.classes();
+		set<Uml::Class>::iterator c;
+	
+		for(c = classes.begin(); c != classes.end(); c++ ) {
+			Uml::Class cl = *c;
+			set<Uml::CompositionParentRole> children = cl.parentRoles();
+			for(set<Uml::CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++) {
+				Uml::Class theother = (Uml::Class)(theOther(*i)).target();
+				Uml::Namespace theother_ns = (Uml::Namespace)theother.parent();
+				if (ns != theother_ns)
+					ret.insert(theother_ns);
+			}
+		}
+
+		return ret;
+	}
+
 	UDM_DLL set<AssociationRole> AssociationTargetRoles(const Class &c)
 	{
 		set<AssociationRole> roles;
@@ -430,6 +451,24 @@ namespace Uml
 	
 	};
 
+	UDM_DLL set<Namespace> CompositionPeerChildNamespaces(const Namespace &ns)
+	{
+		set<Namespace> ret;
+
+		set<Class> classes = ns.classes();
+		for (set<Class>::iterator i = classes.begin(); i != classes.end(); i++) {
+			set<CompositionChildRole> comps_c = CompositionPeerChildRoles(*i);
+			for (set<CompositionChildRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++) {
+				Class theother = j->target();
+				Namespace theother_ns = (Namespace)theother.parent();
+				if (ns != theother_ns)
+					ret.insert(theother_ns);
+			}
+		}
+
+		return ret;
+	}
+
 	UDM_DLL set<CompositionParentRole> CompositionPeerParentRoles(const Class &c) 
 	{
 		set<CompositionParentRole> roles;
@@ -461,6 +500,36 @@ namespace Uml
 		return roles;
 	}
 
+
+	UDM_DLL set<Namespace> OtherCompositionPeerParentRolesNamespaces(const Class &c)
+	{
+		set<Namespace> ret;
+		Namespace ns = c.parent();
+		set<CompositionParentRole> comps_c = CompositionPeerParentRoles(c);
+		for (set<CompositionParentRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++) {
+			Class theother = j->target();
+			Namespace theother_ns = (Namespace)theother.parent();
+			if (ns != theother_ns)
+				ret.insert(theother_ns);
+		}
+
+		return ret;
+
+	}
+
+	UDM_DLL bool IsCrossNSComposition(const Composition &c)
+	{
+		CompositionParentRole p_r = c.parentRole();
+		Class p_c = p_r.target();
+		Namespace p_ns = p_c.parent();
+
+		CompositionChildRole c_r = c.childRole();
+		Class c_c = c_r.target();
+		Namespace c_ns = c_c.parent();
+
+		return p_ns != c_ns;
+
+	}
 
 	UDM_DLL set<Attribute> AncestorAttributes(const Class &c)
 	{
