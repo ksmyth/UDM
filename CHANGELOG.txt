@@ -66,14 +66,14 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 Changelog 
 -----------------
 
-08/31/04	-	Release 2.20
+09/28/04	-	Release 2.20
 
 		-	Compatible with GME 4.8.25
 		-	CppUnit testprojects are provided.
 		-	UdmTomi::DeleteObject() bugfix, the object on which DeleteObject is called not it is a null UDM object.
 		-	UdmDom bugfix regarding the ordering of the subelements in the saved XML file, in certain situations the ordering of
 			the sublements did not respect the corresponding XSD file.
-		- 	Bugfixes for the reported bugs on JIRA site: (UDM-10, UDM-11, UDM-13, UDM-14, UDM-15)
+		- 	Bugfixes for the reported bugs on JIRA site: (UDM-10, UDM-11, UDM-13, UDM-14, UDM-15, UDM-16, UDM-17)
 			(the JIRA site is located at http://escher.isis.vanderbilt.edu/JIRA/secure/IssueNavigator.jspa?reset=true&mode=hide&pid=10053)
 		-	Please note the change of the software license. 
 
