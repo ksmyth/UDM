@@ -239,7 +239,7 @@ InputPath=.\res\Resources.txt
 
 "UdmInterpreter.zip" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	cd res 
-	zip.exe -r UdmInterpreter.zip UdmInterpreter 
+	zip.exe -r UdmInterpreter.zip UdmInterpreter -x *.scc 
 	
 # End Custom Build
 
@@ -250,7 +250,7 @@ InputPath=.\res\Resources.txt
 
 "UdmInterpreter.zip" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	cd res 
-	zip.exe -r UdmInterpreter.zip UdmInterpreter 
+	zip.exe -r UdmInterpreter.zip UdmInterpreter -x *.scc 
 	
 # End Custom Build
 
