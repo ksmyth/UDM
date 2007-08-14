@@ -668,13 +668,10 @@ void GenerateHClassChildren(const ::Uml::Class &cl, ostream & output)
 			if(Uml::IsDerivedFrom(*j, *k) || Uml::IsDerivedFrom(*k, *j)) 
 			{
 				string kind_children_name;
-				if (SingleCPPNamespace(*j))
-					kind_children_name = (*j).name();
-				else {
-					if (ns)
-						kind_children_name = string(ns.name()) + "_";
-					kind_children_name += (*j).name();
-				}
+				if (ns != j->parent_ns())
+					kind_children_name = j->getPath2("_", false);
+				else
+					kind_children_name = j->name();
 
 				output << "\t\t\tUdm::ChildrenAttr< " << UmlClassCPPName(*j) << "> " << kind_children_name << 
 					"_kind_children() const { return Udm::ChildrenAttr< " << UmlClassCPPName(*j) <<
