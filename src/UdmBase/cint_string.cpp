@@ -1,6 +1,9 @@
 
 
 /*
+  03/28/05 - kalmar
+        if (impl) delete[] impl, impl = 0; bug fixed
+
 	04/27/04 -	endre
 			added
 			- copy constructor
@@ -52,7 +55,7 @@ UDM_DLL cint_string::cint_string(const char * frm)
 
 UDM_DLL cint_string& cint_string::operator=(const cint_string& frm)
 {
-	if (impl) delete impl;
+	if (impl) delete[] impl, impl = 0;
 
 	if (frm.impl)
 	{
@@ -112,7 +115,7 @@ UDM_DLL cint_string& cint_string::operator +=(const cint_string& what)
 		// not enough space -> realloc
 		char* incr_impl= new char[ (what_length+ curr_length) * 2];
 		strcpy( incr_impl, impl);
-		delete impl;
+		delete[] impl, impl = 0;
 		impl= incr_impl;
 	}
 	strcat( impl, what.buffer());
@@ -146,7 +149,7 @@ UDM_DLL cint_string::operator bool() const
 	
 UDM_DLL cint_string::~cint_string()
 {
-	delete impl;
+	delete[] impl, impl = 0;
 };
 
 UDM_DLL int cint_string::comp(const char * compare_to) const
