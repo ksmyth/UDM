@@ -15,12 +15,35 @@ Requirements:
 - ant
 - junit
 
+Build-environment preparation (RHEL 4):
+----------------------------------------------
+- install the following rpms from our repository:
+  xerces-c, xerces-c-devel, xalan-c, xalan-c-devel, minizip, minizip-devel,
+  minizip-libs, pccts, swig1324, cppunit, cppunit-devel
+- if the system is registered with RHN and subscribed to the
+  "Extras" channel, then install either java-1.4.2-bea or java-1.4.2-ibm:
+  up2date java-1.4.2-bea java-1.4.2-bea-devel
+  up2date java-1.4.2-ibm java-1.4.2-ibm-devel
+- import JPackage signing key
+  rpm --import http://www.jpackage.org/jpackage.asc
+- add the following lines into /etc/sysconfig/rhn/sources
+  yum jpackage16-generic http://mirrors.dotsrc.org/jpackage/1.6/generic/free
+  yum jpackage16-rhel40 http://mirrors.dotsrc.org/jpackage/1.6/redhat-el-4.0/free
+- install ant, junit:
+  up2date ant ant-junit ant-trax junit xerces-j2 xalan-j2 xml-commons-apis
+- if neither java-1.4.2-bea nor java-1.4.2-ibm is installed,
+  then:
+  - download and install Java 2 SDK, v 1.4.2_10 (J2SE)
+  - add the following line into /etc/sysconfig/rhn/sources
+  yum jpackage16-generic-non-free http://mirrors.dotsrc.org/jpackage/1.6/generic/non-free
+  - install java-1.4.2-sun-compat
+
 Build-environment preparation (Fedora 5):
 ----------------------------------------------
 - install the following rpms (and required dependencies) from
   Fedora Core/Extras:
   ant, ant-junit, ant-trax, cppunit-devel, java-sdk, junit,
-  swig and xml-commons-apis
+  swig, xalan-j2, xerces-j2 and xml-commons-apis
 - install the following rpms from our repository: xerces-c,
   xerces-c-devel, xalan-c, xalan-c-devel, minizip, minizip-devel,
   minizip-libs, pccts
@@ -30,7 +53,7 @@ Build-environment preparation (Fedora Core 4):
 - install the following rpms (and required dependencies) from
   Fedora Core/Extras:
   ant, ant-junit, ant-trax, cppunit-devel, java-sdk, junit,
-  swig and xml-commons-apis
+  swig, xalan-j2, xerces-j2 and xml-commons-apis
 - install the following rpms from our repository: xerces-c,
   xerces-c-devel, xalan-c, xalan-c-devel, minizip, minizip-devel,
   minizip-libs, pccts
