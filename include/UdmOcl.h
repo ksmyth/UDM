@@ -167,7 +167,7 @@ namespace UdmPat {
 
 namespace UdmOcl {
 	std::string LowerFirst( const std::string& strValue );
-	std::string GetQualifiedName(const ::Uml::Class &c);
+	std::string GetQualifiedName(const ::Uml::Class &c, bool isAssocRole = false);
 }; //namespace UdmOcl
 
 #endif // UDMOCL_h

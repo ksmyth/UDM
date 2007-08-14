@@ -183,8 +183,8 @@ namespace Uml
 	UDM_DLL bool HasChildRoleMultipleTargets(const CompositionChildRole & ccr);
 
 	typedef vector<CompositionChildRole> ChildRoleChain;
-	//returns the possible containments paths of class what in class origin, at any level
-	UDM_DLL void GetChildRoleChain(const Class & origin, const Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain = ChildRoleChain());
+	//fills the vector chains with the possible containments paths of class what in class origin, at any level; returns true if successful, false if a loop was detected
+	UDM_DLL bool GetChildRoleChain(const Class & origin, const Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain = ChildRoleChain());
 
 	UDM_DLL Namespace GetTheOnlyNamespace(const Diagram & dgr);
 
