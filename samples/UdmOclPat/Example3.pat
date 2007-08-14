@@ -9,5 +9,5 @@ Example 3
 
 The root folder contains:
 <:
-  self.orState->forAll(o | { print(o.aname); } );
+  self.orState->forAll(o | { print(o.name); } );
 :>
