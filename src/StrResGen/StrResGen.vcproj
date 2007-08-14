@@ -43,7 +43,7 @@
 				OutputFile="..\..\etc\StrResGen.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(UDM_PATH)/lib"
+				AdditionalLibraryDirectories="../../lib"
 				ProgramDatabaseFile=".\Release/StrResGen.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
@@ -101,7 +101,7 @@
 				OutputFile="..\..\etc\StrResGenD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(UDM_PATH)/lib"
+				AdditionalLibraryDirectories="../../lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/StrResGen.pdb"
 				SubSystem="1"
