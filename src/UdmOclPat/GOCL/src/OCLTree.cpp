@@ -3175,7 +3175,6 @@ namespace OclTree
 		for(iter = PatHelper::handles.begin(); iter != PatHelper::handles.end(); iter++) {
 			if(iter->second != NULL  && *(iter->second) && iter->second->is_open()) {
 				iter->second->close();
-				PatHelper::handles.erase(iter);
 			}
 		}
 	}
