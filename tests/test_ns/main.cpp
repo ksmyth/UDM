@@ -47,6 +47,7 @@ int main()
   catch(udm_exception& e)
   {
     std::cout << e.what();
+    return 1;
   }
 
   return 0;
