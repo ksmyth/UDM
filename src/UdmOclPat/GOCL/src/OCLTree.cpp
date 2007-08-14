@@ -1784,14 +1784,14 @@ namespace OclTree
 		contextFunction.m_poolExceptions.Clear();
 
 		bool bArgumentsValid = true;
-		for ( unsigned int i = 0 ; i < m_vecArguments.size() ; i++ )
+		for ( int i = 0 ; i < (int) m_vecArguments.size() ; i++ )
 			bArgumentsValid = m_vecArguments[ i ]->Check( contextFunction ) && bArgumentsValid;
 
 		OclCommon::Exception exFunction;
 
 		if ( bArgumentsValid ) {
 			StringVector vecTypes;
-			for ( i = 0 ; i < m_vecArguments.size() ; i++ )
+			for ( i = 0 ; i < (int) m_vecArguments.size() ; i++ )
 				vecTypes.push_back( m_vecArguments[ i ]->m_vecType[ 0 ] );
 			OclSignature::Function sigFunction( m_strName, vecTypes );
 
@@ -2835,10 +2835,10 @@ namespace OclTree
 	{
 		return new Constraint( (TreeManager*) this );
 	}
+
 //<udmoclpat changes
 	TextNode* TreeManager::CreateTextNode() const
 	{
-		//fprintf(stdout, "Created text node.\n");
 		return new TextNode( (TreeManager*) this);
 	}
 
@@ -2894,7 +2894,6 @@ namespace OclTree
 
 	bool TextNode::CheckImplementation( TypeContext& context )
 	{
-		//printf("TextNode: CheckImplementation called.");
 		if ( ! m_pTreeNode ) {
 			ObjectNode* pObject = GetTreeManager()->CreateObject();
 			m_pTreeNode = pObject;

@@ -42,7 +42,7 @@
 	#define IF_EXC_NODES( nodes ) \
 		{	\
 			if ( ! m_ExceptionPool.IsEmpty() ) { \
-				for ( int iiii = 0 ; iiii < nodes.size() ; iiii++ )	\
+				for ( unsigned int iiii = 0 ; iiii < nodes.size() ; iiii++ )	\
 					if ( nodes[ iiii ] )	\
 						delete nodes[ iiii ];	\
 				nodes.clear();	\
@@ -312,7 +312,7 @@ class OCLParser
 					bFirstIdentifierUnused = false;
 					if ( iCurrent == INPUTEND )
 						return strConsumed;
-					for ( TokenSet::const_iterator i = setTokens.begin() ; i != setTokens.end() && bConsumeIt; i++ )
+					for ( TokenSet::const_iterator i = setTokens.begin() ; i != setTokens.end() && bConsumeIt; ++i )
 						switch ( *i ) {
 							case CLASS_MULTIPLICATIVE :	if ( set_el( iCurrent, MULTIPLICATIVE_OPERATORS_set ) ) bConsumeIt = false; break;
 							case CLASS_ADDITIVE :		  	if ( set_el( iCurrent, ADDITIVE_OPERATORS_set ) ) bConsumeIt = false; break;
