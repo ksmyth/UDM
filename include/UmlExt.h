@@ -156,6 +156,9 @@ namespace Uml
 	// All local ends of associations this class can have (including those defined in ancestors)
 	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Diagram & cross_dgr);
 
+// Returns true if the targets and the association class (if it exists) do not belong to the same namespace
+	UDM_DLL bool IsCrossNSAssociation(const Association &a);
+
 	// returns all the Text Attributes for class C
 	UDM_DLL set<Attribute> TextAttributes(const Class &c);
 
