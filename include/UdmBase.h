@@ -765,10 +765,10 @@ namespace Udm
 		virtual AdditiveArrAttrItem& operator +=(const CLASS &a)
 		{
 			//pad with CLASS() if array is smaller than index
-			while (array.size() <=index)
-				array.push_back(CLASS());
+			while (this->array.size() <= this->index)
+				this->array.push_back(CLASS());
 
-			CLASS & i = array.at(index);
+			CLASS & i = this->array.at(this->index);
 			i += a;
 			this->set();
 			return *this;
@@ -1667,55 +1667,8 @@ namespace Udm
 	public:
 		CrossAssocAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
 
-		operator set<CLASS, Pred>() const 
-		{
-			
-			set<CLASS, Pred> ret;
-
-			UdmProject* pr = NULL;
-			if (impl && impl->__getdn())
-				pr = impl->__getdn()->GetProject();
-			if (pr != NULL)
-			{
-				Object peer = impl->clone();
-				set<Object> peers = pr->getSimpleAssociation(peer, meta);
-				set<Object>::iterator peers_i = peers.begin();
-				while (peers_i != peers.end())
-				{
-					ret.insert(CLASS::Cast(*peers_i));
-					peers_i++;
-				};
-			}
-			else
-			{
-				throw udm_exception("Project is NULL!");
-			}
-			return ret;
-		}
-
-		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a)
-		{
-			UdmProject* pr = impl->__getdn()->GetProject();
-			if (pr != NULL)
-			{
-				Object peer = impl->clone();
-				set<Object> peers;
-				TYPENAME set<CLASS, Pred>::const_iterator i = a.begin();
-				while( i != a.end() )
-				{
-					peers.insert((*i));
-					++i;
-				}
-				
-				pr->setSimpleAssociation(peer,peers,meta);
-			}
-			else
-			{
-				throw udm_exception("Project is NULL!");
-			}
-
-			return a;
-		}
+		operator set<CLASS, Pred>() const;
+		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a);
 
 		const set<CLASS, Pred> operator +=(const CLASS &a) {
 			set<CLASS, Pred> xx(*this);
@@ -1800,47 +1753,9 @@ namespace Udm
 	public:
 		CrossPointerAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
 
-		operator CLASS() const 
-		{
-			UdmProject* pr = NULL;
-			set<Object> peers;
-			if (impl && impl->__getdn())
-				pr = impl->__getdn()->GetProject();
-			if (pr != NULL)
-			{
-				Object peer = impl->clone();
-				peers = pr->getSimpleAssociation(peer, meta);
-				if (peers.begin() != peers.end())
-					return CLASS::Cast(*(peers.begin()));
-				
-			}
-			else
-			{
-				throw udm_exception("Project is NULL!");
-			}
+		operator CLASS() const;
 
-			return &_null;
-			
-		}
-
-		const CLASS &operator =(const CLASS &a)
-		{
-			UdmProject* pr = impl->__getdn()->GetProject();
-			if (pr != NULL)
-			{
-				Object peer = impl->clone();
-				set<Object> peers;
-				peers.insert(a);
-				
-				pr->setSimpleAssociation(peer,peers,meta);
-			}
-			else
-			{
-				throw udm_exception("Project is NULL!");
-			}
-
-			return a;			
-		}
+		const CLASS &operator =(const CLASS &a);
 	};
 
 
@@ -1891,47 +1806,8 @@ namespace Udm
 	public:
 		CrossAssocEndAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m) : impl(i), meta(m) { }
 
-		operator CLASS() const 
-		{
-			UdmProject *pr = NULL;
-			CLASS ret;
-			if (impl && impl->__getdn())
-				pr = impl->__getdn()->GetProject();
-
-			if (pr != NULL)
-			{
-				Object link = impl->clone();
-				ret = CLASS::Cast(pr->getEnd(link, meta));
-			}
-			else
-			{
-				throw udm_exception("Project is NULL!");
-			}
-
-			return ret;
-		}
-
-		const CLASS &operator =(const CLASS &a)
-		{
-			UdmProject *pr = NULL;
-			
-			if (impl && impl->__getdn())
-				pr = impl->__getdn()->GetProject();
-
-			Object a_obj(a.__impl()->clone());
-			if (pr != NULL)
-			{
-				Object link = impl->clone();
-				pr->setEnd(link, a_obj, meta);
-			}
-			else
-			{
-				throw udm_exception("Project is NULL!");
-			}
-
-			return a;
-			
-		}
+		operator CLASS() const;
+		const CLASS &operator =(const CLASS &a);
 	};
 
 
@@ -1981,53 +1857,8 @@ namespace Udm
 	public:
 		AClassCrossPointerAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m, const ::Uml::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
 
-		operator CLASS() const 
-		{
-			CLASS ret;
-			UdmProject *pr = NULL;
-			
-			if (impl && impl->__getdn())
-				pr = impl->__getdn()->GetProject();
-
-			if (pr != NULL)
-			{
-				Object peer = impl->clone();
-				set<Object> links = pr->getLinks(peer, peermeta);
-				if (!links.empty())
-					return CLASS::Cast(*(links.begin()));
-				
-			}
-			else
-			{
-				throw udm_exception("Project is NULL!");
-			}
-
-			return ret;
-
-		}
-
-		const CLASS &operator =(const CLASS &a)
-		{
-			UdmProject *pr = NULL;
-			
-			if (impl && impl->__getdn())
-				pr = impl->__getdn()->GetProject();
-
-			if (pr != NULL)
-			{
-				Object peer = impl->clone();
-				set<Object> links;
-				links.insert(a);
-				pr->setLinks(peer, links, peermeta);
-			}
-			else
-			{
-				throw udm_exception("Project is NULL!");
-			}
-
-			return a;
-			
-		}
+		operator CLASS() const;
+		const CLASS &operator =(const CLASS &a);
 
 	};
 // --------------------------- AClassPointerAttr
@@ -2065,18 +1896,7 @@ namespace Udm
 
 		CLASS SetLink(TARGETCLASS peer, Object parent, 
 			const ::Uml::Uml::Class &meta = CLASS::meta,
-			const ::Uml::Uml::CompositionChildRole &role = NULLCHILDROLE) {
-				
-			if(!IsDerivedFrom(meta, CLASS::meta)) {
-						throw udm_exception("Invalid type for assoc class");
-			}
-
-			CLASS nn = CLASS::Cast(Object::Create(meta, parent, role));
-			AssocEndAttr<TARGETCLASS> zz = AssocEndAttr<TARGETCLASS>(nn.__impl(), peermeta);
-			zz = peer;
-			*this = nn;
-			return nn;
-		}	
+			const ::Uml::Uml::CompositionChildRole &role = NULLCHILDROLE);
 	};
 
 	// --------------------------- AClassCrossAssocAttr
@@ -2093,61 +1913,8 @@ namespace Udm
 	public:
 		AClassCrossAssocAttr(ObjectImpl *i, const ::Uml::Uml::AssociationRole &m, const ::Uml::Uml::AssociationRole &m2) : impl(i), peermeta(m), selfmeta(m2) { }
 
-		operator set<CLASS, Pred>() const 
-		{
-			set<CLASS, Pred> ret;
-			
-			UdmProject *pr = NULL;
-			
-			if (impl && impl->__getdn())
-				pr = impl->__getdn()->GetProject();
-
-			if (pr != NULL)
-			{
-				Object peer = impl->clone();
-				set<Object> links = pr->getLinks(peer, peermeta);
-				set<Object>::iterator l_i = links.begin();
-				while (l_i != links.end())
-				{
-					ret.insert(CLASS::Cast(*l_i));
-					l_i++;
-				};
-			}
-			else
-			{
-				throw udm_exception("Project is NULL!");
-			}
-
-			return ret;
-		}
-
-		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a)
-		{
-			
-			UdmProject *pr = NULL;
-			
-			if (impl && impl->__getdn())
-				pr = impl->__getdn()->GetProject();
-
-			if (pr != NULL)
-			{
-				Object peer = impl->clone();
-				set<Object> links;
-				TYPENAME set<CLASS, Pred>::const_iterator a_i = a.begin();
-				while (a_i != a.end())
-				{
-					links.insert(*a_i);
-					a_i++;
-				};
-				pr->setLinks(peer, links, peermeta);
-			}
-			else
-			{
-				throw udm_exception("Project is NULL!");
-			}
-
-			return a;
-		}
+		operator set<CLASS, Pred>() const;
+		const set<CLASS, Pred> &operator =(const set<CLASS, Pred> &a);
 
 	};
 
@@ -2200,20 +1967,7 @@ namespace Udm
 
 		CLASS AddLink(TARGETCLASS peer, Object parent, 
 			const ::Uml::Uml::Class &meta = CLASS::meta,
-			const ::Uml::Uml::CompositionChildRole &role = NULLCHILDROLE) {
-				
-			if(!IsDerivedFrom(meta, CLASS::meta)) {
-						throw udm_exception("Invalid type for assoc class");
-			}
-
-			CLASS nn = CLASS::Cast(Object::Create(meta, parent, role));
-			AssocEndAttr<TARGETCLASS> zz = AssocEndAttr<TARGETCLASS>(nn.__impl(), peermeta);
-			zz = peer;
-			set<CLASS, Pred> b = *this;
-			b.insert(nn);
-			*this = b;
-			return nn;
-		}	
+			const ::Uml::Uml::CompositionChildRole &role = NULLCHILDROLE);
 	};
 
 // --------------------------- ChildrenAttr
@@ -3413,7 +3167,285 @@ public:
 	};
 
 
+	template<class CLASS, class Pred>
+	CrossAssocAttr<CLASS, Pred>::operator set<CLASS, Pred>() const
+	{
 
+		set<CLASS, Pred> ret;
+
+		UdmProject* pr = NULL;
+		if (impl && impl->__getdn())
+			pr = impl->__getdn()->GetProject();
+		if (pr != NULL)
+		{
+			Object peer = impl->clone();
+			set<Object> peers = pr->getSimpleAssociation(peer, meta);
+			set<Object>::iterator peers_i = peers.begin();
+			while (peers_i != peers.end())
+			{
+				ret.insert(CLASS::Cast(*peers_i));
+				peers_i++;
+			};
+		}
+		else
+		{
+			throw udm_exception("Project is NULL!");
+		}
+		return ret;
+	}
+
+	template<class CLASS, class Pred>
+	const set<CLASS, Pred> & CrossAssocAttr<CLASS, Pred>::operator =(const set<CLASS, Pred> &a)
+	{
+		UdmProject* pr = impl->__getdn()->GetProject();
+		if (pr != NULL)
+		{
+			Object peer = impl->clone();
+			set<Object> peers;
+			TYPENAME set<CLASS, Pred>::const_iterator i = a.begin();
+			while( i != a.end() )
+			{
+				peers.insert((*i));
+				++i;
+			}
+
+			pr->setSimpleAssociation(peer,peers,meta);
+		}
+		else
+		{
+			throw udm_exception("Project is NULL!");
+		}
+
+		return a;
+	}
+
+	template<class CLASS>
+	CrossPointerAttr<CLASS>::operator CLASS() const
+	{
+		UdmProject* pr = NULL;
+		set<Object> peers;
+		if (impl && impl->__getdn())
+			pr = impl->__getdn()->GetProject();
+		if (pr != NULL)
+		{
+			Object peer = impl->clone();
+			peers = pr->getSimpleAssociation(peer, meta);
+			if (peers.begin() != peers.end())
+				return CLASS::Cast(*(peers.begin()));
+		}
+		else
+		{
+			throw udm_exception("Project is NULL!");
+		}
+
+		return &_null;
+
+	}
+
+	template<class CLASS>
+	const CLASS & CrossPointerAttr<CLASS>::operator =(const CLASS &a)
+	{
+		UdmProject* pr = impl->__getdn()->GetProject();
+		if (pr != NULL)
+		{
+			Object peer = impl->clone();
+			set<Object> peers;
+			peers.insert(a);
+
+			pr->setSimpleAssociation(peer,peers,meta);
+		}
+		else
+		{
+			throw udm_exception("Project is NULL!");
+		}
+
+		return a;			
+	}
+
+	template<class CLASS>
+	CrossAssocEndAttr<CLASS>::operator CLASS() const 
+	{
+		UdmProject *pr = NULL;
+		CLASS ret;
+		if (impl && impl->__getdn())
+			pr = impl->__getdn()->GetProject();
+
+		if (pr != NULL)
+		{
+			Object link = impl->clone();
+			ret = CLASS::Cast(pr->getEnd(link, meta));
+		}
+		else
+		{
+			throw udm_exception("Project is NULL!");
+		}
+
+		return ret;
+	}
+
+	template<class CLASS>
+	const CLASS & CrossAssocEndAttr<CLASS>::operator =(const CLASS &a)
+	{
+		UdmProject *pr = NULL;
+
+		if (impl && impl->__getdn())
+			pr = impl->__getdn()->GetProject();
+
+		Object a_obj(a.__impl()->clone());
+		if (pr != NULL)
+		{
+			Object link = impl->clone();
+			pr->setEnd(link, a_obj, meta);
+		}
+		else
+		{
+			throw udm_exception("Project is NULL!");
+		}
+
+		return a;
+	}
+
+	template<class CLASS, class TARGETCLASS>
+	AClassCrossPointerAttr<CLASS, TARGETCLASS>::operator CLASS() const
+	{
+		CLASS ret;
+		UdmProject *pr = NULL;
+			
+		if (impl && impl->__getdn())
+			pr = impl->__getdn()->GetProject();
+
+		if (pr != NULL)
+		{
+			Object peer = impl->clone();
+			set<Object> links = pr->getLinks(peer, peermeta);
+			if (!links.empty())
+				return CLASS::Cast(*(links.begin()));
+
+		}
+		else
+		{
+			throw udm_exception("Project is NULL!");
+		}
+
+		return ret;
+
+	}
+
+	template<class CLASS, class TARGETCLASS>
+	const CLASS & AClassCrossPointerAttr<CLASS, TARGETCLASS>::operator =(const CLASS &a)
+	{
+		UdmProject *pr = NULL;
+
+		if (impl && impl->__getdn())
+			pr = impl->__getdn()->GetProject();
+
+		if (pr != NULL)
+		{
+			Object peer = impl->clone();
+			set<Object> links;
+			links.insert(a);
+			pr->setLinks(peer, links, peermeta);
+		}
+		else
+		{
+			throw udm_exception("Project is NULL!");
+		}
+
+		return a;
+
+	}
+
+	template<class CLASS, class TARGETCLASS, class Pred> AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred>::operator set<CLASS, Pred>() const 
+	{
+		set<CLASS, Pred> ret;
+
+		UdmProject *pr = NULL;
+
+		if (impl && impl->__getdn())
+			pr = impl->__getdn()->GetProject();
+
+		if (pr != NULL)
+		{
+			Object peer = impl->clone();
+			set<Object> links = pr->getLinks(peer, peermeta);
+			set<Object>::iterator l_i = links.begin();
+			while (l_i != links.end())
+			{
+				ret.insert(CLASS::Cast(*l_i));
+				l_i++;
+			};
+		}
+		else
+		{
+			throw udm_exception("Project is NULL!");
+		}
+
+		return ret;
+	}
+
+	template<class CLASS, class TARGETCLASS, class Pred> const set<CLASS, Pred> & AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred>::operator =(const set<CLASS, Pred> &a)
+	{
+
+		UdmProject *pr = NULL;
+
+		if (impl && impl->__getdn())
+			pr = impl->__getdn()->GetProject();
+
+		if (pr != NULL)
+		{
+			Object peer = impl->clone();
+			set<Object> links;
+			TYPENAME set<CLASS, Pred>::const_iterator a_i = a.begin();
+			while (a_i != a.end())
+			{
+				links.insert(*a_i);
+				a_i++;
+			};
+			pr->setLinks(peer, links, peermeta);
+		}
+		else
+		{
+			throw udm_exception("Project is NULL!");
+		}
+
+		return a;
+	}
+
+	template<class CLASS, class TARGETCLASS>
+	CLASS AClassPointerAttr<CLASS, TARGETCLASS>::SetLink(TARGETCLASS peer, Object parent, 
+		const ::Uml::Uml::Class &meta,
+		const ::Uml::Uml::CompositionChildRole &role)
+	{
+
+		if(!IsDerivedFrom(meta, CLASS::meta)) {
+					throw udm_exception("Invalid type for assoc class");
+		}
+
+		CLASS nn = CLASS::Cast(Object::Create(meta, parent, role));
+		AssocEndAttr<TARGETCLASS> zz = AssocEndAttr<TARGETCLASS>(nn.__impl(), peermeta);
+		zz = peer;
+		*this = nn;
+		return nn;
+	}	
+
+	template<class CLASS, class TARGETCLASS, class Pred>
+	CLASS AClassAssocAttr<CLASS, TARGETCLASS, Pred>::AddLink(TARGETCLASS peer, Object parent, 
+		const ::Uml::Uml::Class &meta,
+		const ::Uml::Uml::CompositionChildRole &role)
+	{
+
+		if(!IsDerivedFrom(meta, CLASS::meta)) {
+					throw udm_exception("Invalid type for assoc class");
+		}
+
+		CLASS nn = CLASS::Cast(Object::Create(meta, parent, role));
+		AssocEndAttr<TARGETCLASS> zz = AssocEndAttr<TARGETCLASS>(nn.__impl(), peermeta);
+		zz = peer;
+		set<CLASS, Pred> b = *this;
+		b.insert(nn);
+		*this = b;
+		return nn;
+	}	
 
 }
 
