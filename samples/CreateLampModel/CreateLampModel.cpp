@@ -826,6 +826,20 @@ int main(int argc, char* argv[])
 				cout << endl;
 
 
+				//annotations
+				vector<string> annotations;
+				annotations.push_back("Anno1=\\=my annotation on this Lamp\\=");
+				annotations.push_back("Anno1/aspects=600,300");
+				annotations.push_back("Anno1/aspects/*=");
+				annotations.push_back("Anno1/hidden=0");
+				annotations.push_back("Anno1/inheritable=0");
+				doubleBulbLamp.annotations() = annotations;		//assign
+				annotations = doubleBulbLamp.annotations();		//retrieve
+				cout << "Annotations on doubleBulbLamp:" << endl;
+				vector<string>::const_iterator annotations_i = annotations.begin();
+				while (annotations_i != annotations.end())
+					cout << "\t" << *annotations_i++ << endl;
+				cout << endl;
 
 
 
