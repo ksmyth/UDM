@@ -20,7 +20,7 @@ import edu.vanderbilt.isis.udm.swig.cint_string;
  * 
  * @author Himanshu Neema
  */
-public class UdmPseudoObject {
+public class UdmPseudoObject implements Comparable {
     private static final Logger log = Logger.getLogger(UdmPseudoObject.class.getName());
     private edu.vanderbilt.isis.udm.swig.UdmPseudoObject swigUPO;
     private static final int UNSPECIFIED_MODE = -1;
@@ -48,6 +48,47 @@ public class UdmPseudoObject {
             return false;
         }
         return swigUPO.__equals__(((UdmPseudoObject) arg0).getInternal());
+    }
+
+    /**
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    public int compareTo(Object to) {
+        if (!(to instanceof UdmPseudoObject)) {
+            throw new ClassCastException("Argument of compareTo should be an instance of UdmPseudoObject");
+        }
+
+        long dn_id = getDataNetworkId();
+        long to_dn_id = ((UdmPseudoObject) to).getDataNetworkId();
+
+        if (dn_id == to_dn_id) {
+            long diff = getObjectId() - ((UdmPseudoObject) to).getObjectId();
+            if (diff < 0)
+                return -1;
+            else if (diff > 0)
+                return 1;
+            else
+                return 0;
+        }
+
+        long diff = dn_id - to_dn_id;
+        if (diff < 0)
+            return -1;
+        else if (diff > 0)
+            return 1;
+        else
+            return 0;
+    }
+
+    /**
+     * Overrides hashCode() to return Long(getObjectId()).hashCode().
+     * Because the data network id is not used to construct the hash code,
+     * objects from different data networks will have the same hash code.
+     *
+     * @see java.lang.Long#hashCode()
+     */
+    public int hashCode() {
+	return new Long(getObjectId()).hashCode();
     }
 
     protected void setDiagram(Diagram metaDiagram) {
