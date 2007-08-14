@@ -65,14 +65,14 @@ namespace UdmUtil
 
 	UDM_DLL string ExtractName(Udm::Object ob,  const string att_name )
 	{
-		::Uml::Uml::Class cls= ob.type();				
-		set< ::Uml::Uml::Attribute> attrs=cls.attributes();		
+		::Uml::Class cls= ob.type();				
+		set< ::Uml::Attribute> attrs=cls.attributes();		
 		
 		// Adding parent attributes
-		set< ::Uml::Uml::Attribute> aattrs=::Uml::AncestorAttributes(cls);
+		set< ::Uml::Attribute> aattrs=::Uml::AncestorAttributes(cls);
 		attrs.insert(aattrs.begin(),aattrs.end());
 
-		for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+		for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 		{
 			if(string(ai->type())=="String")
 			{
@@ -225,8 +225,8 @@ namespace UdmUtil
 	{
 		int ret=0;
 		
-		::Uml::Uml::Class srcClass = p_srcRoot->type();
-		::Uml::Uml::Class dstClass = p_dstRoot->type();
+		::Uml::Class srcClass = p_srcRoot->type();
+		::Uml::Class dstClass = p_dstRoot->type();
 
 		bool dest_same_dn = (p_srcRoot->__getdn() == p_dstRoot->__getdn());
 
@@ -236,18 +236,18 @@ namespace UdmUtil
 
 		
 
-		set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+		set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
 
-		for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); p_currClass!=ancestorClasses.end(); p_currClass++)
+		for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); p_currClass!=ancestorClasses.end(); p_currClass++)
 		{
 			
 			// Traversing the containtment hierarchy
-			set< ::Uml::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
-			for(set< ::Uml::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
+			set< ::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
+			for(set< ::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
 				p_currRole!=compParentRoles.end(); p_currRole++)
 			{
-				::Uml::Uml::Class childClass=theOther(*p_currRole).target();
+				::Uml::Class childClass=theOther(*p_currRole).target();
 			
 				vector<ObjectImpl*>children= p_srcRoot->getChildren(theOther(*p_currRole),childClass);
 				for(vector<ObjectImpl*>::iterator p_currImpl=children.begin();
@@ -348,7 +348,7 @@ namespace UdmUtil
 									p_dstChild=p_dstRoot->createChild(theOther(*p_currRole), p_srcChild->type(), p_dstChildArc, subtype);
 								else
 								{
-									const ::Uml::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(p_srcChild->type());
+									const ::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(p_srcChild->type());
 									p_dstChild=p_dstRoot->createChild(theOther(*p_currRole), safe_type, p_dstChildArc, subtype, true, true);
 								}
 
@@ -364,7 +364,7 @@ namespace UdmUtil
 								p_dstChild=p_dstRoot->createChild(theOther(*p_currRole), p_srcChild->type());
 							else
 							{
-								const ::Uml::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(p_srcChild->type());
+								const ::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(p_srcChild->type());
 								p_dstChild=p_dstRoot->createChild(theOther(*p_currRole), safe_type);
 							}
 						}
@@ -427,8 +427,8 @@ namespace UdmUtil
 	UDM_DLL int reqCopyLinks(ObjectImpl* p_srcRoot, ObjectImpl* p_dstRoot,copy_assoc_map &cam, const bool direct,const bool simpleLinks)
 	{
 		int ret=0;
-		::Uml::Uml::Class srcClass= p_srcRoot->type();
-		::Uml::Uml::Class dstClass= p_dstRoot->type();
+		::Uml::Class srcClass= p_srcRoot->type();
+		::Uml::Class dstClass= p_dstRoot->type();
 
 		//bool variable which is true when the copy is done within the same datanetwork (an object tree is moved)
 		bool dest_same_dn = (p_srcRoot->__getdn() == p_dstRoot->__getdn());
@@ -439,18 +439,18 @@ namespace UdmUtil
 		// Root objects are of incompatible type
 		if(srcClass!=dstClass) return -1;
 
-		set< ::Uml::Uml::Class> ancestorClasses=AncestorClasses(srcClass);
+		set< ::Uml::Class> ancestorClasses=AncestorClasses(srcClass);
 
-		for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+		for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 						p_currClass!=ancestorClasses.end(); p_currClass++)
 		{
 			// Getting the association roles and iterating through them
-			set< ::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
-			for(set< ::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();p_currAssocRole!=assocRoles.end();p_currAssocRole++)
+			set< ::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+			for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 			{
-				::Uml::Uml::AssociationRole o_role = ::Uml::theOther(*p_currAssocRole);
+				::Uml::AssociationRole o_role = ::Uml::theOther(*p_currAssocRole);
 
-				::Uml::Uml::Class assocClass=::Uml::Uml::Association(p_currAssocRole->parent()).assocClass();
+				::Uml::Class assocClass=::Uml::Association(p_currAssocRole->parent()).assocClass();
 
 				//this function is expected to be called twice, first iwth simplelinks true, and then with simpleLinks false
 				//if simpleLinks is true, only simple associations are copied

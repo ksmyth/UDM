@@ -58,9 +58,9 @@ namespace Ocl
 	typedef OclCommon::RCSmart<Facade> SpFacade;
 	typedef GOCL_STL_NS()vector< OclMeta::DependencySet > DependencySetVector;
 
-	typedef GOCL_STL_NS()map< ::Uml::Uml::Constraint, ConstraintEx* > ConstraintMap;
+	typedef GOCL_STL_NS()map< ::Uml::Constraint, ConstraintEx* > ConstraintMap;
 	typedef GOCL_STL_NS()vector< ConstraintDefEx* > ConstraintDefVector;
-	typedef GOCL_STL_NS()map< ::Uml::Uml::Diagram , SpFacade > FacadeMap;
+	typedef GOCL_STL_NS()map< ::Uml::Diagram , SpFacade > FacadeMap;
 
 	FacadeMap globalFacadeMap;
 
@@ -113,11 +113,11 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		: public ConstraintBase
 	{
 		private :
-			::Uml::Uml::Constraint m_objConstraint;
+			::Uml::Constraint m_objConstraint;
 			bool b_PatProcessing;
 
 		public :
-			ConstraintEx( Facade* pFacade, const ::Uml::Uml::Constraint& objConstraint );
+			ConstraintEx( Facade* pFacade, const ::Uml::Constraint& objConstraint );
 			ConstraintEx( Facade* pFacade, const GOCL_STL_NS()string& _strContext, const GOCL_STL_NS()string& _strExpression );
 
 			bool				Compile( const SErrorNotification& sEN );
@@ -135,11 +135,11 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		: public ConstraintBase
 	{
 		private :
-			::Uml::Uml::ConstraintDefinition m_objDefinition;
+			::Uml::ConstraintDefinition m_objDefinition;
 			bool m_bIsMethod;
 
 		public :
-			ConstraintDefEx( Facade* pFacade, const ::Uml::Uml::ConstraintDefinition& objDefinition );
+			ConstraintDefEx( Facade* pFacade, const ::Uml::ConstraintDefinition& objDefinition );
 
 			virtual GOCL_STL_NS()string		Print( bool bOnlyIdentity = false ) const;
 			bool				IsMethod() const;
@@ -155,19 +155,19 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		: public OclCommon::ReferenceCountable< Facade >
 	{
 		private :
-			::Uml::Uml::Diagram 					m_objDiagram;
+			::Uml::Diagram 					m_objDiagram;
 			OclMeta::TypeManager* 		m_pTypeManager;
 			OclTree::TreeManager* 		m_pTreeManager;
 			ConstraintMap					m_mapConstraints;
 			ConstraintDefVector			m_vecConstraintDefs;
 
 		public :
-			Facade( const ::Uml::Uml::Diagram& objDiagram );
+			Facade( const ::Uml::Diagram& objDiagram );
 			~Facade();
 
 			bool Initialize( const SErrorNotification& sEN );
 
-			EEvaluationResult CheckAll( Udm::Object objObject, const set< ::Uml::Uml::Constraint>& setConstraints, const SEvaluationOptions& options );
+			EEvaluationResult CheckAll( Udm::Object objObject, const set< ::Uml::Constraint>& setConstraints, const SEvaluationOptions& options );
 
 		private :
 			bool LoadConstraintDefinitions( const SErrorNotification& sEN );
@@ -175,8 +175,8 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			bool CompileConstraints( const SErrorNotification& sEN );
 			GOCL_STL_NS()string GetSignature( ConstraintDefEx* pDefinition );
 
-			set<ConstraintEx*> GetAll( const ::Uml::Uml::Class& objClass );
-			set<ConstraintEx*> GetAll( const set< ::Uml::Uml::Constraint>& setConstraints );
+			set<ConstraintEx*> GetAll( const ::Uml::Class& objClass );
+			set<ConstraintEx*> GetAll( const set< ::Uml::Constraint>& setConstraints );
 
 			EEvaluationResult CheckAll( Udm::Object objObject, const set<ConstraintEx*>& vecConstraints, const SEvaluationOptions& options );
 			EEvaluationResult CheckAll( Udm::Object inObject, const set<ConstraintEx*>& vecConstraints, const SEvaluationOptions& options, int iDepth );
@@ -377,11 +377,11 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 	static long lCounter = 0;
 
-	ConstraintEx::ConstraintEx( Facade* pFacade, const ::Uml::Uml::Constraint& objConstraint )
+	ConstraintEx::ConstraintEx( Facade* pFacade, const ::Uml::Constraint& objConstraint )
 		: ConstraintBase( pFacade ), m_objConstraint( objConstraint )
 	{
-		::Uml::Uml::Class context = objConstraint.parent();
-		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
+		::Uml::Class context = objConstraint.parent();
+		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
 		GOCL_STL_NS()string strName = objConstraint.name();
 		GOCL_STL_NS()string strExpression = objConstraint.expression();
 
@@ -487,10 +487,10 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 	{
 		GOCL_STL_NS()string strType = "";
 		GOCL_STL_NS()string strName = "";
-		::Uml::Uml::Class context;
+		::Uml::Class context;
 		if(!b_PatProcessing) {
 			context = m_objConstraint.parent();
-			strType = (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
+			strType = (GOCL_STL_NS()string) ((::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
 			strName = (GOCL_STL_NS()string) m_objConstraint.name();
 		} else {
 			strType = "Failure in pattern file";
@@ -519,11 +519,11 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 //
 //###############################################################################################################################################
 
-	ConstraintDefEx::ConstraintDefEx( Facade* pFacade, const ::Uml::Uml::ConstraintDefinition& objDefinition )
+	ConstraintDefEx::ConstraintDefEx( Facade* pFacade, const ::Uml::ConstraintDefinition& objDefinition )
 		: ConstraintBase( pFacade ), m_objDefinition( objDefinition )
 	{
-		::Uml::Uml::Class context = objDefinition.parent();
-		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
+		::Uml::Class context = objDefinition.parent();
+		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
 		GOCL_STL_NS()string strName = objDefinition.name();
 		GOCL_STL_NS()string strExpression = objDefinition.expression();
 		GOCL_STL_NS()string strParameterList = objDefinition.parameterList();
@@ -537,8 +537,8 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 	GOCL_STL_NS()string ConstraintDefEx::Print( bool bOnlyIdentity ) const
 	{
-		::Uml::Uml::Class context = m_objDefinition.parent();
-		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
+		::Uml::Class context = m_objDefinition.parent();
+		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
 		GOCL_STL_NS()string strName = (GOCL_STL_NS()string) m_objDefinition.name();
 		GOCL_STL_NS()string strParameterList = m_objDefinition.parameterList();
 		GOCL_STL_NS()string strReturnType = m_objDefinition.returnType();
@@ -567,7 +567,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 //
 //###############################################################################################################################################
 
-	Facade::Facade( const ::Uml::Uml::Diagram& objDiagram )
+	Facade::Facade( const ::Uml::Diagram& objDiagram )
 		: m_objDiagram( objDiagram )
 	{
 		 //printf("creating facade.");
@@ -592,14 +592,14 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		GOCL_STL_NS()string strErrAll( "" );
 		bool bResult = true;
 
-		set< ::Uml::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
-		for(set< ::Uml::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++)
+		set< ::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
+		for(set< ::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++)
 		{
-			set< ::Uml::Uml::Class> setClasses = itNamespace->classes();
-			for ( set< ::Uml::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) 
+			set< ::Uml::Class> setClasses = itNamespace->classes();
+			for ( set< ::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) 
 			{
-				set< ::Uml::Uml::ConstraintDefinition> setConstraintDefs = (*itClass).definitions();
-				for ( set< ::Uml::Uml::ConstraintDefinition>::iterator itDefinition = setConstraintDefs.begin() ; itDefinition != setConstraintDefs.end() ; itDefinition++ ) {
+				set< ::Uml::ConstraintDefinition> setConstraintDefs = (*itClass).definitions();
+				for ( set< ::Uml::ConstraintDefinition>::iterator itDefinition = setConstraintDefs.begin() ; itDefinition != setConstraintDefs.end() ; itDefinition++ ) {
 
 					ConstraintDefEx* pDefinition = new ConstraintDefEx( this, *itDefinition );
 
@@ -796,13 +796,13 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		GOCL_STL_NS()string strErrAll( "" );
 		bool bResult = true;
 
-		set< ::Uml::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
-		for(set< ::Uml::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++)
+		set< ::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
+		for(set< ::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++)
 		{
-			set< ::Uml::Uml::Class> setClasses = itNamespace->classes();
-			for ( set< ::Uml::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
-			set< ::Uml::Uml::Constraint> setConstraints = (*itClass).constraints();
-			for ( set< ::Uml::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ ) {
+			set< ::Uml::Class> setClasses = itNamespace->classes();
+			for ( set< ::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
+			set< ::Uml::Constraint> setConstraints = (*itClass).constraints();
+			for ( set< ::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ ) {
 
 				ConstraintEx* pConstraint = new ConstraintEx( this, *itConstraint );
 			//printf("UDMOCL: CompileConstraints\t");
@@ -867,27 +867,27 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		return bResult;
 	}
 
-	set<ConstraintEx*> Facade::GetAll( const ::Uml::Uml::Class& objClass )
+	set<ConstraintEx*> Facade::GetAll( const ::Uml::Class& objClass )
 	{
 		set<ConstraintEx*> setResult;
-		set< ::Uml::Uml::Class> setClasses = Uml::AncestorClasses( objClass );
-		for ( set< ::Uml::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
-			set< ::Uml::Uml::Constraint> setConstraints = (*itClass).constraints();
-			for ( set< ::Uml::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ )
+		set< ::Uml::Class> setClasses = Uml::AncestorClasses( objClass );
+		for ( set< ::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
+			set< ::Uml::Constraint> setConstraints = (*itClass).constraints();
+			for ( set< ::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ )
 				setResult.insert( (*m_mapConstraints.find( *itConstraint )).second );
 		}
 		return setResult;
 	}
 
-	set<ConstraintEx*> Facade::GetAll( const set< ::Uml::Uml::Constraint>& setConstraints )
+	set<ConstraintEx*> Facade::GetAll( const set< ::Uml::Constraint>& setConstraints )
 	{
 		set<ConstraintEx*> setResult;
-		for ( set< ::Uml::Uml::Constraint>::const_iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ )
+		for ( set< ::Uml::Constraint>::const_iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ )
 			setResult.insert( (*m_mapConstraints.find( *itConstraint )).second );
 		return setResult;
 	}
 
-	EEvaluationResult Facade::CheckAll( Udm::Object objObject, const set< ::Uml::Uml::Constraint>& setConstraints, const SEvaluationOptions& options )
+	EEvaluationResult Facade::CheckAll( Udm::Object objObject, const set< ::Uml::Constraint>& setConstraints, const SEvaluationOptions& options )
 	{
 		set<ConstraintEx*> setConstraints2 = GetAll( setConstraints );
 		return CheckAll( objObject, setConstraints2, options, 0 );
@@ -1002,7 +1002,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 //
 //###############################################################################################################################################
 
-	UDM_DLL Evaluator::Evaluator( const Udm::Object& objObject, const set< ::Uml::Uml::Constraint>& setConstraints )
+	UDM_DLL Evaluator::Evaluator( const Udm::Object& objObject, const set< ::Uml::Constraint>& setConstraints )
 		: m_objObject( objObject ), m_setConstraints( setConstraints )
 	{
 	}
@@ -1026,14 +1026,14 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		return ( Udm::Object& ) m_objObject;
 	}
 
-	UDM_DLL set< ::Uml::Uml::Constraint>& Evaluator::constraints() const
+	UDM_DLL set< ::Uml::Constraint>& Evaluator::constraints() const
 	{
-		return ( set< ::Uml::Uml::Constraint>& ) m_setConstraints;
+		return ( set< ::Uml::Constraint>& ) m_setConstraints;
 	}
 
 	UDM_DLL EEvaluationResult Evaluator::Check( const SEvaluationOptions& sOptions ) const
 	{
-		FacadeMap::iterator it = globalFacadeMap.find( ( (::Uml::Uml::Namespace)((::Uml::Uml::Class) m_objObject.type() ).parent()).parent() );
+		FacadeMap::iterator it = globalFacadeMap.find( ( (::Uml::Namespace)((::Uml::Class) m_objObject.type() ).parent()).parent() );
 		if ( it == globalFacadeMap.end() ) {
 			return CER_UNDEFINED;
 		}
@@ -1046,7 +1046,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 //
 //###############################################################################################################################################
 
-	UDM_DLL bool Initialize( const ::Uml::Uml::Diagram& objDiagram, const SErrorNotification& sErrorNotification )
+	UDM_DLL bool Initialize( const ::Uml::Diagram& objDiagram, const SErrorNotification& sErrorNotification )
 	{
 		//printf("Start Initialize");
 		SpFacade spFacade( new Facade( objDiagram ) );
@@ -1061,7 +1061,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		globalFacadeMap.clear();
 	}
 
-	UDM_DLL bool ProcessPat( const ::Uml::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression)
+	UDM_DLL bool ProcessPat( const ::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression)
 	{
 		std::string strContext = (string)objContext.type().name();
 		SErrorNotification en = SErrorNotification();
@@ -1082,7 +1082,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 namespace UdmPat {
 
-	UDM_DLL bool ProcessPat( const ::Uml::Uml::Diagram& metaDiagram, const Udm::Object& dataNetwork , const std::string& strExpression)
+	UDM_DLL bool ProcessPat( const ::Uml::Diagram& metaDiagram, const Udm::Object& dataNetwork , const std::string& strExpression)
 	{
 		return Ocl::ProcessPat(metaDiagram, dataNetwork, strExpression);
 	}

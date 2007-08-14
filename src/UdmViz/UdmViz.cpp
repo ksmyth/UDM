@@ -19,13 +19,13 @@ int main(int argc, char* argv[])
 	{		
 		// Loading the meta for the host graph
 		Udm::SmartDataNetwork  ddnMeta(Uml::diagram);	
-		::Uml::Uml::Diagram theUmlDiagram;
+		::Uml::Diagram theUmlDiagram;
 
 		// Opening the XML meta of the host graph
 		ddnMeta.OpenExisting(argv[2],"uml.dtd", Udm::CHANGES_LOST_DEFAULT);
 		
 		// Casting the DataNetwork to diagram
-		theUmlDiagram = ::Uml::Uml::Diagram::Cast(ddnMeta.GetRootObject());
+		theUmlDiagram = ::Uml::Diagram::Cast(ddnMeta.GetRootObject());
 		
 		// Creating the UDM diagram
 		Udm::UdmDiagram udmDataDiagram;

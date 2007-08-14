@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
 		Udm::SmartDataNetwork  nmeta(Uml::diagram);
 		nmeta.OpenExisting(argv[2],"uml.dtd", Udm::CHANGES_LOST_DEFAULT);
 
-		::Uml::Uml::Diagram thedgr = ::Uml::Uml::Diagram::Cast(nmeta.GetRootObject());
+		::Uml::Diagram thedgr = ::Uml::Diagram::Cast(nmeta.GetRootObject());
 		Udm::UdmDiagram datadiagram;
 		datadiagram.dgr = &thedgr;
 		datadiagram.init = dummy;

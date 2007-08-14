@@ -324,11 +324,11 @@ bool UdmPseudoObject::getParent(const char * prole, UdmPseudoObject &value) cons
 {
 	CINT_TRY(dn_id, ob_id);
 	//obtain parentrole from prole
-	::Uml::Uml::CompositionParentRole cpr;
+	::Uml::CompositionParentRole cpr;
 	if (prole)
 	{
-		set< ::Uml::Uml::CompositionParentRole> proles = AncestorCompositionPeerParentRoles(upi_o.type());
-		set< ::Uml::Uml::CompositionParentRole>::iterator proles_i = proles.begin();
+		set< ::Uml::CompositionParentRole> proles = AncestorCompositionPeerParentRoles(upi_o.type());
+		set< ::Uml::CompositionParentRole>::iterator proles_i = proles.begin();
 		while (proles_i != proles.end())
 		{
 			if (!strcmp(prole, ((string)proles_i->name()).c_str()))
@@ -359,12 +359,12 @@ bool UdmPseudoObject::setParent(UdmPseudoObject &parent, const char * prole)
 	//the new parent
 	Udm::Object new_parent = GetUdmObject(_upi_o_id(parent.dn_id, parent.ob_id));
 
-	::Uml::Uml::CompositionParentRole cpr;
+	::Uml::CompositionParentRole cpr;
 	//obtain parentrole from prole
 	if(prole)
 	{
-		set< ::Uml::Uml::CompositionParentRole> proles = AncestorCompositionPeerParentRoles(upi_o.type());
-		set< ::Uml::Uml::CompositionParentRole>::iterator proles_i = proles.begin();
+		set< ::Uml::CompositionParentRole> proles = AncestorCompositionPeerParentRoles(upi_o.type());
+		set< ::Uml::CompositionParentRole>::iterator proles_i = proles.begin();
 		while (proles_i != proles.end())
 		{
 			if (!strcmp(prole, ((string)proles_i->name()).c_str()))
@@ -394,13 +394,13 @@ bool UdmPseudoObject::detach()
 bool UdmPseudoObject::getChildrenCount(const char * crole, const char *k, const char * kind_ns,  UdmLong &value) const // HN1
 {
 	CINT_TRY(dn_id, ob_id);
-	::Uml::Uml::CompositionChildRole ccr;//it will be NullObject by default
-	::Uml::Uml::Class kind;
+	::Uml::CompositionChildRole ccr;//it will be NullObject by default
+	::Uml::Class kind;
 
 	if (crole)
 	{
-		set< ::Uml::Uml::CompositionChildRole> croles = ::Uml::AncestorCompositionPeerChildRoles(upi_o.type());
-		set< ::Uml::Uml::CompositionChildRole>::iterator croles_i = croles.begin();
+		set< ::Uml::CompositionChildRole> croles = ::Uml::AncestorCompositionPeerChildRoles(upi_o.type());
+		set< ::Uml::CompositionChildRole>::iterator croles_i = croles.begin();
 		while (croles_i != croles.end())
 		{
 			if (!strcmp(crole, ((string)croles_i->name()).c_str()))
@@ -435,13 +435,13 @@ bool UdmPseudoObject::getChildrenCount(const char * crole, const char *k, const 
 bool UdmPseudoObject::getChildren(const char * crole, const char *k, const char * kind_ns, UdmPseudoObjectS &value) const
 {
 	CINT_TRY(dn_id, ob_id);
-	::Uml::Uml::CompositionChildRole ccr;//it will be NullObject by default
-	::Uml::Uml::Class kind;
+	::Uml::CompositionChildRole ccr;//it will be NullObject by default
+	::Uml::Class kind;
 
 	if (crole)
 	{
-		set< ::Uml::Uml::CompositionChildRole> croles = AncestorCompositionPeerChildRoles(upi_o.type());
-		set< ::Uml::Uml::CompositionChildRole>::iterator croles_i = croles.begin();
+		set< ::Uml::CompositionChildRole> croles = AncestorCompositionPeerChildRoles(upi_o.type());
+		set< ::Uml::CompositionChildRole>::iterator croles_i = croles.begin();
 		while (croles_i != croles.end())
 		{
 			if (!strcmp(crole, ((string)croles_i->name()).c_str()))
@@ -485,12 +485,12 @@ bool UdmPseudoObject::setChildren(const char * crole, const UdmPseudoObjectS &ch
 		children_vec.push_back(new_child.__impl());
 	};
 
-	::Uml::Uml::CompositionChildRole ccr;
+	::Uml::CompositionChildRole ccr;
 
 	if (crole)
 	{
-		set< ::Uml::Uml::CompositionChildRole> croles = AncestorCompositionPeerChildRoles(upi_o.type());
-		set< ::Uml::Uml::CompositionChildRole>::iterator croles_i = croles.begin();
+		set< ::Uml::CompositionChildRole> croles = AncestorCompositionPeerChildRoles(upi_o.type());
+		set< ::Uml::CompositionChildRole>::iterator croles_i = croles.begin();
 		while (croles_i != croles.end())
 		{
 			if (!strcmp(crole, ((string)croles_i->name()).c_str()))
@@ -516,17 +516,17 @@ bool UdmPseudoObject::getAssociationCount(const char* ass_role, UdmLong& value, 
 	CINT_TRY(dn_id, ob_id);
 	
 	if (!ass_role) return false;
-	set< ::Uml::Uml::AssociationRole> aroles = AncestorAssociationTargetRoles(upi_o.type());
+	set< ::Uml::AssociationRole> aroles = AncestorAssociationTargetRoles(upi_o.type());
 	
-	::Uml::Uml::Association assoc = ::Uml::GetAncestorAssociation(upi_o.type());
+	::Uml::Association assoc = ::Uml::GetAncestorAssociation(upi_o.type());
 	if (assoc)
 	{
-		set< ::Uml::Uml::AssociationRole> legs = assoc.roles();	
+		set< ::Uml::AssociationRole> legs = assoc.roles();	
 		aroles.insert(legs.begin(), legs.end());
 	}
 
 
-	set< ::Uml::Uml::AssociationRole>::iterator aroles_i = aroles.begin();
+	set< ::Uml::AssociationRole>::iterator aroles_i = aroles.begin();
 	while (aroles_i != aroles.end())
 	{
 		if (!strcmp(ass_role, ((string)aroles_i->name()).c_str()))
@@ -552,16 +552,16 @@ bool UdmPseudoObject::getAssociation(const char* ass_role, UdmPseudoObjectS &val
 	CINT_TRY(dn_id, ob_id);
 	
 	if (!ass_role) return false;
-	set< ::Uml::Uml::AssociationRole> aroles = AncestorAssociationTargetRoles(upi_o.type());
+	set< ::Uml::AssociationRole> aroles = AncestorAssociationTargetRoles(upi_o.type());
 
-	::Uml::Uml::Association assoc = ::Uml::GetAncestorAssociation(upi_o.type());
+	::Uml::Association assoc = ::Uml::GetAncestorAssociation(upi_o.type());
 	if (assoc)
 	{
-		set< ::Uml::Uml::AssociationRole> legs = assoc.roles();	
+		set< ::Uml::AssociationRole> legs = assoc.roles();	
 		aroles.insert(legs.begin(), legs.end());
 	}
 
-	set< ::Uml::Uml::AssociationRole>::iterator aroles_i = aroles.begin();
+	set< ::Uml::AssociationRole>::iterator aroles_i = aroles.begin();
 	while (aroles_i != aroles.end())
 	{
 		if (!strcmp(ass_role, ((string)aroles_i->name()).c_str()))
@@ -587,16 +587,16 @@ bool UdmPseudoObject::setAssociation(const char * ass_role, const UdmPseudoObjec
 {
 	CINT_TRY(dn_id, ob_id);
 	if (!ass_role) return false;
-	::Uml::Uml::Class cl = upi_o.type();
-	::Uml::Uml::Association cl_assoc = ::Uml::GetAncestorAssociation(cl);
-	set< ::Uml::Uml::AssociationRole> aroles;
+	::Uml::Class cl = upi_o.type();
+	::Uml::Association cl_assoc = ::Uml::GetAncestorAssociation(cl);
+	set< ::Uml::AssociationRole> aroles;
 
 	if (cl_assoc)
 		aroles = cl_assoc.roles();
 	else
 		aroles = AncestorAssociationTargetRoles(upi_o.type());
 
-	set< ::Uml::Uml::AssociationRole>::iterator aroles_i = aroles.begin();
+	set< ::Uml::AssociationRole>::iterator aroles_i = aroles.begin();
 	while (aroles_i != aroles.end())
 	{
 		if (!strcmp(ass_role, ((string)aroles_i->name()).c_str()))
@@ -885,7 +885,7 @@ bool UdmPseudoObject::GetAdjacentObjectsCount(const char * dst_type, const char 
 {
 	CINT_TRY(dn_id, ob_id);
 	
-	::Uml::Uml::Class kind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), dst_type_ns, dst_type);
+	::Uml::Class kind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), dst_type_ns, dst_type);
 	if (!kind) throw udm_exception(string("No such kind: ") + dst_type_ns + ':' + dst_type);
 
 	set<Udm::Object> ret = upi_o.GetAdjacentObjects(kind);
@@ -899,7 +899,7 @@ bool UdmPseudoObject::GetAdjacentObjects(const char * dst_type, const char * dst
 {
 	CINT_TRY(dn_id, ob_id);
 	
-	::Uml::Uml::Class kind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), dst_type_ns, dst_type);
+	::Uml::Class kind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), dst_type_ns, dst_type);
 	if (!kind) throw udm_exception(string("No such kind: ") + dst_type_ns + ':' + dst_type);
 
 	set<Udm::Object> ret = upi_o.GetAdjacentObjects(kind);
@@ -919,10 +919,10 @@ bool UdmPseudoObject::GetAdjacentObjectsCount(const char * dst_type, const char 
 {
 	CINT_TRY(dn_id, ob_id);
 
-	::Uml::Uml::Class kind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), dst_type_ns, dst_type);
+	::Uml::Class kind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), dst_type_ns, dst_type);
 	//kind can be null!
 
-	::Uml::Uml::Class o_ass_info_ass_class;
+	::Uml::Class o_ass_info_ass_class;
 
 	if (ass.assoc_class)
 	{
@@ -944,10 +944,10 @@ bool UdmPseudoObject::GetAdjacentObjects(const char * dst_type, const char * dst
 {
 	CINT_TRY(dn_id, ob_id);
 
-	::Uml::Uml::Class kind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), dst_type_ns, dst_type);
+	::Uml::Class kind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), dst_type_ns, dst_type);
 	//kind can be null!
 
-	::Uml::Uml::Class o_ass_info_ass_class;
+	::Uml::Class o_ass_info_ass_class;
 
 	if (ass.assoc_class)
 	{
@@ -995,9 +995,9 @@ bool UdmPseudoObject::GetChildObjectsCount(const CompositionInfo &ci, const cint
 	o_ci.strChildRoleName = ci.childRole;
 	o_ci.strParentRoleName = ci.parentRole;
 
-  const ::Uml::Uml::Diagram &d =upi_o.__impl()->__getdn()->GetRootMeta();
-	::Uml::Uml::Class kind = classByName(d, type_ns.buffer(), type.buffer());
-  ::Uml::Uml::Namespace ns = namespaceByName(d, type_ns.buffer());
+  const ::Uml::Diagram &d =upi_o.__impl()->__getdn()->GetRootMeta();
+	::Uml::Class kind = classByName(d, type_ns.buffer(), type.buffer());
+  ::Uml::Namespace ns = namespaceByName(d, type_ns.buffer());
 
 	set<Udm::Object> ret = upi_o.GetChildObjects(o_ci, kind);
 	value.longVal = ret.size();
@@ -1014,9 +1014,9 @@ bool UdmPseudoObject::GetChildObjects(const CompositionInfo &ci, const cint_stri
 	o_ci.strChildRoleName = ci.childRole;
 	o_ci.strParentRoleName = ci.parentRole;
 
-  const ::Uml::Uml::Diagram &d =upi_o.__impl()->__getdn()->GetRootMeta();
-	::Uml::Uml::Class kind = classByName(d, type_ns.buffer(), type.buffer());
-  ::Uml::Uml::Namespace ns = namespaceByName(d, type_ns.buffer());
+  const ::Uml::Diagram &d =upi_o.__impl()->__getdn()->GetRootMeta();
+	::Uml::Class kind = classByName(d, type_ns.buffer(), type.buffer());
+  ::Uml::Namespace ns = namespaceByName(d, type_ns.buffer());
 
 	set<Udm::Object> ret = upi_o.GetChildObjects(o_ci, kind);
 
@@ -1039,7 +1039,7 @@ bool UdmPseudoObject::GetAssociationClassObjectsCount(const UdmPseudoObject &dst
 
 	Udm::Object dstObject = GetUdmObject(_upi_o_id(dst.dn_id, dst.ob_id));
 	
-	::Uml::Uml::Class o_ass_info_ass_class;
+	::Uml::Class o_ass_info_ass_class;
 
 	if (ass.assoc_class)
 	{
@@ -1064,7 +1064,7 @@ bool UdmPseudoObject::GetAssociationClassObjects(const UdmPseudoObject &dst, con
 
 	Udm::Object dstObject = GetUdmObject(_upi_o_id(dst.dn_id, dst.ob_id));
 	
-	::Uml::Uml::Class o_ass_info_ass_class;
+	::Uml::Class o_ass_info_ass_class;
 
 	if (ass.assoc_class)
 	{
@@ -1123,13 +1123,13 @@ bool UdmPseudoObject::GetPeersFromAssociationClassObject(UdmPseudoObjectS &value
 };
 
 // Helper function
-::Uml::Uml::CompositionChildRole GetCompositionChildRoleByName(const ::Uml::Uml::Class& kind, const string strRoleName)
+::Uml::CompositionChildRole GetCompositionChildRoleByName(const ::Uml::Class& kind, const string strRoleName)
 {
-	set< ::Uml::Uml::CompositionChildRole> ccrs = CompositionPeerChildRoles(kind);
-	set< ::Uml::Uml::CompositionChildRole>::iterator it = ccrs.begin();
+	set< ::Uml::CompositionChildRole> ccrs = CompositionPeerChildRoles(kind);
+	set< ::Uml::CompositionChildRole>::iterator it = ccrs.begin();
 	
 	while(it != ccrs.end()) {
-		::Uml::Uml::CompositionChildRole aCCR = *it;
+		::Uml::CompositionChildRole aCCR = *it;
 		if(string(aCCR.name()) == strRoleName) {
 			return aCCR;
 		}
@@ -1143,13 +1143,13 @@ bool UdmPseudoObject::CreateObject(const char * childType, const char * childTyp
 {
 	CINT_TRY(dn_id, ob_id);
 
-	::Uml::Uml::Class childKind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), childType_ns, childType);
+	::Uml::Class childKind = ::Uml::classByName(upi_o.__impl()->__getdn()->GetRootMeta(), childType_ns, childType);
 	if (!childKind) throw udm_exception(string("No such kind : ") + childType_ns + ':' + childType);
 
 	Udm::Object new_o;
 
 	if(compositionChildRole != 0) {
-		::Uml::Uml::CompositionChildRole ccr = GetCompositionChildRoleByName(upi_o.type(), compositionChildRole);
+		::Uml::CompositionChildRole ccr = GetCompositionChildRoleByName(upi_o.type(), compositionChildRole);
 		new_o = upi_o.Create(childKind, upi_o, ccr, 0, subtype);
 	} else {
 		new_o = upi_o.CreateObject(childKind);
@@ -1168,7 +1168,7 @@ bool UdmPseudoObject::CreateLink(UdmPseudoObject& dst, const AssociationInfo& as
 
 	Udm::Object dstObject = GetUdmObject(_upi_o_id(dst.dn_id, dst.ob_id));
 	
-	::Uml::Uml::Class o_ass_info_ass_class;
+	::Uml::Class o_ass_info_ass_class;
 
 	if (ass.assoc_class)
 	{
@@ -1223,9 +1223,9 @@ bool UdmPseudoDataNetwork::CreateNew(const char * sys_name, const char * meta_lo
 		const Udm::UdmDiagram &dgr = Udm::MetaDepository::LocateDiagram(meta_name.buffer());
 
 			
-		::Uml::Uml::Class rc;
+		::Uml::Class rc;
 		CINT_TRY(rootclass._dn_id(), rootclass._ob_id());
-		rc = ::Uml::Uml::Class::Cast(upi_o);
+		rc = ::Uml::Class::Cast(upi_o);
 		CINT_CATCH;
 		
 		
@@ -1276,9 +1276,9 @@ bool UdmPseudoDataNetwork::CreateNewToString(const char * meta_locator, const Ud
 		const Udm::UdmDiagram &dgr = Udm::MetaDepository::LocateDiagram(meta_name.buffer());
 
 			
-    ::Uml::Uml::Class rc;
+    ::Uml::Class rc;
 		CINT_TRY(rootclass._dn_id(), rootclass._ob_id());
-    rc = ::Uml::Uml::Class::Cast(upi_o);
+    rc = ::Uml::Class::Cast(upi_o);
 		CINT_CATCH;
 		
 		
@@ -1402,7 +1402,7 @@ bool UdmPseudoDataNetwork::GetRootObject(UdmPseudoObject & value)
 bool UdmPseudoDataNetwork::GetRootMeta(UdmPseudoObject &value)			//a Uml::Diagram should be returned
 {
 	CINT_DN_TRY(dn_id);
-	const ::Uml::Uml::Diagram& dgr = dn->GetRootMeta();
+	const ::Uml::Diagram& dgr = dn->GetRootMeta();
 	
 	/*value.dn_id = dgr.__impl()->__getdn()->uniqueId();
 	value.ob_id = dgr.__impl()->uniqueId();
@@ -1478,7 +1478,7 @@ bool UdmPseudoDataNetwork::OCL_Evaluate(cint_string& res)
      
   const Udm::Object& root = dn->GetRootObject();
   const Udm::UdmDiagram& ud = Udm::MetaDepository::LocateDiagram(meta_name.buffer());
-  const ::Uml::Uml::Diagram& metaDiagram = *(ud.dgr);
+  const ::Uml::Diagram& metaDiagram = *(ud.dgr);
 
 
   Ocl::SErrorNotification en(false, Ocl::ENT_ALL) ;
@@ -1526,10 +1526,10 @@ bool UPO_SetDiagram(UdmPseudoObject &diagram_what, const char* name)
 bool  UPO_SetNamespace(UdmPseudoObject &ns_what, UdmPseudoObject &parent_dgr, const char * name)
 {
 	CINT_TRY(parent_dgr._dn_id(), parent_dgr._ob_id());
-	::Uml::Uml::Diagram dgr = ::Uml::Uml::Diagram::Cast(upi_o);
+	::Uml::Diagram dgr = ::Uml::Diagram::Cast(upi_o);
 	if (!dgr) throw udm_exception("The provided namespace is NULL!");
 
-	::Uml::Uml::Namespace what;
+	::Uml::Namespace what;
 	SetNamespace(what, dgr, name);
 	if (!what) throw udm_exception("SetNamespace() failed!");
 
@@ -1543,10 +1543,10 @@ bool UPO_SetClass(UdmPseudoObject &class_what, UdmPseudoObject &parent_ns, const
 //	CINT_TRY(dn_id, ob_id);
 
 	CINT_TRY(parent_ns._dn_id(), parent_ns._ob_id());
-	::Uml::Uml::Namespace ns = ::Uml::Uml::Namespace::Cast(upi_o);
+	::Uml::Namespace ns = ::Uml::Namespace::Cast(upi_o);
 	if (!ns) throw udm_exception("The provided namespace is NULL!");
 
-	::Uml::Uml::Class what;
+	::Uml::Class what;
 	SetClass(what, ns, target_name);
 	if (!what) throw udm_exception("SetClass() failed!");
 /*	class_what.dn_id = what.__impl()->__getdn()->uniqueId();
@@ -1562,10 +1562,10 @@ bool UPO_SetClass(UdmPseudoObject &class_what, UdmPseudoObject &parent_ns, const
 bool UPO_SetAttribute(UdmPseudoObject &attr_what, UdmPseudoObject &class_what_class,  const char* target_name)
 {
 	CINT_TRY(class_what_class._dn_id(), class_what_class._ob_id());
-	::Uml::Uml::Class what_class = ::Uml::Uml::Class::Cast(upi_o);
+	::Uml::Class what_class = ::Uml::Class::Cast(upi_o);
 	if (!what_class) throw udm_exception("The provided class is NULL!");
 
-	::Uml::Uml::Attribute what;
+	::Uml::Attribute what;
 	SetAttribute(what, what_class, target_name);
 	if (!what) throw udm_exception("SetAttribute failed!");
 /*	attr_what.dn_id = what.__impl()->__getdn()->uniqueId();
@@ -1580,13 +1580,13 @@ bool UPO_SetAttribute(UdmPseudoObject &attr_what, UdmPseudoObject &class_what_cl
 bool UPO_SetChildRole(UdmPseudoObject &ccr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char * orole_name)
 {
 	CINT_TRY2(what_target_class._dn_id(), what_target_class._ob_id(), what_theo_target_class._dn_id(), what_theo_target_class._ob_id());
-	::Uml::Uml::Class what_target = ::Uml::Uml::Class::Cast(upi_o1);
+	::Uml::Class what_target = ::Uml::Class::Cast(upi_o1);
 	if (!what_target) throw udm_exception("The provided class is NULL!");
 
-	::Uml::Uml::Class what_theo_target = ::Uml::Uml::Class::Cast(upi_o2);
+	::Uml::Class what_theo_target = ::Uml::Class::Cast(upi_o2);
 	if (!what_theo_target) throw udm_exception("The provided class is NULL!");
 
-	::Uml::Uml::CompositionChildRole what;
+	::Uml::CompositionChildRole what;
 	SetChildRole(what,what_target, what_theo_target, role_name, orole_name);
 
 	if (!what) throw udm_exception("SetChildRole failed!");
@@ -1604,13 +1604,13 @@ bool UPO_SetChildRole(UdmPseudoObject &ccr_what, UdmPseudoObject &what_target_cl
 bool UPO_SetParentRole(UdmPseudoObject &cpr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char* orole_name)
 {
 	CINT_TRY2(what_target_class._dn_id(), what_target_class._ob_id(), what_theo_target_class._dn_id(), what_theo_target_class._ob_id());
-	::Uml::Uml::Class what_target = ::Uml::Uml::Class::Cast(upi_o1);
+	::Uml::Class what_target = ::Uml::Class::Cast(upi_o1);
 	if (!what_target) throw udm_exception("The provided class is NULL!");
 
-	::Uml::Uml::Class what_theo_target = ::Uml::Uml::Class::Cast(upi_o2);
+	::Uml::Class what_theo_target = ::Uml::Class::Cast(upi_o2);
 	if (!what_theo_target) throw udm_exception("The provided class is NULL!");
 
-	::Uml::Uml::CompositionParentRole what;
+	::Uml::CompositionParentRole what;
 	SetParentRole(what,what_target, what_theo_target, role_name, orole_name);
 
 	if (!what) throw udm_exception("SetChildRole failed!");
@@ -1627,13 +1627,13 @@ bool UPO_SetParentRole(UdmPseudoObject &cpr_what, UdmPseudoObject &what_target_c
 bool UPO_SetAssocRole(UdmPseudoObject &ar_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char* target_name)
 {
 	CINT_TRY2(what_target_class._dn_id(), what_target_class._ob_id(), what_theo_target_class._dn_id(), what_theo_target_class._ob_id());
-	::Uml::Uml::Class what_target = ::Uml::Uml::Class::Cast(upi_o1);
+	::Uml::Class what_target = ::Uml::Class::Cast(upi_o1);
 	if (!what_target) throw udm_exception("The provided class is NULL!");
 
-	::Uml::Uml::Class what_theo_target = ::Uml::Uml::Class::Cast(upi_o2);
+	::Uml::Class what_theo_target = ::Uml::Class::Cast(upi_o2);
 	if (!what_theo_target) throw udm_exception("The provided class is NULL!");
 
-	::Uml::Uml::AssociationRole what;
+	::Uml::AssociationRole what;
 	SetAssocRole(what,what_target, what_theo_target, target_name);
 
 	if (!what) throw udm_exception("SetChildRole failed!");
@@ -1651,10 +1651,10 @@ void UPO_dummy(){};
 class UPO_metainfo
 {
 	Udm::DataNetwork * dn;
-	::Uml::Uml::Diagram * udgr;
+	::Uml::Diagram * udgr;
 	Udm::UdmDiagram * dgr;
 public:
-	UPO_metainfo(Udm::DataNetwork *_dn, ::Uml::Uml::Diagram * _udgr, Udm::UdmDiagram * _dgr) : dn(_dn), udgr(_udgr), dgr(_dgr) {} ;
+	UPO_metainfo(Udm::DataNetwork *_dn, ::Uml::Diagram * _udgr, Udm::UdmDiagram * _dgr) : dn(_dn), udgr(_udgr), dgr(_dgr) {} ;
 	~UPO_metainfo()
 	{
 		Udm::MetaDepository::RemoveDiagram(udgr->name());
@@ -1705,11 +1705,11 @@ bool  UPO_LoadDiagram(const char * xml_meta_file, UdmPseudoObject & diagram)
 		//we have to load it and register it with MetaDepository
 		//somewhere we have to release these objects
 		UdmDom::DomDataNetwork * ddn = new UdmDom::DomDataNetwork(::Uml::diagram);
-		::Uml::Uml::Diagram * loaded_dgr = new ::Uml::Uml::Diagram();
+		::Uml::Diagram * loaded_dgr = new ::Uml::Diagram();
 		Udm::UdmDiagram * dgr = new Udm::UdmDiagram();	//this will be fried by RemoveDiagram();
 
 		ddn->OpenExisting(xml_meta_file, "Uml.xsd", Udm::CHANGES_LOST_DEFAULT);
-		*loaded_dgr = ::Uml::Uml::Diagram::Cast(ddn->GetRootObject());
+		*loaded_dgr = ::Uml::Diagram::Cast(ddn->GetRootObject());
 
 		if (!loaded_dgr) throw udm_exception("UML Diagram could not be loaded!");
 		
@@ -1757,7 +1757,7 @@ bool  UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_str
 		//we have to load it and register it with MetaDepository
 		//somewhere we have to release these objects
 		UdmDom::DomDataNetwork * ddn = new UdmDom::DomDataNetwork(::Uml::diagram);
-		::Uml::Uml::Diagram * loaded_dgr = new ::Uml::Uml::Diagram();
+		::Uml::Diagram * loaded_dgr = new ::Uml::Diagram();
 		Udm::UdmDiagram * dgr = new Udm::UdmDiagram();	//this will be fried by RemoveDiagram();
 
     string xml(xml_string);
@@ -1765,7 +1765,7 @@ bool  UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_str
     replaceAll(xml,"\\n","&#10;");
 
 		ddn->OpenExistingFromString(xml, "Uml.xsd");
-		*loaded_dgr = ::Uml::Uml::Diagram::Cast(ddn->GetRootObject());
+		*loaded_dgr = ::Uml::Diagram::Cast(ddn->GetRootObject());
 
 		if (!loaded_dgr) throw udm_exception("UML Diagram could not be loaded!");
 		
