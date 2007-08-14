@@ -1228,15 +1228,15 @@ namespace UdmDom
 		}
 
 	// --- containment
-		ObjectImpl *getParent(DOM_Node parent, const ::Uml::CompositionParentRole &role) const 
+		ObjectImpl *getParent(const ::Uml::CompositionParentRole &role) const 
 		{
 // TODO: check role if not NULLROLE
 
 			TRY_XML_EXCEPTION
 			
-			if ((parent == (DOM_NullPtr *)NULL) || (parent.getNodeType() != DOM_Node::ELEMENT_NODE)) {
-				return &Udm::_null;
-			}
+			DOM_Node parent = dom_element.getParentNode();
+
+			if ((parent == (DOM_NullPtr *)NULL) || (parent.getNodeType() != DOM_Node::ELEMENT_NODE)) return &Udm::_null;
 			
 			DomObject * do_parent = new DomObject(static_cast<DOM_Element&>(parent), mydn);
 			
@@ -1246,9 +1246,8 @@ namespace UdmDom
 				//this will return the null object when there are multiple 
 				//possible compositions and the current composition doesn't match
 				//the requested compostion
-				if(!comp && DSFind(dom_element.getAttribute("__child_as"), DOMString(GetANameFor(role.parent()).c_str())) < 0) {
+				if(!comp && DSFind(dom_element.getAttribute("__child_as"), DOMString(GetANameFor(role.parent()).c_str())) < 0)
 					return &Udm::_null;
-				}
 
 				//still need to check the type
 				//even if there is only on possible composition between me as child
@@ -1257,12 +1256,12 @@ namespace UdmDom
 				
 				set< ::Uml::Class> cl_s = Uml::DescendantClasses(role.target());
 
-				if (cl_s.find(do_parent->m_type)  != cl_s.end()) {
+				if (cl_s.find(do_parent->m_type)  != cl_s.end())
 					return do_parent;
-				} else {
+				else
+				{
 					delete do_parent;
-					//return &Udm::_null;
-					return this->getParent(parent.getParentNode(), role);
+					return &Udm::_null;
 				}
 
 			}
@@ -1272,15 +1271,6 @@ namespace UdmDom
 			CATCH_XML_EXCEPTION("DomObject::getParent()");
 			
 			
-		}
-
-		ObjectImpl *getParent(const ::Uml::CompositionParentRole &role) const 
-		{
-			TRY_XML_EXCEPTION
-			
-			return this->getParent(dom_element.getParentNode(), role);
-
-			CATCH_XML_EXCEPTION("DomObject::getParent()");
 		}
 
 
@@ -2088,7 +2078,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				}
 				::Uml::Namespace parent_ns = meta.parent_ns();
 				string nodename_str = parent_ns != ::Uml::Namespace(NULL) ? string(parent_ns.name()) + ':' +  string(meta.name()) : string(meta.name());
-				string node_uri = getNSURI(parent_ns != ::Uml::Namespace(NULL) ? parent_ns.name() : "__dgr_" + string(((::Uml::Diagram) meta.parent()).name()));
+				string node_uri = getNSURI(parent_ns != ::Uml::Namespace(NULL) ? parent_ns.name() : "__dgr_" + string(::Uml::GetDiagram(meta).name()));
 				DOMString nodename = DOMString(nodename_str.c_str());
 				//DOMString ns_uri = DOMString((string(UDM_DOM_URI_PREFIX) + '/' +  string(::Uml::Namespace(meta.parent()).name())).c_str());
 				DOMString ns_uri(node_uri.c_str());

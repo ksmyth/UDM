@@ -915,4 +915,31 @@ namespace Uml
 		return Diagram();
 	}
 
+	UDM_DLL Diagram GetDiagram(const Class &c)
+	{
+		Namespace ns = c.parent_ns();
+		if (ns)
+			return ns.parent();
+		else
+			return c.parent();
+	}
+
+	UDM_DLL Diagram GetDiagram(const Association &assoc)
+	{
+		Namespace ns = assoc.parent_ns();
+		if (ns)
+			return ns.parent();
+		else
+			return assoc.parent();
+	}
+
+	UDM_DLL Diagram GetDiagram(const Composition &comp)
+	{
+		Namespace ns = comp.parent_ns();
+		if (ns)
+			return ns.parent();
+		else
+			return comp.parent();
+	}
+
 }
