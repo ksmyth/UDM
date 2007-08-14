@@ -789,11 +789,11 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="CompIcon.ico"
+				RelativePath="resources\compicon.ico"
 				>
 			</File>
 			<File
-				RelativePath="resources\compicon.ico"
+				RelativePath="CompIcon.ico"
 				>
 			</File>
 			<File
