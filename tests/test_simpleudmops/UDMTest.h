@@ -24,6 +24,7 @@ CPPUNIT_TEST( TestFileCreation );
 CPPUNIT_TEST( TestObjectCreation );
 CPPUNIT_TEST( TestExistingNetwork );
 CPPUNIT_TEST( TestAttributes );
+CPPUNIT_TEST( TestDirectAttributesAssignment );
 CPPUNIT_TEST( TestConnection );
 CPPUNIT_TEST_EXCEPTION( TestObjectDestruction, udm_exception ); //this test expects an exception
 CPPUNIT_TEST_SUITE_END();
@@ -40,6 +41,7 @@ public:
 	void TestObjectCreation();
 	void TestExistingNetwork();
 	void TestAttributes();
+	void TestDirectAttributesAssignment();
 	void TestConnection();
 	void TestObjectDestruction();
 

@@ -81,6 +81,17 @@ void CUDMTest::TestAttributes()
 	CPPUNIT_ASSERT( m_bulb.Wattage() != 75 );
 }
 
+void CUDMTest::TestDirectAttributesAssignment()
+{
+	GetNetwork();
+
+	m_term1.Type() = "terminal";
+	m_term2.Type() = m_term1.Type();
+
+	CPPUNIT_ASSERT( (string)m_term1.Type() == "terminal" );
+	CPPUNIT_ASSERT( (string)m_term2.Type() == "terminal" );
+}
+
 void CUDMTest::TestConnection()
 {
 	GetNetwork();
