@@ -229,7 +229,7 @@
 						Description="Generating UDM API files from $(InputPath)"
 						CommandLine="&quot;%UDM_PATH%\bin\UdmD.exe&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;
 "
-						Outputs="Package1.h;Package1.cpp;Package1.xsd;Package2.h;Package2.cpp;Package2.xsd;CL.cpp;CL.h;CL.xsd;CLPackage.cpp;CLPackage.h;CLPackage.xsd"/>
+						Outputs="Package1.h;Package1.cpp;Package1.xsd;Package2.h;Package2.cpp;Package2.xsd;CL.cpp;CL.h;CL.xsd;CLPackage.cpp;CLPackage.h;CLPackage.xsd;Package2_NSp.xsd;Package2_NSp_NSc.xsd"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
