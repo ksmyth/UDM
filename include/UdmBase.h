@@ -2587,7 +2587,7 @@ namespace Udm
 		set<Object> GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Class & clsChildType);
 		// UDM TOMI Paradigm Independent Interface
 		// Test if the object is in the tree rooted at where
-		bool Object::IsNodeOfTree(const Object &where);
+		bool IsNodeOfTree(const Object &where);
 		
 		// Functions for associations and links
 		// UDM TOMI Paradigm Independent Interface
