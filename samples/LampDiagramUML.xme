@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{B211E52E-D39B-4B79-9024-8BAF48DDE75A}" cdate="Mon Aug 30 22:30:14 2004" mdate="Mon Aug 30 22:30:16 2004" version="" metaguid="{7AB97DAB-DEAD-BEEF-FEED-DAD000000001}" metaversion="" metaname="UML">
+<project guid="{B1ECA2BC-552C-478D-B09B-B9235925DDD7}" cdate="Mon Sep 11 13:12:11 2006" mdate="Mon Sep 11 13:12:11 2006" version="" metaguid="{3C3EC3F0-B5AF-4FB6-B413-B27FE7E0E67F}" metaversion="" metaname="UML">
 	<name>LampDiagram</name>
 	<comment></comment>
 	<author></author>
@@ -9,6 +9,9 @@
 		<name>LampDiagram</name>
 		<model id="id-0065-00000001" kind="Package" relid="0x2" childrelidcntr="0x1">
 			<name>LampDiagram</name>
+			<attribute kind="alias" status="meta">
+				<value></value>
+			</attribute>
 			<attribute kind="version" status="meta">
 				<value>1.00</value>
 			</attribute>
@@ -71,8 +74,7 @@ volatile TempArrayInt:Integer[0..*ordered]=9,8,5,6
 volatile TempArrayReal:Real[0..* ordered]=40,35,26,17
 volatile TempArrayBoolean:Boolean[0..* ordered]=true,false,true,false
 registry RegAttr:String[0..1]
-
-
+registry annotations: String[0..*]
 </value>
 					</attribute>
 					<attribute kind="IsAbstract" status="meta">
