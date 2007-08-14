@@ -52,7 +52,7 @@ END
 // DTD
 //
 
-LAMPDIAGRAM.XSD         XSD     DISCARDABLE     "LampDiagram.xsd"
+LAMPDIAGRAM.XSD         XSD     DISCARDABLE     "..\LampDiagram.xsd"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 
