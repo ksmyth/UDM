@@ -337,9 +337,9 @@ namespace Udm
 
 		for (vector<string>::const_iterator i = vals.begin(); i != vals.end(); i++)
 		{
-			if (!strnicmp(i->c_str(), "true", 4))
+			if (!_strnicmp(i->c_str(), "true", 4))
 				ret.push_back(true);
-			else if (!strnicmp(i->c_str(), "false", 5))
+			else if (!_strnicmp(i->c_str(), "false", 5))
 				ret.push_back(false);
 			else
 				throw udm_exception(string("Parsing of bool-array failed: ") + sc_delimited);
@@ -1236,7 +1236,7 @@ namespace Udm
 		else */if((l = bid.rfind('.')) >= bid.size()-4) {
 			bid.erase(0,l+1);
 			while(p) {
-				if(!stricmp(p->ext.c_str(), bid.c_str())) {
+				if(!_stricmp(p->ext.c_str(), bid.c_str())) {
 					return p->crea(metainfo, project);
 				}
 				p = p->next;
