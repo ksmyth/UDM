@@ -4,7 +4,7 @@
 
 1. Windows Operating system (preferably NT, 2000, XP)
 
-2. GME 4, R4.5.18 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 4, R4.8.25 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 6.0 SP6
@@ -12,6 +12,12 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+
+08/27/04	-	Release 2.20
+
+
+		- 	
+		-	Please note the change of the software license. 
 
 06/18/04	-	Release 2.19
 
