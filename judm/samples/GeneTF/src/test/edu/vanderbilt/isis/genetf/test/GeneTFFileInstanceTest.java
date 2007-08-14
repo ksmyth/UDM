@@ -142,6 +142,10 @@ public class GeneTFFileInstanceTest extends TestCase {
 
         System.out.println("\ntestCreateBlankInstance():");
         printContainer(con);
+        
+        // call constraint checker
+        String res = gtf.checkConstraints();
+        System.out.println("\nResult of constraint evaluation: " + res + "\n");
 
         gtf.save();
     }
