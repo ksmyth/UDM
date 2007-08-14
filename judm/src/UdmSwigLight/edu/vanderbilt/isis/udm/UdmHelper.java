@@ -31,6 +31,15 @@ public class UdmHelper {
         return new UdmPseudoObject(swigUpo);
     }
 
+    public static UdmPseudoObject loadDiagramFromString(String xmlMetaFile, String xmlString) throws UdmException {
+        log.finer("UdmPseudoObject swigUpo = new UdmPseudoObject();");
+        edu.vanderbilt.isis.udm.swig.UdmPseudoObject swigUpo = new edu.vanderbilt.isis.udm.swig.UdmPseudoObject();
+        log.finer("UDMCint.UPO_LoadDiagramFromString(\"" + xmlMetaFile + "\"," + xmlString + "\",swigUpo);");
+        boolean success = UDMCint.UPO_LoadDiagramFromString(xmlMetaFile, xmlString, swigUpo);
+        checkError(success, "Error while loading metaDiagram file from string: " + xmlMetaFile);
+        return new UdmPseudoObject(swigUpo);
+    }
+
     public static void unloadDiagram(String xmlMetaFile) throws UdmException {
         log.finer("UDMCint.UPO_UnLoadDiagram(\"" + xmlMetaFile + "\");");
         boolean success = UDMCint.UPO_UnLoadDiagram(xmlMetaFile);
@@ -89,10 +98,20 @@ public class UdmHelper {
     }
     public static void StoreXsd(String key, String xsd_str)throws UdmException 
     {
-    	cint_string key_c = new cint_string(key);
-    	cint_string xsd_str_c = new cint_string(xsd_str);
+        cint_string key_c = new cint_string(key);
+        cint_string xsd_str_c = new cint_string(xsd_str);
         boolean success = UDMCint.StoreXsd(key_c, xsd_str_c);
         checkError(success, "Error in UDM method StoreXsd");
+    }
+    
+    /**
+     * Removes the stored XSDs. 
+     * @throws UdmException
+     */
+    public static void ClearXsdStorage()throws UdmException 
+    {
+        boolean success = UDMCint.ClearXsdStorage();
+        checkError(success, "Error in UDM method ClearXsdStorage");
     }
     
     

@@ -17,8 +17,12 @@ public class Diagram {
 
     private Map metaClassesByName = new TreeMap();
     
-    public Diagram(String xmlMetaFile) throws UdmException {
+    /*public Diagram(String xmlMetaFile) throws UdmException {
         diagram = UdmHelper.loadDiagram(xmlMetaFile);
+    }*/
+
+    public Diagram(String xmlMetaFile, String xmlString) throws UdmException {
+        diagram = UdmHelper.loadDiagramFromString(xmlMetaFile, xmlString);
     }
 
     public UdmPseudoObject getDiagram() {

@@ -25,12 +25,14 @@ public abstract class UdmFactory {
    private String xsdMetaFile;
    private String metaName;
    private String packagePath;
+   private String xmlMetaFileInString;
 
    protected Diagram metaDiagram;
    protected UdmPseudoDataNetwork dataNetwork;
 
    protected UdmFactory(String xmlMetaFile, String xsdMetaFile, String metaName, String packagePath) throws UdmException {
        System.loadLibrary("UdmCint");
+       UdmHelper.StoreXsd("Uml.xsd", Resource.copyResourceToStr(packagePath + "Uml.xsd"));
        this.xmlMetaFile = xmlMetaFile;
        this.xsdMetaFile = xsdMetaFile;
        this.metaName = metaName;
@@ -56,21 +58,24 @@ public abstract class UdmFactory {
    
    private void init() throws UdmException {
        initResources();
-       loadDiagram();
+       loadDiagram(); 
    }
    
    private void initResources() {
-       Resource.copyResourceToTempDir(packagePath + xmlMetaFile);
+       xmlMetaFileInString = Resource.copyResourceToStr(packagePath + xmlMetaFile);
+       //System.out.println("xmlMetaFile = " + xmlMetaFile);
+       //System.out.println("xmlMetaFileInString = " + xmlMetaFileInString.charAt(0));
        //Resource.copyResourceToTempDir(packagePath + xsdMetaFile);
        //Resource.copyResourceToTempDir(udmPackagePath + umlXsdFile);
        
-       String tempDir = Resource.getTempDir();
-       xmlMetaFile = tempDir + xmlMetaFile;
+       //String tempDir = Resource.getTempDir();
+      //xmlMetaFile = tempDir + xmlMetaFile;
      //  xsdMetaFile = tempDir + xsdMetaFile;
    }
    
    private void loadDiagram() throws UdmException {
-       metaDiagram = new Diagram(xmlMetaFile);
+       //metaDiagram = new Diagram(xmlMetaFile);
+       metaDiagram = new Diagram(xmlMetaFile, xmlMetaFileInString);
    }
    protected void createDataNetwork() throws UdmException {
        

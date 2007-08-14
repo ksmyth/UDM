@@ -150,4 +150,21 @@ public class UdmPseudoDataNetwork {
         log.finer("swigId.getLongVal();");
         return swigId.getLongVal();
     }
+    
+    /**
+     * Calls the constraint checker in this data network and returns the result in
+     * a string.
+     * @return The result of the constraint evaluation.
+     * @throws UdmException
+     */
+    public String checkConstraints() throws UdmException {
+        log.finer("UdmPseudoDataNetwork.checkConstraints();");
+        cint_string res = new cint_string("");
+        boolean success = swigDN.OCL_Evaluate(res);
+        if(!success) {
+            throw new UdmException("Call to UDM method UdmPseudoDataNetwork::checkConstraints() failed");
+        }
+        return res.buffer();
+    }
+    
  }
