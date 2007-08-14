@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{02CA7A1F-EFCB-44E0-8C56-040B1F0E11B4}" cdate="Sun Jan 16 10:42:17 2005" mdate="Sun Jan 16 10:42:17 2005" version="" metaguid="{FE567B15-EE82-4593-8F50-88EF650D69AA}" metaversion="" metaname="UML">
+<project guid="{545EC3CC-4463-4D82-9489-E40DD38DFBA8}" cdate="Sun Apr 17 18:20:02 2005" mdate="Sun Apr 17 18:20:02 2005" version="" metaguid="{509307E1-CC5C-48A2-BF6A-DE5B3D0A1BA2}" metaversion="" metaname="UML">
 	<name>Uml</name>
 	<comment></comment>
 	<author></author>
@@ -9,6 +9,9 @@
 		<name>Uml</name>
 		<model id="id-0065-00000001" kind="Package" relid="0x3" childrelidcntr="0x1">
 			<name>Uml</name>
+			<attribute kind="nsURIPrefix" status="meta">
+				<value>http://www.isis.vanderbilt.edu/2004/schemas/</value>
+			</attribute>
 			<attribute kind="version">
 				<value>2.04</value>
 			</attribute>
@@ -224,7 +227,8 @@ from:String[0..1]
 						</regnode>
 					</regnode>
 					<attribute kind="Attributes">
-						<value>name:String</value>
+						<value>name:String
+uri:String</value>
 					</attribute>
 					<attribute kind="IsAbstract" status="meta">
 						<value>false</value>
@@ -421,15 +425,15 @@ max:Integer
 				</atom>
 				<atom id="id-0066-0000000e" kind="Class" role="Class" relid="0x26">
 					<name>Diagram</name>
-					<regnode name="PartRegs">
+					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
-						<regnode name="Constraints">
+						<regnode name="Constraints" isopaque="yes">
 							<value></value>
 							<regnode name="Position" isopaque="yes">
 								<value>79,142</value>
 							</regnode>
 						</regnode>
-						<regnode name="UML">
+						<regnode name="UML" isopaque="yes">
 							<value></value>
 							<regnode name="Position" isopaque="yes">
 								<value>39,138</value>
@@ -607,8 +611,8 @@ version:String[0..1]</value>
 					<attribute kind="srcRolename">
 						<value>subTypes</value>
 					</attribute>
-					<connpoint role="dst" target="id-0066-00000006"/>
 					<connpoint role="src" target="id-0066-00000006"/>
+					<connpoint role="dst" target="id-0066-00000006"/>
 				</connection>
 				<connection id="id-0068-0000000c" kind="Association" role="Association" relid="0x12">
 					<name>Association</name>
