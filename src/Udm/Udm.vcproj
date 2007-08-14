@@ -44,7 +44,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="File2CodeD.lib JavaAPIGenD.lib UdmXmiD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib Xalan-C_1D.lib zlibD.lib"
+				AdditionalDependencies="UmlD.lib File2CodeD.lib JavaAPIGenD.lib UdmXmiD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib Xalan-C_1D.lib zlibD.lib"
 				OutputFile="..\..\bin.net\UdmD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -109,7 +109,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="File2Code.lib JavaAPIGen.lib UdmXmi.lib UdmBase.lib UdmDom.lib UdmUtil.lib  xerces-c_2.lib Xalan-C_1.lib zlib.lib"
+				AdditionalDependencies="Uml.lib File2Code.lib JavaAPIGen.lib UdmXmi.lib UdmBase.lib Xalan-C_1.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
 				OutputFile=".\..\..\bin.net\Udm.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -215,9 +215,6 @@
 			</File>
 			<File
 				RelativePath="..\include\UdmBase.h">
-			</File>
-			<File
-				RelativePath="..\include\Uml.h">
 			</File>
 		</Filter>
 		<File

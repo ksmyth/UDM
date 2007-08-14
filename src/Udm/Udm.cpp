@@ -86,7 +86,13 @@ CHANGELOG
 //cross-link-approved
 void GenerateHExport(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname, const string& macro);
 void GenerateH(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname, bool visitor_sup = false, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
-void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname, const ::Uml::Uml::Diagram& cross_dgr = NULL, map<string, string> *ns_map = NULL, const string& macro = "");
+void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram, 
+                    ostream &output, string fname, 
+                    const ::Uml::Uml::Diagram& cross_dgr = NULL, 
+                    map<string, string> *ns_map = NULL, 
+                    const string& macro = "",
+                    bool integrate_xsd = false);
+
 void GenerateCPP(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
 //void GenerateCORBACPP(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
 // not cross-link approved
@@ -120,6 +126,7 @@ int main(int argc, char **argv) {
 		bool generate_dtd = false;
 		bool uxsdi = false;				//use XSD inheritence features when generating XSD
 		bool xsd_el_ta = false;				//generate XSD elements like they would have text attributes
+    bool integrate_xsd = false; //integrate xsd into the generated API;
 		map<string, string> ns_map;
     set<string> ns_ignore_set;
     set<string> qualifiedAtrrsNS_set;
@@ -175,6 +182,11 @@ int main(int argc, char **argv) {
 				else if (c == 'e')
 				{
 					xsd_el_ta = true;
+					continue;
+				}
+				else if (c == 'g')
+				{
+					integrate_xsd = true;
 					continue;
 				}
 
@@ -306,7 +318,7 @@ usage:
 			if(!ff.good()) throw udm_exception("Error opening for write " + cm_name + ".h");
 			else
 			{
-				GenerateNewCPP(cross_meta, ff, cm_name, cross_meta,ns_map.empty() ? NULL : &ns_map);
+				GenerateNewCPP(cross_meta, ff, cm_name, cross_meta,ns_map.empty() ? NULL : &ns_map,  "", integrate_xsd);
 // 				if(new_meta && !corba_meta) GenerateNewCPP(cross_meta, ff, cm_name, cross_meta);
 // 				else if (corba_meta) GenerateCORBACPP(cross_meta,  ff, cm_name, cross_meta, macro);
 // 				else GenerateCPP(cross_meta, ff, cm_name, cross_meta, macro);
@@ -378,7 +390,7 @@ usage:
 				else 
 				{
 					//GenerateNewCPP(dgr, ff, sname, cross_meta);
-					if(new_meta && !corba_meta) GenerateNewCPP(dgr, ff, sname, cross_meta, ns_map.empty() ? NULL : &ns_map, macro);
+					if(new_meta && !corba_meta) GenerateNewCPP(dgr, ff, sname, cross_meta, ns_map.empty() ? NULL : &ns_map, macro, integrate_xsd);
 				//	else if (corba_meta) GenerateCORBACPP(dgr,  ff, sname, cross_meta, macro);
 					else GenerateCPP(dgr,  ff, sname, cross_meta, macro);
 				}
@@ -555,7 +567,7 @@ usage:
 			}
 			else		// modified by LA
 			{
-				if(new_meta && !corba_meta) GenerateNewCPP(diagram, ff, fname, NULL, ns_map.empty() ? NULL : &ns_map, macro);
+				if(new_meta && !corba_meta) GenerateNewCPP(diagram, ff, fname, NULL, ns_map.empty() ? NULL : &ns_map, macro, integrate_xsd);
 			//	else if (corba_meta) GenerateCORBACPP(diagram,  ff, fname);
 				else GenerateCPP(diagram,  ff, fname, NULL, macro);
 			}
