@@ -2,7 +2,6 @@
 
 #include "Utils.h"
 #include <Uml.h>
-#include <UdmDom.h>
 
 //! Constructor.
 /*!
