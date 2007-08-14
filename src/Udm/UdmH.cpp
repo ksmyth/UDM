@@ -372,7 +372,10 @@ string GetDgrfromFromStr(const string& fromstr)
 };
 string GetNsfromFromStr(const string& fromstr )
 {
-	return fromstr.substr(fromstr.find(':') +1, string::npos);
+	unsigned int i = fromstr.find(':');
+	if (i == string::npos)
+		return "";
+	return fromstr.substr(i +1, string::npos);
 };
 
 void CheckNamespaceFlips(const InheritenceSolver &is)
@@ -951,33 +954,37 @@ void GenerateHClass(const ::Uml::Class &cl, const ::Uml::Class &cross_cl, bool i
 	}
 }
 
-//XXX2
-void GenerateHCrossForwardDeclarations(const ::Uml::Diagram &dgr, ostream &output,  const ::Uml::Namespace& cross_ns, const string& dgr_name, const string & macro)
+
+void GenerateHCrossForwardDeclarations(const ::Uml::Diagram &dgr, ostream &output,  const ::Uml::Diagram& cross_dgr, const string& dgr_name, const string & macro)
 {
-	if (cross_ns)
+	if (cross_dgr)
 	{
 		set< ::Uml::Namespace> nses = dgr.namespaces();
 		
-		set< ::Uml::Class> cross_classes = cross_ns.classes();
+		set< ::Uml::Class> cross_classes = cross_dgr.classes();
 		map<string, UmlClassesByName> cr_cls_nsp;
 
 		for(set< ::Uml::Class>::iterator i = cross_classes.begin(); i != cross_classes.end(); i++)
 		{
+			string from = i->from();
+			if (from.size() == 0) continue;
+			string dgr_from = GetDgrfromFromStr(from);
+			string ns_from = GetNsfromFromStr(from);
+			map<string, UmlClasses> & cr_cls = cr_cls_nsp[dgr_from];
+			UmlClasses & clss = cr_cls[ns_from];
 			
 			for(set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 			{
-				string from = i->from();
-				string dgr_from = GetDgrfromFromStr(from);
-				string ns_from = GetNsfromFromStr(from);
 				string ns_name = nses_i->name();
 				
-				if (((dgr_from == dgr_name)&& (ns_from == ns_name) )|| (from.size()==0)) continue;
-				map<string, UmlClasses> & cr_cls = cr_cls_nsp[dgr_from];
-				UmlClasses & clss = cr_cls[ns_from];
+				if (dgr_from == dgr_name && ns_from == ns_name) continue;
 
 	//			vector< ::Uml::Class> & clss = cr_cls_nsp[from];
 				clss.insert(*i);
 			};
+
+			if (!(dgr_from == dgr_name && ns_from == ""))
+				clss.insert(*i);
 		}
 		for(map<string, UmlClassesByName>::iterator j = cr_cls_nsp.begin(); j != cr_cls_nsp.end(); j++)
 		{
@@ -1201,7 +1208,7 @@ void GenerateHN(const ::Uml::Diagram &diagram, ostream &output, string fname, bo
 		
 	GenerateHPreamble(diagram, fname, output, macro);
 	
-	GenerateHCrossForwardDeclarations(diagram, output, ::Uml::GetTheOnlyNamespace(cross_dgr), diagram.name(), macro);
+	GenerateHCrossForwardDeclarations(diagram, output, cross_dgr, diagram.name(), macro);
 
 	// generate namespace headers, visitor class headers
 	GenerateHIncludeNamespaceFwdDeclarations(diagram, output, fname);
@@ -1259,7 +1266,7 @@ void GenerateHD(const ::Uml::Diagram &diagram, ostream &output, string fname, bo
 		
 	GenerateHPreamble(diagram, fname, output, macro);
 	
-	GenerateHCrossForwardDeclarations(diagram, output, ::Uml::GetTheOnlyNamespace(cross_dgr), diagram.name(), macro);
+	GenerateHCrossForwardDeclarations(diagram, output, cross_dgr, diagram.name(), macro);
 
 	output << "namespace " << hname << " {" << endl;
 	output << "\textern " << macro << " Udm::UdmDiagram diagram;" << endl;
@@ -1316,7 +1323,7 @@ void GenerateHC(const ::Uml::Diagram &diagram, ostream &output, string fname, bo
 		
 	GenerateHPreamble(diagram, fname, output, macro);
 	
-	GenerateHCrossForwardDeclarations(diagram, output, ::Uml::GetTheOnlyNamespace(cross_dgr), diagram.name(), macro);
+	GenerateHCrossForwardDeclarations(diagram, output, cross_dgr, diagram.name(), macro);
 
 
 	output << "namespace " << hname << " {" << endl;

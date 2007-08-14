@@ -111,7 +111,7 @@ bool SingleCPPNamespace(const ::Uml::Class &cl)
 	string cross_cl_name = string(cl.name()) + string(Udm::cross_delimiter);
 	if (ns)
 		cross_cl_name += (string)ns.name();
-	return ::Uml::classByName(::Uml::GetTheOnlyNamespace(cross_dgr), cross_cl_name);
+	return ::Uml::classByName(cross_dgr, cross_cl_name);
 }
 
 void CPPSetXsdStorage(const ::Uml::Diagram &diagram, ostream &output)
