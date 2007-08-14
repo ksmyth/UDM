@@ -570,7 +570,11 @@ namespace OclBasic
 		{
 			DECL_REAL( dArg1, GetArgument( 0 ) );
 			DECL_REAL( dArg2, GetArgument( 1 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), max( dArg1, dArg2 ) ) );
+			#if _MSC_VER >= 1310
+				SetResult( CREATE_REAL( GetTypeManager(), max( dArg1, dArg2 ) ) );
+			#else
+				SetResult( CREATE_REAL( GetTypeManager(), std::max( dArg1, dArg2 ) ) );
+			#endif
 		}
 	};
 
@@ -580,7 +584,11 @@ namespace OclBasic
 		{
 			DECL_REAL( dArg1, GetArgument( 0 ) );
 			DECL_REAL( dArg2, GetArgument( 1 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), min( dArg1, dArg2 ) ) );
+			#if _MSC_VER >= 1310
+				SetResult( CREATE_REAL( GetTypeManager(), min( dArg1, dArg2 ) ) );
+			#else
+				SetResult( CREATE_REAL( GetTypeManager(), std::min( dArg1, dArg2 ) ) );
+			#endif
 		}
 	};
 
@@ -618,7 +626,11 @@ namespace OclBasic
 		{
 			DECL_REAL( dThis, GetThis() );
 			DECL_REAL( dArg, GetArgument( 0 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), max( dThis, dArg ) ) );
+			#if _MSC_VER >= 1310
+				SetResult( CREATE_REAL( GetTypeManager(), max( dThis, dArg ) ) );
+			#else
+				SetResult( CREATE_REAL( GetTypeManager(), std::max( dThis, dArg ) ) );
+			#endif
 		}
 	};
 
@@ -628,7 +640,11 @@ namespace OclBasic
 		{
 			DECL_REAL( dThis, GetThis() );
 			DECL_REAL( dArg, GetArgument( 0 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), min( dThis, dArg ) ) );
+			#if _MSC_VER >= 1310
+				SetResult( CREATE_REAL( GetTypeManager(), min( dThis, dArg ) ) );
+			#else
+				SetResult( CREATE_REAL( GetTypeManager(), std::min( dThis, dArg ) ) );
+			#endif
 		}
 	};
 
@@ -792,7 +808,11 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lArg1, GetArgument( 0 ) );
 			DECL_INTEGER( lArg2, GetArgument( 1 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), max( lArg1, lArg2 ) ) );
+			#if _MSC_VER >= 1310
+				SetResult( CREATE_INTEGER( GetTypeManager(), max( lArg1, lArg2 ) ) );
+			#else
+				SetResult( CREATE_INTEGER( GetTypeManager(), std::max( lArg1, lArg2 ) ) );
+			#endif
 		}
 	};
 
@@ -802,7 +822,11 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lArg1, GetArgument( 0 ) );
 			DECL_INTEGER( lArg2, GetArgument( 1 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), min( lArg1, lArg2 ) ) );
+			#if _MSC_VER >= 1310
+				SetResult( CREATE_INTEGER( GetTypeManager(), min( lArg1, lArg2 ) ) );
+			#else
+				SetResult( CREATE_INTEGER( GetTypeManager(), std::min( lArg1, lArg2 ) ) );
+			#endif
 		}
 	};
 
@@ -821,7 +845,11 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lThis, GetThis() );
 			DECL_INTEGER( lArg, GetArgument( 0 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), max( lThis, lArg ) ) );
+			#if _MSC_VER >= 1310
+				SetResult( CREATE_INTEGER( GetTypeManager(), max( lThis, lArg ) ) );
+			#else
+				SetResult( CREATE_INTEGER( GetTypeManager(), std::max( lThis, lArg ) ) );
+			#endif
 		}
 	};
 
@@ -831,7 +859,11 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lThis, GetThis() );
 			DECL_INTEGER( lArg, GetArgument( 0 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), min( lThis, lArg ) ) );
+			#if _MSC_VER >= 1310
+				SetResult( CREATE_INTEGER( GetTypeManager(), min( lThis, lArg ) ) );
+			#else
+				SetResult( CREATE_INTEGER( GetTypeManager(), std::min( lThis, lArg ) ) );
+			#endif
 		}
 	};
 
@@ -907,7 +939,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_COLLECTION( collThis, GetThis() );
-			SetResult( CREATE_BOOLEAN( GetTypeManager(), find( collThis.begin(), collThis.end(), GetArgument( 0 ) ) != collThis.end() ) );
+			SetResult( CREATE_BOOLEAN( GetTypeManager(), std::find( collThis.begin(), collThis.end(), GetArgument( 0 ) ) != collThis.end() ) );
 		}
 	};
 
