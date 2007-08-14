@@ -193,7 +193,7 @@
 		<copy todir="${build.dir}/${dspackage}/classes/main">
 			<fileset dir="samples/${dspackage}/src/main">
 				<include name="**/*.xml" />
-				<include name="**/*.xsd" />
+				<!--include name="**/*.xsd" /-->
 			</fileset>
 		</copy>
 
@@ -264,11 +264,11 @@
 		<!-- Compile wrapper for the SWIG generated Java code classes (UdmCintLight)-->
 		<mkdir dir="${udmcintlight.classes.dir}" />
 		<javac srcdir="${udmcintlight.src.dir}" destdir="${udmcintlight.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
-		<copy todir="${udmcintlight.classes.dir}/edu/vanderbilt/isis/udm">
+		<!--copy todir="${udmcintlight.classes.dir}/edu/vanderbilt/isis/udm">
 			<fileset dir="${udm.etc.dir}" casesensitive="no">
 				<include name="Uml.xsd" />
 			</fileset>
-		</copy>
+		</copy-->
 		<copy todir="${classes.dir}">
 			<fileset dir="${udmcintlight.classes.dir}" casesensitive="no"/>
 		</copy>
@@ -291,7 +291,7 @@
 		<antcall target="ds-compile-gen">
 			<param name="dspackage" value="SBML2Ex" />
 			<param name="dspackagelower" value="sbml2ex" />
-			<param name="udm_options" value=" -j -q jigcell -e -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon" />
+			<param name="udm_options" value=" -j -q jigcell -e -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u flux=http://arep.med.harvard.edu/fluxns -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon" />
 		</antcall>
 	</target>
 
@@ -315,12 +315,12 @@
 
 		<javac srcdir="samples/${dspackage}/src/main" destdir="${build.dir}/${dspackage}/classes/main" deprecation="false" debug="true" classpathref="compile.classpath" />
 		<!-- Copy the domain sopecific XSD and XSD next to the classes-->
-		<copy todir="${build.dir}/${dspackage}/classes/main">
+		<!--copy todir="${build.dir}/${dspackage}/classes/main">
 			<fileset dir="samples/${dspackage}/src/main">
 				<include name="**/*.xml" />
 				<include name="**/*.xsd" />
 			</fileset>
-		</copy>
+		</copy-->
 
 		<!-- XSD validation may fail if the XSD file is not in the working directory -->
 		<copy todir="${build.dir}/${dspackage}">
@@ -389,13 +389,14 @@
 		</fileset>
 		</copy>
 		<!-- Delete intermediate files -->
-		<copy todir="samples/${dspackage}/src/main/edu/vanderbilt/isis/meta">
+		<!--copy todir="samples/${dspackage}/src/main/edu/vanderbilt/isis/meta">
 			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
 				<include name="**/*.xml" />
 				<include name="**/*.xsd" />
 			</fileset>
-		</copy>
+		</copy-->
 		<delete dir="samples/${dspackage}/meta/edu" />
+		<delete dir="samples/${dspackage}/meta/test" />
 	</target>
 
 	<!-- Update the distribution -->
@@ -558,7 +559,7 @@
 		<!-- Create domain specific jar file -->
 		<zip destfile="${dist.dir}/${dspackage}/${dspackage}.jar">
 			<fileset dir="${build.dir}/${dspackage}/classes/main" />
-			<fileset dir="${build.dir}/${dspackage}/classes/test" />
+			<!--fileset dir="${build.dir}/${dspackage}/classes/test" /-->
 		</zip>
 		
 		<!-- Create domain specific test jar file -->
