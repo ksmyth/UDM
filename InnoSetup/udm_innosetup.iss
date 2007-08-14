@@ -14,7 +14,7 @@
 #define GMEVER "5.11.18"
 
 [Setup]
-AppName=UDM
+AppName=UDM {#UDMVER}
 APPVerName=UDM
 AppVersion={#UDMVER}
 AppPublisher=ISIS, Vanderbilt University
@@ -30,6 +30,7 @@ OutputBaseFilename=Udm_setup
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=true
+AppCopyright=Copyright (C) 2000-2006 ISIS, Vanderbilt University
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
