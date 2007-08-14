@@ -41,7 +41,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib UdmDom.lib UdmGme.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
+				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
 				OutputFile="../../bin/UdmCopy.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
