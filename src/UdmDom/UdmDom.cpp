@@ -405,13 +405,13 @@ namespace UdmDom
 		pair<xsd_ns_mapping_storage::str_str_map::const_iterator, bool> ins_res1 = xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.insert(item1);
 		
 		if (!ins_res1.second && namespaceURI.compare(ins_res1.first->second))
-			throw udm_exception(string("A mapping from UML namespace '"  + namespaceUML + "' exists already: " + namespaceURI));
+			throw udm_exception(string("A mapping from URI namespace '"  + namespaceURI + "' exists already: " + namespaceUML));
 
  		xsd_ns_mapping_storage::str_str_map::value_type item2(namespaceURI, xsdName);
 		pair<xsd_ns_mapping_storage::str_str_map::const_iterator, bool> ins_res2 = xsd_ns_mapping_storage::uri2xsdname.insert(item2);
 		
 		if (!ins_res2.second && xsdName.compare(ins_res2.first->second))
-			throw udm_exception(string("A mapping from UML namespace '"  + namespaceUML + "' exists already: " + namespaceURI));
+			throw udm_exception(string("A mapping from URI namespace '"  + namespaceURI + "' exists already: " + xsdName));
 
 	}
 
@@ -419,7 +419,7 @@ namespace UdmDom
 	{
 		xsd_ns_mapping_storage::static_xsd_ns_mapping_container.erase(namespaceURI);
 		xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.erase(namespaceURI);
-    xsd_ns_mapping_storage::uri2xsdname.erase(namespaceURI);
+		xsd_ns_mapping_storage::uri2xsdname.erase(namespaceURI);
     
 	}
 
@@ -427,7 +427,7 @@ namespace UdmDom
 	{
 		xsd_ns_mapping_storage::static_xsd_ns_mapping_container.clear();
 		xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.clear();
-    xsd_ns_mapping_storage::uri2xsdname.clear();
+		xsd_ns_mapping_storage::uri2xsdname.clear();
 	}
 
 	//=================================
@@ -3293,8 +3293,8 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 	//ugly but necesarry
 	UDM_DLL str_xsd_storage::str_str_map str_xsd_storage::static_xsd_container;
-  UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::uri2xsdname;
-  UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_mapping_container;
+	UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::uri2xsdname;
+	UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_mapping_container;
 	UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container;
 
 	
