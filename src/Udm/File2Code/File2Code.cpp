@@ -6,9 +6,9 @@
 
 #include ".\file2code.h"
 
-File2Code::File2Code(const std::string& name, 
-                    const std::string& infname, 
-                    const GenModeType& mode):
+File2Code::File2Code(const std::string& name, // the name of the generated source file
+                    const std::string& infname, // the input xsd file
+                    const GenModeType& mode):   // mode = java or cpp
   m_name(name),
   m_infname (infname),
   m_mode(mode)
@@ -53,12 +53,12 @@ void  File2Code::genCpp(std::ostream& out)
 //==================================
 void File2Code::genJavaHeader(std::ostream& out)
 {
-      out << "class " << m_name << "{" << std::endl;
-      out << "private static String str = new String("");" << std::endl;
-      out << "public static String getString()" << std::endl;
-      out << "{" << std::endl;
-      out << "if (str.length() == 0)" << std::endl;
-      out << "{" << std::endl;
+      out << "public class " << m_name << "{" << std::endl;
+      out << "\tprivate static String str = new String("");" << std::endl << std::endl;
+      out << "\tpublic static String getString()" << std::endl;
+      out << "\t{" << std::endl;
+      out << "\t\tif (str.length() == 0)" << std::endl;
+      out << "\t\t{" << std::endl;
 
 }
 //==================================
@@ -105,7 +105,7 @@ void File2Code::genBody(std::ostream& out)
     {
       std::getline(in, str);
               //str = "bb\"a\"bb";
-      out << "str +=";   
+      out << "\t\t\tstr +=";   
       out << "\"";   
       std::string::size_type p = str.find_first_of("\"",0);
       if (p == std::string::npos)
@@ -127,7 +127,7 @@ void File2Code::genBody(std::ostream& out)
       out << "\\n\"";  
       out << ";" << std::endl;   
     }
-    out << "}" << std::endl;
-    out << "return str;" << std::endl;
-    out << "}" << std::endl;
+    out << "\t\t}" << std::endl;
+    out << "\t\treturn str;" << std::endl;
+    out << "\t}" << std::endl;
 }
