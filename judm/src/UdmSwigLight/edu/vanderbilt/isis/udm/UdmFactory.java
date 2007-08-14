@@ -29,13 +29,12 @@ public abstract class UdmFactory {
 
     private void findSwigDll() {
         String judm_path = null;
-        String swig_lib = "UdmSwig.dll";
+        String swig_lib = System.mapLibraryName("UdmSwig");
+        String os_name = System.getProperty("os.name");
         try {
-            String os_name = System.getProperty("os.name");
             String exec = "cmd /c set";
             if (os_name.indexOf("Windows") == -1) {
                 // linux specific
-                swig_lib = "libUdmSwig.so";
                 exec = "/bin/bash -c set";
             }
 
@@ -61,7 +60,11 @@ public abstract class UdmFactory {
         if (judm_path == null) {
             throw new UnsatisfiedLinkError("No UDM_PATH environment variable defined");
         }
-        SWIG_LIB_PATH = judm_path + "/bin/" + swig_lib;
+        if (os_name.indexOf("Windows") == -1) {
+            SWIG_LIB_PATH = judm_path + "/lib/" + swig_lib;
+        } else {
+            SWIG_LIB_PATH = judm_path + "/bin/" + swig_lib;
+        }
     }
 
     protected UdmFactory(
