@@ -12,8 +12,10 @@ echo Generate domain-specific %1 jUdm source ...
 echo Done
 
 echo Generate the domain-specific %1 jUdm library ...
-%UDM_PATH%\judm\lib\ant-1.6.2\bin\ant -f %UDM_PATH%\etc\java\etc\build.xml -Dbasedir=%curr_dir% -Ddspackage=%1 -quiet lib
+%UDM_3RDPARTY_PATH%\ant-1.6.2\bin\ant -f %UDM_PATH%\etc\java\etc\build.xml -Dbasedir=%curr_dir% -Ddspackage=%1 -quiet lib-zip
 echo Done
+
+goto end
 
 :usage
 echo .
