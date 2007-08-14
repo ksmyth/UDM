@@ -2,12 +2,13 @@
 //
 
 #include "test_ns.h"
+#include <Uml.h>
 
 void writeTest(const std::string& fname)
 {
 
-	Udm::SmartDataNetwork  out(test_ns::diagram);
-	out.CreateNew(fname.c_str(), "test_ns_AB.xsd",	test_ns::AB::AB::meta, Udm::CHANGES_PERSIST_ALWAYS);
+	Udm::SmartDataNetwork out(test_ns::diagram);
+	out.CreateNew(fname.c_str(), "test_ns_AB.xsd", test_ns::AB::AB::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
 	test_ns::AB::AB ab = test_ns::AB::AB::Cast(out.GetRootObject());
 
@@ -27,29 +28,37 @@ void writeTest(const std::string& fname)
 void readTest(const std::string& fname)
 {
 
-	Udm::SmartDataNetwork  out(test_ns::diagram);
-	out.OpenExisting(fname.c_str(), "test_ns_AB.xsd");
+	Udm::SmartDataNetwork in(test_ns::diagram);
+	in.OpenExisting(fname.c_str(), "test_ns_AB.xsd");
 
-	test_ns::AB::AB ab = test_ns::AB::AB::Cast(out.GetRootObject());
+	test_ns::AB::AB ab = test_ns::AB::AB::Cast(in.GetRootObject());
 
-	out.CloseNoUpdate();
+	in.CloseNoUpdate();
 }
 //=========================================
 
 int main()
 {
-  try
-  {
-    std::string fn ="test.xml";
-    writeTest(fn);
-    readTest(fn);
-  }
-  catch(udm_exception& e)
-  {
-    std::cout << e.what();
-    return 1;
-  }
+	try
+	{
+		std::string fn ="test.xml";
+		writeTest(fn);
+		readTest(fn);
 
-  return 0;
+		// test initialization from another diagram
+		Udm::SmartDataNetwork udmDN(Uml::diagram);
+		udmDN.OpenExisting("test_ns_udm.xml");
+		
+		Uml::Diagram theUmlDiagram(Uml::Diagram::Cast(udmDN.GetRootObject()));
+		test_ns::Initialize(theUmlDiagram);
+
+	}
+	catch(udm_exception& e)
+	{
+		std::cout << e.what();
+		return 1;
+	}
+
+	return 0;
 }
 

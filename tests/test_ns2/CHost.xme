@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{8984CC60-23D1-4F29-8D2B-D90DC1871F1A}" cdate="Mon May 14 06:24:41 2007" mdate="Mon May 14 06:24:41 2007" version="" metaguid="{D300EA57-7F64-4B0E-AE50-878BE38527DC}" metaversion="" metaname="MetaGME">
+<project guid="{2851A031-DE90-477D-8E8D-DCACD6BFABBE}" cdate="Sun Jun 03 19:54:29 2007" mdate="Sun Jun 03 19:54:29 2007" version="" metaguid="{D300EA57-7F64-4B0E-AE50-878BE38527DC}" metaversion="" metaname="MetaGME">
 	<name>CHost</name>
 	<comment></comment>
 	<author></author>
@@ -69,7 +69,7 @@
 					</regnode>
 				</regnode>
 			</regnode>
-			<model id="id-0065-00000002" kind="ParadigmSheet" guid="{96233377-4430-4e2f-B1D4-3D09B76DDFC1}" relid="0x1" childrelidcntr="0xf">
+			<model id="id-0065-00000001" kind="ParadigmSheet" guid="{96233377-4430-4e2f-B1D4-3D09B76DDFC1}" relid="0x1" childrelidcntr="0xf">
 				<name>ParadigmSheet</name>
 				<atom id="id-0066-00000001" kind="Atom" role="Atom" guid="{E4F26ED8-24D6-4e37-88F7-CB1630DB19F6}" relid="0x6">
 					<name>DAtom</name>
@@ -570,7 +570,7 @@
 					</regnode>
 				</regnode>
 			</regnode>
-			<model id="id-0065-00000003" kind="ParadigmSheet" guid="{371FB238-5E45-4eab-BDB6-75BB37BCC75D}" relid="0x1" childrelidcntr="0x5">
+			<model id="id-0065-00000002" kind="ParadigmSheet" guid="{371FB238-5E45-4eab-BDB6-75BB37BCC75D}" relid="0x1" childrelidcntr="0x5">
 				<name>ParadigmSheet</name>
 				<atom id="id-0066-00000007" kind="Atom" role="Atom" guid="{BD82C557-5E6A-44a4-81C0-63078D1AECA2}" relid="0x2">
 					<name>BAtom</name>
@@ -818,7 +818,7 @@
 				</regnode>
 			</regnode>
 		</regnode>
-		<model id="id-0065-00000001" kind="ParadigmSheet" guid="{020AFD7B-A2FB-4042-AA17-166ABCD79661}" relid="0x1" childrelidcntr="0x9">
+		<model id="id-0065-00000003" kind="ParadigmSheet" guid="{020AFD7B-A2FB-4042-AA17-166ABCD79661}" relid="0x1" childrelidcntr="0x9">
 			<name>ParadigmSheet</name>
 			<atom id="id-0066-00000009" kind="Model" role="Model" guid="{E0BD2CFF-F970-4faf-A843-887B5F57CA0D}" relid="0x2">
 				<name>CModel</name>
