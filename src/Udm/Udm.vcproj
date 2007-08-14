@@ -110,7 +110,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Uml.lib File2Code.lib JavaAPIGen.lib UdmXmi.lib UdmBase.lib Xalan-C_1.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
-				OutputFile=".\..\..\bin\Udm.exe"
+				OutputFile="..\..\bin\Udm.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
