@@ -19,6 +19,7 @@ namespace UdmTests
     protected:
       void readFromFile(std::istream& in, std::string& str);
       void testRead(const std::string& result);
+      void testReadSBML2Ex(const std::string& result);
       void testWrite(std::string& result);
 
 		public:

@@ -9,7 +9,6 @@
 #include <fstream>
 #include "GeneTF_xsd.h"
 
-
 void UdmTests::Test::readFromFile(std::istream& in, std::string& str)
 {
 	if (!in.good())
@@ -267,6 +266,8 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
   UPO_UnLoadDiagram(diagram_file);
 }
 //============================
+//============================
+
 void UdmTests::Test::testWrite(std::string& result)
 {
   char metaname[] = "GeneTF";
@@ -492,8 +493,10 @@ void UdmTests::Test::test()
 
  //writeAPI();
  std::string result;
- testWrite(result);
- testRead(result);
+ 
+// testWrite(result);
+ //testRead(result);
+ testReadSBML2Ex("versionCheck.xml");
 
 }
 

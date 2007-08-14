@@ -166,6 +166,9 @@
 						PreprocessorDefinitions=""/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\testReadSBML2Ex.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -186,7 +189,7 @@
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\UdmD.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTF_xsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe ..\..\src\Uml\Uml.xsd Uml_xsd
+
 "
 					Outputs="GeneTF.cpp;GeneTF.h;"/>
 			</FileConfiguration>
@@ -221,6 +224,63 @@
 "
 					Outputs="$(InputDir)\$(InputName).mga;$(InputDir)\GeneTF_udm.xml"/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\SBML2Ex_udm.xml">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe &quot;$(InputPath)&quot; -g -v -e -q jigcell -i xhtml -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon -u flux=http://arep.med.harvard.edu/fluxns
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe math.xsd math_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe sbml.xsd sbml_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe dbi.xsd dbi_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe unigene.xsd unigene_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe xhtml.xsd xhtml_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe flux.xsd flux_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe jigcell.xsd jigcell_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe jd.xsd jd_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe bc.xsd bc_xsd"
+					Outputs="SBML2Ex.cpp;SBML2Ex.h;sbml.xsd"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe &quot;$(InputPath)&quot; -g -v -e -q jigcell -i xhtml -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon -u flux=http://arep.med.harvard.edu/fluxns
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe math.xsd math_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe sbml.xsd sbml_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe dbi.xsd dbi_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe unigene.xsd unigene_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe xhtml.xsd xhtml_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe flux.xsd flux_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe jigcell.xsd jigcell_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe jd.xsd jd_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe bc.xsd bc_xsd"
+					Outputs="SBML2Ex.cpp;SBML2Ex.h;sbml.xsd"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\SBML2Ex_uml.xme">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;"
+					Outputs="$(InputDir)$(InputName).mga;$(InputDir)SBML2Ex_udm.xml"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;"
+					Outputs="$(InputDir)$(InputName).mga;$(InputDir)SBML2Ex_udm.xml"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\versionCheck.xml">
 		</File>
 	</Files>
 	<Globals>
