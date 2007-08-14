@@ -216,7 +216,7 @@ public:
 
 
 	//attribute setters
-	bool SetIntVal(const char * name, UDM__int64 value);
+	bool SetIntVal(const char * name, __int64 value);
 	bool SetRealVal(const char * name, double value);
 	bool SetStrVal(const char * name, const char * value);
 	bool SetBoolVal(const char * name, bool value);
