@@ -42,7 +42,9 @@ void ExtractAttributes(Udm::Object ob, int nDepthLevel=0);
 string ExtractName(Udm::Object ob);
 void DumpClasses(::Uml::Diagram dgr);
 void DumpCompositions(::Uml::Diagram dgr);
+void DumpCompositions(const set< ::Uml::Composition> &metacomps);
 void DumpAssociations(::Uml::Diagram dgr);
+void DumpAssociations(const set< ::Uml::Association> &metaas);
 
 void ExtractLinks(Udm::Object ob);
 void VisitObjects(Udm::Object ob, int nDepthLevel=0);
