@@ -28,7 +28,7 @@
 				AdditionalIncludeDirectories="..\..\Include, .\GOCL\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
-				RuntimeLibrary="3"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/UDMOclPat.pch"
