@@ -284,6 +284,89 @@ namespace UdmDom
 		
 	};
 
+	const DOM_Node DOM3GetElementAncestor(const DOM_Node &currentNode) {
+		DOM_Node parent = currentNode.getParentNode();
+		if (parent != 0) {
+			short type = parent.getNodeType();
+			if (type == DOM_Node::ELEMENT_NODE) {
+				return parent;
+			}
+			return DOM3GetElementAncestor(parent);
+		}
+		return parent;
+	}
+
+	// from xerces-c, only for element type nodes
+	const DOMString DOM3LookupNamespaceURI(const DOM_Node &thisNode, const DOMString &specifiedPrefix)
+	{
+		short type = thisNode.getNodeType();
+		switch(type) {
+		case DOM_Node::ELEMENT_NODE : {
+			DOMString ns = thisNode.getNamespaceURI();
+			DOMString prefix = thisNode.getPrefix();
+			if (ns != 0) {
+				// REVISIT: is it possible that prefix is empty string?
+				if (specifiedPrefix == 0 && prefix == specifiedPrefix) {
+					// looking for default namespace
+					return ns;
+				} else if (prefix != 0 && prefix.equals(specifiedPrefix)) {
+					// non default namespace
+				  return ns;
+				}
+			}
+			if (thisNode.hasAttributes()) {
+				DOM_NamedNodeMap nodeMap = thisNode.getAttributes();
+				if (nodeMap != 0) {
+					int length = nodeMap.getLength();
+					for (int i = 0; i < length; i++) {
+						DOM_Node attr = nodeMap.item(i);
+						DOMString attrPrefix = attr.getPrefix();
+						DOMString value = attr.getNodeValue();
+						ns = attr.getNamespaceURI();
+
+						if (ns != 0 && ns.equals(XMLUni::fgXMLNSURIName)) {
+							// at this point we are dealing with DOM Level 2 nodes only
+							if (specifiedPrefix == 0 && attr.getNodeName().equals(XMLUni::fgXMLNSString)) {
+								// default namespace
+								return value;
+							} else if (attrPrefix != 0 &&
+                                   attrPrefix.equals(XMLUni::fgXMLNSString) &&
+                                   attr.getLocalName().equals(specifiedPrefix)) {
+								// non default namespace
+								return value;
+							}
+						}
+					}
+				}
+			}
+			DOM_Node ancestor = DOM3GetElementAncestor(thisNode);
+			if (ancestor != 0) {
+				return DOM3LookupNamespaceURI(ancestor, specifiedPrefix);
+			}
+			return 0;
+		}
+		// type is unknown
+		return 0;
+		}
+	}
+
+	string getNSForNode(const DOM_Node &node)
+	{
+		DOMString namespaceURI = DOM3LookupNamespaceURI(node, node.getPrefix());
+		if (namespaceURI == NULL) {
+			string e_description = "Couldn't find the namespace URI for node '";
+			e_description += StrX(node.getLocalName()).localForm();
+			e_description += "'.\n";
+			e_description += "Namespace URIs must be URLs with the last component being an UML namespace.";
+			throw udm_exception(e_description);
+		}
+
+		string ns_uri = StrX(namespaceURI).localForm();
+		int ns_name_loc = ns_uri.rfind('/', ns_uri.length());
+		return ns_uri.substr(ns_name_loc + 1);
+	}
+
+
 	DOM_Element getElementNamed(DOM_Element parent, const DOMString &name, const DOMString &ns_name, bool create = false, int no = 1)
 	{
 		DOM_Element elem;
@@ -293,7 +376,7 @@ namespace UdmDom
 		{
 			if( n.getNodeType() == DOM_Node::ELEMENT_NODE )
 			{
-				if ( (n.getLocalName().equals(name)) && (n.getPrefix().equals(ns_name)))
+				if ( (n.getLocalName().equals(name)) && getNSForNode(n).compare(StrX(ns_name).localForm()) == 0)
 				{
 					elem = (DOM_Element&)(n);
 					i++;
@@ -479,19 +562,16 @@ namespace UdmDom
 		{
 			//This could be faster also, diagram are relatively small
 			//so I don't waste my time here
-			/*
 			StrX cl_name(element.getLocalName());		//class name
-			StrX ns_name(element.getPrefix());		//name space	
-			*/
-			StrX key(element.getNodeName());		//namespace:class
+			string ns_name = getNSForNode(element);		//namespace
+			string key = ns_name + ":";			//namespace:class
+			key += cl_name.localForm();
 
-			map<string, ::Uml::Uml::Class>::iterator mcc_i = ((DomDataNetwork *)mydn)->meta_class_cache.find(key.localForm());
+			map<string, ::Uml::Uml::Class>::iterator mcc_i = ((DomDataNetwork *)mydn)->meta_class_cache.find(key);
 			if (mcc_i != ((DomDataNetwork *)mydn)->meta_class_cache.end())
 				return mcc_i->second;
 
-			string e_description = "Couldn't find in cache the class of element '";
-			e_description += key.localForm();
-			e_description += "'";
+			string e_description = "Couldn't find in cache the class of element '" + key + "'";
 			throw udm_exception(e_description);
 		}; //eo findClass()
 
@@ -3026,7 +3106,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 	  {
 		  string sysid = StrX(systemId).localForm();
 		  InputSource* is = NULL;
-		 
+
 		  if (_use_str_xsd)
 		  {
 			  //look up in the string map.
