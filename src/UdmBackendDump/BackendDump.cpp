@@ -108,11 +108,19 @@ string CBackendDump::ExtractName(Udm::Object ob)
 
 void CBackendDump::DumpClasses(::Uml::Diagram dgr)
 {
-
-	set< ::Uml::Namespace> metanses = dgr.namespaces();
 	
 	*dump<<endl<<endl<<"Meta Classes"<<endl;
 	*dump<<"____________"<<endl;
+
+	set< ::Uml::Class>metaclasses= dgr.classes();
+
+	for(set< ::Uml::Class>::iterator ii = metaclasses.begin();ii != metaclasses.end(); ii++) 
+	{
+		
+		*dump<<" "<< string(ii->name()) << endl;
+	}
+
+	set< ::Uml::Namespace> metanses = dgr.namespaces();
 
 	for(set< ::Uml::Namespace>::iterator i = metanses.begin();i != metanses.end(); i++) 
 	{
@@ -129,46 +137,114 @@ void CBackendDump::DumpClasses(::Uml::Diagram dgr)
 	
 }
 
+void CBackendDump::DumpCompositions(const set< ::Uml::Composition> &metacomps)
+{
+	*dump<<endl<<endl<<"Meta Compositions"<<endl;
+	*dump<<"_________________"<<endl;
+	for(set< ::Uml::Composition>::const_iterator iii = metacomps.begin();iii != metacomps.end(); iii++) 
+	{
+		string name=string(iii->name()).c_str();
+		if(name=="")name="<no name specified>";
+		*dump<<endl<<"  "<<name<<endl;
+		*dump<<"    "<<"ParentRole"<<endl;
+			
+
+		::Uml::CompositionParentRole parentRole=iii->parentRole();
+		*dump<<"      "<<string(parentRole.name())<<endl;
+
+
+		string strTmp="IsNavigable: ";
+		parentRole.isNavigable()?strTmp+="true":strTmp+="False";
+		*dump<<"      "<<strTmp<<endl;
+
+		*dump<<"    "<<"Child Role"<<endl;
+			
+
+		::Uml::CompositionChildRole childRole=iii->childRole();
+		strTmp=childRole.name();
+		*dump<<"      "<<strTmp<<endl;
+			
+
+		strTmp="IsNavigable: ";
+		childRole.isNavigable()?strTmp+="true":strTmp+="False";
+		*dump<<"      "<<strTmp<<endl;
+
+		__int64 minm=childRole.min(),maxm=childRole.max();
+
+		char strMax[40];
+		char strTmp2[255];
+
+		if(maxm==-1)
+			sprintf(strMax,"%s","*");
+		else
+		{
+#ifdef _WIN32
+			sprintf(strMax,"%I64d",maxm);
+#else
+			sprintf(strMax,"%lld",maxm);
+#endif
+		}
+
+		if(minm==maxm)
+		{
+#ifdef _WIN32
+			sprintf(strTmp2,"Multiplicity: %I64d", minm);				
+#else			
+			sprintf(strTmp2,"Multiplicity: %lld", minm);				
+#endif							
+		}
+		else
+		{
+#ifdef _WIN32
+			sprintf(strTmp2,"Multiplicity: %I64d..%s", minm,strMax);				
+#else
+			sprintf(strTmp2,"Multiplicity: %lld..%s", minm,strMax);				
+#endif
+		}
+
+		*dump<<"      "<<strTmp2<<endl;
+			
+	}
+}
+
 void CBackendDump::DumpCompositions(::Uml::Diagram  dgr)
 {
+	DumpCompositions(dgr.compositions());
+
 	set< ::Uml::Namespace> nses = dgr.namespaces();
 	for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
-		::Uml::Namespace ns = *nses_i;
+		DumpCompositions(nses_i->compositions());
+	}
+}
 
-		set< ::Uml::Composition>metacomps= ns.compositions();
-		*dump<<endl<<endl<<"Meta Compositions"<<endl;
-		*dump<<"_________________"<<endl;
-		for(set< ::Uml::Composition>::iterator iii = metacomps.begin();iii != metacomps.end(); iii++) 
+void CBackendDump::DumpAssociations(const set< ::Uml::Association> &metaas)
+{
+	*dump<<endl<<endl<<"Meta Associations"<<endl;
+	*dump<<"_________________"<<endl;
+	for(set< ::Uml::Association>::const_iterator i = metaas.begin();i != metaas.end(); i++) 
+	{
+		string name=i->name();
+		if(name=="")name="<no name specified>";
+		*dump<<endl<<"  "<<name<<endl;
+
+		set< ::Uml::AssociationRole> metaroles=i->roles();
+		for(set< ::Uml::AssociationRole>::iterator ir=metaroles.begin();ir!=metaroles.end();ir++)
 		{
-			string name=string(iii->name()).c_str();
-			if(name=="")name="<no name specified>";
-			*dump<<endl<<"  "<<name<<endl;
-			*dump<<"    "<<"ParentRole"<<endl;
-			
+			string strTmp=ir->name();
 
-			::Uml::CompositionParentRole parentRole=iii->parentRole();			
-			*dump<<"      "<<string(parentRole.name())<<endl;
-
-
-			string strTmp="IsNavigable: ";
-			parentRole.isNavigable()?strTmp+="true":strTmp+="False";
-			*dump<<"      "<<strTmp<<endl;
-
-			*dump<<"    "<<"Child Role"<<endl;
-			
-
-			::Uml::CompositionChildRole childRole=iii->childRole();			
-			strTmp=childRole.name();
-			*dump<<"      "<<strTmp<<endl;
-			
+			*dump<<"    "<<strTmp<<endl;
 
 			strTmp="IsNavigable: ";
-			childRole.isNavigable()?strTmp+="true":strTmp+="False";
+			ir->isNavigable()?strTmp+="true":strTmp+="False";
+
+			*dump<<"      "<<strTmp<<endl;
+				
+			strTmp="IsPrimary: ";
+			ir->isPrimary()?strTmp+="true":strTmp+="False";
 			*dump<<"      "<<strTmp<<endl;
 
-			__int64 minm=childRole.min(),maxm=childRole.max();
-
+			__int64 minm=ir->min(),maxm=ir->max();
 			char strMax[40];
 			char strTmp2[255];
 
@@ -187,9 +263,10 @@ void CBackendDump::DumpCompositions(::Uml::Diagram  dgr)
 			{
 #ifdef _WIN32
 				sprintf(strTmp2,"Multiplicity: %I64d", minm);				
-#else			
-				sprintf(strTmp2,"Multiplicity: %lld", minm);				
-#endif							
+#else
+				sprintf(strTmp2,"Multiplicity: %lld", minm);
+#endif
+					
 			}
 			else
 			{
@@ -201,82 +278,21 @@ void CBackendDump::DumpCompositions(::Uml::Diagram  dgr)
 			}
 
 			*dump<<"      "<<strTmp2<<endl;
-			
+
 		}
+		
 	}
 }
 
 void CBackendDump::DumpAssociations(::Uml::Diagram dgr)
 {
 
+	DumpAssociations(dgr.associations());
+
 	set< ::Uml::Namespace> nses = dgr.namespaces();
 	for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
-		::Uml::Namespace ns = *nses_i;
-
-		set< ::Uml::Association>metaas= ns.associations();
-		*dump<<endl<<endl<<"Meta Associations"<<endl;
-		*dump<<"_________________"<<endl;
-		for(set< ::Uml::Association>::iterator i = metaas.begin();i != metaas.end(); i++) 
-		{
-			string name=i->name();
-			if(name=="")name="<no name specified>";
-			*dump<<endl<<"  "<<name<<endl;
-
-			set< ::Uml::AssociationRole> metaroles=i->roles();
-			for(set< ::Uml::AssociationRole>::iterator ir=metaroles.begin();ir!=metaroles.end();ir++)
-			{
-				string strTmp=ir->name();
-
-				*dump<<"    "<<strTmp<<endl;
-
-				strTmp="IsNavigable: ";
-				ir->isNavigable()?strTmp+="true":strTmp+="False";
-
-				*dump<<"      "<<strTmp<<endl;
-				
-				strTmp="IsPrimary: ";
-				ir->isPrimary()?strTmp+="true":strTmp+="False";
-				*dump<<"      "<<strTmp<<endl;
-
-				__int64 minm=ir->min(),maxm=ir->max();
-				char strMax[40];
-				char strTmp2[255];
-
-				if(maxm==-1)
-					sprintf(strMax,"%s","*");
-				else
-				{
-	#ifdef _WIN32
-					sprintf(strMax,"%I64d",maxm);
-	#else
-					sprintf(strMax,"%lld",maxm);
-	#endif
-				}
-
-				if(minm==maxm)
-				{
-	#ifdef _WIN32
-					sprintf(strTmp2,"Multiplicity: %I64d", minm);				
-	#else
-					sprintf(strTmp2,"Multiplicity: %lld", minm);
-	#endif
-					
-				}
-				else
-				{
-	#ifdef _WIN32
-					sprintf(strTmp2,"Multiplicity: %I64d..%s", minm,strMax);				
-	#else
-					sprintf(strTmp2,"Multiplicity: %lld..%s", minm,strMax);				
-	#endif
-				}
-
-				*dump<<"      "<<strTmp2<<endl;
-
-			}
-		
-		}
+		DumpAssociations(nses_i->associations());
 	}
 }
 
