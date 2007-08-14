@@ -437,7 +437,7 @@ void CSyntacticSemanticDialog::OnClickConstraintsColumn( NMHDR* pNMHDR, LRESULT*
 			// Add Message
 
 			lvItem.iSubItem = 2;
-			strTemp = GME::Convert( ex.GetErrorMessage() );
+			strTemp = GME::Convert( ex.GGetMessage() );
 			lvItem.pszText = strTemp.GetBuffer( strTemp.GetLength() );
 			m_lstErrors.SetItem( &lvItem );
 
