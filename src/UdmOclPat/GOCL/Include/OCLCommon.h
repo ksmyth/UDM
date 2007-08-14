@@ -17,23 +17,20 @@ in case of VC 7.x we use MSVC's own STL
 #include <stl_user_config.h>
 #endif
 #endif
-
-#pragma warning ( disable : 4786 )
-
-#include "vector"
-#include "map"
-#include "set"
-#include "string"
+#include <vector>
+#include <map>
+#include <set>
+#include <string>
 #include "stdio.h"
 
 #include "OCLConfig.h"
 
 #define TABSTR "    "
 
-typedef GOCL_STL_NS()vector< GOCL_STL_NS()string >	StringVector;
+typedef std::vector< std::string >	StringVector;
 typedef StringVector			TypeSeq;
 
-// bool operator!=( const GOCL_STL_NS()string& str1, const GOCL_STL_NS()string& str2 );
+bool operator!=( const std::string& str1, const std::string& str2 );
 
 struct Position
 {
@@ -41,15 +38,15 @@ struct Position
 	int iColumn;
 };
 
-GOCL_STL_NS()string& Trim( GOCL_STL_NS()string& strIn );
+std::string& Trim( std::string& strIn );
 
-typedef GOCL_STL_NS()map< int , Position > PositionMap;
+typedef std::map< int , Position > PositionMap;
 
 namespace OclCommon {
 
-	void Convert( const TypeSeq& ts, GOCL_STL_NS()string& s );
-	int Convert( const GOCL_STL_NS()string& s, TypeSeq& ts );
+	void Convert( const TypeSeq& ts, std::string& s );
+	int Convert( const std::string& s, TypeSeq& ts );
 
 }; // namespace OclCommon
 
-#endif 
+#endif OCLCommon_h

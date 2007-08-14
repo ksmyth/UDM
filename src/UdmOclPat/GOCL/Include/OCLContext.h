@@ -8,8 +8,6 @@
 #ifndef OCLContext_h
 #define OCLContext_h
 
-#pragma warning ( disable : 4786 )
-
 #include "OCLCommon.h"
 
 namespace OclCommon
@@ -68,13 +66,13 @@ namespace OclCommon
 		: public Context
 	{
 		public :
-			typedef struct CItem_tag { GOCL_STL_NS()string name; TItem item; } CItem;
-			typedef GOCL_STL_NS()vector< CItem > CItemVector;
+			typedef struct CItem_tag { std::string name; TItem item; } CItem;
+			typedef std::vector< CItem > CItemVector;
 
 
 		private :
 			typedef struct StoreItem{ TItem object; bool bAssignable; };
-			typedef GOCL_STL_NS()map< GOCL_STL_NS()string, StoreItem > TMap;
+			typedef std::map< std::string, StoreItem > TMap;
 
 		private :
 			TMap		m_mapVariables;
@@ -93,13 +91,13 @@ namespace OclCommon
 				return *this;
 			}
 
-			bool ExistsVariable( const GOCL_STL_NS()string& strName ) const
+			bool ExistsVariable( const std::string& strName ) const
 			{
 				TItem object;
 				return GetVariable( strName, object );
 			}
 
-			bool GetVariable( const GOCL_STL_NS()string& strName, TItem& object ) const
+			bool GetVariable( const std::string& strName, TItem& object ) const
 			{
 				StoreItem item;
 				bool bExists = GetVariable( strName, item );
@@ -108,7 +106,7 @@ namespace OclCommon
 				return bExists;
 			}
 
-			bool AddVariable( const GOCL_STL_NS()string& strName, const TItem& object, bool bAssignable = false )
+			bool AddVariable( const std::string& strName, const TItem& object, bool bAssignable = false )
 			{
 				StoreItem item;
 				if ( GetVariable( strName, item ) )
@@ -119,7 +117,7 @@ namespace OclCommon
 				return true;
 			}
 
-			bool IsAssignable( const GOCL_STL_NS()string& strName, bool& bAssignable ) const
+			bool IsAssignable( const std::string& strName, bool& bAssignable ) const
 			{
 				StoreItem item;
 				bool bExists = GetVariable( strName, item );
@@ -128,7 +126,7 @@ namespace OclCommon
 				return bExists;
 			}
 
-			bool RemoveVariable( const GOCL_STL_NS()string& strName )
+			bool RemoveVariable( const std::string& strName )
 			{
 				if ( ExistsVariable( strName ) ) {
 					m_mapVariables.erase( strName );
@@ -137,7 +135,7 @@ namespace OclCommon
 				return false;
 			}
 
-			bool SetVariable( const GOCL_STL_NS()string& strName, const TItem& object )
+			bool SetVariable( const std::string& strName, const TItem& object )
 			{
 				StoreItem item;
 				bool bExists = GetVariable( strName, item );
@@ -154,7 +152,7 @@ namespace OclCommon
 				CItemVector vecItems;
 				CItem selfItem;
 				bool bHasSelf = false;
-				for ( typename TMap::const_iterator i = m_mapVariables.begin() ; i != m_mapVariables.end() ; ++i ) {
+				for ( TMap::const_iterator i = m_mapVariables.begin() ; i != m_mapVariables.end() ; ++i ) {
 					if ( (*i).first == "self" ) {
 						bHasSelf = true;
 						selfItem.name = "self";
@@ -177,9 +175,9 @@ namespace OclCommon
 			}
 
 		private :
-			bool GetVariable( const GOCL_STL_NS()string& strName, StoreItem& item ) const
+			bool GetVariable( const std::string& strName, StoreItem& item ) const
 			{
-				typename TMap::const_iterator i = m_mapVariables.find( strName );
+				TMap::const_iterator i = m_mapVariables.find( strName );
 				if ( i == m_mapVariables.end() )
 					return false;
 				item = (*i).second;
@@ -201,12 +199,12 @@ namespace OclCommon
 	class ContextStack
 	{
 		public :
-			typedef typename RealContext< TItem >::CItem StateItem;
-			typedef GOCL_STL_NS()vector< StateItem > StateItemVector;
+			typedef RealContext< TItem >::CItem StateItem;
+			typedef std::vector< StateItem > StateItemVector;
 
 		private :
 			typedef RealContext< TItem > CTItem;
-			typedef GOCL_STL_NS()vector< CTItem > CTVector;
+			typedef std::vector< CTItem > CTVector;
 
 		private :
 			CTVector 			m_vecContexts;
@@ -232,7 +230,7 @@ namespace OclCommon
 			bool RemoveContext()
 			{
 				if ( ! m_vecContexts.empty() ) {
-					typename CTVector::iterator i = m_vecContexts.end();
+					CTVector::iterator i = m_vecContexts.end();
 					i--;
 					m_vecContexts.erase( i );
 					return true;
@@ -240,7 +238,7 @@ namespace OclCommon
 				return false;
 			}
 
-			bool ExistsVariable( const GOCL_STL_NS()string& strName ) const
+			bool ExistsVariable( const std::string& strName ) const
 			{
 				for ( int i = m_vecContexts.size() - 1 ; i >= 0 ; i-- )
 					if ( m_vecContexts[ i ].ExistsVariable( strName ) )
@@ -251,7 +249,7 @@ namespace OclCommon
 				return false;
 			}
 
-			bool GetVariable( const GOCL_STL_NS()string& strName, TItem& object ) const
+			bool GetVariable( const std::string& strName, TItem& object ) const
 			{
 				for ( int i = m_vecContexts.size() - 1 ; i >= 0 ; i-- )
 					if ( m_vecContexts[ i ].GetVariable( strName, object ) )
@@ -262,7 +260,7 @@ namespace OclCommon
 				return false;
 			}
 
-			bool IsAssignable( const GOCL_STL_NS()string& strName, bool& bAssignable ) const
+			bool IsAssignable( const std::string& strName, bool& bAssignable ) const
 			{
 				for ( int i = m_vecContexts.size() - 1 ; i >= 0 ; i-- )
 					if ( m_vecContexts[ i ].IsAssignable( strName, bAssignable ) )
@@ -273,7 +271,7 @@ namespace OclCommon
 				return false;
 			}
 
-			bool AddVariable( const GOCL_STL_NS()string& strName, const TItem& object, bool bAssignable = false, bool bRedefine = false )
+			bool AddVariable( const std::string& strName, const TItem& object, bool bAssignable = false, bool bRedefine = false )
 			{
 				if ( bRedefine && ! m_vecContexts[ m_vecContexts.size() - 1 ].ExistsVariable( strName ) || ! ExistsVariable( strName ) ) {
 					m_vecContexts[ m_vecContexts.size() - 1 ].AddVariable( strName, object, bAssignable );
@@ -282,7 +280,7 @@ namespace OclCommon
 				return false;
 			}
 
-			bool RemoveVariable( const GOCL_STL_NS()string& strName )
+			bool RemoveVariable( const std::string& strName )
 			{
 				for ( int i = m_vecContexts.size() - 1 ; i >= 0 ; i-- )
 					if ( m_vecContexts[ i ].RemoveVariable( strName ) )
@@ -293,7 +291,7 @@ namespace OclCommon
 				return false;
 			}
 
-			bool SetVariable( const GOCL_STL_NS()string& strName, const TItem& object )
+			bool SetVariable( const std::string& strName, const TItem& object )
 			{
 				for ( int i = m_vecContexts.size() - 1 ; i >= 0 ; i-- )
 					if ( m_vecContexts[ i ].SetVariable( strName, object ) )
@@ -307,14 +305,14 @@ namespace OclCommon
 			StateItemVector GetState() const
 			{
 				StateItemVector vecItemsOut;
-				for ( int i = 0 ; i < m_vecContexts.size() ; i++ ) {
+				for ( unsigned int i = 0 ; i < m_vecContexts.size() ; i++ ) {
 					StateItemVector vecItems = m_vecContexts[ i ].GetState();
 					if ( i != 0 && vecItems[ 0 ].name == "self" ) {
 						char chBuffer[ 100 ];
 						sprintf( chBuffer, "%d", i + 1 );
-						vecItems[ 0 ].name = "self - " + GOCL_STL_NS()string( chBuffer );
+						vecItems[ 0 ].name = "self - " + std::string( chBuffer );
 					}
-					for ( int j = 0 ; j < vecItems.size() ; j++ )
+					for ( unsigned int j = 0 ; j < vecItems.size() ; j++ )
 						vecItemsOut.push_back( vecItems[ j ] );
 				}
 				return vecItemsOut;

@@ -8,9 +8,6 @@
 #ifndef OCLFactory_h
 #define OCLFactory_h
 
-#pragma warning ( disable : 4786 )
-
-#include "OCLCommon.h"
 #include "OCLSignature.h"
 #include "OCLFeature.h"
 
@@ -55,7 +52,7 @@ namespace OclImplementation
 				return m_pTypeManager;
 			}
 
-		friend class OclMeta::TypeManager;
+		friend OclMeta::TypeManager;
 	};
 
 	typedef FeatureFactory< OclSignature::Attribute , OclMeta::AttributeVector > AttributeFactory;
@@ -85,14 +82,14 @@ namespace OclImplementation
 
 			virtual			~TypeFactory() {};
 
-			virtual void	GetTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector< OclMeta::Type* >& vecTypes ) = 0;
+			virtual void	GetTypes( const std::string& strName, std::vector< OclMeta::Type* >& vecTypes ) = 0;
 
 			OclMeta::TypeManager* GetTypeManager() const
 			{
 				return m_pTypeManager;
 			}
 
-		friend class OclMeta::TypeManager;
+		friend OclMeta::TypeManager;
 	};
 
 	//##############################################################################################################################################
@@ -128,10 +125,9 @@ namespace OclImplementation
 				return m_pTypeManager;
 			}
 
-		friend class OclMeta::TypeManager;
+		friend OclMeta::TypeManager;
 	};
 
 }; // namespace OclImplementation
 
-#endif 
-
+#endif OCLFactory_h

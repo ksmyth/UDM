@@ -8,11 +8,11 @@
 #ifndef OCLFeatureImplementation_h
 #define OCLFeatureImplementation_h
 
-#pragma warning ( disable : 4786 )
-
 #include "OCLCommon.h"
+#include "OclViolation.h"
 #include "OCLObject.h"
 #include "OCLException.h"
+#include "OCLConfig.h"
 
 #define ATTRIBUTE( featureName )		class featureName : public OclImplementation::Attribute
 #define ASSOCIATION( featureName )	class featureName : public OclImplementation::Association
@@ -86,12 +86,12 @@ namespace OclImplementation
 				return m_pTypeManager;
 			}
 
-			void ThrowException( const GOCL_STL_NS()string& strMessage )
+			void ThrowException( const std::string& strMessage )
 			{
 				THROWOCL0( ET_RUNTIME, strMessage );
 			}
 
-		friend class OclMeta::TypeManager;
+		friend OclMeta::TypeManager;
 	};
 
 //##############################################################################################################################################
@@ -198,15 +198,18 @@ namespace OclImplementation
 	{
 		private :
 			OclMeta::Object 	m_Next;
+			OclMeta::Object 	m_NextOri;
 			bool 				m_bStopped;
 			bool				m_bDoSnapShot;
 
 		public :
 			virtual void Initialize()										{ m_bDoSnapShot = false; m_bStopped = false; }
-					void SetSubResult( const OclMeta::Object& object ) 	{ m_Next = object; 			}
-					OclMeta::Object GetSubResult() const 				{ return m_Next; 				}
+					void SetSubResult( const OclMeta::Object& object )			{ m_Next = object; }
+					void SetSubOriResult( const OclMeta::Object& oriobject ) 			{ m_NextOri = oriobject; }
+					OclMeta::Object GetSubResult() const 				{ return m_Next; 			}
+					OclMeta::Object GetSubOriResult() const 			{ return m_NextOri;			}
 					bool DoSnapshot() const								{ return m_bDoSnapShot; 	}
-					void SetDoSnapshot( bool bDo ) 						{ m_bDoSnapShot = bDo; 	}
+					void SetDoSnapshot( bool bDo ) 						{ m_bDoSnapShot = bDo; 		}
 					bool DoStop() const									{ return m_bStopped; 		}
 					void SetDoStop( bool bDo ) 							{ m_bStopped = bDo;	 		}
 			virtual 	void Finalize() 											{ Feature::Finalize(); TypeableFeature::Finalize(); ParametralFeature::Finalize(); m_Next = OclMeta::Object::UNDEFINED; }
@@ -229,6 +232,9 @@ namespace OclImplementation
 	{
 		public :
 			virtual 	void Finalize() { Feature::Finalize(); TypeableFeature::Finalize(); ParametralFeature::Finalize(); }
+			virtual		OclTree::ViolationVector GetViolations() {OclTree::ViolationVector vec; return vec;}
+			virtual		void ClearViolations() {}
+
 	};
 
 //##############################################################################################################################################

@@ -8,8 +8,6 @@
 #ifndef OCLType_h
 #define OCLType_h
 
-#pragma warning ( disable : 4786 )
-
 #include "OCLCommon.h"
 #include "OCLException.h"
 #include "OCLFactory.h"
@@ -22,7 +20,7 @@ namespace OclMeta
 	class CompoundType;
 	class TypeManager;
 
-	typedef GOCL_STL_NS()vector< Type* > TypeVector;
+	typedef std::vector< Type* > TypeVector;
 
 	union UCallResult
 	{
@@ -48,8 +46,8 @@ namespace OclMeta
 		UTypeResult	uResult;
 	};
 
-	typedef GOCL_STL_NS()map< GOCL_STL_NS()string , CallResult > CallResultMap;
-	typedef GOCL_STL_NS()map< GOCL_STL_NS()string , TypeResult > TypeResultMap;
+	typedef std::map< std::string , CallResult > CallResultMap;
+	typedef std::map< std::string , TypeResult > TypeResultMap;
 
 //##############################################################################################################################################
 //
@@ -83,11 +81,11 @@ namespace OclMeta
 			void 		ClearDynamicTypes();
 			void 		ClearGlobals();
 
-			Type* 		GetType( const GOCL_STL_NS()string& strName );
+			Type* 		GetType( const std::string& strName );
 
-			int 			GetTypeDistance( const GOCL_STL_NS()string& strName );
-			int 			IsTypeA( const GOCL_STL_NS()string& strName1, const GOCL_STL_NS()string& strName2 );
-			GOCL_STL_NS()string 		GetTypeBase( const GOCL_STL_NS()string& strName1, const GOCL_STL_NS()string& strName2 );
+			int 			GetTypeDistance( const std::string& strName );
+			int 			IsTypeA( const std::string& strName1, const std::string& strName2 );
+			std::string 	GetTypeBase( const std::string& strName1, const std::string& strName2 );
 			bool 		IsTypeA( const TypeSeq& vecType1, const TypeSeq& vecType2 );
 			TypeSeq 	GetTypeBase( const TypeSeq& vecType1, const TypeSeq& vecType2 );
 
@@ -97,8 +95,8 @@ namespace OclMeta
 			void 		RegisterType( TypeResult& typeResult );
 
 		private :
-			int 			IsTypeAR( const GOCL_STL_NS()string& strName1, const GOCL_STL_NS()string& strName2, int iLevel );
-			GOCL_STL_NS()string 		GetTypeBaseR( const GOCL_STL_NS()string& strName1, const GOCL_STL_NS()string& strName2 );
+			int 			IsTypeAR( const std::string& strName1, const std::string& strName2, int iLevel );
+			std::string 	GetTypeBaseR( const std::string& strName1, const std::string& strName2 );
 	};
 
 //##############################################################################################################################################
@@ -115,7 +113,7 @@ namespace OclMeta
 	{
 		private :
 			bool 											m_bDynamic;
-			GOCL_STL_NS()string 											m_strName;
+			std::string 									m_strName;
 			StringVector									m_vecSuperTypes;
 			CallResultMap									m_mapAttributes;
 			CallResultMap									m_mapAssociations;
@@ -126,11 +124,11 @@ namespace OclMeta
 			TypeManager*								m_pTypeManager;
 
 		public :
-											Type( const GOCL_STL_NS()string& strName, const StringVector& vecSuperTypes, OclImplementation::AttributeFactory* pAttributeFactory, OclImplementation::AssociationFactory* pAssociationFactory, OclImplementation::MethodFactory* pMethodFactory, bool bDynamic );
+											Type( const std::string& strName, const StringVector& vecSuperTypes, OclImplementation::AttributeFactory* pAttributeFactory, OclImplementation::AssociationFactory* pAssociationFactory, OclImplementation::MethodFactory* pMethodFactory, bool bDynamic );
 			virtual 							~Type();
 
 					bool 					IsDynamic() const;
-					GOCL_STL_NS()string 					GetName() const;
+					std::string 			GetName() const;
 					const StringVector& 	GetSuperTypeNames() const;
 			virtual	bool					IsCompound() const;
 
@@ -145,7 +143,7 @@ namespace OclMeta
 		protected :
 					TypeManager* 		GetTypeManager() const;
 
-		friend class TypeManager;
+		friend TypeManager;
 	};
 
 //##############################################################################################################################################
@@ -166,19 +164,18 @@ namespace OclMeta
 			OclImplementation::IteratorFactory*		m_pIteratorFactory;
 
 		public :
-											CompoundType( const GOCL_STL_NS()string& strName, const StringVector& vecSuperTypes, OclImplementation::AttributeFactory* pAttributeFactory, OclImplementation::AssociationFactory* pAssociationFactory, OclImplementation::MethodFactory* pMethodFactory, OclImplementation::IteratorFactory* pIteratorFactory, bool bDynamic );
+											CompoundType( const std::string& strName, const StringVector& vecSuperTypes, OclImplementation::AttributeFactory* pAttributeFactory, OclImplementation::AssociationFactory* pAssociationFactory, OclImplementation::MethodFactory* pMethodFactory, OclImplementation::IteratorFactory* pIteratorFactory, bool bDynamic );
 			virtual 							~CompoundType();
 
 			virtual	bool					IsCompound() const;
 
-					Iterator* 				GetIterator( const OclSignature::Iterator& signature );
+					Iterator* 				GetIterator(int level, const OclSignature::Iterator& signature );
 	//	protected :
 			virtual 	CallResult 				GetResults( const OclSignature::Iterator& signature );
 
-		friend class TypeManager;
+		friend TypeManager;
 	};
 
 }; // namespace OclMeta
 
 #endif
-

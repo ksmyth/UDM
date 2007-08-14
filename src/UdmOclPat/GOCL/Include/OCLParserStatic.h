@@ -7,14 +7,12 @@
 
 #include "OCLCommon.h"
 
-#pragma warning( disable : 4786 )
-
-#pragma warning ( disable : 4786 )
-
-#include "set"
 #include "OCLTokens.h"
+#include <set>
 
-typedef GOCL_STL_NS()set< int > TokenSet;
+using namespace std;
+
+typedef std::set< int > TokenSet;
 
 extern TokenSet First_name;
 extern TokenSet First_typeName;
@@ -99,8 +97,8 @@ extern TokenSet Last_implicationExpression;
 void 		InitializeTokenSets();
 TokenSet 	Union( const TokenSet& setTokens1, const TokenSet& setTokens2 );
 TokenSet 	Union( const TokenSet& setTokens, int iToken );
-GOCL_STL_NS()string 		PrintToken( int iToken, bool bQuote );
-GOCL_STL_NS()string 		PrintTokens( const TokenSet& setTokens );
+std::string 		PrintToken( int iToken, bool bQuote );
+std::string 		PrintTokens( const TokenSet& setTokens );
 bool 		Contains( const TokenSet& setTokens1, const TokenSet& setTokens2 );
 bool 		Contains( const TokenSet& setTokens, int iToken );
 

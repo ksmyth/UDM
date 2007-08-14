@@ -8,14 +8,12 @@
 #ifndef OCLFormalParameter_h
 #define OCLFormalParameter_h
 
-#pragma warning ( disable : 4786 )
-
-#include "OCLCommon.h"
+#include "OclCommon.h"
 
 namespace OclCommon
 {
 	class FormalParameter;
-	typedef GOCL_STL_NS()vector< FormalParameter > FormalParameterVector;
+	typedef std::vector< FormalParameter > FormalParameterVector;
 
 //##############################################################################################################################################
 //
@@ -30,17 +28,17 @@ namespace OclCommon
 	class FormalParameter
 	{
 		private :
-			GOCL_STL_NS()string	m_strName;
-			GOCL_STL_NS()string	m_strType;
+			std::string	m_strName;
+			std::string	m_strType;
 			bool	m_bRequired;
 
 		public :
-			FormalParameter( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strType, bool bRequired )
+			FormalParameter( const std::string& strName, const std::string& strType, bool bRequired )
 				: m_strName( strName ), m_strType( strType ), m_bRequired( bRequired )
 			{
 			}
 
-			FormalParameter( const GOCL_STL_NS()string& strType, bool bRequired )
+			FormalParameter( const std::string& strType, bool bRequired )
 				: m_strName( "" ), m_strType( strType ), m_bRequired( bRequired )
 			{
 			}
@@ -70,7 +68,7 @@ namespace OclCommon
 				return m_strType == object.m_strType;
 			}
 
-			bool IsIdentical( const GOCL_STL_NS()string& strType ) const
+			bool IsIdentical( const std::string& strType ) const
 			{
 				return m_strType == strType;
 			}
@@ -90,12 +88,12 @@ namespace OclCommon
 				return m_bRequired;
 			}
 
-			GOCL_STL_NS()string GetName() const
+			std::string GetName() const
 			{
 				return m_strName;
 			}
 
-			GOCL_STL_NS()string GetTypeName() const
+			std::string GetTypeName() const
 			{
 				return m_strType;
 			}

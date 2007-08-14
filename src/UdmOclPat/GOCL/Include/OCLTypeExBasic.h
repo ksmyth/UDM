@@ -8,8 +8,6 @@
 #ifndef OCLTypeExBasic_h
 #define OCLTypeExBasic_h
 
-#pragma warning ( disable : 4786 )
-
 #include "OCLCommon.h"
 #include "OCLFactory.h"
 #include "OCLType.h"
@@ -165,6 +163,26 @@ namespace OclBasic
 
 //##############################################################################################################################################
 //
+//	T Y P E   O F   ocl::OerderedSet
+//
+//##############################################################################################################################################
+
+	class TOrderedSet_MethodFactory
+		: public OclImplementation::MethodFactory
+	{
+		public :
+			virtual void GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures );
+	};
+
+	class TOrderedSet_IteratorFactory
+		: public OclImplementation::IteratorFactory
+	{
+		public :
+			virtual void GetFeatures( const OclSignature::Iterator& signature, OclMeta::IteratorVector& vecFeatures );
+	};
+
+//##############################################################################################################################################
+//
 //	G L O B A L   F A C T O R I E S
 //
 //##############################################################################################################################################
@@ -187,7 +205,7 @@ namespace OclBasic
 		: public OclImplementation::TypeFactory
 	{
 		public :
-			virtual void GetTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes );
+			virtual void GetTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes );
 	};
 
 }; // namespace OclBasic

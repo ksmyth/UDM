@@ -8,8 +8,7 @@
 #ifndef OCLObjectExBasic_h
 #define OCLObjectExBasic_h
 
-#pragma warning ( disable : 4786 )
-
+#include "OCLCommon.h"
 #include "OCLObject.h"
 
 	#define CREATE_BOOLEAN( pManager, bValue )	\
@@ -36,12 +35,12 @@
 			( ( OclBasic::Boolean* ) var2Name.GetImplementation() )->GetValue( varName )
 
 	#define DECL_STRING( varName, var2Name )			\
-		GOCL_STL_NS()string varName;										\
+		std::string varName;										\
 		if ( ! var2Name.IsUndefined() )			\
 			( ( OclBasic::String* ) var2Name.GetImplementation() )->GetValue( varName )
 
 	#define DECL_ENUMERATION( varName, var2Name )			\
-		GOCL_STL_NS()string varName;											\
+		std::string varName;											\
 		if ( ! var2Name.IsUndefined() )			\
 			( ( OclBasic::Enumeration* ) var2Name.GetImplementation() )->GetValue( varName )
 
@@ -56,7 +55,7 @@
 			( ( OclBasic::Integer* ) var2Name.GetImplementation() )->GetValue( varName )
 
 	#define DECL_TYPE( varName, var2Name )			\
-		GOCL_STL_NS()string varName;										\
+		std::string varName;										\
 		if ( ! var2Name.IsUndefined() )			\
 			( ( OclBasic::Type* ) var2Name.GetImplementation() )->GetValue( varName )
 
@@ -93,16 +92,21 @@
 	#define CREATE_BAG( pManager, bagValue )	\
 		OclMeta::Object( new OclBasic::Bag( pManager, bagValue ) )
 
+	#define CREATE_ORDEREDSET( pManager, osetValue )	\
+		OclMeta::Object( new OclBasic::OrderedSet( pManager, osetValue ) )
+
 	#define DECL_COLLECTION( varName, var2Name )	\
 		OclMeta::ObjectVector varName;	\
 		if ( ! var2Name.IsUndefined() ) {		\
-			if ( var2Name.GetTypeName() == "ocl::Set" )	\
+			if ( var2Name.GetTypeName() == "ocl::Set" )	 \
 				( ( OclBasic::Set* ) var2Name.GetImplementation() )->GetValue( varName );	\
 			else if ( var2Name.GetTypeName() == "ocl::Bag" )	\
 				( ( OclBasic::Bag* ) var2Name.GetImplementation() )->GetValue( varName );	\
-			else	\
+			else if ( var2Name.GetTypeName() == "ocl::Sequence" )	\
 				( ( OclBasic::Sequence* ) var2Name.GetImplementation() )->GetValue( varName );	\
-		}
+			else \
+				( ( OclBasic::OrderedSet* ) var2Name.GetImplementation() )->GetValue( varName ); \
+		} 
 
 	#define DECL_COLLECTION2( varName, var2Name )	\
 		if ( ! var2Name.IsUndefined() ) {		\
@@ -110,8 +114,10 @@
 				( ( OclBasic::Set* ) var2Name.GetImplementation() )->GetValue( varName );	\
 			else if ( var2Name.GetTypeName() == "ocl::Bag" )	\
 				( ( OclBasic::Bag* ) var2Name.GetImplementation() )->GetValue( varName );	\
-			else	\
+			else if ( var2Name.GetTypeName() == "ocl::Sequence" )	\
 				( ( OclBasic::Sequence* ) var2Name.GetImplementation() )->GetValue( varName );	\
+			else \
+				( ( OclBasic::OrderedSet* ) var2Name.GetImplementation() )->GetValue( varName );	\
 		}
 
 	#define DECL_ITERATOR( varName, var2Name )	\
@@ -151,22 +157,22 @@ namespace OclBasic
 		: public Any
 	{
 		private :
-			GOCL_STL_NS()string m_Value;
+			std::string m_Value;
 
 		protected :
-			String( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName, const GOCL_STL_NS()string& value );
+			String( OclMeta::TypeManager* pManager, const std::string& strTypeName, const std::string& value );
 		public :
-			String( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& value );
+			String( OclMeta::TypeManager* pManager, const std::string& value );
 			virtual Any* Clone() const;
 
-			void GetValue( GOCL_STL_NS()string& value ) const;
-			void SetValue( const GOCL_STL_NS()string& value );
+			void GetValue( std::string& value ) const;
+			void SetValue( const std::string& value );
 
 			virtual bool Equals( const Any& object ) const;
 			bool operator==( const String& object ) const;
 			bool operator!=( const String& object ) const;
 
-			virtual GOCL_STL_NS()string Print() const;
+			virtual std::string Print() const;
 	};
 
 //##############################################################################################################################################
@@ -183,23 +189,23 @@ namespace OclBasic
 		: public Any
 	{
 		private :
-			GOCL_STL_NS()string m_Value;
+			std::string m_Value;
 
 
 		protected :
-			Enumeration( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName, const GOCL_STL_NS()string& value );
+			Enumeration( OclMeta::TypeManager* pManager, const std::string& strTypeName, const std::string& value );
 		public :
-			Enumeration( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& value );
+			Enumeration( OclMeta::TypeManager* pManager, const std::string& value );
 			virtual Any* Clone() const;
 
-			void GetValue( GOCL_STL_NS()string& value ) const;
-			void SetValue( const GOCL_STL_NS()string& value );
+			void GetValue( std::string& value ) const;
+			void SetValue( const std::string& value );
 
 			virtual bool Equals( const Any& object ) const;
 			bool operator==( const Enumeration& object ) const;
 			bool operator!=( const Enumeration& object ) const;
 
-			virtual GOCL_STL_NS()string Print() const;
+			virtual std::string Print() const;
 	};
 
 //##############################################################################################################################################
@@ -219,7 +225,7 @@ namespace OclBasic
 			bool m_Value;
 
 		protected :
-			Boolean( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName, bool value );
+			Boolean( OclMeta::TypeManager* pManager, const std::string& strTypeName, bool value );
 		public :
 			Boolean( OclMeta::TypeManager* pManager, bool value );
 			virtual Any* Clone() const;
@@ -231,7 +237,7 @@ namespace OclBasic
 			bool operator==( const Boolean& object ) const;
 			bool operator!=( const Boolean& object ) const;
 
-			virtual GOCL_STL_NS()string Print() const;
+			virtual std::string Print() const;
 	};
 
 //##############################################################################################################################################
@@ -251,7 +257,7 @@ namespace OclBasic
 			double m_Value;
 
 		protected :
-			Real( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName, double value );
+			Real( OclMeta::TypeManager* pManager, const std::string& strTypeName, double value );
 		public :
 			Real( OclMeta::TypeManager* pManager, double value );
 			virtual Any* Clone() const;
@@ -263,7 +269,7 @@ namespace OclBasic
 			bool operator==( const Real& object ) const;
 			bool operator!=( const Real& object ) const;
 
-			virtual GOCL_STL_NS()string Print() const;
+			virtual std::string Print() const;
 	};
 
 //##############################################################################################################################################
@@ -280,7 +286,7 @@ namespace OclBasic
 		: public Real
 	{
 		protected :
-			Integer( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName, long value );
+			Integer( OclMeta::TypeManager* pManager, const std::string& strTypeName, long value );
 		public :
 			Integer( OclMeta::TypeManager* pManager, long value );
 			virtual Any* Clone() const;
@@ -291,7 +297,7 @@ namespace OclBasic
 			bool operator==( const Integer& object ) const;
 			bool operator!=( const Integer& object ) const;
 
-			virtual GOCL_STL_NS()string Print() const;
+			virtual std::string Print() const;
 	};
 
 //##############################################################################################################################################
@@ -308,22 +314,22 @@ namespace OclBasic
 		: public Any
 	{
 		private :
-			GOCL_STL_NS()string m_Value;
+			std::string m_Value;
 
 		protected :
-			Type( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName, const GOCL_STL_NS()string& value );
+			Type( OclMeta::TypeManager* pManager, const std::string& strTypeName, const std::string& value );
 		public :
-			Type( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& value );
+			Type( OclMeta::TypeManager* pManager, const std::string& value );
 			virtual Any* Clone() const;
 
-			void GetValue( GOCL_STL_NS()string& value ) const;
-			void SetValue( const GOCL_STL_NS()string& value );
+			void GetValue( std::string& value ) const;
+			void SetValue( const std::string& value );
 
 			virtual bool Equals( const Any& object ) const;
 			bool operator==( const Type& object ) const;
 			bool operator!=( const Type& object ) const;
 
-			virtual GOCL_STL_NS()string Print() const;
+			virtual std::string Print() const;
 	};
 
 //##############################################################################################################################################
@@ -355,8 +361,8 @@ namespace OclBasic
 			OclMeta::ObjectVector	m_vecObjects;
 
 		protected :
-			Set( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName );
-			Set( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName, const OclMeta::ObjectVector& vecObjects );
+			Set( OclMeta::TypeManager* pManager, const std::string& strTypeName );
+			Set( OclMeta::TypeManager* pManager, const std::string& strTypeName, const OclMeta::ObjectVector& vecObjects );
 		public :
 			Set( OclMeta::TypeManager* pManager );
 			Set( OclMeta::TypeManager* pManager, const OclMeta::ObjectVector& vecObjects );
@@ -372,7 +378,7 @@ namespace OclBasic
 			virtual void AddObject( const OclMeta::Object& object );
 			virtual OclImplementation::ObjectIterator* GetIterator();
 
-			virtual GOCL_STL_NS()string Print() const;
+			virtual std::string Print() const;
 	};
 
 //##############################################################################################################################################
@@ -392,8 +398,8 @@ namespace OclBasic
 			OclMeta::ObjectVector	m_vecObjects;
 
 		protected :
-			Bag( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName );
-			Bag( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName, const OclMeta::ObjectVector& vecObjects );
+			Bag( OclMeta::TypeManager* pManager, const std::string& strTypeName );
+			Bag( OclMeta::TypeManager* pManager, const std::string& strTypeName, const OclMeta::ObjectVector& vecObjects );
 		public :
 			Bag( OclMeta::TypeManager* pManager );
 			Bag( OclMeta::TypeManager* pManager, const OclMeta::ObjectVector& vecObjects );
@@ -409,7 +415,7 @@ namespace OclBasic
 			virtual void AddObject( const OclMeta::Object& object );
 			virtual OclImplementation::ObjectIterator* GetIterator();
 
-			virtual GOCL_STL_NS()string Print() const;
+			virtual std::string Print() const;
 	};
 
 //##############################################################################################################################################
@@ -429,8 +435,8 @@ namespace OclBasic
 			OclMeta::ObjectVector	m_vecObjects;
 
 		protected :
-			Sequence( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName );
-			Sequence( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName, const OclMeta::ObjectVector& vecObjects );
+			Sequence( OclMeta::TypeManager* pManager, const std::string& strTypeName );
+			Sequence( OclMeta::TypeManager* pManager, const std::string& strTypeName, const OclMeta::ObjectVector& vecObjects );
 		public :
 			Sequence( OclMeta::TypeManager* pManager );
 			Sequence( OclMeta::TypeManager* pManager, const OclMeta::ObjectVector& vecObjects );
@@ -446,7 +452,48 @@ namespace OclBasic
 			virtual void AddObject( const OclMeta::Object& object );
 			virtual OclImplementation::ObjectIterator* GetIterator();
 
-			virtual GOCL_STL_NS()string Print() const;
+			virtual std::string Print() const;
+	};
+
+//##############################################################################################################################################
+//
+//	C L A S S : OclBasic::OrderedSet <<< + OclBasic::Collection
+//
+//==============================================================================================================================================
+//
+//	D E S C R I P T I O N :
+//
+//##############################################################################################################################################
+
+	class OrderedSet
+		: public Set
+	{
+		private :
+			OclMeta::ObjectVector	m_vecObjects;
+			void * m_pArgNode;
+
+		protected :
+			OrderedSet( OclMeta::TypeManager* pManager, const std::string& strTypeName );
+			OrderedSet( OclMeta::TypeManager* pManager, const std::string& strTypeName, const OclMeta::ObjectVector& vecObjects );
+		public :
+			OrderedSet( OclMeta::TypeManager* pManager );
+			OrderedSet( OclMeta::TypeManager* pManager, const OclMeta::ObjectVector& vecObjects );
+			virtual Any* Clone() const;
+
+			void GetValue( OclMeta::ObjectVector& value ) const;
+			void SetValue( const OclMeta::ObjectVector& value );
+
+//			void SetArgNode(void *arg);
+//			void GetArgNode(void * &arg);
+
+			virtual bool Equals( const Any& object ) const;
+			bool operator==( const OrderedSet& object ) const;
+			bool operator!=( const OrderedSet& object ) const;
+
+			virtual void AddObject( const OclMeta::Object& object );
+			virtual OclImplementation::ObjectIterator* GetIterator();
+
+			virtual std::string Print() const;
 	};
 
 }; // namespace OclBasic

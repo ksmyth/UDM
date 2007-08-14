@@ -8,8 +8,6 @@
 #ifndef OCLSignature_h
 #define OCLSignature_h
 
-#pragma warning ( disable : 4786 )
-
 #include "OCLCommon.h"
 #include "OCLFormalParameter.h"
 
@@ -42,17 +40,17 @@ namespace OclSignature
 			enum FeatureKind { FK_OPERATOR = 0, FK_METHOD = 1, FK_FUNCTION = 2, FK_ATTRIBUTE = 3, FK_ASSOCIATION = 4, FK_ITERATOR = 5 };
 
 		private :
-			GOCL_STL_NS()string 			m_strName;
+			std::string		m_strName;
 			FeatureKind 	m_eKind;
 
 		protected :
-									Feature( const GOCL_STL_NS()string& strName, FeatureKind eKind );
+									Feature( const std::string& strName, FeatureKind eKind );
 		public :
 			virtual 					~Feature();
 
-					GOCL_STL_NS()string 			GetName() const;
+					std::string		GetName() const;
 					FeatureKind 	GetKind() const;
-			virtual 	GOCL_STL_NS()string 			Print() const;
+			virtual std::string		Print() const;
 		protected :
 					bool			IsIdentical( const Feature& object ) const;
 	};
@@ -82,7 +80,7 @@ namespace OclSignature
 					const OclCommon::FormalParameter& 		GetParameter( int i ) const;
 		protected :
 					OclCommon::FormalParameterVector& 	GetParameters();
-			virtual 	GOCL_STL_NS()string 							Print() const;
+			virtual std::string 					Print() const;
 					bool 							IsIdentical( const ParametralFeature& object ) const;
 	};
 
@@ -99,16 +97,16 @@ namespace OclSignature
 	class TypeableFeature
 	{
 		private :
-			GOCL_STL_NS()string	m_strTypeName;
+			std::string	m_strTypeName;
 
 		protected :
-							TypeableFeature( const GOCL_STL_NS()string& strTypeName );
+							TypeableFeature( const std::string& strTypeName );
 							TypeableFeature();
 		public :
 			virtual 			~TypeableFeature();
 
-					GOCL_STL_NS()string 	GetTypeName() const;
-			virtual 	GOCL_STL_NS()string 	Print() const;
+					std::string 	GetTypeName() const;
+			virtual std::string 	Print() const;
 	};
 
 //##############################################################################################################################################
@@ -126,14 +124,14 @@ namespace OclSignature
 			public TypeableFeature
 	{
 		public :
-							Attribute( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strTypeName );
+							Attribute( const std::string& strName, const std::string& strTypeName );
 		protected :
-							Attribute( const GOCL_STL_NS()string& strName );
+							Attribute( const std::string& strName );
 		public :
 			virtual 			~Attribute();
 
-			virtual 	GOCL_STL_NS()string 	Print() const;
-					bool	IsIdentical( const Attribute& object ) const;
+			virtual std::string 	Print() const;
+					bool			IsIdentical( const Attribute& object ) const;
 	};
 
 //##############################################################################################################################################
@@ -151,18 +149,18 @@ namespace OclSignature
 			public TypeableFeature
 	{
 		private :
-			GOCL_STL_NS()string	m_strAcceptable;
+			std::string	m_strAcceptable;
 
 		public :
-							Association( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strTypeName, const GOCL_STL_NS()string& strAcceptable );
+							Association( const std::string& strName, const std::string& strTypeName, const std::string& strAcceptable );
 		protected :
-							Association( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strAcceptable );
+							Association( const std::string& strName, const std::string& strAcceptable );
 		public :
 			virtual 			~Association();
 
-			virtual 	GOCL_STL_NS()string 	Print() const;
-					GOCL_STL_NS()string 	GetAcceptableTypeName() const;
-					bool	IsIdentical( const Association& object ) const;
+			virtual std::string 	Print() const;
+					std::string 	GetAcceptableTypeName() const;
+					bool			IsIdentical( const Association& object ) const;
 	};
 
 //##############################################################################################################################################
@@ -181,14 +179,14 @@ namespace OclSignature
 			public ParametralFeature
 	{
 		public :
-							Iterator( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strTypeName, const GOCL_STL_NS()string& strParameterType );
+							Iterator( const std::string& strName, const std::string& strTypeName, const std::string& strParameterType );
 		protected :
-							Iterator( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strParameterType );
+							Iterator( const std::string& strName, const std::string& strParameterType );
 		public :
 			virtual 			~Iterator();
 
-			virtual 	GOCL_STL_NS()string 	Print() const;
-					bool	IsIdentical( const Iterator& object ) const;
+			virtual std::string 	Print() const;
+					bool			IsIdentical( const Iterator& object ) const;
 	};
 
 //##############################################################################################################################################
@@ -207,14 +205,14 @@ namespace OclSignature
 			public ParametralFeature
 	{
 		public :
-							Method( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strTypeName, const StringVector& vecTypes );
+							Method( const std::string& strName, const std::string& strTypeName, const StringVector& vecTypes );
 		protected :
-							Method( const GOCL_STL_NS()string& strName, const OclCommon::FormalParameterVector& vecParameters );
+							Method( const std::string& strName, const OclCommon::FormalParameterVector& vecParameters );
 		public :
 			virtual 			~Method();
 
-			virtual 	GOCL_STL_NS()string 	Print() const;
-					bool	IsIdentical( const Method& object ) const;
+			virtual std::string 	Print() const;
+					bool			IsIdentical( const Method& object ) const;
 	};
 
 //##############################################################################################################################################
@@ -231,13 +229,13 @@ namespace OclSignature
 		: public Feature, public ParametralFeature
 	{
 		public :
-							Operator( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strOperand1Type );
-							Operator( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strOperand1Type, const GOCL_STL_NS()string& strOperand2Type );
+							Operator( const std::string& strName, const std::string& strOperand1Type );
+							Operator( const std::string& strName, const std::string& strOperand1Type, const std::string& strOperand2Type );
 		public :
 			virtual 			~Operator();
 
-			virtual 	GOCL_STL_NS()string 	Print() const;
-					bool	IsIdentical( const Operator& object ) const;
+			virtual std::string 	Print() const;
+					bool			IsIdentical( const Operator& object ) const;
 	};
 
 //##############################################################################################################################################
@@ -254,14 +252,14 @@ namespace OclSignature
 		: public Feature, public ParametralFeature
 	{
 		public :
-							Function( const GOCL_STL_NS()string& strName, const StringVector& vecTypes );
+							Function( const std::string& strName, const StringVector& vecTypes );
 		protected :
-							Function( const GOCL_STL_NS()string& strName, const OclCommon::FormalParameterVector& vecParameters );
+							Function( const std::string& strName, const OclCommon::FormalParameterVector& vecParameters );
 		public :
 			virtual 			~Function();
 
-			virtual 	GOCL_STL_NS()string 	Print() const;
-					bool	IsIdentical( const Function& object ) const;
+			virtual std::string 	Print() const;
+					bool			IsIdentical( const Function& object ) const;
 	};
 
 }; // namespace OclSignature

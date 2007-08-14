@@ -8,8 +8,7 @@
 #ifndef OCLFeature_h
 #define OCLFeature_h
 
-#pragma warning ( disable : 4786 )
-
+#include "OCLCommon.h"
 #include "OCLFormalParameter.h"
 #include "OCLSignature.h"
 #include "OCLFeatureImplementation.h"
@@ -24,16 +23,16 @@ namespace OclMeta
 	class Operator;
 	class Function;
 
-	typedef GOCL_STL_NS()vector< Attribute* > AttributeVector;
-	typedef GOCL_STL_NS()vector< Association* > AssociationVector;
-	typedef GOCL_STL_NS()vector< Iterator* > IteratorVector;
-	typedef GOCL_STL_NS()vector< Method* > MethodVector;
-	typedef GOCL_STL_NS()vector< Operator* > OperatorVector;
-	typedef GOCL_STL_NS()vector< Function* > FunctionVector;
+	typedef std::vector< Attribute* > AttributeVector;
+	typedef std::vector< Association* > AssociationVector;
+	typedef std::vector< Iterator* > IteratorVector;
+	typedef std::vector< Method* > MethodVector;
+	typedef std::vector< Operator* > OperatorVector;
+	typedef std::vector< Function* > FunctionVector;
 
 	class Dependency;
 
-	typedef GOCL_STL_NS()set< Dependency > DependencySet;
+	typedef std::set< Dependency > DependencySet;
 
 //##############################################################################################################################################
 //
@@ -54,7 +53,7 @@ namespace OclMeta
 			TypeSeq					m_vecTypeReturn;
 
 		protected :
-			Feature( const GOCL_STL_NS()string& strName, const OclSignature::Feature::FeatureKind eKind, const TypeSeq& vecTypeReturn, bool bDynamic, bool bDependence = false )
+			Feature( const std::string& strName, const OclSignature::Feature::FeatureKind eKind, const TypeSeq& vecTypeReturn, bool bDynamic, bool bDependence = false )
 				: OclSignature::Feature( strName, eKind ), m_vecTypeReturn( vecTypeReturn ), m_bDynamic( bDynamic ), m_bDependence( bDependence )
 			{
 			}
@@ -130,13 +129,13 @@ namespace OclMeta
 //##############################################################################################################################################
 
 	class Attribute
-		: 	public OclMeta::Feature,
+		: 	public Feature,
 			public OclSignature::Attribute,
-			public OclMeta::FeatureAppendix< OclImplementation::Attribute >
+			public FeatureAppendix< OclImplementation::Attribute >
 	{
 		public :
-			Attribute( const GOCL_STL_NS()string& strName, const TypeSeq& vecTypeReturn, OclImplementation::Attribute* pImplementation, bool bDynamic, bool bDependence = false )
-				: OclMeta::Feature( strName, OclSignature::Feature::FK_ATTRIBUTE, vecTypeReturn, bDynamic, bDependence ), OclSignature::Attribute( strName ), OclMeta::FeatureAppendix<OclImplementation::Attribute>( pImplementation )
+			Attribute( const std::string& strName, const TypeSeq& vecTypeReturn, OclImplementation::Attribute* pImplementation, bool bDynamic, bool bDependence = false )
+				: Feature( strName, OclSignature::Feature::FK_ATTRIBUTE, vecTypeReturn, bDynamic, bDependence ), OclSignature::Attribute( strName ), FeatureAppendix<OclImplementation::Attribute>( pImplementation )
 			{
 			}
 
@@ -157,13 +156,13 @@ namespace OclMeta
 //##############################################################################################################################################
 
 	class Association
-		: 	public OclMeta::Feature,
+		: 	public Feature,
 			public OclSignature::Association,
-			public OclMeta::FeatureAppendix< OclImplementation::Association >
+			public FeatureAppendix< OclImplementation::Association >
 	{
 		public :
-			Association( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strAcceptable, TypeSeq& vecTypeReturn, OclImplementation::Association* pImplementation, bool bDynamic )
-				: OclMeta::Feature( strName, OclSignature::Feature::FK_ASSOCIATION, vecTypeReturn, bDynamic ), OclSignature::Association( strName, strAcceptable ), OclMeta::FeatureAppendix<OclImplementation::Association>( pImplementation )
+			Association( const std::string& strName, const std::string& strAcceptable, TypeSeq& vecTypeReturn, OclImplementation::Association* pImplementation, bool bDynamic )
+				: Feature( strName, OclSignature::Feature::FK_ASSOCIATION, vecTypeReturn, bDynamic ), OclSignature::Association( strName, strAcceptable ), FeatureAppendix<OclImplementation::Association>( pImplementation )
 			{
 			}
 
@@ -184,13 +183,13 @@ namespace OclMeta
 //##############################################################################################################################################
 
 	class Iterator
-		: 	public OclMeta::Feature,
+		: 	public Feature,
 			public OclSignature::Iterator,
-			public OclMeta::FeatureAppendix< OclImplementation::Iterator >
+			public FeatureAppendix< OclImplementation::Iterator >
 	{
 		public :
-			Iterator( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strParameterType, TypeSeq& vecTypeReturn, OclImplementation::Iterator* pImplementation, bool bDynamic )
-				: OclMeta::Feature( strName, OclSignature::Feature::FK_ITERATOR, vecTypeReturn, bDynamic ), OclSignature::Iterator( strName, strParameterType ), OclMeta::FeatureAppendix<OclImplementation::Iterator>( pImplementation )
+			Iterator( const std::string& strName, const std::string& strParameterType, TypeSeq& vecTypeReturn, OclImplementation::Iterator* pImplementation, bool bDynamic )
+				: Feature( strName, OclSignature::Feature::FK_ITERATOR, vecTypeReturn, bDynamic ), OclSignature::Iterator( strName, strParameterType ), FeatureAppendix<OclImplementation::Iterator>( pImplementation )
 			{
 			}
 
@@ -211,13 +210,13 @@ namespace OclMeta
 //##############################################################################################################################################
 
 	class Method
-		: 	public OclMeta::Feature,
+		: 	public Feature,
 			public OclSignature::Method,
-			public OclMeta::FeatureAppendix< OclImplementation::Method >
+			public FeatureAppendix< OclImplementation::Method >
 	{
 		public :
-			Method( const GOCL_STL_NS()string& strName, const OclCommon::FormalParameterVector& vecParameters, TypeSeq& vecTypeReturn, OclImplementation::Method* pImplementation, bool bDynamic, bool bDependence = false )
-				: OclMeta::Feature( strName, OclSignature::Feature::FK_METHOD, vecTypeReturn, bDynamic, bDependence ), OclSignature::Method( strName, vecParameters ), OclMeta::FeatureAppendix<OclImplementation::Method>( pImplementation )
+			Method( const std::string& strName, const OclCommon::FormalParameterVector& vecParameters, TypeSeq& vecTypeReturn, OclImplementation::Method* pImplementation, bool bDynamic, bool bDependence = false )
+				: Feature( strName, OclSignature::Feature::FK_METHOD, vecTypeReturn, bDynamic, bDependence ), OclSignature::Method( strName, vecParameters ), FeatureAppendix<OclImplementation::Method>( pImplementation )
 			{
 			}
 
@@ -238,18 +237,18 @@ namespace OclMeta
 //##############################################################################################################################################
 
 	class Operator
-		: 	public OclMeta::Feature,
+		: 	public Feature,
 			public OclSignature::Operator,
-			public OclMeta::FeatureAppendix< OclImplementation::Operator >
+			public FeatureAppendix< OclImplementation::Operator >
 	{
 		public :
-			Operator( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strOperand1Type, const TypeSeq& vecTypeReturn, OclImplementation::Operator* pImplementation, bool bDynamic )
-				: OclMeta::Feature( strName, OclSignature::Feature::FK_OPERATOR, vecTypeReturn, bDynamic ), OclSignature::Operator( strName, strOperand1Type ), OclMeta::FeatureAppendix<OclImplementation::Operator>( pImplementation )
+			Operator( const std::string& strName, const std::string& strOperand1Type, const TypeSeq& vecTypeReturn, OclImplementation::Operator* pImplementation, bool bDynamic )
+				: Feature( strName, OclSignature::Feature::FK_OPERATOR, vecTypeReturn, bDynamic ), OclSignature::Operator( strName, strOperand1Type ), FeatureAppendix<OclImplementation::Operator>( pImplementation )
 			{
 			}
 
-			Operator( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strOperand1Type, const GOCL_STL_NS()string& strOperand2Type, const TypeSeq& vecTypeReturn, OclImplementation::Operator* pImplementation, bool bDynamic )
-				: OclMeta::Feature( strName, OclSignature::Feature::FK_OPERATOR, vecTypeReturn, bDynamic ), OclSignature::Operator( strName, strOperand1Type, strOperand2Type ), OclMeta::FeatureAppendix<OclImplementation::Operator>( pImplementation )
+			Operator( const std::string& strName, const std::string& strOperand1Type, const std::string& strOperand2Type, const TypeSeq& vecTypeReturn, OclImplementation::Operator* pImplementation, bool bDynamic )
+				: Feature( strName, OclSignature::Feature::FK_OPERATOR, vecTypeReturn, bDynamic ), OclSignature::Operator( strName, strOperand1Type, strOperand2Type ), FeatureAppendix<OclImplementation::Operator>( pImplementation )
 			{
 			}
 
@@ -270,13 +269,13 @@ namespace OclMeta
 //##############################################################################################################################################
 
 	class Function
-		: 	public OclMeta::Feature,
+		: 	public Feature,
 			public OclSignature::Function,
-			public OclMeta::FeatureAppendix< OclImplementation::Function >
+			public FeatureAppendix< OclImplementation::Function >
 	{
 		public :
-			Function( const GOCL_STL_NS()string& strName, const OclCommon::FormalParameterVector& vecParameters, TypeSeq& vecTypeReturn, OclImplementation::Function* pImplementation, bool bDynamic )
-				: OclMeta::Feature( strName, OclSignature::Feature::FK_FUNCTION, vecTypeReturn, bDynamic ), OclSignature::Function( strName, vecParameters ), OclMeta::FeatureAppendix<OclImplementation::Function>( pImplementation )
+			Function( const std::string& strName, const OclCommon::FormalParameterVector& vecParameters, TypeSeq& vecTypeReturn, OclImplementation::Function* pImplementation, bool bDynamic )
+				: Feature( strName, OclSignature::Feature::FK_FUNCTION, vecTypeReturn, bDynamic ), OclSignature::Function( strName, vecParameters ), FeatureAppendix<OclImplementation::Function>( pImplementation )
 			{
 			}
 
@@ -300,7 +299,7 @@ namespace OclMeta
 	{
 		public :
 			Position 	m_position;
-			GOCL_STL_NS()string		m_strSignature;
+			std::string	m_strSignature;
 			bool 		m_bFailed;
 			bool 		m_bChecked;
 
@@ -309,7 +308,7 @@ namespace OclMeta
 			{
 			}
 
-			Dependency( const GOCL_STL_NS()string& strSignature, const Position& position )
+			Dependency( const std::string& strSignature, const Position& position )
 				: m_strSignature( strSignature), m_position( position ), m_bFailed( false ), m_bChecked( false )
 			{
 			}
@@ -345,9 +344,9 @@ namespace OclMeta
 				return m_strSignature < d.m_strSignature;
 			}
 
-			GOCL_STL_NS()string Print() const
+			std::string Print() const
 			{
-				GOCL_STL_NS()string strOut = "c: ";
+				std::string strOut = "c: ";
 				strOut += ( m_bChecked ) ? "1 " : "0 ";
 				strOut += "f: ";
 				strOut += ( m_bFailed ) ? "1 " : "0 ";
@@ -356,7 +355,7 @@ namespace OclMeta
 
 			static bool IsChecked( const DependencySet& ds )
 			{
-				for ( DependencySet::const_iterator i = ds.begin() ; i != ds.end() ; i++ )
+				for ( DependencySet::iterator i = ds.begin() ; i != ds.end() ; i++ )
 					if ( ! (*i).m_bChecked )
 						return false;
 				return true;
@@ -364,7 +363,7 @@ namespace OclMeta
 
 			static bool IsFailed( const DependencySet& ds )
 			{
-				for ( DependencySet::const_iterator i = ds.begin() ; i != ds.end() ; i++ )
+				for ( DependencySet::iterator i = ds.begin() ; i != ds.end() ; i++ )
 					if ( ! (*i).m_bChecked )
 						return false;
 					else
@@ -377,24 +376,24 @@ namespace OclMeta
 			{
 				DependencySet::iterator i = ds.find( d );
 				if ( i != ds.end() ) {
-					d.m_bFailed = bFailed;
-					d.m_bChecked = true;
-					ds.erase( i );
-					ds.insert( d );
-				}
+				d.m_bFailed = bFailed;
+				d.m_bChecked = true;
+				ds.erase( i );
+				ds.insert( d );
+			}
 			}
 
-			static Dependency LookUp( DependencySet& ds, const GOCL_STL_NS()string& strSignature )
+			static Dependency LookUp( DependencySet& ds, const std::string& strSignature )
 			{
 				Position pos;
 				DependencySet::iterator it = ds.find( Dependency( strSignature, pos ) );
 				return ( it != ds.end() ) ? *it : Dependency();
 			}
 
-			static GOCL_STL_NS()string Print( const DependencySet& setDependencies )
+			static std::string Print( const DependencySet& setDependencies )
 			{
-				GOCL_STL_NS()string strOut;
-				for ( DependencySet::const_iterator it = setDependencies.begin() ; it != setDependencies.end() ; it++ )
+				std::string strOut;
+				for ( DependencySet::iterator it = setDependencies.begin() ; it != setDependencies.end() ; it++ )
 					strOut += (*it).Print() + "\r\n";
 				return strOut;
 			}

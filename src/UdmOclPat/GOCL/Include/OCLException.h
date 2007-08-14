@@ -8,8 +8,6 @@
 #ifndef OCLException_h
 #define OCLException_h
 
-#pragma warning ( disable : 4786 )
-
 #include "OCLCommon.h"
 
 //###############################################################################################################################################
@@ -87,7 +85,7 @@
 
 namespace OclCommon
 {
-	class Exception;
+	//class Exception;
 	class ExceptionPool;
 
 //###############################################################################################################################################
@@ -107,7 +105,7 @@ namespace OclCommon
 
 		private :
 			int					m_iCode;
-			GOCL_STL_NS()string				m_strMessage;
+			std::string			m_strMessage;
 			ExceptionType		m_eType;
 			StringVector 		m_vecParameters;
 			int 					m_iLine;
@@ -124,20 +122,20 @@ namespace OclCommon
 			{
 			}
 
-			Exception( ExceptionType eType, int iCode, const GOCL_STL_NS()string& param, int iLine = -1, int iColumn = -1 )
+			Exception( ExceptionType eType, int iCode, const std::string& param, int iLine = -1, int iColumn = -1 )
 				: m_iCode( iCode ), m_strMessage( "" ), m_iLine( iLine ), m_iColumn( iColumn ), m_eType( eType )
 			{
 				m_vecParameters.push_back( param );
 			}
 
-			Exception( ExceptionType eType, int iCode, const GOCL_STL_NS()string& param1, const GOCL_STL_NS()string& param2, int iLine = -1, int iColumn = -1 )
+			Exception( ExceptionType eType, int iCode, const std::string& param1, const std::string& param2, int iLine = -1, int iColumn = -1 )
 				: m_iCode( iCode ), m_strMessage( "" ), m_iLine( iLine ), m_iColumn( iColumn ), m_eType( eType )
 			{
 				m_vecParameters.push_back( param1 );
 				m_vecParameters.push_back( param2 );
 			}
 
-			Exception( ExceptionType eType, int iCode, const GOCL_STL_NS()string& param1, const GOCL_STL_NS()string& param2, const GOCL_STL_NS()string& param3, int iLine = -1, int iColumn = -1 )
+			Exception( ExceptionType eType, int iCode, const std::string& param1, const std::string& param2, const std::string& param3, int iLine = -1, int iColumn = -1 )
 				: m_iCode( iCode ), m_strMessage( "" ), m_iLine( iLine ), m_iColumn( iColumn ), m_eType( eType )
 			{
 				m_vecParameters.push_back( param1 );
@@ -150,25 +148,25 @@ namespace OclCommon
 			{
 			}
 
-			Exception( ExceptionType eType, const GOCL_STL_NS()string& strMessage, int iLine = -1, int iColumn = -1 )
+			Exception( ExceptionType eType, const std::string& strMessage, int iLine = -1, int iColumn = -1 )
 				: m_iCode( -1 ), m_strMessage( strMessage ), m_iLine( iLine ), m_iColumn( iColumn ), m_eType( eType )
 			{
 			}
 
-			Exception( ExceptionType eType, const GOCL_STL_NS()string& strMessage, const GOCL_STL_NS()string& param, int iLine = -1, int iColumn = -1 )
+			Exception( ExceptionType eType, const std::string& strMessage, const std::string& param, int iLine = -1, int iColumn = -1 )
 				: m_iCode( -1 ), m_strMessage( strMessage ), m_iLine( iLine ), m_iColumn( iColumn ), m_eType( eType )
 			{
 				m_vecParameters.push_back( param );
 			}
 
-			Exception( ExceptionType eType, const GOCL_STL_NS()string& strMessage, const GOCL_STL_NS()string& param1, const GOCL_STL_NS()string& param2, int iLine = -1, int iColumn = -1 )
+			Exception( ExceptionType eType, const std::string& strMessage, const std::string& param1, const std::string& param2, int iLine = -1, int iColumn = -1 )
 				: m_iCode( -1 ), m_strMessage( strMessage ), m_iLine( iLine ), m_iColumn( iColumn ), m_eType( eType )
 			{
 				m_vecParameters.push_back( param1 );
 				m_vecParameters.push_back( param2 );
 			}
 
-			Exception( ExceptionType eType, const GOCL_STL_NS()string& strMessage, const GOCL_STL_NS()string& param1, const GOCL_STL_NS()string& param2, const GOCL_STL_NS()string& param3, int iLine = -1, int iColumn = -1 )
+			Exception( ExceptionType eType, const std::string& strMessage, const std::string& param1, const std::string& param2, const std::string& param3, int iLine = -1, int iColumn = -1 )
 				: m_iCode( -1 ), m_strMessage( strMessage ), m_iLine( iLine ), m_iColumn( iColumn ), m_eType( eType )
 			{
 				m_vecParameters.push_back( param1 );
@@ -177,7 +175,7 @@ namespace OclCommon
 			}
 
 
-			Exception( ExceptionType eType, const GOCL_STL_NS()string& strMessage, const StringVector& vecParameters, int iLine = -1, int iColumn = -1 )
+			Exception( ExceptionType eType, const std::string& strMessage, const StringVector& vecParameters, int iLine = -1, int iColumn = -1 )
 				: m_iCode( -1 ), m_vecParameters( vecParameters ), m_strMessage( strMessage ), m_iLine( iLine ), m_iColumn( iColumn ), m_eType( eType )
 			{
 			}
@@ -219,7 +217,8 @@ namespace OclCommon
 				m_iColumn = iColumn;
 			}
 
-			GOCL_STL_NS()string GetErrorMessage();
+			std::string GGetMessage();//z!
+			std::string GetErrorMessage();
 
 			int GetCode()
 			{
@@ -245,7 +244,7 @@ namespace OclCommon
 	class ExceptionPool
 	{
 		private :
-			typedef GOCL_STL_NS()vector< Exception > ExceptionVector;
+			typedef std::vector< Exception > ExceptionVector;
 
 			ExceptionVector	m_vecExceptions;
 			bool				m_bHasError;
@@ -279,7 +278,7 @@ namespace OclCommon
 
 			void Add( ExceptionPool& ePool )
 			{
-				for ( int i = 0 ; i < ePool.m_vecExceptions.size() ; i++ )
+				for ( unsigned int i = 0 ; i < ePool.m_vecExceptions.size() ; i++ )
 					Add( ePool.m_vecExceptions[ i ] );
 			}
 
@@ -304,23 +303,22 @@ namespace OclCommon
 					return;
 				if ( from < 0 )
 					from = 0;
-				if ( from > m_vecExceptions.size() )
+				if ( from > (int) m_vecExceptions.size() )
 					return;
-				if ( to < 0 || to >= m_vecExceptions.size() )
+				if ( to < 0 || to >= (int) m_vecExceptions.size() )
 					to = m_vecExceptions.size() - 1;
-				if ( from == 0 && to == m_vecExceptions.size() - 1 )
+				if ( from == 0 && to == (int) m_vecExceptions.size() - 1 )
 					m_vecExceptions.clear();
 				else {
 					ExceptionVector vecTemp( m_vecExceptions );
 					m_vecExceptions.clear();
-					int i;
-					for ( i = 0 ; i < from ; i++ )
+					for ( int i = 0 ; i < from ; i++ )
 						m_vecExceptions.push_back( vecTemp[ i ] );
-					for ( i = to ; i < vecTemp.size() ; i++ )
+					for ( i = to ; i < (int) vecTemp.size() ; i++ )
 						m_vecExceptions.push_back( vecTemp[ i ] );
 				}
 				m_bHasError = false;
-				for ( int i = 0 ; i < m_vecExceptions.size() ; i++ )
+				for ( unsigned int i = 0 ; i < m_vecExceptions.size() ; i++ )
 					if ( m_vecExceptions[ i ].GetType() != Exception::ET_WARNING ) {
 						m_bHasError = true;
 						break;
@@ -334,13 +332,13 @@ namespace OclCommon
 
 			void SetLine( int iLine )
 			{
-				for ( int i = 0 ; i < m_vecExceptions.size() ; i++ )
+				for ( unsigned int i = 0 ; i < m_vecExceptions.size() ; i++ )
 					m_vecExceptions[ i ].SetLine( iLine );
 			}
 
 			void SetColumn( int iColumn )
 			{
-				for ( int i = 0 ; i < m_vecExceptions.size() ; i++ )
+				for ( unsigned int i = 0 ; i < m_vecExceptions.size() ; i++ )
 					m_vecExceptions[ i ].SetColumn( iColumn );
 			}
 	};

@@ -8,10 +8,9 @@
 #ifndef OCLObject_h
 #define OCLObject_h
 
-#pragma warning ( disable : 4786 )
-
 #include "OCLCommon.h"
 #include "OCLRefCount.h"
+#include "unknwn.h"
 
 namespace OclMeta {
 	class Object;
@@ -27,7 +26,7 @@ namespace OclMeta
 {
 	class TypeManager;
 
-	typedef GOCL_STL_NS()vector< Object > ObjectVector;
+	typedef std::vector< Object > ObjectVector;
 
 //##############################################################################################################################################
 //
@@ -46,7 +45,7 @@ namespace OclMeta
 			static const Object UNDEFINED;
 
 		private :
-			GOCL_STL_NS()string m_strStaticTypeName;
+			std::string m_strStaticTypeName;
 
 		public :
 											Object();
@@ -59,13 +58,15 @@ namespace OclMeta
 			bool 							operator==( const Object& object ) const;
 			bool 							operator!=( const Object& object ) const;
 
-			GOCL_STL_NS()string 							GetTypeName() const;
-			GOCL_STL_NS()string 							GetStaticTypeName() const;
-			void 							SetStaticTypeName( const GOCL_STL_NS()string& strStaticTypeName );
+			std::string						GetTypeName() const;
+			std::string 					GetStaticTypeName() const;
+			void 							SetStaticTypeName( const std::string& strStaticTypeName );
 			bool 							IsCompound() const;
+			bool							IsComparable() const;
 			bool 							IsUndefined() const;
 			OclImplementation::Object* 	GetImplementation() const;
-			GOCL_STL_NS()string			Print() const;
+			std::string						Print() const;
+			virtual IUnknown*				GetObject() const;
 	};
 
 }; // namespace OclMeta
@@ -87,11 +88,11 @@ namespace OclImplementation
 		: public OclCommon::ReferenceCountable< Object >
 	{
 		protected :
-			GOCL_STL_NS()string m_strTypeName;
+			std::string m_strTypeName;
 			OclMeta::TypeManager*	m_pTypeManager;
 
 		protected :
-			Object( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName )
+			Object( OclMeta::TypeManager* pManager, const std::string& strTypeName )
 				: OclCommon::ReferenceCountable<Object>(), m_pTypeManager( pManager ), m_strTypeName( strTypeName )
 			{
 			}
@@ -101,7 +102,7 @@ namespace OclImplementation
 			{
 			}
 
-			GOCL_STL_NS()string GetTypeName() const
+			std::string GetTypeName() const
 			{
 				return m_strTypeName;
 			}
@@ -115,6 +116,14 @@ namespace OclImplementation
 			{
 				return false;
 			}
+			
+			virtual bool IsComparable() const
+			{
+				if (m_strTypeName == "ocl::Integer"  ||  m_strTypeName == "ocl::Real"  ||
+					m_strTypeName == "ocl::String")
+					return true; 
+				return false;
+			}
 
 			virtual Object* Clone() const
 			{
@@ -126,7 +135,8 @@ namespace OclImplementation
 				return this == &object;
 			}
 
-			virtual GOCL_STL_NS()string Print() const = 0;
+			virtual std::string Print() const = 0;
+			virtual IUnknown* GetObject() const {return NULL;};
 
 			virtual bool IsUndefined() const
 			{
@@ -148,7 +158,7 @@ namespace OclImplementation
 		: public Object
 	{
 		protected :
-			CompoundObject( OclMeta::TypeManager* pManager, const GOCL_STL_NS()string& strTypeName )
+			CompoundObject( OclMeta::TypeManager* pManager, const std::string& strTypeName )
 				: Object( pManager, strTypeName )
 			{
 			}
@@ -197,4 +207,3 @@ namespace OclImplementation
 }; // namespace OclImplementation
 
 #endif // OCLObject_h
-

@@ -8,21 +8,20 @@
 #ifndef OCLTree_h
 #define OCLTree_h
 
-#pragma warning ( disable : 4786 )
-
 #include "OCLCommon.h"
 #include "OCLException.h"
 #include "OCLObject.h"
 #include "OCLContext.h"
 #include "OCLType.h"
 #include "OCLFormalParameter.h"
+#include "OclViolation.h"
 
-
+//<udmoclpat changes
 #include <map>
 #include <iostream>
 #include <fstream>
 #include <cstdio>
-
+//udmoclpat changes>
 
 namespace OclTree
 {
@@ -51,14 +50,14 @@ namespace OclTree
 
 	class ContextNode;
 	class Constraint;
-//Begin: Added by Ananth
+//<udmoclpat changes
 	class TextNode;
 	class PrintNode;
 	class FileNode;
 	class HandleNode;
 	class EnumerationNode;
 	class PatHelper;
-//End: Added by Ananth
+//udmoclpat changes>
 
 	typedef OclCommon::ContextStack< TypeSeq > TypeContextStack;
 
@@ -68,7 +67,7 @@ namespace OclTree
 			TypeContextStack			m_ctxTypes;
 			OclCommon::ExceptionPool	m_poolExceptions;
 			StringVector					m_vecImplicits;
-			GOCL_STL_NS()string							m_strStereotype;
+			std::string						m_strStereotype;
 			OclMeta::DependencySet		m_setDependencies;
 
 		public :
@@ -97,17 +96,18 @@ namespace OclTree
 
 	typedef OclCommon::ContextStack< OclMeta::Object > ObjectContextStack;
 
+/*	transferred to OclViolation
 	struct Violation {
 		bool						bIsException;
-		GOCL_STL_NS()string						strMessage;
-		GOCL_STL_NS()string						strSignature;
+		std::string						strMessage;
+		std::string						strSignature;
 		Position					position;
 		StringVector				vecVariables;
 		StringVector				vecObjects;
 	};
 
-	typedef GOCL_STL_NS()vector< Violation >	ViolationVector;
-
+	typedef std::vector< Violation >	ViolationVector;
+*/
 	struct ObjectContext {
 		ObjectContextStack	oCtx;
 		ViolationVector		vecViolations;
@@ -119,7 +119,7 @@ namespace OclTree
 		bool 					m_bEnableTracking;
 	};
 
-	typedef GOCL_STL_NS()vector< TreeNode* > TreeNodeVector;
+	typedef std::vector< TreeNode* > TreeNodeVector;
 
 //##############################################################################################################################################
 //
@@ -133,8 +133,9 @@ namespace OclTree
 
 	class TreeNode
 	{
+//<udmoclpat changes
 		public :	typedef enum NodeKind { NK_OBJECT = 0, NK_COLLECTION = 1, NK_DECLARATION = 2,  NK_VARIABLE = 3, NK_IFTHENELSE = 4, NK_OPERATOR = 5, NK_FUNCTION = 6, NK_ATTRIBUTE = 7, NK_ASSOCIATION = 8, NK_METHOD = 9,  NK_ITERATOR = 10, NK_CONTEXT = 11, NK_TYPECAST = 12, NK_CONSTRAINT = 13, NK_EXTENSION = 14, NK_TEXTNODE = 15, NK_ENUMERATIONNODE = 16, NK_PRINTNODE = 17, NK_FILENODE = 18, NK_HANDLENODE = 19 };
-
+//udmoclpat changes>
 		private : 				TreeManager* 	m_pManager;
 						const 	NodeKind			m_eKind;
 		public :					TypeSeq			m_vecType;
@@ -149,22 +150,23 @@ namespace OclTree
 					TreeManager* 		GetTreeManager() const;
 					NodeKind				GetKind() const;
 
-			virtual 	GOCL_STL_NS()string 					Print( const GOCL_STL_NS()string& strTabs ) const = 0;
+			virtual std::string 			Print( const std::string& strTabs ) const = 0;
 					bool					Check( TypeContext& context );
 			virtual 	OclMeta::Object 		Evaluate( ObjectContext& context ) = 0;
 
-			 		bool 					ParseTypeSeq( TypeContext& context, const Position& position, GOCL_STL_NS()string& strType, TypeSeq& vecType ) const;
+			 		bool 					ParseTypeSeq( TypeContext& context, const Position& position, std::string& strType, TypeSeq& vecType ) const;
 			 		bool					CastType( TypeContext& context, const Position& position, const TypeSeq& vecTypeFrom, const TypeSeq& vecTypeTo ) const;
 			 		VariableNode*			CreateThis( TypeContext& context, int iImplicitPos ) const;
 			 		int						GetLastExceptionCode( TypeContext& context ) const;
 
 			 		TypeSeq				GetParametralTypeSeq( const TypeSeq& vecType1, const TypeSeq& vecType2, const TypeSeq& vecTypeReturn );
-			 		OclMeta::Feature* 	CheckAmbiguity( const GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes, const GOCL_STL_NS()vector<OclSignature::Feature*>& vecSignatures, GOCL_STL_NS()vector<int>& vecAmbiguities, int& iPrecedence, OclCommon::ExceptionPool& exAmbiguity );
+			 		OclMeta::Feature* 	CheckAmbiguity( const std::vector<OclMeta::Type*>& vecTypes, const std::vector<OclSignature::Feature*>& vecSignatures, std::vector<int>& vecAmbiguities, int& iPrecedence, OclCommon::ExceptionPool& exAmbiguity );
 
-			 		void 					AddViolation( ObjectContext& context, int iLine, const GOCL_STL_NS()string& strSignature, const GOCL_STL_NS()string& strMessage = "" );
+			 		void 					AddViolation( ObjectContext& context, int iLine, const std::string& strSignature, const std::string& strMessage = "" );
+					void					AddViolation(ObjectContext& context, Violation &violation);
 			 		bool					IsBooleanReturned();
-					OclMeta::Object 		CheckFalseResult( ObjectContext& context, OclMeta::Object spObject, int iLine, const GOCL_STL_NS()string& strSignature );
-					OclMeta::Object 		EvaluateCast( ObjectContext& context, OclMeta::Object spObject, int iLine, const GOCL_STL_NS()string& strSignature, const GOCL_STL_NS()string& strTypeName = "", bool bOnlyTest = true );
+					OclMeta::Object 		CheckFalseResult( ObjectContext& context, OclMeta::Object spObject, int iLine, const std::string& strSignature );
+					OclMeta::Object 		EvaluateCast( ObjectContext& context, OclMeta::Object spObject, int iLine, const std::string& strSignature, const std::string& strTypeName = "", bool bOnlyTest = true );
 
 			protected :
 			virtual 	void					CheckInitialize();
@@ -184,13 +186,13 @@ namespace OclTree
 	class ObjectNode
 		: public TreeNode
 	{
-		public :			GOCL_STL_NS()string	m_strType;
-						GOCL_STL_NS()string 	m_strValue;
+		public :		std::string		m_strType;
+						std::string 	m_strValue;
 						bool 	m_bCallable;
 
 													ObjectNode( TreeManager* pManager );
 
-					virtual 	GOCL_STL_NS()string 					Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string				Print( const std::string& strTabs ) const;
 					virtual 	bool					CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 		Evaluate( ObjectContext& context );
 	};
@@ -208,13 +210,13 @@ namespace OclTree
 	class CollectionNode
 		: public TreeNode
 	{
-		public :		GOCL_STL_NS()string 			m_strType;
+		public :	std::string 	m_strType;
 					TreeNodeVector 	m_vecNodes;
 
 													CollectionNode( TreeManager* pManager );
 													~CollectionNode();
 
-					virtual 	GOCL_STL_NS()string 					Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 			Print( const std::string& strTabs ) const;
 					virtual 	bool 					CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 		Evaluate( ObjectContext& context );
 	};
@@ -232,8 +234,8 @@ namespace OclTree
 	class DeclarationNode
 		: public TreeNode
 	{
-		public :		GOCL_STL_NS()string 				m_strType;
-					GOCL_STL_NS()string 				m_strName;
+		public :	std::string 				m_strType;
+					std::string 				m_strName;
 					TreeNode* 		m_pValueNode;
 					TreeNode* 		m_pInnerNode;
 					TypeSeq			m_vecTypeDecl;
@@ -241,7 +243,7 @@ namespace OclTree
 													DeclarationNode( TreeManager* pManager );
 													~DeclarationNode();
 
-					virtual 	GOCL_STL_NS()string 					Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 			Print( const std::string& strTabs ) const;
 					virtual 	OclMeta::Object 		Evaluate( ObjectContext& context );
 
 					virtual 	void					CheckInitialize();
@@ -261,14 +263,14 @@ namespace OclTree
 	class TypeCastNode
 		: public TreeNode
 	{
-		public :		GOCL_STL_NS()string 				m_strType;
+		public :	std::string 	m_strType;
 					TreeNode* 		m_pThisNode;
-					bool				m_bIsDynamic;
+					bool			m_bIsDynamic;
 
 													TypeCastNode( TreeManager* pManager );
 													~TypeCastNode();
 
-					virtual 	GOCL_STL_NS()string 					Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 		Print( const std::string& strTabs ) const;
 					virtual 	void				CheckInitialize();
 					virtual 	bool					CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 		Evaluate( ObjectContext& context );
@@ -295,7 +297,7 @@ namespace OclTree
 													IfThenElseNode( TreeManager* pManager );
 													~IfThenElseNode();
 
-					virtual 	GOCL_STL_NS()string 					Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 			Print( const std::string& strTabs ) const;
 					virtual 	bool					CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 		Evaluate( ObjectContext& context );
 	};
@@ -314,15 +316,15 @@ namespace OclTree
 		: public TreeNode
 	{
 		public :
-					GOCL_STL_NS()string			m_strName;
+					std::string	m_strName;
 					TreeNode* 	m_pOperandNode1;
 					TreeNode* 	m_pOperandNode2;
-					GOCL_STL_NS()string 			m_strAssignVarName;
+					std::string 			m_strAssignVarName;
 
 													OperatorNode( TreeManager* pManager );
 													~OperatorNode();
 
-					virtual 	GOCL_STL_NS()string 					Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 			Print( const std::string& strTabs ) const;
 					virtual 	void					CheckInitialize();
 					virtual 	bool					CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 		Evaluate( ObjectContext& context );
@@ -338,29 +340,56 @@ namespace OclTree
 //
 //##############################################################################################################################################
 
+	class LevelCounter 
+	{
+		public:
+			LevelCounter(int *count) 
+			{
+				if (count)
+				{
+					counter = count;
+					(*counter)++;
+				}
+			}
+			~LevelCounter()
+			{
+				if (counter)
+				{
+					(*counter)--;
+				}
+			}
+
+		private:
+			int *counter;
+	};
+
 	class IteratorNode
 		: public TreeNode
 	{
-		public :
-					GOCL_STL_NS()string 						m_strName;
-					TreeNode* 				m_pThisNode;
-					TreeNode*					m_pArgumentNode;
+		// recursion corrected: terge
+		private:
+			static int m_iteratorLevel;
 
-					StringVector 				m_vecDeclarators;
-					GOCL_STL_NS()string						m_strDeclType;
+		public :
+					std::string 			m_strName;
+					TreeNode* 				m_pThisNode;
+					TreeNode*				m_pArgumentNode;
+
+					StringVector 			m_vecDeclarators;
+					std::string				m_strDeclType;
 					TypeSeq					m_vecTypeDecl;
 
-					GOCL_STL_NS()string 						m_strAccuType;
-					GOCL_STL_NS()string 						m_strAccuName;
-					TypeSeq 					m_vecTypeAccu;
+					std::string 			m_strAccuType;
+					std::string 			m_strAccuName;
+					TypeSeq 				m_vecTypeAccu;
 					TreeNode* 				m_pAccuNode;
 
-					GOCL_STL_NS()string						m_strCallOperator;
+					std::string				m_strCallOperator;
 
 												IteratorNode( TreeManager* pManager );
 												~IteratorNode();
 
-					virtual 	GOCL_STL_NS()string 				Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 		Print( const std::string& strTabs ) const;
 					virtual 	void				CheckInitialize();
 					virtual 	bool				CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 	Evaluate( ObjectContext& context );
@@ -382,17 +411,20 @@ namespace OclTree
 	class MethodNode
 		: public TreeNode
 	{
-		public :		GOCL_STL_NS()string 						m_strName;
+		private:
+			static int	m_stackLevel;
+
+		public :	std::string 			m_strName;
 					TreeNode* 				m_pThisNode;
 					TreeNodeVector			m_vecArguments;
-					GOCL_STL_NS()string						m_strCallOperator;
+					std::string				m_strCallOperator;
 
 					IteratorNode*				m_pIterator;
 
 												MethodNode( TreeManager* pManager );
 												~MethodNode();
 
-					virtual 	GOCL_STL_NS()string 				Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 		Print( const std::string& strTabs ) const;
 					virtual 	void				CheckInitialize();
 					virtual 	bool				CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 	Evaluate( ObjectContext& context );
@@ -411,7 +443,7 @@ namespace OclTree
 	class FunctionNode
 		: public TreeNode
 	{
-		public :		GOCL_STL_NS()string 						m_strName;
+		public :	std::string				m_strName;
 					TreeNodeVector			m_vecArguments;
 
 					MethodNode*				m_pMethod;
@@ -419,7 +451,7 @@ namespace OclTree
 												FunctionNode( TreeManager* pManager );
 												~FunctionNode();
 
-					virtual 	GOCL_STL_NS()string 				Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 		Print( const std::string& strTabs ) const;
 					virtual 	void				CheckInitialize();
 					virtual 	bool				CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 	Evaluate( ObjectContext& context );
@@ -438,15 +470,15 @@ namespace OclTree
 	class AssociationNode
 		: public TreeNode
 	{
-		public :		GOCL_STL_NS()string 						m_strName;
-					GOCL_STL_NS()string						m_strAcceptable;
+		public :	std::string 				m_strName;
+					std::string					m_strAcceptable;
 					TreeNode*					m_pThisNode;
-					GOCL_STL_NS()string 						m_strCallOperator;
+					std::string 				m_strCallOperator;
 
 												AssociationNode( TreeManager* pManager );
 												~AssociationNode();
 
-					virtual 	GOCL_STL_NS()string 				Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 		Print( const std::string& strTabs ) const;
 					virtual 	void				CheckInitialize();
 					virtual 	bool				CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 	Evaluate( ObjectContext& context );
@@ -467,9 +499,9 @@ namespace OclTree
 	class AttributeNode
 		: public TreeNode
 	{
-		public :		GOCL_STL_NS()string 						m_strName;
+		public :	std::string 				m_strName;
 					TreeNode*					m_pThisNode;
-					GOCL_STL_NS()string 						m_strCallOperator;
+					std::string 				m_strCallOperator;
 
 					AssociationNode*			m_pAssociation;
 					IteratorNode*				m_pCollector;
@@ -477,7 +509,7 @@ namespace OclTree
 												AttributeNode( TreeManager* pManager );
 												~AttributeNode();
 
-					virtual 	GOCL_STL_NS()string 				Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 		Print( const std::string& strTabs ) const;
 					virtual 	void				CheckInitialize();
 					virtual 	bool				CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 	Evaluate( ObjectContext& context );
@@ -496,7 +528,7 @@ namespace OclTree
 	class VariableNode
 		: public TreeNode
 	{
-		public :		GOCL_STL_NS()string 						m_strName;
+		public :	std::string 			m_strName;
 
 					AttributeNode*			m_pAttribute;
 					ObjectNode*				m_pType;
@@ -504,7 +536,7 @@ namespace OclTree
 												VariableNode( TreeManager* pManager );
 												~VariableNode();
 
-					virtual 	GOCL_STL_NS()string 				Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 		Print( const std::string& strTabs ) const;
 					virtual 	void				CheckInitialize();
 					virtual 	bool				CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 	Evaluate( ObjectContext& context );
@@ -523,19 +555,19 @@ namespace OclTree
 	class ContextNode
 		: public TreeNode
 	{
-		public :			GOCL_STL_NS()string 								m_strName;
-						GOCL_STL_NS()string 								m_strType;
+		public :		std::string 						m_strName;
+						std::string 						m_strType;
 						bool								m_bClassifier;
-						GOCL_STL_NS()string								m_strStereotype;
+						std::string							m_strStereotype;
 						OclMeta::DependencySet			m_setDependencies;
 
 						OclCommon::FormalParameterVector 	m_vecParameters;
-						GOCL_STL_NS()string										m_strReturnType;
-						TypeSeq									m_vecTypeReturn;
+						std::string							m_strReturnType;
+						TypeSeq								m_vecTypeReturn;
 
 													ContextNode( TreeManager* pManager );
 
-					virtual 	GOCL_STL_NS()string 					Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 			Print( const std::string& strTabs ) const;
 					virtual 	void					CheckInitialize();
 					virtual 	bool					CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 		Evaluate( ObjectContext& context );
@@ -554,14 +586,14 @@ namespace OclTree
 	class Constraint
 		: public TreeNode
 	{
-		public :			GOCL_STL_NS()string 				m_strName;
-						ContextNode* 		m_pContext;
+		public :		std::string 	m_strName;
+						ContextNode* 	m_pContext;
 						TreeNode* 		m_pExpression;
 
 													Constraint( TreeManager* pManager );
 					virtual							~Constraint();
 
-					virtual 	GOCL_STL_NS()string 					Print( const GOCL_STL_NS()string& strTabs ) const;
+					virtual 	std::string 			Print( const std::string& strTabs ) const;
 					virtual 	bool					CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object 		Evaluate( ObjectContext& context );
 	};
@@ -581,7 +613,7 @@ namespace OclTree
 		public : 									ObjectNodeAdaptor() {}
 					virtual 							~ObjectNodeAdaptor() {}
 
-					virtual GOCL_STL_NS()string 					Print( const GOCL_STL_NS()string& strTabs, ObjectNode* pNode ) const;
+					virtual std::string 			Print( const std::string& strTabs, ObjectNode* pNode ) const;
 					virtual bool 					Check( TypeContext& context, ObjectNode* pNode ) const;
 					virtual OclMeta::Object 		Evaluate( ObjectContext& context, ObjectNode* pNode ) const;
 	};
@@ -602,7 +634,7 @@ namespace OclTree
 												CollectionNodeAdaptor() {}
 			virtual 								~CollectionNodeAdaptor() {}
 
-			virtual GOCL_STL_NS()string 						Print( const GOCL_STL_NS()string& strTabs, CollectionNode* pNode ) const;
+			virtual std::string 				Print( const std::string& strTabs, CollectionNode* pNode ) const;
 			virtual bool 						Check( TypeContext& context, CollectionNode* pNode ) const;
 			virtual OclMeta::Object	 		Evaluate( ObjectContext& context, CollectionNode* pNode ) const;
 	};
@@ -646,17 +678,19 @@ namespace OclTree
 
 						ContextNode* 				CreateContext() const;
 						Constraint* 				CreateConstraint() const;
+//<udmoclpat chagnes
 						TextNode*				CreateTextNode() const;
 						PrintNode*				CreatePrintNode() const;
 						FileNode*				CreateFileNode() const;
 						HandleNode*				CreateHandleNode() const;
 						EnumerationNode*				CreateEnumerationNode() const;
+//udmoclpat changes>
 
-		friend class ObjectNode;
-		friend class CollectionNode;
+		friend ObjectNode;
+		friend CollectionNode;
 	};
 
-
+//<udmoclpat changes
 //##############################################################################################################################################
 //
 //	C L A S S : OclTree::TextNode
@@ -671,14 +705,14 @@ namespace OclTree
 		: public TreeNode
 	{
 		public:
-			GOCL_STL_NS()string m_strValue;
+			std::string m_strValue;
 			TreeNode* m_pTreeNode;
 
 			TextNode( TreeManager* pManager );
 			~TextNode();
 
 			virtual 	OclMeta::Object Evaluate( ObjectContext& context );
-			virtual 	GOCL_STL_NS()string 	Print( const GOCL_STL_NS()string& strTabs ) const { return "TextNode - value: " + m_strValue + "\r\n"; };
+			virtual 	std::string 	Print( const std::string& strTabs ) const { return "TextNode - value: " + m_strValue + "\r\n"; };
 			virtual 	bool CheckImplementation( TypeContext& context );
 
 	};
@@ -701,7 +735,7 @@ namespace OclTree
 					TreeNodeVector 	m_vecNodes;
 					EnumerationNode( TreeManager* pManager );
 					~EnumerationNode();
-					virtual 	GOCL_STL_NS()string 	Print( const GOCL_STL_NS()string& strTabs ) const { return "Enumeration Node - size: " + m_vecNodes.size(); };
+					virtual 	std::string 	Print( const std::string& strTabs ) const { return "Enumeration Node - size: " + m_vecNodes.size(); };
 					virtual 	bool                 CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object      Evaluate( ObjectContext& context );
 	};
@@ -727,7 +761,7 @@ namespace OclTree
 			PrintNode( TreeManager* pManager );
 			~PrintNode();
 
-			virtual 	GOCL_STL_NS()string 	Print( const GOCL_STL_NS()string& strTabs ) const { return "Print Node"; };
+			virtual 	std::string 	Print( const std::string& strTabs ) const { return "Print Node"; };
 			virtual 	bool                 CheckImplementation( TypeContext& context );
 			virtual 	OclMeta::Object      Evaluate( ObjectContext& context );
 	};
@@ -748,15 +782,15 @@ namespace OclTree
 	{
 		public :
 			TreeNode* m_pFileNameNode;
-			GOCL_STL_NS()string strHandle;
-			GOCL_STL_NS()string strMode;
-			GOCL_STL_NS()string strFileName;
+			std::string strHandle;
+			std::string strMode;
+			std::string strFileName;
 			TreeNode* m_pTreeNode;
 
 			FileNode( TreeManager* pManager );
 			~FileNode();
 
-			virtual 	GOCL_STL_NS()string 	Print( const GOCL_STL_NS()string& strTabs ) const { return "Print Node"; };
+			virtual 	std::string 	Print( const std::string& strTabs ) const { return "Print Node"; };
 			virtual 	bool                 CheckImplementation( TypeContext& context );
 			virtual 	OclMeta::Object      Evaluate( ObjectContext& context );
 	};
@@ -776,13 +810,13 @@ namespace OclTree
 		: public TreeNode
 	{
 		public :
-			GOCL_STL_NS()string strHandle;
+			std::string strHandle;
 			TreeNode* m_pTreeNode;
 
 			HandleNode( TreeManager* pManager );
 			~HandleNode();
 
-			virtual 	GOCL_STL_NS()string 	Print( const GOCL_STL_NS()string& strTabs ) const { return "Print Node"; };
+			virtual 	std::string 	Print( const std::string& strTabs ) const { return "Print Node"; };
 			virtual 	bool                 CheckImplementation( TypeContext& context );
 			virtual 	OclMeta::Object      Evaluate( ObjectContext& context );
 	};
@@ -791,11 +825,11 @@ namespace OclTree
 	class PatHelper
 	{
 		public:
-			static std::map<const GOCL_STL_NS()string, std::ofstream*> handles;
+			static std::map<const std::string, std::ofstream*> handles;
 			static std::ofstream* f_pat_output;
 			static void clean();
 	};
-
+//udmoclpat changes>
 }; // namespace OclTree
 
 #endif // OclTree_h

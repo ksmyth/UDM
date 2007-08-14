@@ -8,8 +8,6 @@
 #ifndef OCLConstraint_h
 #define OCLConstraint_h
 
-#pragma warning ( disable : 4786 )
-
 #include "OCLTree.h"
 
 namespace Ocl
@@ -62,8 +60,8 @@ namespace Ocl
 			OclTree::Constraint*						m_pCtxConstraint;
 			OclTree::Constraint*						m_pConstraint;
 
-			GOCL_STL_NS()string 										m_strText;
-			GOCL_STL_NS()string 										m_strName;
+			std::string 										m_strText;
+			std::string 										m_strName;
 			State 										m_eState;
 			bool 										m_bDynamic;
 			bool										m_bContextSucceeded;
@@ -75,38 +73,38 @@ namespace Ocl
 		public :
 																Constraint();
 																Constraint( OclTree::TreeManager* pManager );
-																Constraint( OclTree::TreeManager* pManager, const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strText, bool bDynamic = false );
+																Constraint( OclTree::TreeManager* pManager, const std::string& strName, const std::string& strText, bool bDynamic = false );
 			virtual 												~Constraint();
 
 					State 										Register( OclTree::TreeManager* pManager );
-					State 										Define( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strText = "", bool bDynamic = false );
+					State 										Define( const std::string& strName, const std::string& strText = "", bool bDynamic = false );
 
-					GOCL_STL_NS()string 										GetDefinedName() const;
+					std::string 								GetDefinedName() const;
 					State 										GetState() const;
 					bool										IsValid() const;
 					bool										IsDefined() const;
-					GOCL_STL_NS()string 										GetText() const;
+					std::string									GetText() const;
 					bool 										IsDynamic() const;
 
 					State 										ParseContext();
 
-					GOCL_STL_NS()string 										GetName() const;
-					Stereotype 								GetStereotype() const;
+					std::string									GetName() const;
+					Stereotype 									GetStereotype() const;
 
 					State 										CheckContext();
 
-					GOCL_STL_NS()string 										GetContextType() const;
-					GOCL_STL_NS()string 										GetReturnType() const;
+					std::string 								GetContextType() const;
+					std::string 								GetReturnType() const;
 					OclCommon::FormalParameterVector 	GetFormalParameters() const;
-					virtual GOCL_STL_NS()string							GetFullName() const;
+					virtual std::string							GetFullName() const;
 
 					State Parse();
 
 					State 										Check( OclTree::TypeContextStack& ctxTypes );
 
 					OclMeta::DependencySet 					GetDependencySet() const;
-					GOCL_STL_NS()string 										PrintTree() const;
-					GOCL_STL_NS()string 										Print() const;
+					std::string 								PrintTree() const;
+					std::string 								Print() const;
 
 					State										SetDependencyResult( const OclMeta::DependencySet& setDependenies = OclMeta::DependencySet() );
 					OclCommon::ExceptionPool 				GetExceptions();
@@ -116,11 +114,11 @@ namespace Ocl
 					OclMeta::Object 							Evaluate( OclTree::ObjectContextStack& ctxObjects, bool bEnableLogicalShortCircuit = false, bool bEnableIteratorShortCircuit = false, bool bEnableTracking = true );
 
 					OclTree::ViolationVector 					GetViolations();
+					void										ClearViolations();
+//<udmoclpat changes
 					static void setPatProcessFlag(bool bFlag);
-					//static void setPatOutputFile(std::string str) { OclTree::PatHelper::f_pat_output.open(str.c_str()); };
-					//static void closePatOutputFile() { OclTree::PatHelper::f_pat_output.close(); };
+//udmoclpat changes>
 	};
 }; // namespace Ocl
 
 #endif // OCLConstraint_h
-

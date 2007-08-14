@@ -8,17 +8,15 @@
 #ifndef OCLConfig_h
 #define OCLConfig_h
 
-// Use OCL_USING_STL_NAMESPACE if you use std:: namespace
-
-#ifdef OCL_USING_STL_NAMESPACE
-	#define GOCL_STL_NS() std::
-#else
-	#define GOCL_STL_NS()
-#endif
+#define USE_LOGICAL_SHORTCIRCUIT				false
+#define USE_LOGICAL_ITERATOR_SHORTCIRCUIT	false
+#define MAX_VIOLATION_FOR_CHECK				-1
+#define MAX_VIOLATION_FOR_CONSTRAINT			-1
+#define GOCL_STL_NS() std::
 
 #pragma warning( disable : 4503 )
 #pragma warning( disable : 4786 )
 #pragma warning( disable : 4018 )
 #pragma warning( disable : 4244 )
 
-#endif // OCLConfig_h
+#endif OCLConfig_h
