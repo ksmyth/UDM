@@ -65,6 +65,13 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+04/20/04	-	Release 2.13
+			
+			- Fixed StaticObject::setAssociation bug, which prevented adding/removing
+			"out of the box" links to instance objects
+			- Fixed detach() in each backend to also remove the placheholder object, if it exists
+			- Fixed UdmTOMI bug GetAssociationClassObjects, added boolean variable tryCrosslink
+
 04/14/04	-	Release 2.12
 
 			- Fixed ~StaticObject destructor bug.
