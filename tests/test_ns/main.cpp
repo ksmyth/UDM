@@ -32,12 +32,12 @@ void readTest(const std::string& fname)
 }
 //=========================================
 
-void main()
+int main()
 {
   try
   {
     std::string fn ="test.xml";
-    //writeTest(fn);
+    writeTest(fn);
     readTest(fn);
   }
   catch(udm_exception& e)
@@ -45,6 +45,6 @@ void main()
     std::cout << e.what();
   }
 
-	
+  return 0;
 }
 
