@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<sbml xmlns="http://www.sbml.org/sbml/level2" xmlns:sbml="http://www.sbml.org/sbml/level2" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:unigene="http://www.dbi.tju.edu/xmlns/unigene" xmlns:go="http://www.dbi.tju.edu/xmlns/go" xmlns:dbi="http://www.dbi.tju.edu/xmlns/dbi" version="1" level="2">
+<sbml xmlns="http://www.sbml.org/sbml/level2" xmlns:sbml="http://www.sbml.org/sbml/level2" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:unigene="http://www.dbi.tju.edu/xmlns/unigene" xmlns:go="http://www.dbi.tju.edu/xmlns/go" xmlns:dbi="http://www.dbi.tju.edu/xmlns/dbi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sbml.org/sbml/level2 SBML2Ex_sbml.xsd http://www.w3.org/1998/Math/MathML SBML2Ex_math.xsd http://www.w3.org/1999/xhtml SBML2Ex_html.xsd http://www.dbi.tju.edu/xmlns/unigene SBML2Ex_unigene.xsd http://www.dbi.tju.edu/xmlns/go SBML2Ex_go.xsd http://www.dbi.tju.edu/xmlns/dbi SBML2Ex_dbi.xsd" version="1" level="2">
   <model>
     <listOfSpecies>
       <species id="AA017353" compartment="null">

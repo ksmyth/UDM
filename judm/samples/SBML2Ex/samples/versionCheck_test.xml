@@ -2,7 +2,7 @@
 <sbml:sbml level="2" version="1" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xmlns:sbml="http://www.isis.vanderbilt.edu/2004/schemas/sbml" 
-xsi:schemaLocation="http://www.isis.vanderbilt.edu/2004/schemas/sbml sbml.xsd">
+xsi:schemaLocation="http://www.isis.vanderbilt.edu/2004/schemas/sbml SBML2Ex_sbml.xsd">
 <sbml:model id="versionCheck" name="versionCheck">
 
 <!--

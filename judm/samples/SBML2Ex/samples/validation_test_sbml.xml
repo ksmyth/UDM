@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<sbml xmlns="http://www.sbml.org/sbml/level2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sbmlns="http://www.sbml.org/sbml/level2" xmlns:mathmlns="http://www.w3.org/1998/Math/MathML" xmlns:html="http://www.w3.org/1999/xhtml" xsi:noNamespaceSchemaLocation="SBML2.xsd" level="2" version="1">
+	<sbml xmlns="http://www.sbml.org/sbml/level2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sbmlns="http://www.sbml.org/sbml/level2" xmlns:mathmlns="http://www.w3.org/1998/Math/MathML" xmlns:html="http://www.w3.org/1999/xhtml" xsi:noNamespaceSchemaLocation="SBML2Ex.xsd" level="2" version="1">
     <model>
     <listOfCompartments>
     <compartment id="cell"/>
