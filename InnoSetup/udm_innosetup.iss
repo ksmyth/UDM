@@ -64,6 +64,7 @@ Source: {#UDM3rdPartyPath}\zlib\license.txt; DestDir: {app}\3rdparty\zlib; Compo
 Source: {#UDM3rdPartyPath}\zlib\zlib.lib; DestDir: {app}\3rdparty\zlib; Components: Core; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\zlib\zlibD.lib; DestDir: {app}\3rdparty\zlib; Components: Core; Flags: ignoreversion
 ;Udm bin folder
+Source: {#UDM3rdPartyPath}\xerces-c_2_5_0\bin\xerces-c_2_5_0.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion deleteafterinstall
 Source: {#UDMPATH}\bin\{#UDMDLL}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\bin\{#UDMDLLD}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\bin\GmeOclExprChecker.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
@@ -237,7 +238,9 @@ end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
-	if CurStep = ssPostInstall then begin
+	if CurStep = ssInstall then begin
+		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_PATH', {app}+'');
+		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_3RDPARTY_PATH', {app}+'3rdparty');
 		ModPath('PATH', '%UDM_PATH%\bin');
 		ModPath('PATH', '%UDM_PATH%\etc');
 		ModPath('PATH', '%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\bin');
