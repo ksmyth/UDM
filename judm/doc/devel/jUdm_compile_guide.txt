@@ -30,11 +30,11 @@ Step-by-step guide:
 
 		5.1 ant dist-all
 			Target “dist-all” initializes the build’s distribution environment 
-			(<udm_ns>\judm\build\build_win) after completely removing it from the disk, 
-			copies the necessary dll-s into this build directry, 
+			(<udm_ns>\judm\build\build_win) after completely removing any previous build
+			from the disk, copies the necessary dll-s into this build directry, 
 			updates, re-generates, and compiles the swig and domain-specific source codes, 
 			generates javadoc API documentation, and updates the domain-specific distribution 
-			by generating the necessary jar files in <udm_ns>\judm\build\build_win\dist.
+			by generating the necessary zip files in <udm_ns>\judm\build\build_win\dist.
 
 		5.2 ant dist
 			Target “dist” re-initializes the build’s distribution environment 
@@ -61,3 +61,4 @@ Step-by-step guide:
 			does not re-generate the source files.
 			This task requires the existence of the swig and domain-specific source codes, so you
 			have to run "compile-gen" task prior running this task.
+

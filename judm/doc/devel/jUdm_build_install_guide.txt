@@ -7,30 +7,43 @@ Requirements:
 	The step-by-step guide to compile jUdm source files must be completed
 	J2SK 1.4.2 as Java Runtime Environment 
 
+	This document uses <udm_ns> to denote the root of the UDM_NS sources.
+
 Step-by-step guide:
 -------------------------
 
-	1. Open a command shell and go to the directory <udm_ns>\judm. 
+	1. Versioning
 
-		Using ANT you have run the following targets
+		The <udm_ns>\judm\etc folder contains the manifest files that will be added to the 
+		judm.jar when compiling the jUdm core classes. Check out this manifest and increase the
+		verison number if necessary.
+
+		Similarly, <udm_ns>\judm\samples\GeneTF\etc, <udm_ns>\judm\samples\GeneTRE\etc, and
+		<udm_ns>\judm\samples\SBML2Ex\etc folders contain the manifest files that will be added
+		to the domain-specific jars when compiling these domain-specific generated classes.
+		Check out these manifest files and increment the version numbers whenever applicable.
+
+	2. Open a command shell and go to the directory <udm_ns>\judm
+
+	3. Using ANT you have to run the following target:
 
 		ant dist-all
 			Target “dist-all” initializes the build’s distribution environment 
-			(<udm_ns>\judm\build\build_win) after completely removing it from the disk, 
-			copies the necessary dll-s into this build directry, 
+			(<udm_ns>\judm\build\build_win) after completely removing any previous builds
+			from the disk, copies the necessary dll-s into this build directry, 
 			updates, re-generates, and compiles the swig and domain-specific source codes, 
 			generates javadoc API documentation, and updates the domain-specific distribution 
-			by generating the necessary jar files in <udm_ns>\judm\build\build_win\dist in case
+			by generating the necessary zip files in <udm_ns>\judm\build\build_win\dist in case
 			you use windows or in <udm_ns>\judm\build\build_linux\dist in case you use linux.
 
-	2. InstallShield
+	4. InstallShield
 
-		2.1 Create a group (optional) in the install wizard for the jUdm core module
-		2.2 Add <udm_ns>\judm\build\build_win\dist\judm to this newly created group
-		2.3 Create a group (optional) in the install wizard for the jUdm samples
-		2.4 Add <udm_ns>\judm\build\build_win\dist\GeneTF to this newly created samples group
-		2.5 Add <udm_ns>\judm\build\build_win\dist\GeneTRE to this newly created samples group
-		2.6 Add <udm_ns>\judm\build\build_win\dist\SBML2Ex to this newly created samples group
+		4.1 Create a group (optional) in the install wizard for the jUdm core module
+		4.2 Add <udm_ns>\judm\build\build_win\dist\judm to this newly created group
+		4.3 Create a group (optional) in the install wizard for the jUdm samples
+		4.4 Add <udm_ns>\judm\build\build_win\dist\GeneTF to this newly created samples group
+		4.5 Add <udm_ns>\judm\build\build_win\dist\GeneTRE to this newly created samples group
+		4.6 Add <udm_ns>\judm\build\build_win\dist\SBML2Ex to this newly created samples group
 
 			When the user intalls the UDM, he or she should be able to decide whether to install 
 			the jUdm or not; moreover, he or she sould be able to decide whether to install the 
@@ -42,7 +55,7 @@ Step-by-step guide:
 			<some_udm_install>...\judm\samples\GeneTRE
 			<some_udm_install>...\judm\samples\SBML2Ex
 
-		2.7 Create the environment variable JUDM_PATH:
+		4.7 Create the environment variable JUDM_PATH:
 
 			JUDM_PATH=<some_udm_install>...\judm
 			
