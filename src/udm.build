@@ -69,8 +69,11 @@
 
   <setenv name="MSVCDir" value="${Dir.msvc}"/>
 
+  <if test="${environment::variable-exists('PATH')}">
+    <property name="Path.path" value="${environment::get-variable('PATH')}"/>
+  </if>
   <ifnot test="${environment::variable-exists('PATH')}">
-    <setenv name="PATH" value=""/>
+    <property name="Path.path" value=""/>
   </ifnot>
   <setenv>
     <variable name="PATH">
@@ -91,13 +94,16 @@
         <pathelement dir="${Dir.frameworksdk}\bin"/>
         <pathelement dir="${Dir.framework}\bin"/>
 
-        <pathelement path="${environment::get-variable('PATH')}"/>
+        <pathelement path="${Path.path}"/>
       </path>
     </variable>
   </setenv>
 
+  <if test="${environment::variable-exists('INCLUDE')}">
+    <property name="Path.lib" value="${environment::get-variable('INCLUDE')}"/>
+  </if>
   <ifnot test="${environment::variable-exists('INCLUDE')}">
-    <setenv name="INCLUDE" value=""/>
+    <property name="Path.lib" value=""/>
   </ifnot>
   <setenv>
     <variable name="INCLUDE">
@@ -120,13 +126,16 @@
         <pathelement dir="${Path.udm}\UdmOclPat\GOCL\Include"/>
         <pathelement dir="${Path.udm}\UML GME\Interpreter"/>
 
-        <pathelement path="${environment::get-variable('INCLUDE')}"/>
+        <pathelement path="${Path.include}"/>
       </path>
     </variable>
   </setenv>
 
+  <if test="${environment::variable-exists('LIB')}">
+    <property name="Path.lib" value="${environment::get-variable('LIB')}"/>
+  </if>
   <ifnot test="${environment::variable-exists('LIB')}">
-    <setenv name="LIB" value=""/>
+    <property name="Path.lib" value=""/>
   </ifnot>
   <setenv>
     <variable name="LIB">
@@ -144,19 +153,22 @@
         <pathelement dir="${Dir.msvc}\PlatformSDK\lib"/>
         <pathelement dir="${Dir.frameworksdk}\lib"/>
 
-        <pathelement path="${environment::get-variable('LIB')}"/>
+        <pathelement path="${Path.lib}"/>
       </path>
     </variable>
   </setenv>
 
+  <if test="${environment::variable-exists('CLASSPATH')}">
+    <property name="Path.javaclass" value="${environment::get-variable('CLASSPATH')}"/>
+  </if>
   <ifnot test="${environment::variable-exists('CLASSPATH')}">
-    <setenv name="CLASSPATH" value=""/>
+    <property name="Path.javaclass" value=""/>
   </ifnot>
   <setenv>
     <variable name="CLASSPATH">
       <path>
         <pathelement dir="${Path.udm_3rdparty}\antlr-2.7.1"/>
-        <pathelement path="${environment::get-variable('CLASSPATH')}"/>
+        <pathelement path="${Path.javaclass}"/>
       </path>
     </variable>
   </setenv>
