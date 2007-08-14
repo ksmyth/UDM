@@ -71,13 +71,13 @@ public abstract class UdmFactory {
         throws UdmException {
         try {
             System.loadLibrary("UdmSwig");
-            System.out.println("library path: UdmSwig");
+            //System.out.println("library path: UdmSwig");
         } catch (UnsatisfiedLinkError linkEx) {
             if (JUDM_CINT_LIB_PATH == null) {
                 findJUDM_PATH();
             }
 
-            System.out.println("judm path: " + JUDM_CINT_LIB_PATH);
+            //System.out.println("judm path: " + JUDM_CINT_LIB_PATH);
             System.load(JUDM_CINT_LIB_PATH);
         }
         // store the Uml.xsd file
