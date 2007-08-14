@@ -181,6 +181,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/FORCE:MULTIPLE"
 				AdditionalDependencies="ANTLR.lib GOCL.lib"
 				OutputFile="..\..\..\bin\GmeOclExprChecker.dll"
 				LinkIncremental="1"
@@ -789,11 +790,11 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="resources\compicon.ico"
+				RelativePath="CompIcon.ico"
 				>
 			</File>
 			<File
-				RelativePath="CompIcon.ico"
+				RelativePath="resources\compicon.ico"
 				>
 			</File>
 			<File
