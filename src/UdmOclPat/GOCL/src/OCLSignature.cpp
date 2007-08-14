@@ -252,6 +252,11 @@ namespace OclSignature
 	{
 	}
 
+	Method::Method( const std::string& strName, const std::string& strTypeName, const OclCommon::FormalParameterVector& vecParameters )
+		: Feature( strName, Feature::FK_METHOD ), TypeableFeature( strTypeName ), ParametralFeature( vecParameters )
+	{
+	}
+
 	Method::~Method()
 	{
 	}
