@@ -11,7 +11,7 @@
 #define UDMDLL "UdmDll_3_1_2.dll"
 #define UDMDLLD "UdmDll_3_1_2D.dll"
 #define UDMVER "3.1.2"
-#define GMEVER "6.11.9"
+#define GMEVER "7.6.29"
 #define OutputFileBase "Udm_setup"
 
 [Setup]
