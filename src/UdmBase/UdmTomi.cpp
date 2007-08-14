@@ -364,6 +364,33 @@ UDM_DLL bool Object::GetIntValue(string strAttrName, string& value) const
 	return false;
 };
 
+
+// Himanshu: integer array attributes getter
+UDM_DLL bool Object::GetIntValues(string strAttrName, vector<__int64>& values) const
+{
+	// Getting Attributes from meta
+	::Uml::Uml::Class cls= type();
+	set<::Uml::Uml::Attribute> attrs=cls.attributes();	
+	
+	// Adding parent attributes
+	set<::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	attrs.insert(aattrs.begin(),aattrs.end());
+
+	
+	for(set<::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	{
+		string strCurrAttrName=ai->name();
+		
+		if(string(ai->type())=="Integer"&& strCurrAttrName==strAttrName)
+		{
+			values=getIntegerAttrArr(*ai);
+			return true;
+		}
+	}
+	// Could not find the attribute.
+	return false;
+};
+
 // UDM TOMI Paradigm Independent Interface
 // get the value of Attribute named strAttrName of type String
 // return false if not found,true if ok
@@ -391,6 +418,34 @@ UDM_DLL bool Object::GetStrValue( string strAttrName, string& value) const
 	// Could not find the attribute.
 	return false;
 };
+
+// Himanshu: string array attribute getter
+UDM_DLL bool Object::GetStrValues(string strAttrName, vector<string>& values) const
+{
+	// Getting Attributes from meta
+	::Uml::Uml::Class cls= type();
+	set<::Uml::Uml::Attribute> attrs=cls.attributes();	
+	
+	// Adding parent attributes
+	set<::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	attrs.insert(aattrs.begin(),aattrs.end());
+
+	
+	for(set<::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	{
+		string strCurrAttrName=ai->name();
+		
+		if( ((string(ai->type())=="String") || (string(ai->type())=="Text") ) && strCurrAttrName==strAttrName)
+		{
+			values=getStringAttrArr(*ai);
+			return true;
+		}
+	}
+	// Could not find the attribute.
+	return false;
+};
+
+
 
 UDM_DLL bool Object::GetStrValue( string strAttrName, __int64& value) const
 {
@@ -442,6 +497,32 @@ UDM_DLL bool Object::GetRealValue( string strAttrName, double& value) const
 	return false;
 };
 
+// Himanshu: double array attribute getter
+UDM_DLL bool Object::GetRealValues(string strAttrName, vector<double>& values) const
+{
+	// Getting Attributes from meta
+	::Uml::Uml::Class cls= type();
+	set<::Uml::Uml::Attribute> attrs=cls.attributes();	
+	
+	// Adding parent attributes
+	set<::Uml::Uml::Attribute> aattrs=::Uml::AncestorAttributes(cls);
+	attrs.insert(aattrs.begin(),aattrs.end());
+
+	
+	for(set<::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	{
+		string strCurrAttrName=ai->name();
+		
+		if(string(ai->type())=="Real"&& strCurrAttrName==strAttrName)
+		{
+			values=getRealAttrArr(*ai);
+			return true;
+		}
+	}
+	// Could not find the attribute.
+	return false;
+};
+
 // UDM TOMI Paradigm Independent Interface
 // get the value of Attribute named strAttrName of type Bool
 // return false if not found,true if ok
@@ -469,6 +550,33 @@ UDM_DLL bool Object::GetBoolValue( string strAttrName, bool& value) const
 	// Could not find the attribute.
 	return false;
 };
+
+// Himanshu: bool array attribute getter
+UDM_DLL bool Object::GetBoolValues(string strAttrName, vector<bool>& values) const
+{
+	// Getting Attributes from meta
+	::Uml::Uml::Class cls= type();
+	set<::Uml::Uml::Attribute> attrs=cls.attributes();	
+	
+	// Adding parent attributes
+	set<::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	attrs.insert(aattrs.begin(),aattrs.end());
+
+	
+	for(set<::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	{
+		string strCurrAttrName=ai->name();
+		
+		if(string(ai->type())=="Boolean"&& strCurrAttrName==strAttrName)
+		{
+			values=getBooleanAttrArr(*ai);
+			return true;
+		}
+	}
+	// Could not find the attribute.
+	return false;
+};
+
 
 // UDM TOMI Paradigm Independent Interface
 // get the value of Attribute named strAttrName of type Int
