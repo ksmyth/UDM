@@ -13,7 +13,7 @@ JavaAPIGen::~JavaAPIGen(void)
 {
 }
 //================================================
-void JavaAPIGen::GenerateJava(const ::Uml::Uml::Diagram &diagram, 
+void JavaAPIGen::generate(const ::Uml::Uml::Diagram &diagram, 
                   const map<std::string, std::string>& ns_map, 
                   const std::string& inputfile)
 {

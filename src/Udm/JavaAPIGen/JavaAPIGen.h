@@ -7,7 +7,7 @@ class JavaAPIGen
 public:
   JavaAPIGen(void);
   ~JavaAPIGen(void);
-  void GenerateJava(const ::Uml::Uml::Diagram &diagram, 
+  void  generate(const ::Uml::Uml::Diagram &diagram, 
                     const map<std::string, std::string>& ns_map, 
                     const std::string& inputfile);
 };
