@@ -338,7 +338,8 @@ class OCLParser
 		private :
 			void AddException( const string& strMessage, const string& strParam1, const string& strParam2, int iLine )
 			{
-				m_ExceptionPool.Add( OclCommon::Exception( OclCommon::Exception::ET_SYNTACTIC, strMessage, strParam1, strParam2, iLine ) );
+				OclCommon::Exception exp( OclCommon::Exception( OclCommon::Exception::ET_SYNTACTIC, strMessage, strParam1, strParam2, iLine ) );
+				m_ExceptionPool.Add( exp );
 			}
 	>>
 

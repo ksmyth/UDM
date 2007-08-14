@@ -259,7 +259,8 @@ namespace Ocl
 		for ( OclMeta::DependencySet::const_iterator i = setDependencies.begin() ; i != setDependencies.end() ; i++ ) {
 			if ( (*i).m_bFailed ) {
 				bWasError = true;
-				m_poolExceptions.Add( OclCommon::Exception( OclCommon::Exception::ET_SEMANTIC, EX_CONSTRAINT_DEF_FAILED, (*i).m_strSignature, (*i).m_position.iLine, (*i).m_position.iColumn ) );
+				OclCommon::Exception exp( OclCommon::Exception( OclCommon::Exception::ET_SEMANTIC, EX_CONSTRAINT_DEF_FAILED, (*i).m_strSignature, (*i).m_position.iLine, (*i).m_position.iColumn ) );
+				m_poolExceptions.Add( exp );
 			}
 		}
 		return m_eState = ( bWasError ) ? CS_CHECK_DEPENDENCY_FAILED : CS_CHECK_DEPENDENCY_SUCCEEDED;
@@ -330,7 +331,7 @@ namespace Ocl
 		m_vecViolations.clear();;
 		db = m_vecViolations.size();
 	}
-													
+
 //<udmoclpat changes
 	void Constraint::setPatProcessFlag(bool bflag)
 	{

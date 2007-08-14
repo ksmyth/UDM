@@ -312,7 +312,8 @@ namespace OclMeta
 				return strName1;
 		StringVector vecTypes;
 		const StringVector& vecSuperTypes = GetType( strName1 )->GetSuperTypeNames();
-		for ( unsigned int i = 0 ; i < vecSuperTypes.size() ; i++ )
+		unsigned int i;
+		for ( i = 0 ; i < vecSuperTypes.size() ; i++ )
 			vecTypes.push_back( GetTypeBase( vecSuperTypes[ i ], strName2 ) );
 		int iIsA = -1;
 		std::string strResult = "ocl::Any";
@@ -353,7 +354,7 @@ namespace OclMeta
 
 	bool TypeManager::IsTypeA( const TypeSeq& vecType1, const TypeSeq& vecType2 )
 	{
-		// terge ?? 
+		// terge ??
 		if ( vecType2.size() < vecType1.size() )
 			return false;
 		for ( unsigned int i = 0 ; i < vecType1.size() ; i++ )
@@ -655,7 +656,11 @@ namespace OclMeta
 		// recursion corrected: terge
 		char signoStr[100];
 		std::string signo = signature.Print();
-		itoa(level, signoStr, 10);  
+#ifdef _WIN32
+		itoa(level, signoStr, 10);
+#else
+		sprintf( signoStr, "%d", level );
+#endif
 		signo += signoStr;
 
 		if ( GetCallResult( m_mapIterators, signo/*signature*/, callResult ) )
