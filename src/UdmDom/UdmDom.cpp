@@ -1267,7 +1267,7 @@ namespace UdmDom
 				//and role.target() as parent,
 				//might happen that my parent is not the requested one
 				
-				set<::Uml::Uml::Class> cl_s = Uml::DescendantClasses(role.target());
+				set< ::Uml::Uml::Class> cl_s = Uml::DescendantClasses(role.target());
 
 				if (cl_s.find(do_parent->m_type)  != cl_s.end())
 					return do_parent;
@@ -1352,8 +1352,8 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 			
 			if(myid != 0) 
 			{
-				set<::Uml::Uml::AssociationRole> rs = Uml::AncestorAssociationTargetRoles(m_type);
-				for(set<::Uml::Uml::AssociationRole>::iterator role = rs.begin(); role != rs.end(); role++) 
+				set< ::Uml::Uml::AssociationRole> rs = Uml::AncestorAssociationTargetRoles(m_type);
+				for(set< ::Uml::Uml::AssociationRole>::iterator role = rs.begin(); role != rs.end(); role++) 
 				{
 					DOMString tname = Uml::MakeRoleName(*role).c_str();
 					DOMString oname = Uml::MakeRoleName(Uml::theOther(*role)).c_str();
@@ -1368,8 +1368,8 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				::Uml::Uml::Association assoc = m_type.association();
 				if(assoc) 
 				{
-					set<::Uml::Uml::AssociationRole> rs = assoc.roles();
-					for(set<::Uml::Uml::AssociationRole>::iterator role = rs.begin(); role != rs.end(); role++) 
+					set< ::Uml::Uml::AssociationRole> rs = assoc.roles();
+					for(set< ::Uml::Uml::AssociationRole>::iterator role = rs.begin(); role != rs.end(); role++) 
 					{
 						DOMString tname = Uml::MakeRoleName(*role).c_str();
 						DOMString oname = Uml::MakeRoleName(Uml::theOther(*role)).c_str();
@@ -2160,13 +2160,13 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 
 
 
-					set<::Uml::Uml::Class> ancestorClasses=Uml::AncestorClasses(archetype->type());
+					set< ::Uml::Uml::Class> ancestorClasses=Uml::AncestorClasses(archetype->type());
 
-					for(set<::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); 
+					for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); 
 					p_currClass!=ancestorClasses.end(); p_currClass++)
 					{
-						set<::Uml::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
-						for(set<::Uml::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
+						set< ::Uml::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
+						for(set< ::Uml::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
 							p_currRole!=compParentRoles.end(); p_currRole++)
 							{
 								::Uml::Uml::Class childClass=Uml::theOther(*p_currRole).target();
@@ -2942,12 +2942,12 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		/*if(!LoadLibrary("..\\lib\\xerces-c_1_2")) MessageBox(NULL, "Baj van", "Load lib", 0); */
 
 		//create a cache for meta-classes 
-		set<::Uml::Uml::Namespace> meta_namespaces= metaroot.dgr->namespaces();
+		set< ::Uml::Uml::Namespace> meta_namespaces= metaroot.dgr->namespaces();
 		
-		for (set<::Uml::Uml::Namespace>::iterator mni = meta_namespaces.begin(); mni != meta_namespaces.end(); mni++)
+		for (set< ::Uml::Uml::Namespace>::iterator mni = meta_namespaces.begin(); mni != meta_namespaces.end(); mni++)
 		{
-			set<::Uml::Uml::Class> meta_classes = mni->classes();
-			for (set<::Uml::Uml::Class>::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
+			set< ::Uml::Uml::Class> meta_classes = mni->classes();
+			for (set< ::Uml::Uml::Class>::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
 			{
 				//namespace + ":" + classname
 				string key = (string)(mni->name()) + ":" + (string)(mci->name());
@@ -3685,7 +3685,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 				// set XML Schema
 				DOM_Element de = static_cast<DomObject *>(GetRootObject().__impl())->dom_element;
 				
-				set<::Uml::Uml::Namespace> nses = metaroot.dgr->namespaces();
+				set< ::Uml::Uml::Namespace> nses = metaroot.dgr->namespaces();
 				de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
 						  DOMString("xmlns:xsi"), DOMString("http://www.w3.org/2001/XMLSchema-instance"));
 
@@ -3699,7 +3699,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 				}
 				else
 				{
-					set<::Uml::Uml::Namespace>::iterator nses_i = nses.begin();
+					set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin();
 					string schemalocations;
 
 					while (nses_i != nses.end())

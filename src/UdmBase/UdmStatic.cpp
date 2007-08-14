@@ -1400,7 +1400,7 @@ namespace UdmStatic
 	{ 
 		
 		
-		set<::Uml::Uml::CompositionChildRole> inserted_via;			//this will contain the roles altered this time
+		set< ::Uml::Uml::CompositionChildRole> inserted_via;			//this will contain the roles altered this time
 		children_type already_there;							//this will contain the childrens which where there (only for the previous rolenames)
 		children_type inserted_now;								//this will contain the inserted items (including thos already there)
 		
@@ -1437,7 +1437,7 @@ namespace UdmStatic
 			//role is ok!
 			
 			
-			pair<set<::Uml::Uml::CompositionChildRole>::iterator, bool> ins_res = inserted_via.insert(role);
+			pair<set< ::Uml::Uml::CompositionChildRole>::iterator, bool> ins_res = inserted_via.insert(role);
 			
 			if (ins_res.second)
 			{
@@ -1468,7 +1468,7 @@ namespace UdmStatic
 		//get the inserted now childrens
 		//if not found detach it..
 
-		for(set<::Uml::Uml::CompositionChildRole> ::iterator j = inserted_via.begin(); j!= inserted_via.end(); j++)
+		for(set< ::Uml::Uml::CompositionChildRole> ::iterator j = inserted_via.begin(); j!= inserted_via.end(); j++)
 		{
 			pair<children_type::iterator, children_type::iterator> m = 	already_there.equal_range((*j).uniqueId());
 			while(m.first != m.second)
@@ -1640,13 +1640,13 @@ namespace UdmStatic
 				cam.erase(cam.begin(), cam.end());
 		
 			
-			set<::Uml::Uml::Class> ancestorClasses=Uml::AncestorClasses(archetype->type());
+			set< ::Uml::Uml::Class> ancestorClasses=Uml::AncestorClasses(archetype->type());
 
-			for(set<::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); 
+			for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); 
 			p_currClass!=ancestorClasses.end(); p_currClass++)
 			{
-				set<::Uml::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
-				for(set<::Uml::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
+				set< ::Uml::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
+				for(set< ::Uml::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
 					p_currRole!=compParentRoles.end(); p_currRole++)
 					{
 						::Uml::Uml::Class childClass=Uml::theOther(*p_currRole).target();
@@ -1831,8 +1831,8 @@ namespace UdmStatic
 
 					//now let's deal with assoc. classes.
 					//we can be a descendant of an assoc. class either
-					set<::Uml::Uml::Class> dsc_s = Uml::DescendantClasses(assClass);
-					set<::Uml::Uml::Class>::iterator dsc_i = dsc_s.find(assoc_so->m_type);	
+					set< ::Uml::Uml::Class> dsc_s = Uml::DescendantClasses(assClass);
+					set< ::Uml::Uml::Class>::iterator dsc_i = dsc_s.find(assoc_so->m_type);	
 
 					//if (assClass == assoc_so->m_type)	
 					if (dsc_i != dsc_s.end())
@@ -2052,7 +2052,7 @@ namespace UdmStatic
 
 
 		//we will need our ancestors 
-		set<::Uml::Uml::Class> anc_s = Uml::AncestorClasses(m_type);
+		set< ::Uml::Uml::Class> anc_s = Uml::AncestorClasses(m_type);
 		//check the mode parameter			
 		if (mode != Udm::TARGETFROMPEER)
 		{
@@ -2072,7 +2072,7 @@ namespace UdmStatic
 			
 				if (!ass) 
 				{
-					for ( set<::Uml::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
+					for ( set< ::Uml::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
 					{
 						ass = (*anc_i).association();
 						if (ass) break;
@@ -2082,7 +2082,7 @@ namespace UdmStatic
 				if (!ass)
 					throw udm_exception("TARGETFROMCLASS was requested and I'm not an association class!");
 				
-				set<::Uml::Uml::AssociationRole> ass_roles = ass.roles();
+				set< ::Uml::Uml::AssociationRole> ass_roles = ass.roles();
 				if (ass_roles.size() != 2) 
 				{
 					string err_str;
@@ -2090,7 +2090,7 @@ namespace UdmStatic
 					throw udm_exception(err_str);
 				}
 
-				set<::Uml::Uml::AssociationRole >::iterator role_it = ass_roles.begin();
+				set< ::Uml::Uml::AssociationRole >::iterator role_it = ass_roles.begin();
 
 				::Uml::Uml::AssociationRole role_end = *(role_it);
 
@@ -2126,15 +2126,15 @@ namespace UdmStatic
 
 				//get all my rolenames (from ancestor classes, too)
 
-				set<::Uml::Uml::AssociationRole> roles;
-				for ( set<::Uml::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
+				set< ::Uml::Uml::AssociationRole> roles;
+				for ( set< ::Uml::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
 				{
-					set<::Uml::Uml::AssociationRole> c_roles = (*anc_i).associationRoles();
+					set< ::Uml::Uml::AssociationRole> c_roles = (*anc_i).associationRoles();
 					roles.insert(c_roles.begin(), c_roles.end());
 				}
 				
 				//find the role provided
-				set<::Uml::Uml::AssociationRole>::iterator i = roles.find(Uml::theOther(meta));
+				set< ::Uml::Uml::AssociationRole>::iterator i = roles.find(Uml::theOther(meta));
 			
 				if (i == roles.end()) 
 					throw udm_exception("Invalid meta specified in StaticObject::setAssociation!");
@@ -2151,14 +2151,14 @@ namespace UdmStatic
 	
 			//get all my rolenames (from ancestor classes, too)
 
-			set<::Uml::Uml::AssociationRole> roles;
-			for ( set<::Uml::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
+			set< ::Uml::Uml::AssociationRole> roles;
+			for ( set< ::Uml::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
 			{
-				set<::Uml::Uml::AssociationRole> c_roles = (*anc_i).associationRoles();
+				set< ::Uml::Uml::AssociationRole> c_roles = (*anc_i).associationRoles();
 				roles.insert(c_roles.begin(), c_roles.end());
 			}
 			
-			set<::Uml::Uml::AssociationRole>::iterator i = roles.find(Uml::theOther(meta));
+			set< ::Uml::Uml::AssociationRole>::iterator i = roles.find(Uml::theOther(meta));
 			if (i == roles.end()) 
 				throw udm_exception("Invalid meta specified in StaticObject::setAssociation!");
 			
@@ -2490,7 +2490,7 @@ namespace UdmStatic
 	unsigned long StaticDataNetwork::DeSerialize(FILE *f, map<unsigned long, const StaticObject*>& tr_map,  Object & root_o)
 	{
 		//make some caches
-		typedef pair<::Uml::Uml::Class, string> role_key_t; 
+		typedef pair< ::Uml::Uml::Class, string> role_key_t; 
 
 		//cache maps
 		typedef map<string, ::Uml::Uml::Class> type_cache_t;
@@ -2672,10 +2672,10 @@ namespace UdmStatic
 			
 			//read in my type's ancestors
 			//we will need them 
-			static set<::Uml::Uml::Class> ancestors;
+			static set< ::Uml::Uml::Class> ancestors;
 			ancestors = Uml::AncestorClasses(type);
 
-			static set<::Uml::Uml::Class>::iterator anc_i;
+			static set< ::Uml::Uml::Class>::iterator anc_i;
 
 			//read the childrens
 			static unsigned long children_no;
@@ -2737,8 +2737,8 @@ namespace UdmStatic
 						{
 							if (!ccr)
 							{
-								static set<::Uml::Uml::CompositionParentRole> cpr_s;
-								static set<::Uml::Uml::CompositionParentRole>::iterator cpr_s_i;
+								static set< ::Uml::Uml::CompositionParentRole> cpr_s;
+								static set< ::Uml::Uml::CompositionParentRole>::iterator cpr_s_i;
 								static string ccr_try_name;
 								
 								cpr_s.erase(cpr_s.begin(), cpr_s.end());
@@ -2854,8 +2854,8 @@ namespace UdmStatic
 							if (!asr)
 							{
 							
-								static set<::Uml::Uml::AssociationRole> asr_s, ass_asr_s;
-								static set<::Uml::Uml::AssociationRole>::iterator asr_s_i ;
+								static set< ::Uml::Uml::AssociationRole> asr_s, ass_asr_s;
+								static set< ::Uml::Uml::AssociationRole>::iterator asr_s_i ;
 
 								asr_s.erase(asr_s.begin(), asr_s.end());
 								ass_asr_s.erase(ass_asr_s.begin(), ass_asr_s.end());
@@ -2945,8 +2945,8 @@ namespace UdmStatic
 				
 				for (anc_i = ancestors.begin(); anc_i != ancestors.end(); anc_i++)
 				{
-					set<::Uml::Uml::Attribute> att_l = (*anc_i).attributes();
-					for(set<::Uml::Uml::Attribute>::iterator att_i = att_l.begin(); att_i != att_l.end(); att_i++)
+					set< ::Uml::Uml::Attribute> att_l = (*anc_i).attributes();
+					for(set< ::Uml::Uml::Attribute>::iterator att_i = att_l.begin(); att_i != att_l.end(); att_i++)
 					{
 						//this can't be static
 						pair<string const, uniqueId_type> att_map_item((string)(*att_i).name(), (*att_i).uniqueId());
@@ -3620,7 +3620,7 @@ namespace UdmStatic
 		length += sizeof(unsigned long);
 		
 		
-		static set<::Uml::Uml::Class> ancestors;
+		static set< ::Uml::Uml::Class> ancestors;
 		ancestors = Uml::AncestorClasses(m_type);
 				
 		static map<uniqueId_type, string> ccr_map;
@@ -4588,7 +4588,7 @@ namespace Uml
 	{
 		set<Uml::Attribute> atts = what_class.attributes();
 		bool found = false;
-		for(set<::Uml::Uml::Attribute>::iterator i = atts.begin(); i != atts.end(); i++)
+		for(set< ::Uml::Uml::Attribute>::iterator i = atts.begin(); i != atts.end(); i++)
 		{
 			if (!strcmp(target_name, ((string)i->name()).c_str()))
 			{

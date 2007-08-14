@@ -1401,8 +1401,8 @@ namespace Udm
 	{
 	
 		//if all is false, only nonpersistent attributes will be modified
-		set<::Uml::Uml::Attribute> attributes = Uml::AncestorAttributes(type());
-		set<::Uml::Uml::Attribute>::const_iterator c_i = attributes.begin();
+		set< ::Uml::Uml::Attribute> attributes = Uml::AncestorAttributes(type());
+		set< ::Uml::Uml::Attribute>::const_iterator c_i = attributes.begin();
 
 			while (c_i != attributes.end())
 			{
@@ -1631,8 +1631,8 @@ namespace Udm
 
 		UDM_DLL void ObjectImpl::CopyAttributesFrom(const ObjectImpl*  from, bool direct)
 		{
-			set <::Uml::Uml::Attribute> attributes = Uml::AncestorAttributes(type());
-			set <::Uml::Uml::Attribute>::iterator attr_i = attributes.begin();
+			set < ::Uml::Uml::Attribute> attributes = Uml::AncestorAttributes(type());
+			set < ::Uml::Uml::Attribute>::iterator attr_i = attributes.begin();
 			while (attr_i != attributes.end())
 				CopyAttributeFrom(*attr_i++, from, direct);
 		};

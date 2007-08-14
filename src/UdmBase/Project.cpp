@@ -410,9 +410,9 @@ namespace Udm
 		return ret;
 	};
 
-	UDM_DLL vector<::Uml::Uml::Diagram> UdmProject::GetMetaDiagrams() const
+	UDM_DLL vector< ::Uml::Uml::Diagram> UdmProject::GetMetaDiagrams() const
 	{
-		vector<::Uml::Uml::Diagram> ret;
+		vector< ::Uml::Uml::Diagram> ret;
 		for (map<string, DataNetwork*>::const_iterator i = datanetworks.begin(); i != datanetworks.end(); i++)
 			ret.push_back(i->second->GetRootMeta());
 
@@ -576,8 +576,8 @@ namespace Udm
 			Udm::SmartDataNetwork * dn = new SmartDataNetwork(LocateDiagram(i->metalocator()), this);
 			//generate the corresponding DTD( this needs the diagram to be initialized)
 			
-			set<::Uml::Uml::Namespace> nses = LocateDiagram(i->metalocator()).dgr->namespaces();
-			for(set<::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+			set< ::Uml::Uml::Namespace> nses = LocateDiagram(i->metalocator()).dgr->namespaces();
+			for(set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 			{
 				::Uml::Uml::Namespace ns = *nses_i;
 				ff.open(string(temp_path + PATHDELIM + (string)ns.name() + ".xsd").c_str());

@@ -14,7 +14,7 @@ CHANGELOG
 namespace DTDGen
 {
 	typedef pair<__int64, __int64> card_prod;			//cardinality specification: min, max
-	typedef pair<::Uml::Uml::Class, card_prod> class_w_cp;		//class with cardinality prod
+	typedef pair< ::Uml::Uml::Class, card_prod> class_w_cp;		//class with cardinality prod
 	typedef vector<class_w_cp> cwcp_order;				//list of classes with cardinality info
 
 	//sumarizes cardinalities into one cardinality
