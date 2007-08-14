@@ -155,7 +155,7 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="swig.exe -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o $(ProjectDir)$(InputName)_wrap.cpp $(InputPath)
+					CommandLine="swig.exe -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o &quot;$(ProjectDir)$(InputName)_wrap.cpp&quot; &quot;$(InputPath)&quot;
 "
 					Outputs="$(ProjectDir)$(InputName)_wrap.cpp"/>
 			</FileConfiguration>
@@ -163,7 +163,7 @@
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="swig.exe -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o $(ProjectDir)$(InputName)_wrap.cpp $(InputPath)
+					CommandLine="swig.exe -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o &quot;$(ProjectDir)$(InputName)_wrap.cpp&quot; &quot;$(InputPath)&quot;
 "
 					Outputs="$(ProjectDir)$(InputName)_wrap.cpp"/>
 			</FileConfiguration>
