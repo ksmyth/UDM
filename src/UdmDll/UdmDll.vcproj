@@ -45,9 +45,9 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib\"
-				ProgramDatabaseFile=".\..\..\lib/UdmDll.pdb"
+				ProgramDatabaseFile="..\..\bin/UdmDll.pdb"
 				OptimizeReferences="1"
-				ImportLibrary=".\..\..\lib/UdmDll.lib"
+				ImportLibrary="..\..\lib/UdmDll.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
