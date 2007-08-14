@@ -39,8 +39,20 @@ void UdmTests::Test::testRead(const std::string& result)
   StoreXsd("Uml.xsd",cint_string (getUmlxsd().c_str()));
   UdmPseudoObject diagram;
 
+  std::ifstream ind(diagram_file);
+  
+  std::string dxml;
+  readFromFile(ind, dxml);
 
-
+  if(!UPO_LoadDiagramFromString(diagram_file,dxml.c_str(), diagram))
+  {
+     cint_string str;
+     diagram.GetLastError(str);
+     std::cout << __LINE__ <<std::endl;
+     std::cout << str.buffer() <<std::endl;
+     exit(1);
+   }
+/*
 
 
   if(!UPO_LoadDiagram(diagram_file,diagram))
@@ -51,7 +63,7 @@ void UdmTests::Test::testRead(const std::string& result)
      std::cout << str.buffer() <<std::endl;
      exit(1);
    }
-
+*/
 
   /*
   UdmPseudoObject swigNewUPO = new UdmPseudoObject();
