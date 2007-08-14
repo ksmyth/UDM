@@ -65,6 +65,12 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+04/14/04	-	Release 2.12
+
+			- Fixed ~StaticObject destructor bug.
+			- Fixed CreateLink(), DeleteLink() bug regarding temporary association 
+			between the objects of the same datanetwork
+			
 04/07/04	-	Release 2.11
 
 			- Added UdmTomi functions:
