@@ -240,19 +240,8 @@
 		
 	</target>
 
-	<!-- Copy the Linux SOs in the directory of the distribution -->
+	<!-- java.library.path includes the lib dir, copying is not needed -->
 	<target name="copy-dlls-linux" unless="isWindows" description="Copy SOs to build dir for testing">
-
-		<mkdir dir="${judm.dir}" />
-		<mkdir dir="${judm.bin.dir}" />
-		
-		<copy todir="${judm.bin.dir}">
-			<!-- Copy UdmSwig DLL in the directory of the distribution -->
-			<fileset dir="${udm.dir}/lib">
-				<include name="libUdmSwig.so" />
-			</fileset>
-		</copy>
-		
 	</target>
 
 	<!-- Compile the source codes -->
@@ -755,7 +744,7 @@
 		<!-- Run junit tests -->
 		<junit fork="yes" dir="${build.dir}/${dspackage}">
 			<!-- This is necessary for System.load("UdmSwig") to succeed -->
-			<jvmarg value="-Djava.library.path=${judm.dir}${path.separator}${judm.dir}/bin" />
+			<jvmarg value="-Djava.library.path=${judm.dir}${path.separator}${judm.dir}/bin${path.separator}${udm.bin.dir}/../lib/.libs" />
 			<jvmarg value="-Djava.util.logging.config.file=${udmswiglight.src.dir}/debug-logging.properties" />
 			<!-- We need to add the dir containing the DLLs that UdmSwig depends on
 				to the PATH rather than java.library.path. Unfortunately they won't be

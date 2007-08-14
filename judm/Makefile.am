@@ -1,6 +1,7 @@
 ## Makefile.am -- Process this file with automake to produce Makefile.in
 
 SUBDIRS			= doc etc samples src
+AM_MAKEFLAGS		= -j1
 
 EXTRA_DIST		= build.xml
 
@@ -26,7 +27,7 @@ clean: build.xml
 	@rm -f sources-stamp
 
 check: $(OBJS)
-	LD_LIBRARY_PATH=`pwd`/../lib/.libs UDM_PATH=`pwd`/.. ant \
+	UDM_PATH=`pwd`/.. ant \
 		-buildfile $(srcdir)/build.xml \
 		-Dudm.dir=`pwd`/.. \
 		-Dudm.src.dir=$(srcdir)/.. \
