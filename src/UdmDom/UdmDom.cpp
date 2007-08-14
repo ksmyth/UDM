@@ -648,7 +648,7 @@ namespace UdmDom
 			{
 				//the attribute desynched_atts exists
 				int k = DSFind(pa, DOMString(myname.c_str()));
-				if(k <= 0) 
+				if(k < 0) 
 				{
 					//meta is not yet desynched
 					pa.appendData(' ');
