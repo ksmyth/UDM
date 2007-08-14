@@ -19,6 +19,11 @@ protected:
   void genBody(std::ostream& out);
   void genJava(std::ostream& out);
   void genCpp(std::ostream& out);
+  void replace(std::string& out,
+                        const std::string& str,
+                        const std::string& s1,
+                        const std::string& s2);
+
 
 public:
   File2Code(const std::string& name, 

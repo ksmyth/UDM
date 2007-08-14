@@ -88,7 +88,30 @@ void File2Code::genCppTail(std::ostream& out)
     out << "}" << std::endl;
     out << "#endif" << std::endl;
 }
+//==================================
+void File2Code::replace(std::string& out,
+                        const std::string& str,
+                        const std::string& s1,
+                        const std::string& s2)
+{
+    out.clear();
+      std::string::size_type p = str.find_first_of(s1,0);
+      if (p == std::string::npos)
+        out += str;
+      else
+      {
 
+        std::string::size_type oldp = 0;
+        while(p != std::string::npos)
+        {
+          out += str.substr(oldp,p-oldp);
+          out += s2;
+          oldp = p + 1;
+          p = str.find_first_of(s1, oldp);
+        }
+        out += str.substr(oldp,str.size() - oldp);
+      }
+}
 //==================================
 void File2Code::genBody(std::ostream& out)
 {
@@ -104,26 +127,18 @@ void File2Code::genBody(std::ostream& out)
     while(in.good())
     {
       std::getline(in, str);
-              //str = "bb\"a\"bb";
       out << "\t\t\tstr +=";   
       out << "\"";   
-      std::string::size_type p = str.find_first_of("\"",0);
-      if (p == std::string::npos)
-        out << str;
-      else
-      {
 
-        std::string::size_type oldp = 0;
-        std::string lofax;
-        while(p != std::string::npos)
-        {
-          out << str.substr(oldp,p-oldp);
-          out << "\\\"";
-          oldp = p + 1;
-          p = str.find_first_of("\"", oldp);
-        }
-        out << str.substr(oldp,str.size() - oldp);
-      }
+      std::string tmp;
+      replace(tmp, str, "\\", "\\\\");
+      std::string tmp1;
+      replace(tmp1, tmp, "\"", "\\\"");
+      /*std::string tmp;
+      replace(tmp, str, "\\&quot;", "\\\\&quot;");
+      std::string tmp1;
+      replace(tmp1, tmp, "\\n", "\\\\n");*/
+      out << tmp1;
       out << "\\n\"";  
       out << ";" << std::endl;   
     }
