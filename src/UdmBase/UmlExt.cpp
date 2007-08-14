@@ -408,6 +408,7 @@ namespace Uml
 		return roles;
 	}
 
+	// All the other ends of associations this class can have (including those defined in ancestors)
 	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Diagram & cross_dgr)
 	{
 		set<AssociationRole> ret;
@@ -417,37 +418,11 @@ namespace Uml
 		{
 			Class a_i = *i;
 			Namespace ns_i = a_i.parent_ns();
-			string cross_cl_name = string(a_i.name()) + "_cross_ph_";
+			string cross_cl_name = string(a_i.name()) + Udm::cross_delimiter;
 			if (ns_i != Namespace(NULL))
 				cross_cl_name += string(ns_i.name());
 			//Class ph_a_i = classByName(cross_dgr, a_i.name());
 			Class ph_a_i = classByName(cross_dgr, cross_cl_name);
-			if (ph_a_i)
-			{
-				set<AssociationRole> ret_i = AssociationTargetRoles(ph_a_i);
-				ret.insert(ret_i.begin(), ret_i.end());
-			}
-			i++;
-		};
-
-		return ret;
-	}
-
-	// All the other ends of associations this class can have (including those defined in ancestors)
-	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Namespace & cross_dgr_ns)
-	{
-		set<AssociationRole> ret;
-		set<Class> anc_cs = AncestorClasses(c);
-		set<Class>::iterator i = anc_cs.begin();
-		while (i != anc_cs.end())
-		{
-			Class a_i = *i;
-			Namespace ns_i = a_i.parent_ns();
-			string cross_cl_name = string(a_i.name()) + "_cross_ph_";
-			if (ns_i != Namespace(NULL))
-				cross_cl_name += string(ns_i.name());
-			//Class ph_a_i = classByName(cross_dgr, a_i.name());
-			Class ph_a_i = classByName(cross_dgr_ns, cross_cl_name);
 			if (ph_a_i)
 			{
 				set<AssociationRole> ret_i = AssociationTargetRoles(ph_a_i);
@@ -483,32 +458,6 @@ namespace Uml
 
 		return ret;
 	}
-
-	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Namespace & cross_dgr_ns)
-	{
-		set<AssociationRole> ret;
-		set<Class> anc_cs = AncestorClasses(c);
-		set<Class>::iterator i = anc_cs.begin();
-		while (i != anc_cs.end())
-		{
-			Class a_i = *i;
-			Namespace ns_i = a_i.parent_ns();
-			string cross_cl_name = string(a_i.name()) + Udm::cross_delimiter;
-			if (ns_i != Namespace(NULL))
-				cross_cl_name += string(ns_i.name());
-			//Class ph_a_i = classByName(cross_dgr, a_i.name());
-			Class ph_a_i = classByName(cross_dgr_ns, cross_cl_name);
-			if (ph_a_i)
-			{
-				set<AssociationRole> ret_i = ph_a_i.associationRoles();
-				ret.insert(ret_i.begin(), ret_i.end());
-			}
-			i++;
-		};
-
-		return ret;
-	}
-
 
 	UDM_DLL set<AssociationRole> AncestorAssociationRoles(const Class &c)
 	{

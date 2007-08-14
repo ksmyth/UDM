@@ -352,9 +352,9 @@ namespace Udm
 		project_dn->OpenExisting(project_path, "UdmProject.xsd");
 		Project = project_dn->GetRootObject();
 
-		::UdmProject::UdmProject::Project _project = ::UdmProject::UdmProject::Project::Cast(Project);
+		::UdmProject::Project _project = ::UdmProject::Project::Cast(Project);
 
-		::UdmProject::UdmProject::Datanetwork cross_ass = _project.cross_associations();
+		::UdmProject::Datanetwork cross_ass = _project.cross_associations();
 		if(cross_ass)
 		{
 			string systemname = cross_ass.systemname();
@@ -363,7 +363,7 @@ namespace Udm
 			cross_meta_dn->OpenExisting(systempath, "Uml", Udm::CHANGES_LOST_DEFAULT);
 		}
 		
-		::UdmProject::UdmProject::Datanetwork cross_links_pdn = _project.crosslinks();
+		::UdmProject::Datanetwork cross_links_pdn = _project.crosslinks();
 		if(cross_links_pdn)
 		{
 			string systemname = cross_links_pdn.systemname();
@@ -376,7 +376,7 @@ namespace Udm
 		}
 
 		// Needed by gcc
-		typedef ::UdmProject::UdmProject::Datanetwork UdmPrDn;
+		typedef ::UdmProject::Datanetwork UdmPrDn;
 
 		vector<UdmPrDn> dns = _project.instances();
 		vector<UdmPrDn>::iterator i = dns.begin();
@@ -551,15 +551,15 @@ namespace Udm
 		ofstream ff;
 		ff.open(string(temp_path + PATHDELIM + "UdmProject.xsd").c_str());
 		if(!ff.good()) throw udm_exception("Error opening for write UdmProject.dtd");
-		else DTDGen::GenerateXMLSchema(::Uml::GetTheOnlyNamespace(*::UdmProject::diagram.dgr), ff);
+		else DTDGen::GenerateXMLSchema(*::UdmProject::diagram.dgr, ff);
 		ff.close();
 		ff.clear();
 
 
 		//this requires the above generated DTD
-		project_dn->CreateNew(temp_path + PATHDELIM + "_project_.xml", "UdmProject",::UdmProject::UdmProject::Project::meta,sem);
+		project_dn->CreateNew(temp_path + PATHDELIM + "_project_.xml", "UdmProject",::UdmProject::Project::meta,sem);
 		Project = project_dn->GetRootObject();
-		::UdmProject::UdmProject::Project _project = ::UdmProject::UdmProject::Project::Cast(Project);
+		::UdmProject::Project _project = ::UdmProject::Project::Cast(Project);
 
 		
 
@@ -576,7 +576,7 @@ namespace Udm
 			Udm::SmartDataNetwork * dn = new SmartDataNetwork(LocateDiagram(i->metalocator()), this);
 			//generate the corresponding DTD( this needs the diagram to be initialized)
 			::Uml::Diagram *dgr = LocateDiagram(i->metalocator()).dgr;
-			ff.open(string(temp_path + PATHDELIM + "__dgr_" + (string)dgr->name() + ".xsd").c_str());
+			ff.open(string(temp_path + PATHDELIM + (string)dgr->name() + ".xsd").c_str());
 			if (!ff.good()) throw udm_exception("Error opening for write DTD file");
 			else DTDGen::GenerateXMLSchema(*dgr, ff);
 			ff.close();
@@ -601,7 +601,7 @@ namespace Udm
 			rev_datanetworks.insert(pair<Udm::DataNetwork*, string>(dn->testdn(), i->filename()));
 			
 			
-			::UdmProject::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::UdmProject::Datanetwork::Create(_project,::UdmProject::UdmProject::Project::meta_instances);
+			::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::Datanetwork::Create(_project,::UdmProject::Project::meta_instances);
 			_udm_pr_dn.metalocator() = i->metalocator();
 			_udm_pr_dn.systemname() = i->filename();
 			//_udm_pr_dn.metaDgr() = (*(Udm::MetaDepository::LocateDiagram(i->metalocator).dgr)).name();
@@ -614,20 +614,20 @@ namespace Udm
 		//create cross-link data network
 		cross_links = new Udm::SmartDataNetwork(cross_diag);
 
-		::UdmProject::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::UdmProject::Datanetwork::Create(_project,::UdmProject::UdmProject::Project::meta_crosslinks);
+		::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::Datanetwork::Create(_project,::UdmProject::Project::meta_crosslinks);
 		_udm_pr_dn.metalocator() = (string)(cross_diag.dgr->name());
 		_udm_pr_dn.systemname() = (string)(_project.name()) + ".xml";
 		_udm_pr_dn.metaDgr() = (string)(cross_diag.dgr->name());
 
 		cross_meta = const_cast<Udm::UdmDiagram*>(&cross_diag);
 
-		ff.open(string(temp_path + PATHDELIM + (string)(::Uml::GetTheOnlyNamespace(*cross_diag.dgr).name()) + ".xsd").c_str());
+		ff.open(string(temp_path + PATHDELIM + (string)(cross_diag.dgr->name()) + ".xsd").c_str());
 		if(!ff.good()) throw udm_exception("Error opening for write XSD file");
-		else DTDGen::GenerateXMLSchema(::Uml::GetTheOnlyNamespace(*cross_diag.dgr), ff);
+		else DTDGen::GenerateXMLSchema(*cross_diag.dgr, ff);
 		ff.close();
 		ff.clear();
 			
-		cross_links->CreateNew(temp_path + PATHDELIM + (string)(_udm_pr_dn.systemname()), _udm_pr_dn.metalocator(), Uml::classByName(::Uml::GetTheOnlyNamespace(*cross_diag.dgr), "_gen_cont"));
+		cross_links->CreateNew(temp_path + PATHDELIM + (string)(_udm_pr_dn.systemname()), _udm_pr_dn.metalocator(), Uml::classByName(*cross_diag.dgr, "_gen_cont"));
 		
 		//restoring DTD path 
 		UdmDom::DomDataNetwork::DTDPath = saved_dtd_path;	
@@ -667,7 +667,7 @@ namespace Udm
 		string cross_cl_name = string(o.type().name()) + string(Udm::cross_delimiter);
 		if ((::Uml::Namespace) o.type().parent_ns() != ::Uml::Namespace(NULL))
 			cross_cl_name += string(::Uml::Namespace(o.type().parent_ns()).name());
-		::Uml::Class ph_class = Uml::classByName(::Uml::GetTheOnlyNamespace(*(cross_meta->dgr)), cross_cl_name);
+		::Uml::Class ph_class = Uml::classByName(*(cross_meta->dgr), cross_cl_name);
 
 		set<Udm::Object> ph_children = root_object.GetChildObjects(ph_class);
 		set<Udm::Object>::iterator ph_c_i = ph_children.begin();
@@ -1038,20 +1038,20 @@ namespace Udm
 
 		//creating a non-persistent project data network
 		project_dn = new UdmStatic::StaticDataNetwork(::UdmProject::diagram);
-		project_dn->CreateNew(" ", " ", ::UdmProject::UdmProject::Project::meta, CHANGES_LOST_DEFAULT);
+		project_dn->CreateNew(" ", " ", ::UdmProject::Project::meta, CHANGES_LOST_DEFAULT);
 		Project = project_dn->GetRootObject();
-		::UdmProject::UdmProject::Project _project = ::UdmProject::UdmProject::Project::Cast(Project);
+		::UdmProject::Project _project = ::UdmProject::Project::Cast(Project);
 
 
 		//creating a non-persistent cross-link data network 
 		cross_meta = const_cast<Udm::UdmDiagram*>(&cross_diag);
 		cross_links = new UdmStatic::StaticDataNetwork(cross_diag);
-		const ::Uml::Class& root_cls = Uml::SafeTypeContainer::GetSafeType(::Uml::classByName(::Uml::GetTheOnlyNamespace(*cross_diag.dgr), "_gen_cont"));
+		const ::Uml::Class& root_cls = Uml::SafeTypeContainer::GetSafeType(::Uml::classByName(*cross_diag.dgr, "_gen_cont"));
 		cross_links->CreateNew(" ", " ", root_cls, CHANGES_LOST_DEFAULT);
 	
 
 		//adding the cross-link data network to the project
-		::UdmProject::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::UdmProject::Datanetwork::Create(_project,::UdmProject::UdmProject::Project::meta_crosslinks);
+		::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::Datanetwork::Create(_project,::UdmProject::Project::meta_crosslinks);
 		/* //these can be left out
 		_udm_pr_dn.metalocator() = cross_diag.dgr->name();
 		_udm_pr_dn.systemname() = i->filename;
@@ -1075,7 +1075,7 @@ namespace Udm
 
 			//adding it to the project
 			
-			::UdmProject::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::UdmProject::Datanetwork::Create(_project,::UdmProject::UdmProject::Project::meta_instances);
+			::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::Datanetwork::Create(_project,::UdmProject::Project::meta_instances);
 			/* // - these can be left out
 			_udm_pr_dn.metalocator() = i->datanetwork->GetRootMeta()->name();
 			_udm_pr_dn.systemname() = i->filename;
