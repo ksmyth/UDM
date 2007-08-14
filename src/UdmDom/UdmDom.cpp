@@ -391,17 +391,27 @@ namespace UdmDom
 		if (namespaceURI == NULL) {
 			return "";
 			string e_description = "Empty namespace URIs are not allowed for node '";
-			e_description += StrX(node.getNodeName()).localForm();
+			e_description += (string)StrX(node.getNodeName()).localForm() + "'";
 			throw udm_exception(e_description);
 		}
 
 		string ns_uri = StrX(namespaceURI).localForm();
+
 		xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.find(ns_uri);
 		if (it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end()) {
 			return it_ns_map->second;
 		} else {
-			int ns_name_loc = ns_uri.rfind('/', ns_uri.length());
-			ns_uri = ns_uri.substr(ns_name_loc + 1);
+			string uri_prefix(UDM_DOM_URI_PREFIX);
+
+			// UDM_DOM_URI_PREFIX + namespace_path(delim = "/")
+			if (ns_uri.compare(0, uri_prefix.length(), uri_prefix)) {
+				string e_description = "Namespace URI does not begin with '" + uri_prefix + "' for node '";
+				e_description += (string)StrX(node.getNodeName()).localForm();
+				e_description += "'. Did you create the mapping from UML to URI?";
+				throw udm_exception(e_description);
+			}
+
+			ns_uri = ns_uri.substr(uri_prefix.length());
 			if (ns_uri.find("__dgr_", 0) == 0)
 				return "";
 			else
@@ -451,17 +461,21 @@ namespace UdmDom
 	}
 
 	//=================================
-	const string getNSURI(const string& ns_name )
+	const string getNSURI(const string& ns_path )
 	{
 		string ns_uri;
-		xsd_ns_mapping_storage::str_str_map::const_iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.find(ns_name);
+
+		//when searching in the map replace '/' with "::"
+		string ns_path_mapped = UdmUtil::replace_delimiter(ns_path, "/", "::");
+
+		xsd_ns_mapping_storage::str_str_map::const_iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.find(ns_path_mapped);
 		if (it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.end()) 
 			ns_uri = it_ns_map->second.c_str();
 		else
 		{
 			ns_uri = string(UDM_DOM_URI_PREFIX);
 			//ns_uri += "/";
-			ns_uri += ns_name;
+			ns_uri += ns_path;
 		}
 		return ns_uri;
 	}
@@ -613,10 +627,12 @@ namespace UdmDom
 			//This could be faster also, diagram are relatively small
 			//so I don't waste my time here
 			StrX cl_name(element.getLocalName());		//class name
-			string ns_name = getNSForNode(element);		//namespace
-			string key;			//namespace:class
-			if (ns_name.size())
-				key += ns_name + ":";
+			string ns_path = getNSForNode(element);		//namespace_path(delim = "/")
+			string key;			//namespace_path:class
+			if (ns_path.size()) {
+				ns_path = UdmUtil::replace_delimiter(ns_path, "/", ":");
+				key += ns_path + ":";
+			}
 			key += cl_name.localForm();
 
 			map<string, ::Uml::Class>::iterator mcc_i = ((DomDataNetwork *)mydn)->meta_class_cache.find(key);
@@ -2123,15 +2139,25 @@ namespace UdmDom
 				if(!Uml::IsDerivedFrom(meta, role.target())) {
 					throw udm_exception("Invalid child specified: " + casestr);
 				}
+
 				::Uml::Namespace parent_ns = meta.parent_ns();
-				string nodename_str = parent_ns != ::Uml::Namespace(NULL) ? string(parent_ns.name()) + ':' +  string(meta.name()) : string(meta.name());
-				string node_uri = getNSURI(parent_ns != ::Uml::Namespace(NULL) ? parent_ns.name() : "__dgr_" + string(::Uml::GetDiagram(meta).name()));
-				DOMString nodename = DOMString(nodename_str.c_str());
+
+				string node_name, node_uri;
+				if (parent_ns)
+				{
+					node_name = parent_ns.getPath2("_", false) + ":";
+					node_uri = getNSURI(parent_ns.getPath2("/", false));
+				}
+				else
+				{
+					node_uri = getNSURI("__dgr_" + (string)::Uml::GetDiagram(meta).name());
+				}
+				node_name += (string)meta.name();
+
 				//DOMString ns_uri = DOMString((string(UDM_DOM_URI_PREFIX) + '/' +  string(::Uml::Namespace(meta.parent()).name())).c_str());
-				DOMString ns_uri(node_uri.c_str());
 
 				DomObject *dep = 
-					new DomObject(meta, dom_element.getOwnerDocument().createElementNS(ns_uri, nodename), mydn);
+					new DomObject(meta, dom_element.getOwnerDocument().createElementNS(node_uri.c_str(), node_name.c_str()), mydn);
 				//dep does not have at this moment an archetype!!!
 				dep->setParent(this, Uml::theOther(role), false);
 
@@ -2965,13 +2991,7 @@ namespace UdmDom
 	{
 		for (set< ::Uml::Class>::const_iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
 		{
-			//namespace + ":" + classname
-			string key;
-			::Uml::Namespace mci_ns = mci->parent_ns();
-			if (mci_ns != ::Uml::Namespace(NULL))
-				key += (string)mci_ns.name() + ":";
-			key += (string)(mci->name());
-			pair<string, ::Uml::Class> mcc_item(key, *mci);
+			pair<string, ::Uml::Class> mcc_item(mci->getPath2(":", false), *mci);
 			pair<map<string,  ::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
 			if (!ins_res.second)
 				throw udm_exception("Insert failed when creating meta classes by name map!");
@@ -2994,9 +3014,8 @@ namespace UdmDom
 		//create a cache for meta-classes 
 		AddToMetaClassesCache(metaroot.dgr->classes());
 
-		set< ::Uml::Namespace> meta_namespaces= metaroot.dgr->namespaces();
-		
-		for (set< ::Uml::Namespace>::iterator mni = meta_namespaces.begin(); mni != meta_namespaces.end(); mni++)
+		::Uml::DiagramNamespaces meta_namespaces(*metaroot.dgr);
+		for (::Uml::DiagramNamespaces::iterator mni = meta_namespaces.begin(); mni != meta_namespaces.end(); mni++)
 		{
 			AddToMetaClassesCache(mni->classes());
 		}
@@ -3375,6 +3394,45 @@ namespace UdmDom
 	}//eo void DomDataNetwork::MapExistingIDs(DOM_Node &d) 
 
 
+	void DomDataNetwork::MapNamespaces(DOM_Node &d) 
+	{
+		TRY_XML_EXCEPTION
+
+		while (!d.isNull()) 
+		{
+			if(d.getNodeType() == DOM_Node::PROCESSING_INSTRUCTION_NODE) 
+			{
+				DOM_ProcessingInstruction * DPI = static_cast<DOM_ProcessingInstruction*>(&d);
+				if (DPI->getTarget().equals(DOMString("udm_udmdom_nsmap")))
+				{
+					vector<string> custom_ns_map = UdmUtil::string_to_vector(DPI->getData().transcode(), ' ');
+					for (vector<string>::const_iterator i = custom_ns_map.begin(); i != custom_ns_map.end(); i++)
+					{
+						string::size_type loc = i->find('=');
+						if (loc == string::npos)
+							throw udm_exception("Corrupt custom NS map element: " + *i);
+
+						string ns_path = i->substr(0, loc);
+						string ns_uri = i->substr(loc + 1);
+						if (ns_uri.length() < 2)
+							throw udm_exception("Corrupt custom NS map element: " + *i);
+
+						ns_uri = ns_uri.substr(1, ns_uri.size() - 2);
+
+						string xsd_file = UdmUtil::replace_delimiter(ns_path, "::", "_") + ".xsd";
+						RemoveURIToUMLNamespaceMapping(ns_uri);
+						AddURIToUMLNamespaceMapping(ns_uri, ns_path, xsd_file);
+					}
+				}
+			 }//eo if(d.getNodeType() == DOM_Node::PROCESSING_INSTRUCTION_NODE) 
+			 d = d.getNextSibling();
+		}//eo while (d != 0)
+			
+		CATCH_XML_EXCEPTION("DomDataNetwork::MapNamespaces()");
+
+	}//eo void DomDataNetwork::MapNamespaces(DOM_Node &d) 
+
+
 	UDM_DLL void DomDataNetwork::OpenExistingFromString(string &str, 
 									const string &metalocator, 
 									enum Udm::BackendSemantics sem)
@@ -3452,6 +3510,10 @@ namespace UdmDom
 
 		//parser.getDocument().setUserData((void *)pp.load(systemname.c_str()));
 
+		//map UML namespaces to URI
+		DOM_Node first_child = parser.getDocument().getFirstChild();
+		MapNamespaces(first_child);
+
 	
 		rootobject = new DomObject(/*dgr, */root, this);
 		//version checking
@@ -3481,7 +3543,6 @@ namespace UdmDom
 		//get all the id's
 		//this must be recursive, but, at least, it's run only once/UDM session
 		MapExistingIDs(root);
-
 
 		
 		this->str.erase();
@@ -3566,6 +3627,10 @@ namespace UdmDom
 		ASSERT( root != (DOM_NullPtr *)NULL );
 
 		parser.getDocument().setUserData((void *)pp.load(systemname.c_str()));
+
+		//map UML namespaces to URI
+		DOM_Node first_child = parser.getDocument().getFirstChild();
+		MapNamespaces(first_child);
 
 	
 		rootobject = new DomObject(/*dgr,*/ root, this);
@@ -3725,19 +3790,19 @@ namespace UdmDom
 
 
 			::Uml::Namespace rootclass_ns = rootclass.parent_ns();
-			string root_qualified_name;
-			string root_uri = getNSURI("__dgr_" + string(metaroot.dgr->name()));
-			if (rootclass_ns != ::Uml::Namespace(NULL)) {
-				root_qualified_name = (string)rootclass_ns.name() + ":";
-				root_uri = getNSURI(rootclass_ns.name());
+
+			string root_qualified_name, root_uri;
+
+			if (rootclass_ns != ::Uml::Namespace(NULL))
+			{
+				root_qualified_name = rootclass_ns.getPath2("_", false) + ":" + rootname;
+				root_uri = getNSURI(rootclass_ns.getPath2("/", false));
 			}
-
-			root_qualified_name += rootname;
-
-			//string root_uri = getNSURI(root_ns_name.length() ? root_ns_name : "__dgr_" + string(metaroot.dgr->name()));
-			string dgr_uri = getNSURI("__dgr_" + string(metaroot.dgr->name()));
-			//string root_ns_uri = string(UDM_DOM_URI_PREFIX) + root_ns_name;
-
+			else
+			{
+				root_qualified_name = rootname;
+				root_uri = getNSURI("__dgr_" + (string)metaroot.dgr->name());
+			}
 
 
 			doc = impl.createDocument(
@@ -3767,37 +3832,36 @@ namespace UdmDom
 				// set XML Schema
 				DOM_Element de = static_cast<DomObject *>(GetRootObject().__impl())->dom_element;
 				
-				set< ::Uml::Namespace> nses = metaroot.dgr->namespaces();
 				de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
 						  DOMString("xmlns:xsi"), DOMString("http://www.w3.org/2001/XMLSchema-instance"));
 
-				/*
-				de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
-						  DOMString("xmlns"), DOMString(dgr_uri.c_str()));
-				string schemalocations = dgr_uri + ' ' + string(metaroot.dgr->name()) + ".xsd";
-				*/
 				de.setAttributeNS(DOMString("http://www.w3.org/2001/XMLSchema-instance"),
 						  DOMString("xsi:noNamespaceSchemaLocation"), DOMString(string((string)metaroot.dgr->name() + ".xsd").c_str()));
-				string schemalocations;
 
-				set< ::Uml::Namespace>::iterator nses_i = nses.begin();
+				::Uml::DiagramNamespaces nses(*metaroot.dgr);
+				::Uml::DiagramNamespaces::iterator nses_i = nses.begin();
+
+				string schemalocations;
+				vector<string> custom_ns_map;
 				while (nses_i != nses.end())
 				{
+					string ns_uri = getNSURI(nses_i->getPath2("/", false));
 
-						
-					string ns_name = nses_i->name();
-					string ns_uri = getNSURI(ns_name);
-					//string ns_uri = string(UDM_DOM_URI_PREFIX) + ns_name;
-						
-					if (schemalocations.size()) schemalocations += ' ';
+					if (schemalocations.size())
+						schemalocations += ' ';
+
 					schemalocations += ns_uri;
 					schemalocations += ' ';
-					schemalocations += (string)metaroot.dgr->name() + '_';
-					schemalocations += ns_name;
+					schemalocations += nses_i->getPath2("_");
 					schemalocations += ".xsd";
 
 					de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
-							  DOMString((string("xmlns:") + ns_name).c_str()), DOMString(ns_uri.c_str()));
+							  DOMString((string("xmlns:") + nses_i->getPath2("_", false)).c_str()), DOMString(ns_uri.c_str()));
+
+					string ns_path = nses_i->getPath2("::", false);
+					xsd_ns_mapping_storage::str_str_map::const_iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.find(ns_path);
+					if (it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.end())
+						custom_ns_map.push_back(ns_path + "=\"" + UdmUtil::escape_chars(it_ns_map->second, '\\', "\"") + "\"");
 
 					nses_i++;
 
@@ -3806,6 +3870,14 @@ namespace UdmDom
 				if (schemalocations.size())
 					de.setAttributeNS(DOMString("http://www.w3.org/2001/XMLSchema-instance"),
 						DOMString("xsi:schemaLocation"), DOMString(schemalocations.c_str()) );
+
+				if (custom_ns_map.size())
+				{
+					DOM_ProcessingInstruction DPI = doc.createProcessingInstruction(DOMString("udm_udmdom_nsmap"), DOMString(UdmUtil::vector_to_string(custom_ns_map, ' ').c_str()));
+					//DOM_ProcessingInstruction DPI2 = doc.createProcessingInstruction(DOMString("udm_udmdom_nsmap"), DOMString(UdmUtil::vector_to_string(custom_ns_map, ' ').c_str()));
+					doc.insertBefore(DPI, doc.getFirstChild());
+					//doc.insertBefore(DPI2, doc.getFirstChild());
+				}
 			}
 
 

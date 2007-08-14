@@ -121,9 +121,9 @@ namespace UmlOcl
 
 				GetFeatures( m_diagram.classes(), signature, vecFeatures );
 
-				std::vector< ::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
-				for( int j = 0; j < vecNamespaces.size(); j++)
-					GetFeatures( vecNamespaces[ j ].classes(), signature, vecFeatures );
+				::Uml::DiagramNamespaces nses(m_diagram);
+				for( ::Uml::DiagramNamespaces::iterator i = nses.begin(); i != nses.end(); i++)
+					GetFeatures( i->classes(), signature, vecFeatures );
 			}
 	};
 
@@ -628,16 +628,16 @@ namespace UmlOcl
 	{
 		bool bIsQualified = strName.find( "::" ) != std::string::npos; // true if qualified type, false if local type
 
-		std::string strDgrName, strNsName, strClassName;
+		std::string strDgrName, strNsPath, strClassName;
 
 		if (bIsQualified) 
 		{
 			unsigned int loc1 = strName.find("::");
-			unsigned int loc2 = strName.find("::", loc1 + 2);
-			if (loc2 != std::string::npos)
+			unsigned int loc2 = strName.rfind("::");
+			if (loc1 != loc2)
 			{
 				strDgrName = strName.substr(0, loc1);
-				strNsName = strName.substr(loc1 + 2, loc2 - loc1 - 2);
+				strNsPath = strName.substr(loc1 + 2, loc2 - loc1 - 2);
 				strClassName = strName.substr(loc2 + 2);
 			}
 			else
@@ -658,17 +658,17 @@ namespace UmlOcl
 		//the corresponding namespace
 		//if type is not qualified, we search it in the diagram and
 		//all namespaces 
-		if ( (!bIsQualified) || ( strNsName == "" ) )
+		if ( (!bIsQualified) || ( strNsPath.empty() ) )
 		{
 			GetDynamicTypes( m_diagram.classes(), strClassName, vecTypes );
 		}
 
-		std::vector< ::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
-		for ( int j = 0; j < vecNamespaces.size(); j++)
+		::Uml::DiagramNamespaces nses(m_diagram);
+		for ( ::Uml::DiagramNamespaces::iterator j = nses.begin(); j != nses.end(); j++)
 		{
-			if ( (!bIsQualified) || ( strNsName == (std::string) vecNamespaces[ j ].name() ) )
+			if ( (!bIsQualified) || ( strNsPath == j->getPath2("::", false) ) )
 			{
-				GetDynamicTypes( vecNamespaces[ j ].classes(), strClassName, vecTypes );
+				GetDynamicTypes( j->classes(), strClassName, vecTypes );
 			}
 		}
 	}

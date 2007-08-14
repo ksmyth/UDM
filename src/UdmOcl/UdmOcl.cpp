@@ -595,18 +595,9 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		std::string strErrAll( "" );
 		bool bResult = true;
 
-		set< ::Uml::Class> setClasses;
-		set< ::Uml::Class> setDgrClasses = m_objDiagram.classes();
-		setClasses.insert(setDgrClasses.begin(), setDgrClasses.end());
-		set< ::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
-		for(set< ::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++) {
-			set< ::Uml::Class> setNsClasses = itNamespace->classes();
-			setClasses.insert(setNsClasses.begin(), setNsClasses.end());
-		}
-
-		for ( set< ::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) 
-		{
-				set< ::Uml::ConstraintDefinition> setConstraintDefs = (*itClass).definitions();
+		::Uml::DiagramClasses setClasses(m_objDiagram);
+		for ( ::Uml::DiagramClasses::iterator itClass = setClasses.begin(); itClass != setClasses.end(); itClass++ ) {
+				set< ::Uml::ConstraintDefinition> setConstraintDefs = itClass->definitions();
 				for ( set< ::Uml::ConstraintDefinition>::iterator itDefinition = setConstraintDefs.begin() ; itDefinition != setConstraintDefs.end() ; itDefinition++ ) {
 
 					ConstraintDefEx* pDefinition = new ConstraintDefEx( this, *itDefinition );
@@ -807,17 +798,9 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		std::string strErrAll( "" );
 		bool bResult = true;
 
-		set< ::Uml::Class> setClasses;
-		set< ::Uml::Class> setDgrClasses = m_objDiagram.classes();
-		setClasses.insert(setDgrClasses.begin(), setDgrClasses.end());
-		set< ::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
-		for(set< ::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++) {
-			set< ::Uml::Class> setNsClasses = itNamespace->classes();
-			setClasses.insert(setNsClasses.begin(), setNsClasses.end());
-		}
-
-		for ( set< ::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
-			set< ::Uml::Constraint> setConstraints = (*itClass).constraints();
+		::Uml::DiagramClasses setClasses(m_objDiagram);
+		for ( ::Uml::DiagramClasses::iterator itClass = setClasses.begin(); itClass != setClasses.end(); itClass++ ) {
+			set< ::Uml::Constraint> setConstraints = itClass->constraints();
 			for ( set< ::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ ) {
 
 				ConstraintEx* pConstraint = new ConstraintEx( this, *itConstraint );
@@ -887,7 +870,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		set<ConstraintEx*> setResult;
 		set< ::Uml::Class> setClasses = Uml::AncestorClasses( objClass );
 		for ( set< ::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
-			set< ::Uml::Constraint> setConstraints = (*itClass).constraints();
+			set< ::Uml::Constraint> setConstraints = itClass->constraints();
 			for ( set< ::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ )
 				setResult.insert( (*m_mapConstraints.find( *itConstraint )).second );
 		}
@@ -1177,19 +1160,10 @@ namespace UdmOcl {
 
 	std::string GetQualifiedName(const ::Uml::Class &c, bool isAssocRole)
 	{
-		std::string q_name;
-		::Uml::Diagram dgr = ::Uml::GetDiagram(c);
-		::Uml::Namespace ns = c.parent_ns();
+		std::string q_name = c.getPath2("::");
 
 		if (isAssocRole)
-			q_name += LowerFirst( dgr.name() ) + "::";
-		else
-			q_name += (std::string) dgr.name() + "::";
-
-		if (ns)
-			q_name += (std::string) ns.name() + "::";
-
-		q_name += c.name();
+			q_name.replace(0, 1, _strlwr( (char*) q_name.substr(0, 1).c_str() ));
 
 		return q_name;
 	}
