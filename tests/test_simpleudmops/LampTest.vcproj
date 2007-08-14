@@ -3,8 +3,10 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="LampTest"
-	SccProjectName=""
-	SccLocalPath="">
+	SccProjectName="&quot;$/MoBIESTransition/udm_ns&quot;, RIZAAAAA"
+	SccAuxPath=""
+	SccLocalPath="..\.."
+	SccProvider="MSSCCI:Microsoft Visual SourceSafe">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
