@@ -404,7 +404,7 @@ std::strstream& AttributeObject::operator >>(std::strstream& xml)
 {
 
 	//name and type, 
-	xml << "   <Uml:Attribute name= \"" << name << "\" type= \"" << strType() << "\"";
+	xml << "   <Attribute name= \"" << name << "\" type= \"" << strType() << "\"";
 
 	//ordered and visibility, optionals 
 	xml << (ordered ? " ordered= \"true\"" : " ordered= \"false\"");
