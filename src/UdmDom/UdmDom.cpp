@@ -1293,7 +1293,11 @@ namespace UdmDom
 
 			::Uml::CompositionChildRole chr = comp.childRole();
 			string ret = chr.name();
-			if(ret.empty()) ret = string(::Uml::Class(chr.target()).name());
+			if(ret.empty())
+				if (::Uml::IsCrossNSComposition(comp))
+					ret = ((::Uml::Class) chr.target()).getPath2("_", false);
+				else
+					ret = ((::Uml::Class) chr.target()).name();
 			return ret;
 		}
 
@@ -1569,27 +1573,23 @@ namespace UdmDom
 			   
 				if(currentparent != aa.dom_element) 
 				{
+					string my_type_name = m_type.getPath2("::", false);
+
 					bool inserted = false;
 					for(DOM_Node n = aa.dom_element.getFirstChild(); n != (DOM_NullPtr *)NULL;n = n.getNextSibling())	
 					{
 						if( n.getNodeType() == DOM_Node::ELEMENT_NODE )
 						{
-							StrX name = n.getLocalName();
-							
-							char * my_type_name = new char[((string)m_type.name()).size() + 1];
-							strcpy(my_type_name, ((string)m_type.name()).c_str());
+							DOM_Element e = static_cast<DOM_Element&>(n);
 
-							const char * curr_child_name = name.localForm();
+							string curr_child_name = findClass(e).getPath2("::", false);
 
-							if (strcmp(my_type_name, curr_child_name) < 0)
+							if (my_type_name.compare(curr_child_name) < 0)
 							{
-								aa.dom_element.insertBefore(dom_element, n);
+								aa.dom_element.insertBefore(dom_element, e);
 								inserted = true;
-								delete [] my_type_name;
 								break;
 							}
-
-							delete [] my_type_name;
 
 						}
 					}
@@ -1833,7 +1833,7 @@ namespace UdmDom
 			vector<ObjectImpl*>::const_iterator a_i = a.begin();
 			while (a_i != a.end())
 			{
-				vector<ObjectImpl*> & vec = map_seq[(*a_i)->type().name()];
+				vector<ObjectImpl*> & vec = map_seq[(*a_i)->type().getPath2("::", false)];
 				vec.push_back(*a_i++);
 
 			}
@@ -1954,6 +1954,7 @@ namespace UdmDom
 			for(vector<ObjectImpl *>::const_iterator i = a_sorted.begin(); i != a_sorted.end(); i++) 
 			{
 				DomObject &de = *static_cast<DomObject *>(*i);
+				string child_type_name = (*i)->type().getPath2("::", false);
 				
 				
 //#ifdef RECORD_ROLES
@@ -1988,26 +1989,19 @@ namespace UdmDom
 					{
 						if( n.getNodeType() == DOM_Node::ELEMENT_NODE )
 						{
-							StrX name = n.getLocalName();
+							DOM_Element e = static_cast<DOM_Element&>(n);
 
-							
-							char * child_type_name = new char[((string)((*i)->type().name())).size() + 1];
-							strcpy(child_type_name, ((string)((*i)->type().name())).c_str());
+							string curr_child_name = findClass(e).getPath2("::", false);
 
-							const char * curr_child_name = name.localForm();
-
-							if (strcmp(child_type_name, curr_child_name) < 0)
+							if (child_type_name.compare(curr_child_name) < 0)
 							{
-								dom_element.insertBefore(de.dom_element, n);
+								dom_element.insertBefore(de.dom_element, e);
 								inserted = true;
-								delete [] child_type_name;
 								break;
 							}
-
-							delete [] child_type_name;
-
 						}
 					}
+
 					if (!inserted)
 						dom_element.appendChild(de.dom_element);
 
@@ -2126,7 +2120,7 @@ namespace UdmDom
 						throw udm_exception("createChild: Instantiated objects can not be modified!");
 				}
 
-				string casestr = (string)meta.name() + "-s in " + (string)m_type.name() + "-s";
+				string casestr = meta.getPath2("::", false) + "-s in " + m_type.getPath2("::", false) + "-s";
 				::Uml::CompositionChildRole role = childrole;
 			    if(!role) {
 					::Uml::Composition comp = Uml::matchChildToParent(meta, m_type);
