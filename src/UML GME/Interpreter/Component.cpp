@@ -1537,6 +1537,7 @@ void CClassBuilder::GetUMLAttributes()
 	CString str_attributes;
 
 	GetAttribute("Attributes",str_attributes);
+	str_attributes.Trim();
 	char buf[4096];
 	char *string = buf;
 	strcpy(string,(LPCSTR)str_attributes);
