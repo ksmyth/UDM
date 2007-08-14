@@ -106,6 +106,11 @@
 			<param name="dspackage" value="SBML2Ex" />
 			<param name="dspackagelower" value="sbml2ex" />
 		</antcall>
+		<!-- TimeSeries -->
+		<antcall target="ds-clean">
+			<param name="dspackage" value="TimeSeries" />
+			<param name="dspackagelower" value="timeseries" />
+		</antcall>
 	</target>
 
 	<!-- Delete generated source files of a domain specific package -->
@@ -216,6 +221,12 @@
 			<param name="dspackagelower" value="sbml2ex" />
 		</antcall>
 		
+		<!-- Compile domain specific code for TimeSeries -->
+		<antcall target="ds-compile">
+			<param name="dspackage" value="TimeSeries" />
+			<param name="dspackagelower" value="timeseries" />
+		</antcall>
+		
 	</target>
 
 	<!-- Compile the SWIG/UDM source codes -->
@@ -281,6 +292,12 @@
 			<param name="dspackage" value="SBML2Ex" />
 			<param name="dspackagelower" value="sbml2ex" />
 			<param name="udm_options" value=" -j -i jigcell -q jigcell -e -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon" />
+		</antcall>
+		<!-- TimeSeries -->
+		<antcall target="ds-generate">
+			<param name="dspackage" value="TimeSeries" />
+			<param name="dspackagelower" value="timeseries" />
+			<param name="udm_options" value=" -j " />
 		</antcall>
 
 	</target>
@@ -412,6 +429,12 @@
 			<param name="dspackage" value="SBML2Ex" />
 			<param name="dspackagelower" value="sbml2ex" />
 		</antcall>
+		
+		<!-- Update the TimeSeries build -->
+		<antcall target="ds-build">
+			<param name="dspackage" value="TimeSeries" />
+			<param name="dspackagelower" value="timeseries" />
+		</antcall>
 
 	</target>
 
@@ -431,6 +454,14 @@
 		
 		<!-- Copy the Uml.xsd to the build directory -->
 		<copy todir="${udm.bin.dir}" file="${judm.dir}/judm.jar" />
+		
+		<!-- Generate Java UDM API documentation --> 
+		<antcall target="judm-apidoc"/>
+
+		<!-- Zip the full distribution together -->
+		<!--zip destfile="${build.dir}/judm.zip">
+			<fileset dir="${judm.dir}"/>
+		</zip-->		
 
 	</target>
 
@@ -497,6 +528,12 @@
 		<!-- Delete intermediate files -->
 		<delete dir="${build.dir}/${dspackage}/classes" />
 		
+		
+		<!-- Generate API documentation -->
+		<antcall target="ds-apidoc">
+			<param name="dspackage" value="${dspackage}" />
+		</antcall>
+		
 		<!-- Update udm_ns Java samples  -->
 		<delete dir="${udm.dir}/samples/Java/${dspackage}" />
 		<mkdir dir="${udm.dir}/samples/Java/${dspackage}" />
@@ -505,6 +542,11 @@
 			</fileset>
 		</copy>
 		
+		<!-- Zip the full distribution together -->
+		<!--zip destfile="${build.dir}/${dspackage}.zip">
+			<fileset dir="${build.dir}/${dspackage}"/>
+		</zip-->		
+		
 	</target>
 	
 	<!-- Create the build -->
@@ -512,9 +554,6 @@
 		
 		<!-- After generating the sources, call build to compile them -->
 		<antcall target="build"/>
-		
-		<!-- Generate API documentation -->
-		<antcall target="apidoc"/>
 		
 	</target>
 
@@ -539,6 +578,10 @@
 			<param name="dspackage" value="SBML2Ex" />
 		</antcall>
 		
+		<!-- Generate TimeSeries API documentation --> 
+		<antcall target="ds-apidoc">
+			<param name="dspackage" value="TimeSeries" />
+		</antcall>
 	</target>
 
 	<!-- Generate Java UDM API documentation -->
@@ -605,7 +648,7 @@
 		</antcall>
 
 		<antcall target="ds-test">
-			<param name="dspackage" value="SBML2Ex" />
+			<param name="dspackage" value="TimeSeries" />
 		</antcall>
 		
 		<mkdir dir="${build.reports.tests.dir}/html" />
@@ -647,44 +690,4 @@
 
 	</target>
 
-	<!-- Generate a domain specific package -->
-	<target name="ns_test" depends="init" if="isWindows" description="Generate the domain specific package">
-		<property name="dspackage" value="NS_TEST" />
-		<property name="dspackagelower" value="ns_test" />
-		<property name="udm_options" value=" -j" />
-
-		<!-- Delete old generated files -->
-		<delete>
-			<fileset dir="samples/${dspackage}/meta">
-				<filename name="*.xml" />
-				<filename name="*.xsd" />
-			</fileset>
-		</delete>
-		
-		<!-- Delete source files -->
-		<delete dir="samples/${dspackage}/src/main/edu" />
-
-		<!-- Generate UDM XML from the XME XML file -->
-		<!--exec dir="samples/${dspackage}/meta" executable="cmd">
-			<arg line="/c ${udm.etc.dir}/xme2udmxml ${dspackage}_uml.xme ${dspackage}.mga " />
-		</exec-->
-		
-		<!-- Generate UDM XML from the XME XML file -->
-		<exec dir="samples/${dspackage}/meta" executable="cmd">
-			<arg line="/c ${udm.dir}\bin\udm.exe ${dspackage}_udm.xml ${udm_options}" />
-		</exec>
-		
-		<!-- Update source code -->
-		<copy todir="samples/${dspackage}/src/main">
-			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
-				<include name="**/*.java" />
-				<include name="**/*.html" />
-		</fileset>
-		</copy>
-
-		<!-- Delete intermediate files -->
-		<delete dir="samples/${dspackage}/meta/edu" />
-		<delete dir="samples/${dspackage}/meta/test" />
-	</target>
-	
 </project>
