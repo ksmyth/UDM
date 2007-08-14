@@ -3033,7 +3033,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			  str_xsd_storage::str_str_map::iterator it_sxc = str_xsd_storage::static_xsd_container.find(sysid);
 			  if (it_sxc != str_xsd_storage::static_xsd_container.end())
 			  {
-				  const string & xsd_str = *(it_sxc->second);
+				  const string & xsd_str = it_sxc->second;
 				  is =  new MemBufInputSource((const unsigned char * )xsd_str.c_str(), xsd_str.size(), "MBIS");
 			  }
 
@@ -3139,7 +3139,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 				str_xsd_storage::str_str_map::iterator it_sxc = str_xsd_storage::static_xsd_container.find(sysid);
 				if (it_sxc != str_xsd_storage::static_xsd_container.end())
 				{
-					const string & xsd_str = *(it_sxc->second);
+					const string & xsd_str = it_sxc->second;
 					is =  new MemBufInputSource((const unsigned char * )xsd_str.c_str(), xsd_str.size(), "MBIS");
 				}
 			}
