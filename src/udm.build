@@ -4,10 +4,16 @@
 
 
   <!-- PROPERTIES -->
-  <property name="Configuration" value="Release"/>
+  <ifnot test="${property::exists('Configuration')}">
+    <property name="Configuration" value="Release"/>
+  </ifnot>
 
   <property name="Path.gme_root"     value="${environment::get-variable('GME_ROOT')}"/>
-  <property name="Path.udm_3rdparty" value="${environment::get-variable('UDM_3RDPARTY_PATH')}"/>
+
+  <ifnot test="${property::exists('Path.udm_3rdparty')}">
+    <property name="Path.udm_3rdparty" value="${environment::get-variable('UDM_3RDPARTY_PATH')}"/>
+  </ifnot>
+
   <property name="Path.udm"          value="${project::get-base-directory()}"/>
   <property name="Path.jdk"          value="${environment::get-variable('JDK_PATH')}"/>
 
