@@ -1,7 +1,7 @@
 #ifndef MOBIES_UML_H
 #define MOBIES_UML_H
 // header file Uml.h generated from diagram Uml
-// generated on Fri May 20 11:49:48 2005
+// generated on Sun May 22 14:45:50 2005
 
 #ifndef MOBIES_UDMBASE_H
 #include "UdmBase.h"
