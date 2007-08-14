@@ -5,9 +5,9 @@
 #pragma option -v+
 #pragma verboselevel 9
 
-#define UDMPATH "C:\Projects\udm_ns2"
-#define UDM3rdPartyPATH "C:\Projects\udm_ns_3rdparty"
-#define GREATPATH "C:\Projects\GReAT"
+#define UDMPATH "E:\MoBIESTransition\udm_ns2"
+#define UDM3rdPartyPATH "E:\MoBIESTransition\udm_ns_3rdparty"
+#define GREATPATH "E:\MoBIESTransition\GReAT"
 #define UDMDLL "UdmDll_3_0_1.dll"
 #define UDMDLLD "UdmDll_3_0_1D.dll"
 #define UDMVER "3.0.2"
@@ -143,6 +143,7 @@ Source: {#UDMPATH}\lib\GOCL.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\lib\UdmGmeD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\lib\UdmOclD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\lib\UdmBase.lib; DestDir: {app}\lib; Flags: ignoreversion
+Source: {#UDMPATH}\lib\UdmBaseD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\lib\UdmDllD.lib; DestDir: {app}\lib; Flags: ignoreversion
 ;Udm Samples folder
 Source: {#UDMPATH}\samples\LampDiagramGME.xme; DestDir: {app}\samples\C++; Components: C; Flags: ignoreversion
@@ -243,25 +244,31 @@ begin
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
+var
+	path : String;
 begin
 	if CurStep = ssInstall then begin
-//		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_PATH', {app}+'');
-//		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_3RDPARTY_PATH', {app}+'3rdparty');
-		ModPath('PATH', '%UDM_PATH%\bin');
-		ModPath('PATH', '%UDM_PATH%\etc');
-		ModPath('PATH', '%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\bin');
-		ModPath('PATH', '%UDM_3RDPARTY_PATH%\xalan-c_1_8_0\bin');
+		path := ExpandConstant('{app}');
+//		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_PATH', path);
+//		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_3RDPARTY_PATH', path+'3rdparty');
+		ModPath('PATH', path+'\bin');
+		ModPath('PATH', path+'\etc');
+		ModPath('PATH', path+'\3rdparty\xerces-c_2_5_0\bin');
+		ModPath('PATH', path+'\3rdparty\xalan-c_1_8_0\bin');
 		ModPath('CLASSPATH', '.');
 	end;
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+	path : String;
 begin
 	if CurUninstallStep = usUninstall then begin
-		ModPath('PATH', '%UDM_PATH%\bin');
-		ModPath('PATH', '%UDM_PATH%\etc');
-		ModPath('PATH', '%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\bin');
-		ModPath('PATH', '%UDM_3RDPARTY_PATH%\xalan-c_1_8_0\bin');
+		path := ExpandConstant('{app}');
+		ModPath('PATH', path+'\bin');
+		ModPath('PATH', path+'\etc');
+		ModPath('PATH', path+'\3rdparty\xerces-c_2_5_0\bin');
+		ModPath('PATH', path+'\3rdparty\xalan-c_1_8_0\bin');
 		ModPath('CLASSPATH', '.');
 	end;
 end;
