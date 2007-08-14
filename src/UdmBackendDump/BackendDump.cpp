@@ -30,15 +30,15 @@ void CBackendDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 	*dump<<"Object '"<< ExtractName(ob)<<"["<<ObjectID<<"]"<<"("<<nDepthLevel<<")"<< "' of type '"<<string(cls.name())<<"' attributes:"<<endl;
 	
 
-	set<::Uml::Uml::Attribute> attrs=cls.attributes();	
+	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set<::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
 	
-	for(set<::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		if(string(ai->type())=="String")
 		{
@@ -79,13 +79,13 @@ void CBackendDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 string CBackendDump::ExtractName(Udm::Object ob)
 {
 	::Uml::Uml::Class cls= ob.type();				
-	set<::Uml::Uml::Attribute> attrs=cls.attributes();		
+	set< ::Uml::Uml::Attribute> attrs=cls.attributes();		
 	
 	// Adding parent attributes
-	set<::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
-	for(set<::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		if(string(ai->type())=="String")
 		{
@@ -109,18 +109,18 @@ string CBackendDump::ExtractName(Udm::Object ob)
 void CBackendDump::DumpClasses(::Uml::Uml::Diagram dgr)
 {
 
-	set<::Uml::Uml::Namespace> metanses = dgr.namespaces();
+	set< ::Uml::Uml::Namespace> metanses = dgr.namespaces();
 	
 	*dump<<endl<<endl<<"Meta Classes"<<endl;
 	*dump<<"____________"<<endl;
 
-	for(set<::Uml::Uml::Namespace>::iterator i = metanses.begin();i != metanses.end(); i++) 
+	for(set< ::Uml::Uml::Namespace>::iterator i = metanses.begin();i != metanses.end(); i++) 
 	{
 	
-		set<::Uml::Uml::Class>metaclasses= i->classes();
+		set< ::Uml::Uml::Class>metaclasses= i->classes();
 	
 
-		for(set<::Uml::Uml::Class>::iterator ii = metaclasses.begin();ii != metaclasses.end(); ii++) 
+		for(set< ::Uml::Uml::Class>::iterator ii = metaclasses.begin();ii != metaclasses.end(); ii++) 
 		{
 		
 			*dump<<" "<< string(i->name())<< "::" << string(ii->name()) << endl;
@@ -131,15 +131,15 @@ void CBackendDump::DumpClasses(::Uml::Uml::Diagram dgr)
 
 void CBackendDump::DumpCompositions(::Uml::Uml::Diagram  dgr)
 {
-	set<::Uml::Uml::Namespace> nses = dgr.namespaces();
-	for (set<::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+	set< ::Uml::Uml::Namespace> nses = dgr.namespaces();
+	for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
 		::Uml::Uml::Namespace ns = *nses_i;
 
-		set<::Uml::Uml::Composition>metacomps= ns.compositions();
+		set< ::Uml::Uml::Composition>metacomps= ns.compositions();
 		*dump<<endl<<endl<<"Meta Compositions"<<endl;
 		*dump<<"_________________"<<endl;
-		for(set<::Uml::Uml::Composition>::iterator iii = metacomps.begin();iii != metacomps.end(); iii++) 
+		for(set< ::Uml::Uml::Composition>::iterator iii = metacomps.begin();iii != metacomps.end(); iii++) 
 		{
 			string name=string(iii->name()).c_str();
 			if(name=="")name="<no name specified>";
@@ -209,22 +209,22 @@ void CBackendDump::DumpCompositions(::Uml::Uml::Diagram  dgr)
 void CBackendDump::DumpAssociations(::Uml::Uml::Diagram dgr)
 {
 
-	set<::Uml::Uml::Namespace> nses = dgr.namespaces();
-	for (set<::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+	set< ::Uml::Uml::Namespace> nses = dgr.namespaces();
+	for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
 		::Uml::Uml::Namespace ns = *nses_i;
 
-		set<::Uml::Uml::Association>metaas= ns.associations();
+		set< ::Uml::Uml::Association>metaas= ns.associations();
 		*dump<<endl<<endl<<"Meta Associations"<<endl;
 		*dump<<"_________________"<<endl;
-		for(set<::Uml::Uml::Association>::iterator i = metaas.begin();i != metaas.end(); i++) 
+		for(set< ::Uml::Uml::Association>::iterator i = metaas.begin();i != metaas.end(); i++) 
 		{
 			string name=i->name();
 			if(name=="")name="<no name specified>";
 			*dump<<endl<<"  "<<name<<endl;
 
-			set<::Uml::Uml::AssociationRole> metaroles=i->roles();
-			for(set<::Uml::Uml::AssociationRole>::iterator ir=metaroles.begin();ir!=metaroles.end();ir++)
+			set< ::Uml::Uml::AssociationRole> metaroles=i->roles();
+			for(set< ::Uml::Uml::AssociationRole>::iterator ir=metaroles.begin();ir!=metaroles.end();ir++)
 			{
 				string strTmp=ir->name();
 
@@ -331,14 +331,14 @@ void CBackendDump::ExtractLinks(Udm::Object ob)
 {
 	::Uml::Uml::Class cls= ob.type();				
 
-	set<::Uml::Uml::AssociationRole> roles=cls.associationRoles();
-	set<::Uml::Uml::AssociationRole> aroles=Uml::AncestorAssociationRoles(cls);
+	set< ::Uml::Uml::AssociationRole> roles=cls.associationRoles();
+	set< ::Uml::Uml::AssociationRole> aroles=Uml::AncestorAssociationRoles(cls);
 
 
 	roles.insert(aroles.begin(),aroles.end());
 
 
-	for(set<::Uml::Uml::AssociationRole>::iterator ri = roles.begin();ri != roles.end(); ri++) 
+	for(set< ::Uml::Uml::AssociationRole>::iterator ri = roles.begin();ri != roles.end(); ri++) 
 	{
 
 		set<Udm::Object> os=ob.getAssociation(Uml::theOther(*ri));
