@@ -1076,7 +1076,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 
 	UDM_DLL bool ProcessPat( const ::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression)
 	{
-		std::string strContext = (string)objContext.type().name();
+		//std::string strContext = (string)objContext.type().name();
+		std::string strContext = ::UdmOcl::GetQualifiedName(objContext.type());
 		SErrorNotification en = SErrorNotification();
 		Constraint::setPatProcessFlag(true);
 		size_t _pos = 0;
