@@ -65,6 +65,18 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+11/12/04	-	Release 2.21
+
+		-	Require GME4 R4.11.10
+		-	Updated to xerces_2_5
+		-	Updated to xalan_1_8	
+		- 	Updated UdmCopy functions to also handle copying object hierarchies within the same datanetwork,
+			with peers, archetypes and references "out of the box".
+		- 	Small UdmDom bug: FUll XSD path is included in XML header
+		- 	Text attributes are also supported, which get persisted in XML as Text nodes.
+		- 	Silent mode UML2XML
+		-	Please note the change of the software license. 
+
 09/28/04	-	Release 2.20
 
 		-	Require GME4 R4.8.25.	

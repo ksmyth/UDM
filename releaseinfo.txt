@@ -4,7 +4,7 @@
 
 1. Windows Operating system (preferably NT, 2000, XP)
 
-2. GME 4, R4.8.25 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 4, R4.11.10 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 6.0 SP6
@@ -12,6 +12,17 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+11/12/04	-	Release 2.21
+
+		-	Require GME4 R4.11.10
+		-	Updated to xerces_2_5
+		-	Updated to xalan_1_8	
+		- 	Updated UdmCopy functions to also handle copying object hierarchies within the same datanetwork,
+			with peers, archetypes and references "out of the box".
+		- 	Small UdmDom bug: FUll XSD path is included in XML header
+		- 	Text attributes are also supported, which get persisted in XML as Text nodes.
+		- 	Silent mode UML2XML
+		-	Please note the change of the software license. 
 
 09/28/04	-	Release 2.20
 
