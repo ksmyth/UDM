@@ -24,6 +24,8 @@ in case of UDM MSVC's own STL
 #include <map>
 #include <set>
 #include <string>
+#include <algorithm>
+#include <functional>
 #include "stdio.h"
 
 #include "OCLConfig.h"
