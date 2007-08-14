@@ -8,16 +8,41 @@
     <property name="Configuration" value="Release"/>
   </ifnot>
 
-  <property name="Path.gme_root"     value="${environment::get-variable('GME_ROOT')}"/>
+  <property name="Path.gme_root" value="${environment::get-variable('GME_ROOT')}"/>
 
   <ifnot test="${property::exists('Path.udm_3rdparty')}">
     <property name="Path.udm_3rdparty" value="${environment::get-variable('UDM_3RDPARTY_PATH')}"/>
   </ifnot>
 
-  <property name="Path.udm"          value="${project::get-base-directory()}"/>
-  <property name="Path.jdk"          value="${environment::get-variable('JDK_PATH')}"/>
+  <property name="Path.udm" value="${project::get-base-directory()}"/>
+  <property name="Path.jdk" value="${environment::get-variable('JDK_PATH')}"/>
 
-  <property name="Version.VS" value="7.1"/>
+  <if test="${environment::variable-exists('VSVERSION')}">
+    <property name="Version.VS" value="${environment::get-variable('VSVERSION')}"/>"/>
+  </if>
+  <ifnot test="${environment::variable-exists('VSVERSION')}">
+    <property name="Version.VS" value="7.1"/>"/>
+  </ifnot>
+
+  <if test="${Version.VS} = '7.1'">
+    <property name="Version.VS.verbose" value="7.1"/>
+  </if>
+  <if test="${Version.VS} = '8'">
+    <property name="Version.VS.verbose" value="8.0"/>
+  </if>
+  <if test="${Version.VS} = '8E'">
+    <property name="Version.VS.verbose" value="8.0"/>
+  </if>
+
+  <if test="${Version.VS} = '7.1'">
+    <property name="File.solution" value="Udm.sln"/>
+  </if>
+  <if test="${Version.VS} = '8'">
+    <property name="File.solution" value="UdmVS2005.sln"/>
+  </if>
+  <if test="${Version.VS} = '8E'">
+    <property name="File.solution" value="UdmVS2005.sln"/>
+  </if>
 
   <property name="Path.xerces"   value="${Path.udm_3rdparty}\xerces-c_2_5_0"/>
   <property name="Path.xalan"    value="${Path.udm_3rdparty}\xalan-c_1_8_0"/>
@@ -30,19 +55,19 @@
 
   <readregistry
    hive="LOCALMACHINE"
-   key="SOFTWARE\Microsoft\VisualStudio\${Version.VS}\Setup\VS\EnvironmentDirectory"
+   key="SOFTWARE\Microsoft\VisualStudio\${Version.VS.verbose}\Setup\VS\EnvironmentDirectory"
    property="Dir.vsinstall"
   />
 
   <readregistry
    hive="LOCALMACHINE"
-   key="SOFTWARE\Microsoft\VisualStudio\${Version.VS}\Setup\VS\ProductDir"
+   key="SOFTWARE\Microsoft\VisualStudio\${Version.VS.verbose}\Setup\VS\ProductDir"
    property="Dir.vcinstall"
   />
 
   <readregistry
    hive="LOCALMACHINE"
-   key="SOFTWARE\Microsoft\VisualStudio\${Version.VS}\Setup\VC\ProductDir"
+   key="SOFTWARE\Microsoft\VisualStudio\${Version.VS.verbose}\Setup\VC\ProductDir"
    property="Dir.msvc"
   />
 
@@ -255,7 +280,7 @@
             udm_swig"
    description="main compile of udm"
   >
-    <solution configuration="${Configuration}" includevsfolders="true" solutionfile="Udm.sln" verbose="true"/>
+  <solution configuration="${Configuration}" includevsfolders="true" solutionfile="${File.solution}" verbose="true"/>
   </target>
 
 </project>
