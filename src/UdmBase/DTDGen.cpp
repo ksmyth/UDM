@@ -920,7 +920,8 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 		/*<xs:complexContent>
 		<xs:extension base="Person">*/
 		output << "\t\t<xsd:complexContent>" << endl;
-		output << "\t\t\t<xsd:extension base=\"" <<only_base.name() <<"Type\">" << endl;
+		::Uml::Uml::Namespace only_base_ns = only_base.parent();
+		output << "\t\t\t<xsd:extension base=\"" << only_base_ns.name() << ":" << only_base.name() <<"Type\">" << endl;
 	}
 	
 
@@ -993,7 +994,15 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 		output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
 
 
-		set<::Uml::Uml::Namespace> other_ns = Uml::CompositionPeerChildNamespaces(ns);
+		set<::Uml::Uml::Namespace> other_ns;
+
+		set<::Uml::Uml::Namespace> other_ns_comp = Uml::CompositionPeerChildNamespaces(ns);
+		other_ns.insert(other_ns_comp.begin(), other_ns_comp.end());
+
+		if (uxsdi) {
+			set<::Uml::Uml::Namespace> other_ns_base = Uml::BaseTypesNamespaces(ns);
+			other_ns.insert(other_ns_base.begin(), other_ns_base.end());
+		}
 
 		output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://www.isis.vanderbilt.edu/2004/schemas/"<< ns.name() << "\" xmlns:" << ns.name() << "=\"http://www.isis.vanderbilt.edu/2004/schemas/" << ns.name() << "\"";
 
@@ -1018,16 +1027,20 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 			if(uxsdi || !(bool)i->isAbstract() )
 			{
 				GenerateXMLSchemaElement(*i,  output, uxsdi);
-				set<::Uml::Uml::Class> p_c = Uml::AncestorContainerClasses(*i);		//all possible containers
-				set<::Uml::Uml::Namespace> o_ns = Uml::OtherCompositionPeerParentRolesNamespaces(*i);
-				// namespaces, other than this one, containing the parent ends of compositions having this class as child
+				// XSD elements can't be of abstract types,
+				// don't make them globals
+				if (!uxsdi || !(bool)i->isAbstract()) {
+					set<::Uml::Uml::Class> p_c = Uml::AncestorContainerClasses(*i);		//all possible containers
+					set<::Uml::Uml::Namespace> o_ns = Uml::OtherCompositionPeerParentRolesNamespaces(*i);
+					// namespaces, other than this one, containing the parent ends of compositions having this class as child
 
 			
 				
-				//the condition: It's not contained or it's only container is itself
-				if ( (p_c.size() == 0) || ( (p_c.size() == 1) && ( *(p_c.begin()) == *i )) || (o_ns.size() > 0))
-				//if  (Uml::AncestorContainerClasses(*i).size() < 1 ) //it's not self contained
-					globalElements.push_back(*i);
+					//the condition: It's not contained or it's only container is itself
+					if ( (p_c.size() == 0) || ( (p_c.size() == 1) && ( *(p_c.begin()) == *i )) || (o_ns.size() > 0))
+					//if  (Uml::AncestorContainerClasses(*i).size() < 1 ) //it's not self contained
+						globalElements.push_back(*i);
+				}
 
 			}
 			++i;
