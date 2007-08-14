@@ -41,7 +41,7 @@ char *_itoa( int value, char *string, int radix )
 #include "UdmOclType.h"
 
 
-#define LINE_END std::string( "\r\n" )
+#define LINE_END std::string( "\n" )
 #define LARGE_DELIMITER std::string( "##############################################################" ) + LINE_END
 #define SMALL_DELIMITER std::string( "--------------------------------------------------------------" ) + LINE_END
 
@@ -331,11 +331,12 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		OclCommon::ExceptionPool poolExceptions = (( ConstraintBase* const ) this )->GetExceptions();
 		for ( int i = 0 ; i < poolExceptions.Size() ; i++ ) {
 			OclCommon::Exception ex = poolExceptions.GetAt( i );
-			if ( ex.GetLine() < 0 )
+			// Constraint definition adds 2 lines, so substract that from the line number
+			if ( ex.GetLine() < 2 )
 				strResult += "Line: ? ";
 			else {
 				char chBuffer[ 300 ];
-				_itoa( ex.GetLine(), chBuffer, 10 );
+				_itoa( ex.GetLine() - 2, chBuffer, 10 );
 				strResult += "Line: " + std::string( chBuffer );
 			}
 			if ( ex.GetCode() == -1 )
@@ -357,11 +358,12 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		OclTree::ViolationVector vecViolations = (( ConstraintBase* const ) this )->GetViolations();
 		for ( int i = 0 ; i < vecViolations.size() ; i++ ) {
 			OclTree::Violation vi = vecViolations[ i ];
-			if ( vi.position.iLine < 0 )
+			// Constraint definition adds 2 lines, so substract that from the line number
+			if ( vi.position.iLine < 2 )
 				strResult += "Line: ? ";
 			else {
 				char chBuffer[ 300 ];
-				_itoa( vi.position.iLine, chBuffer, 10 );
+				_itoa( vi.position.iLine - 2, chBuffer, 10 );
 				strResult += "Line: " + std::string( chBuffer );
 			}
 			strResult += " Message: " + vi.strMessage + "[ " + vi.strSignature + " ]" + LINE_END;
@@ -389,7 +391,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		std::string strExpression = objConstraint.expression();
 
 		Define( strType + "::" + strName, "context " + strType + " inv " + strName + " : " + LINE_END + LINE_END + strExpression, true );
-		//printf( ("context " + strType + " inv " + strName + " : " + strExpression + "\n").c_str());
+		//std::cout << "context " + strType + " inv " + strName + " : " + LINE_END + LINE_END + strExpression << endl;
 		Register( m_pFacade->m_pTreeManager );
 		b_PatProcessing = false;
 	}
@@ -403,7 +405,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		std::string strName = chBuffer;
 		std::string strExpression = _strExpression;
 		Define( strType + "::" + strName, "context " + strType + " inv " + strName + " : " + LINE_END + LINE_END + strExpression, true );
-		//printf( ("context " + strType + " inv " + strName + " : " + strExpression + "\n").c_str());
+		//std::cout << "context " + strType + " inv " + strName + " : " + LINE_END + LINE_END + strExpression << endl;
 		Register( m_pFacade->m_pTreeManager );
 		b_PatProcessing = true;
 	}
@@ -505,13 +507,13 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 			if(!b_PatProcessing)
 				strResult += "==> Description : " + LINE_END + (std::string) m_objConstraint.description() + LINE_END;
 			else
-				strResult += "==> Description : Some constraint in the pat.";
+				strResult += "==> Description : Some constraint in the pat." + LINE_END;
 			strResult += "==> Expression : " + LINE_END;
-			strResult += strType + "::" + strName + " context " + strType + " inv " + strName + " : " + LINE_END + LINE_END;
-			if(!b_PatProcessing)
+			if(!b_PatProcessing) {
+				strResult += strType + "::" + strName + " context " + strType + " inv " + strName + " : " + LINE_END + LINE_END;
 				strResult += (std::string) m_objConstraint.expression() + LINE_END;
-			else
-				strResult += " The Expression. ";
+			} else
+				strResult += " The Expression. " + LINE_END;
 		}
 		return strResult;
 	}
