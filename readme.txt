@@ -65,7 +65,15 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
-04/06/06	-	Release 2.18
+06/18/04	-	Release 2.19
+
+
+		- 	udm.exe -c (CORBA switch) switch bug fixed. Now, it works for .udm files containing cross links.
+		-	The bug associated with "Heap limit reached" and "Too many exception handlers" compiler errors 
+			for large class diagrams fixed. The initialize function is now broken down into many different functions
+		-	Please note the change of the software license. 
+
+06/04/06	-	Release 2.18
 
 
 		- 	Added Udm::BaseVisitor class and Udm::Object::Accept(const BaseVisitor&) virtual functions
