@@ -57,9 +57,9 @@ Source: {#UDM3rdPartyPath}\junit\*; DestDir: {app}\3rdparty\junit; Excludes: *.s
 Source: {#UDM3rdPartyPath}\mpc\*; DestDir: {app}\3rdparty\mpc; Excludes: clone_build_tree.exe, mnwc.exe, prj_install.exe, *.scc; Components: C Full3rdParty; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\mpc\config\*; DestDir: {app}\3rdparty\mpc\config; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\mpc\devtools\*; DestDir: {app}\3rdparty\mpc\devtools; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\mpc\docs\*; DestDir: {app}\3rdparty\mpc\docs; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\mpc\docs\*; DestDir: {app}\3rdparty\mpc\docs; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion recursesubdirs
 Source: {#UDM3rdPartyPath}\mpc\history\*; DestDir: {app}\3rdparty\mpc\history; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\mpc\modules\*; DestDir: {app}\3rdparty\mpc\modules; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\mpc\modules\*; DestDir: {app}\3rdparty\mpc\modules; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion recursesubdirs
 Source: {#UDM3rdPartyPath}\mpc\templates\*; DestDir: {app}\3rdparty\mpc\templates; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\xalan-c_1_8_0\license.txt; DestDir: {app}\3rdparty\xalan-c_1_8_0; Components: Core; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\xalan-c_1_8_0\bin\*; DestDir: {app}\3rdparty\xalan-c_1_8_0\bin; Excludes: *.scc; Components: Core; Flags: ignoreversion
