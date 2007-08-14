@@ -141,6 +141,14 @@
     </variable>
   </setenv>
 
+  <setenv>
+    <variable name="CLASSPATH">
+      <path>
+        <pathelement dir="${Path.udm_3rdparty}\antlr-2.7.1"/>
+	<pathelement path="${environment::get-variable('CLASSPATH')}"/>
+      </path>
+    </variable>
+  </setenv>
 
   <target name="init" description="initialization of build">
     <echo message="NAnt build for &quot;${Configuration}&quot; configuration"/>
