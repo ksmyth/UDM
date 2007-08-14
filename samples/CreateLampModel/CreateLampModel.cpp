@@ -729,7 +729,7 @@ int main(int argc, char* argv[])
 
 				
 				vector<__int64> a;
-				a.push_back(0x1234567890abcdef);	//64bit integer
+				a.push_back(0x1234567890abcdefLL);	//64bit integer
 				a.push_back(7);
 				a.push_back(1);
 				
