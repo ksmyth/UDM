@@ -4,7 +4,7 @@
 //	OCLTree.cpp
 //
 //###############################################################################################################################################
-
+#include "Solve4786.h"
 #include "OCLTree.h"
 
 #include "OCLObjectExBasic.h"
@@ -12,6 +12,7 @@
 #include "OCLFeature.h"
 #include "OCLFeatureImplementation.h"
 #include "OCLParserStatic.h"
+#include "OCLException.h"
 
 namespace OclTree
 {
@@ -25,12 +26,6 @@ namespace OclTree
 		OclCommon::Exception( OclCommon::Exception::ET_SEMANTIC, iCode, param1, param2, pos.iLine, pos.iColumn )
 
 	#define ADDEX( ex ) \
-	{\
-		OclCommon::Exception exp(ex);\
-		context.m_poolExceptions.Add( exp );\
-	}
-
-	#define ADDEXS( ex ) \
 		context.m_poolExceptions.Add( ex )
 
 	#define SETEXPOS( ex, pos ) \
@@ -41,10 +36,10 @@ namespace OclTree
 
 	#define EVALCATCH( iLinee, strSigg ) 										\
 		catch ( OclCommon::Exception ex ) {									\
-			AddViolation( context, iLinee, strSigg, ex.GetErrorMessage() );		\
+			AddViolation( context, iLinee, strSigg, ex.GGetMessage() );		\
 		}																		\
 		catch ( char* ex ) {													\
-			AddViolation( context, iLinee, strSigg, GOCL_STL_NS()string( ex ) + " " ); 		\
+			AddViolation( context, iLinee, strSigg, std::string( ex ) + " " ); 		\
 		}																		\
 		catch ( ... ) {															\
 			AddViolation( context, iLinee, strSigg, "UNEX" ); 					\
@@ -79,7 +74,7 @@ namespace OclTree
 		return m_eKind;
 	}
 
-	bool TreeNode::ParseTypeSeq( TypeContext& context, const Position& position, GOCL_STL_NS()string& strType, TypeSeq& vecType ) const
+	bool TreeNode::ParseTypeSeq( TypeContext& context, const Position& position, std::string& strType, TypeSeq& vecType ) const
 	{
 		TypeSeq vecSavedType = vecType;
 		int iRes = OclCommon::Convert( strType, vecType );
@@ -88,7 +83,7 @@ namespace OclTree
 			return false;
 		}
 		bool bValid = true;
-		for ( int i = 0 ; i < vecType.size() ; i++ ) {
+		for ( unsigned int i = 0 ; i < vecType.size() ; i++ ) {
 			OclMeta::Type* pType = NULL;
 			try {
 				pType = m_pManager->GetTypeManager()->GetType( vecType[ i ] );
@@ -121,7 +116,7 @@ namespace OclTree
 	{
 		OclMeta::TypeManager* pManager = m_pManager->GetTypeManager();
 		if ( ! pManager->IsTypeA( vecTypeFrom, vecTypeTo ) && ! pManager ->IsTypeA( vecTypeTo, vecTypeFrom ) ) {
-			GOCL_STL_NS()string strCType, strSType;
+			std::string strCType, strSType;
 			OclCommon::Convert( vecTypeFrom, strSType );
 			OclCommon::Convert( vecTypeTo, strCType );
 			ADDEX( EXCEPTION2( EX_CAST_TYPE_MISMATCH, strSType, strCType, position ) );
@@ -133,11 +128,11 @@ namespace OclTree
 	TypeSeq TreeNode::GetParametralTypeSeq( const TypeSeq& vecType1, const TypeSeq& vecType2, const TypeSeq& vecTypeReturn )
 	{
 		m_vecType.clear();
-		int i;
-		for ( i = 0 ; i < vecTypeReturn.size() - 1 ; i++ )
+
+		for ( unsigned int i = 0 ; i < vecTypeReturn.size() - 1 ; i++ )
 			m_vecType.push_back( vecTypeReturn[ i ] );
 
-		GOCL_STL_NS()string strLastType = vecTypeReturn[ vecTypeReturn.size() - 1 ];
+		std::string strLastType = vecTypeReturn[ vecTypeReturn.size() - 1 ];
 
 		if ( strLastType == TYPE_AGGREGATED_OBJECT ) {
 			for ( i = 1 ; i < vecType1.size() ; i++ )
@@ -194,7 +189,7 @@ namespace OclTree
 		return ( iLastCode == 0 ) ? -1 : context.m_poolExceptions.GetAt( context.m_poolExceptions.Size() - 1 ).GetCode();
 	}
 
-	OclMeta::Feature* TreeNode::CheckAmbiguity( const GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes, const GOCL_STL_NS()vector<OclSignature::Feature*>& vecSignatures, GOCL_STL_NS()vector<int>& vecAmbiguities, int& iPrecedence, OclCommon::ExceptionPool& exAmbiguity )
+	OclMeta::Feature* TreeNode::CheckAmbiguity( const std::vector<OclMeta::Type*>& vecTypes, const std::vector<OclSignature::Feature*>& vecSignatures, std::vector<int>& vecAmbiguities, int& iPrecedence, OclCommon::ExceptionPool& exAmbiguity )
 	{
 		OclCommon::Exception exception;
 		OclCommon::Exception exception2;
@@ -205,7 +200,7 @@ namespace OclTree
 				case OclSignature::Feature::FK_OPERATOR 		: feature1 = m_pManager->GetTypeManager()->GetOperator( *( (OclSignature::Operator*)vecSignatures[ 0 ] ) ); break;
 				case OclSignature::Feature::FK_FUNCTION 		: feature1 = m_pManager->GetTypeManager()->GetFunction( *( (OclSignature::Function*)vecSignatures[ 0 ] ) ); break;
 				case OclSignature::Feature::FK_METHOD 			: feature1 = vecTypes[ 0 ]->GetMethod( *( (OclSignature::Method*)vecSignatures[ 0 ] ) ); break;
-				case OclSignature::Feature::FK_ITERATOR 		: feature1 = ( ( OclMeta::CompoundType*) vecTypes[ 0 ] )->GetIterator( *( (OclSignature::Iterator*)vecSignatures[ 0 ] ) ); break;
+				case OclSignature::Feature::FK_ITERATOR 		: feature1 = ( ( OclMeta::CompoundType*) vecTypes[ 0 ] )->GetIterator(0, *( (OclSignature::Iterator*)vecSignatures[ 0 ] ) ); break;
 				case OclSignature::Feature::FK_ATTRIBUTE 		: feature1 = vecTypes[ 0 ]->GetAttribute( *( (OclSignature::Attribute*)vecSignatures[ 0 ] ) ); break;
 				case OclSignature::Feature::FK_ASSOCIATION 	: feature1 = vecTypes[ 0 ]->GetAssociation( *( (OclSignature::Association*)vecSignatures[ 0 ] ) ); break;
 			}
@@ -224,7 +219,7 @@ namespace OclTree
 				case OclSignature::Feature::FK_OPERATOR 		: feature2 = m_pManager->GetTypeManager()->GetOperator( *( (OclSignature::Operator*)vecSignatures[ 1 ] ) ); break;
 				case OclSignature::Feature::FK_FUNCTION 		: feature2 = m_pManager->GetTypeManager()->GetFunction( *( (OclSignature::Function*)vecSignatures[ 1 ] ) ); break;
 				case OclSignature::Feature::FK_METHOD 			: feature2 = vecTypes[ 1 ]->GetMethod( *( (OclSignature::Method*)vecSignatures[ 1 ] ) ); break;
-				case OclSignature::Feature::FK_ITERATOR 		: feature2 = ( ( OclMeta::CompoundType*) vecTypes[ 1 ] )->GetIterator( *( (OclSignature::Iterator*)vecSignatures[ 1 ] ) ); break;
+				case OclSignature::Feature::FK_ITERATOR 		: feature2 = ( ( OclMeta::CompoundType*) vecTypes[ 1 ] )->GetIterator(0, *( (OclSignature::Iterator*)vecSignatures[ 1 ] ) ); break;
 				case OclSignature::Feature::FK_ATTRIBUTE 		: feature2 = vecTypes[ 1 ]->GetAttribute( *( (OclSignature::Attribute*)vecSignatures[ 1 ] ) ); break;
 				case OclSignature::Feature::FK_ASSOCIATION 	: feature2 = vecTypes[ 1 ]->GetAssociation( *( (OclSignature::Association*)vecSignatures[ 1 ] ) ); break;
 			}
@@ -235,8 +230,7 @@ namespace OclTree
 			if ( feature1 || ! feature1 && exception.GetCode() == vecAmbiguities[ 0 ] ) {
 				if ( feature1 )
 					vecAmbiguities[ 0 ] = 0;
-				OclCommon::Exception exp(OclCommon::Exception::ET_SEMANTIC, vecAmbiguities[ 2 ], vecSignatures[ 0 ]->Print(), vecSignatures[ 1 ]->Print() ); 
-				exAmbiguity.Add( exp  );
+				exAmbiguity.Add( OclCommon::Exception( OclCommon::Exception::ET_SEMANTIC, vecAmbiguities[ 2 ], vecSignatures[ 0 ]->Print(), vecSignatures[ 1 ]->Print() ) );
 				return NULL;
 			}
 			iPrecedence = 1;
@@ -252,8 +246,7 @@ namespace OclTree
 				if ( feature1 || ! feature1 && exception.GetCode() == vecAmbiguities[ 0 ] ) {
 					if ( feature1 )
 						vecAmbiguities[ 0 ] = 0;
-					OclCommon::Exception exp( OclCommon::Exception::ET_SEMANTIC, vecAmbiguities[ 2 ], vecSignatures[ 0 ]->Print(), vecSignatures[ 1 ]->Print() ) ;
-					exAmbiguity.Add( exp);
+					exAmbiguity.Add( OclCommon::Exception( OclCommon::Exception::ET_SEMANTIC, vecAmbiguities[ 2 ], vecSignatures[ 0 ]->Print(), vecSignatures[ 1 ]->Print() ) );
 					return NULL;
 				}
 				else {
@@ -280,7 +273,7 @@ namespace OclTree
 		}
 	}
 
-	void TreeNode::AddViolation( ObjectContext& context, int iLine, const GOCL_STL_NS()string& strSignature, const GOCL_STL_NS()string& strMessage )
+	void TreeNode::AddViolation( ObjectContext& context, int iLine, const std::string& strSignature, const std::string& strMessage )
 	{
 		if ( ! context.m_bEnableTracking )
 			return;
@@ -299,10 +292,26 @@ namespace OclTree
 		violation.strSignature = strSignature;
 
 		ObjectContextStack::StateItemVector vecItems = context.oCtx.GetState();
-		for ( int i = 0 ; i < vecItems.size() ; i++ ) {
-			violation.vecVariables.push_back( vecItems[ i ].name );
-			violation.vecObjects.push_back( vecItems[ i ].item.Print() );
+		for ( unsigned int i = 0 ; i < vecItems.size() ; i++ ) {
+//			ObjectContextStack::StateItem itemx = vecItems[i];
+			string nam = vecItems[ i ].name;
+			violation.vecVariables.push_back( nam );
+			string str = vecItems[ i ].item.Print();
+			violation.vecObjects.push_back( str );
+			IUnknown* iu;
+			iu = vecItems[ i ].item.GetObject();
+			violation.vecObjectsPtr.push_back(iu);
 		}
+		context.vecViolations.push_back( violation );
+		context.iViolationCount++;
+
+		if ( violation.bIsException )
+			context.m_bHasException;
+	}
+
+	// terge
+	void TreeNode::AddViolation(ObjectContext& context, Violation &violation)
+	{
 		context.vecViolations.push_back( violation );
 		context.iViolationCount++;
 
@@ -315,7 +324,7 @@ namespace OclTree
 		return GetTreeManager()->GetTypeManager()->IsTypeA( m_vecType[ 0 ], "ocl::Boolean" ) >= 0;
 	}
 
-	OclMeta::Object TreeNode::CheckFalseResult( ObjectContext& context, OclMeta::Object spObject, int iLine, const GOCL_STL_NS()string& strSignature )
+	OclMeta::Object TreeNode::CheckFalseResult( ObjectContext& context, OclMeta::Object spObject, int iLine, const std::string& strSignature )
 	{
 		if ( spObject.IsUndefined() )
 			return spObject;
@@ -327,14 +336,11 @@ namespace OclTree
 		return spObject;
 	}
 
-	OclMeta::Object TreeNode::EvaluateCast( ObjectContext& context, OclMeta::Object spObject, int iLine, const GOCL_STL_NS()string& strSignature, const GOCL_STL_NS()string& strTypeName, bool bOnlyTest )
+	OclMeta::Object TreeNode::EvaluateCast( ObjectContext& context, OclMeta::Object spObject, int iLine, const std::string& strSignature, const std::string& strTypeName, bool bOnlyTest )
 	{
-		//printf("In EvaluateCast|");
-		GOCL_STL_NS()string strTypeName2 = ( strTypeName.empty() ) ? m_vecType[ 0 ] : strTypeName;
-		if ( spObject.IsUndefined() ) {
-			//printf("Undefined in EvaluateCast1|");
+		std::string strTypeName2 = ( strTypeName.empty() ) ? m_vecType[ 0 ] : strTypeName;
+		if ( spObject.IsUndefined() )
 			return spObject;
-		}
 		EVALTRY {
 			if ( GetTreeManager()->GetTypeManager()->IsTypeA( spObject.GetTypeName(), strTypeName2 ) >= 0 ) {
 				if ( ! bOnlyTest ) {
@@ -345,10 +351,8 @@ namespace OclTree
 				return spObject;
 			}
 			AddViolation( context, iLine, strSignature, "Object is not instance of type [ " + strTypeName2 + " ]." );
-			//printf("EvaluateCast returninf UNDEFINED2|");
 			return OclMeta::Object::UNDEFINED;
 		} EVALCATCH( iLine, "At casting object: " + strSignature );
-		//printf("EvaluateCast returninf UNDEFINED2|");
 		return OclMeta::Object::UNDEFINED;
 	}
 
@@ -375,7 +379,7 @@ namespace OclTree
 	{
 	}
 
-	GOCL_STL_NS()string ObjectNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string ObjectNode::Print( const std::string& strTabs ) const
 	{
 		return GetTreeManager()->m_pOAdaptor->Print( strTabs, (ObjectNode*)this );
 	}
@@ -410,11 +414,11 @@ namespace OclTree
 	CollectionNode::~CollectionNode()
 	{
 		if ( ! m_bTester && ! m_bSelfTester )
-			for ( int i = 0; i < m_vecNodes.size() ; i++ )
+			for ( unsigned int i = 0; i < m_vecNodes.size() ; i++ )
 				delete m_vecNodes[ i ];
 	}
 
-	GOCL_STL_NS()string CollectionNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string CollectionNode::Print( const std::string& strTabs ) const
 	{
 		return GetTreeManager()->m_pCAdaptor->Print( strTabs, (CollectionNode*)this );
 	}
@@ -452,9 +456,9 @@ namespace OclTree
 		}
 	}
 
-	GOCL_STL_NS()string DeclarationNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string DeclarationNode::Print( const std::string& strTabs ) const
 	{
-		GOCL_STL_NS()string strOut = strTabs + "<Declaration name=\"" + m_strName + "\" type=\"" + m_strType + "\">\r\n";
+		std::string strOut = strTabs + "<Declaration name=\"" + m_strName + "\" type=\"" + m_strType + "\">\r\n";
 
 		strOut += strTabs + TABSTR + "<Variable>\r\n";
 		strOut += m_pValueNode->Print( strTabs + TABSTR + TABSTR );
@@ -485,14 +489,15 @@ namespace OclTree
 
 		if ( ! m_strType.empty() )
 			if ( ParseTypeSeq( context, m_mapPositions[ LID_VARIABLE_TYPE ], m_strType, m_vecTypeDecl ) )
-				if ( ! CastType( context, m_mapPositions[ LID_VARIABLE_TYPE ], m_pValueNode->m_vecType, m_vecTypeDecl ) )
-					m_vecTypeDecl.clear();
+				if ( ! m_pValueNode->m_vecType.empty() )
+					if ( ! CastType( context, m_mapPositions[ LID_VARIABLE_TYPE ], m_pValueNode->m_vecType, m_vecTypeDecl ) )
+						m_vecTypeDecl.clear();
 
 
 		// Check if variable already exists , Add variable
 
 		if ( context.m_ctxTypes.ExistsVariable( m_strName ) )
-			ADDEX( EXCEPTION1( EX_VARIABLE_ALREADY_EXISTS, m_strName, m_mapPositions[ LID_VARIABLE_NAME ] ) )
+			ADDEX( EXCEPTION1( EX_VARIABLE_ALREADY_EXISTS, m_strName, m_mapPositions[ LID_VARIABLE_NAME ] ) );
 		else
 			if ( ! m_vecTypeDecl.empty() )
 				context.m_ctxTypes.AddVariable( m_strName, m_vecTypeDecl, true );
@@ -507,7 +512,7 @@ namespace OclTree
 		if ( ! m_vecTypeDecl.empty() )
 			context.m_ctxTypes.RemoveVariable( m_strName );
 
-		return ! m_vecType.empty();
+		return ! m_vecType.empty() && ! m_pValueNode->m_vecType.empty();
 	}
 
 	OclMeta::Object DeclarationNode::Evaluate( ObjectContext& context )
@@ -543,9 +548,9 @@ namespace OclTree
 				delete m_pThisNode;
 	}
 
-	GOCL_STL_NS()string TypeCastNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string TypeCastNode::Print( const std::string& strTabs ) const
 	{
-		GOCL_STL_NS()string strOut = strTabs + "<TypeCast type=\"" + m_strType + "\" dynamic=\"" + ( ( m_bIsDynamic ) ? "true" : "false" ) + "\">\r\n";
+		std::string strOut = strTabs + "<TypeCast type=\"" + m_strType + "\" dynamic=\"" + ( ( m_bIsDynamic ) ? "true" : "false" ) + "\">\r\n";
 
 		strOut += strTabs + TABSTR + "<This>\r\n";
 		if ( m_pThisNode )
@@ -626,9 +631,9 @@ namespace OclTree
 		}
 	}
 
-	GOCL_STL_NS()string IfThenElseNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string IfThenElseNode::Print( const std::string& strTabs ) const
 	{
-		GOCL_STL_NS()string strOut = strTabs + "<IfThenElse>\r\n";
+		std::string strOut = strTabs + "<IfThenElse>\r\n";
 
 		strOut += strTabs + TABSTR + "<IfExpression>\r\n";
 		strOut += m_pIfNode->Print( strTabs + TABSTR + TABSTR );
@@ -667,7 +672,7 @@ namespace OclTree
 
 		if ( bThenElseValid ) {
 			if ( ! ( m_pThenNode->m_vecType[ 0 ] == m_pElseNode->m_vecType[ 0 ] ) ) {
-				GOCL_STL_NS()string strType1, strType2;
+				std::string strType1, strType2;
 				OclCommon::Convert( m_pThenNode->m_vecType, strType1 );
 				OclCommon::Convert( m_pElseNode->m_vecType, strType2 );
 				ADDEX( EXCEPTION2( EX_IF_TYPE_MISMATCH, strType1, strType2, m_mapPositions[ LID_NODE_START ] ) );
@@ -715,9 +720,9 @@ namespace OclTree
 		}
 	}
 
-	GOCL_STL_NS()string OperatorNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string OperatorNode::Print( const std::string& strTabs ) const
 	{
-		GOCL_STL_NS()string strOut = strTabs + "<Operator name=\"" + m_strName + "\">\r\n";
+		std::string strOut = strTabs + "<Operator name=\"" + m_strName + "\">\r\n";
 
 		strOut += strTabs + TABSTR + "<Operand1>\r\n";
 		strOut += m_pOperandNode1->Print( strTabs + TABSTR + TABSTR );
@@ -759,7 +764,7 @@ namespace OclTree
 				if ( bAssignable ) {
 					m_strAssignVarName = pVariable->m_strName;
 					if ( ! GetTreeManager()->GetTypeManager()->IsTypeA( m_pOperandNode2->m_vecType, m_pOperandNode1->m_vecType ) ) {
-						GOCL_STL_NS()string strVarType, strValType;
+						std::string strVarType, strValType;
 						OclCommon::Convert( m_pOperandNode1->m_vecType , strVarType );
 						OclCommon::Convert( m_pOperandNode2->m_vecType , strValType );
 						ADDEX( EXCEPTION2( EX_ASSIGNMENT_TYPE_MISMATCH, strVarType, strValType, GetPos( LID_NODE_START ) ) );
@@ -807,7 +812,7 @@ namespace OclTree
 
 		// Evaluation of Logical Operators
 
-		if ( m_pOperandNode1->IsBooleanReturned() && m_pOperandNode2 && m_pOperandNode2->IsBooleanReturned() && m_vecType[ 0 ] == "ocl::Boolean" ) {
+/*		if ( m_pOperandNode1->IsBooleanReturned() && m_pOperandNode2 && m_pOperandNode2->IsBooleanReturned() && m_vecType[ 0 ] == "ocl::Boolean" ) {
 
 			if ( m_strName == "and" || m_strName == "&&" ) {
 				OclMeta::Object spOperand1 = m_pOperandNode1->Evaluate( context );
@@ -830,9 +835,49 @@ namespace OclTree
 					return spOperand2;
 				DECL_BOOLEAN( bOperand2, spOperand2 );
 				return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), bOperand2 ), iLineFeatureName, signature.Print() );
+			}*/
+
+		// undef and/&& false = false and/&& undef = false
+		// undef and/&& anything = undef
+		if ( m_pOperandNode1->IsBooleanReturned() && m_pOperandNode2 && m_pOperandNode2->IsBooleanReturned() && m_vecType[ 0 ] == "ocl::Boolean" ) {
+
+			if ( m_strName == "and" || m_strName == "&&" ) {
+				OclMeta::Object spOperand1 = m_pOperandNode1->Evaluate( context );
+				if ( ! spOperand1.IsUndefined() ) {
+					DECL_BOOLEAN( bOperand1, spOperand1 );
+					if ( ! bOperand1 ) {
+						if ( m_strName == "&&" || context.m_bShortCircuitLogical )
+							return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), false ), iLineFeatureName, signature.Print() );
+					}
+				}
+				OclMeta::Object spOperand2 = m_pOperandNode2->Evaluate( context );
+				if ( ! spOperand1.IsUndefined()  &&  ! spOperand2.IsUndefined()) {
+					DECL_BOOLEAN( bOperand1, spOperand1 );
+					DECL_BOOLEAN( bOperand2, spOperand2 );
+					return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), bOperand1 && bOperand2 ), iLineFeatureName, signature.Print() );
+				}
+				// cannot create UNDEFINED result
+				else if (spOperand1.IsUndefined()  &&  spOperand2.IsUndefined()) {
+					return spOperand1;
+				}
+				else if (spOperand1.IsUndefined()) {
+					DECL_BOOLEAN( bOperand2, spOperand2 );
+					if (bOperand2)
+						return spOperand1;
+					else
+						return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), false ), iLineFeatureName, signature.Print() );
+				}
+				else if (spOperand2.IsUndefined()) {
+					DECL_BOOLEAN( bOperand1, spOperand1 );
+					if (bOperand1)
+						return spOperand2;
+					else
+						return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), false ), iLineFeatureName, signature.Print() );
+				}
 			}
 
-			if ( m_strName == "or" || m_strName == "||" ) {
+
+/*			if ( m_strName == "or" || m_strName == "||" ) {
 				OclMeta::Object spOperand1 = m_pOperandNode1->Evaluate( context );
 				if ( ! spOperand1.IsUndefined() ) {
 					DECL_BOOLEAN( bOperand1, spOperand1 );
@@ -850,9 +895,46 @@ namespace OclTree
 				}
 				DECL_BOOLEAN( bOperand2, spOperand2 );
 				return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), bOperand2 ), iLineFeatureName, signature.Print() );
+			}*/
+
+			// true OR/|| UNDEF = UNDEF OR/|| true = true
+			// UNDEF OR/|| anything = UNDEF
+			if ( m_strName == "or" || m_strName == "||" ) {
+				OclMeta::Object spOperand1 = m_pOperandNode1->Evaluate( context );
+				if ( ! spOperand1.IsUndefined() ) {
+					DECL_BOOLEAN( bOperand1, spOperand1 );
+					if ( bOperand1 ) {
+						if ( m_strName == "||"  ||  context.m_bShortCircuitLogical )
+							return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), true ), iLineFeatureName, signature.Print() );
+					}
+				}
+				OclMeta::Object spOperand2 = m_pOperandNode2->Evaluate( context );
+				if ( ! spOperand1.IsUndefined()  &&  ! spOperand2.IsUndefined()) {
+					DECL_BOOLEAN( bOperand1, spOperand1 );
+					DECL_BOOLEAN( bOperand2, spOperand2 );
+					return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), bOperand1 || bOperand2 ), iLineFeatureName, signature.Print() );
+				}
+				else if (spOperand1.IsUndefined()  &&  spOperand2.IsUndefined() )
+					return spOperand1;
+				else if (spOperand1.IsUndefined()) {
+					DECL_BOOLEAN( bOperand2, spOperand2 );
+					if (!bOperand2)
+						return spOperand1;
+					else
+						return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), true ), iLineFeatureName, signature.Print() );
+				}
+				else if (spOperand2.IsUndefined()) {
+					DECL_BOOLEAN( bOperand1, spOperand1 );
+					if (!bOperand1)
+						return spOperand2;
+					else
+						return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), true ), iLineFeatureName, signature.Print() );
+				}
 			}
 
-			if ( m_strName == "implies" || m_strName == "=>" ) {
+
+
+/*			if ( m_strName == "implies" || m_strName == "=>" ) {
 				OclMeta::Object spOperand1 = m_pOperandNode1->Evaluate( context );
 				if ( spOperand1.IsUndefined() )
 					return spOperand1;
@@ -867,6 +949,42 @@ namespace OclTree
 					return spOperand2;
 				DECL_BOOLEAN( bOperand2, spOperand2 );
 				return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), bOperand2 ), iLineFeatureName, signature.Print() );
+			}
+		}*/
+
+			// FALSE =>/implies anything - true
+			// anything =>/implies TRUE - true
+			if ( m_strName == "implies" || m_strName == "=>" ) {
+				OclMeta::Object spOperand1 = m_pOperandNode1->Evaluate( context );
+				if ( !spOperand1.IsUndefined() ) {
+					DECL_BOOLEAN( bOperand1, spOperand1 );
+					if (! bOperand1) {
+						if ( m_strName == "=>" || context.m_bShortCircuitLogical )
+							return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), true ), iLineFeatureName, signature.Print() );
+					}
+				}
+				OclMeta::Object spOperand2 = m_pOperandNode2->Evaluate( context );
+				if ( ! spOperand1.IsUndefined()  &&  ! spOperand2.IsUndefined()) {
+					DECL_BOOLEAN( bOperand1, spOperand1 );
+					DECL_BOOLEAN( bOperand2, spOperand2 );
+					return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), !bOperand1  ||  bOperand2), iLineFeatureName, signature.Print() );
+				}
+				else if (spOperand1.IsUndefined()  &&  spOperand2.IsUndefined() )
+					return spOperand1;
+				else if (spOperand1.IsUndefined()) {
+					DECL_BOOLEAN( bOperand2, spOperand2 );
+					if (!bOperand2)
+						return spOperand1;
+					else
+						return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), true), iLineFeatureName, signature.Print() );
+				}
+				else if (spOperand2.IsUndefined()) {
+					DECL_BOOLEAN( bOperand1, spOperand1 );
+					if (bOperand1)
+						return spOperand2;
+					else
+						return CheckFalseResult( context, CREATE_BOOLEAN( GetTreeManager()->GetTypeManager(), true ), iLineFeatureName, signature.Print() );
+				}
 			}
 		}
 
@@ -947,6 +1065,7 @@ namespace OclTree
 //	C L A S S : OclTree::IteratorNode <<< + OclTree::TreeNode
 //
 //##############################################################################################################################################
+	int IteratorNode::m_iteratorLevel = 0;
 
 	IteratorNode::IteratorNode( TreeManager* pManager )
 		: TreeNode( pManager, TreeNode::NK_ITERATOR ), m_strName( "" ), m_pThisNode( NULL ), m_pArgumentNode( NULL ), m_strDeclType( "" ), m_strCallOperator( "" ), m_strAccuName( "" ), m_strAccuType( "" ), m_pAccuNode( NULL )
@@ -965,13 +1084,13 @@ namespace OclTree
 		}
 	}
 
-	GOCL_STL_NS()string IteratorNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string IteratorNode::Print( const std::string& strTabs ) const
 	{
-		GOCL_STL_NS()string strOut = strTabs + "<Iterator name=\"" + m_strName + "\">\r\n";
+		std::string strOut = strTabs + "<Iterator name=\"" + m_strName + "\">\r\n";
 
 		if ( m_vecDeclarators.size() > 0 ) {
 			strOut += strTabs + TABSTR + "<Declarators type=\"" + m_strDeclType + "\">\r\n" + strTabs + TABSTR + TABSTR;
-			for ( int i = 0 ; i < m_vecDeclarators.size() ; i++ )
+			for ( unsigned int i = 0 ; i < m_vecDeclarators.size() ; i++ )
 				strOut += m_vecDeclarators[ i ] + " ";
 			strOut += "\r\n" + strTabs + TABSTR + "</Declarators>\r\n";
 		}
@@ -1039,7 +1158,7 @@ namespace OclTree
 				m_pThisNode = NULL;
 				int iLastCode = GetLastExceptionCode( contextIterator );
 				if ( iLastCode != EX_ITERATOR_DOESNT_EXIST && iLastCode != EX_TYPE_NOT_COMPOUND_ITERATOR && iLastCode != -1 ) {
-					ADDEXS( contextIterator.m_poolExceptions );
+					ADDEX( contextIterator.m_poolExceptions );
 					return false;
 				}
 			}
@@ -1089,16 +1208,16 @@ namespace OclTree
 		if ( m_vecDeclarators.empty() ) {
 			char chBuffer[ 20 ];
 			sprintf( chBuffer, "!iter%d", context.m_vecImplicits.size() );
-			m_vecDeclarators.push_back( GOCL_STL_NS()string( chBuffer ) );
-			context.m_vecImplicits.push_back( GOCL_STL_NS()string( chBuffer ) );
+			m_vecDeclarators.push_back( std::string( chBuffer ) );
+			context.m_vecImplicits.push_back( std::string( chBuffer ) );
 		}
 
 		// Check and Add Declarators
 
-		GOCL_STL_NS()vector< bool > vecDeclDone( m_vecDeclarators.size(), true );
+		std::vector< bool > vecDeclDone( m_vecDeclarators.size(), true );
 
 		if ( ! m_vecTypeDecl.empty() ) {
-			for ( int i = 0 ; i < m_vecDeclarators.size() ; i++ ) {
+			for ( unsigned int i = 0 ; i < m_vecDeclarators.size() ; i++ ) {
 				vecDeclDone[ i ] = context.m_ctxTypes.AddVariable( m_vecDeclarators[ i ], m_vecTypeDecl, true );
 				if ( ! vecDeclDone[ i ] )
 					ADDEX( EXCEPTION1( EX_VARIABLE_ALREADY_EXISTS, m_vecDeclarators[ i ], m_mapPositions[ LID_DECLARATOR_NAME + i ] ) );
@@ -1129,7 +1248,7 @@ namespace OclTree
 
 				try {
 					OclMeta::CompoundType* pCType = (OclMeta::CompoundType*) pType;
-					OclMeta::Iterator* pIterator = pCType->GetIterator( OclSignature::Iterator( m_strName, m_pThisNode->m_vecType[ 0 ], m_pArgumentNode->m_vecType[ 0 ] ) );
+					OclMeta::Iterator* pIterator = pCType->GetIterator(0, OclSignature::Iterator( m_strName, m_pThisNode->m_vecType[ 0 ], m_pArgumentNode->m_vecType[ 0 ] ) );
 					GetParametralTypeSeq( m_pThisNode->m_vecType, m_pArgumentNode->m_vecType, pIterator->GetReturnTypeSeq() );
 				}
 				catch ( OclCommon::Exception ex ) {
@@ -1149,7 +1268,7 @@ namespace OclTree
 		// Remove Declarators
 
 		if ( ! m_vecTypeDecl.empty() ) {
-			for ( int i = 0 ; i < m_vecDeclarators.size() ; i++ )
+			for ( unsigned int i = 0 ; i < m_vecDeclarators.size() ; i++ )
 				if ( vecDeclDone[ i ] )
 					context.m_ctxTypes.RemoveVariable( m_vecDeclarators[ i ] );
 		}
@@ -1162,11 +1281,8 @@ namespace OclTree
 		// Remove Implicit variable if it was
 
 		if ( m_vecDeclarators[ 0 ].substr( 0, 1 ) == "!" ) {
-			
-			/*StringVector::iterator it = context.m_vecImplicits.end();
+			StringVector::iterator it = context.m_vecImplicits.end();
 			context.m_vecImplicits.erase( it-- );
-			*/
-			context.m_vecImplicits.pop_back();
 		}
 
 		return ! m_vecType.empty();
@@ -1174,6 +1290,9 @@ namespace OclTree
 
 	OclMeta::Object IteratorNode::Evaluate( ObjectContext& context )
 	{
+		// recursion corrected: terge
+		LevelCounter level(&m_iteratorLevel);
+
 		int iLineFeatureName = m_mapPositions[ LID_FEATURE_NAME ].iLine;
 		OclSignature::Iterator signature( m_strName, m_pThisNode->m_vecType[ 0 ], m_pArgumentNode->m_vecType[ 0 ] );
 
@@ -1186,7 +1305,7 @@ namespace OclTree
 			OclImplementation::Iterator* pIIterator = NULL;
 			if ( ! m_pAccuNode ) {
 				OclMeta::CompoundType* pCType = (OclMeta::CompoundType*) GetTreeManager()->GetTypeManager()->GetType( objectThis.GetStaticTypeName() );
-				OclMeta::Iterator* pIterator = pCType->GetIterator( signature );
+				OclMeta::Iterator* pIterator = pCType->GetIterator(m_iteratorLevel, signature );
 				pIIterator = pIterator->GetImplementation();
 				if ( ! pIIterator )
 					THROWOCL0( ET_RUNTIME, EX_ITERATOR_NOT_IMPLEMENTED );
@@ -1194,7 +1313,6 @@ namespace OclTree
 				pIIterator->Initialize();
 				pIIterator->SetThis( objectThis );
 			}
-
 			else {
 				OclMeta::Object accumulator = EvaluateCast( context, m_pAccuNode->Evaluate( context ), m_mapPositions[ LID_ACCUMULATOR_TYPE ].iLine, m_strAccuName + " = ...", m_vecType[ 0 ], m_strAccuType.empty() );
 				context.oCtx.AddVariable( m_strAccuName, accumulator, true );
@@ -1224,7 +1342,7 @@ namespace OclTree
 		int iLineFeatureName = m_mapPositions[ LID_FEATURE_NAME ].iLine;
 		OclSignature::Iterator signature( m_strName, m_pThisNode->m_vecType[ 0 ], m_pArgumentNode->m_vecType[ 0 ] );
 
-		GOCL_STL_NS()string strDecl = m_vecDeclarators[ iDeclNum ];
+		std::string strDecl = m_vecDeclarators[ iDeclNum ];
 		context.oCtx.AddVariable( strDecl, OclMeta::Object::UNDEFINED, true );
 
 		DECL_ITERATOR( iterator, objectThis );
@@ -1240,13 +1358,14 @@ namespace OclTree
 			context.oCtx.SetVariable( strDecl, objectIter );
 			vecArguments[ iDeclNum ] = objectIter;
 
-			if ( iDeclNum == m_vecDeclarators.size() - 1 ) {
+			if ( iDeclNum == (int)m_vecDeclarators.size() - 1 ) {
 				EVALTRY {
-					OclMeta::Object spAccu = m_pArgumentNode->Evaluate( context );
+					OclMeta::Object spAccu = m_pArgumentNode->Evaluate( context ); // evaluate the argument
 					if ( ! m_pAccuNode ) {
 						pIIterator->SetArguments( vecArguments );
 						pIIterator->SetSubResult( spAccu );
-						(*pIIterator)();
+						pIIterator->SetSubOriResult( objectIter );
+						(*pIIterator)(); 
 						if ( pIIterator->DoStop() )
 							bDoStop = true;
 					}
@@ -1266,6 +1385,7 @@ namespace OclTree
 //	C L A S S : OclTree::MethodNode <<< + OclTree::TreeNode
 //
 //##############################################################################################################################################
+	int MethodNode::m_stackLevel = 0;
 
 	MethodNode::MethodNode( TreeManager* pManager )
 		: TreeNode( pManager, TreeNode::NK_METHOD ), m_strName( "" ), m_pThisNode( NULL ), m_strCallOperator( "" ), m_pIterator( NULL )
@@ -1276,7 +1396,7 @@ namespace OclTree
 	{
 		if ( ! m_bTester && ! m_bSelfTester ) {
 			delete m_pThisNode;
-			for ( int i = 0 ; i < m_vecArguments.size() ; i++ )
+			for ( unsigned int i = 0 ; i < m_vecArguments.size() ; i++ )
 				delete m_vecArguments[ i ];
 		}
 		if ( m_pIterator ) {
@@ -1285,24 +1405,24 @@ namespace OclTree
 		}
 	}
 
-	GOCL_STL_NS()string MethodNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string MethodNode::Print( const std::string& strTabs ) const
 	{
 		if ( m_pIterator )
 			return m_pIterator->Print( strTabs );
 
-		GOCL_STL_NS()string strOut = strTabs + "<Method name=\"" + m_strName + "\">\r\n";
+		std::string strOut = strTabs + "<Method name=\"" + m_strName + "\">\r\n";
 
 		strOut += strTabs + TABSTR + "<This>\r\n";
 		strOut += m_pThisNode->Print( strTabs + TABSTR + TABSTR );
 		strOut += strTabs + TABSTR + "</This>\r\n";
 
 		if ( ! m_vecArguments.empty() ) {
-			for ( int i = 0 ; i < m_vecArguments.size() ; i++ ) {
+			for ( unsigned int i = 0 ; i < m_vecArguments.size() ; i++ ) {
 				char chNum[ 100 ];
 				sprintf( chNum, "%d", i );
-				strOut += strTabs + TABSTR + "<Argument_" + GOCL_STL_NS()string( chNum ) + ">\r\n";
+				strOut += strTabs + TABSTR + "<Argument_" + std::string( chNum ) + ">\r\n";
 				strOut += m_vecArguments[ i ]->Print( strTabs + TABSTR + TABSTR );
-				strOut += strTabs + TABSTR + "</Argument_" + GOCL_STL_NS()string( chNum ) + ">\r\n";
+				strOut += strTabs + TABSTR + "</Argument_" + std::string( chNum ) + ">\r\n";
 			}
 		}
 
@@ -1355,8 +1475,7 @@ namespace OclTree
 			if ( ! pType->IsCompound() || m_vecArguments.size() != 1 ) {
 
 				bool bArgumentsValid = true;
-				int i;
-				for ( i = 0 ; i < m_vecArguments.size() ; i++ )
+				for ( unsigned int i = 0 ; i < m_vecArguments.size() ; i++ )
 					bArgumentsValid = m_vecArguments[ i ]->Check( context ) && bArgumentsValid;
 
 				if ( bArgumentsValid ) {
@@ -1400,8 +1519,8 @@ namespace OclTree
 				vecType.erase( vecType.begin() );
 				char chBuffer[ 20 ];
 				sprintf( chBuffer, "!iter%d", contextIterator.m_vecImplicits.size() );
-				contextIterator.m_ctxTypes.AddVariable( GOCL_STL_NS()string( chBuffer ), vecType, true );
-				contextIterator.m_vecImplicits.push_back( GOCL_STL_NS()string( chBuffer ) );
+				contextIterator.m_ctxTypes.AddVariable( std::string( chBuffer ), vecType, true );
+				contextIterator.m_vecImplicits.push_back( std::string( chBuffer ) );
 
 				// Check the iterator
 
@@ -1409,23 +1528,20 @@ namespace OclTree
 
 				// Remove the newly created implicit iterator
 
-				contextIterator.m_ctxTypes.RemoveVariable( GOCL_STL_NS()string( chBuffer ) );
-				/*
+				contextIterator.m_ctxTypes.RemoveVariable( std::string( chBuffer ) );
 				StringVector::iterator it = contextIterator.m_vecImplicits.end();
 				contextIterator.m_vecImplicits.erase( it-- );
-				*/
-				contextIterator.m_vecImplicits.pop_back();
 
 			TypeSeq vecTypeIterator = m_vecArguments[ 0 ]->m_vecType;
 
 			if ( bMethodValid ) {
-				GOCL_STL_NS()vector<OclMeta::Type*> vecTypes( 2, pType );
+				std::vector<OclMeta::Type*> vecTypes( 2, pType );
 
 				OclSignature::Method sigMethod( m_strName, pType->GetName(), StringVector( 1, vecTypeMethod[ 0 ] ) );
 				OclSignature::Iterator sigIterator( m_strName, pType->GetName(), vecTypeMethod[ 0 ] );
-				GOCL_STL_NS()vector<OclSignature::Feature*> vecSignatures( 2, &sigMethod ); vecSignatures[ 1 ] = &sigIterator;
+				std::vector<OclSignature::Feature*> vecSignatures( 2, &sigMethod ); vecSignatures[ 1 ] = &sigIterator;
 
-				GOCL_STL_NS()vector<int> vecCodes( 3, EX_METHOD_AMBIGUOUS ); vecCodes[ 1 ] = EX_ITERATOR_AMBIGUOUS; vecCodes[ 2 ] = EX_METHOD_ITERATOR_AMBIGUOUS;
+				std::vector<int> vecCodes( 3, EX_METHOD_AMBIGUOUS ); vecCodes[ 1 ] = EX_ITERATOR_AMBIGUOUS; vecCodes[ 2 ] = EX_METHOD_ITERATOR_AMBIGUOUS;
 
 				OclCommon::ExceptionPool poolResult;
 
@@ -1433,12 +1549,12 @@ namespace OclTree
 
 				OclMeta::Feature* pFeature = CheckAmbiguity( vecTypes, vecSignatures, vecCodes, iPrecedence, poolResult );
 				if ( ! pFeature ) {
-					ADDEXS( poolResult );
+					ADDEX( poolResult );
 					return false;
 				}
 				else {
 					if ( iPrecedence == -1 ) {
-						ADDEXS( contextMethod.m_poolExceptions );
+						ADDEX( contextMethod.m_poolExceptions );
 						TypeContext contextTemp = context;
 						m_vecArguments[ 0 ]->Check( contextTemp );
 						GetParametralTypeSeq( m_pThisNode->m_vecType, vecTypeMethod, pFeature->GetReturnTypeSeq() );
@@ -1447,7 +1563,7 @@ namespace OclTree
 						return true;
 					}
 					else {
-						ADDEXS( contextIterator.m_poolExceptions );
+						ADDEX( contextIterator.m_poolExceptions );
 						if ( ! bIteratorValid )
 							return false;
 						if ( vecTypeMethod != vecTypeIterator )
@@ -1470,13 +1586,13 @@ namespace OclTree
 				}
 			}
 			if ( bIteratorValid ) {
-				GOCL_STL_NS()vector<OclMeta::Type*> vecTypes( 2, pType );
+				std::vector<OclMeta::Type*> vecTypes( 2, pType );
 
 				OclSignature::Iterator sigIterator( m_strName, pType->GetName(), vecTypeIterator[ 0 ] );
 				OclSignature::Method sigMethod( m_strName, pType->GetName(), StringVector( 1, vecTypeIterator[ 0 ] ) );
-				GOCL_STL_NS()vector<OclSignature::Feature*> vecSignatures( 2, &sigIterator ); vecSignatures[ 1 ] = &sigMethod;
+				std::vector<OclSignature::Feature*> vecSignatures( 2, &sigIterator ); vecSignatures[ 1 ] = &sigMethod;
 
-				GOCL_STL_NS()vector<int> vecCodes( 3, EX_ITERATOR_AMBIGUOUS ); vecCodes[ 1 ] = EX_METHOD_AMBIGUOUS; vecCodes[ 2 ] = EX_METHOD_ITERATOR_AMBIGUOUS;
+				std::vector<int> vecCodes( 3, EX_ITERATOR_AMBIGUOUS ); vecCodes[ 1 ] = EX_METHOD_AMBIGUOUS; vecCodes[ 2 ] = EX_METHOD_ITERATOR_AMBIGUOUS;
 
 				OclCommon::ExceptionPool poolResult;
 
@@ -1484,18 +1600,18 @@ namespace OclTree
 
 				OclMeta::Feature* pFeature = CheckAmbiguity( vecTypes, vecSignatures, vecCodes, iPrecedence, poolResult );
 				if ( ! pFeature ) {
-					ADDEXS( poolResult );
+					ADDEX( poolResult );
 					return false;
 				}
 				else {
 					if ( iPrecedence == 1 ) {
-						ADDEXS( contextMethod.m_poolExceptions );
+						ADDEX( contextMethod.m_poolExceptions );
 						if ( pFeature->IsDependence() )
 							context.m_setDependencies.insert( OclMeta::Dependency( sigMethod.Print(), m_mapPositions[ LID_FEATURE_NAME ] ) );
 						return true;
 					}
 					else {
-						ADDEXS( contextIterator.m_poolExceptions );
+						ADDEX( contextIterator.m_poolExceptions );
 						m_pIterator= GetTreeManager()->CreateIterator();
 						m_pIterator->m_bTester = true;
 						m_pIterator->m_pThisNode = m_pThisNode;
@@ -1514,26 +1630,42 @@ namespace OclTree
 				}
 			}
 			if ( m_strCallOperator == "->" )
-				ADDEXS( contextIterator.m_poolExceptions );
+				ADDEX( contextIterator.m_poolExceptions );
 			else
-				ADDEXS( contextMethod.m_poolExceptions );
+				ADDEX( contextMethod.m_poolExceptions );
 			return false;
 		}
 		return false;
 	}
 
+#define MAX_CONSTR_FUNC_LEVEL 100 // max level of constraint function encapsulation
+
 	OclMeta::Object MethodNode::Evaluate( ObjectContext& context )
 	{
+		LevelCounter level(&m_stackLevel);
+		std::string lastFuncName = "";
+		static std::string currFuncName = "";
+		std::string *szivas = &currFuncName;
+
+		if (m_stackLevel <= 1)
+			currFuncName = "";
+
 		if ( m_pIterator )
 			return m_pIterator->Evaluate( context );
 
 		int iLineFeatureName = m_mapPositions[ LID_FEATURE_NAME ].iLine;
 
 		StringVector vecTypes;
-		int i;
-		for ( i = 0 ; i < m_vecArguments.size() ; i++ )
+		for ( unsigned int i = 0 ; i < m_vecArguments.size() ; i++ )
 			vecTypes.push_back( m_vecArguments[ i ]->m_vecType[ 0 ] );
 		OclSignature::Method signature( m_strName, m_pThisNode->m_vecType[ 0 ], vecTypes );
+
+		if (m_stackLevel >= MAX_CONSTR_FUNC_LEVEL)
+		{
+			std::string message = "possibly infinite loop broken";
+			AddViolation(context, iLineFeatureName, signature.Print(), message);
+			return OclMeta::Object::UNDEFINED;
+		}
 
 		OclMeta::Object objectThis = m_pThisNode->Evaluate( context );
 		OclMeta::ObjectVector vecArguments;
@@ -1555,6 +1687,12 @@ namespace OclTree
 			OclImplementation::Method* pIMethod = pMethod->GetImplementation();
 			if ( ! pIMethod )
 				THROWOCL0( ET_RUNTIME, EX_METHOD_NOT_IMPLEMENTED );
+			
+			if (((OclMeta::Feature*)pMethod)->IsDynamic()) // userdef method
+			{
+				lastFuncName = currFuncName;
+				currFuncName =  m_strName; // GetFullName(); 
+			}
 
 			pIMethod->Initialize();
 			pIMethod->SetThis( objectThis );
@@ -1563,7 +1701,23 @@ namespace OclTree
 			(*pIMethod)();
 
 			OclMeta::Object spResult = EvaluateCast( context, pIMethod->GetResult(), iLineFeatureName, signature.Print() );
+
 			pIMethod->Finalize();
+
+			// all of the violations collected in pIMethod (((OclGmeCM::ConstraintMethod*)pIMethod)->m_spFunction)
+			// will lose, one violation will be added to context depending on spResult 
+			// ?? !! terge
+			OclTree::ViolationVector vec = pIMethod->GetViolations();
+			pIMethod->ClearViolations();
+			int num = vec.size();
+			for (int kk=0; kk<num; kk++)
+			{
+				if (vec[kk].methodName.empty())
+					vec[kk].methodName = currFuncName;
+				AddViolation(context, vec[kk]);
+			}
+			if (!lastFuncName.empty())
+				currFuncName = lastFuncName;
 
 			return CheckFalseResult( context, spResult, iLineFeatureName, signature.Print() );
 		} EVALCATCH( iLineFeatureName, signature.Print() );
@@ -1584,26 +1738,26 @@ namespace OclTree
 	FunctionNode::~FunctionNode()
 	{
 		if ( ! m_bTester && ! m_bSelfTester ) {
-			for ( int i = 0 ; i < m_vecArguments.size() ; i++ )
+			for ( unsigned int i = 0 ; i < m_vecArguments.size() ; i++ )
 				delete m_vecArguments[ i ];
 		}
 		CheckInitialize();
 	}
 
-	GOCL_STL_NS()string FunctionNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string FunctionNode::Print( const std::string& strTabs ) const
 	{
 		if ( m_pMethod )
 			return m_pMethod->Print( strTabs );
 
-		GOCL_STL_NS()string strOut = strTabs + "<Function name=\"" + m_strName + "\">\r\n";
+		std::string strOut = strTabs + "<Function name=\"" + m_strName + "\">\r\n";
 
 		if ( ! m_vecArguments.empty() ) {
-			for ( int i = 0 ; i < m_vecArguments.size() ; i++ ) {
+			for ( unsigned int i = 0 ; i < m_vecArguments.size() ; i++ ) {
 				char chNum[ 100 ];
 				sprintf( chNum, "%d", i );
-				strOut += strTabs + TABSTR + "<Argument_" + GOCL_STL_NS()string( chNum ) + ">\r\n";
+				strOut += strTabs + TABSTR + "<Argument_" + std::string( chNum ) + ">\r\n";
 				strOut += m_vecArguments[ i ]->Print( strTabs + TABSTR + TABSTR );
-				strOut += strTabs + TABSTR + "</Argument_" + GOCL_STL_NS()string( chNum ) + ">\r\n";
+				strOut += strTabs + TABSTR + "</Argument_" + std::string( chNum ) + ">\r\n";
 			}
 		}
 
@@ -1630,8 +1784,7 @@ namespace OclTree
 		contextFunction.m_poolExceptions.Clear();
 
 		bool bArgumentsValid = true;
-		int i;
-		for ( i = 0 ; i < m_vecArguments.size() ; i++ )
+		for ( unsigned int i = 0 ; i < m_vecArguments.size() ; i++ )
 			bArgumentsValid = m_vecArguments[ i ]->Check( contextFunction ) && bArgumentsValid;
 
 		OclCommon::Exception exFunction;
@@ -1644,7 +1797,7 @@ namespace OclTree
 
 			try {
 				OclMeta::Function* pFunction = GetTreeManager()->GetTypeManager()->GetFunction( sigFunction );
-				ADDEXS( contextFunction.m_poolExceptions );
+				ADDEX( contextFunction.m_poolExceptions );
 				GetParametralTypeSeq( TypeSeq(), ( m_vecArguments.empty() ) ? TypeSeq() : m_vecArguments[ 0 ]->m_vecType, pFunction->GetReturnTypeSeq() );
 				if ( pFunction->IsDependence() )
 					context.m_setDependencies.insert( OclMeta::Dependency( sigFunction.Print(), m_mapPositions[ LID_FEATURE_NAME ] ) );
@@ -1653,8 +1806,8 @@ namespace OclTree
 			catch ( OclCommon::Exception ex ) {
 				SETEXPOS( ex, m_mapPositions[ LID_FEATURE_NAME ] );
 				if ( ex.GetCode() != EX_FUNCTION_DOESNT_EXIST ) {
-					ADDEXS( contextFunction.m_poolExceptions );
-					ADDEX( ex )
+					ADDEX( contextFunction.m_poolExceptions );
+					ADDEX( ex );
 					return false;
 				}
 				exFunction = ex;
@@ -1678,7 +1831,7 @@ namespace OclTree
 			m_pMethod->m_vecArguments = m_vecArguments;
 
 			if ( m_pMethod->Check( contextMethod ) ) {
-				ADDEXS( contextMethod.m_poolExceptions );
+				ADDEX( contextMethod.m_poolExceptions );
 				m_pMethod->m_bTester = false;
 				m_bSelfTester = true;
 				m_vecType = m_pMethod->m_vecType;
@@ -1691,7 +1844,7 @@ namespace OclTree
 				m_pMethod = NULL;
 				int iLastCode = GetLastExceptionCode( contextMethod);
 				if ( iLastCode != EX_METHOD_DOESNT_EXIST && iLastCode != EX_ITERATOR_DOESNT_EXIST &&  iLastCode != EX_TYPE_NOT_COMPOUND_ITERATOR && iLastCode != -1 ) {
-					ADDEXS( contextMethod.m_poolExceptions );
+					ADDEX( contextMethod.m_poolExceptions );
 					return false;
 				}
 			}
@@ -1707,8 +1860,7 @@ namespace OclTree
 
 		int iLineFeatureName = m_mapPositions[ LID_FEATURE_NAME ].iLine;
 		StringVector vecTypes;
-		int i;
-		for ( i = 0 ; i < m_vecArguments.size() ; i++ )
+		for ( unsigned int i = 0 ; i < m_vecArguments.size() ; i++ )
 			vecTypes.push_back( m_vecArguments[ i ]->m_vecType[ 0 ] );
 		OclSignature::Function signature( m_strName, vecTypes );
 
@@ -1757,9 +1909,9 @@ namespace OclTree
 				delete m_pThisNode;
 	}
 
-	GOCL_STL_NS()string AssociationNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string AssociationNode::Print( const std::string& strTabs ) const
 	{
-		GOCL_STL_NS()string strOut = strTabs + "<Association name=\"" + m_strName + "\" class=\"" + m_strAcceptable + "\">\r\n";
+		std::string strOut = strTabs + "<Association name=\"" + m_strName + "\" class=\"" + m_strAcceptable + "\">\r\n";
 
 		strOut += strTabs + TABSTR + "<This>\r\n";
 		if ( m_pThisNode )
@@ -1813,7 +1965,7 @@ namespace OclTree
 				m_pThisNode = NULL;
 				int iLastCode = GetLastExceptionCode( contextAssociation );
 				if ( iLastCode != EX_ASSOCIATION_DOESNT_EXIST ) {
-					ADDEXS( contextAssociation.m_poolExceptions );
+					ADDEX( contextAssociation.m_poolExceptions );
 					return false;
 				}
 			}
@@ -1910,14 +2062,14 @@ namespace OclTree
 		}
 	}
 
-	GOCL_STL_NS()string AttributeNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string AttributeNode::Print( const std::string& strTabs ) const
 	{
 		if ( m_pAssociation )
 			return m_pAssociation->Print( strTabs );
 		if ( m_pCollector )
 			return m_pCollector->Print( strTabs );
 
-		GOCL_STL_NS()string strOut = strTabs + "<Attribute name=\"" + m_strName + "\">\r\n";
+		std::string strOut = strTabs + "<Attribute name=\"" + m_strName + "\">\r\n";
 
 		strOut += strTabs + TABSTR + "<This>\r\n";
 		strOut += m_pThisNode->Print( strTabs + TABSTR + TABSTR );
@@ -1973,13 +2125,13 @@ namespace OclTree
 
 				// Create Feature Call Check
 
-				GOCL_STL_NS()vector<OclMeta::Type*> vecTypes( 2, pType );
+				std::vector<OclMeta::Type*> vecTypes( 2, pType );
 
 				OclSignature::Attribute sigAttribute( m_strName, pType->GetName() );
 				OclSignature::Association sigAssociation( m_strName, pType->GetName(), "" );
-				GOCL_STL_NS()vector<OclSignature::Feature*> vecSignatures( 2, &sigAttribute ); vecSignatures[ 1 ] = &sigAssociation;
+				std::vector<OclSignature::Feature*> vecSignatures( 2, &sigAttribute ); vecSignatures[ 1 ] = &sigAssociation;
 
-				GOCL_STL_NS()vector<int> vecCodes( 3, EX_ATTRIBUTE_AMBIGUOUS ); vecCodes[ 1 ] = EX_ASSOCIATION_AMBIGUOUS; vecCodes[ 2 ] = EX_ATTRIBUTE_ASSOCIATION_AMBIGUOUS;
+				std::vector<int> vecCodes( 3, EX_ATTRIBUTE_AMBIGUOUS ); vecCodes[ 1 ] = EX_ASSOCIATION_AMBIGUOUS; vecCodes[ 2 ] = EX_ATTRIBUTE_ASSOCIATION_AMBIGUOUS;
 
 				OclCommon::ExceptionPool poolResult;
 
@@ -1989,7 +2141,7 @@ namespace OclTree
 
 				OclMeta::Feature* pFeature = CheckAmbiguity( vecTypes, vecSignatures, vecCodes, iPrecedence, poolResult );
 				if ( ! pFeature ) {
-					ADDEXS( poolResult );
+					ADDEX( poolResult );
 					return false;
 				}
 				else {
@@ -2022,13 +2174,13 @@ namespace OclTree
 
 				OclMeta::Type* pTypeInner = GetTreeManager()->GetTypeManager()->GetType( m_pThisNode->m_vecType[ 1 ] );
 
-				GOCL_STL_NS()vector<OclMeta::Type*> vecTypes( 2, pType ); vecTypes[ 1 ] = pTypeInner;
+				std::vector<OclMeta::Type*> vecTypes( 2, pType ); vecTypes[ 1 ] = pTypeInner;
 
 				OclSignature::Attribute sigAttribute( m_strName, pType->GetName() );
 				OclSignature::Attribute sigAttributeInner( m_strName, pTypeInner->GetName() );
-				GOCL_STL_NS()vector<OclSignature::Feature*> vecSignatures( 2, &sigAttribute ); vecSignatures[ 1 ] = &sigAttributeInner;
+				std::vector<OclSignature::Feature*> vecSignatures( 2, &sigAttribute ); vecSignatures[ 1 ] = &sigAttributeInner;
 
-				GOCL_STL_NS()vector<int> vecCodes( 3, EX_ATTRIBUTE_AMBIGUOUS ); vecCodes[ 2 ] = EX_ATTRIBUTE_INNERATTRIBUTE_AMBIGUOUS;
+				std::vector<int> vecCodes( 3, EX_ATTRIBUTE_AMBIGUOUS ); vecCodes[ 2 ] = EX_ATTRIBUTE_INNERATTRIBUTE_AMBIGUOUS;
 
 				OclCommon::ExceptionPool poolResult;
 
@@ -2038,7 +2190,7 @@ namespace OclTree
 
 				OclMeta::Feature* pFeature = CheckAmbiguity( vecTypes, vecSignatures, vecCodes, iPrecedence, poolResult );
 				if ( ! pFeature ) {
-					ADDEXS( poolResult );
+					ADDEX( poolResult );
 					return false;
 				}
 				else {
@@ -2051,13 +2203,13 @@ namespace OclTree
 						if ( pFeature->IsDependence() )
 							context.m_setDependencies.insert( OclMeta::Dependency( sigAttributeInner.Print(), m_mapPositions[ LID_FEATURE_NAME ] ) );
 						int iPiece = 0; char chBuffer[ 500 ];
-						GOCL_STL_NS()string strDeclarator = "-" + m_strName;
+						std::string strDeclarator = "-" + m_strName;
 						sprintf( chBuffer, "%d", iPiece );
-						while ( context.m_ctxTypes.ExistsVariable( strDeclarator + GOCL_STL_NS()string( chBuffer ) ) )
+						while ( context.m_ctxTypes.ExistsVariable( strDeclarator + std::string( chBuffer ) ) )
 							sprintf( chBuffer, "%d", ++iPiece );
 
 						VariableNode* pVariableNode = GetTreeManager()->CreateVariable();
-						pVariableNode->m_strName = strDeclarator + GOCL_STL_NS()string( chBuffer );
+						pVariableNode->m_strName = strDeclarator + std::string( chBuffer );
 						pVariableNode->m_vecType = TypeSeq( 1, pTypeInner->GetName() );
 
 						AttributeNode* pAttributeNode = GetTreeManager()->CreateAttribute();
@@ -2071,7 +2223,7 @@ namespace OclTree
 						m_pCollector->m_pThisNode = m_pThisNode;
 						m_pCollector->m_strCallOperator = "->";
 						m_pCollector->m_strName = "collect";
-						m_pCollector->m_vecDeclarators = StringVector( 1, GOCL_STL_NS()string( chBuffer ) );
+						m_pCollector->m_vecDeclarators = StringVector( 1, std::string( chBuffer ) );
 						m_pCollector->m_mapPositions = m_mapPositions;
 						m_pCollector->m_pArgumentNode = pAttributeNode;
 
@@ -2137,12 +2289,12 @@ namespace OclTree
 		CheckInitialize();
 	}
 
-	GOCL_STL_NS()string VariableNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string VariableNode::Print( const std::string& strTabs ) const
 	{
 		if ( m_pAttribute )
 			return m_pAttribute->Print( strTabs );
 
-		GOCL_STL_NS()string strOut = strTabs + "<Variable name=\"" + m_strName + "\">\r\n";
+		std::string strOut = strTabs + "<Variable name=\"" + m_strName + "\">\r\n";
 		strOut += strTabs + "</Variable>\r\n";
 		return strOut;
 	}
@@ -2184,8 +2336,8 @@ namespace OclTree
 		else {
 			delete m_pType;
 			m_pType = NULL;
-			if ( m_strName.find( ":" ) != GOCL_STL_NS()string::npos ) {
-				ADDEXS( contextType.m_poolExceptions );
+			if ( m_strName.find( ":" ) != std::string::npos ) {
+				ADDEX( contextType.m_poolExceptions );
 				return false;
 			}
 		}
@@ -2227,7 +2379,7 @@ namespace OclTree
 				m_pAttribute = NULL;
 				int iLastCode = GetLastExceptionCode( contextAttribute );
 				if ( iLastCode != EX_ATTRIBUTE_DOESNT_EXIST && iLastCode != EX_ASSOCIATION_DOESNT_EXIST ) {
-					ADDEXS( contextAttribute.m_poolExceptions );
+					ADDEX( contextAttribute.m_poolExceptions );
 					return false;
 				}
 			}
@@ -2259,14 +2411,14 @@ namespace OclTree
 	{
 	}
 
-	GOCL_STL_NS()string ContextNode::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string ContextNode::Print( const std::string& strTabs ) const
 	{
-		GOCL_STL_NS()string strOut = strTabs + "<Context type=\"" +( ( m_bClassifier ) ? "Classifier" : "Operation" ) + "\" stereotype=\"" + m_strStereotype + "\">\r\n";
+		std::string strOut = strTabs + "<Context type=\"" +( ( m_bClassifier ) ? "Classifier" : "Operation" ) + "\" stereotype=\"" + m_strStereotype + "\">\r\n";
 		if ( m_bClassifier )
 			strOut += strTabs + TABSTR + ( ( ! m_strName.empty() ) ? m_strName : "self" ) + " : " + m_strType + "\r\n";
 		else {
 			strOut += strTabs + TABSTR + m_strType + "::" + m_strName + "( ";
-			for ( int i = 0 ; i < m_vecParameters.size() ; i++ ) {
+			for ( unsigned int i = 0 ; i < m_vecParameters.size() ; i++ ) {
 				strOut += m_vecParameters[ i ].GetName() + " : " + m_vecParameters[ i ].GetTypeName();
 				if ( i != m_vecParameters.size() - 1 )
 					strOut += ", ";
@@ -2313,14 +2465,14 @@ namespace OclTree
 		// Check Parameters
 
 		TypeSeq vecType;
-		for ( int i = 0 ; i < m_vecParameters.size() ; i++ ) {
+		for ( unsigned int i = 0 ; i < m_vecParameters.size() ; i++ ) {
 			vecType.clear();
-			GOCL_STL_NS()string strType = m_vecParameters[ i ].GetTypeName();
-			GOCL_STL_NS()string strName = m_vecParameters[ i ].GetName();
+			std::string strType = m_vecParameters[ i ].GetTypeName();
+			std::string strName = m_vecParameters[ i ].GetName();
 			if ( ParseTypeSeq( context, m_mapPositions[ LID_PARAMETER_TYPE + i ], strType, vecType ) )
 				m_vecParameters[ i ] = OclCommon::FormalParameter( strName, strType, m_vecParameters[ i ].IsRequired() );
 			if ( context.m_ctxTypes.ExistsVariable( strName ) )
-				ADDEX( EXCEPTION1( EX_VARIABLE_ALREADY_EXISTS, strName, m_mapPositions[ LID_PARAMETER_NAME + i ] ) )
+				ADDEX( EXCEPTION1( EX_VARIABLE_ALREADY_EXISTS, strName, m_mapPositions[ LID_PARAMETER_NAME + i ] ) );
 			else
 				if ( ! vecType.empty() )
 					context.m_ctxTypes.AddVariable( strName, vecType );
@@ -2368,9 +2520,9 @@ namespace OclTree
 			delete m_pExpression;
 	}
 
-	GOCL_STL_NS()string Constraint::Print( const GOCL_STL_NS()string& strTabs ) const
+	std::string Constraint::Print( const std::string& strTabs ) const
 	{
-		GOCL_STL_NS()string strOut = strTabs + strTabs + "<Constraint name=\"" + m_strName + "\">\r\n";
+		std::string strOut = strTabs + strTabs + "<Constraint name=\"" + m_strName + "\">\r\n";
 
 		strOut += strTabs + TABSTR + "<Context>\r\n";
 		strOut += m_pContext->Print( strTabs + TABSTR + TABSTR );
@@ -2386,22 +2538,16 @@ namespace OclTree
 
 	bool Constraint::CheckImplementation( TypeContext& context )
 	{
-		//printf("Constraint: CheckImplementation called");
 		m_pContext->Check( context );
 		bool bValidC = context.m_poolExceptions.IsEmpty();
 		bool bValidE = true;
 		if ( m_pExpression ) {
-			/*if (m_pExpression->GetKind() == TreeNode::NK_TEXTNODE) {
-				//printf ("It is  atree node|");
-				return true;
-			}*/
 			bValidE = m_pExpression->Check( context );
 			if ( bValidE && bValidC ) {
-				//printf("in if(bValidE && bValidC)|");
 				m_pContext->m_setDependencies = context.m_setDependencies;
 				if ( ! GetTreeManager()->GetTypeManager()->IsTypeA( m_pExpression->m_vecType, m_pContext->m_vecTypeReturn ) ) {
 					if ( m_pContext->m_strStereotype == "defattribute" || m_pContext->m_strStereotype == "defmethod" ) {
-						GOCL_STL_NS()string strEType, strDType;
+						std::string strEType, strDType;
 						OclCommon::Convert( m_pExpression->m_vecType, strEType );
 						OclCommon::Convert( m_pContext->m_vecTypeReturn, strDType );
 						ADDEX( EXCEPTION2( EX_CONSTRAINT_DEF_RETURN_MISMATCH, strDType, strEType, m_pExpression->m_mapPositions[ LID_NODE_START ] ) );
@@ -2419,19 +2565,15 @@ namespace OclTree
 
 	OclMeta::Object Constraint::Evaluate( ObjectContext& context )
 	{
-		//printf("In Constraint::Evaluate|");
-		if (m_pExpression->GetKind() == TreeNode::NK_TEXTNODE) {
-			//printf("The text node is in Constraint::Evaluate|");
-			//return spResult;
-		}
 		int iLineNodeStart = m_mapPositions[ LID_NODE_START ].iLine;
 		EVALTRY {
 			OclMeta::Object spResult = EvaluateCast( context, m_pExpression->Evaluate( context ), iLineNodeStart, "At root expression" );
 			context.m_bEnableTracking = true;
 			if ( spResult.IsUndefined() ) {
-				GOCL_STL_NS()string strMyself = ( m_pContext->m_strStereotype == "defattribute" || m_pContext->m_strStereotype == "defmethod" ) ? "Definition " : "Constraint ";
+				std::string strMyself = ( m_pContext->m_strStereotype == "defattribute" || m_pContext->m_strStereotype == "defmethod" ) ? "Definition " : "Constraint ";
 				AddViolation( context, iLineNodeStart, "At root expression", strMyself + "evaluated to undefined object." );
 			}
+
 			return CheckFalseResult( context, spResult, iLineNodeStart, "At root expression" );
 		} EVALCATCH( iLineNodeStart, "At root expression" );
 		return OclMeta::Object::UNDEFINED;
@@ -2443,9 +2585,9 @@ namespace OclTree
 //
 //##############################################################################################################################################
 
-	GOCL_STL_NS()string ObjectNodeAdaptor::Print( const GOCL_STL_NS()string& strTabs, ObjectNode* pNode ) const
+	std::string ObjectNodeAdaptor::Print( const std::string& strTabs, ObjectNode* pNode ) const
 	{
-		GOCL_STL_NS()string strOut = strTabs + "<Object type=\"" + pNode->m_strType + "\">\r\n";
+		std::string strOut = strTabs + "<Object type=\"" + pNode->m_strType + "\">\r\n";
 
 		strOut += strTabs + TABSTR + "<Value>\r\n";
 		strOut += strTabs + TABSTR + TABSTR;
@@ -2472,7 +2614,7 @@ namespace OclTree
 				return true;
 			else {
 				if ( pNode->m_strType == "ocl::Type" ) {
-					GOCL_STL_NS()string strValue = pNode->m_strValue;
+					std::string strValue = pNode->m_strValue;
 					TypeSeq vecType;
 					bool bIsType = pNode->ParseTypeSeq( context, pNode->m_mapPositions[ LID_NODE_START ], strValue, vecType );
 					if ( ! bIsType )
@@ -2517,16 +2659,16 @@ namespace OclTree
 //
 //##############################################################################################################################################
 
-	GOCL_STL_NS()string CollectionNodeAdaptor::Print( const GOCL_STL_NS()string& strTabs, CollectionNode* pNode ) const
+	std::string CollectionNodeAdaptor::Print( const std::string& strTabs, CollectionNode* pNode ) const
 	{
-		GOCL_STL_NS()string strOut = strTabs + "<Collection type=\"" + pNode->m_strType + "\">\r\n";
+		std::string strOut = strTabs + "<Collection type=\"" + pNode->m_strType + "\">\r\n";
 
-		for ( int i = 0 ; i < pNode->m_vecNodes.size() ; i++ ) {
+		for ( unsigned int i = 0 ; i < pNode->m_vecNodes.size() ; i++ ) {
 			char chNum[ 100 ];
 			sprintf( chNum, "%d", i );
-			strOut += strTabs + TABSTR + "<Element_" + GOCL_STL_NS()string( chNum ) + ">\r\n";
+			strOut += strTabs + TABSTR + "<Element_" + std::string( chNum ) + ">\r\n";
 			strOut += pNode->m_vecNodes[ i ]->Print( strTabs + TABSTR + TABSTR );
-			strOut += strTabs + TABSTR + "</Element_" + GOCL_STL_NS()string( chNum ) + ">\r\n";
+			strOut += strTabs + TABSTR + "</Element_" + std::string( chNum ) + ">\r\n";
 		}
 
 		strOut += strTabs + "</Collection>\r\n";
@@ -2535,7 +2677,7 @@ namespace OclTree
 
 	bool CollectionNodeAdaptor::Check( TypeContext& context, CollectionNode* pNode ) const
 	{
-		if ( pNode->m_strType == "Set" || pNode->m_strType == "Sequence" || pNode->m_strType == "Bag" )
+		if ( pNode->m_strType == "Set" || pNode->m_strType == "Sequence" || pNode->m_strType == "Bag" || pNode->m_strType == "OrderedSet" )
 			pNode->m_strType = "ocl::" + pNode->m_strType;
 
 		bool bValid = pNode->ParseTypeSeq( context, pNode->m_mapPositions[ LID_NODE_START ], pNode->m_strType, pNode->m_vecType );
@@ -2551,7 +2693,7 @@ namespace OclTree
 
 			// Check if this adaptor can create Compound Object
 
-			if ( ! ( pNode->m_vecType[ 0 ] == "ocl::Set" || pNode->m_vecType[ 0 ] == "ocl::Sequence" || pNode->m_vecType[ 0 ] == "ocl::Bag" ) ) {
+			if ( ! ( pNode->m_vecType[ 0 ] == "ocl::Set" || pNode->m_vecType[ 0 ] == "ocl::Sequence" || pNode->m_vecType[ 0 ] == "ocl::Bag"  || pNode->m_vecType[ 0 ] == "ocl::OrderedSet" ) ) {
 				ADDEX( EXCEPTION1( EX_CANNOT_CREATE_COLLECTION, pNode->m_strType, pNode->m_mapPositions[ LID_NODE_START ] ) );
 				bValid = false;
 			}
@@ -2561,7 +2703,7 @@ namespace OclTree
 
 		bool bArgumentsValid = true;
 		TypeSeq vecAggregatedType;
-		for ( int i = 0 ; i < pNode->m_vecNodes.size() ; i++ ) {
+		for ( unsigned int i = 0 ; i < pNode->m_vecNodes.size() ; i++ ) {
 			bArgumentsValid = pNode->m_vecNodes[ i ]->Check( context )  && bArgumentsValid;
 			if ( bArgumentsValid ) {
 				TypeSeq vecType = pNode->m_vecNodes[ i ]->m_vecType;
@@ -2586,7 +2728,7 @@ namespace OclTree
 	OclMeta::Object CollectionNodeAdaptor::Evaluate( ObjectContext& context, CollectionNode* pNode ) const
 	{
 		OclMeta::ObjectVector vecObjects;
-		for ( int i = 0 ; i < pNode->m_vecNodes.size() ; i++ )
+		for ( unsigned int i = 0 ; i < pNode->m_vecNodes.size() ; i++ )
 			vecObjects.push_back( pNode->m_vecNodes[ i ]->Evaluate( context ) );
 
 		if ( pNode->m_vecType[ 0 ] == "ocl::Set" )
@@ -2595,6 +2737,8 @@ namespace OclTree
 			return CREATE_BAG( pNode->GetTreeManager()->GetTypeManager(), vecObjects );
 		if ( pNode->m_vecType[ 0 ] == "ocl::Sequence" )
 			return CREATE_SEQUENCE( pNode->GetTreeManager()->GetTypeManager(), vecObjects );
+		if ( pNode->m_vecType[ 0 ] == "ocl::OrderedSet" )
+			return CREATE_ORDEREDSET( pNode->GetTreeManager()->GetTypeManager(), vecObjects );
 
 		return OclMeta::Object::UNDEFINED;
 	}
@@ -2689,10 +2833,9 @@ namespace OclTree
 
 	Constraint* TreeManager::CreateConstraint() const
 	{
-		//fprintf(stdout, "Created constraint node.\n");
 		return new Constraint( (TreeManager*) this );
 	}
-	//Begin Pat
+//<udmoclpat changes
 	TextNode* TreeManager::CreateTextNode() const
 	{
 		//fprintf(stdout, "Created text node.\n");
@@ -2718,9 +2861,9 @@ namespace OclTree
 	{
 		return new EnumerationNode( (TreeManager*) this );
 	}
-	//End Pat
+//udmoclpat changes>
 
-//Begin Pat
+//<udmoclpat changes
 //##############################################################################################################################################
 //
 //	C L A S S : OclTree::TextNode
@@ -2843,7 +2986,7 @@ namespace OclTree
 
 	OclMeta::Object HandleNode::Evaluate( ObjectContext& context )
 	{
-		std::map<const GOCL_STL_NS()string, std::ofstream*>::iterator iter = PatHelper::handles.find(strHandle);
+		std::map<const std::string, std::ofstream*>::iterator iter = PatHelper::handles.find(strHandle);
 		if( iter != PatHelper::handles.end() ) {
 			PatHelper::f_pat_output = iter->second;
 		}
@@ -2911,14 +3054,14 @@ namespace OclTree
 				fo->open(strFileName.c_str());
 		}
 		if(!fo->good()) throw "Cannot open output file";
-		std::map<const GOCL_STL_NS()string, std::ofstream*>::iterator iter = PatHelper::handles.find(strHandle);
+		std::map<const std::string, std::ofstream*>::iterator iter = PatHelper::handles.find(strHandle);
 		if( iter != PatHelper::handles.end() ) {
 			if(iter->second != NULL  && *(iter->second) && iter->second->is_open()) {
 				iter->second->close();
 				PatHelper::handles.erase(iter);
 			}
 		}
-		PatHelper::handles.insert(std::pair<const GOCL_STL_NS()string, std::ofstream*>(strHandle, fo));
+		PatHelper::handles.insert(std::pair<const std::string, std::ofstream*>(strHandle, fo));
 		return  m_pTreeNode->Evaluate( context );
 	}
 
@@ -3009,10 +3152,10 @@ namespace OclTree
 
 //	bool PatHelper::b_ProcessingPat(false);
 	std::ofstream* PatHelper::f_pat_output;
-	std::map<const GOCL_STL_NS()string, std::ofstream*> PatHelper::handles;
+	std::map<const std::string, std::ofstream*> PatHelper::handles;
 	void PatHelper::clean()
 	{
-		std::map<const GOCL_STL_NS()string, std::ofstream*>::iterator iter;
+		std::map<const std::string, std::ofstream*>::iterator iter;
 		for(iter = PatHelper::handles.begin(); iter != PatHelper::handles.end(); iter++) {
 			if(iter->second != NULL  && *(iter->second) && iter->second->is_open()) {
 				iter->second->close();
@@ -3021,6 +3164,6 @@ namespace OclTree
 		}
 	}
 
-//End Pat
+//udmoclpat changes>
 
 }; // namespace OclTree

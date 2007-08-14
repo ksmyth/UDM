@@ -4,38 +4,11 @@
 //	OCLTypeExBasic.cpp
 //
 //###############################################################################################################################################
-
+#include "Solve4786.h"
 #include "OCLTypeExBasic.h"
 
 #include "OCLObjectExBasic.h"
 #include "math.h"
-#include "algorithm"
-
-#ifndef _WIN32
-char *_strupr( char *string )
-{
-	if (string)
-	{
-		for (int i = 0; i< strlen(string); i++)
-			*(string + i) = toupper(*(string+i));
-	};
-	return string;
-};
-
-char *_strlwr( char *string )
-{
-	if (string)
-	{
-		for (int i = 0; i< strlen(string); i++)
-			*(string + i) = tolower(*(string+i));
-	};
-	return string;
-};
-
-
-
-
-#endif
 
 namespace OclBasic
 {
@@ -109,7 +82,7 @@ namespace OclBasic
 
 	void TAny_MethodFactory::GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		int iCount = signature.GetParameterCount();
 		FPV vecParams;
 		TS vecType;
@@ -234,7 +207,7 @@ namespace OclBasic
 				ThrowException( "Argument 'from' is less than 0." );
 				return;
 			}
-			if ( iFrom >= strThis.length() ) {
+			if ( iFrom >= (int) strThis.length() ) {
 				ThrowException( "Argument 'from' equals to or is greater than size of string." );
 				return;
 			}
@@ -247,11 +220,12 @@ namespace OclBasic
 				ThrowException( "Argument 'to' greater than Argument 'from'." );
 				return;
 			}
-			if ( iTo >= strThis.length() ) {
-				ThrowException( "Argument 'to' equals to or is greater than size of string." );
+			if ( iTo > (int) strThis.length() ) {
+				ThrowException( "Argument 'to' is greater than size of string." );
 				return;
 			}
-			SetResult( CREATE_STRING( GetTypeManager(), strThis.substr( iFrom, iTo ) ) );
+			std::string res = strThis.substr( iFrom, iTo-iFrom );
+			SetResult( CREATE_STRING( GetTypeManager(), res ) );
 		}
 	};
 
@@ -261,7 +235,12 @@ namespace OclBasic
 		{
 			DECL_STRING( strThis, GetThis() );
 			Trim( strThis );
-			for ( int i = 0 ; i < strThis.length() ; i ++ )
+			unsigned int i = 0;
+			if (strThis[ i ] == '-'  ||  strThis[ i ] == '+')
+				i++;
+			if (i >= strThis.length())
+				ThrowException( "String cannot be converted to ocl::Integer." );
+			for ( ; i < strThis.length() ; i ++ )
 				if ( strThis[ i ] < '0' || strThis[ i ] > '9' )
 					ThrowException( "String cannot be converted to ocl::Integer." );
 			long lValue = atol( strThis.c_str() );
@@ -294,7 +273,7 @@ namespace OclBasic
 
 	void TString_AttributeFactory::GetFeatures( const OclSignature::Attribute& signature, OclMeta::AttributeVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		TS vecType;
 
 		if ( strName == "size" ) {
@@ -306,7 +285,7 @@ namespace OclBasic
 
 	void TString_MethodFactory::GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		int iCount = signature.GetParameterCount();
 		FPV vecParams;
 		TS vecType;
@@ -383,7 +362,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_BOOLEAN( bArg1, GetArgument( 0 ) );
-			DECL_BOOLEAN( bArg2, GetArgument( 0 ) );
+			DECL_BOOLEAN( bArg2, GetArgument( 1 ) );
 			SetResult( CREATE_BOOLEAN( GetTypeManager(), bArg1 || bArg2 ) );
 		}
 	};
@@ -402,7 +381,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_BOOLEAN( bArg1, GetArgument( 0 ) );
-			DECL_BOOLEAN( bArg2, GetArgument( 0 ) );
+			DECL_BOOLEAN( bArg2, GetArgument( 1 ) );
 			SetResult( CREATE_BOOLEAN( GetTypeManager(), ! bArg1 || bArg2 ) );
 		}
 	};
@@ -412,7 +391,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_BOOLEAN( bArg1, GetArgument( 0 ) );
-			DECL_BOOLEAN( bArg2, GetArgument( 0 ) );
+			DECL_BOOLEAN( bArg2, GetArgument( 1 ) );
 			SetResult( CREATE_BOOLEAN( GetTypeManager(), bArg1 && ! bArg2 || ! bArg1 && bArg2 ) );
 		}
 	};
@@ -546,7 +525,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_REAL( dArg, GetArgument( 0 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), (int)floor( dArg ) ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), floor( dArg ) ) );
 		}
 	};
 
@@ -555,8 +534,8 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_REAL( dArg, GetArgument( 0 ) );
-			long lFloor = (long) floor(dArg );
-			SetResult( CREATE_INTEGER( GetTypeManager(), (int)(lFloor + ( ( lFloor + 0.5 <= dArg && dArg >= 0 ) ? 1 : 0 )) ) );
+			long lFloor = floor( dArg );
+			SetResult( CREATE_INTEGER( GetTypeManager(), lFloor + ( ( lFloor + 0.5 <= dArg && dArg >= 0 ) ? 1 : 0 ) ) );
 		}
 	};
 
@@ -566,7 +545,7 @@ namespace OclBasic
 		{
 			DECL_REAL( dArg1, GetArgument( 0 ) );
 			DECL_REAL( dArg2, GetArgument( 1 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), ( dArg1 > dArg2 ) ? dArg1 : dArg2 ) );
+			SetResult( CREATE_REAL( GetTypeManager(), std::max( dArg1, dArg2 ) ) );
 		}
 	};
 
@@ -576,7 +555,7 @@ namespace OclBasic
 		{
 			DECL_REAL( dArg1, GetArgument( 0 ) );
 			DECL_REAL( dArg2, GetArgument( 1 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), ( dArg1 < dArg2 ) ? dArg1 : dArg2  ) );
+			SetResult( CREATE_REAL( GetTypeManager(), std::min( dArg1, dArg2 ) ) );
 		}
 	};
 
@@ -594,7 +573,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_REAL( dThis, GetThis() );
-			SetResult( CREATE_INTEGER( GetTypeManager(), (long int)(floor( dThis )) ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), floor( dThis ) ) );
 		}
 	};
 
@@ -603,8 +582,8 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_REAL( dThis, GetThis() );
-			long lFloor = (long) floor( dThis );
-			SetResult( CREATE_INTEGER( GetTypeManager(), (long int)(lFloor + ( ( lFloor + 0.5 <= dThis && dThis >= 0 ) ? 1 : 0 ) )) );
+			long lFloor = floor( dThis );
+			SetResult( CREATE_INTEGER( GetTypeManager(), lFloor + ( ( lFloor + 0.5 <= dThis && dThis >= 0 ) ? 1 : 0 ) ) );
 		}
 	};
 
@@ -614,7 +593,7 @@ namespace OclBasic
 		{
 			DECL_REAL( dThis, GetThis() );
 			DECL_REAL( dArg, GetArgument( 0 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), ( dThis > dArg ) ? dThis : dArg ) );
+			SetResult( CREATE_REAL( GetTypeManager(), std::max( dThis, dArg ) ) );
 		}
 	};
 
@@ -624,13 +603,13 @@ namespace OclBasic
 		{
 			DECL_REAL( dThis, GetThis() );
 			DECL_REAL( dArg, GetArgument( 0 ) );
-			SetResult( CREATE_REAL( GetTypeManager(), ( dThis < dArg ) ? dThis : dArg  ) );
+			SetResult( CREATE_REAL( GetTypeManager(), std::min( dThis, dArg ) ) );
 		}
 	};
 
 	void TReal_MethodFactory::GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		int iCount = signature.GetParameterCount();
 		FPV vecParams;
 		TS vecType;
@@ -788,7 +767,7 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lArg1, GetArgument( 0 ) );
 			DECL_INTEGER( lArg2, GetArgument( 1 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), ( lArg1 > lArg2 ) ? lArg1 : lArg2  ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), std::max( lArg1, lArg2 ) ) );
 		}
 	};
 
@@ -798,7 +777,7 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lArg1, GetArgument( 0 ) );
 			DECL_INTEGER( lArg2, GetArgument( 1 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), ( lArg1 < lArg2 ) ? lArg1 : lArg2 ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), std::min( lArg1, lArg2 ) ) );
 		}
 	};
 
@@ -817,7 +796,7 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lThis, GetThis() );
 			DECL_INTEGER( lArg, GetArgument( 0 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), ( lThis > lArg ) ? lThis : lArg ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), std::max( lThis, lArg ) ) );
 		}
 	};
 
@@ -827,13 +806,13 @@ namespace OclBasic
 		{
 			DECL_INTEGER( lThis, GetThis() );
 			DECL_INTEGER( lArg, GetArgument( 0 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), ( lThis < lArg ) ? lThis : lArg ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), std::min( lThis, lArg ) ) );
 		}
 	};
 
 	void TInteger_MethodFactory::GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		int iCount = signature.GetParameterCount();
 		FPV vecParams;
 		TS vecType;
@@ -865,9 +844,9 @@ namespace OclBasic
 //
 //##############################################################################################################################################
 
-	//##############################################################################################################################################
+//##############################################################################################################################################
 //
-//	C O M M O N  F E A T U R E S   O F  ocl::Set , ocl::Bag , ocl::Sequence
+//	C O M M O N  F E A T U R E S   O F  ocl::Set , ocl::Bag , ocl::Sequence , ocl::OrderedSet
 //
 //##############################################################################################################################################
 
@@ -903,7 +882,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_COLLECTION( collThis, GetThis() );
-			SetResult( CREATE_BOOLEAN( GetTypeManager(), GOCL_STL_NS()find( collThis.begin(), collThis.end(), GetArgument( 0 ) ) != collThis.end() ) );
+			SetResult( CREATE_BOOLEAN( GetTypeManager(), std::find( collThis.begin(), collThis.end(), GetArgument( 0 ) ) != collThis.end() ) );
 		}
 	};
 
@@ -912,7 +891,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_COLLECTION( collThis, GetThis() );
-			SetResult( CREATE_BOOLEAN( GetTypeManager(), GOCL_STL_NS()find( collThis.begin(), collThis.end(), GetArgument( 0 ) ) == collThis.end() ) );
+			SetResult( CREATE_BOOLEAN( GetTypeManager(), std::find( collThis.begin(), collThis.end(), GetArgument( 0 ) ) == collThis.end() ) );
 		}
 	};
 
@@ -922,7 +901,7 @@ namespace OclBasic
 		{
 			DECL_COLLECTION( collThis, GetThis() );
 			long lResult = 0;
-			for ( int i = 0 ; i < collThis.size() ; i++ )
+			for ( unsigned int i = 0 ; i < collThis.size() ; i++ )
 				if ( collThis[ i ] == GetArgument( 0 ) )
 					lResult++;
 			SetResult( CREATE_INTEGER( GetTypeManager(), lResult ) );
@@ -936,7 +915,7 @@ namespace OclBasic
 			DECL_COLLECTION( collThis, GetThis() );
 			DECL_ITERATOR( spIterator, GetArgument( 0 ) );
 			while ( spIterator->HasNext() ) {
-				OclMeta::ObjectVector::iterator i = GOCL_STL_NS()find( collThis.begin(), collThis.end(), spIterator->GetNext() );
+				OclMeta::ObjectVector::iterator i = std::find( collThis.begin(), collThis.end(), spIterator->GetNext() );
 				if ( i == collThis.end() ) {
 					SetResult( CREATE_BOOLEAN( GetTypeManager(), false ) );
 					return;
@@ -954,7 +933,7 @@ namespace OclBasic
 			DECL_COLLECTION( collThis, GetThis() );
 			DECL_ITERATOR( spIterator, GetArgument( 0 ) );
 			while ( spIterator->HasNext() )
-				if ( GOCL_STL_NS()find( collThis.begin(), collThis.end(), spIterator->GetNext() ) != collThis.end() ) {
+				if ( std::find( collThis.begin(), collThis.end(), spIterator->GetNext() ) != collThis.end() ) {
 					SetResult( CREATE_BOOLEAN( GetTypeManager(), false ) );
 					return;
 				}
@@ -1001,7 +980,21 @@ namespace OclBasic
 		}
 	};
 
-	ITERATOR( TCollection_Exists )
+// --
+	METHOD( TCollection_AsOrderedSet )
+	{
+		void operator()()
+		{
+			if ( GetThis().GetTypeName() == "ocl::OrderedSet" ) {
+				SetResult( GetThis() );
+				return;
+			}
+			DECL_COLLECTION( collThis, GetThis() );
+			SetResult( CREATE_ORDEREDSET( GetTypeManager(), collThis ) );
+		}
+	};
+// --
+	ITERATOR( TCollection_Exists ) // true - if the collection contains at least one element - for which the condition evaluates to true
 	{
 		private:
 			int iAccumulator;
@@ -1027,7 +1020,7 @@ namespace OclBasic
 
 		OclMeta::Object GetResult() const
 		{
-			return ( iAccumulator == -1 ) ? OclMeta::Object::UNDEFINED : CREATE_BOOLEAN( GetTypeManager(), iAccumulator == 1 );
+			return CREATE_BOOLEAN( GetTypeManager(), iAccumulator == 1 );
 		}
 	};
 
@@ -1063,7 +1056,7 @@ namespace OclBasic
 
 		OclMeta::Object GetResult() const
 		{
-			return ( iAccumulator == -1 ) ? OclMeta::Object::UNDEFINED : CREATE_BOOLEAN( GetTypeManager(), iAccumulator == 1 );
+			return CREATE_BOOLEAN( GetTypeManager(), iAccumulator != 0 );
 		}
 	};
 
@@ -1083,7 +1076,7 @@ namespace OclBasic
 		void operator()()
 		{
 			if ( bResult ) {
-				if ( GOCL_STL_NS()find( vecObjects.begin(), vecObjects.end(), GetSubResult() ) != vecObjects.end() ) {
+				if ( std::find( vecObjects.begin(), vecObjects.end(), GetSubResult() ) != vecObjects.end() ) {
 					bResult = false;
 					SetDoStop( true );
 				}
@@ -1104,7 +1097,7 @@ namespace OclBasic
 		}
 	};
 
-	ITERATOR( TCollection_Any )
+	ITERATOR( TCollection_Any ) // returns one element - the condition evaluates to true for that element
 	{
 		private :
 			OclMeta::ObjectVector vecObjects;
@@ -1138,7 +1131,7 @@ namespace OclBasic
 		}
 	};
 
-	ITERATOR( TCollection_One )
+	ITERATOR( TCollection_One ) // true - if the collection contains just one element - for which the condition evaluates to true
 	{
 		private :
 			int iCount;
@@ -1167,9 +1160,107 @@ namespace OclBasic
 		}
 	};
 
+// --
+//
+	ITERATOR( TCollection_SortedBy)
+	{
+		private :
+			typedef std::map<long, OclMeta::Object> TintMap;
+			TintMap intMap;
+			bool isInt;
+			typedef std::map<double, OclMeta::Object> TrealMap;
+			TrealMap realMap;
+			bool isReal;
+			typedef std::map<std::string, OclMeta::Object> TstringMap;
+			TstringMap stringMap;
+			bool isString;
+
+
+		void Initialize()
+		{
+			OclIterator::Initialize();
+			intMap.clear();
+			isInt = false;
+			realMap.clear();
+			isReal = false;
+			stringMap.clear();
+			isString = false;
+		}
+
+		void operator()()
+		{
+			OclMeta::Object keyObj = GetSubResult();
+			if (!keyObj.IsComparable())
+			{
+				ThrowException( "Key must be: Integer or Real or String." );
+				return;
+			}
+			OclMeta::Object store = GetSubOriResult();
+			std::string keytype = keyObj.GetTypeName();
+
+			if (keytype == "ocl::Integer")
+			{
+				isInt = true;
+				DECL_INTEGER(key, keyObj);
+				intMap.insert(TintMap::value_type(key, store));
+			}
+			else if (keytype == "ocl::Real")
+			{
+				isReal = true;
+				DECL_REAL(key, keyObj);
+				realMap.insert(TrealMap::value_type(key, store));
+			}
+			else if (keytype == "ocl::String")
+			{
+				isString = true;
+				DECL_STRING(key, keyObj);
+				stringMap.insert(TstringMap::value_type(key, store));
+			}
+
+		}
+
+		OclMeta::Object GetResult() const
+		{
+			OclMeta::ObjectVector vecSelecteds;
+			vecSelecteds.clear();
+			if (isInt)
+			{
+				TintMap::const_iterator it = intMap.begin();
+				for (; it != intMap.end(); it++)
+					vecSelecteds.push_back( (*it).second);
+			}
+			else if (isReal)
+			{
+				TrealMap::const_iterator it = realMap.begin();
+				for (; it != realMap.end(); it++)
+					vecSelecteds.push_back( (*it).second);
+			}
+			else if (isString)
+			{
+				TstringMap::const_iterator it = stringMap.begin();
+				for (; it != stringMap.end(); it++)
+					vecSelecteds.push_back( (*it).second);
+			}
+
+			return CREATE_ORDEREDSET( GetTypeManager(), vecSelecteds );
+		}
+
+		void Finalize()
+		{
+			intMap.clear();
+			isInt = false;
+			realMap.clear();
+			isReal = false;
+			stringMap.clear();
+			isString = false;
+			OclIterator::Finalize();
+		}
+	};
+// --
+
 	void TCollection_AttributeFactory::GetFeatures( const OclSignature::Attribute& signature, OclMeta::AttributeVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		TS vecType;
 
 		if ( strName == "size" ) {
@@ -1181,7 +1272,7 @@ namespace OclBasic
 
 	void TCollection_MethodFactory::GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		int iCount = signature.GetParameterCount();
 		FPV vecParams;
 		TS vecType;
@@ -1247,6 +1338,15 @@ namespace OclBasic
 			return;
 		}
 
+// --
+		if ( ( strName == "asOrderedSet" ) && iCount == 0 ) {
+			vecType.push_back( "ocl::OrderedSet" );
+			vecType.push_back( TYPE_AGGREGATED_OBJECT );
+			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TCollection_AsOrderedSet(), false ) );
+			return;
+		}
+// --
+
 		if ( ( strName == "asSequence" ) && iCount == 0 ) {
 			vecType.push_back( "ocl::Sequence" );
 			vecType.push_back( TYPE_AGGREGATED_OBJECT );
@@ -1257,7 +1357,7 @@ namespace OclBasic
 
 	void TCollection_IteratorFactory::GetFeatures( const OclSignature::Iterator& signature, OclMeta::IteratorVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		TS vecType;
 
 		if ( strName == "exists" ) {
@@ -1289,6 +1389,14 @@ namespace OclBasic
 			vecFeatures.push_back( new OclMeta::Iterator( strName, "ocl::Boolean", vecType, new TCollection_One(), false ) );
 			return;
 		}
+// --
+		if ( strName == "sortedBy" ) {
+			vecType.push_back( "ocl::OrderedSet" );
+			vecType.push_back( TYPE_AGGREGATED_OBJECT ); // ??
+			vecFeatures.push_back( new OclMeta::Iterator( strName, "ocl::Any", vecType, new TCollection_SortedBy(), false ) );
+			return;
+		}
+// --
 	}
 
 //##############################################################################################################################################
@@ -1297,7 +1405,7 @@ namespace OclBasic
 //
 //##############################################################################################################################################
 
-	OPERATOR( TSet_Plus )
+	OPERATOR( TSet_Plus )  // unio Set
 	{
 		void operator()()
 		{
@@ -1305,14 +1413,14 @@ namespace OclBasic
 			DECL_ITERATOR( spIterator, GetArgument( 1 ) );
 			while ( spIterator->HasNext() ) {
 				OclMeta::Object object = spIterator->GetNext();
-				if ( GOCL_STL_NS()find( collThis.begin(), collThis.end(), object ) == collThis.end() )
+				if ( std::find( collThis.begin(), collThis.end(), object ) == collThis.end() )
 					collThis.push_back( object );
 			}
 			SetResult( CREATE_SET( GetTypeManager(), collThis ) );
 		}
 	};
 
-	OPERATOR( TSet_PlusBag )
+	OPERATOR( TSet_PlusBag )  // unio Bag
 	{
 		void operator()()
 		{
@@ -1324,7 +1432,7 @@ namespace OclBasic
 		}
 	};
 
-	OPERATOR( TSet_Times )
+	OPERATOR( TSet_Times ) // intersection
 	{
 		void operator()()
 		{
@@ -1333,8 +1441,8 @@ namespace OclBasic
 			OclMeta::ObjectVector collOut;
 			while ( spIterator->HasNext() ) {
 				OclMeta::Object object = spIterator->GetNext();
-				if ( GOCL_STL_NS()find( collThis.begin(), collThis.end(), object ) != collThis.end() )
-					if ( GOCL_STL_NS()find( collOut.begin(), collOut.end(), object ) == collOut.end() )
+				if ( std::find( collThis.begin(), collThis.end(), object ) != collThis.end() )
+					if ( std::find( collOut.begin(), collOut.end(), object ) == collOut.end() ) // unnecessary
 						collOut.push_back( object );
 			}
 			SetResult( CREATE_SET( GetTypeManager(), collOut ) );
@@ -1348,7 +1456,7 @@ namespace OclBasic
 			DECL_COLLECTION( collThis, GetArgument( 0 ) );
 			DECL_ITERATOR( spIterator, GetArgument( 1 ) );
 			while ( spIterator->HasNext() ) {
-				OclMeta::ObjectVector::iterator i =  GOCL_STL_NS()find( collThis.begin(), collThis.end(), spIterator->GetNext() );
+				OclMeta::ObjectVector::iterator i =  std::find( collThis.begin(), collThis.end(), spIterator->GetNext() );
 				if ( i != collThis.end() )
 					collThis.erase( i );
 			}
@@ -1356,7 +1464,7 @@ namespace OclBasic
 		}
 	};
 
-	OPERATOR( TSet_Percent )
+	OPERATOR( TSet_Percent ) // symmetricdifference
 	{
 		void operator()()
 		{
@@ -1366,13 +1474,13 @@ namespace OclBasic
 			OclMeta::ObjectVector collTemp;
 			while ( spIterator->HasNext() ) {
 				OclMeta::Object object = spIterator->GetNext();
-				if ( GOCL_STL_NS()find( collThis.begin(), collThis.end(), object ) == collThis.end() )
+				if ( std::find( collThis.begin(), collThis.end(), object ) == collThis.end() )
 					collOut.push_back( object );
 				else
 					collTemp.push_back( object );
 			}
-			for ( int i = 0 ; i < collThis.size() ; i++ )
-				if ( GOCL_STL_NS()find( collTemp.begin(), collTemp.end(), collThis[ i ] ) == collTemp.end() )
+			for ( unsigned int i = 0 ; i < collThis.size() ; i++ )
+				if ( std::find( collTemp.begin(), collTemp.end(), collThis[ i ] ) == collTemp.end() )
 					collOut.push_back( collThis[ i ] );
 			SetResult( CREATE_SET( GetTypeManager(), collOut ) );
 		}
@@ -1386,7 +1494,7 @@ namespace OclBasic
 			DECL_ITERATOR( spIterator, GetArgument( 0 ) );
 			while ( spIterator->HasNext() ) {
 				OclMeta::Object object = spIterator->GetNext();
-				if ( GOCL_STL_NS()find( collThis.begin(), collThis.end(), object ) == collThis.end() )
+				if ( std::find( collThis.begin(), collThis.end(), object ) == collThis.end() )
 					collThis.push_back( object );
 			}
 			SetResult( CREATE_SET( GetTypeManager(), collThis ) );
@@ -1414,8 +1522,8 @@ namespace OclBasic
 			OclMeta::ObjectVector collOut;
 			while ( spIterator->HasNext() ) {
 				OclMeta::Object object = spIterator->GetNext();
-				if ( ! ( GOCL_STL_NS()find( collThis.begin(), collThis.end(), object ) == collThis.end() ) )
-					if ( GOCL_STL_NS()find( collOut.begin(), collOut.end(), object ) == collOut.end() )
+				if ( ! ( std::find( collThis.begin(), collThis.end(), object ) == collThis.end() ) )
+					if ( std::find( collOut.begin(), collOut.end(), object ) == collOut.end() )
 						collOut.push_back( object );
 			}
 			SetResult( CREATE_SET( GetTypeManager(), collOut ) );
@@ -1429,7 +1537,7 @@ namespace OclBasic
 			DECL_COLLECTION( collThis, GetThis() );
 			DECL_ITERATOR( spIterator, GetArgument( 0 ) );
 			while ( spIterator->HasNext() ) {
-				OclMeta::ObjectVector::iterator i =  GOCL_STL_NS()find( collThis.begin(), collThis.end(), spIterator->GetNext() );
+				OclMeta::ObjectVector::iterator i =  std::find( collThis.begin(), collThis.end(), spIterator->GetNext() );
 				if ( i != collThis.end() )
 					collThis.erase( i );
 			}
@@ -1447,13 +1555,13 @@ namespace OclBasic
 			OclMeta::ObjectVector collTemp;
 			while ( spIterator->HasNext() ) {
 				OclMeta::Object object = spIterator->GetNext();
-				if ( GOCL_STL_NS()find( collThis.begin(), collThis.end(), object ) == collThis.end() )
+				if ( std::find( collThis.begin(), collThis.end(), object ) == collThis.end() )
 					collOut.push_back( object );
 				else
 					collTemp.push_back( object );
 			}
-			for ( int i = 0 ; i < collThis.size() ; i++ )
-				if ( GOCL_STL_NS()find( collTemp.begin(), collTemp.end(), collThis[ i ] ) == collTemp.end() )
+			for ( unsigned int i = 0 ; i < collThis.size() ; i++ )
+				if ( std::find( collTemp.begin(), collTemp.end(), collThis[ i ] ) == collTemp.end() )
 					collOut.push_back( collThis[ i ] );
 			SetResult( CREATE_SET( GetTypeManager(), collOut ) );
 		}
@@ -1464,7 +1572,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_COLLECTION( collThis, GetThis() );
-			if ( GOCL_STL_NS()find( collThis.begin(), collThis.end(), GetArgument( 0 ) ) == collThis.end() )
+			if ( std::find( collThis.begin(), collThis.end(), GetArgument( 0 ) ) == collThis.end() )
 				collThis.push_back( GetArgument( 0 ) );
 			SetResult( CREATE_SET( GetTypeManager(), collThis ) );
 		}
@@ -1475,7 +1583,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_COLLECTION( collThis, GetThis() );
-			OclMeta::ObjectVector::iterator i = GOCL_STL_NS()find( collThis.begin(), collThis.end(), GetArgument( 0 ) );
+			OclMeta::ObjectVector::iterator i = std::find( collThis.begin(), collThis.end(), GetArgument( 0 ) );
 			if ( i  != collThis.end() )
 				collThis.erase( i );
 			SetResult( CREATE_SET( GetTypeManager(), collThis ) );
@@ -1497,7 +1605,7 @@ namespace OclBasic
 		{
 			if ( ! GetSubResult().IsUndefined() ) {
 				DECL_BOOLEAN( bArg, GetSubResult() );
-				if ( bArg && GOCL_STL_NS()find( m_vecSelecteds.begin(), m_vecSelecteds.end(), GetArgument( 0 ) ) == m_vecSelecteds.end() )
+				if ( bArg && std::find( m_vecSelecteds.begin(), m_vecSelecteds.end(), GetArgument( 0 ) ) == m_vecSelecteds.end() )
 					m_vecSelecteds.push_back( GetArgument( 0 ) );
 			}
 		}
@@ -1529,7 +1637,7 @@ namespace OclBasic
 		{
 			if ( ! GetSubResult().IsUndefined() ) {
 				DECL_BOOLEAN( bArg, GetSubResult() );
-				if ( ! bArg && GOCL_STL_NS()find( m_vecSelecteds.begin(), m_vecSelecteds.end(), GetArgument( 0 ) ) == m_vecSelecteds.end() )
+				if ( ! bArg && std::find( m_vecSelecteds.begin(), m_vecSelecteds.end(), GetArgument( 0 ) ) == m_vecSelecteds.end() )
 					m_vecSelecteds.push_back( GetArgument( 0 ) );
 			}
 		}
@@ -1576,7 +1684,7 @@ namespace OclBasic
 
 	void TSet_MethodFactory::GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		int iCount = signature.GetParameterCount();
 		FPV vecParams;
 		TS vecType;
@@ -1646,7 +1754,7 @@ namespace OclBasic
 
 	void TSet_IteratorFactory::GetFeatures( const OclSignature::Iterator& signature, OclMeta::IteratorVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		TS vecType;
 
 		if ( strName == "select" ) {
@@ -1683,7 +1791,7 @@ namespace OclBasic
 		{
 			DECL_COLLECTION( collThis, GetArgument( 0 ) );
 			DECL_COLLECTION( collArg, GetArgument( 1 ) );
-			for ( int i = 0 ; i < collArg.size() ; i++ )
+			for ( unsigned int i = 0 ; i < collArg.size() ; i++ )
 				collThis.push_back( collArg[ i ] );
 			SetResult( CREATE_SEQUENCE( GetTypeManager(), collThis) );
 		}
@@ -1695,7 +1803,7 @@ namespace OclBasic
 		{
 			DECL_COLLECTION( collThis, GetThis() );
 			DECL_COLLECTION( collArg, GetArgument( 0 ) );
-			for ( int i = 0 ; i < collArg.size() ; i++ )
+			for ( unsigned int i = 0 ; i < collArg.size() ; i++ )
 				collThis.push_back( collArg[ i ] );
 			SetResult( CREATE_SEQUENCE( GetTypeManager(), collThis) );
 		}
@@ -1731,13 +1839,13 @@ namespace OclBasic
 				ThrowException( "Argument 'from' is less than 0." );
 				return;
 			}
-			if ( lFrom >= collThis.size() ) {
+			if ( lFrom >= (int) collThis.size() ) {
 				ThrowException( "Argument 'from' equals to or is greater than size of Sequence." );
 				return;
 			}
 			if ( GetArgumentCount() == 1 ) {
 				OclMeta::ObjectVector collOut;
-				for ( long i = lFrom ; i < collThis.size() ; i++ )
+				for ( unsigned long i = lFrom ; i < collThis.size() ; i++ )
 					collOut.push_back( collThis[ i ] );
 				SetResult( CREATE_SEQUENCE( GetTypeManager(), collOut ) );
 				return;
@@ -1747,12 +1855,12 @@ namespace OclBasic
 				ThrowException( "Argument 'to' greater than Argument 'from'." );
 				return;
 			}
-			if ( lTo >= collThis.size() ) {
+			if ( lTo >= (int) collThis.size() ) {
 				ThrowException( "Argument 'to' equals to or is greater than size of Sequence." );
 				return;
 			}
 			OclMeta::ObjectVector collOut;
-			for ( long i = lFrom ; i < lTo ; i++ )
+			for ( long i = lFrom ; i <= lTo ; i++ )
 				collOut.push_back( collThis[ i ] );
 			SetResult( CREATE_SEQUENCE( GetTypeManager(), collOut ) );
 		}
@@ -1768,7 +1876,7 @@ namespace OclBasic
 				ThrowException( "Argument 'from' is less than 0." );
 				return;
 			}
-			if ( lAt >= collThis.size() ) {
+			if ( lAt >= (int) collThis.size() ) {
 				ThrowException( "Argument 'from' equals to or is greater than size of Sequence." );
 				return;
 			}
@@ -1784,13 +1892,13 @@ namespace OclBasic
 			DECL_INTEGER( lAt, GetArgument( 0 ) );
 			if ( lAt < 0 )
 				lAt = 0;
-			if ( lAt >= collThis.size() ) {
+			if ( lAt >= (int) collThis.size() ) {
 				collThis.push_back( GetArgument( 1 ) );
 				SetResult( CREATE_SEQUENCE( GetTypeManager(), collThis ) );
 				return;
 			}
 			OclMeta::ObjectVector vecOut;
-			for ( int i = 0 ; i < collThis.size() ; i++ ) {
+			for ( int i = 0 ; i < (int) collThis.size() ; i++ ) {
 				if ( i == lAt )
 					vecOut.push_back( GetArgument( 1 ) );
 				vecOut.push_back( collThis[ i ] );
@@ -1804,7 +1912,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_COLLECTION( collThis, GetThis() );
-			for ( int i = 0 ; i < collThis.size() ; i ++ )
+			for ( int i = 0 ; i < (int) collThis.size() ; i ++ )
 				if ( collThis[ i ] == GetArgument( 0 ) ) {
 					SetResult( CREATE_INTEGER( GetTypeManager(), i ) );
 					return;
@@ -1857,7 +1965,7 @@ namespace OclBasic
 			bool bFound = false;
 			do {
 				bFound = false;
-				OclMeta::ObjectVector::iterator i = GOCL_STL_NS()find( collThis.begin(), collThis.end(), GetArgument( 0 ) );
+				OclMeta::ObjectVector::iterator i = std::find( collThis.begin(), collThis.end(), GetArgument( 0 ) );
 				if ( i  != collThis.end() ) {
 					collThis.erase( i );
 					bFound = true;
@@ -1961,7 +2069,7 @@ namespace OclBasic
 
 	void TSequence_MethodFactory::GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		int iCount = signature.GetParameterCount();
 		FPV vecParams;
 		TS vecType;
@@ -1987,6 +2095,15 @@ namespace OclBasic
 			vecType.push_back( "ocl::Sequence" );
 			vecType.push_back( TYPE_ARGUMENT_SELF_BASE );
 			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TSequence_Append(), false ) );
+			return;
+		}
+
+		if ( ( strName == "subSequence" ) && iCount == 2 ) {
+			vecParams.push_back( FP( "pos", "ocl::Integer", true ) );
+			vecParams.push_back( FP( "pos", "ocl::Integer", true ) );
+			vecType.push_back( "ocl::Sequence" );
+			vecType.push_back( TYPE_ARGUMENT_SELF_BASE );
+			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TSequence_SubSequence(), false ) );
 			return;
 		}
 
@@ -2044,7 +2161,7 @@ namespace OclBasic
 
 	void TSequence_IteratorFactory::GetFeatures( const OclSignature::Iterator& signature, OclMeta::IteratorVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		TS vecType;
 
 		if ( strName == "select" ) {
@@ -2075,7 +2192,7 @@ namespace OclBasic
 //
 //##############################################################################################################################################
 
-	OPERATOR( TBag_Plus )
+	OPERATOR( TBag_Plus )  // unio
 	{
 		void operator()()
 		{
@@ -2087,7 +2204,7 @@ namespace OclBasic
 		}
 	};
 
-	OPERATOR( TBag_Times )
+	OPERATOR( TBag_Times ) // intersection Bag
 	{
 		void operator()()
 		{
@@ -2096,7 +2213,7 @@ namespace OclBasic
 			OclMeta::ObjectVector collOut;
 			while ( spIterator->HasNext() ) {
 				OclMeta::Object object = spIterator->GetNext();
-				OclMeta::ObjectVector::iterator i = GOCL_STL_NS()find( collThis.begin(), collThis.end(), object );
+				OclMeta::ObjectVector::iterator i = std::find( collThis.begin(), collThis.end(), object );
 				if ( i != collThis.end() ) {
 					collOut.push_back( object );
 					collThis.erase( i );
@@ -2106,7 +2223,7 @@ namespace OclBasic
 		}
 	};
 
-	OPERATOR( TBag_TimesSet )
+	OPERATOR( TBag_TimesSet ) // intersection Set
 	{
 		void operator()()
 		{
@@ -2115,7 +2232,7 @@ namespace OclBasic
 			OclMeta::ObjectVector collOut;
 			while ( spIterator->HasNext() ) {
 				OclMeta::Object object = spIterator->GetNext();
-				OclMeta::ObjectVector::iterator i = GOCL_STL_NS()find( collThis.begin(), collThis.end(), object );
+				OclMeta::ObjectVector::iterator i = std::find( collThis.begin(), collThis.end(), object );
 				if ( i != collThis.end() ) {
 					collOut.push_back( object );
 					collThis.erase( i );
@@ -2147,7 +2264,7 @@ namespace OclBasic
 			OclMeta::ObjectVector collOut;
 			while ( spIterator->HasNext() ) {
 				OclMeta::Object object = spIterator->GetNext();
-				OclMeta::ObjectVector::iterator i = GOCL_STL_NS()find( collThis.begin(), collThis.end(), object );
+				OclMeta::ObjectVector::iterator i = std::find( collThis.begin(), collThis.end(), object );
 				if ( i != collThis.end() ) {
 					collOut.push_back( object );
 					collThis.erase( i );
@@ -2166,7 +2283,7 @@ namespace OclBasic
 			OclMeta::ObjectVector collOut;
 			while ( spIterator->HasNext() ) {
 				OclMeta::Object object = spIterator->GetNext();
-				OclMeta::ObjectVector::iterator i = GOCL_STL_NS()find( collThis.begin(), collThis.end(), object );
+				OclMeta::ObjectVector::iterator i = std::find( collThis.begin(), collThis.end(), object );
 				if ( i != collThis.end() ) {
 					collOut.push_back( object );
 					collThis.erase( i );
@@ -2194,7 +2311,7 @@ namespace OclBasic
 			bool bFound = false;
 			do {
 				bFound = false;
-				OclMeta::ObjectVector::iterator i = GOCL_STL_NS()find( collThis.begin(), collThis.end(), GetArgument( 0 ) );
+				OclMeta::ObjectVector::iterator i = std::find( collThis.begin(), collThis.end(), GetArgument( 0 ) );
 				if ( i  != collThis.end() ) {
 					collThis.erase( i );
 					bFound = true;
@@ -2298,7 +2415,7 @@ namespace OclBasic
 
 	void TBag_MethodFactory::GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		int iCount = signature.GetParameterCount();
 		FPV vecParams;
 		TS vecType;
@@ -2352,7 +2469,7 @@ namespace OclBasic
 
 	void TBag_IteratorFactory::GetFeatures( const OclSignature::Iterator& signature, OclMeta::IteratorVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		TS vecType;
 
 		if ( strName == "select" ) {
@@ -2377,6 +2494,343 @@ namespace OclBasic
 		}
 	}
 
+
+// --  OrderedSet inserted here
+//##############################################################################################################################################
+//
+//	T Y P E   O F  ocl::OrderedSet
+//
+//##############################################################################################################################################
+
+	METHOD( TOrderedSet_Prepend )
+	{
+		void operator()()
+		{
+			DECL_COLLECTION( collThis, GetThis() );
+			collThis.insert( collThis.begin(), GetArgument( 0 ) );
+			SetResult( CREATE_ORDEREDSET( GetTypeManager(), collThis ) );
+		}
+	};
+
+	METHOD( TOrderedSet_Append )
+	{
+		void operator()()
+		{
+			DECL_COLLECTION( collThis, GetThis() );
+			collThis.push_back( GetArgument( 0 ) );
+			SetResult( CREATE_ORDEREDSET( GetTypeManager(), collThis ) );
+		}
+	};
+
+	METHOD( TOrderedSet_SubOrderedSet)
+	{
+		void operator()()
+		{
+			DECL_COLLECTION( collThis, GetThis() );
+			DECL_INTEGER( lFrom, GetArgument( 0 ) );
+			if ( lFrom < 0 ) {
+				ThrowException( "Argument 'from' is less than 0." );
+				return;
+			}
+			if ( lFrom >= (int) collThis.size() ) {
+				ThrowException( "Argument 'from' equals to or is greater than size of OrderedSet." );
+				return;
+			}
+			if ( GetArgumentCount() == 1 ) {
+				OclMeta::ObjectVector collOut;
+				for ( unsigned long i = lFrom ; i < collThis.size() ; i++ )
+					collOut.push_back( collThis[ i ] );
+				SetResult( CREATE_ORDEREDSET( GetTypeManager(), collOut ) );
+				return;
+			}
+			DECL_INTEGER( lTo, GetArgument( 1 ) );
+			if ( lTo < lFrom ) {
+				ThrowException( "Argument 'to' greater than Argument 'from'." );
+				return;
+			}
+			if ( lTo >= (int) collThis.size() ) {
+				ThrowException( "Argument 'to' equals to or is greater than size of OrderedSet." );
+				return;
+			}
+			OclMeta::ObjectVector collOut;
+			for ( long i = lFrom ; i <= lTo ; i++ )
+				collOut.push_back( collThis[ i ] );
+			SetResult( CREATE_ORDEREDSET( GetTypeManager(), collOut ) );
+		}
+	};
+
+	METHOD( TOrderedSet_At )
+	{
+		void operator()()
+		{
+			DECL_COLLECTION( collThis, GetThis() );
+			DECL_INTEGER( lAt, GetArgument( 0 ) );
+			if ( lAt < 0 ) {
+				ThrowException( "Argument 'from' is less than 0." );
+				return;
+			}
+			if ( lAt >= (int) collThis.size() ) {
+				ThrowException( "Argument 'from' equals to or is greater than size of OrederedSet." );
+				return;
+			}
+			SetResult( collThis[ lAt ] );
+		}
+	};
+
+	METHOD( TOrderedSet_InsertAt )
+	{
+		void operator()()
+		{
+			DECL_COLLECTION( collThis, GetThis() );
+			DECL_INTEGER( lAt, GetArgument( 0 ) );
+			if ( lAt < 0 )
+				lAt = 0;
+			if ( lAt >= (int) collThis.size() ) {
+				collThis.push_back( GetArgument( 1 ) );
+				SetResult( CREATE_ORDEREDSET( GetTypeManager(), collThis ) );
+				return;
+			}
+			OclMeta::ObjectVector vecOut;
+			for ( int i = 0 ; i < (int) collThis.size() ; i++ ) {
+				if ( i == lAt )
+					vecOut.push_back( GetArgument( 1 ) );
+				vecOut.push_back( collThis[ i ] );
+			}
+			SetResult( CREATE_ORDEREDSET( GetTypeManager(), vecOut ) );
+		}
+	};
+
+	METHOD( TOrderedSet_IndexOf )
+	{
+		void operator()()
+		{
+			DECL_COLLECTION( collThis, GetThis() );
+			for ( int i = 0 ; i < (int) collThis.size() ; i ++ )
+				if ( collThis[ i ] == GetArgument( 0 ) ) {
+					SetResult( CREATE_INTEGER( GetTypeManager(), i ) );
+					return;
+				}
+			SetResult( CREATE_INTEGER( GetTypeManager(), -1 ) );
+		}
+	};
+
+	METHOD( TOrderedSet_First )
+	{
+		void operator()()
+		{
+			DECL_COLLECTION( collThis, GetThis() );
+			if ( collThis.empty() ) {
+				ThrowException( "Sequence is empty." );
+				return;
+			}
+			SetResult( collThis[ 0 ] );
+		}
+	};
+
+	METHOD( TOrderedSet_Last )
+	{
+		void operator()()
+		{
+			DECL_COLLECTION( collThis, GetThis() );
+			if ( collThis.empty() ) {
+				ThrowException( "Sequence is empty." );
+				return;
+			}
+			SetResult( collThis[ collThis.size() - 1 ] );
+		}
+	};
+
+
+	ITERATOR( TOrderedSet_Select )
+	{
+		private :
+			OclMeta::ObjectVector m_vecSelecteds;
+
+		void Initialize()
+		{
+			OclIterator::Initialize();
+			m_vecSelecteds.clear();
+		}
+
+		void operator()()
+		{
+			if ( ! GetSubResult().IsUndefined() ) {
+				DECL_BOOLEAN( bArg, GetSubResult() );
+				if ( bArg )
+					m_vecSelecteds.push_back( GetArgument( 0 ) );
+			}
+		}
+
+		OclMeta::Object GetResult() const
+		{
+			return CREATE_ORDEREDSET( GetTypeManager(), m_vecSelecteds );
+		}
+
+		void Finalize()
+		{
+			m_vecSelecteds.clear();
+			OclIterator::Finalize();
+		}
+	};
+
+	ITERATOR( TOrderedSet_Reject )
+	{
+		private :
+			OclMeta::ObjectVector m_vecSelecteds;
+
+		void Initialize()
+		{
+			OclIterator::Initialize();
+			m_vecSelecteds.clear();
+		}
+
+		void operator()()
+		{
+			if ( ! GetSubResult().IsUndefined() ) {
+				DECL_BOOLEAN( bArg, GetSubResult() );
+				if ( ! bArg )
+					m_vecSelecteds.push_back( GetArgument( 0 ) );
+			}
+		}
+
+		OclMeta::Object GetResult() const
+		{
+			return CREATE_ORDEREDSET( GetTypeManager(), m_vecSelecteds );
+		}
+
+		void Finalize()
+		{
+			m_vecSelecteds.clear();
+			OclIterator::Finalize();
+		}
+	};
+
+	ITERATOR( TOrderedSet_Collect )
+	{
+		private :
+			OclMeta::ObjectVector m_vecSelecteds;
+
+		void Initialize()
+		{
+			OclIterator::Initialize();
+			m_vecSelecteds.clear();
+		}
+
+		void operator()()
+		{
+			m_vecSelecteds.push_back( GetSubResult() );
+		}
+
+		OclMeta::Object GetResult() const
+		{
+			return CREATE_BAG( GetTypeManager(), m_vecSelecteds );
+		}
+
+		void Finalize()
+		{
+			m_vecSelecteds.clear();
+			OclIterator::Finalize();
+		}
+	};
+
+	void TOrderedSet_MethodFactory::GetFeatures( const OclSignature::Method& signature, OclMeta::MethodVector& vecFeatures )
+	{
+		std::string strName = signature.GetName();
+		int iCount = signature.GetParameterCount();
+		FPV vecParams;
+		TS vecType;
+
+		if ( ( strName == "prepend" ) && iCount == 1 ) {
+			vecParams.push_back( FP( "any", "ocl::Any", true ) );
+			vecType.push_back( "ocl::OrderedSet" );
+			vecType.push_back( TYPE_ARGUMENT_SELF_BASE );
+			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TOrderedSet_Prepend(), false ) );
+			return;
+		}
+
+		if ( ( strName == "append" ) && iCount == 1 ) {
+			vecParams.push_back( FP( "any", "ocl::Any", true ) );
+			vecType.push_back( "ocl::OrderedSet" );
+			vecType.push_back( TYPE_ARGUMENT_SELF_BASE );
+			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TOrderedSet_Append(), false ) );
+			return;
+		}
+
+		if ( ( strName == "subOrderedSet" ) && iCount == 2 ) {
+			vecParams.push_back( FP( "pos", "ocl::Integer", true ) );
+			vecParams.push_back( FP( "pos", "ocl::Integer", true ) );
+			vecType.push_back( "ocl::OrderedSet" );
+			vecType.push_back( TYPE_ARGUMENT_SELF_BASE );
+			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TOrderedSet_SubOrderedSet(), false ) );
+			return;
+		}
+
+		if ( ( strName == "first" ) && iCount == 0 ) {
+			vecType.push_back( TYPE_AGGREGATED_OBJECT );
+			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TOrderedSet_First(), false ) );
+			return;
+		}
+
+		if ( ( strName == "last" ) && iCount == 0 ) {
+			vecType.push_back( TYPE_AGGREGATED_OBJECT );
+			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TOrderedSet_Last(), false ) );
+			return;
+		}
+
+		if ( ( strName == "at" ) && iCount == 1 ) {
+			vecParams.push_back( FP( "pos", "ocl::Integer", true ) );
+			vecType.push_back( TYPE_AGGREGATED_OBJECT );
+			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TOrderedSet_At(), false ) );
+			return;
+		}
+
+		if ( ( strName == "indexOf" ) && iCount == 1 ) {
+			vecParams.push_back( FP( "any", "ocl::Any", true ) );
+			vecType.push_back( "ocl::Integer" );
+			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TOrderedSet_IndexOf(), false ) );
+			return;
+		}
+
+		if ( ( strName == "insertAt" ) && iCount == 2 ) {
+			vecParams.push_back( FP( "pos", "ocl::Integer", true ) );
+			vecParams.push_back( FP( "any", "ocl::Any", true ) );
+			vecType.push_back( "ocl::OrderedSet" );
+			vecType.push_back( TYPE_ARGUMENT_SELF_BASE );
+			vecFeatures.push_back( new OclMeta::Method( strName, vecParams, vecType, new TOrderedSet_InsertAt(), false ) );
+			return;
+		}
+
+	}
+
+	void TOrderedSet_IteratorFactory::GetFeatures( const OclSignature::Iterator& signature, OclMeta::IteratorVector& vecFeatures )
+	{
+		std::string strName = signature.GetName();
+		TS vecType;
+
+		if ( strName == "select" ) {
+			vecType.push_back( "ocl::OrderedSet" );
+			vecType.push_back( TYPE_AGGREGATED_OBJECT );
+			vecFeatures.push_back( new OclMeta::Iterator( strName, "ocl::Boolean", vecType, new TOrderedSet_Select(), false ) );
+			return;
+		}
+
+		if ( strName == "reject" ) {
+			vecType.push_back( "ocl::OrderedSet" );
+			vecType.push_back( TYPE_AGGREGATED_OBJECT );
+			vecFeatures.push_back( new OclMeta::Iterator( strName, "ocl::Boolean", vecType, new TOrderedSet_Reject(), false ) );
+			return;
+		}
+
+		if ( strName == "collect" ) {
+			vecType.push_back( "ocl::OrderedSet" );
+			vecType.push_back( TYPE_EXPRESSION_RETURN );
+			vecFeatures.push_back( new OclMeta::Iterator( strName, "ocl::Any", vecType, new TOrderedSet_Collect(), false ) );
+			return;
+		}
+	}
+
+
+
 //##############################################################################################################################################
 //
 //	G L O B A L   F A C T O R I E S
@@ -2385,7 +2839,7 @@ namespace OclBasic
 
 	void OperatorFactory::GetFeatures( const OclSignature::Operator& signature, OclMeta::OperatorVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		int iCount = signature.GetParameterCount();
 
 		// ocl::Any
@@ -2685,7 +3139,7 @@ namespace OclBasic
 
 	void FunctionFactory::GetFeatures( const OclSignature::Function& signature, OclMeta::FunctionVector& vecFeatures )
 	{
-		GOCL_STL_NS()string strName = signature.GetName();
+		std::string strName = signature.GetName();
 		int iCount = signature.GetParameterCount();
 
 		// ocl::Any
@@ -2764,7 +3218,7 @@ namespace OclBasic
 
 	}
 
-	void TypeFactory::GetTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes )
+	void TypeFactory::GetTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes )
 	{
 		if ( strName == "ocl::Any" || strName == "Any" ) {
 			StringVector vecSupers;
@@ -2841,7 +3295,13 @@ namespace OclBasic
 			vecTypes.push_back( new OclMeta::CompoundType( "ocl::Bag", vecSupers, new OclImplementation::AttributeFactory(), new OclImplementation::AssociationFactory(), new TBag_MethodFactory(),new TBag_IteratorFactory(),  false ) );
 			return;
 		}
+
+		if ( strName == "ocl::OrderedSet" || strName == "OrderedSet" ) {
+			StringVector vecSupers;
+			vecSupers.push_back( "ocl::Set" );
+			vecTypes.push_back( new OclMeta::CompoundType( "ocl::OrderedSet", vecSupers, new OclImplementation::AttributeFactory(), new OclImplementation::AssociationFactory(), new OclBasic::TOrderedSet_MethodFactory(),new OclBasic::TOrderedSet_IteratorFactory(),  false ) );
+			return;
+		}
 	}
 
 }; // namespace OclBasic
-

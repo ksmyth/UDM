@@ -4,7 +4,7 @@
 //	OCLType.h
 //
 //###############################################################################################################################################
-
+#include "Solve4786.h"
 #include "OCLType.h"
 
 namespace OclMeta
@@ -27,11 +27,11 @@ namespace OclMeta
 	}
 
 	template < class TItem >
-	TItem* DisposeVector( GOCL_STL_NS()vector<TItem*>& vecArg, int iGetPos = -1 )
+	TItem* DisposeVector( std::vector<TItem*>& vecArg, int iGetPos = -1 )
 	{
 		TItem* pItem = NULL;
-		for ( int i = 0 ; i < vecArg.size() ; i++ )
-			if ( i == iGetPos )
+		for ( unsigned int i = 0 ; i < vecArg.size() ; i++ )
+			if ( (int) i == iGetPos )
 				pItem = vecArg[ i ];
 			else
 				delete vecArg[ i ];
@@ -71,9 +71,10 @@ namespace OclMeta
 			throw OclCommon::Exception( *callResult.uResult.pException );
 	}
 
-	bool GetCallResult( const CallResultMap& mapArg, const OclSignature::Feature& feature, CallResult& callResult )
+	// recursion corrected: terge
+	bool GetCallResult( const CallResultMap& mapArg, std::string/*const OclSignature::Feature*/& feature, CallResult& callResult )
 	{
-		CallResultMap::const_iterator i = mapArg.find( feature.Print() );
+		CallResultMap::const_iterator i = mapArg.find( feature/*.Print()*/ );
 		if ( i != mapArg.end() ) {
 			callResult = (*i).second;
 			return true;
@@ -82,11 +83,11 @@ namespace OclMeta
 	}
 
 	template < class TParametralFeature, class TParametralSignature >
-	void FilterParametralFeature( TypeManager* pManager, const TParametralSignature& signature, GOCL_STL_NS()vector<TParametralFeature*>& vecArg, int iCodeAmbig, int iCodeExist, CallResult& callResult)
+	void FilterParametralFeature( TypeManager* pManager, const TParametralSignature& signature, std::vector<TParametralFeature*>& vecArg, int iCodeAmbig, int iCodeExist, CallResult& callResult)
 	{
 		int iPos = -1;
 		int iMatch = -1;
-		for ( int j = 0 ; j < vecArg.size() ; j++ ) {
+		for ( unsigned int j = 0 ; j < vecArg.size() ; j++ ) {
 			int iMatch2 = 0;
 			try {
 				iMatch2 = MatchParametralFeature( pManager, signature, *vecArg[ j ] );
@@ -97,7 +98,7 @@ namespace OclMeta
 			if ( iMatch2 != -1 ) {
 				if ( iMatch == -1 || iMatch2 < iMatch ) {
 					iMatch = iMatch2;
-					iPos = j;
+					iPos = (int) j;
 				}
 				else if ( iMatch == iMatch2 && ! vecArg[ j ]->IsIdentical( *vecArg[ iPos ] ) ) {
 					iPos = -1;
@@ -119,7 +120,7 @@ namespace OclMeta
 	}
 
 	template < class TTypeableFeature, class TTypeableSignature >
-	void FilterTypeableFeature( const TTypeableSignature& signature, GOCL_STL_NS()vector<TTypeableFeature*>& vecArg, int iCodeAmbig, int iCodeExist, CallResult& callResult )
+	void FilterTypeableFeature( const TTypeableSignature& signature, std::vector<TTypeableFeature*>& vecArg, int iCodeAmbig, int iCodeExist, CallResult& callResult )
 	{
 		if ( vecArg.size() > 1 ) {
 			DisposeVector<TTypeableFeature>( vecArg );
@@ -137,9 +138,9 @@ namespace OclMeta
 	}
 
 	template< class TFeature , class TFeatureSignature >
-	bool FilterBaseType( TypeManager* pManager, const StringVector& vecSuperTypes, const TFeatureSignature& signature, GOCL_STL_NS()vector<TFeature*>& vecArg, int iCodeExist, CallResult& callResult )
+	bool FilterBaseType( TypeManager* pManager, const StringVector& vecSuperTypes, const TFeatureSignature& signature, std::vector<TFeature*>& vecArg, int iCodeExist, CallResult& callResult )
 	{
-		for ( int i = 0 ; i < vecSuperTypes.size() ; i++ ) {
+		for ( unsigned int i = 0 ; i < vecSuperTypes.size() ; i++ ) {
 			try {
 				Type* pType = pManager->GetType( vecSuperTypes[ i ] );
 				callResult = pType->GetResults( signature );
@@ -227,7 +228,7 @@ namespace OclMeta
 		ClearGlobals();
 	}
 
-	Type* TypeManager::GetType( const GOCL_STL_NS()string& strName )
+	Type* TypeManager::GetType( const std::string& strName )
 	{
 		TypeResultMap::iterator i = m_mapTypes.find( strName );
 		if ( i != m_mapTypes.end() ) {
@@ -269,14 +270,14 @@ namespace OclMeta
 			throw OclCommon::Exception( *typeResult.uResult.pException );
 	}
 
-	int TypeManager::IsTypeAR( const GOCL_STL_NS()string& strName1, const GOCL_STL_NS()string& strName2, int iLevel )
+	int TypeManager::IsTypeAR( const std::string& strName1, const std::string& strName2, int iLevel )
 	{
 		Type* pType1 = GetType( strName1 );
 		if ( pType1->GetName() == strName2 )
 			return iLevel;
 		const StringVector& vecSuperTypes = pType1->GetSuperTypeNames();
 		int iIsA = -1;
-		for ( int i = 0 ; i < vecSuperTypes.size() ; i++ ) {
+		for ( unsigned int i = 0 ; i < vecSuperTypes.size() ; i++ ) {
 			int iIsA2 = IsTypeAR( vecSuperTypes[ i ], strName2, iLevel + 1 );
 			if ( iIsA2 != -1 && ( iIsA == -1 || iIsA2 < iIsA ) )
 				iIsA = iIsA2;
@@ -284,20 +285,20 @@ namespace OclMeta
 		return iIsA;
 	}
 
-	int TypeManager::IsTypeA( const GOCL_STL_NS()string& strName1, const GOCL_STL_NS()string& strName2 )
+	int TypeManager::IsTypeA( const std::string& strName1, const std::string& strName2 )
 	{
 		Type* pType2 = GetType( strName2 );
 		return IsTypeAR( strName1, pType2->GetName(), 0 );
 	}
 
-	int TypeManager::GetTypeDistance( const GOCL_STL_NS()string& strName )
+	int TypeManager::GetTypeDistance( const std::string& strName )
 	{
 		Type* pType = GetType( ( strName.empty() ) ? "ocl::Any" : strName );
 		const StringVector& vecSuperTypes = pType->GetSuperTypeNames();
 		if ( vecSuperTypes.empty() )
 			return 0;
 		int iDistance = -1;
-		for ( int i = 0 ; i < vecSuperTypes.size() ; i++ ) {
+		for ( unsigned int i = 0 ; i < vecSuperTypes.size() ; i++ ) {
 			int iDistance2 = GetTypeDistance( vecSuperTypes[ i ] );
 			if ( iDistance == -1 || iDistance2 < iDistance )
 				iDistance = iDistance2 + 1;
@@ -305,17 +306,16 @@ namespace OclMeta
 		return iDistance;
 	}
 
-	GOCL_STL_NS()string TypeManager::GetTypeBaseR( const GOCL_STL_NS()string& strName1, const GOCL_STL_NS()string& strName2 )
+	std::string TypeManager::GetTypeBaseR( const std::string& strName1, const std::string& strName2 )
 	{
 		if ( strName1 == "ocl::Any" )
 				return strName1;
 		StringVector vecTypes;
 		const StringVector& vecSuperTypes = GetType( strName1 )->GetSuperTypeNames();
-		int i;
-		for ( i = 0 ; i < vecSuperTypes.size() ; i++ )
+		for ( unsigned int i = 0 ; i < vecSuperTypes.size() ; i++ )
 			vecTypes.push_back( GetTypeBase( vecSuperTypes[ i ], strName2 ) );
 		int iIsA = -1;
-		GOCL_STL_NS()string strResult = "ocl::Any";
+		std::string strResult = "ocl::Any";
 		for ( i = 0 ; i < vecTypes.size() ; i++ ) {
 			int iIsA2 = GetTypeDistance( vecTypes[ i ] );
 			if ( iIsA2 != -1 && ( iIsA == -1 || iIsA2 < iIsA ) ) {
@@ -326,14 +326,14 @@ namespace OclMeta
 		return strResult;
 	}
 
-	GOCL_STL_NS()string TypeManager::GetTypeBase( const GOCL_STL_NS()string& strName1, const GOCL_STL_NS()string& strName2 )
+	std::string TypeManager::GetTypeBase( const std::string& strName1, const std::string& strName2 )
 	{
 		if ( IsTypeA( strName1, strName2 ) >= 0 )
 				return strName2;
 		if ( IsTypeA( strName2, strName1 ) >= 0 )
 				return strName1;
-		GOCL_STL_NS()string strBase1 = GetTypeBaseR( strName1, strName2 );
-		GOCL_STL_NS()string strBase2 = GetTypeBaseR( strName2, strName1 );
+		std::string strBase1 = GetTypeBaseR( strName1, strName2 );
+		std::string strBase2 = GetTypeBaseR( strName2, strName1 );
 		if ( strBase1 == "ocl::Any" )
 				return strBase2;
 		if ( strBase2 == "ocl::Any" )
@@ -346,16 +346,17 @@ namespace OclMeta
 		if ( vecType2.size() < vecType1.size() )
 			return GetTypeBase( vecType2, vecType1 );
 		TypeSeq vecType;
-		for ( int i = 0 ; i < vecType1.size() ; i++ )
+		for ( unsigned int i = 0 ; i < vecType1.size() ; i++ )
 			vecType.push_back( GetTypeBase( vecType1[ i ], vecType2[ i ] ) );
 		return vecType;
 	}
 
 	bool TypeManager::IsTypeA( const TypeSeq& vecType1, const TypeSeq& vecType2 )
 	{
-		if ( vecType2.size() > vecType1.size() )
+		// terge ?? 
+		if ( vecType2.size() < vecType1.size() )
 			return false;
-		for ( int i = 0 ; i < vecType1.size() ; i++ )
+		for ( unsigned int i = 0 ; i < vecType1.size() ; i++ )
 			if ( IsTypeA( vecType1[ i ], vecType2[ i ] ) < 0 )
 				return false;
 		return true;
@@ -365,8 +366,9 @@ namespace OclMeta
 	{
 		CallResult callResult;
 		callResult.uResult.pException = NULL;
+		std::string signo = signature.Print();
 
-		if ( GetCallResult( m_mapOperators, signature, callResult ) )
+		if ( GetCallResult( m_mapOperators, signo/*signature*/, callResult ) )
 			return ReturnCallResult<Operator>( callResult );
 
 		OperatorVector vecOperators;
@@ -389,7 +391,9 @@ namespace OclMeta
 	{
 		CallResult callResult;
 		callResult.uResult.pException = NULL;
-		if ( GetCallResult( m_mapFunctions, signature, callResult ) )
+		std::string signo = signature.Print();
+
+		if ( GetCallResult( m_mapFunctions, signo/*signature*/, callResult ) )
 			return ReturnCallResult<Function>( callResult );
 
 		FunctionVector vecFunctions;
@@ -443,7 +447,7 @@ namespace OclMeta
 //
 //##############################################################################################################################################
 
-	Type::Type( const GOCL_STL_NS()string& strName, const StringVector& vecSuperTypes, OclImplementation::AttributeFactory* pAttributeFactory, OclImplementation::AssociationFactory* pAssociationFactory, OclImplementation::MethodFactory* pMethodFactory, bool bDynamic )
+	Type::Type( const std::string& strName, const StringVector& vecSuperTypes, OclImplementation::AttributeFactory* pAttributeFactory, OclImplementation::AssociationFactory* pAssociationFactory, OclImplementation::MethodFactory* pMethodFactory, bool bDynamic )
 		: m_strName( strName ), m_vecSuperTypes( vecSuperTypes ), m_pAttributeFactory( pAttributeFactory ), m_pAssociationFactory( pAssociationFactory ), m_pMethodFactory( pMethodFactory ), m_bDynamic( bDynamic )
 	{
 	}
@@ -463,7 +467,7 @@ namespace OclMeta
 		return m_bDynamic;
 	}
 
-	GOCL_STL_NS()string Type::GetName() const
+	std::string Type::GetName() const
 	{
 		return m_strName;
 	}
@@ -486,8 +490,9 @@ namespace OclMeta
 	Attribute* Type::GetAttribute( const OclSignature::Attribute& signature )
 	{
 		CallResult callResult;
+		std::string signo = signature.Print();
 
-		if ( GetCallResult( m_mapAttributes, signature, callResult ) )
+		if ( GetCallResult( m_mapAttributes, signo/*signature*/, callResult ) )
 			return ReturnCallResult<Attribute>( callResult );
 
 		callResult = GetResults( signature );
@@ -500,8 +505,9 @@ namespace OclMeta
 	Association* Type::GetAssociation( const OclSignature::Association& signature )
 	{
 		CallResult callResult;
+		std::string signo = signature.Print();
 
-		if ( GetCallResult( m_mapAssociations, signature, callResult ) )
+		if ( GetCallResult( m_mapAssociations, signo/*signature*/, callResult ) )
 			return ReturnCallResult<Association>( callResult );
 
 		callResult = GetResults( signature );
@@ -514,8 +520,9 @@ namespace OclMeta
 	Method* Type::GetMethod( const OclSignature::Method& signature )
 	{
 		CallResult callResult;
+		std::string signo = signature.Print();
 
-		if ( GetCallResult( m_mapMethods, signature, callResult ) )
+		if ( GetCallResult( m_mapMethods, signo/*signature*/, callResult ) )
 			return ReturnCallResult<Method>( callResult );
 
 		callResult = GetResults( signature );
@@ -625,7 +632,7 @@ namespace OclMeta
 //
 //##############################################################################################################################################
 
-	CompoundType::CompoundType( const GOCL_STL_NS()string& strName, const StringVector& vecSuperTypes, OclImplementation::AttributeFactory* pAttributeFactory, OclImplementation::AssociationFactory* pAssociationFactory, OclImplementation::MethodFactory* pMethodFactory, OclImplementation::IteratorFactory* pIteratorFactory, bool bDynamic )
+	CompoundType::CompoundType( const std::string& strName, const StringVector& vecSuperTypes, OclImplementation::AttributeFactory* pAttributeFactory, OclImplementation::AssociationFactory* pAssociationFactory, OclImplementation::MethodFactory* pMethodFactory, OclImplementation::IteratorFactory* pIteratorFactory, bool bDynamic )
 		: Type( strName, vecSuperTypes, pAttributeFactory, pAssociationFactory, pMethodFactory, bDynamic ), m_pIteratorFactory( pIteratorFactory )
 	{
 	}
@@ -641,16 +648,22 @@ namespace OclMeta
 		return true;
 	}
 
-	Iterator* CompoundType::GetIterator( const OclSignature::Iterator& signature )
+	Iterator* CompoundType::GetIterator(int level, const OclSignature::Iterator& signature )
 	{
 		CallResult callResult;
 
-		if ( GetCallResult( m_mapIterators, signature, callResult ) )
+		// recursion corrected: terge
+		char signoStr[100];
+		std::string signo = signature.Print();
+		itoa(level, signoStr, 10);  
+		signo += signoStr;
+
+		if ( GetCallResult( m_mapIterators, signo/*signature*/, callResult ) )
 			return ReturnCallResult<Iterator>( callResult );
 
 		callResult = GetResults( signature );
 
-		m_mapIterators.insert( CallResultMap::value_type( signature.Print(), callResult ) );
+		m_mapIterators.insert( CallResultMap::value_type( signo/*signature.Print()*/, callResult ) );
 		GetTypeManager()->RegisterFeature( callResult );
 		return ReturnCallResult<Iterator>( callResult );
 	}

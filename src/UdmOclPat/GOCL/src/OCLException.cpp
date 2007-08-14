@@ -4,7 +4,7 @@
 //	OCLException.cpp
 //
 //###############################################################################################################################################
-
+#include "Solve4786.h"
 #include "OCLException.h"
 
 //###############################################################################################################################################
@@ -13,7 +13,7 @@
 //
 //###############################################################################################################################################
 
-GOCL_STL_NS()string ErrorMessages[] = {
+std::string ErrorMessages[] = {
 
 	"Type [ ? ] does not exist.",
 	"Type [ ? ] is ambiguous.",
@@ -74,9 +74,13 @@ namespace OclCommon
 //
 //###############################################################################################################################################
 
-	GOCL_STL_NS()string Exception::GetErrorMessage()
+	std::string Exception::GetErrorMessage() {
+		return GGetMessage();
+	}
+
+	std::string Exception::GGetMessage()
 	{
-		GOCL_STL_NS()string strMessage = m_strMessage;
+		std::string strMessage = m_strMessage;
 		if ( m_iCode != - 1 ) {
 			switch ( m_eType ) {
 				case ET_SYNTACTIC 	:
@@ -85,9 +89,9 @@ namespace OclCommon
 				case ET_WARNING	 	: strMessage = ErrorMessages[ m_iCode - 100 ]; break;
 			}
 		}
-		int iCnt = 0;
+		unsigned int iCnt = 0;
 		int iPos = strMessage.find( '?' );
-		while ( iPos != GOCL_STL_NS()string::npos && iCnt < m_vecParameters.size() ) {
+		while ( iPos != std::string::npos && iCnt < m_vecParameters.size() ) {
 			strMessage = strMessage.substr( 0, iPos ) + m_vecParameters[ iCnt++ ] + strMessage.substr( iPos + 1, strMessage.length() - iPos - 1 );
 			iPos = strMessage.find( '?' );
 		}

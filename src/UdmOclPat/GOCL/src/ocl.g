@@ -8,8 +8,7 @@
 
 #header
 <<
-	#pragma warning ( disable : 4786 )
-
+	#include "Solve4786.h"
 	#include "OCLTree.h"
 	#include "OCLLexer.h"
 	#include "OCLParserStatic.h"
@@ -138,10 +137,11 @@
 #token FALSEE 					"false"
 #token UNDEFINED 				"undefined"
 #token NULLL 						"null"
+//<udmoclpat changes
 #token PAT_PRINT				"print"
 #token PAT_OPEN				"open"
 #token PAT_SWITCH				"switch"
-
+//udmoclpat changes>
 
 //======================================================================================================================================
 //	GENERAL TOKENS
@@ -151,12 +151,14 @@
 #token INTEGER					" [0-9]+ "
 #token REAL						" ( [0-9]+ . [0-9]* | [0-9]* . [0-9]+ ) { [eE] { [\-\+] } [0-9]+ } "
 
+//<udmoclpat changes
 //======================================================================================================================================
 //	TOKENS ADDED FOR PATPARSER
 #token CARAT					"^"
 #token DOLLAR					"$"
 #token AMPERSAND				"&"
 #token SEPERATOR				":>"   << mode( LITERAL ); skip(); >>
+//udmoclpat changes>
 
 //======================================================================================================================================
 //	TOKEN CLASSES
@@ -259,38 +261,19 @@ class OCLParser
 			OclTree::TreeManager* 			m_pManager;
 			OCLLexer* 						m_pLexer;
 			OclCommon::ExceptionPool		m_ExceptionPool;
-			bool	 						m_bOnlyContext;
-//			TextNode*						m_pTextNode;
+			bool	 							m_bOnlyContext;
+//<udmoclpat changes			
 		public:
 			static bool							m_bProcessingPat;
-//			bool							m_bInvalidEnumeration;
+//udmoclpat changes>
 	>>
-	<<	
-//		public : 
-//			void SetTextNode( const GOCL_STL_NS()string& strText )
-//			{
-//				m_pTextNode = new OclTree::TextNode( strText );
-//			}
-	>>
-	
-	<<
-//		private :
-//			OclTree::TreeNode* IncludeTextNode( OclTree::TreeNode* pNode )
-//			{
-//				if ( ! m_pTextNode ) 
-//					return pNode;
-//				OclTree::TreeNode* pNode = new OclTree::EnumerationNode( m_pTextNode, pNode );
-//				m_pTextNode = NULL;
-//				return pNode;
-//			}
-	>>			
 
 	<<
 		public :
-			static OclTree::Constraint* ParseConstraint( OclTree::TreeManager* pManager, const GOCL_STL_NS()string& strConstraintArg, bool bOnlyContext, OclCommon::ExceptionPool& ePool )
+			static OclTree::Constraint* ParseConstraint( OclTree::TreeManager* pManager, const string& strConstraintArg, bool bOnlyContext, OclCommon::ExceptionPool& ePool )
 			{
 				InitializeTokenSets();
-				GOCL_STL_NS()string strConstraint( strConstraintArg );
+				string strConstraint( strConstraintArg );
 				DLGStringInput input( ( const DLGChar* ) strConstraint.c_str() );
 				OCLLexer lexer( &input );
 				ANTLRTokenBuffer pipe( &lexer );
@@ -301,38 +284,35 @@ class OCLParser
 				parser.m_pManager = pManager;
 				parser.m_pLexer = &lexer;
 				parser.m_ExceptionPool.Clear();
-//				parser.m_pTextNode = NULL;
 				parser.init();
 
 				int iParseSignal;
 				OclTree::Constraint* pConstraint = NULL;
 				parser.m_bOnlyContext = bOnlyContext;
-//				parser.m_bInvalidEnumeration = false;
 				parser.constraint( &iParseSignal, pConstraint );
 
 				ePool = parser.m_ExceptionPool;
-//				parser.pConstraint = pConstraint & parser.m_bInvalidEnumeration;
 				return pConstraint;
 			}
 	>>
-	
+
 	<<
 		private :
-			GOCL_STL_NS()string Consume( const TokenSet& setTokens, bool bFirstIdentifierUnused )
+			string Consume( const TokenSet& setTokens, bool bFirstIdentifierUnused )
 			{
 				if ( setTokens.empty() )
 					return "";
 				bool bConsumeIt = true;
-				GOCL_STL_NS()string strConsumed("");
+				string strConsumed("");
 				while ( bConsumeIt ) {
 					ANTLRTokenType iCurrent = LA(1);
-					GOCL_STL_NS()string strCurrent = GOCL_STL_NS()string( LT(1)->getText() );
+					string strCurrent = string( LT(1)->getText() );
 					if ( bFirstIdentifierUnused && iCurrent == IDENTIFIER )
 						iCurrent = UNUSED;
 					bFirstIdentifierUnused = false;
 					if ( iCurrent == INPUTEND )
 						return strConsumed;
-					for ( TokenSet::const_iterator i = setTokens.begin() ; i != setTokens.end() && bConsumeIt; i++ )
+					for ( TokenSet::iterator i = setTokens.begin() ; i != setTokens.end() && bConsumeIt; i++ )
 						switch ( *i ) {
 							case CLASS_MULTIPLICATIVE :	if ( set_el( iCurrent, MULTIPLICATIVE_OPERATORS_set ) ) bConsumeIt = false; break;
 							case CLASS_ADDITIVE :		  	if ( set_el( iCurrent, ADDITIVE_OPERATORS_set ) ) bConsumeIt = false; break;
@@ -356,25 +336,24 @@ class OCLParser
 
 	<<
 		private :
-			void AddException( const GOCL_STL_NS()string& strMessage, const GOCL_STL_NS()string& strParam1, const GOCL_STL_NS()string& strParam2, int iLine )
+			void AddException( const string& strMessage, const string& strParam1, const string& strParam2, int iLine )
 			{
-				OclCommon::Exception exp(OclCommon::Exception::ET_SYNTACTIC, strMessage, strParam1, strParam2, iLine );
-				m_ExceptionPool.Add( exp );
+				m_ExceptionPool.Add( OclCommon::Exception( OclCommon::Exception::ET_SYNTACTIC, strMessage, strParam1, strParam2, iLine ) );
 			}
 	>>
 
 	<<
 		private :
-			void PrintErrorSelection( GOCL_STL_NS()string strViables, const TokenSet& setRequired, const TokenSet& setFollow )
+			void PrintErrorSelection( string strViables, const TokenSet& setRequired, const TokenSet& setFollow )
 			{
 				int iLine = LT(1)->getLine();
 				int iCurrent = LA(1);
-				GOCL_STL_NS()string strToken = ( iCurrent == INPUTEND ) ? "InputEnd" : "\"" + GOCL_STL_NS()string( LT(1)->getText() ) + "\"";
+				string strToken = ( iCurrent == INPUTEND ) ? "InputEnd" : "\"" + string( LT(1)->getText() ) + "\"";
 				if ( iCurrent == IDENTIFIER && ! Contains( setRequired, IDENTIFIER ) )
 					iCurrent = UNUSED;
 
-				GOCL_STL_NS()string strConsumed = Consume( setFollow, iCurrent == UNUSED );
-				GOCL_STL_NS()string strMessage;
+				string strConsumed = Consume( setFollow, iCurrent == UNUSED );
+				string strMessage;
 				if ( iCurrent == INPUTEND )
 					strMessage = "At the end of expression ? cannot be parsed";
 				else
@@ -394,11 +373,11 @@ class OCLParser
 			{
 				int iLine = LT(1)->getLine();
 				int iCurrent = LA(1);
-				GOCL_STL_NS()string strToken = ( iCurrent == INPUTEND ) ? "InputEnd" : "\"" + GOCL_STL_NS()string( LT(1)->getText() ) + "\"";
+				string strToken = ( iCurrent == INPUTEND ) ? "InputEnd" : "\"" + string( LT(1)->getText() ) + "\"";
 				if ( iCurrent == IDENTIFIER && iToken != IDENTIFIER )
 					iCurrent = UNUSED;
 
-				GOCL_STL_NS()string strViables = PrintToken( iToken, true );
+				string strViables = PrintToken( iToken, true );
 
 				if ( iToken != INPUTEND && Contains( setFollow, iToken ) ) {
 					if ( iCurrent == INPUTEND )
@@ -407,14 +386,14 @@ class OCLParser
 						AddException( "? is missing before Token [ ? ].", strViables, strToken, iLine );
 				}
 				else {
-					GOCL_STL_NS()string strConsumed = Consume( setFollow, iCurrent == UNUSED );
+					string strConsumed = Consume( setFollow, iCurrent == UNUSED );
 					if ( iToken == INPUTEND )
 						AddException( "Superfluous tokens [ \" ?\" ] are ignored at the end of expression.", strConsumed, "", iLine );
 					else {
 						if ( iCurrent == INPUTEND )
 							AddException( "? is missing at the end of expression", strViables, "", iLine );
 						else {
-							GOCL_STL_NS()string strMessage = "At Token [ ? ] ? cannot be parsed.";
+							string strMessage = "At Token [ ? ] ? cannot be parsed.";
 							if ( ! strConsumed.empty() )
 								strMessage += " Ignored tokens are [ \" " + strConsumed + "\" ].";
 							AddException( strMessage, strToken, strViables, iLine );
@@ -426,11 +405,11 @@ class OCLParser
 
 	<<
 		private :
-			bool PrintErrorIteration( const GOCL_STL_NS()string& strSeparator, const TokenSet& setFirst, const TokenSet& setFollow )
+			bool PrintErrorIteration( const string& strSeparator, const TokenSet& setFirst, const TokenSet& setFollow )
 			{
 				int iLine = LT(1)->getLine();
 				int iCurrent = LA(1);
-				GOCL_STL_NS()string strToken = "\"" + GOCL_STL_NS()string( LT(1)->getText() ) + "\"";
+				string strToken = "\"" + string( LT(1)->getText() ) + "\"";
 				if ( iCurrent == IDENTIFIER && ! Contains( setFirst, IDENTIFIER ) )
 					iCurrent = UNUSED;
 
@@ -447,7 +426,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::Constraint* CreateConstraint( const GOCL_STL_NS()string& strName, OclTree::ContextNode* pCNode, OclTree::TreeNode* pNode, const PositionMap& mapPositions )
+			OclTree::Constraint* CreateConstraint( const string& strName, OclTree::ContextNode* pCNode, OclTree::TreeNode* pNode, const PositionMap& mapPositions )
 			{
 				OclTree::Constraint* pResult = m_pManager->CreateConstraint();
 				pResult->m_strName = strName;
@@ -462,7 +441,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::ContextNode* CreateContext( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strType, const GOCL_STL_NS()string& strStereotype, const PositionMap& mapPositions, const OclCommon::FormalParameterVector& vecParameters = OclCommon::FormalParameterVector(), const GOCL_STL_NS()string& strReturnType = "" )
+			OclTree::ContextNode* CreateContext( const string& strName, const string& strType, const string& strStereotype, const PositionMap& mapPositions, const OclCommon::FormalParameterVector& vecParameters = OclCommon::FormalParameterVector(), const string& strReturnType = "" )
 			{
 				OclTree::ContextNode* pResult = m_pManager->CreateContext();
 				pResult->m_strName = strName;
@@ -478,7 +457,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::DeclarationNode* CreateDeclaration( const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strType, OclTree::TreeNode* pSNode, const PositionMap& mapPositions )
+			OclTree::DeclarationNode* CreateDeclaration( const string& strName, const string& strType, OclTree::TreeNode* pSNode, const PositionMap& mapPositions )
 			{
 				OclTree::DeclarationNode* pResult = m_pManager->CreateDeclaration();
 				pResult->m_strName = strName;
@@ -521,7 +500,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::MethodNode* CreateMethod( const GOCL_STL_NS()string& strCallOperator, const GOCL_STL_NS()string& strName, OclTree::TreeNode* pThisNode, const OclTree::TreeNodeVector& vecArguments, const PositionMap& mapPositions )
+			OclTree::MethodNode* CreateMethod( const string& strCallOperator, const string& strName, OclTree::TreeNode* pThisNode, const OclTree::TreeNodeVector& vecArguments, const PositionMap& mapPositions )
 			{
 				OclTree::MethodNode* pResult = m_pManager->CreateMethod();
 				pResult->m_strCallOperator = strCallOperator;
@@ -535,7 +514,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::FunctionNode* CreateFunction( const GOCL_STL_NS()string& strName, const OclTree::TreeNodeVector& vecArguments, const PositionMap& mapPositions )
+			OclTree::FunctionNode* CreateFunction( const string& strName, const OclTree::TreeNodeVector& vecArguments, const PositionMap& mapPositions )
 			{
 				OclTree::FunctionNode* pResult = m_pManager->CreateFunction();
 				pResult->m_strName = strName;
@@ -547,7 +526,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::OperatorNode* CreateOperator( const GOCL_STL_NS()string& strName, OclTree::TreeNode* pOperand1, OclTree::TreeNode* pOperand2, const PositionMap& mapPositions )
+			OclTree::OperatorNode* CreateOperator( const string& strName, OclTree::TreeNode* pOperand1, OclTree::TreeNode* pOperand2, const PositionMap& mapPositions )
 			{
 				OclTree::OperatorNode* pResult = m_pManager->CreateOperator();
 				pResult->m_strName = strName;
@@ -561,7 +540,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::IteratorNode* CreateIterator( const GOCL_STL_NS()string& strCallOperator, const GOCL_STL_NS()string& strName, OclTree::TreeNode* pThisNode, OclTree::TreeNode* pArgumentNode, const StringVector& vecDeclarators, const GOCL_STL_NS()string& strDeclType, const GOCL_STL_NS()string& strAccName, const GOCL_STL_NS()string& strAccType, OclTree::TreeNode* pAccuNode, const PositionMap& mapPositions )
+			OclTree::IteratorNode* CreateIterator( const string& strCallOperator, const string& strName, OclTree::TreeNode* pThisNode, OclTree::TreeNode* pArgumentNode, const StringVector& vecDeclarators, const string& strDeclType, const string& strAccName, const string& strAccType, OclTree::TreeNode* pAccuNode, const PositionMap& mapPositions )
 			{
 				OclTree::IteratorNode* pResult = m_pManager->CreateIterator();
 				pResult->m_strCallOperator = strCallOperator;
@@ -582,7 +561,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::VariableNode* CreateVariable( const GOCL_STL_NS()string& strName, const PositionMap& mapPositions )
+			OclTree::VariableNode* CreateVariable( const string& strName, const PositionMap& mapPositions )
 			{
 				OclTree::VariableNode* pResult = m_pManager->CreateVariable();
 				pResult->m_strName = strName;
@@ -593,7 +572,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::AttributeNode* CreateAttribute( const GOCL_STL_NS()string& strCallOperator, const GOCL_STL_NS()string& strName, OclTree::TreeNode* pThisNode, const PositionMap& mapPositions )
+			OclTree::AttributeNode* CreateAttribute( const string& strCallOperator, const string& strName, OclTree::TreeNode* pThisNode, const PositionMap& mapPositions )
 			{
 				OclTree::AttributeNode* pResult = m_pManager->CreateAttribute();
 				pResult->m_strName = strName;
@@ -606,7 +585,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::AssociationNode* CreateAssociation( const GOCL_STL_NS()string& strCallOperator, const GOCL_STL_NS()string& strName, OclTree::TreeNode* pThisNode, const GOCL_STL_NS()string& strAcceptable, const PositionMap& mapPositions )
+			OclTree::AssociationNode* CreateAssociation( const string& strCallOperator, const string& strName, OclTree::TreeNode* pThisNode, const string& strAcceptable, const PositionMap& mapPositions )
 			{
 				OclTree::AssociationNode* pResult = m_pManager->CreateAssociation();
 				pResult->m_strName = strName;
@@ -660,7 +639,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::ObjectNode* CreateObject( const GOCL_STL_NS()string& strType, const GOCL_STL_NS()string& strValue, bool bCallable, const PositionMap& mapPositions )
+			OclTree::ObjectNode* CreateObject( const string& strType, const string& strValue, bool bCallable, const PositionMap& mapPositions )
 			{
 				OclTree::ObjectNode* pResult = m_pManager->CreateObject();
 				pResult->m_strType = strType;
@@ -673,7 +652,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::CollectionNode* CreateCollection( const GOCL_STL_NS()string& strType, const OclTree::TreeNodeVector& vecElements, const PositionMap& mapPositions )
+			OclTree::CollectionNode* CreateCollection( const string& strType, const OclTree::TreeNodeVector& vecElements, const PositionMap& mapPositions )
 			{
 				OclTree::CollectionNode* pResult = m_pManager->CreateCollection();
 				pResult->m_strType = strType;
@@ -682,10 +661,11 @@ class OCLParser
 				return pResult;
 			}
 	>>
-
+	
+//<udmoclpat changes
 	<<
 		private :
-			OclTree::TextNode* CreateText( const GOCL_STL_NS()string& strValue, const PositionMap& mapPositions )
+			OclTree::TextNode* CreateText( const string& strValue, const PositionMap& mapPositions )
 			{
 				OclTree::TextNode* pResult = m_pManager->CreateTextNode();
 				pResult->m_strValue = strValue;
@@ -717,7 +697,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::HandleNode* CreateHandle( const GOCL_STL_NS()string& strHandle )
+			OclTree::HandleNode* CreateHandle( const string& strHandle )
 			{
 				OclTree::HandleNode* pResult = m_pManager->CreateHandleNode();
 				pResult->strHandle = strHandle;
@@ -727,7 +707,7 @@ class OCLParser
 
 	<<
 		private :
-			OclTree::FileNode* CreateFile( OclTree::TreeNode*& pTreeNode, const GOCL_STL_NS()string& strHandle, const GOCL_STL_NS()string& strMode)
+			OclTree::FileNode* CreateFile( OclTree::TreeNode*& pTreeNode, const string& strHandle, const string& strMode)
 			{
 				OclTree::FileNode* pResult = m_pManager->CreateFileNode();
 				pResult->m_pFileNameNode = pTreeNode;
@@ -736,6 +716,7 @@ class OCLParser
 				return pResult;
 			}
 	>>
+//udmoclpat changes>
 
 //######################################################################################################################################
 //	RULES
@@ -754,7 +735,7 @@ rootExpression [ OclTree::TreeNode*& pNode ] :
 
 constraint [ OclTree::Constraint*& pConstraint ] :
 	<<
-		GOCL_STL_NS()string strName; OclTree::TreeNode* pNode = NULL; OclTree::ContextNode* pCNode = NULL;
+		string strName; OclTree::TreeNode* pNode = NULL; OclTree::ContextNode* pCNode = NULL;
 		PositionMap mapPositions;
 	>>
 	contextDeclaration [ First_name, pCNode ]
@@ -762,8 +743,9 @@ constraint [ OclTree::Constraint*& pConstraint ] :
 	<< INSLINE0( LID_CONSTRAINT_NAME ); >>
 	wrap_colon [ First_expression ]
 	<< if ( m_bOnlyContext ) { IF_NO_EXC( $pConstraint = CreateConstraint( strName, pCNode, pNode, mapPositions ); ); return; } >>
-//	expression [ First_inputend, pNode ]
+//<udmoclpat changes
 	enumeratedExpression [ First_inputend, pNode ]
+//udmoclpat changes>
 	wrap_inputend
 	<< IF_EXC_NODE( pNode ) >>
 	<< IF_EXC_NODE( pCNode ) >>
@@ -815,7 +797,7 @@ classifierContextWithNameTester :
 
 classifierContext [ const TokenSet& setFollow, OclTree::ContextNode*& pCNode, PositionMap& mapPositions ] :
 	<<
-		GOCL_STL_NS()string strName("self"); GOCL_STL_NS()string strType; GOCL_STL_NS()string strNewType;
+		string strName("self"); string strType; string strNewType;
 		bool bSubRule1In = false;
 	>>
 	name [ Union( Union( First_colon, DOUBLECOLON ), INV ), strType ]
@@ -842,7 +824,7 @@ classifierContext [ const TokenSet& setFollow, OclTree::ContextNode*& pCNode, Po
 
 operationContext [ const TokenSet& setFollow, OclTree::ContextNode*& pCNode, PositionMap& mapPositions ] :
 	<<
-		OclCommon::FormalParameterVector vecParameters; GOCL_STL_NS()string strType(""); GOCL_STL_NS()string strName; GOCL_STL_NS()string strReturnType; GOCL_STL_NS()string strStereotype;
+		OclCommon::FormalParameterVector vecParameters; string strType(""); string strName; string strReturnType; string strStereotype;
 		bool bSubRule1In = false; bool bSubRule2In = false;
 	>>
 	typeName [ First_left_parenthesis, strName ]
@@ -850,7 +832,7 @@ operationContext [ const TokenSet& setFollow, OclTree::ContextNode*& pCNode, Pos
 	<< INSLINE0( LID_FEATURE_NAME ); >>
 	<<
 		int iPos = strName.rfind( ':' );
-		if ( iPos != GOCL_STL_NS()string::npos )
+		if ( iPos != string::npos )
 			{ strType = strName.substr( 0, iPos - 1 ); strName = strName.substr( iPos + 1, strName.length() - iPos - 1 ); }
 		else
 			AddException( "Invalid operation name. Type and name of operation must be specified.", "", "", LT(1)->getLine() );
@@ -877,7 +859,7 @@ operationContext [ const TokenSet& setFollow, OclTree::ContextNode*& pCNode, Pos
 
 formalParameterList [ const TokenSet& setFollow, OclCommon::FormalParameterVector& vecParameters, PositionMap& mapPositions ] :
 	<<
-		GOCL_STL_NS()string strName; GOCL_STL_NS()string strType; int iPrmCnt = 0;
+		string strName; string strType; int iPrmCnt = 0;
 	>>
 	formalParameter [ Union( Union( setFollow, SEMICOLON ), First_formalParameter ), strName, strType, $mapPositions, iPrmCnt ]
 	<<
@@ -896,7 +878,7 @@ formalParameterList [ const TokenSet& setFollow, OclCommon::FormalParameterVecto
 //======================================================================================================================================
 // 	formalParameter
 
-formalParameter [ const TokenSet& setFollow, GOCL_STL_NS()string& strName , GOCL_STL_NS()string& strType, PositionMap& mapPositions, int& iPrmCnt ] :
+formalParameter [ const TokenSet& setFollow, string& strName , string& strType, PositionMap& mapPositions, int& iPrmCnt ] :
 	name [ First_colon, $strName ]
 	<< INSLINE0( LID_PARAMETER_NAME + $iPrmCnt ); >>
 	wrap_colon [ First_typeName ]
@@ -904,8 +886,7 @@ formalParameter [ const TokenSet& setFollow, GOCL_STL_NS()string& strName , GOCL
 	<< INSLINE0( LID_PARAMETER_TYPE + $iPrmCnt++ ); >>
 ;
 
-//begin: Added by Ananth 
-
+//<udmoclpatchanges
 //======================================================================================================================================
 // 	extendedExpression
 
@@ -982,7 +963,7 @@ exception default :
 textNode [  const TokenSet& setFollow, OclTree::TreeNode*&  pTextNode] :
 	<< PositionMap mapPositions; >>
 	str:TEXT_LITERAL
-	<< GOCL_STL_NS()string strValue = GOCL_STL_NS()string( str->getText() ); 
+	<< string strValue = string( str->getText() ); 
 		IF_NO_EXC( $pTextNode = CreateText( strValue, mapPositions ); ) >>
 ;
 
@@ -992,8 +973,8 @@ textNode [  const TokenSet& setFollow, OclTree::TreeNode*&  pTextNode] :
 fileNode [ const TokenSet& setFollow, OclTree::TreeNode*&  pFileNode] :
 	
 	<< OclTree::TreeNode* pNode = NULL; 
-		GOCL_STL_NS()string strHandle;  
-		GOCL_STL_NS()string strMode; >>
+		string strHandle;  
+		string strMode; >>
 	wrap_pat_open [ setFollow ]
 	wrap_left_parenthesis [ First_expression ]
 	expression [ First_right_parenthesis , pNode ]
@@ -1011,7 +992,7 @@ fileNode [ const TokenSet& setFollow, OclTree::TreeNode*&  pFileNode] :
 
 handleNode [ const TokenSet& setFollow, OclTree::TreeNode*&  pHandleNode] :
 
-	<<	GOCL_STL_NS()string strHandle;  >> 
+	<<	string strHandle;  >> 
 	wrap_pat_switch [ setFollow ]
 	wrap_left_parenthesis [ First_name ]
 	name [ setFollow, strHandle ]
@@ -1019,7 +1000,7 @@ handleNode [ const TokenSet& setFollow, OclTree::TreeNode*&  pHandleNode] :
 	<< IF_NO_EXC( $pHandleNode = CreateHandle( strHandle ); ) >>
 ;
 
-//end: Added by Ananth 
+//udmoclpat changes>
 
 //======================================================================================================================================
 // 	expression
@@ -1030,7 +1011,9 @@ expression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	>>
 	(
 		letExpression [ First_expression, pDNode ]
+//<udmoclpat changes
 		enumeratedExpression [ setFollow, $pNode ]
+//udmoclpat changes>
 		<< IF_EXC_NODE( pDNode ) >>
 		<< IF_EXC_NODE( pNode ) >>
 		<< IF_NO_EXC( pDNode->m_pInnerNode = $pNode; $pNode = pDNode; ) >>
@@ -1046,7 +1029,7 @@ exception default :
 
 letExpression [ const TokenSet& setFollow, OclTree::DeclarationNode*& pDNode ] :
 	<<
-		GOCL_STL_NS()string strName; GOCL_STL_NS()string strType(""); OclTree::TreeNode* pSNode = NULL;
+		string strName; string strType(""); OclTree::TreeNode* pSNode = NULL;
 		PositionMap mapPositions;
 	>>
 	wrap_let [ First_name ]
@@ -1077,9 +1060,13 @@ ifExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<< INSLINE0( LID_NODE_START ); >>
 	expression [ First_then, pIfNode ]
 	wrap_then [ First_expression ]
+//<udmoclpat changes
 	enumeratedExpression [ First_else, pThenNode ]
+//udmoclpat changes>
 	wrap_else [ First_expression ]
+//<udmoclpat changes
 	enumeratedExpression [ First_endif, pElseNode ]
+//udmoclpat changes>
 	wrap_endif [ setFollow ]
 	<< IF_EXC_NODE( pIfNode ) >>
 	<< IF_EXC_NODE( pThenNode ) >>
@@ -1092,7 +1079,7 @@ ifExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 
 implicationExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<<
-		OclTree::TreeNode* pSNode = NULL; GOCL_STL_NS()string strOp;
+		OclTree::TreeNode* pSNode = NULL; string strOp;
 		PositionMap mapPositions;
 	>>
 	orExpression [ Union( Union( setFollow, CLASS_LOGICAL_IMPLIES ), First_orExpression ), $pNode ]
@@ -1106,9 +1093,9 @@ implicationExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<< if ( PrintErrorIteration( "BinaryOperator", First_orExpression, setFollow ) ) implicationExpression( &_signal, setFollow, $pNode ); >>
 ;
 
-implicationExpressionRight [ const TokenSet& setFollow, OclTree::TreeNode*& pNode, GOCL_STL_NS()string& strOp, PositionMap& mapPositions ] :
+implicationExpressionRight [ const TokenSet& setFollow, OclTree::TreeNode*& pNode, string& strOp, PositionMap& mapPositions ] :
 	<<
-		OclTree::TreeNode* pSNode = NULL; GOCL_STL_NS()string strOp2;
+		OclTree::TreeNode* pSNode = NULL; string strOp2;
 	>>
 	wrap_implies [ First_orExpression, $strOp ]
 	<< INSLINE0( LID_FEATURE_NAME ); >>
@@ -1128,7 +1115,7 @@ implicationExpressionRight [ const TokenSet& setFollow, OclTree::TreeNode*& pNod
 
 orExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<<
-		OclTree::TreeNode* pSNode = NULL; GOCL_STL_NS()string strOp;
+		OclTree::TreeNode* pSNode = NULL; string strOp;
 		PositionMap mapPositions;
 	>>
 	xorExpression [ Union( Union( setFollow, CLASS_LOGICAL_OR ), First_xorExpression ), $pNode ]
@@ -1166,7 +1153,7 @@ xorExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 
 andExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<<
-		OclTree::TreeNode* pSNode = NULL; GOCL_STL_NS()string strOp;
+		OclTree::TreeNode* pSNode = NULL; string strOp;
 		PositionMap mapPositions;
 	>>
 	relationalExpression [ Union( Union( setFollow, CLASS_LOGICAL_AND ), First_relationalExpression ), $pNode ]
@@ -1185,7 +1172,7 @@ andExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 
 relationalExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<<
-		OclTree::TreeNode* pSNode = NULL; GOCL_STL_NS()string strOp;
+		OclTree::TreeNode* pSNode = NULL; string strOp;
 		PositionMap mapPositions;
 	>>
 	additiveExpression [ Union( Union( setFollow, CLASS_RELATIONAL ), First_additiveExpression ), $pNode ]
@@ -1204,7 +1191,7 @@ relationalExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 
 additiveExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<<
-		OclTree::TreeNode* pSNode = NULL; GOCL_STL_NS()string strOp;
+		OclTree::TreeNode* pSNode = NULL; string strOp;
 		PositionMap mapPositions;
 	>>
 	multiplicativeExpression [ Union( Union( setFollow, CLASS_ADDITIVE ), First_multiplicativeExpression ), $pNode ]
@@ -1223,7 +1210,7 @@ additiveExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 
 multiplicativeExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<<
-		OclTree::TreeNode* pSNode = NULL; GOCL_STL_NS()string strOp;
+		OclTree::TreeNode* pSNode = NULL; string strOp;
 		PositionMap mapPositions;
 	>>
 	unaryExpression [ Union( Union( setFollow, CLASS_MULTIPLICATIVE ), First_unaryExpression ), $pNode ]
@@ -1242,7 +1229,7 @@ multiplicativeExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode 
 
 unaryExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<<
-		GOCL_STL_NS()string strOp;
+		string strOp;
 		PositionMap mapPositions;
 		bool bSubRule1In = false;
 	>>
@@ -1306,7 +1293,7 @@ postfixExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 
 featureCallWithThis [ const TokenSet& setFollow, OclTree::TreeNode* pSelf, OclTree::TreeNode*& pNode ] :
 	<<
-		GOCL_STL_NS()string strCallOperator;
+		string strCallOperator;
 		int iLine = -1;
 	>>
 	(
@@ -1340,9 +1327,9 @@ exception default :
 //======================================================================================================================================
 // 	featureCall
 
-featureCall [ const TokenSet& setFollow, const GOCL_STL_NS()string& strCallOperator, OclTree::TreeNode*& pNode ] :
+featureCall [ const TokenSet& setFollow, const string& strCallOperator, OclTree::TreeNode*& pNode ] :
 	<<
-		GOCL_STL_NS()string strName, strRole;
+		string strName, strRole;
 		PositionMap mapPositions; bool bWasInRule = false; bool bOperation = false;
 	>>
 	typeName [ Union( First_qualifiers, Union( First_featureCallParameters, setFollow ) ), strName ]
@@ -1373,7 +1360,7 @@ featureCall [ const TokenSet& setFollow, const GOCL_STL_NS()string& strCallOpera
 //======================================================================================================================================
 // 	featureCallParameters
 
-featureCallParameters [ const TokenSet& setFollow, const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strCallOperator, OclTree::TreeNode*& pNode, PositionMap& mapPositions ] :
+featureCallParameters [ const TokenSet& setFollow, const string& strName, const string& strCallOperator, OclTree::TreeNode*& pNode, PositionMap& mapPositions ] :
 	wrap_left_parenthesis [ First_featureCallParametersHelper ]
 	featureCallParametersHelper [ First_right_parenthesis, $strName, $strCallOperator, $pNode, mapPositions ]
 	wrap_right_parenthesis [ setFollow ]
@@ -1397,7 +1384,7 @@ iteratorMethodCallTester :
 	)
 ;
 
-featureCallParametersHelper [ const TokenSet& setFollow, const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strCallOperator, OclTree::TreeNode*& pNode, PositionMap& mapPositions ] :
+featureCallParametersHelper [ const TokenSet& setFollow, const string& strName, const string& strCallOperator, OclTree::TreeNode*& pNode, PositionMap& mapPositions ] :
 	<<
 		OclTree::TreeNodeVector vecArguments;
 	>>
@@ -1428,13 +1415,15 @@ exception default :
 //======================================================================================================================================
 // 	iteratorMethodCall
 
-iteratorMethodCall [ const TokenSet& setFollow, const GOCL_STL_NS()string& strName, const GOCL_STL_NS()string& strCallOperator, OclTree::TreeNode*& pNode, PositionMap& mapPositions ] :
+iteratorMethodCall [ const TokenSet& setFollow, const string& strName, const string& strCallOperator, OclTree::TreeNode*& pNode, PositionMap& mapPositions ] :
 	<<
-		OclTree::TreeNode* pArgNode = NULL; StringVector vecDeclarators; GOCL_STL_NS()string strDeclType; GOCL_STL_NS()string strAccName; GOCL_STL_NS()string strAccType; OclTree::TreeNode* pAccNode = NULL;
+		OclTree::TreeNode* pArgNode = NULL; StringVector vecDeclarators; string strDeclType; string strAccName; string strAccType; OclTree::TreeNode* pAccNode = NULL;
 	>>
 	iteratorDeclaration [ First_expression, vecDeclarators, strDeclType, strAccName, strAccType, pAccNode, mapPositions ]
 	<< IF_EXC_NODE( pAccNode ) >>
+//<udmoclpat changes
 	enumeratedExpression [ setFollow, pArgNode ]
+//udmoclpat changes>
 	<< IF_EXC_NODE( pArgNode ) >>
 	<< IF_NO_EXC( $pNode = CreateIterator( $strCallOperator, $strName, NULL, pArgNode, vecDeclarators, strDeclType, strAccName, strAccType, pAccNode, mapPositions ); ) >>
 ;
@@ -1442,9 +1431,9 @@ iteratorMethodCall [ const TokenSet& setFollow, const GOCL_STL_NS()string& strNa
 //======================================================================================================================================
 // 	iteratorDeclaration
 
-iteratorDeclaration [ const TokenSet& setFollow, StringVector& vecDeclarators, GOCL_STL_NS()string& strDeclType, GOCL_STL_NS()string& strAccName, GOCL_STL_NS()string& strAccType, OclTree::TreeNode*& pAccNode, PositionMap& mapPositions ] :
+iteratorDeclaration [ const TokenSet& setFollow, StringVector& vecDeclarators, string& strDeclType, string& strAccName, string& strAccType, OclTree::TreeNode*& pAccNode, PositionMap& mapPositions ] :
 	<<
-		GOCL_STL_NS()string strName1, strName2, strType; bool bWasInRule1 = false; bool bWasInRule2 = false;
+		string strName1, strName2, strType; bool bWasInRule1 = false; bool bWasInRule2 = false;
 		int iLine = -1; int iLine2 = -1;
 	>>
 	// identifier
@@ -1544,7 +1533,7 @@ actualParameterList [ const TokenSet& setFollow, OclTree::TreeNodeVector& vecArg
 
 //======================================================================================================================================
 // 	qualifiers
-qualifiers [ const TokenSet& setFollow, GOCL_STL_NS()string& strRole, PositionMap& mapPositions ] :
+qualifiers [ const TokenSet& setFollow, string& strRole, PositionMap& mapPositions ] :
 	wrap_left_bracket [ First_name ]
 	name [ First_right_bracket, $strRole ]
 	<< INSLINE0( LID_ROLE_NAME ); >>
@@ -1564,7 +1553,7 @@ qualifiers [ const TokenSet& setFollow, OclTree::TreeNodeVector& vecArguments ] 
 
 literal [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<<
-		GOCL_STL_NS()string strValue; GOCL_STL_NS()string strType; bool bCallable = false;
+		string strValue; string strType; bool bCallable = false;
 		PositionMap mapPositions;
 	>>
 	(
@@ -1595,7 +1584,7 @@ exception default :
 
 literalCollection [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	<<
-		GOCL_STL_NS()string strType; OclTree::TreeNodeVector vecElements;
+		string strType; OclTree::TreeNodeVector vecElements;
 		PositionMap mapPositions;
 	>>
 	typeName [ First_left_brace, strType ]
@@ -1631,9 +1620,9 @@ expressionListOrRange [ const TokenSet& setFollow, OclTree::TreeNodeVector& vecE
 //======================================================================================================================================
 // 	typeName
 
-typeName [ const TokenSet& setFollow, GOCL_STL_NS()string& strName ] :
+typeName [ const TokenSet& setFollow, string& strName ] :
 	<<
-		GOCL_STL_NS()string strTemp;
+		string strTemp;
 	>>
 	name [ Union( setFollow, DOUBLECOLON ), strName ]
 	(
@@ -1646,9 +1635,9 @@ typeName [ const TokenSet& setFollow, GOCL_STL_NS()string& strName ] :
 //======================================================================================================================================
 // 	name
 
-name [ const TokenSet& setFollow, GOCL_STL_NS()string& strName ] :
+name [ const TokenSet& setFollow, string& strName ] :
 	id:IDENTIFIER
-	<< strName = GOCL_STL_NS()string( id->getText() ); >>
+	<< strName = string( id->getText() ); >>
 ;
 exception default : << PrintErrorToken( IDENTIFIER, setFollow ); >>
 
@@ -1685,9 +1674,9 @@ wrap_right_parenthesis [ const TokenSet& setFollow ] :
 ;
 exception default : << PrintErrorToken( RIGHT_PARENTHESIS, setFollow ); >>
 
-prePost [ const TokenSet& setFollow, GOCL_STL_NS()string& strStereotypes ] :
+prePost [ const TokenSet& setFollow, string& strStereotypes ] :
 	pp:PREPOST
-	<< strStereotypes = GOCL_STL_NS()string( pp->getText() ); >>
+	<< strStereotypes = string( pp->getText() ); >>
 ;
 exception default : << PrintErrorToken( CLASS_PREPOST, setFollow ); >>
 
@@ -1731,15 +1720,15 @@ wrap_endif [ const TokenSet& setFollow ] :
 ;
 exception default : << PrintErrorToken( ENDIF, setFollow ); >>
 
-wrap_implies [ const TokenSet& setFollow, GOCL_STL_NS()string& strOp ] :
+wrap_implies [ const TokenSet& setFollow, string& strOp ] :
 	op:LOGICAL_IMPLIES
-	<< strOp = GOCL_STL_NS()string( op->getText() ); >>
+	<< strOp = string( op->getText() ); >>
 ;
 exception default : << PrintErrorToken( CLASS_LOGICAL_IMPLIES, setFollow ); >>
 
-wrap_or [ const TokenSet& setFollow, GOCL_STL_NS()string& strOp ] :
+wrap_or [ const TokenSet& setFollow, string& strOp ] :
 	op:LOGICAL_OR
-	<< strOp = GOCL_STL_NS()string( op->getText() ); >>
+	<< strOp = string( op->getText() ); >>
 ;
 exception default : << PrintErrorToken( CLASS_LOGICAL_OR, setFollow ); >>
 
@@ -1748,39 +1737,39 @@ wrap_xor [ const TokenSet& setFollow ] :
 ;
 exception default : << PrintErrorToken( XOR, setFollow ); >>
 
-wrap_and [ const TokenSet& setFollow, GOCL_STL_NS()string& strOp ] :
+wrap_and [ const TokenSet& setFollow, string& strOp ] :
 	op:LOGICAL_AND
-	<< strOp = GOCL_STL_NS()string( op->getText() ); >>
+	<< strOp = string( op->getText() ); >>
 ;
 exception default : << PrintErrorToken( CLASS_LOGICAL_AND, setFollow ); >>
 
-relationalOperator [ const TokenSet& setFollow, GOCL_STL_NS()string& strOp ] :
+relationalOperator [ const TokenSet& setFollow, string& strOp ] :
 	op:RELATIONAL_OPERATORS
-	<< strOp = GOCL_STL_NS()string( op->getText() ); >>
+	<< strOp = string( op->getText() ); >>
 ;
 exception default : << PrintErrorToken( CLASS_RELATIONAL, setFollow ); >>
 
-addOperator [ const TokenSet& setFollow, GOCL_STL_NS()string& strOp ] :
+addOperator [ const TokenSet& setFollow, string& strOp ] :
 	op:ADDITIVE_OPERATORS
-	<< strOp = GOCL_STL_NS()string( op->getText() ); >>
+	<< strOp = string( op->getText() ); >>
 ;
 exception default : << PrintErrorToken( CLASS_ADDITIVE, setFollow ); >>
 
-multiplyOperator [ const TokenSet& setFollow, GOCL_STL_NS()string& strOp ] :
+multiplyOperator [ const TokenSet& setFollow, string& strOp ] :
 	op:MULTIPLICATIVE_OPERATORS
-	<< strOp = GOCL_STL_NS()string( op->getText() ); >>
+	<< strOp = string( op->getText() ); >>
 ;
 exception default : << PrintErrorToken( CLASS_MULTIPLICATIVE, setFollow ); >>
 
-unaryOperator [ const TokenSet& setFollow, GOCL_STL_NS()string& strOp ] :
+unaryOperator [ const TokenSet& setFollow, string& strOp ] :
 	op:UNARY_OPERATORS
-	<< strOp = GOCL_STL_NS()string( op->getText() ); >>
+	<< strOp = string( op->getText() ); >>
 ;
 exception default : << PrintErrorToken( CLASS_UNARY, setFollow ); >>
 
-callOperator [ const TokenSet& setFollow, GOCL_STL_NS()string& strCallOperator ] :
+callOperator [ const TokenSet& setFollow, string& strCallOperator ] :
 	op:CALL_OPERATORS
-	<< strCallOperator = GOCL_STL_NS()string( op->getText() ); >>
+	<< strCallOperator = string( op->getText() ); >>
 ;
 exception default : << PrintErrorToken( CLASS_CALLKIND, setFollow ); >>
 
@@ -1814,21 +1803,21 @@ wrap_right_brace [ const TokenSet& setFollow ] :
 ;
 exception default : << PrintErrorToken( RIGHT_BRACE, setFollow ); >>
 
-wrap_string [ const TokenSet& setFollow, GOCL_STL_NS()string& strValue ] :
+wrap_string [ const TokenSet& setFollow, string& strValue ] :
 	str:STRING
-	<< strValue = GOCL_STL_NS()string( str->getText() ); strValue  = strValue.substr( 1, strValue.length() - 2 ); >>
+	<< strValue = string( str->getText() ); strValue  = strValue.substr( 1, strValue.length() - 2 ); >>
 ;
 exception default : << PrintErrorToken( STRING, setFollow ); >>
 
-wrap_real [ const TokenSet& setFollow, GOCL_STL_NS()string& strValue ] :
+wrap_real [ const TokenSet& setFollow, string& strValue ] :
 	r:REAL
-	<< strValue = GOCL_STL_NS()string( r->getText() ); >>
+	<< strValue = string( r->getText() ); >>
 ;
 exception default : << PrintErrorToken( REAL, setFollow ); >>
 
-wrap_integer [ const TokenSet& setFollow, GOCL_STL_NS()string& strValue ] :
+wrap_integer [ const TokenSet& setFollow, string& strValue ] :
 	i:INTEGER
-	<< strValue = GOCL_STL_NS()string( i->getText() ); >>
+	<< strValue = string( i->getText() ); >>
 ;
 exception default : << PrintErrorToken( INTEGER, setFollow ); >>
 
@@ -1837,9 +1826,9 @@ wrap_pound  [ const TokenSet& setFollow ] :
 ;
 exception default : << PrintErrorToken( POUND, setFollow ); >>
 
-wrap_boolean [ const TokenSet& setFollow, GOCL_STL_NS()string& strValue ] :
+wrap_boolean [ const TokenSet& setFollow, string& strValue ] :
 	b:BOOLEAN
-	<< strValue = GOCL_STL_NS()string( b->getText() ); >>
+	<< strValue = string( b->getText() ); >>
 ;
 exception default : << PrintErrorToken( CLASS_BOOLEAN, setFollow ); >>
 
@@ -1848,7 +1837,7 @@ wrap_inputend :
 ;
 exception default : << PrintErrorToken( INPUTEND, First_inputend ); >>
 
-
+//<udmoclpat changes
 wrap_print [ const TokenSet& setFollow ] :
 	PAT_PRINT
 ;
@@ -1863,9 +1852,9 @@ wrap_pat_switch [ const TokenSet& setFollow ] :
 	PAT_SWITCH
 ;
 exception default : << PrintErrorToken( PAT_SWITCH, setFollow ); >>
+//udmoclpat changes>
 
-} 
-// END Of OCLParser
+} // END Of OCLParser
 
 //######################################################################################################################################
 //
@@ -1879,10 +1868,10 @@ exception default : << PrintErrorToken( PAT_SWITCH, setFollow ); >>
 //	BASIC TOKENS
 
 #token								"@"				<< ; >> // TODO; End of string
-#token								"[\n\r]"				<< mode( START ); skip(); newline();>>
+#token								"[\n\r]"				<< mode( START ); skip(); newline(); >>
 #token								"~[\n\r]+"			<< skip(); >>
 
-//begin: Added by Ananth 
+//<udmoclpat changes
 //######################################################################################################################################
 //
 //	 L I T E R A L   T E X T   L E X E R   D E F I N I T I O N
@@ -1902,4 +1891,4 @@ exception default : << PrintErrorToken( PAT_SWITCH, setFollow ); >>
 #token 							"\\t" << replstr("\t"); more(); >>
 #token TEXT_LITERAL				"<:"  << replstr(""); mode( START ); >>
 //( (OCLParser*) getParser() )->SetTextNode( lextext() )
-//end: Added by Ananth 
+//udmoclpat changes>

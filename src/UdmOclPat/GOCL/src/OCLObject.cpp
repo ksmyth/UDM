@@ -4,7 +4,7 @@
 //	OCLObject.cpp
 //
 //###############################################################################################################################################
-
+#include "Solve4786.h"
 #include "OCLObject.h"
 
 #define UNDEFINED_TYPENAME ""
@@ -69,17 +69,17 @@ namespace OclMeta
 		return ! Equals( object );
 	}
 
-	GOCL_STL_NS()string Object::GetTypeName() const
+	std::string Object::GetTypeName() const
 	{
 		return ( IsUndefined() ) ? UNDEFINED_TYPENAME : Ptr()->GetTypeName();
 	}
 
-	GOCL_STL_NS()string Object::GetStaticTypeName() const
+	std::string Object::GetStaticTypeName() const
 	{
 		return m_strStaticTypeName;
 	}
 
-	void Object::SetStaticTypeName( const GOCL_STL_NS()string& strStaticTypeName )
+	void Object::SetStaticTypeName( const std::string& strStaticTypeName )
 	{
 		m_strStaticTypeName = strStaticTypeName;
 	}
@@ -91,10 +91,15 @@ namespace OclMeta
 		return Ptr()->IsCompound();
 	}
 
+	bool Object::IsComparable() const
+	{
+		if ( IsUndefined() )
+			return false;
+		return Ptr()->IsComparable();
+	}
+
 	bool Object::IsUndefined() const
 	{
-		//if(IsNull()) { printf("Object is null|"); }
-		//else if(Ptr()->IsUndefined()) { printf("Ptr Undefined|"); }
 		return IsNull() || Ptr()->IsUndefined();
 	}
 
@@ -108,9 +113,14 @@ namespace OclMeta
 		return ( IsUndefined() ) ? UNDEFINED : Object( Ptr()->Clone() );
 	}
 
-	GOCL_STL_NS()string Object::Print() const
+	std::string Object::Print() const
 	{
 		return ( IsUndefined() ) ? "undefined" : Ptr()->Print();
+	}
+
+	IUnknown* Object::GetObject() const
+	{
+		return ( IsUndefined() ) ? NULL : Ptr()->GetObject();
 	}
 
 }; // namespace OclMeta
