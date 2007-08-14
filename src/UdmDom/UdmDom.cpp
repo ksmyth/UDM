@@ -3125,10 +3125,24 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			}
 #endif
 
-			string filename = DomDataNetwork::FindFile(sysid);
+			string filename;
+			if (!is)
+			{
+				filename = DomDataNetwork::FindFile(sysid);
+				if(!filename.empty()) 
+					is = new LocalFileInputSource(DOMString(filename.c_str()).rawBuffer());	
+			}
 
-			if(!filename.empty()) 
-				is = new LocalFileInputSource(DOMString(filename.c_str()).rawBuffer());
+			if (!is)
+			{
+				//also look up in the string map.
+				str_xsd_storage::str_str_map::iterator it_sxc = str_xsd_storage::static_xsd_container.find(sysid);
+				if (it_sxc != str_xsd_storage::static_xsd_container.end())
+				{
+					const string & xsd_str = *(it_sxc->second);
+					is =  new MemBufInputSource((const unsigned char * )xsd_str.c_str(), xsd_str.size(), "MBIS");
+				}
+			}
 
 			if (!is) 
 				return HandlerBase().resolveEntity(publicId, systemId);
