@@ -31,7 +31,7 @@ public abstract class UdmFileFactory extends ExtendedUdmFactory {
      * Creates a data network in a file with the specified root type.
      * @param instanceFileName
      * @param metaType
-     * @return
+     * @return The instance of the root object in the created data network.
      * @throws UdmException
      */
     public UdmPseudoObject createNewDataNetwork(String instanceFileName, String metaType, String ns)
@@ -53,7 +53,7 @@ public abstract class UdmFileFactory extends ExtendedUdmFactory {
 
     /**
      * Creates and opens a data network from a string specified by the parameter.
-     * @param xmlString The string containing the xml.
+     * @param xmlStream The string containing the xml.
      * @return The root object of the opened data network
      * @throws UdmException
      */

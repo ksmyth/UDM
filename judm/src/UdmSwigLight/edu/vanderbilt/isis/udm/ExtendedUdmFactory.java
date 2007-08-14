@@ -58,8 +58,9 @@ public abstract class ExtendedUdmFactory extends UdmFactory {
     }
 
     /**
-     * @param instanceFileName
-     * @return
+     * Opens an exisitng data network from a file.
+     * @param instanceFileName The location of the file.
+     * @return The root object in the opened data network.
      * @throws UdmException
      */
     protected UdmPseudoObject openExistingDNFromFile(String instanceFileName)
@@ -71,8 +72,9 @@ public abstract class ExtendedUdmFactory extends UdmFactory {
     }
 
     /**
-     * @param xml
-     * @return
+     * Opens an exisitng data network from a string.
+     * @param xml The string that contains the data network.
+     * @return The root object in the opened data network.
      * @throws UdmException
      */
     protected UdmPseudoObject openExistingDNFromString(String xml)
@@ -83,8 +85,9 @@ public abstract class ExtendedUdmFactory extends UdmFactory {
     }
 
     /**
-     * @param in
-     * @return
+     * Opens an exisitng data network from an input stream.
+     * @param in The input stream that contains the data network.
+     * @return The root object in the opened data network.
      * @throws UdmException
      */
     protected UdmPseudoObject openExistingDNFromStream(InputStream in)
@@ -110,9 +113,10 @@ public abstract class ExtendedUdmFactory extends UdmFactory {
     }
 
     /**
-     * @param instanceFileName
-     * @param rootMetaClass
-     * @return
+     * Creates a new data network in a file.
+     * @param instanceFileName The location of the file.
+     * @param rootMetaClass The meta class of the root object 
+     * @return The instance of the root object in the created data network.
      * @throws UdmException
      */
     protected UdmPseudoObject createNewDNToFile(
@@ -125,8 +129,9 @@ public abstract class ExtendedUdmFactory extends UdmFactory {
     }
 
     /**
-     * @param rootMetaClass
-     * @return
+     * Creates a data network in a string.
+     * @param rootMetaClass The meta class of the root object 
+     * @return The instance of the root object in the created data network.
      * @throws UdmException
      */
     protected UdmPseudoObject createNewDNToString(UdmPseudoObject rootMetaClass)
@@ -137,6 +142,7 @@ public abstract class ExtendedUdmFactory extends UdmFactory {
     }
 
     /**
+     * Closes and updates the data network.
      * @throws UdmException
      */
     public void closeWithUpdate() throws UdmException {
@@ -144,6 +150,7 @@ public abstract class ExtendedUdmFactory extends UdmFactory {
     }
 
     /**
+     * Closes the data network without saving the changes.
      * @throws UdmException
      */
     public void closeNoUpdate() throws UdmException {
@@ -151,8 +158,8 @@ public abstract class ExtendedUdmFactory extends UdmFactory {
     }
 
     /**
-     * Returns true if the data network is open; otherwise, returns false.
-     * @return
+     * Returns <code>true</code> if the data network is open; otherwise, returns <code>false</code>.
+     * @return <code>true</code> if the data netork is open; otherwise, <code>false</code>.
      * @throws UdmException
      */
     public boolean isDataNetworkOpen() throws UdmException {
@@ -169,7 +176,7 @@ public abstract class ExtendedUdmFactory extends UdmFactory {
 
     /**
      * Saves the data network in the specified file.
-     * @param systemName
+     * @param systemName The location of the file.
      * @throws UdmException
      */
     protected void saveAsFile(String systemName) throws UdmException {

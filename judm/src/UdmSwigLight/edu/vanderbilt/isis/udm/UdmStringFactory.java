@@ -29,7 +29,8 @@ public abstract class UdmStringFactory extends ExtendedUdmFactory {
     /**
      * Creates a data network in string with the specified root type.
      * @param metaType
-     * @return
+     * @param ns
+     * @return The root object of the created data network
      * @throws UdmException
      */
     public UdmPseudoObject createNewDataNetwork(String metaType, String ns) throws UdmException {
@@ -48,8 +49,8 @@ public abstract class UdmStringFactory extends ExtendedUdmFactory {
     }
 
     /**
-     * Creates and opens a data network from a string specified by the parameter.
-     * @param xmlString The string containing the xml.
+     * Creates and opens a data network from a stream specified by the parameter.
+     * @param xmlStream The stream containing the xml.
      * @return The root object of the opened data network
      * @throws UdmException
      */
