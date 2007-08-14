@@ -4456,7 +4456,6 @@ namespace Uml
 	void InitClass(const Class &obj, const Namespace &parent, const char *name, bool isAbstract, const char *stereo, const char * from)
 	{
 		UdmStatic::CreateComposition(parent, Namespace::meta_classes, obj, Class::meta_parent_ns);
-		UdmStatic::CreateComposition(parent.parent(), Diagram::meta_classes, obj, Class::meta_parent);
 
 		obj.name() = name;
 		if(stereo) obj.stereotype() = stereo;
@@ -4504,7 +4503,6 @@ namespace Uml
 	void InitAssociation(const Association &obj, const Namespace &parent, const char *name)
 	{
 		UdmStatic::CreateComposition(parent, Namespace::meta_associations, obj, Association::meta_parent_ns);
-		UdmStatic::CreateComposition(parent.parent(), Diagram::meta_associations, obj, Association::meta_parent);
 
 		obj.name() = name;
 	}
@@ -4537,7 +4535,6 @@ namespace Uml
 	void InitComposition(const Composition &obj, const Namespace &parent, const char *name)
 	{
 		UdmStatic::CreateComposition(parent, Namespace::meta_compositions, obj, Composition::meta_parent_ns);
-		UdmStatic::CreateComposition(parent.parent(), Diagram::meta_compositions, obj, Composition::meta_parent);
 
 		obj.name() = name;
 	}

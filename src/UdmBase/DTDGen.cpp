@@ -1022,7 +1022,7 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 		{
 			string i_name = cwcps_i->first.name();
 			::Uml::Namespace i_ns = cwcps_i->first.parent_ns();
-			::Uml::Diagram i_dgr = cwcps_i->first.parent();
+			::Uml::Diagram i_dgr = ::Uml::GetDiagram(cwcps_i->first);
 
 			bool ignore = false;
 			{

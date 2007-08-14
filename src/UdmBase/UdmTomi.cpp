@@ -132,10 +132,10 @@ using namespace Udm;	//for Object
 // UDM TOMI Paradigm Independent Interface
 // Retrieves the adjacent objects of an object associated via simple association or association class. 
 // The returned set can be empty. Composition relationships are not considered here.
-UDM_DLL set<Object> Object::GetAdjacentObjects()
+UDM_DLL multiset<Object> Object::GetAdjacentObjects()
 {
 		
-	set<Udm::Object> objAdjacentObs;
+	multiset<Udm::Object> objAdjacentObs;
 	const ::Uml::Class & srcClass= type();
 	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
@@ -159,8 +159,8 @@ UDM_DLL set<Object> Object::GetAdjacentObjects()
 		Object src_o = pr->GetPlaceHolder(*this, false);
 		if (src_o)
 		{
-			set<Object> ret = src_o.GetAdjacentObjects();
-			for(set<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
+			multiset<Object> ret = src_o.GetAdjacentObjects();
+			for(multiset<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
 				objAdjacentObs.insert(pr->GetRealObject(*ret_i));
 		}
 	};
@@ -173,9 +173,9 @@ UDM_DLL set<Object> Object::GetAdjacentObjects()
 // Retrieves the adjacent objects of an object. The adjacent objects 
 // are of the type of clsType or derived from it. The returned set can 
 // be empty. Composition relationships are not considered here.
-UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType)
+UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType)
 {
-	set<Udm::Object> objAdjacentObs;
+	multiset<Udm::Object> objAdjacentObs;
 	::Uml::Class srcClass= type();
 	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
@@ -219,8 +219,8 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType)
 				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter;
 				if ((::Uml::Namespace) clsDstType.parent_ns() != ::Uml::Namespace(NULL))
 					clsDst_cross_ph_name += (string)(((::Uml::Namespace) clsDstType.parent_ns()).name());
-				set<Object> ret = src_o.GetAdjacentObjects(Uml::classByName(::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)),clsDst_cross_ph_name));
-				for(set<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
+				multiset<Object> ret = src_o.GetAdjacentObjects(Uml::classByName(::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)),clsDst_cross_ph_name));
+				for(multiset<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
 					objAdjacentObs.insert(pr->GetRealObject(*ret_i));
 			}
 		}
@@ -236,9 +236,9 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType)
 // The adjacent objects are of the type of clsType or derived from it. 
 // The returned set can be empty. Composition relationships are not considered here. 
 // Parameter clsType can be null.
-UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType, const AssociationInfo& ascType)
+UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType, const AssociationInfo& ascType)
 {
-	set<Udm::Object> objAdjacentObs;
+	multiset<Udm::Object> objAdjacentObs;
 	::Uml::Class srcClass= type();
 	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
@@ -251,41 +251,62 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType, 
 							p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
 
-			vector<ObjectImpl*>dstPeers=impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::TARGETFROMPEER);
-			
+			// Checking role names
+			string strSrcRoleName = p_currAssocRole->name();
+			string strDstRoleName = ::Uml::theOther(*p_currAssocRole).name();
 
-			for(vector<ObjectImpl*>::iterator p_currDstPeer=dstPeers.begin();
-								p_currDstPeer!=dstPeers.end(); p_currDstPeer++)
+			if ((strSrcRoleName != ascType.strSrcRoleName && !ascType.strSrcRoleName.empty()) || (strDstRoleName != ascType.strDstRoleName && !ascType.strDstRoleName.empty()))
+				continue;
+
+			// Check if there is an association class for this role
+			::Uml::Association assoc = ::Uml::theOther(*p_currAssocRole).parent();
+			::Uml::Class assoc_cls = assoc.assocClass();
+			if (ascType.clsAssociation != ::Uml::Class(NULL) && assoc_cls == ::Uml::Class(NULL))
+				continue;
+
+			// If a simple association, get the matching peers and continue with the next role
+			if (assoc_cls == ::Uml::Class(NULL)) {
+				vector<ObjectImpl*> dstPeers = impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::TARGETFROMPEER);
+
+	                        for(vector<ObjectImpl*>::iterator p_currDstPeer=dstPeers.begin(); p_currDstPeer != dstPeers.end(); p_currDstPeer++)
+				{
+					Udm::Object dstObject(*p_currDstPeer);
+
+					// Checking class type
+					if (clsDstType != ::Uml::Class(NULL) && !::Uml::IsDerivedFrom(dstObject.type(),clsDstType))
+						continue;
+
+					objAdjacentObs.insert(dstObject);
+				}
+				continue;
+			}
+
+			// Check all association with classes
+			vector<ObjectImpl*> assocs = impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::CLASSFROMTARGET);
+
+			for(vector<ObjectImpl*>::iterator p_currAssoc = assocs.begin(); p_currAssoc != assocs.end(); p_currAssoc++)
 			{
-				Udm::Object dstObject(*p_currDstPeer);
+				Udm::Object assocCls_obj(*p_currAssoc);
+				::Uml::Class clsAssociation = assocCls_obj.type();
+
+				// Checking association class type
+				if (ascType.clsAssociation != ::Uml::Class(NULL) && ascType.clsAssociation != clsAssociation && !::Uml::IsDerivedFrom(clsAssociation, ascType.clsAssociation))
+					continue;
+
+				// Get and test the peers
+				vector<ObjectImpl*> dstPeers = assocCls_obj.impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::TARGETFROMCLASS);
+				for(vector<ObjectImpl*>::iterator p_currDstPeer = dstPeers.begin(); p_currDstPeer != dstPeers.end(); p_currDstPeer++)
+				{
+					Udm::Object dstObject(*p_currDstPeer);
 						
 					// Checking class type
-				if(clsDstType!=::Uml::Class(NULL) && !::Uml::IsDerivedFrom(dstObject.type(),clsDstType))
-				{
-					continue;		
-				}
-		
-				// Checking association class type
-				::Uml::Class clsAssociation=::Uml::Association(p_currAssocRole->parent()).assocClass();
-				if(ascType.clsAssociation!=::Uml::Class(NULL)&& ascType.clsAssociation!=clsAssociation)
-				{
-					continue;
-				}
+					if(clsDstType!=::Uml::Class(NULL) && !::Uml::IsDerivedFrom(dstObject.type(),clsDstType))
+						continue;		
 
-				// Checking role names
-				string strSrcRoleName=p_currAssocRole->name();
-				string strDstRoleName=::Uml::theOther(*p_currAssocRole).name();
+					objAdjacentObs.insert(dstObject);
 
-				if(strSrcRoleName!=ascType.strSrcRoleName||strDstRoleName!=ascType.strDstRoleName)
-				{
-					continue;
 				}
-
-				// If everything has matched
-				objAdjacentObs.insert(dstObject);
-		
-				
-			}			
+			}
 		}
 	}
 
@@ -303,20 +324,131 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType, 
 				if ((::Uml::Namespace) clsDstType.parent_ns() != ::Uml::Namespace(NULL))
 					clsDst_cross_ph_name += (string)(((::Uml::Namespace) clsDstType.parent_ns()).name());
 
-				//we have to translate ascType as well
-				string clsAssociation_name;
-				if (ascType.clsAssociation) {
-					clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
-					if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
-						clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
-				}
-				AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), clsAssociation_name) :  ascType.clsAssociation);
-				newAscType.strSrcRoleName = ascType.strSrcRoleName;
-				newAscType.strDstRoleName = ascType.strDstRoleName;
+				string cross_clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
+				if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
+				  cross_clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
 
-				set<Object> ret = src_o.GetAdjacentObjects(::Uml::classByName(::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)),clsDst_cross_ph_name), newAscType);
-				for(set<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
-					objAdjacentObs.insert(pr->GetRealObject(*ret_i));
+				::Uml::Class cross_cl = ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), cross_clsAssociation_name );
+
+				//we have to translate ascType as well
+				AssociationInfo newAscType(ascType.clsAssociation ? cross_cl : ascType.clsAssociation);
+
+				// don't proceed if no cross association was found
+				if ((ascType.clsAssociation != ::Uml::Class(NULL) && newAscType.clsAssociation != ::Uml::Class(NULL)) || ascType.clsAssociation == ::Uml::Class(NULL))
+				{
+					newAscType.strSrcRoleName = ascType.strSrcRoleName;
+					newAscType.strDstRoleName = ascType.strDstRoleName;
+
+					multiset<Object> ret = src_o.GetAdjacentObjects(::Uml::classByName(::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)),clsDst_cross_ph_name), newAscType);
+					for(multiset<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
+						objAdjacentObs.insert(pr->GetRealObject(*ret_i));
+				
+				}
+			}
+		}
+	};
+
+
+	return objAdjacentObs;
+
+};
+
+// UDM TOMI Paradigm Independent Interface
+// Retrieves the adjacent objects, together with the association class,
+// of an object via link instance of ascType. 
+// The adjacent objects are of the type of clsType or derived from it. 
+// The returned set can be empty. Composition relationships are not considered here. Associations without an association class are ignored.
+// Parameter clsType can be null.
+UDM_DLL multiset< pair<Object, Object> > Object::GetAdjacentObjectsWithAssocClasses(const ::Uml::Class & clsDstType, const AssociationInfo& ascType)
+{
+	multiset< pair<Udm::Object, Udm::Object> > objAdjacentObs;
+	::Uml::Class srcClass= type();
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+
+	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+					p_currClass!=ancestorClasses.end(); p_currClass++)
+	{
+		// Getting the association roles and iterating through them
+		set< ::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+		for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
+							p_currAssocRole!=assocRoles.end();p_currAssocRole++)
+		{
+
+			// Checking role names
+			string strSrcRoleName = p_currAssocRole->name();
+			string strDstRoleName = ::Uml::theOther(*p_currAssocRole).name();
+
+			if ((strSrcRoleName != ascType.strSrcRoleName && !ascType.strSrcRoleName.empty()) || (strDstRoleName != ascType.strDstRoleName && !ascType.strDstRoleName.empty()))
+				continue;
+
+			// Check if there is an association class for this role
+			::Uml::Association assoc = ::Uml::theOther(*p_currAssocRole).parent();
+			::Uml::Class assoc_cls = assoc.assocClass();
+			if (assoc_cls == ::Uml::Class(NULL))
+				continue;
+
+			vector<ObjectImpl*> assocs = impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::CLASSFROMTARGET);
+
+			for(vector<ObjectImpl*>::iterator p_currAssoc = assocs.begin(); p_currAssoc != assocs.end(); p_currAssoc++)
+			{
+				Udm::Object assocCls_obj(*p_currAssoc);
+				::Uml::Class clsAssociation = assocCls_obj.type();
+
+				// Checking association class type
+				if (ascType.clsAssociation != ::Uml::Class(NULL) && ascType.clsAssociation != clsAssociation && !::Uml::IsDerivedFrom(clsAssociation, ascType.clsAssociation))
+					continue;
+
+				// Get and test the peers
+				vector<ObjectImpl*> dstPeers = assocCls_obj.impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::TARGETFROMCLASS);
+				for(vector<ObjectImpl*>::iterator p_currDstPeer = dstPeers.begin(); p_currDstPeer != dstPeers.end(); p_currDstPeer++)
+				{
+					Udm::Object dstObject(*p_currDstPeer);
+						
+					// Checking class type
+					if(clsDstType!=::Uml::Class(NULL) && !::Uml::IsDerivedFrom(dstObject.type(),clsDstType))
+						continue;		
+
+					objAdjacentObs.insert(make_pair(dstObject, assocCls_obj));
+
+				}
+			}
+		}
+	}
+
+	//additive recursion for cross links
+	if (__impl()->__getdn()->GetProject())
+	{
+
+		UdmProject * pr = __impl()->__getdn()->GetProject();
+		Object src_o = pr->GetPlaceHolder(*this, false);
+		if(src_o)
+		{
+			if (pr->HasCrossMeta())
+			{
+				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter;
+				if ((::Uml::Namespace) clsDstType.parent_ns() != ::Uml::Namespace(NULL))
+					clsDst_cross_ph_name += (string)(((::Uml::Namespace) clsDstType.parent_ns()).name());
+
+				string cross_clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
+				if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
+				  cross_clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
+
+				::Uml::Class cross_cl = ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), cross_clsAssociation_name );
+
+				//we have to translate ascType as well
+				AssociationInfo newAscType(ascType.clsAssociation ? cross_cl : ascType.clsAssociation);
+
+				// don't proceed if no cross association was found
+				if ((ascType.clsAssociation != ::Uml::Class(NULL) && newAscType.clsAssociation != ::Uml::Class(NULL)) || ascType.clsAssociation == ::Uml::Class(NULL))
+				{
+					newAscType.strSrcRoleName = ascType.strSrcRoleName;
+					newAscType.strDstRoleName = ascType.strDstRoleName;
+
+					multiset< pair<Object, Object> > ret = src_o.GetAdjacentObjectsWithAssocClasses(::Uml::classByName(::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)),clsDst_cross_ph_name), newAscType);
+					for(multiset<pair<Object, Object> >::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
+						objAdjacentObs.insert(make_pair(pr->GetRealObject(ret_i->first), pr->GetRealObject(ret_i->second)));
+				
+				}
 			}
 		}
 	};
