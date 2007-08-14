@@ -5,11 +5,15 @@
 #include <stdexcept>
 #include <sstream>
 #include <UdmBase.h>
-#define CS_IN_UDMCINT
 #include <UdmCintSwig.h>
 #include <fstream>
 #include "GeneTF_xsd.h"
-#include "Uml_xsd.h"
+
+
+namespace Uml_xsd
+{
+ const std::string& getString();
+}
 
 void UdmTests::Test::readFromFile(std::istream& in, std::string& str)
 {
