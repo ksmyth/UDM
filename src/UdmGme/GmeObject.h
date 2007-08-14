@@ -104,8 +104,13 @@ namespace UdmGme
 		virtual long getAttrStatus(const ::Uml::Attribute &meta) const;
 
 	
-	// array attribute setters/getters are wrapped in ObjectImpl 
+	// array attribute setters/getters for non-string values are wrapped in ObjectImpl 
 	// relaying on set/get StringAttr
+
+	//	string array version overridden here to get/set annotations
+
+		virtual vector<string> getStringAttrArr(const ::Uml::Attribute &meta) const;
+		virtual void setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct = true);
 
 
 
