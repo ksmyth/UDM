@@ -514,8 +514,8 @@ usage:
       // call java API generation
 		if (generate_java) 
 		{
-      JavaAPIGen gen;
-			gen.generate(diagram, ns_map, inputfile);
+      JavaAPIGen gen(diagram, ns_map, inputfile);
+			gen.generate();
 			return 0;
 		}
 
