@@ -98,7 +98,7 @@
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
-			Name="BootUdmCompile|Win32"
+			Name="BootUdmCompile Release|Win32"
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
@@ -117,6 +117,55 @@
 			<Tool
 				Name="VCLibrarianTool"
 				OutputFile="../../lib/Uml.lib"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy .\Uml.h ..\..\include"/>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="if exist ..\..\etc\Uml_udm.xml attrib -r ..\..\etc\Uml_udm.xml
+if exist *.cpp attrib -r *.cpp
+if exist *.h attrib -r *.h
+if exist *.xsd attrib -r *.xsd
+if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
+"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="BootUdmCompile Debug|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="$(UDM_PATH)/include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT"
+				MinimalRebuild="TRUE"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="TRUE"
+				DebugInformationFormat="4"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="../../lib/UmlD.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -180,11 +229,18 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 					Outputs=""/>
 			</FileConfiguration>
 			<FileConfiguration
-				Name="BootUdmCompile|Win32">
+				Name="BootUdmCompile Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="%UDM_PATH%\bin.net\Udm.exe &quot;$(InputPath)&quot; -m -l UDM_DLL
 "
+					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="BootUdmCompile Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="%UDM_PATH%\bin.net\Udm.exe &quot;$(InputPath)&quot; -m -l UDM_DLL"
 					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
 			</FileConfiguration>
 		</File>
@@ -205,13 +261,20 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 					Outputs=""/>
 			</FileConfiguration>
 			<FileConfiguration
-				Name="BootUdmCompile|Win32">
+				Name="BootUdmCompile Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="cd &quot;$(InputDir)&quot;
 &quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
 "
 					Outputs="$(InputDir)$(InputName).mga;$(InputDir)Uml_udm.xml"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="BootUdmCompile Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine=""
+					Outputs=""/>
 			</FileConfiguration>
 		</File>
 	</Files>
