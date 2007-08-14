@@ -619,7 +619,7 @@
 	</target>
 
 	<!-- Run unit test on the distribution packages -->
-	<target name="test" depends="init" description="Run unit tests.">
+	<target name="test" depends="dist-all" description="Run unit tests.">
 		<!-- directory where junit reports go -->
 		<property name="build.reports.tests.dir" location="${build.dir}/report" />
 		<mkdir dir="${build.reports.tests.dir}/xml" />
@@ -647,12 +647,18 @@
 		
 	<!-- Run a batch test for a domain specific package -->
 	<target name="ds-test">
-		<echo> "Test ${dspackage}... ${build.dir}/${dspackage}" </echo>
+		<echo> Test ${dspackage}... </echo>
 		<fail unless="dspackage" message="Missing parameter: dspackage" />
-		<echo> "parameter ready" </echo>
-		<echo> "${build.dir}/${dspackage}" </echo>
+		<!-- Copy the necessary xml files -->
+		<copy todir="samples/">
+			<fileset dir="samples/${dspackage}/samples">
+				<include name="*.xml" />
+			</fileset>
+		</copy>
+		
+		<!-- Run junit tests -->
 		<junit fork="yes" >
-			<!-- This is necessary for System.loadLibrary("UdmCint") to succeed -->
+			<!-- This is necessary for System.load("UdmSwig") to succeed -->
 			<jvmarg value="-Djava.library.path=${judm.dir}" />
 			<!-- We need to add the dir containing the DLLs that UdmCint depends on
 				to the PATH rather than java.library.path. Unfortunately they won't be
@@ -670,6 +676,14 @@
 				</fileset>
 			</batchtest>
 		</junit>
+
+		<!-- Delete the intermediate xml files -->
+		<delete>
+			<fileset dir="samples/">
+				<include name="*.xml" />
+				<include name="*.txt" />
+			</fileset>
+		</delete>
 	</target>
 
 	<!-- Generate a domain specific package -->
