@@ -65,7 +65,7 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
-03/24/06		Release 3.0.1
+03/30/06		Release 3.0.1
 
 		-	Upgraded to GME 5.11.18
 
