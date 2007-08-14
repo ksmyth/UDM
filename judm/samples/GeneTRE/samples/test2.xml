@@ -1,4 +1,4 @@
-<GeneTRE:Container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:GeneTRE="http://kutykuruty.khm.edu" xsi:schemaLocation="http://kutykuruty.khm.edu GeneTRE.xsd">
+<GeneTRE:Container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:GeneTRE="http://www.isis.vanderbilt.edu/2004/schemas/GeneTRE" xsi:schemaLocation="http://www.isis.vanderbilt.edu/2004/schemas/GeneTRE GeneTRE.xsd">
 	<GeneTRE:Gene _id="id9e" name="jojo" site="idae"/>
 	<GeneTRE:PWM _id="ida6" gene="idae" name="PWM"/>
 	<GeneTRE:TF name="toto"/>

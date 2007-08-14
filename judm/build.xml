@@ -211,7 +211,7 @@
 		<antcall target="ds-generate">
 			<param name="dspackage" value="GeneTRE" />
 			<param name="dspackagelower" value="genetre" />
-			<param name="udm_options" value=" -j -u GeneTRE=http://kutykuruty.khm.edu" />
+			<param name="udm_options" value=" -j" />
 		</antcall>
 		<!-- SBML2Ex -->
 		<antcall target="ds-generate">
@@ -370,10 +370,7 @@
 		<!-- Copy the domain specific source  -->
 		<mkdir dir="${build.dir}/${dspackage}/src/main/edu" />
 		<copy todir="${build.dir}/${dspackage}/src/main/edu">
-			<fileset dir="samples/${dspackage}/src/main/edu">
-				<include name="**/*.java" />
-				<include name="**/*.html" />
-			</fileset>
+			<fileset dir="samples/${dspackage}/src/main/edu"/>
 		</copy>
 		
 		<mkdir dir="${build.dir}/${dspackage}/src/test" />
@@ -395,7 +392,11 @@
 		<delete dir="${udm.dir}/samples/Java/${dspackage}" />
 		<mkdir dir="${udm.dir}/samples/Java/${dspackage}" />
 		<copy todir="${udm.dir}/samples/Java/${dspackage}">
-			<fileset dir="${build.dir}/${dspackage}"/>
+			<fileset dir="${build.dir}/${dspackage}">
+				<include name="**/*.jar" />
+				<include name="**/*.cmd" />
+				<include name="**/*.sh" />
+			</fileset>
 		</copy>
 		
 	</target>
