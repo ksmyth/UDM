@@ -1,7 +1,7 @@
 #ifndef MOBIES_UML_H
 #define MOBIES_UML_H
 // header file Uml.h generated from diagram Uml
-// generated on Thu May 19 17:45:36 2005
+// generated on Sun May 22 14:45:50 2005
 
 #ifndef MOBIES_UDMBASE_H
 #include "UdmBase.h"
@@ -14,8 +14,8 @@ namespace Uml {
 	UDM_DLL void Initialize();
 
 	namespace Uml {
-		class UDM_DLL CompositionChildRole;
 		class UDM_DLL Diagram;
+		class UDM_DLL CompositionChildRole;
 		class UDM_DLL CompositionParentRole;
 		class UDM_DLL AssociationRole;
 		class UDM_DLL Association;
@@ -59,11 +59,11 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::Diagram> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::Diagram>(impl);}
 
-			static ::Uml::Uml::Attribute meta_version;
-			Udm::StringAttr version() const { return Udm::StringAttr(impl, meta_version); }
-
 			static ::Uml::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
+
+			static ::Uml::Uml::Attribute meta_version;
+			Udm::StringAttr version() const { return Udm::StringAttr(impl, meta_version); }
 
 			static ::Uml::Uml::CompositionChildRole meta_namespaces;
 			Udm::ChildrenAttr< ::Uml::Uml::Namespace> namespaces() const { return Udm::ChildrenAttr< ::Uml::Uml::Namespace>(impl, meta_namespaces); }
@@ -97,22 +97,22 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::Association> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::Association>(impl);}
 
-			static ::Uml::Uml::Attribute meta_nonpersistent;
-			Udm::BooleanAttr nonpersistent() const { return Udm::BooleanAttr(impl, meta_nonpersistent); }
-
 			static ::Uml::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
+
+			static ::Uml::Uml::Attribute meta_nonpersistent;
+			Udm::BooleanAttr nonpersistent() const { return Udm::BooleanAttr(impl, meta_nonpersistent); }
 
 			static ::Uml::Uml::AssociationRole meta_assocClass;
 			Udm::PointerAttr< ::Uml::Uml::Class> assocClass() const { return Udm::PointerAttr< ::Uml::Uml::Class>(impl, meta_assocClass); }
 
-			static ::Uml::Uml::CompositionChildRole meta_tagValues;
-			Udm::ChildrenAttr< ::Uml::Uml::TaggedValue> tagValues() const { return Udm::ChildrenAttr< ::Uml::Uml::TaggedValue>(impl, meta_tagValues); }
-			template <class Pred> Udm::ChildrenAttr< ::Uml::Uml::TaggedValue, Pred> tagValues_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::TaggedValue, Pred>(impl, meta_tagValues); }
-
 			static ::Uml::Uml::CompositionChildRole meta_roles;
 			Udm::ChildrenAttr< ::Uml::Uml::AssociationRole> roles() const { return Udm::ChildrenAttr< ::Uml::Uml::AssociationRole>(impl, meta_roles); }
 			template <class Pred> Udm::ChildrenAttr< ::Uml::Uml::AssociationRole, Pred> roles_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::AssociationRole, Pred>(impl, meta_roles); }
+
+			static ::Uml::Uml::CompositionChildRole meta_tagValues;
+			Udm::ChildrenAttr< ::Uml::Uml::TaggedValue> tagValues() const { return Udm::ChildrenAttr< ::Uml::Uml::TaggedValue>(impl, meta_tagValues); }
+			template <class Pred> Udm::ChildrenAttr< ::Uml::Uml::TaggedValue, Pred> tagValues_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::TaggedValue, Pred>(impl, meta_tagValues); }
 
 			Udm::ChildrenAttr< ::Uml::Uml::AssociationRole> Uml_AssociationRole_kind_children() const { return Udm::ChildrenAttr< ::Uml::Uml::AssociationRole>(impl, Udm::NULLCHILDROLE); }
 			template<class Pred> Udm::ChildrenAttr< ::Uml::Uml::AssociationRole, Pred> Uml_AssociationRole_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::AssociationRole, Pred>(impl, Udm::NULLCHILDROLE); }
@@ -150,17 +150,17 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::TaggedValue> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::TaggedValue>(impl);}
 
-			static ::Uml::Uml::Attribute meta_value;
-			Udm::StringAttr value() const { return Udm::StringAttr(impl, meta_value); }
-
 			static ::Uml::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
 
-			static ::Uml::Uml::CompositionParentRole meta_classParent;
-			Udm::ParentAttr< ::Uml::Uml::Class> classParent() const { return Udm::ParentAttr< ::Uml::Uml::Class>(impl, meta_classParent); }
+			static ::Uml::Uml::Attribute meta_value;
+			Udm::StringAttr value() const { return Udm::StringAttr(impl, meta_value); }
 
 			static ::Uml::Uml::CompositionParentRole meta_assocParent;
 			Udm::ParentAttr< ::Uml::Uml::Association> assocParent() const { return Udm::ParentAttr< ::Uml::Uml::Association>(impl, meta_assocParent); }
+
+			static ::Uml::Uml::CompositionParentRole meta_classParent;
+			Udm::ParentAttr< ::Uml::Uml::Class> classParent() const { return Udm::ParentAttr< ::Uml::Uml::Class>(impl, meta_classParent); }
 
 			Udm::ParentAttr<Udm::Object> parent() const { return Udm::ParentAttr<Udm::Object>(impl, Udm::NULLPARENTROLE); }
 		};
@@ -187,17 +187,17 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::Composition> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::Composition>(impl);}
 
-			static ::Uml::Uml::Attribute meta_nonpersistent;
-			Udm::BooleanAttr nonpersistent() const { return Udm::BooleanAttr(impl, meta_nonpersistent); }
-
 			static ::Uml::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
 
-			static ::Uml::Uml::CompositionChildRole meta_childRole;
-			Udm::ChildAttr< ::Uml::Uml::CompositionChildRole> childRole() const { return Udm::ChildAttr< ::Uml::Uml::CompositionChildRole>(impl, meta_childRole); }
+			static ::Uml::Uml::Attribute meta_nonpersistent;
+			Udm::BooleanAttr nonpersistent() const { return Udm::BooleanAttr(impl, meta_nonpersistent); }
 
 			static ::Uml::Uml::CompositionChildRole meta_parentRole;
 			Udm::ChildAttr< ::Uml::Uml::CompositionParentRole> parentRole() const { return Udm::ChildAttr< ::Uml::Uml::CompositionParentRole>(impl, meta_parentRole); }
+
+			static ::Uml::Uml::CompositionChildRole meta_childRole;
+			Udm::ChildAttr< ::Uml::Uml::CompositionChildRole> childRole() const { return Udm::ChildAttr< ::Uml::Uml::CompositionChildRole>(impl, meta_childRole); }
 
 			Udm::ChildrenAttr< ::Uml::Uml::CompositionChildRole> Uml_CompositionChildRole_kind_children() const { return Udm::ChildrenAttr< ::Uml::Uml::CompositionChildRole>(impl, Udm::NULLCHILDROLE); }
 			template<class Pred> Udm::ChildrenAttr< ::Uml::Uml::CompositionChildRole, Pred> Uml_CompositionChildRole_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::CompositionChildRole, Pred>(impl, Udm::NULLCHILDROLE); }
@@ -238,13 +238,13 @@ namespace Uml {
 			static ::Uml::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
 
-			static ::Uml::Uml::CompositionChildRole meta_compositions;
-			Udm::ChildrenAttr< ::Uml::Uml::Composition> compositions() const { return Udm::ChildrenAttr< ::Uml::Uml::Composition>(impl, meta_compositions); }
-			template <class Pred> Udm::ChildrenAttr< ::Uml::Uml::Composition, Pred> compositions_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::Composition, Pred>(impl, meta_compositions); }
-
 			static ::Uml::Uml::CompositionChildRole meta_classes;
 			Udm::ChildrenAttr< ::Uml::Uml::Class> classes() const { return Udm::ChildrenAttr< ::Uml::Uml::Class>(impl, meta_classes); }
 			template <class Pred> Udm::ChildrenAttr< ::Uml::Uml::Class, Pred> classes_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::Class, Pred>(impl, meta_classes); }
+
+			static ::Uml::Uml::CompositionChildRole meta_compositions;
+			Udm::ChildrenAttr< ::Uml::Uml::Composition> compositions() const { return Udm::ChildrenAttr< ::Uml::Uml::Composition>(impl, meta_compositions); }
+			template <class Pred> Udm::ChildrenAttr< ::Uml::Uml::Composition, Pred> compositions_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::Composition, Pred>(impl, meta_compositions); }
 
 			static ::Uml::Uml::CompositionChildRole meta_associations;
 			Udm::ChildrenAttr< ::Uml::Uml::Association> associations() const { return Udm::ChildrenAttr< ::Uml::Uml::Association>(impl, meta_associations); }
@@ -286,11 +286,11 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::Class> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::Class>(impl);}
 
-			static ::Uml::Uml::Attribute meta_isAbstract;
-			Udm::BooleanAttr isAbstract() const { return Udm::BooleanAttr(impl, meta_isAbstract); }
-
 			static ::Uml::Uml::Attribute meta_stereotype;
 			Udm::StringAttr stereotype() const { return Udm::StringAttr(impl, meta_stereotype); }
+
+			static ::Uml::Uml::Attribute meta_isAbstract;
+			Udm::BooleanAttr isAbstract() const { return Udm::BooleanAttr(impl, meta_isAbstract); }
 
 			static ::Uml::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
@@ -321,13 +321,13 @@ namespace Uml {
 			Udm::AssocAttr< ::Uml::Uml::Class> subTypes() const { return Udm::AssocAttr< ::Uml::Uml::Class>(impl, meta_subTypes); }
 			template <class Pred> Udm::AssocAttr< ::Uml::Uml::Class, Pred > subTypes_sorted(const Pred &) const { return Udm::AssocAttr< ::Uml::Uml::Class, Pred>(impl, meta_subTypes); }
 
-			static ::Uml::Uml::CompositionChildRole meta_attributes;
-			Udm::ChildrenAttr< ::Uml::Uml::Attribute> attributes() const { return Udm::ChildrenAttr< ::Uml::Uml::Attribute>(impl, meta_attributes); }
-			template <class Pred> Udm::ChildrenAttr< ::Uml::Uml::Attribute, Pred> attributes_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::Attribute, Pred>(impl, meta_attributes); }
-
 			static ::Uml::Uml::CompositionChildRole meta_definitions;
 			Udm::ChildrenAttr< ::Uml::Uml::ConstraintDefinition> definitions() const { return Udm::ChildrenAttr< ::Uml::Uml::ConstraintDefinition>(impl, meta_definitions); }
 			template <class Pred> Udm::ChildrenAttr< ::Uml::Uml::ConstraintDefinition, Pred> definitions_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::ConstraintDefinition, Pred>(impl, meta_definitions); }
+
+			static ::Uml::Uml::CompositionChildRole meta_attributes;
+			Udm::ChildrenAttr< ::Uml::Uml::Attribute> attributes() const { return Udm::ChildrenAttr< ::Uml::Uml::Attribute>(impl, meta_attributes); }
+			template <class Pred> Udm::ChildrenAttr< ::Uml::Uml::Attribute, Pred> attributes_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Uml::Attribute, Pred>(impl, meta_attributes); }
 
 			static ::Uml::Uml::CompositionChildRole meta_constraints;
 			Udm::ChildrenAttr< ::Uml::Uml::Constraint> constraints() const { return Udm::ChildrenAttr< ::Uml::Uml::Constraint>(impl, meta_constraints); }
@@ -376,11 +376,11 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::Constraint> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::Constraint>(impl);}
 
-			static ::Uml::Uml::Attribute meta_description;
-			Udm::StringAttr description() const { return Udm::StringAttr(impl, meta_description); }
-
 			static ::Uml::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
+
+			static ::Uml::Uml::Attribute meta_description;
+			Udm::StringAttr description() const { return Udm::StringAttr(impl, meta_description); }
 
 			static ::Uml::Uml::Attribute meta_expression;
 			Udm::StringAttr expression() const { return Udm::StringAttr(impl, meta_expression); }
@@ -412,11 +412,11 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::GenericRole> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::GenericRole>(impl);}
 
-			static ::Uml::Uml::Attribute meta_isNavigable;
-			Udm::BooleanAttr isNavigable() const { return Udm::BooleanAttr(impl, meta_isNavigable); }
-
 			static ::Uml::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
+
+			static ::Uml::Uml::Attribute meta_isNavigable;
+			Udm::BooleanAttr isNavigable() const { return Udm::BooleanAttr(impl, meta_isNavigable); }
 
 			Udm::ParentAttr<Udm::Object> parent() const { return Udm::ParentAttr<Udm::Object>(impl, Udm::NULLPARENTROLE); }
 		};
@@ -443,11 +443,11 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::CompositionChildRole> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::CompositionChildRole>(impl);}
 
-			static ::Uml::Uml::Attribute meta_max;
-			Udm::IntegerAttr max() const { return Udm::IntegerAttr(impl, meta_max); }
-
 			static ::Uml::Uml::Attribute meta_min;
 			Udm::IntegerAttr min() const { return Udm::IntegerAttr(impl, meta_min); }
+
+			static ::Uml::Uml::Attribute meta_max;
+			Udm::IntegerAttr max() const { return Udm::IntegerAttr(impl, meta_max); }
 
 			static ::Uml::Uml::AssociationRole meta_target;
 			Udm::PointerAttr< ::Uml::Uml::Class> target() const { return Udm::PointerAttr< ::Uml::Uml::Class>(impl, meta_target); }
@@ -509,11 +509,11 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::AssociationRole> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::AssociationRole>(impl);}
 
-			static ::Uml::Uml::Attribute meta_max;
-			Udm::IntegerAttr max() const { return Udm::IntegerAttr(impl, meta_max); }
-
 			static ::Uml::Uml::Attribute meta_min;
 			Udm::IntegerAttr min() const { return Udm::IntegerAttr(impl, meta_min); }
+
+			static ::Uml::Uml::Attribute meta_max;
+			Udm::IntegerAttr max() const { return Udm::IntegerAttr(impl, meta_max); }
 
 			static ::Uml::Uml::Attribute meta_isPrimary;
 			Udm::BooleanAttr isPrimary() const { return Udm::BooleanAttr(impl, meta_isPrimary); }
@@ -548,11 +548,11 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::Attribute> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::Attribute>(impl);}
 
-			static ::Uml::Uml::Attribute meta_name;
-			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
-
 			static ::Uml::Uml::Attribute meta_type;
 			Udm::StringAttr type() const { return Udm::StringAttr(impl, meta_type); }
+
+			static ::Uml::Uml::Attribute meta_name;
+			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
 
 			static ::Uml::Uml::Attribute meta_defvalue;
 			Udm::StringAttrArr defvalue() const { return Udm::StringAttrArr(impl, meta_defvalue); }
@@ -602,11 +602,11 @@ namespace Uml {
 
 			Udm::ArchetypeAttr< ::Uml::Uml::ConstraintDefinition> Archetype() { return Udm::ArchetypeAttr< ::Uml::Uml::ConstraintDefinition>(impl);}
 
-			static ::Uml::Uml::Attribute meta_stereotype;
-			Udm::StringAttr stereotype() const { return Udm::StringAttr(impl, meta_stereotype); }
-
 			static ::Uml::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
+
+			static ::Uml::Uml::Attribute meta_stereotype;
+			Udm::StringAttr stereotype() const { return Udm::StringAttr(impl, meta_stereotype); }
 
 			static ::Uml::Uml::Attribute meta_parameterList;
 			Udm::StringAttr parameterList() const { return Udm::StringAttr(impl, meta_parameterList); }
