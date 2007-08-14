@@ -715,10 +715,14 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		}
 
 		for ( i = 0 ; i < vecErrors.size() ; i++ ) {
-			for ( int j = 0 ; j < vecDependencySets.size() ; j++ ) {
-				OclMeta::Dependency dep = OclMeta::Dependency::LookUp( vecDependencySets[ j ], vecErrors[ i ] );
-				if ( ! ( dep.m_strSignature == "#" ) ) {
-					OclMeta::Dependency::SetChecked( vecDependencySets[ j ], dep, true );
+			for ( int j = 0 ; j < vecDependencySets.size() ; j++ ) 
+			{
+				std::set<OclMeta::Dependency>::iterator dep_i = OclMeta::Dependency::LookUp( vecDependencySets[ j ], vecErrors[ i ] );
+				if (dep_i == vecDependencySets[ j ].end()) continue;
+				OclMeta::Dependency dep = *dep_i;
+				if ( ! ( dep.m_strSignature == "#" ) ) 
+				{
+					OclMeta::Dependency::SetChecked( vecDependencySets[ j ], dep_i, true );
 					std::string strSignature = GetSignature( m_vecConstraintDefs[ j ] );
 					/*
 						// this find function could not be compiled with VC7.x .NET'w own STL
