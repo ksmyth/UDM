@@ -177,7 +177,7 @@ public class GeneTREStringInstanceTest extends TestCase {
     * @throws UdmException
     */
     public void testCreateBlankInstance() throws UdmException {
-        ContainerStringFactory gtf = FactoryRepository.getGeneTREContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetreContainerStringFactory();
         Container con = gtf.create();
 
         fillContainer(con);
@@ -203,7 +203,7 @@ public class GeneTREStringInstanceTest extends TestCase {
         } catch (IOException e) {
         }
 
-        ContainerStringFactory gtf = FactoryRepository.getGeneTREContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetreContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
         Container con = null;
         if (rootUPO instanceof Container) {
@@ -235,7 +235,7 @@ public class GeneTREStringInstanceTest extends TestCase {
         } catch (IOException e) {
         }
 
-        ContainerStringFactory gtf = FactoryRepository.getGeneTREContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetreContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
         Container con = null;
         if (rootUPO instanceof Container) {
@@ -254,7 +254,7 @@ public class GeneTREStringInstanceTest extends TestCase {
      * @throws UdmException
      */
     public void testCreateToStreamBlankInstance() throws UdmException {
-        ContainerStringFactory gtf = FactoryRepository.getGeneTREContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetreContainerStringFactory();
         Container con = gtf.create();
 
         fillContainer(con);
@@ -274,7 +274,7 @@ public class GeneTREStringInstanceTest extends TestCase {
         } catch (IOException e) {
         }
 
-        ContainerStringFactory gtf = FactoryRepository.getGeneTREContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetreContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
         Container con = null;
         if (rootUPO instanceof Container) {
@@ -300,7 +300,7 @@ public class GeneTREStringInstanceTest extends TestCase {
         } catch (IOException e) {
         }
 
-        ContainerStringFactory gtf = FactoryRepository.getGeneTREContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetreContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
         Container con = null;
         if (rootUPO instanceof Container) {

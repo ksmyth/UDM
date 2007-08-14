@@ -175,7 +175,7 @@ public class GeneTREFileInstanceTest extends TestCase {
      * @throws UdmException
      */
     public void testCreateBlankInstance() throws UdmException {
-        ContainerFileFactory gtf = FactoryRepository.getGeneTREContainerFileFactory();
+        ContainerFileFactory gtf = FactoryRepository.getgenetreContainerFileFactory();
         Container con = gtf.create(NEW_INSTANCE_FILE);
 
         fillContainer(con);
@@ -191,7 +191,7 @@ public class GeneTREFileInstanceTest extends TestCase {
      * @throws UdmException
      */
     public void testOpenExistingFromFile() throws UdmException {
-        ContainerFileFactory gtf = FactoryRepository.getGeneTREContainerFileFactory();
+        ContainerFileFactory gtf = FactoryRepository.getgenetreContainerFileFactory();
         Container con = gtf.open(NEW_INSTANCE_FILE);
 
         System.out.println("\ntestOpenExistingFromFile():\n");
@@ -206,7 +206,7 @@ public class GeneTREFileInstanceTest extends TestCase {
      */
     public void testOpenExistingFromFileSaveToStream()
         throws UdmException {
-        ContainerFileFactory gtf = FactoryRepository.getGeneTREContainerFileFactory();
+        ContainerFileFactory gtf = FactoryRepository.getgenetreContainerFileFactory();
         Container con = gtf.open(NEW_INSTANCE_FILE);
 
         InputStream a = gtf.saveAsStream();
@@ -232,7 +232,7 @@ public class GeneTREFileInstanceTest extends TestCase {
             return;
         }
 
-        ContainerFileFactory gtf = FactoryRepository.getGeneTREContainerFileFactory();
+        ContainerFileFactory gtf = FactoryRepository.getgenetreContainerFileFactory();
         Container con = gtf.open(xml);
 
         gtf.saveAs(BM_FILE_OUT);
