@@ -11,6 +11,9 @@ arising out of or in connection with the use or performance of
 this software.
 */
 /*
+11/23/05	-	endre
+		-	free string returned by _tempnam/tempnam
+
 12/12/04	-	endre
 
 		-	G++ 3 porting issues.
@@ -141,6 +144,7 @@ namespace Udm
 		//UdmDom::DomDataNetwork::DTDPath = t_dir_name;
 			
 		temp_path = t_dir_name;		
+		free(t_dir_name);
 	};
 
 	void UdmProject::DeCompress()
@@ -663,11 +667,7 @@ namespace Udm
 		// this is needed because of setting associations to null has a meaning - deleting links
 		if(!o) return o;
 
-		//The classname in cross diagram is: classname + "_cross_ph_" + diagramname
-		string cross_cl_name = string(o.type().name()) + string(Udm::cross_delimiter);
-		if ((::Uml::Namespace) o.type().parent_ns() != ::Uml::Namespace(NULL))
-			cross_cl_name += string(::Uml::Namespace(o.type().parent_ns()).name());
-		::Uml::Class ph_class = Uml::classByName(*(cross_meta->dgr), cross_cl_name);
+		::Uml::Class ph_class = Uml::GetClassFromCrossDgr(*(cross_meta->dgr), o.type());
 
 		set<Udm::Object> ph_children = root_object.GetChildObjects(ph_class);
 		set<Udm::Object>::iterator ph_c_i = ph_children.begin();

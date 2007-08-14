@@ -221,10 +221,8 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 		{
 			if (pr->HasCrossMeta())
 			{
-				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter;
-				if ((::Uml::Namespace) clsDstType.parent_ns() != ::Uml::Namespace(NULL))
-					clsDst_cross_ph_name += (string)(((::Uml::Namespace) clsDstType.parent_ns()).name());
-				multiset<Object> ret = src_o.GetAdjacentObjects(Uml::classByName(*(pr->GetCrossMeta().dgr),clsDst_cross_ph_name));
+				::Uml::Class cross_clsDstType = ::Uml::GetClassFromCrossDgr(*(pr->GetCrossMeta().dgr), clsDstType);
+				multiset<Object> ret = src_o.GetAdjacentObjects(cross_clsDstType);
 				for(multiset<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
 					objAdjacentObs.insert(pr->GetRealObject(*ret_i));
 			}
@@ -330,22 +328,10 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 		{
 			if (pr->HasCrossMeta())
 			{
-				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter;
-				if ((::Uml::Namespace) clsDstType.parent_ns() != ::Uml::Namespace(NULL))
-					clsDst_cross_ph_name += (string)(((::Uml::Namespace) clsDstType.parent_ns()).name());
-
-				string cross_clsAssociation_name;
-				if (ascType.clsAssociation)
-				{
-					cross_clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
-					if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
-						cross_clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
-				}
-
 				//we have to translate ascType as well
 				::Uml::Class newAscTypeCl;
 				if (ascType.clsAssociation)
-					newAscTypeCl = ::Uml::classByName( *(pr->GetCrossMeta().dgr), cross_clsAssociation_name );
+					newAscTypeCl = ::Uml::GetClassFromCrossDgr( *(pr->GetCrossMeta().dgr), ascType.clsAssociation );
 				AssociationInfo newAscType(newAscTypeCl);
 
 				// don't proceed if no cross association was found
@@ -354,7 +340,8 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 					newAscType.strSrcRoleName = ascType.strSrcRoleName;
 					newAscType.strDstRoleName = ascType.strDstRoleName;
 
-					multiset<Object> ret = src_o.GetAdjacentObjects(::Uml::classByName(*(pr->GetCrossMeta().dgr),clsDst_cross_ph_name), newAscType);
+					::Uml::Class cross_clsDstType = ::Uml::GetClassFromCrossDgr(*(pr->GetCrossMeta().dgr), clsDstType);
+					multiset<Object> ret = src_o.GetAdjacentObjects(cross_clsDstType, newAscType);
 					for(multiset<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
 						objAdjacentObs.insert(pr->GetRealObject(*ret_i));
 				
@@ -445,22 +432,10 @@ UDM_DLL multiset< pair<Object, Object> > Object::GetAdjacentObjectsWithAssocClas
 		{
 			if (pr->HasCrossMeta())
 			{
-				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter;
-				if ((::Uml::Namespace) clsDstType.parent_ns() != ::Uml::Namespace(NULL))
-					clsDst_cross_ph_name += (string)(((::Uml::Namespace) clsDstType.parent_ns()).name());
-
-				string cross_clsAssociation_name;
-				if (ascType.clsAssociation)
-				{
-					cross_clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
-					if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
-						cross_clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
-				}
-
 				//we have to translate ascType as well
 				::Uml::Class newAscTypeCl;
 				if (ascType.clsAssociation)
-					newAscTypeCl = ::Uml::classByName( *(pr->GetCrossMeta().dgr), cross_clsAssociation_name );
+					newAscTypeCl = ::Uml::GetClassFromCrossDgr( *(pr->GetCrossMeta().dgr), ascType.clsAssociation );
 				
 				AssociationInfo newAscType(newAscTypeCl);
 
@@ -470,7 +445,8 @@ UDM_DLL multiset< pair<Object, Object> > Object::GetAdjacentObjectsWithAssocClas
 					newAscType.strSrcRoleName = ascType.strSrcRoleName;
 					newAscType.strDstRoleName = ascType.strDstRoleName;
 
-					multiset< pair<Object, Object> > ret = src_o.GetAdjacentObjectsWithAssocClasses(::Uml::classByName(*(pr->GetCrossMeta().dgr),clsDst_cross_ph_name), newAscType);
+					::Uml::Class cross_clsDstType = ::Uml::GetClassFromCrossDgr( *(pr->GetCrossMeta().dgr), clsDstType );
+					multiset< pair<Object, Object> > ret = src_o.GetAdjacentObjectsWithAssocClasses(cross_clsDstType, newAscType);
 					for(multiset<pair<Object, Object> >::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
 						objAdjacentObs.insert(make_pair(pr->GetRealObject(ret_i->first), pr->GetRealObject(ret_i->second)));
 				
@@ -1182,13 +1158,11 @@ UDM_DLL set<Object> Object::GetAssociationClassObjects(Object dstObject, const A
 
 			//it's ok for dst_o to be NULL
 			//we have to translate ascType as well
-			string clsAssociation_name;
-			if (ascType.clsAssociation) {
-				clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
-				if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
-					clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
-			}
-			AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( *(pr->GetCrossMeta().dgr), clsAssociation_name) :  ascType.clsAssociation);
+			::Uml::Class newAscTypeCl;
+			if (ascType.clsAssociation)
+				newAscTypeCl = ::Uml::GetClassFromCrossDgr( *(pr->GetCrossMeta().dgr), ascType.clsAssociation );
+			AssociationInfo newAscType(newAscTypeCl);
+
 			newAscType.strSrcRoleName = ascType.strSrcRoleName;
 			newAscType.strDstRoleName = ascType.strDstRoleName;
 

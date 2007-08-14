@@ -10,6 +10,12 @@ in an action of contract, negligence or other tortious action,
 arising out of or in connection with the use or performance of
 this software.
 
+  11/23/05 - endre
+   - make DOM3GetElementAncestor non-recursive
+   - optimize DOM3LookupNamespaceURI to fetch attribute prefix and value only
+     when needed
+   - fix memory leaks in DomObject::DSFind and MyEntityResolver::CheckForVersionInfo
+
   04/22/05 - kalmar
 
    - added setDomParserExternalSchemaLocation, which allows the parser to use 
@@ -301,12 +307,12 @@ namespace UdmDom
 
 	const DOM_Node DOM3GetElementAncestor(const DOM_Node &currentNode) {
 		DOM_Node parent = currentNode.getParentNode();
-		if (parent != 0) {
+		while (parent != 0) {
 			short type = parent.getNodeType();
 			if (type == DOM_Node::ELEMENT_NODE) {
 				return parent;
 			}
-			return DOM3GetElementAncestor(parent);
+			parent = parent.getParentNode();
 		}
 		return parent;
 	}
@@ -335,20 +341,21 @@ namespace UdmDom
 					int length = nodeMap.getLength();
 					for (int i = 0; i < length; i++) {
 						DOM_Node attr = nodeMap.item(i);
-						DOMString attrPrefix = attr.getPrefix();
-						DOMString value = attr.getNodeValue();
 						ns = attr.getNamespaceURI();
 
 						if (ns != 0 && ns.equals(XMLUni::fgXMLNSURIName)) {
 							// at this point we are dealing with DOM Level 2 nodes only
 							if (specifiedPrefix == 0 && attr.getNodeName().equals(XMLUni::fgXMLNSString)) {
 								// default namespace
-								return value;
-							} else if (attrPrefix != 0 &&
-                                   attrPrefix.equals(XMLUni::fgXMLNSString) &&
-                                   attr.getLocalName().equals(specifiedPrefix)) {
-								// non default namespace
-								return value;
+								return attr.getNodeValue();
+							} else {
+								DOMString attrPrefix = attr.getPrefix();
+								if (attrPrefix != 0 &&
+									attrPrefix.equals(XMLUni::fgXMLNSString) &&
+									attr.getLocalName().equals(specifiedPrefix)) {
+									// non default namespace
+									return attr.getNodeValue();
+								}
 							}
 						}
 					}
@@ -628,6 +635,7 @@ namespace UdmDom
 			for(int i = 0; i <= rl; i++) {
 				if(wcsncmp(rb++, wb, wl) == 0) return i; 
 			}
+			return -1;
 #else
 			const unsigned short * rb = where.rawBuffer();
 			const unsigned short * wb = what.rawBuffer();
@@ -653,15 +661,19 @@ namespace UdmDom
 			*(wb_copy+i) = '\0';
 	
 
-
+			int index = -1;
 			for(int i = 0; i <= rl; i++) {
-				if(strncmp(rb_copy + i, wb_copy, wl) == 0) return i; 
+				if(strncmp(rb_copy + i, wb_copy, wl) == 0) {
+					index = i;
+					break;
+				}
 			}
 
 			delete [] rb_copy;
 			delete [] wb_copy;
+
+			return index;
 #endif
-			return -1;
 		};
 
 
@@ -3105,7 +3117,9 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 						const char * interface_att_name="interface=\"";
 						const char * version_att_name="version=\"";
 
-						string version_string = DPI->getData().transcode();
+						const char * dpi_data = DPI->getData().transcode();
+						string version_string(dpi_data);
+						delete [] dpi_data;
 						string vs_1 = version_string.substr(version_string.find(interface_att_name) + strlen(interface_att_name), string::npos);
 						name = vs_1.substr(0, vs_1.find('"'));
 						string vs_2 = version_string.substr(version_string.find(version_att_name) + strlen(version_att_name), string::npos);

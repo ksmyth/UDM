@@ -17,6 +17,10 @@ this software.
 
 /*
 	CHANGELOG
+	11/24/05	-	endre
+
+					Added GetClassFromCrossDgr, which returns the corresponding class from the cross diagram
+
  	04/22/05	-	kalmar
         fixed OtherCompositionPeerParentRolesNamespaces : parents DescendantClasses need to be tested, too
 
@@ -416,13 +420,7 @@ namespace Uml
 		set<Class>::iterator i = anc_cs.begin();
 		while (i != anc_cs.end())
 		{
-			Class a_i = *i;
-			Namespace ns_i = a_i.parent_ns();
-			string cross_cl_name = string(a_i.name()) + Udm::cross_delimiter;
-			if (ns_i != Namespace(NULL))
-				cross_cl_name += string(ns_i.name());
-			//Class ph_a_i = classByName(cross_dgr, a_i.name());
-			Class ph_a_i = classByName(cross_dgr, cross_cl_name);
+			Class ph_a_i = GetClassFromCrossDgr(cross_dgr, *i);
 			if (ph_a_i)
 			{
 				set<AssociationRole> ret_i = AssociationTargetRoles(ph_a_i);
@@ -441,13 +439,7 @@ namespace Uml
 		set<Class>::iterator i = anc_cs.begin();
 		while (i != anc_cs.end())
 		{
-			Class a_i = *i;
-			Namespace ns_i = a_i.parent_ns();
-			string cross_cl_name = string(a_i.name()) + Udm::cross_delimiter;
-			if (ns_i != Namespace(NULL))
-				cross_cl_name += string(ns_i.name());
-			//Class ph_a_i = classByName(cross_dgr, a_i.name());
-			Class ph_a_i = classByName(cross_dgr, cross_cl_name);
+			Class ph_a_i = GetClassFromCrossDgr(cross_dgr, *i);
 			if (ph_a_i)
 			{
 				set<AssociationRole> ret_i = ph_a_i.associationRoles();
@@ -835,6 +827,16 @@ namespace Uml
 		if (nses.size() != 1) throw udm_exception("Uml::Namespace GetTheOnlyNamespace: More than one namespace found in diagram!");
 		return *(nses.begin());
 	};
+
+	// get the corresponding class from the cross diagram
+	UDM_DLL Class GetClassFromCrossDgr(const Diagram &cross_dgr, const Class &cl) {
+		//The classname in cross diagram is: classname + cross_delimiter + diagramname [ + cross_delimiter + namespacename ]
+		string cross_cl_name = string(cl.name()) + string(Udm::cross_delimiter) + string(GetDiagram(cl).name());
+		Namespace ns = cl.parent_ns();
+		if (ns)
+			cross_cl_name += string(Udm::cross_delimiter) + (string)ns.name();
+		return classByName(cross_dgr, cross_cl_name);
+	}
 
 	// find a class by name
 	UDM_DLL Class classByName(const Diagram &d, const string &ns_name,const string &name )
