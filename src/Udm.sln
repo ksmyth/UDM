@@ -84,13 +84,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmCint", "UdmCint\UdmCint.
 		{BDBC842F-099C-4263-AB8B-46511D82C56C} = {BDBC842F-099C-4263-AB8B-46511D82C56C}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GOCL", "UdmOcl\GOCL\src\GOCL.vcproj", "{7AC34CA0-DCE1-4510-A75F-503603EB151A}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 4
 		SccProjectUniqueName0 = UdmOcl\\UdmOcl.vcproj
 		SccProjectName0 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl\u0022,\u0020INZAAAAA
 		SccLocalPath0 = UdmOcl
@@ -111,12 +107,6 @@ Global
 		SccLocalPath3 = UdmCint
 		SccProvider3 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
 		CanCheckoutShared = false
-		SccProjectUniqueName4 = UdmOcl\\GOCL\\src\\GOCL.vcproj
-		SccProjectName4 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl/GOCL\u0022,\u0020AWBBAAAA
-		SccLocalPath4 = UdmOcl\\Gocl
-		SccProvider4 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
-		CanCheckoutShared = false
-		SccProjectFilePathRelativizedFromConnection4 = src\\
 	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -238,12 +228,6 @@ Global
 		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release.Build.0 = Release|Win32
 		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release MinDependency.ActiveCfg = Release|Win32
 		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release MinDependency.Build.0 = Release|Win32
-		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Debug.ActiveCfg = Debug|Win32
-		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Debug.Build.0 = Debug|Win32
-		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Release.ActiveCfg = Release|Win32
-		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Release.Build.0 = Release|Win32
-		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Release MinDependency.ActiveCfg = Release|Win32
-		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Release MinDependency.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 	EndGlobalSection
