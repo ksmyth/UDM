@@ -31,7 +31,7 @@
 		<tstamp />
 
 		<!-- Directory of the compilation -->
-		<!--property name="build.dir" location="build" /-->
+		<property name="build_main.dir" location="build" />
 		<property name="classes.dir" location="${build.dir}/classes" />
 		<property name="java.build.dir" location="${build.dir}/classes/main" />
 
@@ -87,7 +87,7 @@
 
 	<!-- Clean all jUdm build products -->
 	<target name="clean" depends="init" description="Clean all build products.">
-		<delete dir="${build.dir}" />
+		<delete dir="${build_main.dir}" />
 	</target>
 
 	<!-- Copy the DLLs in the directory of the distribution -->
@@ -488,34 +488,18 @@
 			<param name="dspackage" value="GeneTF" />
 			<param name="dspackagelower" value="genetf" />
 		</antcall>
-		<!-- Generate JavaAPI documentation -->
-		<mkdir dir="${dist.dir}/GeneTF/apidoc" />
-		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/GeneTF/apidoc" windowtitle="GeneTF UDM API">
-			<fileset dir="${dist.dir}/GeneTF/src" defaultexcludes="yes">
-			</fileset>
-		</javadoc>
 		
 		<!-- Create the GeneTRE distribution with UDM API documentation -->
 		<antcall target="ds-dist-dir">
 			<param name="dspackage" value="GeneTRE" />
 			<param name="dspackagelower" value="genetre" />
 		</antcall>
-		<!-- Generate JavaAPI documentation -->
-		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/GeneTRE/apidoc" windowtitle="GeneTRE UDM API">
-			<fileset dir="${dist.dir}/GeneTRE/src" defaultexcludes="yes">
-			</fileset>
-		</javadoc>
 		
 		<!-- Create the SBML2Ex distribution with UDM API documentation -->
 		<antcall target="ds-dist-dir">
 			<param name="dspackage" value="SBML2Ex" />
 			<param name="dspackagelower" value="sbml2ex" />
 		</antcall>
-		<!-- Generate JavaAPI documentation -->
-		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/SBML2Ex/apidoc" windowtitle="SBML2Ex UDM API">
-			<fileset dir="${dist.dir}/SBML2Ex/src" defaultexcludes="yes">
-			</fileset>
-		</javadoc>
 		
 		<!-- Generate Java UDM API documentation --> 
 		<mkdir dir="${judm.dist.dir}/apidoc" />
@@ -594,22 +578,6 @@
 				<include name="**/*.xml" />
 				<include name="**/*.html" />
 				<include name="**/*.xsd" />
-			</fileset>
-		</copy>
-		<copy todir="${dist.dir}/${dspackage}/src/samples">
-			<mapper type="flatten" />
-			<fileset dir="samples/${dspackage}/samples" casesensitive="no">
-				<include name="**/*.xml" />
-				<include name="**/*.xsd" />
-			</fileset>
-		</copy>
-		<copy todir="${dist.dir}/${dspackage}/src/meta">
-			<mapper type="flatten" />
-			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
-				<include name="**/*.xml" />
-				<include name="**/*.xsd" />
-				<include name="**/*.xme" />
-				<include name="**/*.jpg" />
 			</fileset>
 		</copy>
 		
