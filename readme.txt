@@ -65,6 +65,20 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+11/07/05		Release 3.00
+
+		
+		-	Enhanced GME reference port issues - the helper connections can be accessed even if the GME datanetwork was not created with UDM.
+		-	Enhancing the functionality of GetAdjacentObjects() family of functions to return multiset-s, with eventually multiple copies of the same instance. The original functions 
+			were replaced by GetAdjacentUniqueObjects().
+		-	Compiled Linux_build.txt to describe how to build the package on Linux platforms;
+		-	Removed all cint related stuff
+		-	UdmPOI library introduced for UdmPseudoObject Interface.
+		- 	Java codegenerator, java support w/ SWIG; Renamed udmCint to UdmSwig
+		-	Added Namespace support 
+
+
+
 06/16/05		Release 2.23
 
 		-	Upgraded to VC71
