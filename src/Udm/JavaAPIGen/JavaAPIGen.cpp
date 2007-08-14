@@ -228,7 +228,7 @@ void JavaAPIGen::generateJava( const ::Uml::Uml::Diagram &diagram
     
     
     // generate a Utils.java for each namespaces that contains the wrappers
-    UtilsGen utils_gen( *nses_i, package_name, ns_map, inputfile );
+    UtilsGen utils_gen( *nses_i, package_name, ns_map );
     utils_gen.generate( );
 
     // generate java classes in the namespace

@@ -86,7 +86,7 @@ class FactoryGen
     const map<string, string>& m_ns_map;
 
     //! The input UDM XML file.
-    const string & m_inputfile;
+    string m_inputfile;
 
     //! The name of the package for the generated Java file.
     const string m_package_name;

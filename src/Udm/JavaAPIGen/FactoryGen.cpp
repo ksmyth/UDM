@@ -16,11 +16,18 @@ FactoryGen::FactoryGen( const ::Uml::Uml::Namespace &ns
                       , ofstream & factory_output
                       , ofstream & example_output
                       , const string & type)
-:   m_ns( ns ), m_diagram( ns.parent() ), m_ns_map( ns_map ), m_inputfile( inputfile )
+:   m_ns( ns ), m_diagram( ns.parent() ), m_ns_map( ns_map ), m_inputfile( "" )
   , m_package_name(  m_package_name  ), m_root_name( m_root_name )
   , m_ns_name( ns.name() ), m_diag_name( m_diagram.name() ), m_output()
   , m_type( type ), m_factory_output( factory_output ), m_example_output( example_output )
 {
+  m_inputfile = inputfile;
+  for (unsigned int i = 0; i < m_inputfile.size(); ++i)
+  {
+    if ((m_inputfile[i] == '\\') || (m_inputfile[i] == '/') || (m_inputfile[i] == ':'))
+      m_inputfile[i] = '_';
+  }
+  //cout << "input file: " << m_inputfile << endl;
 }
 
 //! Destructor.

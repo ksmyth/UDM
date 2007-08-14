@@ -12,8 +12,7 @@ class UtilsGen
     //! Constructor.
     UtilsGen(const ::Uml::Uml::Namespace &ns
       , const string & package_name
-      , const map<string, string> & ns_map
-      , const string & inputfile);
+      , const map<string, string> & ns_map);
 
     //! Destructor.
     ~UtilsGen( void );
@@ -41,9 +40,6 @@ class UtilsGen
 
     //! Namespace direcotry.
     const map<string, string>& m_ns_map;
-
-    //! The input UDM XML file.
-    const string & m_inputfile;
 
    //! The name of the namespace
    const string m_ns_name;

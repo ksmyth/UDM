@@ -10,10 +10,10 @@
 */
 UtilsGen::UtilsGen( const ::Uml::Uml::Namespace &ns
       , const string & package_name
-      , const map<string, string> & ns_map
-      , const string & inputfile)
-:   m_ns( ns ), m_ns_map( ns_map ), m_inputfile( inputfile )
-  , m_package_name(  package_name  ), m_ns_name( ns.name() )
+      , const map<string, string> & ns_map)
+:   m_ns( ns ), m_ns_map( ns_map )
+  , m_package_name(  package_name  )
+  , m_ns_name( ns.name() )
   , m_output()
 {
 }
