@@ -514,7 +514,7 @@ void GenerateHClassBasic(const ::Uml::Class & cl, const InheritenceSolver& is, o
 		" { return Udm::DerivedAttr< " << UmlClassCPPName(cl) << ", Pred>(impl);}" <<endl <<endl;
 
 
-	output << "\t\t\t" << "Udm::ArchetypeAttr< " << UmlClassCPPName(cl) << "> Archetype()"
+	output << "\t\t\t" << "Udm::ArchetypeAttr< " << UmlClassCPPName(cl) << "> Archetype() const"
 		" { return Udm::ArchetypeAttr< " << UmlClassCPPName(cl) << ">(impl);}" <<endl <<endl;
 
 };
