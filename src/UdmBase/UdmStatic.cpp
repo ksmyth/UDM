@@ -13,7 +13,12 @@ this software.
 
 /*
 CHANGELOG
-	 23/11/04	-	endre
+	28/07/06	-	endre
+			-		fix for UDM-37: in setAssociation() try to associate corresponding
+					subtypes and instances even if an association exists between the
+					main objects
+
+	23/11/04	-	endre
 
 			-		fixed bug which appeared under .net.
 					(id_map was delete before some StaticObjects)
@@ -1945,7 +1950,7 @@ namespace UdmStatic
 		int mode,
 		const bool direct) 
 	{ 
-		
+
 		//check the role name
 		
 		
@@ -2193,6 +2198,12 @@ namespace UdmStatic
 			if (!ins_res.second) throw udm_exception("Fatal error in StaticObject::setAssociation(). Map insertion failed: 1");
 		}
 
+		//fix for UDM-37:
+		//even if we remove items from to_associate because an association already exists,
+		//keep associating the corresponding subtypes and instances because their
+		//associations may be missing
+		set<ObjectImpl*> to_associate_in_st_and_i(to_associate);
+
 		//set up a map of my children with the current role,
 		//such that I can reach my  and my parties iterators for all the associations:
 		//
@@ -2349,7 +2360,10 @@ namespace UdmStatic
 			//and the other one for my party
 			pair<uniqueId_type const, StaticObject*> ass_me((Uml::theOther(meta)).uniqueId(), (StaticObject*)this->clone());
 			((StaticObject*)(*it_to_ass))->associations.safe_insert(ass_me);
+		}
 
+		for(set<ObjectImpl*>::iterator it_to_ass = to_associate_in_st_and_i.begin(); it_to_ass != to_associate_in_st_and_i.end(); it_to_ass++)
+		{
 			//it is a reference setting, we'll do it afterwards
 			//if ( ((string)(meta.name()) == "ref") && (mode == Udm::TARGETFROMPEER) && nvect.size()==1) continue;
 			if (isRefLink (meta, mode, nvect)) continue;
