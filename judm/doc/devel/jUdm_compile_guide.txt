@@ -4,26 +4,24 @@ The requirements and a step-by-step guide to compile jUdm source files
 
 Requirements:
 -------------------
-	J2SK 1.4.2 as Java Runtime Environment 
+	J2SDK 1.4.2 (or later) as Java Runtime Environment 
 
 Step-by-step guide:
 -------------------------
 	1. Setup UDM
 		1.1 Download the UDM_NS sources from the VSS project
 			From now on, I will use <udm_ns> to denote the root of the UDM_NS.
-		1.2 Get UDM 3rd party files
+		1.2 Get UDM 3rd party files from \\atlantis\project\mobies\udm\udm_ns\udm_ns_3rdparty.zip
 		1.3 ...
 	
-	2. Set the CLASSPATH envirnment variable
-		2.1 Add the <j2sdk_root>\jre\lib\rt.jar to the CLASSPATH
-		2.2 Add the '.', i.e., the current directory to the CLASSPATH
+	2. Set the CLASSPATH environment variable
+		2.1 Add  <j2sdk_root>\jre\lib to the CLASSPATH
+		2.2 Add '.', i.e., the current directory to the CLASSPATH
 
 	3. Compile and build the UDM_NS solution
-		3.1 Be sure that the UDM_PATH environment variable exits and is properly set
-		3.1 Be sure that the UDM_3RDPARTY_BIN environment variable exits, is properly set, 
-			and added to the PATH
+		follow the guidelines described in the "Udm_ns compile guide" to compile UDM_ns
 
-	4. Add the ANT tool to the PATH: <udm_ns>\judm\lib\ant-1.6.2\bin
+	4. Add the ANT tool to the PATH:  %UDM_3RDPARTY_PATH%\ant-1.6.2\bin
 
 	5. Open a command shell and go to the directory <udm_ns>\judm. 
 		Using ANT you can run the following targets:
@@ -31,7 +29,7 @@ Step-by-step guide:
 		5.1 ant dist-all
 			Target “dist-all” initializes the build’s distribution environment 
 			(<udm_ns>\judm\build\build_win) after completely removing any previous build
-			from the disk, copies the necessary dll-s into this build directry, 
+			from the disk, copies the necessary dll-s into this build directory, 
 			updates, re-generates, and compiles the swig and domain-specific source codes, 
 			generates javadoc API documentation, and updates the domain-specific distribution 
 			by generating the necessary zip files in <udm_ns>\judm\build\build_win\dist.
@@ -45,15 +43,15 @@ Step-by-step guide:
 			This task requires the existence of the swig and domain-specific source codes, so you
 			have to run either "dist-all" or "compile-gen" tasks prior running this task.
 
-		5.2 ant compile-gen
+		5.3 ant compile-gen
 			Target “compile-gen” re-initializes the build’s distribution environment 
-			(<udm_ns>\judm\build\build_win), copies the necessary dll-s into this build directry, 
+			(<udm_ns>\judm\build\build_win), copies the necessary dll-s into this build directory, 
 			updates, re-generates, and compiles the swig and domain-specific source codes.
 			This task does not update the <udm_ns>\judm\build\build_win\dist directory.
 
-		5.2 ant compile
+		5.4 ant compile
 			Target “compile” re-initializes the build’s distribution environment 
-			(<udm_ns>\judm\build\build_win), copies the necessary dll-s into this build directry, 
+			(<udm_ns>\judm\build\build_win), copies the necessary dll-s into this build directory, 
 			and compiles the swig and domain-specific source codes.
 			updates javadoc API documentation, and updates the domain-specific distribution 
 			by generating the necessary jar files in <udm_ns>\judm\build\build_win\dist.
