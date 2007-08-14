@@ -42,7 +42,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib  UdmOcld.lib GOCL_vc7d.lib cppunitd.lib testrunnerd.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib UmlD.lib UdmUtilD.lib zlibd.lib "
+				AdditionalDependencies="UmlD.lib UdmOcld.lib GOCLd.lib cppunitd.lib testrunnerd.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib zlibd.lib"
 				OutputFile=".\Debug/testUdmCint.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -105,7 +105,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib UdmOcl.lib GOCL_vc7.lib  cppunit.lib testrunner.lib UdmPOI.lib Xalan-C_1.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib "
+				AdditionalDependencies="Uml.lib UdmOcl.lib GOCL.lib cppunit.lib testrunner.lib UdmPOI.lib Xalan-C_1.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib"
 				OutputFile=".\Release/testUdmCint.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -187,7 +187,7 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\UdmD.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
+					CommandLine="&quot;%UDM_PATH%&quot;\bin\UdmD.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTF_xsd
 
 "
@@ -197,7 +197,7 @@
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
+					CommandLine="&quot;%UDM_PATH%&quot;\bin\Udm.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTF_xsd
 
 "
@@ -231,7 +231,7 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe &quot;$(InputPath)&quot; -g -v -e -q jigcell -i xhtml -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon -u flux=http://arep.med.harvard.edu/fluxns
+					CommandLine="&quot;%UDM_PATH%&quot;\bin\Udm.exe &quot;$(InputPath)&quot; -g -v -e -q jigcell -i xhtml -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon -u flux=http://arep.med.harvard.edu/fluxns
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe math.xsd math_xsd
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe sbml.xsd sbml_xsd
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe dbi.xsd dbi_xsd
@@ -240,14 +240,15 @@
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe flux.xsd flux_xsd
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe jigcell.xsd jigcell_xsd
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe jd.xsd jd_xsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe bc.xsd bc_xsd"
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe bc.xsd bc_xsd
+"
 					Outputs="SBML2Ex.cpp;SBML2Ex.h;sbml.xsd"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe &quot;$(InputPath)&quot; -g -v -e -q jigcell -i xhtml -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon -u flux=http://arep.med.harvard.edu/fluxns
+					CommandLine="&quot;%UDM_PATH%&quot;\bin\Udm.exe &quot;$(InputPath)&quot; -g -v -e -q jigcell -i xhtml -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon -u flux=http://arep.med.harvard.edu/fluxns
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe math.xsd math_xsd
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe sbml.xsd sbml_xsd
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe dbi.xsd dbi_xsd
@@ -256,7 +257,8 @@
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe flux.xsd flux_xsd
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe jigcell.xsd jigcell_xsd
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe jd.xsd jd_xsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe bc.xsd bc_xsd"
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe bc.xsd bc_xsd
+"
 					Outputs="SBML2Ex.cpp;SBML2Ex.h;sbml.xsd"/>
 			</FileConfiguration>
 		</File>
@@ -267,7 +269,8 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="cd &quot;$(InputDir)&quot;
-&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;"
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
 					Outputs="$(InputDir)$(InputName).mga;$(InputDir)SBML2Ex_udm.xml"/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -275,7 +278,8 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="cd &quot;$(InputDir)&quot;
-&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;"
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
 					Outputs="$(InputDir)$(InputName).mga;$(InputDir)SBML2Ex_udm.xml"/>
 			</FileConfiguration>
 		</File>

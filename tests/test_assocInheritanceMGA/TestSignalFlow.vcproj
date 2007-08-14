@@ -40,7 +40,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmGmeD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib"
+				AdditionalDependencies="UmlD.lib UdmGmeD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib"
 				OutputFile=".\Debug/TestSignalFlow.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -104,7 +104,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBase.lib UdmGme.lib UdmUtil.lib zlib.lib UdmDom.lib xerces-c_2.lib cppunit.lib"
+				AdditionalDependencies="Uml.lib UdmBase.lib UdmGme.lib UdmUtil.lib zlib.lib UdmDom.lib xerces-c_2.lib cppunit.lib"
 				OutputFile=".\Release/TestSignalFlow.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -226,8 +226,16 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="SignaFlow_udm.xml -&gt; C++ API"
-						CommandLine="..\..\bin.net\Udm.exe &quot;$(InputPath)&quot;
+						CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot;
 "
+						Outputs="SignalFlow.h SignalFlow.cpp SignalFlow.xsd"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="SignaFlow_udm.xml -&gt; C++ API"
+						CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot;"
 						Outputs="SignalFlow.h SignalFlow.cpp SignalFlow.xsd"/>
 				</FileConfiguration>
 			</File>
@@ -264,7 +272,7 @@
 					Name="VCCustomBuildTool"
 					Description="SignalFlow_meta.mga -&gt; SignalFlow_meta.xmp, Registering SignalFlow paradigm"
 					CommandLine="cd &quot;$(InputDir)&quot;
-&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot; 
+&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;
 "
 					Outputs="$(InputDir)$(InputName).xmp, sf1.xme"/>
 			</FileConfiguration>
@@ -274,7 +282,8 @@
 					Name="VCCustomBuildTool"
 					Description="SignalFlow_meta.mga -&gt; SignalFlow_meta.xmp, Registering SignalFlow paradigm"
 					CommandLine="cd &quot;$(InputDir)&quot;
-&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot; "
+&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;
+"
 					Outputs="$(InputDir)$(InputName).xmp, sf1.xme"/>
 			</FileConfiguration>
 		</File>

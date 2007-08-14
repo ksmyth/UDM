@@ -40,7 +40,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBase.lib cppunit.lib testrunner.lib"
+				AdditionalDependencies="Uml.lib UdmBase.lib cppunit.lib testrunner.lib UdmUtil.lib zlib.lib UdmDom.lib xerces-c_2.lib"
 				OutputFile=".\Release/test_cintstring.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -101,7 +101,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBaseD.lib cppunitd.lib testrunnerd.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibd.lib UdmDomd.lib xerces-c_2d.lib"
 				OutputFile=".\Debug/test_cintstring.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"

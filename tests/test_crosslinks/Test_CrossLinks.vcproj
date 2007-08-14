@@ -226,7 +226,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating UDM API files from $(InputPath)"
-						CommandLine="&quot;%UDM_PATH%\bin.net\Udm.exe&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;
+						CommandLine="&quot;%UDM_PATH%\bin\Udm.exe&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;
 "
 						Outputs="Package1.h;Package1.cpp;Package1.xsd;Package2.h;Package2.cpp;Package2.xsd;CL.cpp;CL.h;CL.xsd;CLPackage.cpp;CLPackage.h;CLPackage.xsd"/>
 				</FileConfiguration>
@@ -235,7 +235,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating UDM API files from $(InputPath)"
-						CommandLine="&quot;%UDM_PATH%\bin.net\Udm.exe&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;
+						CommandLine="&quot;%UDM_PATH%\bin\Udm.exe&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;
 "
 						Outputs="Package1.h;Package1.cpp;Package1.xsd;Package2.h;Package2.cpp;Package2.xsd"/>
 				</FileConfiguration>

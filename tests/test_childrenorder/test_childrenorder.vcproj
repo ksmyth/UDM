@@ -41,7 +41,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtilD.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtilD.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib"
 				OutputFile=".\..\..\bin/test_childrenorder.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -105,7 +105,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBase.lib cppunit.lib testrunner.lib UdmUtil.lib zlib.lib UdmDom.lib xerces-c_2.lib"
+				AdditionalDependencies="Uml.lib UdmBase.lib cppunit.lib testrunner.lib UdmUtil.lib zlib.lib UdmDom.lib xerces-c_2.lib"
 				OutputFile=".\..\..\bin/test_childrenorder.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -232,7 +232,7 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="..\..\bin.net\Udm.exe &quot;$(InputPath)&quot; -v
+						CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot; -v
 "
 						Outputs="$(InputName).xsd;$(InputName).cpp;$(InputName).h"/>
 				</FileConfiguration>
@@ -240,7 +240,7 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="..\..\bin.net\Udm.exe &quot;$(InputPath)&quot; -v
+						CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot; -v
 "
 						Outputs="$(InputName).xsd;$(InputName).cpp;$(InputName).h"/>
 				</FileConfiguration>

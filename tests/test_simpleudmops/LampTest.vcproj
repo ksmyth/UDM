@@ -41,7 +41,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib UdmInt.lib libcint.lib Xerces-c_2.lib zlib.lib cppunit_dll.lib"
+				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib Xerces-c_2.lib zlib.lib cppunit_dll.lib"
 				OutputFile="..\..\bin\LampTest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -104,7 +104,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib UdmIntD.lib libcint.lib Xerces-c_2D.lib zlibD.lib cppunitd_dll.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib cppunitd_dll.lib"
 				OutputFile="..\..\bin\LampTest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -234,7 +234,7 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="..\..\bin.net\Udm.exe &quot;$(InputPath)&quot; -v
+						CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot; -v
 "
 						Outputs="$(InputName).xsd;$(InputName).cpp;$(InputName).h"/>
 				</FileConfiguration>
