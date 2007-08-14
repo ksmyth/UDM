@@ -201,7 +201,7 @@ namespace OclCommon
 	class ContextStack
 	{
 		public :
-			typedef RealContext< TItem >::CItem StateItem;
+			typedef typename RealContext< TItem >::CItem StateItem;
 			typedef GOCL_STL_NS()vector< StateItem > StateItemVector;
 
 		private :

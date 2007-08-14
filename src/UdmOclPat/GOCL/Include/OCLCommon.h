@@ -8,7 +8,15 @@
 #ifndef OCLCommon_h
 #define OCLCommon_h
 
+/*
+in case of VC 7.x we use MSVC's own STL
+
+*/
+#ifdef _WIN32
+#if (_MSC_VER == 1200)
 #include <stl_user_config.h>
+#endif
+#endif
 
 #pragma warning ( disable : 4786 )
 
