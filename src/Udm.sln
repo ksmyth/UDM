@@ -5,6 +5,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmBase", "UdmBase\UdmBase.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Component", "UML GME\Interpreter\BONComponent.vcproj", "{207DA527-EC80-4A83-B5C2-B2A02281AFBA}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3CAE3DEE-065E-426C-9C3C-F1F59217C00B} = {3CAE3DEE-065E-426C-9C3C-F1F59217C00B}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmDom", "UdmDom\UdmDom.vcproj", "{9A094C52-E029-4333-AC60-580B9B928E4E}"
@@ -132,16 +133,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UIntWiz", "UIntWiz\UIntWiz.
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 2
-		SccLocalPath0 = .
-		CanCheckoutShared = false
-		SolutionUniqueID = {2DFFE7B3-B81B-40FC-931E-49F8FC071E92}
-		SccProjectUniqueName1 = StrResGen\\StrResGen.vcproj
-		SccLocalPath1 = .
-		CanCheckoutShared = false
-		SccProjectFilePathRelativizedFromConnection1 = StrResGen\\
-	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		BootUdmCompile Debug = BootUdmCompile Debug
 		BootUdmCompile Release = BootUdmCompile Release
@@ -358,5 +349,15 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccLocalPath0 = .
+		CanCheckoutShared = false
+		SolutionUniqueID = {2DFFE7B3-B81B-40FC-931E-49F8FC071E92}
+		SccProjectUniqueName1 = StrResGen\\StrResGen.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = false
+		SccProjectFilePathRelativizedFromConnection1 = StrResGen\\
 	EndGlobalSection
 EndGlobal
