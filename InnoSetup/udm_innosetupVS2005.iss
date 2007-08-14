@@ -8,9 +8,9 @@
 #define UDMPATH "C:\Projects\udm_ns2"
 #define UDM3rdPartyPATH "C:\Projects\udm_ns_3rdparty"
 #define GREATPATH "C:\Projects\GReAT"
-#define UDMDLL "UdmDll_3_1_1.dll"
-#define UDMDLLD "UdmDll_3_1_1D.dll"
-#define UDMVER "3.1.1"
+#define UDMDLL "UdmDll_3_1_2.dll"
+#define UDMDLLD "UdmDll_3_1_2D.dll"
+#define UDMVER "3.1.2"
 #define GMEVER "6.11.9"
 #define OutputFileBase "Udm_setup"
 
