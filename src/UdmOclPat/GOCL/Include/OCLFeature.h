@@ -303,10 +303,6 @@ namespace OclMeta
 			bool 		m_bFailed;
 			bool 		m_bChecked;
 
-			Dependency()
-				: m_strSignature( "#" ), m_bFailed( false ), m_bChecked( false )
-			{
-			}
 
 			Dependency( const std::string& strSignature, const Position& position )
 				: m_strSignature( strSignature), m_position( position ), m_bFailed( false ), m_bChecked( false )
@@ -372,22 +368,20 @@ namespace OclMeta
 				return false;
 			}
 
-			static void SetChecked( DependencySet& ds, Dependency& d, bool bFailed )
+			static void SetChecked( DependencySet& ds, DependencySet::iterator i, bool bFailed )
 			{
-				DependencySet::iterator i = ds.find( d );
-				if ( i != ds.end() ) {
-					d.m_bFailed = bFailed;
-					d.m_bChecked = true;
-					ds.erase( i );
-					ds.insert( d );
-				}
+				Dependency d = *i;
+				d.m_bFailed = bFailed;
+				d.m_bChecked = true;
+				ds.erase( i );
+				ds.insert( d );
 			}
 
-			static Dependency LookUp( DependencySet& ds, const std::string& strSignature )
+			static DependencySet::iterator LookUp( DependencySet& ds, const std::string& strSignature )
 			{
 				Position pos;
 				DependencySet::iterator it = ds.find( Dependency( strSignature, pos ) );
-				return ( it != ds.end() ) ? *it : Dependency();
+				return it;
 			}
 
 			static std::string Print( const DependencySet& setDependencies )
