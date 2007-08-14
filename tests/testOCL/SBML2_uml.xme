@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{DEB9088C-5D90-4C1A-9F47-D264615342E5}" cdate="Fri Apr 22 15:20:07 2005" mdate="Fri Apr 22 15:20:07 2005" version="" metaguid="{F9663D62-3422-4A2B-A613-2E8453675A03}" metaversion="" metaname="UML">
+<project guid="{4C2CFF14-242B-4BA7-87E3-D336D2DC0B5B}" cdate="Tue May 17 16:17:07 2005" mdate="Tue May 17 16:17:07 2005" version="" metaguid="{F9663D62-3422-4A2B-A613-2E8453675A03}" metaversion="" metaname="UML">
 	<name>SBML2_uml</name>
 	<comment></comment>
 	<author></author>
@@ -187,7 +187,7 @@
 						<value>The variable referencedor parameter element. by a rule must be an existing species, compartment, </value>
 					</attribute>
 					<attribute kind="ConstraintEqn">
-						<value>let s = dn.species
+						<value>let s = dn.sbml::species
 in
 let c = dn.compartment
 in 
@@ -197,8 +197,7 @@ c-&gt;exists(cv | cv.id = self.variable)
 or
 s-&gt;exists(sv | sv.id = self.variable) 
 or
-p-&gt;exists(pv | pv.id = self.variable) 
-</value>
+p-&gt;exists(pv | pv.id = self.variable) </value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-00000008" kind="Constraint" role="Constraint" relid="0x14">
@@ -1828,7 +1827,7 @@ in
 						<value>A species reference in a reaction needs to be to a defined species. The reference can be from reactants, products, or modifiers</value>
 					</attribute>
 					<attribute kind="ConstraintEqn">
-						<value>let s = dn.species
+						<value>let s = dn.sbml::species
 in
 if (s.isUndefined()) then
  true
@@ -3321,15 +3320,15 @@ value: String</value>
 				</atom>
 				<atom id="id-0066-00000047" kind="Class" role="Class" relid="0x1a">
 					<name>species</name>
-					<regnode name="PartRegs">
+					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
-						<regnode name="Constraints">
+						<regnode name="Constraints" isopaque="yes">
 							<value></value>
 							<regnode name="Position" isopaque="yes">
 								<value>121,93</value>
 							</regnode>
 						</regnode>
-						<regnode name="UML">
+						<regnode name="UML" isopaque="yes">
 							<value></value>
 							<regnode name="Position" isopaque="yes">
 								<value>121,93</value>
@@ -3555,7 +3554,7 @@ value: String</value>
 					<connpoint role="src" target="id-0066-0000003d"/>
 					<connpoint role="dst" target="id-0066-00000044"/>
 				</connection>
-				<connection id="id-0068-00000059" kind="Composition" role="Composition" relid="0x1b">
+				<connection id="id-0068-00000058" kind="Composition" role="Composition" relid="0x1b">
 					<name>Composition</name>
 					<attribute kind="Cardinality" status="meta">
 						<value>0..*</value>
@@ -3605,7 +3604,7 @@ value: String</value>
 						<value>false</value>
 					</attribute>
 				</reference>
-				<connection id="id-0068-00000058" kind="Composition" role="Composition" relid="0x3">
+				<connection id="id-0068-00000059" kind="Composition" role="Composition" relid="0x3">
 					<name>Composition</name>
 					<regnode name="autorouterPref" isopaque="yes">
 						<value>Ns</value>
