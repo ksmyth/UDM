@@ -71,9 +71,7 @@ CHANGELOG
 #include <UdmXmi.h>
 #include <fstream>
 
-#if 0
 #include "./JavaAPIGen/JavaAPIGen.h"
-#endif
 
 #ifdef WIN32
 #include <contrib\minizip\unzip.h>
@@ -467,7 +465,6 @@ usage:
 			GenerateDSD(ns, nsname, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, qualifiedAtrrsNS);
 		}
 
-#if 0
 		// call java API generation
 		if (generate_java) 
 		{
@@ -475,7 +472,6 @@ usage:
 			gen.generate();
 			return 0;
 		}
-#endif
 
 		ofstream ff;
 
