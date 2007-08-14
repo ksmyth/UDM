@@ -19,6 +19,46 @@
 		<property name="udm_3rdparty.dir" location="${env.UDM_3RDPARTY_PATH}" />
 		<property name="build.dir" location="build/build_win" />
 		<property name="junit.dir" location="${udm_3rdparty.dir}/junit" />
+
+		<!--
+			If UdmD.exe exists and it is newer than Udm.exe or Udm.exe does not exist,
+			then use UdmD.exe and UdmSwigD.dll
+		-->
+		<condition property="udm.bin.exe" value="UdmD.exe">
+			<and>
+				<available file="${udm.bin.dir}/UdmD.exe" />
+				<or>
+					<not>
+						<available file="${udm.bin.dir}/Udm.exe" />
+					</not>
+					<and>
+						<uptodate srcfile="${udm.bin.dir}/Udm.exe" targetfile="${udm.bin.dir}/UdmD.exe" />
+					</and>
+				</or>
+				</and>
+		</condition>
+		<!-- when ant is upgraded, remove this and use "else" in the previous condition -->
+		<condition property="udm.bin.exe" value="Udm.exe">
+			<and>
+				<not>
+					<isset property="udm.bin.exe" />
+				</not>
+				<available file="${udm.bin.dir}/Udm.exe" />
+			</and>
+		</condition>
+
+		<fail unless="udm.bin.exe"
+			message="Neither Debug nor the Release Udm project has been built" />
+
+
+		<condition property="udm.bin.swigdll" value="UdmSwigD.dll">
+			<equals arg1="${udm.bin.exe}" arg2="UdmD.exe" casesensitive="false" />
+		</condition>
+		<!-- when ant is upgraded, remove this and use "else" in the previous condition -->
+		<condition property="udm.bin.swigdll" value="UdmSwig.dll">
+			<equals arg1="${udm.bin.exe}" arg2="Udm.exe" casesensitive="false" />
+		</condition>
+
 	</target>
 
 	<!-- Get the environment variables of UDM from UNIX systems -->
@@ -176,12 +216,11 @@
 				<include name="xerces*.dll" />
 				<exclude name="*D.dll" />
 			</fileset>
-			<!-- Copy Udm executable and UdmCint DLL in the directory of the distribution -->
-			<fileset dir="${udm.bin.dir}">
-				<include name="Udm.exe" />
-				<include name="UdmSwig.dll" />
-			</fileset>
 		</copy>
+
+		<!-- Copy Udm executable and UdmSwig DLL in the directory of the distribution -->
+		<copy file="${udm.bin.dir}/${udm.bin.exe}" tofile="${judm.bin.dir}/udm.exe" overwrite="true" verbose="true" />
+		<copy file="${udm.bin.dir}/${udm.bin.swigdll}" tofile="${judm.bin.dir}/udmswig.dll" overwrite="true" verbose="true" />
 		
 	</target>
 
@@ -363,7 +402,7 @@
 		<!-- Generate UDM XML from the XME XML file -->
 		<echo> Run ${udm.dir}\bin\udm.exe ${dspackage}_udm.xml ${udm_options} </echo>
 		<exec dir="samples/${dspackage}/meta" executable="cmd">
-			<arg line="/c ${udm.dir}\bin\udm.exe ${dspackage}_udm.xml ${udm_options}" />
+			<arg line="/c ${udm.bin.dir}\${udm.bin.exe} ${dspackage}_udm.xml ${udm_options}" />
 		</exec>
 		
 		<!-- Update source code -->
