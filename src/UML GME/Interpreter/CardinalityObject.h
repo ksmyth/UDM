@@ -35,8 +35,6 @@ public:
 	//get the Instance
 	static CardinalityObject * GetInstance();
 	void ResetInstance();
-	
-	std::strstream& operator >>(std::strstream& out);
 
 };
 

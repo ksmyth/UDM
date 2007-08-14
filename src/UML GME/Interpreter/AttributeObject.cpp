@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 
-#include <strstream>
 #include <cmath>
 #include "CardinalityObject.h"
 #include "AttributeObject.h"
@@ -8,6 +7,9 @@
 /*
 CHANGELOG
 
+  12/31/05	-	endre
+		- Added AttributeObject::BuildUML(), conditionally compiled in when used by UML2XML interpreter,
+		  to construct the UML attribute class; removed the output to a stream operator
   10/24/04	-	endre
 
 		- Added a new type, 'Text'. It's the same as String but it gets persisted differently in DOM backend.
@@ -397,115 +399,84 @@ void AttributeObject::addDefStr(const std::string str)
 	defval_string.push_back(str);
 };
 
-
-//XML writer
-
-std::strstream& AttributeObject::operator >>(std::strstream& xml)
+#ifdef UML2XML
+void AttributeObject::BuildUML(::Uml::Class &uml_cls)
 {
+	::Uml::Attribute a = ::Uml::Attribute::Create(uml_cls);
 
-	//name and type, 
-	xml << "   <Attribute name= \"" << name << "\" type= \"" << strType() << "\"";
+	//name and type
+	a.name() = name;
+	a.type() = strType();
 
-	//ordered and visibility, optionals 
-	xml << (ordered ? " ordered= \"true\"" : " ordered= \"false\"");
+	//ordered and visibility, optionals
+	a.ordered() = ordered;
+	a.visibility() = strVisibility();
+	a.nonpersistent() = nonpersistent;
+	a.registry() = reg_val;
 
-	
-	xml << " visibility= \"" << strVisibility() << "\"";
-	xml << " nonpersistent= \"" << (nonpersistent? "true" : "false") << "\"";
-	xml << " registry= \"" << (reg_val? "true" : "false") << "\"";
 
 	//default values
-
 	if (t == Integer && defval_int.size())
 	{
-
-		xml << " defvalue= \"";
-		for(std::vector<long>::iterator i = defval_int.begin(); i!= defval_int.end(); i++)
+		std::vector<std::string> defval_tmp;
+		defval_tmp.reserve(defval_int.size());
+		char buf[128];
+		for(std::vector<long>::iterator i = defval_int.begin(); i != defval_int.end(); i++)
 		{
-			if (i != defval_int.begin()) 
-				xml << ';';
-
-			//need some escapeing here,
-			//we have to be DOM DataNetwork compliant,
-			//regarding array strings
-			//that means, the delimiter is ; and
-			
-
-			xml << *i;
+			_snprintf(buf, 127, "%ld", *i);
+			defval_tmp.push_back(buf);
 		}
-		xml << "\"";
+		a.defvalue() = defval_tmp;
 	}
 
 	if (t == Real && defval_real.size())
 	{
-		xml << " defvalue= \"";
-		for(std::vector<double>::iterator i = defval_real.begin(); i!= defval_real.end(); i++)
+		std::vector<std::string> defval_tmp;
+		defval_tmp.reserve(defval_real.size());
+		char buf[128];
+		for(std::vector<double>::iterator i = defval_real.begin(); i != defval_real.end(); i++)
 		{
-			if (i != defval_real.begin()) 
-				xml << ';';
-			xml << *i;
+			_snprintf(buf, 127, "%g", *i);
+			defval_tmp.push_back(buf);
 		}
-		xml << "\"";
+		a.defvalue() = defval_tmp;
 	}
-
-
 
 	if (t == Boolean && defval_bool.size())
 	{
-		xml << " defvalue= \"";
-		for(std::vector<bool>::iterator i = defval_bool.begin(); i!= defval_bool.end(); i++)
-		{
-			if (i != defval_bool.begin()) 
-				xml << ';';
-			xml << (*i ? "true" : "false" );
-		}
-		xml << "\"";
-	
+		std::vector<std::string> defval_tmp;
+		defval_tmp.reserve(defval_bool.size());
+		for(std::vector<bool>::iterator i = defval_bool.begin(); i != defval_bool.end(); i++)
+			defval_tmp.push_back(*i ? "true" : "false");
+		a.defvalue() = defval_tmp;
 	}
 
 	if (t == String && defval_string.size())
 	{
-		xml << " defvalue= \"";
-		for(std::vector<std::string>::iterator i = defval_string.begin(); i!= defval_string.end(); i++)
+		//just ignore the ending and beginning "-s
+		std::vector<std::string> defval_tmp;
+		defval_tmp.reserve(defval_string.size());
+		for(std::vector<std::string>::iterator i = defval_string.begin(); i != defval_string.end(); i++)
 		{
-			if (i != defval_string.begin()) 
-				xml << ';';
-			
-			//need some escapeing here,
-			//we have to be DOM DataNetwork compliant,
-			//regarding array strings
-			//that means, the delimiter is ; unless escaped
-			
-			const std::string a_item = *i;
-			std::string::const_iterator a_item_ci = a_item.begin();
-			while (a_item_ci != a_item.end())
-			{
+			string s = *i;
+			std::string::iterator s_i = s.begin();
+			while (s_i != s.end() && *s_i == '"') {
+				s.erase(s_i);
+				s_i = s.begin();
+			}
 
-				switch (*a_item_ci)
-				{
-				case ';':
-					xml << "\\";		//escape the semicolon(;)
-					xml << *a_item_ci;	//write the character
-					break;
-				case '\\':
-					xml << "\\";		//escape the escape(\)
-										//I think the grammar does not allow this
-										//for the time being.
-					xml << *a_item_ci;	//write the character
-					break;
-				case '"':
-					break;				//just ignore the ending and beginning "-s
-				default:
-					xml << *a_item_ci;	//write the character
-
-				}
-				
-				a_item_ci++;
-			};  
-
+			s_i = s.end() - 1;
+			while (s.size() && *s_i == '"') {
+				s.erase(s_i);
+				s_i = s.end() - 1;
+			}
+			defval_tmp.push_back(s);
 		}
-		xml << "\"";
+		a.defvalue() = defval_tmp;
 	}
-	
-	return c_obj >> xml;
+
+
+	a.min() = c_obj.getmin();
+	a.max() = c_obj.getmax();
 };
+#endif

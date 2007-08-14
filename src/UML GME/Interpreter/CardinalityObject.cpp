@@ -4,6 +4,9 @@
 
   CHANGELOG:
   
+  12/31/05	-	endre
+		- Removed the output to a stream operator
+
   29/03/04	-	endre
 
 		Fixed bug #54, which was a side effect of the fix ofr bug #51
@@ -27,7 +30,6 @@
   */
 #include "StdAfx.h"
 
-#include <strstream>
 #include "CardinalityObject.h"
 
 //parser
@@ -143,11 +145,4 @@ int CardinalityObject::getmax() const
 std::string CardinalityObject::text()
 {
 	return UML_multiplicity;
-};
-
-
-std::strstream& CardinalityObject::operator >>(std::strstream& xml)
-{
-	xml << " min= \"" << min << "\" max= \"" << max << "\"/>" << std::endl;	
-	return xml;
 };

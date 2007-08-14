@@ -26,8 +26,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,."
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK"
+				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,.,..\..\..\include"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
@@ -51,10 +51,11 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 				Outputs="$(OutDir)\regsvr32.trg"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ANTLRD.lib zlibD.lib"
+				AdditionalDependencies="ANTLRD.lib UdmDllD.lib"
 				OutputFile="..\..\..\bin\UML2XMLD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="..\..\..\lib"
 				ModuleDefinitionFile=".\Component.def"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/UML2XML_d.pdb"
@@ -99,8 +100,8 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,."
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK"
+				AdditionalIncludeDirectories="&quot;$(GME_ROOT)\sdk\bon&quot;;.;..\..\..\include"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -122,10 +123,11 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 				Outputs="$(OutDir)\regsvr32.trg"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ANTLR.lib zlib.lib"
+				AdditionalDependencies="ANTLR.lib UdmDll.lib"
 				OutputFile="..\..\..\bin\UML2XML.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="..\..\..\lib"
 				ModuleDefinitionFile=".\Component.def"
 				ProgramDatabaseFile=".\ReleaseMinDependency/UML2XML.pdb"
 				SubSystem="2"
@@ -591,21 +593,6 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 			<File
 				RelativePath="compicon.ico">
 			</File>
-			<File
-				RelativePath="Uml.xsd">
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCXMLDataGeneratorTool"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCXMLDataGeneratorTool"/>
-				</FileConfiguration>
-			</File>
 		</Filter>
 		<File
 			RelativePath="attribute.g">
@@ -651,42 +638,6 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 		</File>
 		<File
 			RelativePath="ConfigureComponent.exe">
-		</File>
-		<File
-			RelativePath="UdmProject.dtd">
-		</File>
-		<File
-			RelativePath="UdmProject.xsd">
-			<FileConfiguration
-				Name="Debug|Win32"
-				ExcludedFromBuild="TRUE">
-				<Tool
-					Name="VCXMLDataGeneratorTool"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinDependency|Win32"
-				ExcludedFromBuild="TRUE">
-				<Tool
-					Name="VCXMLDataGeneratorTool"/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="Uml.dtd">
-		</File>
-		<File
-			RelativePath="Uml.xsd">
-			<FileConfiguration
-				Name="Debug|Win32"
-				ExcludedFromBuild="TRUE">
-				<Tool
-					Name="VCXMLDataGeneratorTool"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release MinDependency|Win32"
-				ExcludedFromBuild="TRUE">
-				<Tool
-					Name="VCXMLDataGeneratorTool"/>
-			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>
