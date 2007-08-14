@@ -2,9 +2,8 @@
 
 
 #include <UdmBase.h>
-#include <UdmInt.h>
 #include <cint_string.h>
-#include <UdmCint.h>
+#include <UdmCintSwig.h>
 #include "cintUdmPseudoTest.h"
 #include "LampDiagram.h"
 
@@ -15,7 +14,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::cintUdmPseudoTest );
 #define WIN_TEMP_ENV "TEMP"
 #define WIN_TMP_ENV "TMP"
 
-using namespace LampDiagram::LampDiagram;
+using namespace LampDiagram;
 
 void myDisplay(char *msg)
 {
