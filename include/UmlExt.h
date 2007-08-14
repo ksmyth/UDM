@@ -115,6 +115,8 @@ namespace Uml
 	UDM_DLL set<Uml::Class> AncestorContainedClasses(const Uml::Class &c);
 // Get classes this object can contain (ancestors in parent and descendants in children are extracted)
 	UDM_DLL set<Uml::Class> AncestorContainedDescendantClasses(const Uml::Class &c);
+// Get the target namespaces of children having the parent in this namespace
+	UDM_DLL set<Uml::Namespace> TargetNSForAllContainerClasses(const Uml::Namespace &ns);
 
 	// All the other ends of associations (ancestors are ignored)
 	UDM_DLL set<Uml::AssociationRole> AssociationTargetRoles(const Uml::Class &c);
@@ -141,12 +143,18 @@ namespace Uml
 	UDM_DLL set<Uml::CompositionParentRole> CompositionPeerParentRoles(const Uml::Class &c);
 // All the parent ends of compositions this class can participate in (including those defined for ancestors)
 	UDM_DLL set<Uml::CompositionParentRole> AncestorCompositionPeerParentRoles(const Uml::Class &c);
+// The namespaces of all the other ends of the compositions defined for this class as child; the set does not include the namespace of this class
+	UDM_DLL set<Uml::Namespace> OtherCompositionPeerParentRolesNamespaces(const Uml::Class &c);
 
 // All the child ends of compositions defined for this class as parent (ancestors are ignored)
 	UDM_DLL set<Uml::CompositionChildRole> CompositionPeerChildRoles(const Uml::Class &c);
 // All the child ends of compositions this class can participate in (including those defined for ancestors)
 	UDM_DLL set<Uml::CompositionChildRole> AncestorCompositionPeerChildRoles(const Uml::Class &c);
+// The namespaces of all the child ends of all compositions defined for all classes from this namespace that are parent
+	UDM_DLL set<Uml::Namespace> CompositionPeerChildNamespaces(const Uml::Namespace &ns);
 
+// Returns true if the parent and the child of this composition are in different namespaces
+	UDM_DLL bool IsCrossNSComposition(const Uml::Composition &c);
 	
 // All attributes this class can have (including those defined in ancestors)
 	UDM_DLL set<Uml::Attribute> AncestorAttributes(const Uml::Class &c);
