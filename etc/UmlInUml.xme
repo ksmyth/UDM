@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{EAE011DB-3194-4A8D-B886-336ECE316C54}" cdate="Sun Jul 31 19:58:57 2005" mdate="Sun Jul 31 19:58:57 2005" version="" metaguid="{FB4641D2-A80D-4BAC-B0AA-570519CD80D0}" metaversion="" metaname="UML">
+<project guid="{830935A5-5866-4A3D-A9C8-4590DB5FFE5D}" cdate="Sat May 20 20:38:19 2006" mdate="Sat May 20 20:38:19 2006" version="" metaguid="{D8D4D1A7-F9C1-4B28-96A2-8A81DB4E2A79}" metaversion="" metaname="UML">
 	<name>Uml</name>
 	<comment></comment>
 	<author></author>
@@ -9,10 +9,13 @@
 		<name>Uml</name>
 		<model id="id-0065-00000001" kind="Package" relid="0x3" childrelidcntr="0x3">
 			<name>Uml</name>
+			<attribute kind="alias" status="meta">
+				<value></value>
+			</attribute>
 			<attribute kind="version">
 				<value>2.04</value>
 			</attribute>
-			<model id="id-0065-00000003" kind="ClassDiagram" role="ClassDiagram" relid="0x3" childrelidcntr="0x2a">
+			<model id="id-0065-00000002" kind="ClassDiagram" role="ClassDiagram" relid="0x3" childrelidcntr="0x2b">
 				<name>Uml</name>
 				<regnode name="PartRegs" isopaque="yes">
 					<value></value>
@@ -788,6 +791,23 @@ version:String[0..1]</value>
 					</attribute>
 					<connpoint role="src" target="id-0066-00000006"/>
 					<connpoint role="dst" target="id-0066-0000000e"/>
+				</connection>
+				<connection id="id-0068-00000019" kind="Composition" role="Composition" relid="0x2b">
+					<name>Composition</name>
+					<regnode name="autorouterPref" isopaque="yes">
+						<value>Nw</value>
+					</regnode>
+					<attribute kind="Cardinality" status="meta">
+						<value>0..*</value>
+					</attribute>
+					<attribute kind="ChildRole">
+						<value>namespaces</value>
+					</attribute>
+					<attribute kind="ParentRole">
+						<value>parent_ns</value>
+					</attribute>
+					<connpoint role="src" target="id-0066-00000007"/>
+					<connpoint role="dst" target="id-0066-00000007"/>
 				</connection>
 			</model>
 		</model>
