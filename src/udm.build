@@ -1,0 +1,277 @@
+<?xml version="1.0"?>
+<project name="udm" default="build" basedir=".">
+  <description>udm build script</description>
+
+
+  <!-- PROPERTIES -->
+  <property name="Configuration" value="Release"/>
+
+  <property name="Path.gme_root"     value="${environment::get-variable('GME_ROOT')}"/>
+  <property name="Path.udm_3rdparty" value="${environment::get-variable('UDM_3RDPARTY_PATH')}"/>
+  <property name="Path.udm"          value="${project::get-base-directory()}"/>
+  <property name="Path.jdk"          value="${environment::get-variable('JDK_PATH')}"/>
+
+  <property name="Version.VS" value="7.1"/>
+
+  <property name="Path.xerces"   value="${Path.udm_3rdparty}\xerces-c_2_5_0"/>
+  <property name="Path.xalan"    value="${Path.udm_3rdparty}\xalan-c_1_8_0"/>
+  <property name="Path.cppunit"  value="${Path.udm_3rdparty}\cppunit-1.10.2"/>
+  <property name="Path.info-zip" value="${Path.udm_3rdparty}\info-zip"/>
+  <property name="Path.sed"      value="${Path.udm_3rdparty}\sed"/>
+  <property name="Path.swig"     value="${Path.udm_3rdparty}\swig-1.3.24"/>
+  <property name="Path.antlr"    value="${Path.udm_3rdparty}\antlr-2.7.1"/>
+  <property name="Path.zlib"     value="${Path.udm_3rdparty}\zlib"/>
+
+  <readregistry
+   hive="LOCALMACHINE"
+   key="SOFTWARE\Microsoft\VisualStudio\${Version.VS}\Setup\VS\EnvironmentDirectory"
+   property="Dir.vsinstall"
+  />
+
+  <readregistry
+   hive="LOCALMACHINE"
+   key="SOFTWARE\Microsoft\VisualStudio\${Version.VS}\Setup\VS\ProductDir"
+   property="Dir.vcinstall"
+  />
+
+  <readregistry
+   hive="LOCALMACHINE"
+   key="SOFTWARE\Microsoft\VisualStudio\${Version.VS}\Setup\VC\ProductDir"
+   property="Dir.msvc"
+  />
+
+  <property name="ID.framework" value="${framework::get-target-framework()}"/>
+
+  <property name="Dir.framework" value="${framework::get-framework-directory(ID.framework)}"/>
+
+  <!-- WANT FRAMEWORK SDK DIR, BUT NAnt ONLY RETURNS SDK BIN DIRECTORY -->
+  <property name="Dir.frameworksdkbin" value="${framework::get-sdk-directory(ID.framework)}"/>
+
+  <!-- CHOP OFF '\bin' TO GET FRAMEWORK SDK DIR -->
+  <property
+   name="Dir.frameworksdk"
+   value="${string::substring(
+    Dir.frameworksdkbin,
+    0,
+    string::last-index-of( Dir.frameworksdkbin, '\' )
+   )}"
+  />
+
+
+  <!-- ENVIRONMENT VARIABLES -->
+  <!-- THESE WERE DERIVED FROM vcvars32.bat -->
+  <setenv name="VSINSTALLDIR"    value="${Dir.vsinstall}"/>
+  <setenv name="VCINSTALLDIR"    value="${Dir.vcinstall}"/>
+  <setenv name="FrameworkDir"    value="${Dir.framework}"/>
+  <setenv name="FrameworkSDKDir" value="${Dir.frameworksdk}"/>
+
+  <setenv name="DevEnvDir" value="${environment::get-variable('VSINSTALLDIR')}"/>
+  <property name="Dir.devenv" value="${environment::get-variable('DevEnvDir')}"/>"
+
+  <setenv name="MSVCDir" value="${Dir.msvc}"/>
+
+  <setenv>
+    <variable name="PATH">
+      <path>
+        <pathelement dir="${Path.xerces}\bin"/>
+        <pathelement dir="${Path.xalan}\bin"/>
+        <pathelement dir="${Path.cppunit}\bin"/>
+        <pathelement dir="${Path.info-zip}"/>
+        <pathelement dir="${Path.sed}"/>
+        <pathelement dir="${Path.swig}"/>
+        <pathelement dir="${Path.udm}\dir"/>
+
+        <pathelement dir="${Dir.devenv}"/>
+	<pathelement dir="${Dir.msvc}\BIN"/>
+        <pathelement dir="${Dir.vcinstall}\Common7\Tools"/>
+        <pathelement dir="${Dir.vcinstall}\Common7\Tools\bin\prerelease"/>
+        <pathelement dir="${Dir.vcinstall}\Common7\Tools\bin"/>
+        <pathelement dir="${Dir.frameworksdk}\bin"/>
+        <pathelement dir="${Dir.framework}\bin"/>
+
+        <pathelement path="${environment::get-variable('PATH')}"/>
+      </path>
+    </variable>
+  </setenv>
+
+  <setenv>
+    <variable name="INCLUDE">
+      <path>
+        <pathelement dir="${Path.xerces}\include"/>
+        <pathelement dir="${Path.xalan}\include"/>
+        <pathelement dir="${Path.antlr}\lib\cpp"/>
+        <pathelement dir="${Path.zlib}"/>
+        <pathelement dir="${Path.zlib}\contrib\minizip"/>
+        <pathelement dir="${Path.cppunit}\include"/>
+        <pathelement dir="${Path.jdk}\include\win32"/>
+        <pathelement dir="${Path.jdk}\include"/>
+
+	<pathelement dir="${Dir.msvc}\ATLMFC\INCLUDE"/>
+	<pathelement dir="${Dir.msvc}\INCLUDE"/>
+	<pathelement dir="${Dir.msvc}\PlatformSDK\include\prerelease"/>
+	<pathelement dir="${Dir.msvc}\PlatformSDK\include"/>
+	<pathelement dir="${Dir.frameworksdk}\include"/>
+
+	<pathelement dir="${Path.udm}\UdmOclPat\GOCL\Include"/>
+	<pathelement dir="${Path.udm}\UML GME\Interpreter"/>
+
+	<pathelement path="${environment::get-variable('INCLUDE')}"/>
+      </path>
+    </variable>
+  </setenv>
+
+  <setenv>
+    <variable name="LIB">
+      <path>
+        <pathelement dir="${Path.xerces}\lib"/>
+        <pathelement dir="${Path.xalan}\lib"/>
+        <pathelement dir="${Path.zlib}"/>
+        <pathelement dir="${Path.antlr}\lib"/>
+        <pathelement dir="${Path.cppunit}\lib"/>
+        <pathelement dir="${Path.jdk}\lib"/>
+
+	<pathelement dir="${Dir.msvc}\ATLMFC\LIB"/>
+	<pathelement dir="${Dir.msvc}\LIB"/>
+	<pathelement dir="${Dir.msvc}\PlatformSDK\lib\prerelease"/>
+	<pathelement dir="${Dir.msvc}\PlatformSDK\lib"/>
+	<pathelement dir="${Dir.frameworksdk}\lib"/>
+
+	<pathelement path="${environment::get-variable('LIB')}"/>
+      </path>
+    </variable>
+  </setenv>
+
+
+  <target name="init" description="initialization of build">
+    <echo message="NAnt build for &quot;${Configuration}&quot; configuration"/>
+  </target>
+
+  <target name="gocl_antlr" depends="init" description="GOCL ANTLR execution">
+    <exec 
+     program="antlr.exe"
+     basedir="UdmOclPat\GOCL\src\ANTLRBase"
+     workingdir="UdmOclPat\GOCL\src"
+     commandline="-CC -ft OCLTokens.h -fl OCLTokens.dlg -mrhoist off ocl.g"
+    />
+<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
+     ARGUMENT ELEMENTS.
+      <arg line="-CC"/>
+      <arg line="-ft OCLTokens.h"/>
+      <arg line="-fl OCLTokens.dlg"/>
+      <arg line="-mrhoist off"/>
+      <arg file="ocl.g"/>
+    </exec>
+-->
+    <exec
+     program="dlg.exe"
+     basedir="UdmOclPat\GOCL\src\ANTLRBase"
+     workingdir="UdmOclPat\GOCL\src"
+     commandline="-C2 -i -CC -cl OCLLexer OCLTokens.dlg"
+    />
+<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
+     ARGUMENT ELEMENTS.
+      <arg line="-C2"/>
+      <arg line="-i"/>
+      <arg line="-CC"/>
+      <arg line="-cl OCLLexer"/>
+      <arg file="OCLTokens.dlg"/>
+    </exec>
+-->
+  </target>
+
+  <target name="zip_udmint" depends="init" description="ZIP compress UdmInterpreter file">
+    <exec
+     program="zip"
+     workingdir="UIntWiz\res"
+     commandline="-r UdmInterpreter.zip UdmInterpreter -x *.scc"
+    />
+<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
+     ARGUMENT ELEMENTS.
+      <arg line="-r"/>
+      <arg file="UdmInterpreter.zip"/>
+      <arg file="UdmInterpreter"/>
+      <arg line="-x *.scc"/>
+    </exec>
+-->
+  </target>
+
+  <target name="midl_gme_comp" depends="init" description="midl execution on GME BON ComponentLib.idl">
+    <exec
+     program="midl.exe"
+     workingdir="UML GME\Interpreter"
+     commandline="-I.\ /server none /client none &quot;${Path.gme_root}\sdk\BON\ComponentLib.idl&quot;"
+    />
+<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
+     ARGUMENT ELEMENTS.
+      <arg line="-I.\"/>
+      <arg line="/server none"/>
+      <arg line="/client none"/>
+      <arg file="${Path.gme_root}\sdk\BON\ComponentLib.idl"/>
+    </exec>
+-->
+  </target>
+
+  <target name="antlr_interp_card" depends="init" description="antlr execution for GME Interpreter cardinality.g">
+    <exec
+     program="java"
+     workingdir="UML GME\Interpreter"
+     commandline="antlr.Tool cardinality.g"
+    />
+<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
+     ARGUMENT ELEMENTS.
+      <arg line="antlr.Tool"/>
+      <arg file="cardinality.g"/>
+    </exec>
+-->
+  </target>
+
+  <target name="antlr_interp_attr" depends="init" description="antlr execution for GME Interpreter attribute.g">
+    <exec
+     program="java"
+     workingdir="UML GME\Interpreter"
+     commandline="antlr.Tool attribute.g"
+    />
+<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
+     ARGUMENT ELEMENTS.
+      <arg line="antlr.Tool"/>
+      <arg file="attribute.g"/>
+    </exec>
+-->
+  </target>
+
+  <target name="udm_swig" depends="init" description="swig execution for java interface to udm">
+    <exec
+     program="swig.exe"
+     workingdir="UdmSwig"
+     commandline="-java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o UdmSwig_wrap.cpp UdmSwig.i"
+    />
+<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
+     ARGUMENT ELEMENTS.
+      <arg line="-java"/>
+      <arg line="-package edu.vanderbilt.isis.udm.swig"/>
+      <arg line="-outdir ..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig"/>
+      <arg line="-v"/>
+      <arg line="-c++"/>
+      <arg line="-o UdmSwig_wrap.cpp"/>
+      <arg file="UdmSwig.i"/>
+    </exec>
+-->
+  </target>
+
+  <target
+   name="build"
+   depends="init,
+            gocl_antlr,
+            zip_udmint,
+            midl_gme_comp,
+            antlr_interp_card,
+            antlr_interp_attr,
+            udm_swig"
+   description="main compile of udm"
+  >
+    <solution configuration="${Configuration}" includevsfolders="true" solutionfile="Udm.sln" verbose="true"/>
+  </target>
+
+</project>
+
+
