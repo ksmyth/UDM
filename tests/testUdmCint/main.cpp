@@ -495,7 +495,7 @@ void UdmTests::Test::test()
  std::string result;
  
 // testWrite(result);
- //testRead(result);
+// testRead(result);
  testReadSBML2Ex("versionCheck.xml");
 
 }
