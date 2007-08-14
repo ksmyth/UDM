@@ -81,7 +81,7 @@ bool UdmTests::childrenorderTest::ordertest(const char * dgr_name)
 	nw.OpenExisting(dgr_name, "LampDiagram");
 	{
 		RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
-		set<Lamp> lamps = rrr.Lamp_kind_children();
+		set<Lamp> lamps = rrr.LampDiagram_Lamp_kind_children();
 		Lamp lamp = *(lamps.begin());
 
 		//checking the order of the Bulbs
