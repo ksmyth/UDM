@@ -290,7 +290,8 @@ namespace OCLUML
 				GME::FCOVector vecConnectors;
 				GME::FCOVector vecFCOs;
 				GetConnections( spFCO, ( bSrcToDst ) ? "Src" : "Dst", vecConnectors );
-				for ( int i = 0 ; i < vecConnectors.size() ; i++ )
+				int i;
+				for ( i = 0 ; i < vecConnectors.size() ; i++ )
 					GetConnections( vecConnectors[ i ].p,  ( bSrcToDst ) ? "Dst" : "Src", vecFCOs, vecConnections );
 				for ( i = 0 ; i < vecFCOs.size() ; i++ ) {
 					CComPtr<IMgaFCO> spAssocEnd = GetEntity( vecFCOs[ i ].p );
@@ -347,7 +348,8 @@ namespace OCLUML
 				GetConnections( spFCO, "AssociationClass", vecConnectors );
 				GME::FCOVector vecFCOs;
 				GME::FCOVector vecConnections;
-				for ( int i = 0 ; i < vecConnectors.size() ; i++ )
+				int i;
+				for ( i = 0 ; i < vecConnectors.size() ; i++ )
 					GetConnections( vecConnectors[ i ].p, ( bSrcToDst ) ? "Src" : "Dst", vecFCOs, vecConnections );
 				for ( i = 0 ; i < vecFCOs.size() ; i++ ) {
 					CComPtr<IMgaFCO> spAssocEnd = GetEntity( vecFCOs[ i ].p );
