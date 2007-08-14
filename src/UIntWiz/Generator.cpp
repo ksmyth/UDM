@@ -4,7 +4,9 @@
 
 #include "stdafx.h"
 #include "wizard97.h"
-#include <fstream.h>
+#include <fstream>
+
+#include <stdlib.h> //for system()
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -42,6 +44,10 @@ void CGenerator::Generate()
 
 	GenerateProjectFile();
 
+	std::string cmdline = "call %UDM_3RDPARTY_PATH%\\3rdparty\\mpc\\mpc.exe -type vc71 ";
+	cmdline += m_strDestinationPath+_INTERPRETER_CODE_PATH+"Component.mpc";
+    
+	system(cmdline.c_str());
 }
 
 BOOL CGenerator::UnzipSources()
@@ -70,7 +76,7 @@ BOOL CGenerator::UnzipSources()
 	char szMemFileName[40];
 	sprintf(szMemFileName, "(beg:0x%x,end:0x%x)", pResStart,pResEnd);
 
-    ofstream myFile ("c:\\udminterpreter.zip", ios::out | ios::binary);
+	std::ofstream myFile ("c:\\udminterpreter.zip", std::ios::out | std::ios::binary);
     myFile.write ((char *)lpRes, ::SizeofResource(NULL,hResInfo));
 	myFile.close();
 
@@ -618,22 +624,13 @@ bool CGenerator::CopyUdmMetaFiles()
 bool CGenerator::GenerateProjectFile()
 {
 
-	CString strFileName=m_strDestinationPath+_INTERPRETER_CODE_PATH+"Component.dsp";
-	CString strUdmHeaderPath=m_UdmData.m_strUdmPath+"\\Include\\Udm";
-	CString strSTLHeaderPath=m_UdmData.m_strUdmPath+"\\Include\\Stl";	
+	CString strFileName=m_strDestinationPath+_INTERPRETER_CODE_PATH+"Component.mpc";
 	
-	CString strGMEPath;
-	char l_strSingleVal[255];
-	if(GetEnvironmentVariable("GME_ROOT", l_strSingleVal,255)) {
-		strGMEPath=l_strSingleVal;
-	}	
-	CString strGMEBONPath = strGMEPath + "\\SDK\\BON";
-
 	CString strHeaderFileName=m_UdmData.m_strHeaderPath.Right(m_UdmData.m_strHeaderPath.GetLength()-m_UdmData.m_strHeaderPath.ReverseFind('\\')-1);
 	CString strCppFileName=m_UdmData.m_strCppPath.Right(m_UdmData.m_strCppPath.GetLength()-m_UdmData.m_strCppPath.ReverseFind('\\')-1);
 
-	FILE* fDspFile=fopen(strFileName,"wt");
-	if(fDspFile==NULL)
+	FILE* fMpcFile=fopen(strFileName,"wt");
+	if(fMpcFile==NULL)
 	{
 		CString strMessage;
 		strMessage.Format("Udm Interpreter Wizard could not generate project file %s.",strFileName);
@@ -641,385 +638,58 @@ bool CGenerator::GenerateProjectFile()
 		return false;
 	}
 
-	fprintf(fDspFile,"# Microsoft Developer Studio Project File - Name=\"Component\" - Package Owner=<4>\n");
-	fprintf(fDspFile,"# Microsoft Developer Studio Generated Build File, Format Version 6.00\n");
-	fprintf(fDspFile,"# ** DO NOT EDIT **\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# TARGTYPE \"Win32 (x86) Dynamic-Link Library\" 0x0102\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"CFG=Component - Win32 Debug\n");
-	fprintf(fDspFile,"!MESSAGE This is not a valid makefile. To build this project using NMAKE,\n");
-	fprintf(fDspFile,"!MESSAGE use the Export Makefile command and run\n");
-	fprintf(fDspFile,"!MESSAGE \n");
-	fprintf(fDspFile,"!MESSAGE NMAKE /f \"Component.mak\".\n");
-	fprintf(fDspFile,"!MESSAGE \n");
-	fprintf(fDspFile,"!MESSAGE You can specify a configuration when running NMAKE\n");
-	fprintf(fDspFile,"!MESSAGE by defining the macro CFG on the command line. For example:\n");
-	fprintf(fDspFile,"!MESSAGE \n");
-	fprintf(fDspFile,"!MESSAGE NMAKE /f \"Component.mak\" CFG=\"Component - Win32 Debug\"\n");
-	fprintf(fDspFile,"!MESSAGE \n");
-	fprintf(fDspFile,"!MESSAGE Possible choices for configuration are:\n");
-	fprintf(fDspFile,"!MESSAGE \n");
-	fprintf(fDspFile,"!MESSAGE \"Component - Win32 Debug\" (based on \"Win32 (x86) Dynamic-Link Library\")\n");
-	fprintf(fDspFile,"!MESSAGE \"Component - Win32 Release MinSize\" (based on \"Win32 (x86) Dynamic-Link Library\")\n");
-	fprintf(fDspFile,"!MESSAGE \"Component - Win32 Release MinDependency\" (based on \"Win32 (x86) Dynamic-Link Library\")\n");
-	fprintf(fDspFile,"!MESSAGE \n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# Begin Project\n");
-	fprintf(fDspFile,"# PROP AllowPerConfigDependencies 0\n");
-	fprintf(fDspFile,"# PROP Scc_ProjName \"\"\n");
-	fprintf(fDspFile,"# PROP Scc_LocalPath \"\"\n");
-	fprintf(fDspFile,"CPP=cl.exe\n");
-	fprintf(fDspFile,"MTL=midl.exe\n");
-	fprintf(fDspFile,"RSC=rc.exe\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"!IF  \"$(CFG)\" == \"Component - Win32 Debug\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# PROP BASE Use_MFC 2\n");
-	fprintf(fDspFile,"# PROP BASE Use_Debug_Libraries 1\n");
-	fprintf(fDspFile,"# PROP BASE Output_Dir \"Debug\"\n");
-	fprintf(fDspFile,"# PROP BASE Intermediate_Dir \"Debug\"\n");
-	fprintf(fDspFile,"# PROP BASE Target_Dir \"\"\n");
-	fprintf(fDspFile,"# PROP Use_MFC 2\n");
-	fprintf(fDspFile,"# PROP Use_Debug_Libraries 1\n");
-	fprintf(fDspFile,"# PROP Output_Dir \"Debug\"\n");
-	fprintf(fDspFile,"# PROP Intermediate_Dir \"Debug\"\n");
-	fprintf(fDspFile,"# PROP Ignore_Export_Lib 0\n");
-	fprintf(fDspFile,"# PROP Target_Dir \"\"\n");
-	fprintf(fDspFile,"# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /Yu\"stdafx.h\" /FD /GZ /c\n");
-
-	/*
-	Commented by Ananth
-	if(m_UdmData.m_bIncludeUdm)
-	{
-		fprintf(fDspFile,"# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I \"..\\Udm\\Include\\Udm\" /I \"..\\Udm\\Include\\Stl\" /D \"_DEBUG\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /FR /FD /GZ /c\n");
-	}
-	else
-	{
-		fprintf(fDspFile,"# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I \"%s\" /I \"%s\" /D \"_DEBUG\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /FR /FD /GZ /c\n",strUdmHeaderPath,strSTLHeaderPath);
-	}
-	End comment by Ananth
-	*/
-	//Added by Ananth
-	fprintf(fDspFile,"# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I \".\\\\\" /I \".\\\" /I \"%s\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"_DEBUG\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /D \"GME_INTERPRETER_USED\" /D \"UML_CLASS_DIAGRAM\" /FR /FD /GZ /Zm200 /c\n",strGMEBONPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	//End add by Ananth
-
-	/* Commented by Ananth
-	fprintf(fDspFile,"# SUBTRACT CPP /YX /Yc /Yu\n");
-	*/
-	fprintf(fDspFile,"# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /win32\n");
-	fprintf(fDspFile,"# ADD BASE RSC /l 0x409 /d \"_DEBUG\" /d \"_AFXDLL\"\n");
-	fprintf(fDspFile,"# ADD RSC /l 0x409 /d \"_DEBUG\" /d \"_AFXDLL\"\n");
-	fprintf(fDspFile,"BSC32=bscmake.exe\n");
-	fprintf(fDspFile,"# ADD BASE BSC32 /nologo\n");
-	fprintf(fDspFile,"# ADD BSC32 /nologo\n");
-	fprintf(fDspFile,"LINK32=link.exe\n");
-	fprintf(fDspFile,"# ADD BASE LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept\n");
-	/*
-	Commented by Ananth
-	fprintf(fDspFile,"# ADD LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept\n");
-	End comment by Ananth
-	*/
-	//Added by Ananth
-	fprintf(fDspFile,"# ADD LINK32 xerces-c_2D.lib ZlibD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib UdmGmeD.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept /libpath:\"%s\\lib\" /libpath:\"%s\\3rdParty\\zlib\" /libpath:\"%s\\3rdparty\\xerces\\xerces-c_2_5_0-windows_nt-msvc_60\\lib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	fprintf(fDspFile,"# SUBTRACT LINK32 /pdb:none\n");
-	//End add by Ananth
-	fprintf(fDspFile,"# Begin Custom Build - Performing registration\n");
-	fprintf(fDspFile,"OutDir=.\\Debug\n");
-	fprintf(fDspFile,"TargetPath=.\\Debug\\Component.dll\n");
-	fprintf(fDspFile,"InputPath=.\\Debug\\Component.dll\n");
-	fprintf(fDspFile,"SOURCE=\"$(InputPath)\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"$(OutDir)\\regsvr32.trg\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"	regsvr32 /s /c \"$(TargetPath)\" \n");
-	fprintf(fDspFile,"	echo regsvr32 exec. time > \"$(OutDir)\\regsvr32.trg\" \n");
-	fprintf(fDspFile,"	\n");
-	fprintf(fDspFile,"# End Custom Build\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"!ELSEIF  \"$(CFG)\" == \"Component - Win32 Release MinSize\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# PROP BASE Use_MFC 2\n");
-	fprintf(fDspFile,"# PROP BASE Use_Debug_Libraries 0\n");
-	fprintf(fDspFile,"# PROP BASE Output_Dir \"ReleaseMinSize\"\n");
-	fprintf(fDspFile,"# PROP BASE Intermediate_Dir \"ReleaseMinSize\"\n");
-	fprintf(fDspFile,"# PROP BASE Ignore_Export_Lib 0\n");
-	fprintf(fDspFile,"# PROP BASE Target_Dir \"\"\n");
-	fprintf(fDspFile,"# PROP Use_MFC 2\n");
-	fprintf(fDspFile,"# PROP Use_Debug_Libraries 0\n");
-	fprintf(fDspFile,"# PROP Output_Dir \"ReleaseMinSize\"\n");
-	fprintf(fDspFile,"# PROP Intermediate_Dir \"ReleaseMinSize\"\n");
-	fprintf(fDspFile,"# PROP Ignore_Export_Lib 0\n");
-	fprintf(fDspFile,"# PROP Target_Dir \"\"\n");	
-	/*Commented by Ananth
-	fprintf(fDspFile,"# ADD BASE CPP /nologo /MD /W3 /GX /O1 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /Yu\"stdafx.h\" /FD /c\n");
-
-	if(m_UdmData.m_bIncludeUdm)
-	{
-		fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \"..\\Udm\\Include\\Udm\" /I \"..\\Udm\\Include\\Stl\" /D \"NDEBUG\" /D \"_ATL_DLL\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /FD /c\n");
-	}
-	else
-	{
-		fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \"%s\" /I \"%s\" /D \"NDEBUG\" /D \"_ATL_DLL\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /FD /c\n",strUdmHeaderPath,strSTLHeaderPath);
-	}
-	*/
-	//Added by Ananth
-	fprintf(fDspFile,"# ADD BASE CPP /nologo /MD /W3 /GX /O1 /I \".\\\\\" /I \".\\\" /I \"%s/\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_DLL\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /D \"GME_INTERPRETER_USED\" /D \"UML_CLASS_DIAGRAM\" /FR /FD /Zm200 /c\n",strGMEBONPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	//
-	/*Commented by Ananth
-	fprintf(fDspFile,"# SUBTRACT CPP /YX /Yc /Yu\n");
-	fprintf(fDspFile,"# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /win32\n");
-	*/
-	//Added by Ananth
-	fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \".\\\\\" /I \".\\\" /I \"%s\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_DLL\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /D \"GME_INTERPRETER_USED\" /D \"UML_CLASS_DIAGRAM\" /FR /FD /Zm200 /c\n",strGMEBONPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	//end
-	fprintf(fDspFile,"# ADD BASE RSC /l 0x409 /d \"NDEBUG\" /d \"_AFXDLL\"\n");
-	fprintf(fDspFile,"# ADD RSC /l 0x409 /d \"NDEBUG\" /d \"_AFXDLL\"\n");
-	fprintf(fDspFile,"BSC32=bscmake.exe\n");
-	fprintf(fDspFile,"# ADD BASE BSC32 /nologo\n");
-	fprintf(fDspFile,"# ADD BSC32 /nologo\n");
-	fprintf(fDspFile,"LINK32=link.exe\n");
-	/*Commented by Ananth
-	fprintf(fDspFile,"# ADD BASE LINK32 /nologo /subsystem:windows /dll /machine:I386\n");
-	fprintf(fDspFile,"# ADD LINK32 /nologo /subsystem:windows /dll /machine:I386\n");
-	*/
-	//Added by Ananth
-	fprintf(fDspFile,"# ADD BASE LINK32 xerces-c_2.lib Zlib.lib /nologo /subsystem:windows /dll /machine:I386 /out:\"Release/Component.dll\" /libpath:\"%s\\3rdParty\\zlib\" /libpath:\"%s\\3rdparty\\xerces\\xerces-c_2_5_0-windows_nt-msvc_60\\lib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	fprintf(fDspFile,"# ADD LINK32 xerces-c_2.lib Zlib.lib UdmBase.lib UdmDom.lib UdmUtil.lib UdmGme.lib /nologo /subsystem:windows /dll /machine:I386 /libpath:\"%s\\lib\" /libpath:\"%s\\3rdParty\\zlib\" /libpath:\"%s\\3rdparty\\xerces\\xerces-c_2_5_0-windows_nt-msvc_60\\lib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	//end
-	fprintf(fDspFile,"# Begin Custom Build - Performing registration\n");
-	fprintf(fDspFile,"OutDir=.\\ReleaseMinSize\n");
-	fprintf(fDspFile,"TargetPath=.\\ReleaseMinSize\\Component.dll\n");
-	fprintf(fDspFile,"InputPath=.\\ReleaseMinSize\\Component.dll\n");
-	fprintf(fDspFile,"SOURCE=\"$(InputPath)\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"$(OutDir)\\regsvr32.trg\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"	regsvr32 /s /c \"$(TargetPath)\" \n");
-	fprintf(fDspFile,"	echo regsvr32 exec. time > \"$(OutDir)\\regsvr32.trg\" \n");
-	fprintf(fDspFile,"	\n");
-	fprintf(fDspFile,"# End Custom Build\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"!ELSEIF  \"$(CFG)\" == \"Component - Win32 Release MinDependency\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# PROP BASE Use_MFC 2\n");
-	fprintf(fDspFile,"# PROP BASE Use_Debug_Libraries 0\n");
-	fprintf(fDspFile,"# PROP BASE Output_Dir \"ReleaseMinDependency\"\n");
-	fprintf(fDspFile,"# PROP BASE Intermediate_Dir \"ReleaseMinDependency\"\n");
-	fprintf(fDspFile,"# PROP BASE Target_Dir \"\"\n");
-	fprintf(fDspFile,"# PROP Use_MFC 2\n");
-	fprintf(fDspFile,"# PROP Use_Debug_Libraries 0\n");
-	fprintf(fDspFile,"# PROP Output_Dir \"ReleaseMinDependency\"\n");
-	fprintf(fDspFile,"# PROP Intermediate_Dir \"ReleaseMinDependency\"\n");
-	fprintf(fDspFile,"# PROP Ignore_Export_Lib 0\n");
-	fprintf(fDspFile,"# PROP Target_Dir \"\"\n");
-	fprintf(fDspFile,"# ADD BASE CPP /nologo /MD /W3 /GX /O1 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /FD /c\n");
-	/*Commented by Ananth	
-	fprintf(fDspFile,"# ADD BASE CPP /nologo /MD /W3 /GX /O1 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /Yu\"stdafx.h\" /FD /c\n");
-	if(m_UdmData.m_bIncludeUdm)
-	{
-		fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \"..\\Udm\\Include\\Udm\" /I \"..\\Udm\\Include\\Stl\" /D \"NDEBUG\" /D \"_ATL_STATIC_REGISTRY\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /Yu\"stdafx.h\" /FD /c\n");
-	}
-	else
-	{
-		fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \"%s\" /I \"%s\" /D \"NDEBUG\" /D \"_ATL_STATIC_REGISTRY\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /Yu\"stdafx.h\" /FD /c\n", strUdmHeaderPath,strSTLHeaderPath);
-	}
-	*/
-	//Added by Ananth
-	//fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_STATIC_REGISTRY\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /Yu\"stdafx.h\" /FD /c\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \".\\\" /I \"%s\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_STATIC_REGISTRY\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /FD /c\n",strGMEBONPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	//end
-	fprintf(fDspFile,"# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /win32\n");
-	fprintf(fDspFile,"# ADD BASE RSC /l 0x409 /d \"NDEBUG\" /d \"_AFXDLL\"\n");
-	fprintf(fDspFile,"# ADD RSC /l 0x409 /d \"NDEBUG\" /d \"_AFXDLL\"\n");
-	fprintf(fDspFile,"BSC32=bscmake.exe\n");
-	fprintf(fDspFile,"# ADD BASE BSC32 /nologo\n");
-	fprintf(fDspFile,"# ADD BSC32 /nologo\n");
-	fprintf(fDspFile,"LINK32=link.exe\n");
-	fprintf(fDspFile,"# ADD BASE LINK32 /nologo /subsystem:windows /dll /machine:I386\n");
-	fprintf(fDspFile,"# ADD LINK32 xerces-c_2.lib zlib.lib UdmBase.lib UdmGme.lib UdmUtil.lib UdmDom.lib /nologo /subsystem:windows /dll /machine:I386 /libpath:\"%s\\Lib,%s\\3rdparty\\xerces\\xerces-c_2_5_0-windows_nt-msvc_60\\lib,%s\\3rdparty\\zlib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	/*Commented by Ananth
-	fprintf(fDspFile,"# ADD LINK32 /nologo /subsystem:windows /dll /machine:I386 /libpath:\"..\\Udm\\Lib\\Udm ..\\Udm\\Lib\\xerces\"\n");
-	*/
-	fprintf(fDspFile,"# Begin Custom Build - Performing registration\n");
-	fprintf(fDspFile,"OutDir=.\\ReleaseMinDependency\n");
-	fprintf(fDspFile,"TargetPath=.\\ReleaseMinDependency\\Component.dll\n");
-	fprintf(fDspFile,"InputPath=.\\ReleaseMinDependency\\Component.dll\n");
-	fprintf(fDspFile,"SOURCE=\"$(InputPath)\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"$(OutDir)\\regsvr32.trg\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"	regsvr32 /s /c \"$(TargetPath)\" \n");
-	fprintf(fDspFile,"	echo regsvr32 exec. time > \"$(OutDir)\\regsvr32.trg\" \n");
-	fprintf(fDspFile,"	\n");
-	fprintf(fDspFile,"# End Custom Build\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"!ENDIF \n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# Begin Target\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# Name \"Component - Win32 Debug\"\n");
-	fprintf(fDspFile,"# Name \"Component - Win32 Release MinSize\"\n");
-	fprintf(fDspFile,"# Name \"Component - Win32 Release MinDependency\"\n");
-	fprintf(fDspFile,"# Begin Group \"Source Files\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# PROP Default_Filter \"cpp;c;cxx;rc;def;r;odl;idl;hpj;bat\"\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=\"%s\\ComHelp.cpp\"\n", strGMEBONPath);
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\Component.def\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\Component.rc\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=\"%s\\ComponentDll.cpp\"\n", strGMEBONPath);
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\ComponentLib.idl\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"!IF  \"$(CFG)\" == \"Component - Win32 Debug\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# PROP Ignore_Default_Tool 1\n");
-	fprintf(fDspFile,"# Begin Custom Build - MIDL $(InputPath))\n");
-	fprintf(fDspFile,"InputPath=.\\ComponentLib.idl\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"BuildCmds= \\\n");
-	fprintf(fDspFile,"	midl /server none /client none ComponentLib.idl\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"ComponentLib.tlb\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"   $(BuildCmds)\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"ComponentLib.h\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"   $(BuildCmds)\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"ComponentLib_i.c\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"   $(BuildCmds)\n");
-	fprintf(fDspFile,"# End Custom Build\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"!ELSEIF  \"$(CFG)\" == \"Component - Win32 Release MinSize\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# PROP Ignore_Default_Tool 1\n");
-	fprintf(fDspFile,"# Begin Custom Build - MIDL $(InputPath))\n");
-	fprintf(fDspFile,"InputPath=.\\ComponentLib.idl\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"BuildCmds= \\\n");
-	fprintf(fDspFile,"	midl /server none /client none ComponentLib.idl\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"ComponentLib.tlb\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"   $(BuildCmds)\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"ComponentLib.h\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"   $(BuildCmds)\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"ComponentLib_i.c\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"   $(BuildCmds)\n");
-	fprintf(fDspFile,"# End Custom Build\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"!ELSEIF  \"$(CFG)\" == \"Component - Win32 Release MinDependency\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# PROP Ignore_Default_Tool 1\n");
-	fprintf(fDspFile,"# Begin Custom Build - MIDL $(InputPath))\n");
-	fprintf(fDspFile,"InputPath=.\\ComponentLib.idl\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"BuildCmds= \\\n");
-	fprintf(fDspFile,"	midl /server none /client none ComponentLib.idl\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"ComponentLib.tlb\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"   $(BuildCmds)\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"ComponentLib.h\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"   $(BuildCmds)\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"\"ComponentLib_i.c\" : $(SOURCE) \"$(INTDIR)\" \"$(OUTDIR)\"\n");
-	fprintf(fDspFile,"   $(BuildCmds)\n");
-	fprintf(fDspFile,"# End Custom Build\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"!ENDIF \n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=\"%s\\ComponentObj.cpp\"\n", strGMEBONPath);
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-
-	if(m_UdmData.m_nMetaLoading==META_LOADING_CODE)
-	{
-		// Adding cpp file to project
-		fprintf(fDspFile,"SOURCE=.\\%s\n",strCppFileName);
-		fprintf(fDspFile,"# End Source File\n");
-		fprintf(fDspFile,"# Begin Source File\n");
-		fprintf(fDspFile,"\n");
-	}
-
-	fprintf(fDspFile,"SOURCE=.\\RawComponent.cpp\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\StdAfx.cpp\n");
-	fprintf(fDspFile,"# ADD CPP /Yc\"stdafx.h\"\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\UdmApp.cpp\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# End Group\n");
-	fprintf(fDspFile,"# Begin Group \"Header Files\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# PROP Default_Filter \"h;hpp;hxx;hm;inl\"\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\ComponentConfig.h\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	
-	if(m_UdmData.m_nMetaLoading==META_LOADING_CODE)
-	{
-		// Adding header to the project
-		fprintf(fDspFile,"SOURCE=.\\%s\n",strHeaderFileName);	
-		fprintf(fDspFile,"# End Source File\n");
-		fprintf(fDspFile,"# Begin Source File\n");
-		fprintf(fDspFile,"\n");
-	}
-
-	fprintf(fDspFile,"SOURCE=.\\RawComponent.h\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\Resource.h\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\StdAfx.h\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\UdmApp.h\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\UdmConfig.h\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# End Group\n");
-	fprintf(fDspFile,"# Begin Group \"Resource Files\"\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"# PROP Default_Filter \"ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe\"\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\CompIcon.ico\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# End Group\n");
-	fprintf(fDspFile,"# End Target\n");
-	fprintf(fDspFile,"# End Project\n");
+	fprintf(fMpcFile,"project (Component): mfc {\n\n");
+	fprintf(fMpcFile,"  Define_Custom(MIDL) {\n");
+	fprintf(fMpcFile,"  	automatic            = 0\n");
+	fprintf(fMpcFile,"  	command              = midl\n");
+	fprintf(fMpcFile,"  	commandflags         = -win32 -I . -server none -client none\n");
+	fprintf(fMpcFile,"  	source_pre_extension = _i,_p\n");
+	fprintf(fMpcFile,"  	source_outputext     = .c\n");
+	fprintf(fMpcFile,"  	header_outputext     = .h\n");
+	fprintf(fMpcFile,"  	generic_outputext    = .tlb\n");
+	fprintf(fMpcFile,"  	inputext             = .idl\n");
+	fprintf(fMpcFile,"  }\n\n");
+	fprintf(fMpcFile,"  MIDL_Files {\n");
+	fprintf(fMpcFile,"  	gendir = .\n");
+	fprintf(fMpcFile,"  	ComponentLib.idl\n");
+	fprintf(fMpcFile,"  }\n\n");
+	fprintf(fMpcFile,"  dllout = ./bin\n");
+	fprintf(fMpcFile,"  includes += . \\\n");
+	fprintf(fMpcFile,"  $(GME_ROOT)/SDK/BON \\\n");
+	fprintf(fMpcFile,"  $(UDM_PATH)/include\n");
+	fprintf(fMpcFile,"  libpaths += $(UDM_PATH)/lib\n");
+	fprintf(fMpcFile,"  libs += xerces-c_2 zlib UdmBase UdmGme UdmUtil UdmDom\n");
+	fprintf(fMpcFile,"  specific (vc6) {\n");
+	fprintf(fMpcFile,"  includes += $(UDM_3RDPARTY_PATH)/3rdparty/stl \n");
+	fprintf(fMpcFile,"  }\n\n");
+	fprintf(fMpcFile,"  Source_Files {\n");
+	fprintf(fMpcFile,"    StdAfx.cpp\n");
+	fprintf(fMpcFile,"    $(GME_ROOT)/SDK/BON/ComHelp.cpp\n");
+	fprintf(fMpcFile,"    $(GME_ROOT)/SDK/BON/ComponentDll.cpp\n");
+	fprintf(fMpcFile,"    ComponentLib.idl\n");
+	fprintf(fMpcFile,"    $(GME_ROOT)/SDK/BON/ComponentObj.cpp\n");
+	if(m_UdmData.m_nMetaLoading==META_LOADING_CODE) fprintf(fMpcFile,"%s\n",strCppFileName);
+	fprintf(fMpcFile,"    Component.rc\n");
+	fprintf(fMpcFile,"    Component.def\n");
+	fprintf(fMpcFile,"    RawComponent.cpp\n");
+	fprintf(fMpcFile,"    UdmApp.cpp\n");
+	fprintf(fMpcFile,"  }\n\n");
+	fprintf(fMpcFile,"  Header_Files {\n");
+	fprintf(fMpcFile,"    ComponentConfig.h\n");
+	fprintf(fMpcFile,"    RawComponent.h\n");
+	fprintf(fMpcFile,"    Resource.h\n");
+	if(m_UdmData.m_nMetaLoading==META_LOADING_CODE) fprintf(fMpcFile,"%s\n",strHeaderFileName);	
+	fprintf(fMpcFile,"    StdAfx.h\n");
+	fprintf(fMpcFile,"    UdmApp.h\n");
+	fprintf(fMpcFile,"    UdmConfig.h\n");
+	fprintf(fMpcFile,"  }\n\n");
+	fprintf(fMpcFile,"  Resource_Files {\n");
+	fprintf(fMpcFile,"    CompIcon.ico\n");
+	fprintf(fMpcFile,"  }\n");
+	fprintf(fMpcFile,"}");
 
 	// Close file
-	fclose(fDspFile);
+	fclose(fMpcFile);
 
 	return true;
 }
