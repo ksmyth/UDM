@@ -65,7 +65,7 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
-06/04/04	-	Release 2.18
+04/06/06	-	Release 2.18
 
 
 		- 	Added Udm::BaseVisitor class and Udm::Object::Accept(const BaseVisitor&) virtual functions
