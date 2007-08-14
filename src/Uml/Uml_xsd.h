@@ -15,7 +15,7 @@ const std::string& getString()
 			str +="<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n";
 			str +=" elementFormDefault=\"qualified\" \n";
 			str +=">\n";
-			str +="<!-- generated on Sat Oct 28 21:17:15 2006 -->\n";
+			str +="<!-- generated on Mon Jul 02 20:48:17 2007 -->\n";
 			str +="\n";
 			str +="\n";
 			str +="	<xsd:complexType name=\"AttributeType\">\n";
