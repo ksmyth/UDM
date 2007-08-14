@@ -118,7 +118,6 @@ extern void printDOM(DOM_Node doc, string & target, XMLCh *encodingName = NULL);
 #ifdef max
 #undef max
 #endif
-
 #define UDM_DOM_URI_PREFIX "http://www.isis.vanderbilt.edu/2004/schemas/"
 /*
 CHANGELOG
@@ -285,9 +284,10 @@ namespace UdmDom
 		
 	};
 
-	DOM_Element getElementNamed(DOM_Element parent, const DOMString &name, const DOMString &ns_name, bool create = false)
+	DOM_Element getElementNamed(DOM_Element parent, const DOMString &name, const DOMString &ns_name, bool create = false, int no = 1)
 	{
 		DOM_Element elem;
+		int i = 0;
 		DOM_Node n = parent.getFirstChild(); 
 		while (n != (DOM_NullPtr *)NULL)
 		{
@@ -296,7 +296,9 @@ namespace UdmDom
 				if ( (n.getLocalName().equals(name)) && (n.getPrefix().equals(ns_name)))
 				{
 					elem = (DOM_Element&)(n);
-					return elem;
+					i++;
+					if (i == no)
+						return elem;
 				}
 			}
 			n = n.getNextSibling();
@@ -313,15 +315,17 @@ namespace UdmDom
 
 			elem = parent.getOwnerDocument().createElementNS(ns_uri, qualified_name);
 			parent.appendChild(elem);
+			return elem;
 		}
-		return elem;
+		return DOM_Element();
 	};
 
 
 
-	void setTextValue(DOM_Element parent_element, const DOMString &value, const DOMString &name, const DOMString &ns_name)
+
+	void setTextValue(DOM_Element parent_element, const DOMString &value, const DOMString &name, const DOMString &ns_name, int no = 1)
 	{
-		DOM_Element parent = getElementNamed(parent_element, name, ns_name, true);
+		DOM_Element parent = getElementNamed(parent_element, name, ns_name, true, no);
 		DOM_Text tn;
 		if (!parent.hasChildNodes())
 		{
@@ -338,10 +342,22 @@ namespace UdmDom
 		tn.setNodeValue(value);
 	};
 
-	DOMString getTextValue(DOM_Element parent_element, const DOMString &name, const DOMString& ns_uri)
+	void setTextValues(DOM_Element parent_element, const vector<string> &values, const DOMString &name, const DOMString &ns_name)
+	{
+		int i = 0;
+		for(vector<string>::const_iterator v_i = values.begin(); v_i != values.end(); v_i++)
+		{
+			i++;
+			const DOMString value = v_i->c_str();
+			setTextValue(parent_element, value, name, ns_name, i);
+		};
+	};
+
+
+	DOMString getTextValue(DOM_Element parent_element, const DOMString &name, const DOMString& ns_name, int no = 1)
 	{
 		DOMString a;
-		DOM_Element parent = getElementNamed(parent_element, ns_uri, name);
+		DOM_Element parent = getElementNamed(parent_element, name, ns_name, false, no);
 		if (parent == (DOM_NullPtr *) NULL) return a;
 		if (!parent.hasChildNodes()) return a;
 
@@ -352,9 +368,20 @@ namespace UdmDom
 		DOM_Text tn = (DOM_Text&)ttn;
 
 		return tn.getNodeValue();
-		
-
 	};
+
+	void getTextValues(DOM_Element parent_element, vector<string> &values, const DOMString &name, const DOMString &ns_name)
+	{
+		DOMString a;
+		int i =0;
+		do
+		{
+			i++;
+			a = getTextValue(parent_element, name, ns_name, i);
+			if (a != (const DOM_NullPtr *)NULL ) values.push_back(StrX(a).localForm());
+		} while (a != (const DOM_NullPtr *)NULL);
+	};
+
 
 // --------------------------- DomObject
 
@@ -643,20 +670,73 @@ namespace UdmDom
 			return (k >= 0);
 			
 		}
-	// --- attribute getters/setters for simple (non-array) values
-		vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const
-		{
-			//for String attibutes we have the same behaviour
-			if ((string)meta.type() !=  "Text") return ObjectImpl::getStringAttrArr(meta);
-		};
-		void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct = true)
+	/*
+
+		Text attributes are supposed to generate multiple elements containing a single XML text node
+	*/
+
+		void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct)
 		{
 			//for String attibutes we have the same behaviour
 			if ((string)meta.type() !=  "Text") ObjectImpl::setStringAttrArr(meta, a, direct);
 			
+			string name = meta.name();
+
+			ObjectImpl * archetype = getArchetype();
+			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
+			{
+				if(direct)
+				{
+					DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+					setTextValues(dom_element,a,  DOMString(name.c_str()), ns_name);
+					//desynch the attribute
+					desynch_attribute(name);
+				}
+				else
+				{
+					//check if desynched
+					if (!is_attribute_desynched(name))
+					{
+						DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+						setTextValues(dom_element,a,  DOMString(name.c_str()), ns_name);		
+					}
+				}
+			}
+			else
+			{
+				DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+				setTextValues(dom_element,a,  DOMString(name.c_str()), ns_name);
+				//go through all derived and instances
+				vector<ObjectImpl*>::iterator i;
+				vector<ObjectImpl*> deriveds = getDerived();
+				for (i = deriveds.begin(); i != deriveds.end(); i++)
+				{
+					ObjectImpl* derived = *i;
+					derived->setStringAttrArr(meta, a, false);
+					derived->release();
+				}
+
+				vector<ObjectImpl*> instances = getInstances();
+				for (i = instances.begin(); i != instances.end(); i++)
+				{
+					ObjectImpl* instance = *i;
+					instance->setStringAttrArr(meta, a, false);
+					instance->release();
+				}
+			}
+		
+		};
+		vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const
+		{
+			//for String attibutes we have the same behaviour
+			if ((string)meta.type() !=  "Text") return ObjectImpl::getStringAttrArr(meta);
+			vector<string> ret;
+			DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+			getTextValues(dom_element, ret, DOMString(((string)meta.name()).c_str()), ns_name);
+
+			return ret;
 		};
 		
-
 		string getStringAttr(const ::Uml::Uml::Attribute &meta) const
 		{
 			DOMString a;
