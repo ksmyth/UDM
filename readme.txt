@@ -65,6 +65,9 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+05/21/04	-	Release 2.16
+
+		-	Recompiled with GME 4.5.18
 05/13/04	-	Release 2.15
 
 		- New UdmDom feature: 
