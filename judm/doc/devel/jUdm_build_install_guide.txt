@@ -1,5 +1,5 @@
 jUdm_build_install_guide.txt
-The requirements and a step-by-step guide to compile jUdm source files
+The requirements and a step-by-step guide to build jUdm  and other domain-specific installation packages
 --------------------------------------------------------------------------------------------
 
 Requirements:
