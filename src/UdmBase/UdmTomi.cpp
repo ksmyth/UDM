@@ -343,7 +343,10 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 				}
 
 				//we have to translate ascType as well
-				AssociationInfo newAscType(ascType.clsAssociation ? ::Uml::classByName( *(pr->GetCrossMeta().dgr), cross_clsAssociation_name ) : ascType.clsAssociation);
+				::Uml::Class newAscTypeCl;
+				if (ascType.clsAssociation)
+					newAscTypeCl = ::Uml::classByName( *(pr->GetCrossMeta().dgr), cross_clsAssociation_name );
+				AssociationInfo newAscType(newAscTypeCl);
 
 				// don't proceed if no cross association was found
 				if ((ascType.clsAssociation != ::Uml::Class(NULL) && newAscType.clsAssociation != ::Uml::Class(NULL)) || ascType.clsAssociation == ::Uml::Class(NULL))
@@ -455,7 +458,11 @@ UDM_DLL multiset< pair<Object, Object> > Object::GetAdjacentObjectsWithAssocClas
 				}
 
 				//we have to translate ascType as well
-				AssociationInfo newAscType(ascType.clsAssociation ? ::Uml::classByName( *(pr->GetCrossMeta().dgr), cross_clsAssociation_name ) : ascType.clsAssociation);
+				::Uml::Class newAscTypeCl;
+				if (ascType.clsAssociation)
+					newAscTypeCl = ::Uml::classByName( *(pr->GetCrossMeta().dgr), cross_clsAssociation_name );
+				
+				AssociationInfo newAscType(newAscTypeCl);
 
 				// don't proceed if no cross association was found
 				if ((ascType.clsAssociation != ::Uml::Class(NULL) && newAscType.clsAssociation != ::Uml::Class(NULL)) || ascType.clsAssociation == ::Uml::Class(NULL))
