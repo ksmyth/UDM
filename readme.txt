@@ -65,6 +65,30 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+04/28/04	-	Release 2.14
+
+		- MGA backend bugfixes: 
+			- Folder objects could not be deleted through UDM. 
+			- createChild bug scenario: 
+					- B is an abstract class
+					- B is contained in A with empty child role
+					- C is the only descendant of B
+					- crateChild() tries to create C in A	(exeception was thrown)
+		- cint_string enhacments:
+			- copy constrctor
+			- append operators for integer and character
+
+		- Udm::DataNetwork assignment operator bugfix: 
+			- The assignment operator did not remove existing objects from the detsination
+			datanetwork
+
+		- ordering of the sets returned by template classes in generated APIs:
+		ChildrenAttr, AssocAttr, AssocEndAttr, CrossAssocAttr, CrossAssocEndAttr, DerivedAttr, 
+		InstantiatedAttr
+			- API methods returning set<Type>-s of Udm objects will also have a sorted version,
+			with the '_sorted' ending. To these functions a comparer object can be passed, like
+			less<Type> or greater_equal<Type> which will sort the returned set<Type> accordingly.
+
 04/20/04	-	Release 2.13
 			
 			- Fixed StaticObject::setAssociation bug, which prevented adding/removing
