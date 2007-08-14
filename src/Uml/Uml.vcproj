@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="Uml"
+	ProjectGUID="{6A53E343-14C2-4463-A9C8-332DAE560EAF}"
+	SccProjectName="&quot;$/MoBIESTransition/udm_ns/src/Uml&quot;, HJCBAAAA"
+	SccAuxPath=""
+	SccLocalPath="..\.."
+	SccProvider="MSSCCI:Microsoft Visual SourceSafe"
+	Keyword="Win32Proj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="Debug"
+			IntermediateDirectory="Debug"
+			ConfigurationType="4"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="$(UDM_PATH)/include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT"
+				MinimalRebuild="TRUE"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="TRUE"
+				DebugInformationFormat="4"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="../../lib/UmlD.lib"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy .\Uml.h ..\..\include"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="Release"
+			IntermediateDirectory="Release"
+			ConfigurationType="4"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="$(UDM_PATH)/include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;UDM_DLL_EXPORT;UDM_DYNAMIC_LINKING"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="TRUE"
+				DebugInformationFormat="3"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="../../lib/Uml.lib"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			<File
+				RelativePath=".\Uml.cpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			<File
+				RelativePath=".\Uml.h">
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\..\etc\Uml_udm.xml">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\UdmD.exe &quot;$(InputPath)&quot; -l UDM_DLL -g -m
+"
+					Outputs="Uml.cpp;Uml.h"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe &quot;$(InputPath)&quot; -l UDM_DLL -g
+
+"
+					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\etc\UmlInUml.xme">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(InputDir)$(InputName).mga;$(InputDir)Uml_udm.xml"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(InputDir)$(InputName).mga;$(InputDir)Uml_udm.xml"/>
+			</FileConfiguration>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
