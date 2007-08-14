@@ -843,6 +843,18 @@ namespace Uml
 		if (ns) return classByName(ns, name);
 		else return Class();
 	};
+
+
+	UDM_DLL Class classByName(const Diagram &d, const string &name )
+	{
+		set<Namespace> ns_es = d.namespaces();
+		if (ns_es.size() > 1) throw udm_exception("classByName(Diagram, class_name) - more than one namespace found in diagram!");
+
+		Namespace ns = namespaceByName(d, d.name());
+		if (ns) return classByName(ns, name);
+		else return Class();
+	};
+
 	
 // find a namespace by name
 	UDM_DLL Namespace namespaceByName(const Diagram &d, const string &name)
