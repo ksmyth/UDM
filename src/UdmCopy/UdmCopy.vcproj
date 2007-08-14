@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Uml.lib UdmDom.lib UdmGme.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
-				OutputFile="../../bin.net/UdmCopy.exe"
+				OutputFile="../../bin/UdmCopy.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib\"
@@ -103,7 +103,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib zlibD.lib"
-				OutputFile="..\..\bin.net\UdmCopyD.exe"
+				OutputFile="..\..\bin\UdmCopyD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib\"

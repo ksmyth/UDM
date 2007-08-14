@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="UdmXmi.lib xerces-c_2.lib Xalan-C_1.lib"
-				OutputFile="..\..\bin.net\UdmToXmi.exe"
+				OutputFile="..\..\bin\UdmToXmi.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\Lib\"
@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="UdmXmiD.lib xerces-c_2D.lib Xalan-C_1D.lib"
-				OutputFile="..\..\bin.net\UdmToXmiD.exe"
+				OutputFile="..\..\bin\UdmToXmiD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\Lib"

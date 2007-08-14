@@ -41,8 +41,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib GOCL_vc7d.lib UdmOcld.lib jvm.lib jawt.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib  UdmUtilD.lib zlibd.lib"
-				OutputFile="..\..\bin.net\UdmSwigD.dll"
+				AdditionalDependencies="UmlD.lib GOCLd.lib UdmOcld.lib jvm.lib jawt.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib  UdmUtilD.lib zlibd.lib"
+				OutputFile="..\..\bin\UdmSwigD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(UDM_PATH)/lib"
@@ -107,8 +107,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib GOCL_vc7.lib UdmOcl.lib jvm.lib jawt.lib UdmPOI.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmUtil.lib zlib.lib"
-				OutputFile="..\..\bin.net\UdmSwig.dll"
+				AdditionalDependencies="Uml.lib GOCL.lib UdmOcl.lib jvm.lib jawt.lib UdmPOI.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmUtil.lib zlib.lib"
+				OutputFile="..\..\bin\UdmSwig.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(UDM_PATH)/lib"

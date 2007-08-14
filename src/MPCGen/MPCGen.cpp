@@ -15,7 +15,7 @@ const char tmpl[] = "\
    }\n\
 \n\
   Define_Custom(UDM) {\n\
-      command           = &quot;$(UDM_PATH)&quot;/bin.net/Udm \n\
+      command           = &quot;$(UDM_PATH)&quot;/bin/Udm \n\
       inputext          = .xml\n\
    }\n";
 //===============================

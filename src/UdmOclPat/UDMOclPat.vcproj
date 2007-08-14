@@ -42,8 +42,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib  UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib UdmOcl.lib GOCL_VC7.lib xerces-c_2.lib"
-				OutputFile="../../bin.net/UDMOclPat.exe"
+				AdditionalDependencies="Uml.lib  UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib UdmOcl.lib GOCL.lib xerces-c_2.lib"
+				OutputFile="../../bin/UDMOclPat.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\Lib"
@@ -104,8 +104,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib zlibD.lib UdmOclD.lib GOCL_VC7D.lib"
-				OutputFile="../../bin.net/UDMOclPatD.exe"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib zlibD.lib UdmOclD.lib GOCLD.lib"
+				OutputFile="../../bin/UDMOclPatD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\Lib"
