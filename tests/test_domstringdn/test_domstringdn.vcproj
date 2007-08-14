@@ -213,7 +213,7 @@
 				RelativePath="domstringdnTest.h">
 			</File>
 			<File
-				RelativePath="..\..\samples\LampDiagram.h">
+				RelativePath=".\LampDiagram.h">
 			</File>
 		</Filter>
 		<File
