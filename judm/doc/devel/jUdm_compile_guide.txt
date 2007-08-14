@@ -15,9 +15,9 @@ Step-by-step guide:
 		1.3 ...
 	
 	2. Set the CLASSPATH environment variable
-		2.1 Add  <j2sdk_root>\jre\lib to the CLASSPATH
-		2.2 Add '.', i.e., the current directory to the CLASSPATH
-
+		2.1 Add <j2sdk_root>\jre\lib\rt.jar to the CLASSPATH
+		2.2 Add <j2sdk_root>\lib\tools.jar  to the CLASSPATH
+		2.3 Add '.', i.e., the current directory to the CLASSPATH
 	3. Compile and build the UDM_NS solution
 		follow the guidelines described in the "Udm_ns compile guide" to compile UDM_ns
 
