@@ -1674,7 +1674,7 @@ UDM_DLL bool Object::CreateLink(Object& dst, const AssociationInfo& ass)
 };
 */
 
-UDM_DLL string Object::getPath( const std::string& strDelimiter , bool bReverseOrder, bool bNeedRootFolder, const string att_name) const
+UDM_DLL string Object::getPath( const std::string& strDelimiter , bool bReverseOrder, bool bNeedRootFolder, const string att_name, bool omit_lead_delim) const
 {
 		
 	if (*this == impl->__getdn()->GetRootObject())
@@ -1686,7 +1686,11 @@ UDM_DLL string Object::getPath( const std::string& strDelimiter , bool bReverseO
 			else
 				return strDelimiter + UdmUtil::ExtractName(*this, att_name);
 		}
-		else return strDelimiter; 
+		else 
+		{
+			if (omit_lead_delim) return "";
+			else return strDelimiter; 
+		}
 
 	}
 	else 
