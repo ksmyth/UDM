@@ -11,6 +11,9 @@ arising out of or in connection with the use or performance of
 this software.
 */
 /*
+10/17/06	-	endre
+		Added same-class assignment operator to helper classes used to access attributes. Now assignments like a.name() = b.name() are accepted by g++.
+
 12/12/04	-	endre
 
 		-	G++ 3 porting issues.
@@ -482,7 +485,9 @@ namespace Udm
 		TempStringAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator string() const { return impl->getTempStringAttr(meta); }
-		const string &operator =(const string &a) { impl->setTempStringAttr(meta, a); return a; }
+		TempStringAttr &operator =(const string &a) { impl->setTempStringAttr(meta, a); return *this; }
+
+		TempStringAttr &operator =(const TempStringAttr &a) { return operator =( string(a) ); }
 	};
 
 
@@ -497,7 +502,9 @@ namespace Udm
 		TempIntegerAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator __int64() const { return impl->getTempIntegerAttr(meta); }
-		const __int64 &operator =(const __int64 &a) { impl->setTempIntegerAttr(meta, a); return a; }
+		TempIntegerAttr &operator =(const __int64 &a) { impl->setTempIntegerAttr(meta, a); return *this; }
+
+		TempIntegerAttr &operator =(const TempIntegerAttr &a) { return operator =( (__int64) a ); }
 	};
 
 
@@ -511,7 +518,10 @@ namespace Udm
 		TempRealAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator double() const { return impl->getTempRealAttr(meta); }
-		const double &operator =(const double &a) { impl->setTempRealAttr(meta, a); return a; }
+
+		TempRealAttr &operator =(const double &a) { impl->setTempRealAttr(meta, a); return *this; }
+
+		TempRealAttr &operator =(const TempRealAttr &a) { return operator =( double(a) ); }
 	};
 
 
@@ -525,7 +535,9 @@ namespace Udm
 		TempBooleanAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator bool() const { return impl->getTempBooleanAttr(meta); }
-		const bool &operator =(const bool &a) { impl->setTempBooleanAttr(meta, a); return a; }
+		TempBooleanAttr &operator =(const bool &a) { impl->setTempBooleanAttr(meta, a); return *this; }
+
+		TempBooleanAttr &operator =(const TempBooleanAttr &a) { return operator =( bool(a) ); }
 	};
 	
 
@@ -633,7 +645,11 @@ namespace Udm
 		StringAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator string() const { return impl->getStringAttr(meta); }
-		const string &operator =(const string &a) { impl->setStringAttr(meta, a); return a; }
+
+		StringAttr &operator =(const string &a) { impl->setStringAttr(meta, a); return *this; }
+
+		StringAttr &operator =(const StringAttr &a) { return operator =( string(a) ); }
+
 		typedef const char * charp;
 //		operator charp() const { return string().c_str(); } 
 	};
@@ -650,7 +666,10 @@ namespace Udm
 		BooleanAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator bool() const { return impl->getBooleanAttr(meta); }
-		bool operator =(bool a) { impl->setBooleanAttr(meta, a); return a; }
+
+		BooleanAttr &operator =(bool a) { impl->setBooleanAttr(meta, a); return *this; }
+
+		BooleanAttr &operator =(const BooleanAttr &a) { return operator =( bool(a) ); }
 	};
 
 // --------------------------- IntegerAttr
@@ -666,8 +685,11 @@ namespace Udm
 
 		//operator long() const { return impl->getIntegerAttr(meta); }
 		operator __int64() const { return impl->getIntegerAttr(meta); }
-		//long operator =(long a) { impl->setIntegerAttr(meta, a); return a; }
-		__int64 operator =(__int64 a) { impl->setIntegerAttr(meta, a); return a; }
+
+		//IntegerAttr operator =(long a) { impl->setIntegerAttr(meta, a); return *this; }
+		IntegerAttr &operator =(__int64 a) { impl->setIntegerAttr(meta, a); return *this; }
+
+		IntegerAttr &operator =(const IntegerAttr &a) { return operator =( (__int64) a ); }
 	};
 
 // --------------------------- RealAttr
@@ -682,7 +704,10 @@ namespace Udm
 		RealAttr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator double() const { return impl->getRealAttr(meta); }
-		double operator =(double a) { impl->setRealAttr(meta, a); return a; }
+
+		RealAttr &operator =(double a) { impl->setRealAttr(meta, a); return *this; }
+
+		RealAttr &operator =(const RealAttr &a) { return operator =( double(a) ); }
 	};
 
 // multiple-value(array) versions of Attribute objects
@@ -735,6 +760,16 @@ namespace Udm
 			return *this;
 		};
 
+		virtual ArrAttrItem& operator =(const ArrAttrItem<CLASS> &a)
+		{
+			if (this != &a)
+			{
+				array = a.array;
+				index = a.index;
+				set();
+			}
+			return *this;
+		};
 
 		virtual bool operator==(const ArrAttrItem<CLASS>& a)
 		{
@@ -813,6 +848,16 @@ namespace Udm
 			return *this;
 		};
 
+		virtual ArrAttrItem& operator =(const ArrAttrItem<bool> &a)
+		{
+			if (this != &a)
+			{
+				array = a.array;
+				index = a.index;
+				set();
+			}
+			return *this;
+		};
 
 		virtual bool operator==(const ArrAttrItem<bool>& a)
 		{
@@ -869,7 +914,13 @@ namespace Udm
 			return *this;
 		};
 
-		virtual ArrAttrItem<CLASS>& operator = (const CLASS &a)
+		virtual AdditiveArrAttrItem<CLASS>& operator =(const CLASS &a)
+		{
+			ArrAttrItem<CLASS>::operator =(a);
+			return *this;
+		}
+
+		virtual AdditiveArrAttrItem<CLASS>& operator =(const AdditiveArrAttrItem<CLASS> &a)
 		{
 			ArrAttrItem<CLASS>::operator =(a);
 			return *this;
@@ -1125,13 +1176,19 @@ namespace Udm
 		TempStringAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<string>() const { return impl->getTempStringAttrArr(meta); }
-		const vector<string> &operator =(const vector<string> &a) 
+		TempStringAttrArr &operator =(const vector<string> &a) 
 		{ 
 			if (CheckAttributeOrdering(meta))
 				impl->setTempStringAttrArr(meta, SortStrArrAttr(a)); 
 			else
 				impl->setTempStringAttrArr(meta, a); 
-			return a; 
+			return *this; 
+		}
+
+		TempStringAttrArr &operator =(const TempStringAttrArr &a) 
+		{
+			vector<string> av = a;
+			return operator =( av );
 		}
 
 		//on write-operations the array is ordered if requested
@@ -1212,14 +1269,19 @@ namespace Udm
 		TempIntegerAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<__int64>() const { return impl->getTempIntegerAttrArr(meta); }
-		const vector<__int64> &operator =(const vector<__int64> &a) 
+		TempIntegerAttrArr &operator =(const vector<__int64> &a) 
 		{ 
 			
 			if (CheckAttributeOrdering(meta))
 				impl->setTempIntegerAttrArr(meta, SortArrAttr<__int64>(a)); 
 			else
 				impl->setTempIntegerAttrArr(meta, a); 
-			return a; 
+			return *this; 
+		}
+		TempIntegerAttrArr &operator =(const TempIntegerAttrArr &a) 
+		{
+			vector<__int64> av = a;
+			return operator =( av );
 		}
 		const vector<__int64> operator +=(const vector<__int64> &a) 
 		{
@@ -1291,7 +1353,7 @@ namespace Udm
 		TempRealAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<double>() const { return impl->getTempRealAttrArr(meta); }
-		const vector<double> &operator =(const vector<double> &a) 
+		TempRealAttrArr &operator =(const vector<double> &a) 
 		{ 
 			
 			if (CheckAttributeOrdering(meta))
@@ -1299,7 +1361,12 @@ namespace Udm
 			else
 				impl->setTempRealAttrArr(meta, a); 
 
-			return a; 
+			return *this; 
+		}
+		TempRealAttrArr &operator =(const TempRealAttrArr &a) 
+		{
+			vector<double> av = a;
+			return operator =( av );
 		}
 		const vector<double> operator +=(const vector<double> &a) 
 		{
@@ -1369,13 +1436,19 @@ namespace Udm
 		TempBooleanAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<bool>() const { return impl->getTempBooleanAttrArr(meta); }
-		const vector<bool> &operator =(const vector<bool> &a) 
+		TempBooleanAttrArr &operator =(const vector<bool> &a) 
 		{ 
 			if (CheckAttributeOrdering(meta))
 				impl->setTempBooleanAttrArr(meta, SortArrAttr(a));
 			else
 				impl->setTempBooleanAttrArr(meta, a); 
-			return a; 
+			return *this; 
+		}
+
+		TempBooleanAttrArr &operator =(const TempBooleanAttrArr &a) 
+		{
+			vector<bool> av = a;
+			return operator =( av );
 		}
 
 		const vector<bool> operator +=(const vector<bool> &a) 
@@ -1450,15 +1523,20 @@ namespace Udm
 		StringAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<string>() const { return impl->getStringAttrArr(meta); }
-		const vector<string> &operator =(const vector<string> &a) 
+		StringAttrArr &operator =(const vector<string> &a) 
 		{ 
 			if (CheckAttributeOrdering(meta))
 				impl->setStringAttrArr(meta, SortStrArrAttr(a));
 			else
 				impl->setStringAttrArr(meta, a); 
 
-			return a; 
+			return *this; 
 
+		}
+		StringAttrArr &operator =(const StringAttrArr &a) 
+		{
+			vector<string> av = a;
+			return operator =( av );
 		}
 		const vector<string> operator +=(const vector<string> &a) 
 		{
@@ -1541,13 +1619,19 @@ namespace Udm
 		BooleanAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<bool>() const { return impl->getBooleanAttrArr(meta); }
-		const vector<bool>& operator =(const vector<bool>& a) 
+		BooleanAttrArr &operator =(const vector<bool>& a) 
 		{ 
 			if (CheckAttributeOrdering(meta))
 				impl->setBooleanAttrArr(meta, SortArrAttr<bool>(a));
 			else
 				impl->setBooleanAttrArr(meta, a); 
-			return a; 
+			return *this; 
+		}
+
+		BooleanAttrArr &operator =(const BooleanAttrArr &a) 
+		{
+			vector<bool> av = a;
+			return operator =( av );
 		}
 
 		const vector<bool> operator +=(const vector<bool> &a) 
@@ -1606,15 +1690,21 @@ namespace Udm
 		IntegerAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<__int64>() const { return impl->getIntegerAttrArr(meta); }
-		const vector<__int64>& operator =(const vector<__int64>& a) 
+		IntegerAttrArr &operator =(const vector<__int64>& a) 
 		{
 			if (CheckAttributeOrdering(meta))
 				impl->setIntegerAttrArr(meta, SortArrAttr<__int64>(a)); 
 			else
 				impl->setIntegerAttrArr(meta, a); 
 
-			return a; 
+			return *this; 
 		}
+		IntegerAttrArr &operator =(const IntegerAttrArr &a) 
+		{
+			vector<__int64> av = a;
+			return operator =( av );
+		}
+
 		const vector<__int64> operator +=(const vector<__int64> &a) 
 		{
 			vector<__int64> b = impl->getIntegerAttrArr(meta);
@@ -1684,13 +1774,19 @@ namespace Udm
 		RealAttrArr(ObjectImpl *i, const ::Uml::Attribute &m) : impl(i), meta(m) { }
 
 		operator vector<double>() const { return impl->getRealAttrArr(meta); }
-		const vector<double>& operator =(const vector<double> &a) 
+		RealAttrArr &operator =(const vector<double> &a) 
 		{
 			if (CheckAttributeOrdering(meta))
 				impl->setRealAttrArr(meta, SortArrAttr<double>(a)); 
 			else
 				impl->setRealAttrArr(meta, a); 
-			return a; 
+			return *this; 
+		}
+
+		RealAttrArr &operator =(const RealAttrArr &a) 
+		{
+			vector<double> av = a;
+			return operator =( av );
 		}
 
 		const vector<double> operator +=(const vector<double> &a) 
@@ -3468,7 +3564,8 @@ public:
 
 	}
 
-	template<class CLASS, class TARGETCLASS, class Pred> AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred>::operator set<CLASS, Pred>() const 
+	template<class CLASS, class TARGETCLASS, class Pred>
+	AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred>::operator set<CLASS, Pred>() const 
 	{
 		set<CLASS, Pred> ret;
 
@@ -3496,7 +3593,8 @@ public:
 		return ret;
 	}
 
-	template<class CLASS, class TARGETCLASS, class Pred> const set<CLASS, Pred> & AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred>::operator =(const set<CLASS, Pred> &a)
+	template<class CLASS, class TARGETCLASS, class Pred>
+	const set<CLASS, Pred> & AClassCrossAssocAttr<CLASS, TARGETCLASS, Pred>::operator =(const set<CLASS, Pred> &a)
 	{
 
 		UdmProject *pr = NULL;
