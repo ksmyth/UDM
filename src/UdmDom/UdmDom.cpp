@@ -263,7 +263,7 @@ namespace UdmDom
 		char * endptr;
 		unsigned long retval = strtoul(buf_copy+2, &endptr, 16);
 		ASSERT(*endptr == '\0');
-		delete buf_copy;
+		delete [] buf_copy;
 		
 #endif
 		return retval;
@@ -369,8 +369,9 @@ namespace UdmDom
 	{
 		DOMString namespaceURI = DOM3LookupNamespaceURI(node, node.getPrefix());
 		if (namespaceURI == NULL) {
+			return "";
 			string e_description = "Empty namespace URIs are not allowed for node '";
-			e_description += StrX(node.getLocalName()).localForm();
+			e_description += StrX(node.getNodeName()).localForm();
 			throw udm_exception(e_description);
 		}
 
@@ -380,7 +381,11 @@ namespace UdmDom
 			return it_ns_map->second;
 		} else {
 			int ns_name_loc = ns_uri.rfind('/', ns_uri.length());
-			return ns_uri.substr(ns_name_loc + 1);
+			ns_uri = ns_uri.substr(ns_name_loc + 1);
+			if (ns_uri.find("__dgr_", 0) == 0)
+				return "";
+			else
+				return ns_uri;
 		}
 	}
 
@@ -405,68 +410,34 @@ namespace UdmDom
 	UDM_DLL void RemoveURIToUMLNamespaceMapping(const string & namespaceURI)
 	{
 		xsd_ns_mapping_storage::static_xsd_ns_mapping_container.erase(namespaceURI);
-    xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.erase(namespaceURI);
+		xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.erase(namespaceURI);
 	}
 
 	UDM_DLL void ClearURIToUMLNamespaceMappings()
 	{
 		xsd_ns_mapping_storage::static_xsd_ns_mapping_container.clear();
-    xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.clear();
+		xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.clear();
 	}
 
-  //=================================
-  const string getNSURI(const string& ns_name )
-  {
-    string ns_uri;
-   	xsd_ns_mapping_storage::str_str_map::const_iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.find(ns_name);
-  	if (it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.end()) 
-	  	ns_uri = it_ns_map->second.c_str();
-    else
-    {
-      ns_uri = string(UDM_DOM_URI_PREFIX);
+	//=================================
+	const string getNSURI(const string& ns_name )
+	{
+		string ns_uri;
+		xsd_ns_mapping_storage::str_str_map::const_iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.find(ns_name);
+		if (it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container.end()) 
+			ns_uri = it_ns_map->second.c_str();
+		else
+		{
+			ns_uri = string(UDM_DOM_URI_PREFIX);
 			//ns_uri += "/";
 			ns_uri += ns_name;
-    }
-    return ns_uri;
-  }
-
-	DOM_Element getElementNamed(DOM_Element parent, const DOMString &name, const DOMString &ns_name, bool create = false, int no = 1)
-	{
-		DOM_Element elem;
-		int i = 0;
-		DOM_Node n = parent.getFirstChild(); 
-		while (n != (DOM_NullPtr *)NULL)
-		{
-			if( n.getNodeType() == DOM_Node::ELEMENT_NODE )
-			{
-				if ( (n.getLocalName().equals(name)) && getNSForNode(n).compare(StrX(ns_name).localForm()) == 0)
-				{
-					elem = (DOM_Element&)(n);
-					i++;
-					if (i == no)
-						return elem;
-				}
-			}
-			n = n.getNextSibling();
 		}
-		if (create)
-		{
-			DOMString ns_uri(getNSURI(StrX(ns_name).localForm()).c_str());
-
-			DOMString qualified_name(ns_name);
-			qualified_name += ":";
-			qualified_name += name;
-
-			elem = parent.getOwnerDocument().createElementNS(ns_uri, qualified_name);
-			parent.appendChild(elem);
-			return elem;
-		}
-		return DOM_Element();
-	};
+		return ns_uri;
+	}
 
 
 
-	void setTextValue(DOM_Element parent_element, const DOMString &value, const DOMString &name, const DOMString &ns_name, int no = 1)
+	void setTextValue(DOM_Element parent_element, const DOMString &value, const DOMString &name, int no = 1)
 	{
 		
 		DOM_Text tn = parent_element.getOwnerDocument().createTextNode(value);
@@ -474,42 +445,43 @@ namespace UdmDom
 		tn.setNodeValue(value);
 	};
 
-	void setTextValues(DOM_Element parent_element, const vector<string> &values, const DOMString &name, const DOMString &ns_name)
+	void setTextValues(DOM_Element parent_element, const vector<string> &values, const DOMString &name)
 	{
 		string str;
 		for(vector<string>::const_iterator v_i = values.begin(); v_i != values.end(); ++v_i)
 			str += *v_i;
 
-		setTextValue(parent_element, DOMString (str.c_str()), name, ns_name);
+		setTextValue(parent_element, DOMString (str.c_str()), name);
 	}
 
 
- 	void getTextValues(DOM_Element parent_element, vector<string> &values, const DOMString &name, const DOMString &ns_name)
+ 	void getTextValues(DOM_Element parent_element, vector<string> &values, const DOMString &name)
 	{
     
 		for(DOM_Node n = parent_element.getFirstChild(); n != (DOM_NullPtr *)NULL;n = n.getNextSibling())	
 		{
-				DOM_Element ttn = static_cast<DOM_Element&>(n);
+			DOM_Element ttn = static_cast<DOM_Element&>(n);
 
-				if ( (ttn.getNodeType() == DOM_Node::TEXT_NODE))
-        {
-        	DOM_Text tn = (DOM_Text&)ttn;
-          DOMString a = tn.getNodeValue();
+			if ( (ttn.getNodeType() == DOM_Node::TEXT_NODE))
+			{
+				DOM_Text tn = (DOM_Text&)ttn;
+				DOMString a = tn.getNodeValue();
         
-          values.push_back(StrX(a).localForm());
-        }
-    }
+				values.push_back(StrX(a).localForm());
+			}
+		}
 	}
-	DOMString getTextValue(DOM_Element parent_element, const DOMString &name, const DOMString& ns_name, int no = 1)
+
+	DOMString getTextValue(DOM_Element parent_element, const DOMString &name, int no = 1)
 	{
-    vector<string> values;
-    getTextValues(parent_element, values, name, ns_name);
+		vector<string> values;
+		getTextValues(parent_element, values, name);
 
 		DOMString a;
-    if (values.size())
-      a =DOMString(values[0].c_str());
+		if (values.size())
+			a =DOMString(values[0].c_str());
 
-    return a;
+		return a;
 	}
 
 
@@ -611,7 +583,9 @@ namespace UdmDom
 			//so I don't waste my time here
 			StrX cl_name(element.getLocalName());		//class name
 			string ns_name = getNSForNode(element);		//namespace
-			string key = ns_name + ":";			//namespace:class
+			string key;			//namespace:class
+			if (ns_name.size())
+				key += ns_name + ":";
 			key += cl_name.localForm();
 
 			map<string, ::Uml::Class>::iterator mcc_i = ((DomDataNetwork *)mydn)->meta_class_cache.find(key);
@@ -673,8 +647,8 @@ namespace UdmDom
 				if(strncmp(rb_copy + i, wb_copy, wl) == 0) return i; 
 			}
 
-			delete rb_copy;
-			delete wb_copy;
+			delete [] rb_copy;
+			delete [] wb_copy;
 #endif
 			return -1;
 		};
@@ -818,8 +792,7 @@ namespace UdmDom
 			{
 				if(direct)
 				{
-					DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
-					setTextValues(dom_element,a,  DOMString(name.c_str()), ns_name);
+					setTextValues(dom_element,a,  DOMString(name.c_str()));
 					//desynch the attribute
 					desynch_attribute(name);
 				}
@@ -828,15 +801,13 @@ namespace UdmDom
 					//check if desynched
 					if (!is_attribute_desynched(name))
 					{
-						DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
-						setTextValues(dom_element,a,  DOMString(name.c_str()), ns_name);		
+						setTextValues(dom_element,a,  DOMString(name.c_str()));		
 					}
 				}
 			}
 			else
 			{
-				DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
-				setTextValues(dom_element,a,  DOMString(name.c_str()), ns_name);
+				setTextValues(dom_element,a,  DOMString(name.c_str()));
 				//go through all derived and instances
 				vector<ObjectImpl*>::iterator i;
 				vector<ObjectImpl*> deriveds = getDerived();
@@ -862,8 +833,7 @@ namespace UdmDom
 			//for String attibutes we have the same behaviour
 			if ((string)meta.type() !=  "Text") return ObjectImpl::getStringAttrArr(meta);
 			vector<string> ret;
-			DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
-			getTextValues(dom_element, ret, DOMString(((string)meta.name()).c_str()), ns_name);
+			getTextValues(dom_element, ret, DOMString(((string)meta.name()).c_str()));
 
 			return ret;
 		};
@@ -875,9 +845,7 @@ namespace UdmDom
 			// TODO: avoid the name conversion
 			if ((string)(meta.type()) == "Text")
 			{
-				DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
-
-				a = getTextValue(dom_element, DOMString(((string)meta.name()).c_str()), ns_name);
+				a = getTextValue(dom_element, DOMString(((string)meta.name()).c_str()));
 			}	
 			else
 			{
@@ -907,8 +875,7 @@ namespace UdmDom
 					//set the attribute
 					if ((string)(meta.type()) == "Text")
 					{
-						DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
-						setTextValue(dom_element,DOMString(a.c_str()),  DOMString(name.c_str()), ns_name);
+						setTextValue(dom_element,DOMString(a.c_str()),  DOMString(name.c_str()));
 					}
 					else
 						dom_element.setAttribute( DOMString(name.c_str()), DOMString(a.c_str()));
@@ -924,8 +891,7 @@ namespace UdmDom
 						//if not, set the attribute
 						if ((string)(meta.type()) == "Text")
 						{
-							DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
-							setTextValue(dom_element,DOMString(a.c_str()),DOMString(name.c_str()), ns_name);
+							setTextValue(dom_element,DOMString(a.c_str()),DOMString(name.c_str()));
 						}
 						else
 							dom_element.setAttribute( DOMString(name.c_str()), DOMString(a.c_str()));
@@ -937,8 +903,7 @@ namespace UdmDom
 			{
 				if ((string)(meta.type()) == "Text")
 				{
-					DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
-					setTextValue(dom_element,DOMString(a.c_str()),DOMString(name.c_str()), ns_name);
+					setTextValue(dom_element,DOMString(a.c_str()),DOMString(name.c_str()));
 				}
 				else		
 					dom_element.setAttribute( DOMString(name.c_str()), DOMString(a.c_str()));
@@ -1070,7 +1035,7 @@ namespace UdmDom
 			{
 				throw udm_exception("Attribute format error!");
 			}
-			delete copy;
+			delete [] copy;
 			return retval;
 #endif
 			//TODO: error checking??
@@ -1178,7 +1143,7 @@ namespace UdmDom
 			}
 			*(copy + i) = '\0';
 			if(sscanf(copy, "%lf", &d) != 1) throw udm_exception("Attr is of non-float format");
-			delete copy;
+			delete [] copy;
 
 #endif		
 
@@ -1263,28 +1228,27 @@ namespace UdmDom
 		}
 
 	// --- containment
-		ObjectImpl *getParent(const ::Uml::CompositionParentRole &role) const 
+		ObjectImpl *getParent(DOM_Node parent, const ::Uml::CompositionParentRole &role) const 
 		{
 // TODO: check role if not NULLROLE
 
 			TRY_XML_EXCEPTION
 			
-			DOM_Node parent = dom_element.getParentNode();
-			
-			if ((parent == (DOM_NullPtr *)NULL) || (parent.getNodeType() != DOM_Node::ELEMENT_NODE)) 	return &Udm::_null;
+			if ((parent == (DOM_NullPtr *)NULL) || (parent.getNodeType() != DOM_Node::ELEMENT_NODE)) {
+				return &Udm::_null;
+			}
 			
 			DomObject * do_parent = new DomObject(static_cast<DOM_Element&>(parent), mydn);
 			
-			
 			if(role) {
-				::Uml::Composition comp = Uml::matchChildToParent(m_type, role.target()); 
-				
+				::Uml::Composition comp = ::Uml::matchChildToParent(m_type, role.target()); 
 
 				//this will return the null object when there are multiple 
 				//possible compositions and the current composition doesn't match
 				//the requested compostion
-				if(!comp && DSFind(dom_element.getAttribute("__child_as"), DOMString(GetANameFor(role.parent()).c_str())) < 0)  
+				if(!comp && DSFind(dom_element.getAttribute("__child_as"), DOMString(GetANameFor(role.parent()).c_str())) < 0) {
 					return &Udm::_null;
+				}
 
 				//still need to check the type
 				//even if there is only on possible composition between me as child
@@ -1293,12 +1257,12 @@ namespace UdmDom
 				
 				set< ::Uml::Class> cl_s = Uml::DescendantClasses(role.target());
 
-				if (cl_s.find(do_parent->m_type)  != cl_s.end())
+				if (cl_s.find(do_parent->m_type)  != cl_s.end()) {
 					return do_parent;
-				else 
-				{
+				} else {
 					delete do_parent;
-					return &Udm::_null;
+					//return &Udm::_null;
+					return this->getParent(parent.getParentNode(), role);
 				}
 
 			}
@@ -1308,6 +1272,15 @@ namespace UdmDom
 			CATCH_XML_EXCEPTION("DomObject::getParent()");
 			
 			
+		}
+
+		ObjectImpl *getParent(const ::Uml::CompositionParentRole &role) const 
+		{
+			TRY_XML_EXCEPTION
+			
+			return this->getParent(dom_element.getParentNode(), role);
+
+			CATCH_XML_EXCEPTION("DomObject::getParent()");
 		}
 
 
@@ -1561,11 +1534,11 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 							{
 								aa.dom_element.insertBefore(dom_element, n);
 								inserted = true;
-								delete my_type_name;
+								delete [] my_type_name;
 								break;
 							}
 
-							delete my_type_name;
+							delete [] my_type_name;
 
 						}
 					}
@@ -1749,7 +1722,6 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 			DOMString compname;
 			::Uml::Class target;
 
-				
 			//::Uml::Diagram diagram = m_type.parent();
 
 			//checking if role is valid for this object
@@ -2114,9 +2086,13 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				if(!Uml::IsDerivedFrom(meta, role.target())) {
 					throw udm_exception("Invalid child specified: " + casestr);
 				}
-				DOMString nodename = DOMString((string(::Uml::Namespace(meta.parent()).name()) + ':' +  string(meta.name())).c_str());
+				::Uml::Namespace parent_ns = meta.parent_ns();
+				string nodename_str = parent_ns != ::Uml::Namespace(NULL) ? string(parent_ns.name()) + ':' +  string(meta.name()) : string(meta.name());
+				string node_uri = getNSURI(parent_ns != ::Uml::Namespace(NULL) ? parent_ns.name() : "__dgr_" + string(((::Uml::Diagram) meta.parent()).name()));
+				DOMString nodename = DOMString(nodename_str.c_str());
 				//DOMString ns_uri = DOMString((string(UDM_DOM_URI_PREFIX) + '/' +  string(::Uml::Namespace(meta.parent()).name())).c_str());
-        DOMString ns_uri(getNSURI(string(::Uml::Namespace(meta.parent()).name())).c_str());
+				DOMString ns_uri(node_uri.c_str());
+
 				DomObject *dep = 
 					new DomObject(meta, dom_element.getOwnerDocument().createElementNS(ns_uri, nodename), mydn);
 				//dep does not have at this moment an archetype!!!
@@ -2954,6 +2930,24 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		operator charp() { return p; }
 	} pp;
 
+	void DomDataNetwork::AddToMetaClassesCache(const set< ::Uml::Class> &meta_classes)
+	{
+		for (set< ::Uml::Class>::const_iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
+		{
+			//namespace + ":" + classname
+			string key;
+			::Uml::Namespace mci_ns = mci->parent_ns();
+			if (mci_ns != ::Uml::Namespace(NULL))
+				key += (string)mci_ns.name() + ":";
+			key += (string)(mci->name());
+			pair<string, ::Uml::Class> mcc_item(key, *mci);
+			pair<map<string,  ::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
+			if (!ins_res.second)
+				throw udm_exception("Insert failed when creating meta classes by name map!");
+
+		}
+	}
+
 	UDM_DLL DomDataNetwork::DomDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* project) :
 	Udm::DataNetwork(metainfo, project)  
 	{
@@ -2967,21 +2961,13 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		/*if(!LoadLibrary("..\\lib\\xerces-c_1_2")) MessageBox(NULL, "Baj van", "Load lib", 0); */
 
 		//create a cache for meta-classes 
+		AddToMetaClassesCache(metaroot.dgr->classes());
+
 		set< ::Uml::Namespace> meta_namespaces= metaroot.dgr->namespaces();
 		
 		for (set< ::Uml::Namespace>::iterator mni = meta_namespaces.begin(); mni != meta_namespaces.end(); mni++)
 		{
-			set< ::Uml::Class> meta_classes = mni->classes();
-			for (set< ::Uml::Class>::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
-			{
-				//namespace + ":" + classname
-				string key = (string)(mni->name()) + ":" + (string)(mci->name());
-				pair<string, ::Uml::Class> mcc_item(key, *mci);
-				pair<map<string,  ::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
-				if (!ins_res.second)
-					throw udm_exception("Insert failed when creating meta classes by name map!");
-
-			}
+			AddToMetaClassesCache(mni->classes());
 		}
 	}
 
@@ -3041,25 +3027,26 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 		CATCH_XML_EXCEPTION("DomDataNetwork::~DataNetwork()")
 	}
+
 //========================================================
-  void setDomParserExternalSchemaLocation(DOMParser& parser)
-  {
-   string all_ns;
-   if (xsd_ns_mapping_storage::static_xsd_ns_mapping_container.empty())
-      return;
+	void setDomParserExternalSchemaLocation(DOMParser& parser)
+	{
+		string all_ns;
+		if (xsd_ns_mapping_storage::static_xsd_ns_mapping_container.empty())
+			return;
    
-   xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.begin();
-	for(;it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end();++it_ns_map)
-   {
+		xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.begin();
+		for(;it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end();++it_ns_map)
+		{
       
-		const string& uri = it_ns_map->first;
-      const string& ns = it_ns_map->second;
-      all_ns += uri + " " + ns + ".xsd ";
-    }
+			const string& uri = it_ns_map->first;
+			const string& ns = it_ns_map->second;
+			all_ns += uri + " " + ns + ".xsd ";
+		}
    
-    all_ns.resize(all_ns.size()-2);//cut the space
-    parser.setExternalSchemaLocation(all_ns.c_str());
-  }
+		all_ns.resize(all_ns.size()-2);//cut the space
+		parser.setExternalSchemaLocation(all_ns.c_str());
+	}
 //========================================================
 
 	class MyEntityResolver : public EntityResolver 
@@ -3084,7 +3071,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			DOMParser parser;
 
 			parser.setValidationScheme(DOMParser::Val_Never);
-      setDomParserExternalSchemaLocation(parser);
+			setDomParserExternalSchemaLocation(parser);
 
 			try 
 			{
@@ -3306,7 +3293,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 	//ugly but necesarry
 	UDM_DLL str_xsd_storage::str_str_map str_xsd_storage::static_xsd_container;
 	UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_mapping_container;
-  UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container;
+	UDM_DLL xsd_ns_mapping_storage::str_str_map xsd_ns_mapping_storage::static_xsd_ns_back_mapping_container;
 
 	
 
@@ -3381,7 +3368,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		parser.setEntityResolver(&resolver);
 
 
-    setDomParserExternalSchemaLocation(parser);
+		setDomParserExternalSchemaLocation(parser);
 
 		MobiesErrorHandler errhand;
 		parser.setErrorHandler(&errhand);
@@ -3497,7 +3484,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		parser.setIncludeIgnorableWhitespace(false);
 		parser.setEntityResolver(&resolver);
 
-    setDomParserExternalSchemaLocation(parser);
+		setDomParserExternalSchemaLocation(parser);
 
 		MobiesErrorHandler errhand;
 		parser.setErrorHandler(&errhand);
@@ -3703,16 +3690,25 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			}
 
 
-			string root_ns_name = ::Uml::Namespace(rootclass.parent()).name();
-			string root_qualified_name = root_ns_name + ":" + rootname;
+			::Uml::Namespace rootclass_ns = rootclass.parent_ns();
+			string root_ns_name("");
+			if (rootclass_ns != ::Uml::Namespace(NULL))
+				root_ns_name = rootclass_ns.name();
 
-      string root_ns_uri = getNSURI(root_ns_name);
+			string root_qualified_name;
+			if (root_ns_name.length())
+				root_qualified_name = root_ns_name + ":";
+			root_qualified_name += rootname;
+
+			//string root_uri = getNSURI(root_ns_name.length() ? root_ns_name : "__dgr_" + string(metaroot.dgr->name()));
+			string dgr_uri = getNSURI("__dgr_" + string(metaroot.dgr->name()));
 			//string root_ns_uri = string(UDM_DOM_URI_PREFIX) + root_ns_name;
 
 
 
 			doc = impl.createDocument(
-					root_ns_uri.c_str(),                    // root element namespace URI.
+					//root_uri.c_str(),                    // root element namespace URI.
+					"",                    // root element namespace URI.
 					root_qualified_name.c_str(),            // root element name
 					dtd);  // document type object (DTD).
 		
@@ -3742,43 +3738,41 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 				de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
 						  DOMString("xmlns:xsi"), DOMString("http://www.w3.org/2001/XMLSchema-instance"));
 
-				if (nses.size() == 1)
+				/*
+				de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
+						  DOMString("xmlns"), DOMString(dgr_uri.c_str()));
+				string schemalocations = dgr_uri + ' ' + string(metaroot.dgr->name()) + ".xsd";
+				*/
+				de.setAttributeNS(DOMString("http://www.w3.org/2001/XMLSchema-instance"),
+						  DOMString("xsi:noNamespaceSchemaLocation"), DOMString(string((string)metaroot.dgr->name() + ".xsd").c_str()));
+				string schemalocations;
+
+				set< ::Uml::Namespace>::iterator nses_i = nses.begin();
+				while (nses_i != nses.end())
 				{
+
+						
+					string ns_name = nses_i->name();
+					string ns_uri = getNSURI(ns_name);
+					//string ns_uri = string(UDM_DOM_URI_PREFIX) + ns_name;
+						
+					if (schemalocations.size()) schemalocations += ' ';
+					schemalocations += (string)metaroot.dgr->name() + '_';
+					schemalocations += ns_uri;
+					schemalocations += ' ';
+					schemalocations += ns_name;
+					schemalocations += ".xsd";
+
 					de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
-					DOMString((string("xmlns:") + root_ns_name).c_str()), DOMString(root_ns_uri.c_str()));
-					
+							  DOMString((string("xmlns:") + ns_name).c_str()), DOMString(ns_uri.c_str()));
+
+					nses_i++;
+
+
+				};
+				if (schemalocations.size())
 					de.setAttributeNS(DOMString("http://www.w3.org/2001/XMLSchema-instance"),
-						  DOMString("xsi:schemaLocation"), DOMString((root_ns_uri + ' ' + fname_pathless).c_str()));
-				}
-				else
-				{
-					set< ::Uml::Namespace>::iterator nses_i = nses.begin();
-					string schemalocations;
-
-					while (nses_i != nses.end())
-					{
-
-						
-						string ns_name = nses_i->name();
-            string ns_uri = getNSURI(ns_name);
-						//string ns_uri = string(UDM_DOM_URI_PREFIX) + ns_name;
-						
-						if (schemalocations.size()) schemalocations += ' ';
-						schemalocations += ns_uri;
-						schemalocations += ' ';
-						schemalocations += ns_name;
-						schemalocations += ".xsd";
-
-						de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
-							DOMString((string("xmlns:") + ns_name).c_str()), DOMString(ns_uri.c_str()));
-
-						nses_i++;
-
-
-					};
-					de.setAttributeNS(DOMString("http://www.w3.org/2001/XMLSchema-instance"),
-						  DOMString("xsi:schemaLocation"), DOMString(schemalocations.c_str()) );
-				}
+						DOMString("xsi:schemaLocation"), DOMString(schemalocations.c_str()) );
 			}
 
 
@@ -3907,11 +3901,11 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 						ret = full_file_name;
 						continue;
 					}
-					delete full_file_name;
+					delete [] full_file_name;
 					curr_path = next_delim;
 				}
 
-				delete path;
+				delete [] path;
 				
 			}
 
@@ -3922,7 +3916,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			sprintf(full_file_name, "%s%c%s", DTDPath.c_str(), path_hier, file_name.c_str());
 			
 			if (access(full_file_name, 4) == 0) ret = full_file_name;
-			delete full_file_name;
+			delete [] full_file_name;
 
 		}
 		return ret;
@@ -3938,7 +3932,10 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 		~Startup()
 		{
-			XMLPlatformUtils::Terminate();
+			// disabled for now because it may be called too
+			// early during global destruction, while DOM
+			// elements still exist
+			//XMLPlatformUtils::Terminate();
 		}
 	} __startup;
 
@@ -3977,7 +3974,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		parser.setIncludeIgnorableWhitespace(false);
 		parser.setEntityResolver(&resolver);
 
-    setDomParserExternalSchemaLocation(parser);
+		setDomParserExternalSchemaLocation(parser);
 
 		MobiesErrorHandler errhand;
 		parser.setErrorHandler(&errhand);

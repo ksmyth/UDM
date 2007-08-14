@@ -353,7 +353,7 @@ void printDOM(DOM_Node doc, const char *filename, XMLCh *encodingName = NULL)
 
 	    if(formatTarget) delete formatTarget;
 		if(gFormatter) delete gFormatter;
-		if(namebuf) delete namebuf;
+		if(namebuf) delete [] namebuf;
 }
 
 
@@ -404,7 +404,7 @@ void printDOM(DOM_Node doc, string &target, XMLCh *encodingName = NULL)
 
 	    if(formatTarget) delete formatTarget;
 		if(gFormatter) delete gFormatter;
-		if(namebuf) delete namebuf;
+		if(namebuf) delete [] namebuf;
 }
 
 
@@ -420,7 +420,7 @@ public:
 	}
 	void operator++()
 	{ 	count++;
-		if(tabs) delete tabs;
+		if(tabs) delete [] tabs;
 		tabs = new char[count+1];
 		for(int i = 0; i < count; i++)
 		{
@@ -430,7 +430,7 @@ public:
 	}
 	void operator--() 
 	{	count--;
-		if(tabs) delete tabs;
+		if(tabs) delete [] tabs;
 		tabs = new char[count+1];
 		for(int i = 0; i < count; i++)
 		{
@@ -444,7 +444,7 @@ public:
 	}
 	~llevel() 
 	{
-		if (tabs) delete tabs;
+		if (tabs) delete [] tabs;
 	}
 } level;
 
@@ -507,7 +507,7 @@ ostream& operator<<(ostream& target, DOM_Node& toWrite)
 			*(copy + i) = '\0';
 
 			res = sscanf(copy, "%c", &dummy);
-			delete copy;
+			delete [] copy;
 			if (res)
 #endif
 			
