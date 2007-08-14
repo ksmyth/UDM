@@ -57,30 +57,78 @@ public abstract class UdmFactory {
             System.out.println("exception: " + ioEx.getMessage());
         }
 
-        if (judm_path == null) {
-            throw new UnsatisfiedLinkError("No UDM_PATH environment variable defined");
-        }
-        if (os_name.indexOf("Windows") == -1) {
-            SWIG_LIB_PATH = judm_path + "/lib/" + swig_lib;
-        } else {
-            SWIG_LIB_PATH = judm_path + "/bin/" + swig_lib;
+        if (judm_path != null) 
+        {
+//            throw new UnsatisfiedLinkError("No UDM_PATH environment variable defined");
+        
+        	if (os_name.indexOf("Windows") == -1) {
+        		SWIG_LIB_PATH = judm_path + "/lib/" + swig_lib;
+        	} else {
+        		SWIG_LIB_PATH = judm_path + "/bin/" + swig_lib;
+        	}
         }
     }
 
     protected UdmFactory(
         String xmlMetaFile, String xsdMetaFile, String metaName, String packagePath)
         throws UdmException {
-        try {
+    	
+    	String err = new String("");
+    	boolean success = true;
+        try
+		{
             System.loadLibrary("UdmSwig");
             //System.out.println("library path: UdmSwig");
-        } catch (UnsatisfiedLinkError linkEx) {
-            if (SWIG_LIB_PATH == null) {
-                findSwigDll();
-            }
-
-            //System.out.println("judm path: " + SWIG_LIB_PATH);
-            System.load(SWIG_LIB_PATH);
+        } 
+        catch (UnsatisfiedLinkError linkEx)
+		{
+        	err = "Could not find UdmSwig.\n Searched in folders:\n";
+        	err += "java.library.path: " +System.getProperties().get("java.library.path")+"\n";
+        	success = false;
+		}
+        
+        // try in folder /usr/lib on linux 
+        if (!success)
+        {
+        	if (System.getProperty("os.name").indexOf("Windows") == -1) 
+        	{
+        		success = true;
+        		try
+				{
+        			System.load("/usr/lib/" + System.mapLibraryName("UdmSwig"));
+				}
+        		catch (UnsatisfiedLinkError linkEx1)
+				{
+        			err += "/usr/lib/\n";
+        			success = false;
+				}
+        	}
         }
+        // try in UDM_PATH
+        if (!success)
+        {
+        	findSwigDll();
+            if (SWIG_LIB_PATH == null)
+            {
+            	err += "No UDM_PATH environment variable defined";
+            }
+            else
+            {
+            	err += "UDM_PATH: " + SWIG_LIB_PATH;
+            	success = true;
+                try
+				{
+	           		System.load(SWIG_LIB_PATH);
+				}
+	            catch (UnsatisfiedLinkError linkEx1)
+				{
+	            	success = false;
+				}
+            }
+        }
+        
+        if (!success)
+          throw new UnsatisfiedLinkError(err);
         // store the Uml.xsd file
         //UdmHelper.StoreXsd(umlXsdFile, Uml_xsd.getString());
         this.xmlMetaFile = xmlMetaFile;

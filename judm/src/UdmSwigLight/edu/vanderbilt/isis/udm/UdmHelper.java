@@ -183,14 +183,19 @@ public class UdmHelper {
         log.finer("UDMSwig.UPO_SetClass(swigNewUPO,diagram,\"" + className +
             "\");");
 
-        edu.vanderbilt.isis.udm.swig.UdmPseudoObject nsUPO = new edu.vanderbilt.isis.udm.swig.UdmPseudoObject();
+        if (nsName != null && nsName.length() > 0) {
+            edu.vanderbilt.isis.udm.swig.UdmPseudoObject nsUPO = new edu.vanderbilt.isis.udm.swig.UdmPseudoObject();
 
-        boolean success = UDMSwig.UPO_SetNamespace(nsUPO,
-                diagram.getInternal(), nsName);
-        UdmHelper.checkError(success, "UDM method UPO_SetNamespace() failed");
+            boolean success = UDMSwig.UPO_SetNamespace(nsUPO,
+                    diagram.getInternal(), nsName);
+            UdmHelper.checkError(success, "UDM method UPO_SetNamespace() failed");
 
-        success = UDMSwig.UPO_SetClass(swigNewUPO, nsUPO, className);
-        UdmHelper.checkError(success, "UDM method UPO_SetClass() failed");
+             success = UDMSwig.UPO_SetClass(swigNewUPO, nsUPO, className);
+             UdmHelper.checkError(success, "UDM method UPO_SetClass() failed");
+        } else {
+            boolean success = UDMSwig.UPO_SetClass(swigNewUPO, diagram.getInternal(), className);
+             UdmHelper.checkError(success, "UDM method UPO_SetClass() failed");
+        }
 
         return new UdmPseudoObject(swigNewUPO);
     }
