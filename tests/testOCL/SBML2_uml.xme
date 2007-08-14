@@ -188,7 +188,7 @@
 							<value>The variable referencedor parameter element. by a rule must be an existing species, compartment, </value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.SBML2::sbml::species
+							<value>let s = dn.sBML2::sbml::species
 in
 let c = dn.compartment
 in 
@@ -216,7 +216,7 @@ p-&gt;exists(pv | pv.id = self.variable) </value>
 							<value>The variable referenced by a rule must not be referenced as the variable for any other rule.</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let rv = dn.RateRule
+							<value>let rv = dn.rateRule
 in
 rv-&gt;isUnique(rvv | rvv.id)</value>
 						</attribute>
@@ -1819,7 +1819,7 @@ in
 							<value>A species reference in a reaction needs to be to a defined species. The reference can be from reactants, products, or modifiers</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.SBML2::sbml::species
+							<value>let s = dn.sBML2::sbml::species
 in
 if (s.isUndefined()) then
  true
