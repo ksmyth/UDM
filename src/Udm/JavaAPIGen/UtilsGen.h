@@ -10,7 +10,8 @@ class UtilsGen
 {
   public:
     //! Constructor.
-    UtilsGen(const ::Uml::Namespace &ns
+    UtilsGen(const ::Uml::Diagram &diagram
+      , const ::Uml::Namespace &ns
       , const string & package_name
       , const map<string, string> & ns_map);
 
@@ -32,6 +33,9 @@ class UtilsGen
     void header( );
 
   private:
+    //! The diagram of this factory.
+    const ::Uml::Diagram & m_diagram;
+
     //! The namespace of this factory.
     const ::Uml::Namespace & m_ns;
 
@@ -40,9 +44,6 @@ class UtilsGen
 
     //! Namespace direcotry.
     const map<string, string>& m_ns_map;
-
-   //! The name of the namespace
-   const string m_ns_name;
 
    //! Destination utils file.
    ofstream m_output;

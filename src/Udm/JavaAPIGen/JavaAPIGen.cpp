@@ -193,6 +193,45 @@ void JavaAPIGen::generateJava( const ::Uml::Diagram &diagram
   , const map<string, string> & ns_map
   , const string& inputfile)
 {
+
+  // the corresponding JAVA package name
+  string package_name = m_diag_dir;
+
+  ::Uml::Namespace nullNs;
+
+  // generate JAVA from XSD
+  Utils::XML2Java( (string) m_diagram.name() + "_xsd", (string) m_diagram.name() + ".xsd", m_meta_dir );
+
+  // the possible root objects of this diagram
+  vector< ::Uml::Class> roots = Utils::getPossibleRootClasses( m_diagram.classes() );
+  vector< ::Uml::Class>::iterator r_i = roots.begin();
+
+  // generate the specific factories
+  for(; r_i != roots.end(); r_i++ )
+  {
+    // the type of the root object
+    string rc_name = r_i->name();
+    //std::cout << "\troot object: "<<rc_name<<std::endl;
+    //GenerateFactories( *nses_i, package_name, rc_name, ns_map, m_inputfile, m_factory_output, m_example_output );
+    FactoryGen file_fact_gen( m_diagram, nullNs, package_name, rc_name, ns_map, m_inputfile, m_factory_output, m_example_output, "File" );
+    file_fact_gen.generate( );
+    FactoryGen string_fact_gen( m_diagram, nullNs, package_name, rc_name, ns_map, m_inputfile, m_factory_output, m_example_output, "String" );
+    string_fact_gen.generate( );
+  }
+  
+  // generate a Utils.java for each namespaces that contains the wrappers
+  UtilsGen utils_gen( m_diagram, nullNs, package_name, ns_map );
+  utils_gen.generate( );
+
+  // generate java classes in the diagram
+  set< ::Uml::Class> uml_classes = m_diagram.classes();
+  for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
+  {
+    ClassGen class_gen( *uc_i, package_name, m_diagram.name(), "" );
+    class_gen.generate( );
+  }
+
+
   // the namespaces in the diagram
   set< ::Uml::Namespace> nses = diagram.namespaces();
 
@@ -206,10 +245,10 @@ void JavaAPIGen::generateJava( const ::Uml::Diagram &diagram
     Utils::makeDir(package_name);
 
     // generate JAVA from XSD
-    Utils::XML2Java( ns_name + "_xsd", ns_name + ".xsd", m_meta_dir );
+    Utils::XML2Java( (string) m_diagram.name() + "_" + ns_name + "_xsd", (string) m_diagram.name() + "_" + ns_name + ".xsd", m_meta_dir );
 
     // the possible root objects of this namespace
-    vector< ::Uml::Class> roots = Utils::getPossibleRootClasses( *nses_i );
+    vector< ::Uml::Class> roots = Utils::getPossibleRootClasses( nses_i->classes() );
     vector< ::Uml::Class>::iterator r_i = roots.begin();
 
     // generate the specific factories
@@ -219,24 +258,24 @@ void JavaAPIGen::generateJava( const ::Uml::Diagram &diagram
         string rc_name = r_i->name();
         //std::cout << "\troot object: "<<rc_name<<std::endl;
         //GenerateFactories( *nses_i, package_name, rc_name, ns_map, m_inputfile, m_factory_output, m_example_output );
-        FactoryGen file_fact_gen( *nses_i, package_name, rc_name, ns_map, m_inputfile, m_factory_output, m_example_output, "File" );
+        FactoryGen file_fact_gen( m_diagram, *nses_i, package_name, rc_name, ns_map, m_inputfile, m_factory_output, m_example_output, "File" );
         file_fact_gen.generate( );
-        FactoryGen string_fact_gen( *nses_i, package_name, rc_name, ns_map, m_inputfile, m_factory_output, m_example_output, "String" );
+        FactoryGen string_fact_gen( m_diagram, *nses_i, package_name, rc_name, ns_map, m_inputfile, m_factory_output, m_example_output, "String" );
         string_fact_gen.generate( );
     }
     
     
     // generate a Utils.java for each namespaces that contains the wrappers
-    UtilsGen utils_gen( *nses_i, package_name, ns_map );
+    UtilsGen utils_gen( m_diagram, *nses_i, package_name, ns_map );
     utils_gen.generate( );
 
     // generate java classes in the namespace
-    string diagName = nses_i->name();
+    string nsName = nses_i->name();
     set< ::Uml::Class> uml_classes = nses_i->classes();
     for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
     {
       //GenerateJavaClass(*uc_i, package_name, diagName);
-      ClassGen class_gen( *uc_i, package_name, diagName );
+      ClassGen class_gen( *uc_i, package_name, m_diagram.name(), nsName );
       class_gen.generate( );
     }
   }

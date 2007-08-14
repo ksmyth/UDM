@@ -10,7 +10,8 @@ class FactoryGen
 {
   public:
     //! Constructor.
-    FactoryGen(const ::Uml::Namespace &ns
+    FactoryGen(const ::Uml::Diagram &diagram
+      , const ::Uml::Namespace &ns
       , const string & package_name
       , const string & root_name
       , const map<string, string> & ns_map
@@ -75,6 +76,15 @@ class FactoryGen
     //! Generates the ocl evaluation function.
     void checkConstraints( );
 
+    //! Returns the namespace name if it is not null, otherwise the diagram name.
+    string namespaceOrDiagramName( );
+
+    //! Returns the Java code snippet that describes the container.
+    string containerDescriptionDoc( );
+
+    //! Returns the function name part that combines the diagram name with the namespace name.
+    string containerDescriptionFunc( );
+
   private:
     //! The namespace of this factory.
     const ::Uml::Namespace & m_ns;
@@ -93,9 +103,6 @@ class FactoryGen
 
     //! The name of the root object in the namespace.
     const string m_root_name;
-
-   //! The name of the namespace
-   const string m_ns_name;
 
    //! The name of the diagram.
    const string m_diag_name;

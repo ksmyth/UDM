@@ -8,12 +8,12 @@
 /*!
   Creates and initializes the Java API generation.
 */
-UtilsGen::UtilsGen( const ::Uml::Namespace &ns
+UtilsGen::UtilsGen( const ::Uml::Diagram &diagram
+      , const ::Uml::Namespace &ns
       , const string & package_name
       , const map<string, string> & ns_map)
-:   m_ns( ns ), m_ns_map( ns_map )
+  :   m_diagram ( diagram ), m_ns( ns ), m_ns_map( ns_map )
   , m_package_name(  package_name  )
-  , m_ns_name( ns.name() )
   , m_output()
 {
 }
@@ -86,7 +86,10 @@ void UtilsGen::header( )
 
   // generate class documentation
   m_output << "/**" << endl;
-  m_output << " * Utility class for namespace <code>" << m_ns_name << "</code>." << endl;
+  if ( m_ns != ::Uml::Namespace( NULL ) )
+    m_output << " * Utility class for namespace <code>" << m_ns.name() << "</code>." << endl;
+  else
+    m_output << " * Utility class for diagram <code>" << m_diagram.name() << "</code>." << endl;
   m_output << " */ " << endl;
 
   // generate the signature of the class
@@ -97,7 +100,7 @@ void UtilsGen::header( )
 //! Generate function that wraps a pseudoobject in a domain specific object.
 void UtilsGen::wrapper( )
 {
-  set< ::Uml::Class> classes = m_ns.classes();
+  set< ::Uml::Class> classes = m_ns != ::Uml::Namespace( NULL ) ? m_ns.classes() : m_diagram.classes();
   set< ::Uml::Class>::iterator classes_i;
 
   // generate a static function that wraps a pseudoobject in a domain specific object

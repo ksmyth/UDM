@@ -151,11 +151,10 @@ string Utils::getTime()
   Returns the possible root objects of the namespace specified
   by the parameter.
 */
-vector< ::Uml::Class> Utils::getPossibleRootClasses (const ::Uml::Namespace & ns)
+vector< ::Uml::Class> Utils::getPossibleRootClasses (const set< ::Uml::Class> & classes)
 {
   vector< ::Uml::Class> globalElements;
-  set< ::Uml::Class> classes = ns.classes();
-  set< ::Uml::Class>::iterator i = classes.begin();
+  set< ::Uml::Class>::const_iterator i = classes.begin();
 
   while ( i != classes.end() )
   {
@@ -188,7 +187,9 @@ string Utils::getPackageSignature(const ::Uml::Class &cl
   string ret;
 
   string ns = Utils::toLower(current_ns);
-  string parent_ns;// /*to be done for udm_ns2*/ = Utils::toLower( (string)( ( ::Uml::Namespace )cl.parent( ) ).name() );
+  string parent_ns;
+  if ( (::Uml::Namespace) cl.parent_ns() != ::Uml::Namespace(NULL) )
+    parent_ns = Utils::toLower( (string)( ( ::Uml::Namespace )cl.parent_ns( ) ).name() );
 
   if ( ns != parent_ns )
   {

@@ -8,7 +8,8 @@
 /*!
   Creates and initializes the Java API generation.
 */
-FactoryGen::FactoryGen( const ::Uml::Namespace &ns
+FactoryGen::FactoryGen( const ::Uml::Diagram &diagram
+                      , const ::Uml::Namespace &ns
                       , const string &  m_package_name 
                       , const string & m_root_name
                       , const map<string, string> & ns_map
@@ -16,9 +17,9 @@ FactoryGen::FactoryGen( const ::Uml::Namespace &ns
                       , ofstream & factory_output
                       , ofstream & example_output
                       , const string & type)
-:   m_ns( ns ), m_diagram( ns.parent() ), m_ns_map( ns_map ), m_inputfile( "" )
+:   m_diagram( diagram ), m_ns( ns ), m_ns_map( ns_map ), m_inputfile( "" )
   , m_package_name(  m_package_name  ), m_root_name( m_root_name )
-  , m_ns_name( ns.name() ), m_diag_name( m_diagram.name() ), m_output()
+  , m_diag_name( m_diagram.name() ), m_output()
   , m_type( type ), m_factory_output( factory_output ), m_example_output( example_output )
 {
   m_inputfile = inputfile;
@@ -74,12 +75,12 @@ void FactoryGen::addToFactoryRepository( )
   // add this factory to the factory repository
   m_factory_output << "\t/**" << endl;
   m_factory_output << "\t * Returns an instance of the factory <code>" << m_root_name << m_type << "Factory</code>" << endl;
-  m_factory_output << "\t * in namespace <code>" << m_ns_name << "</code>." << endl;
+  m_factory_output << containerDescriptionDoc( ) << endl;
   m_factory_output << "\t * @return An instance of the factory <code>" << m_root_name << m_type << "Factory</code>." << endl;
   m_factory_output << "\t * @throws UdmException If any Udm related exception occured" << endl;
   m_factory_output << "\t * @see " << Utils::toPackageName( m_package_name ) << "." << m_root_name << m_type << "Factory " << endl;
   m_factory_output << "\t */ " << endl;
-  m_factory_output << "\tpublic static " << Utils::toPackageName( m_package_name ) << "." << m_root_name << m_type << "Factory get" << m_ns_name
+  m_factory_output << "\tpublic static " << Utils::toPackageName( m_package_name ) << "." << m_root_name << m_type << "Factory get" << namespaceOrDiagramName( )
     << m_root_name << m_type << "Factory() \n\t\t throws UdmException " << endl;
   m_factory_output << "\t{" << endl;
   m_factory_output << "\t\treturn new " << Utils::toPackageName( m_package_name ) << "." << m_root_name << m_type << "Factory();" << endl;
@@ -109,13 +110,13 @@ void FactoryGen::generateExampleFile( )
   m_example_output << endl;
   m_example_output << "\t/**" << endl;
   m_example_output << "\t * Creates a new data network in a file with root object <code>" << m_root_name << "</code> " << endl;
-  m_example_output << "\t * in namespace <code>" << m_ns_name << "</code>." << endl;
+  m_example_output << containerDescriptionDoc( ) << endl;
   m_example_output << "\t * @throws UdmException" << endl;
   m_example_output << "\t */" << endl;
-  m_example_output << "\tpublic void testCreateInFile_" << m_root_name << "_" << m_ns_name << "() \n\t\tthrows UdmException " << endl;
+  m_example_output << "\tpublic void testCreateInFile_" << m_root_name << "_" << containerDescriptionFunc( ) << "() \n\t\tthrows UdmException " << endl;
   m_example_output << "\t{" << endl;
   m_example_output << "\t\t// open the data network" << endl;
-  m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << m_type << "Factory gtf \n\t\t\t= FactoryRepository.get" << m_ns_name << m_root_name << m_type << "Factory();" << endl;
+  m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << m_type << "Factory gtf \n\t\t\t= FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << m_type << "Factory();" << endl;
   m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "."  << m_root_name << " root \n\t\t\t= gtf.create(\"" << m_root_name << "-newmodel.xml\");" << endl;
   m_example_output << "\t\t" << endl;
   m_example_output << "\t\t// manipulate the data network" << endl;
@@ -133,13 +134,13 @@ void FactoryGen::generateExampleFile( )
   m_example_output << endl;
   m_example_output << "\t/**" << endl;
   m_example_output << "\t * Opens an existing data network from a file with root object <code>" << m_root_name << "</code> " << endl;
-  m_example_output << "\t * in namespace <code>" << m_ns_name << "</code>." << endl;
+  m_example_output << containerDescriptionDoc( ) << endl;
   m_example_output << "\t * @throws UdmException" << endl;
   m_example_output << "\t */" << endl;
-  m_example_output << "\tpublic void testOpenFromFile_" << m_root_name << "_" << m_ns_name << "() \n\t\tthrows UdmException " << endl;
+  m_example_output << "\tpublic void testOpenFromFile_" << m_root_name << "_" << containerDescriptionFunc( ) << "() \n\t\tthrows UdmException " << endl;
   m_example_output << "\t{" << endl;
   m_example_output << "\t\t// open the data network" << endl;
-  m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << m_type << "Factory gtf \n\t\t\t= FactoryRepository.get" << m_ns_name << m_root_name << m_type << "Factory();" << endl;
+  m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << m_type << "Factory gtf \n\t\t\t= FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << m_type << "Factory();" << endl;
   m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "."  << m_root_name << " root \n\t\t\t= gtf.open(\"" << m_root_name << "-existingmodel.xml\");" << endl;
   m_example_output << "\t\t" << endl;
   m_example_output << "\t\t// manipulate the data network" << endl;
@@ -163,13 +164,13 @@ void FactoryGen::generateExampleString( )
   m_example_output << endl;
   m_example_output << "\t/**" << endl;
   m_example_output << "\t * Creates a new data network in a string with root object <code>" << m_root_name << "</code> " << endl;
-  m_example_output << "\t * in namespace <code>" << m_ns_name << "</code>." << endl;
+  m_example_output << containerDescriptionDoc( ) << endl;
   m_example_output << "\t * @throws UdmException" << endl;
   m_example_output << "\t */" << endl;
-  m_example_output << "\tpublic void testCreateInString_" << m_root_name << "_" << m_ns_name << "() \n\t\tthrows UdmException " << endl;
+  m_example_output << "\tpublic void testCreateInString_" << m_root_name << "_" << containerDescriptionFunc( ) << "() \n\t\tthrows UdmException " << endl;
   m_example_output << "\t{" << endl;
   m_example_output << "\t\t// open the data network" << endl;
-  m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "StringFactory gtf \n\t\t\t= FactoryRepository.get" << m_ns_name << m_root_name << "StringFactory();" << endl;
+  m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "StringFactory gtf \n\t\t\t= FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << "StringFactory();" << endl;
   m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "."  << m_root_name << " root \n\t\t\t= gtf.create();" << endl;
   m_example_output << "\t\t" << endl;
   m_example_output << "\t\t// manipulate the data network" << endl;
@@ -187,14 +188,14 @@ void FactoryGen::generateExampleString( )
   m_example_output << endl;
   m_example_output << "\t/**" << endl;
   m_example_output << "\t * Opens an existing data network from a string with root object <code>" << m_root_name << "</code> " << endl;
-  m_example_output << "\t * in namespace <code>" << m_ns_name << "</code>." << endl;
+  m_example_output << containerDescriptionDoc( ) << endl;
   m_example_output << "\t * @throws UdmException" << endl;
   m_example_output << "\t */" << endl;
-  m_example_output << "\tpublic void testOpenFromString_" << m_root_name << "_" << m_ns_name << "() \n\t\tthrows UdmException " << endl;
+  m_example_output << "\tpublic void testOpenFromString_" << m_root_name << "_" << containerDescriptionFunc( ) << "() \n\t\tthrows UdmException " << endl;
   m_example_output << "\t{" << endl; 
   m_example_output << "\t\tString xmlString = \"<...>\";" << endl;
   m_example_output << "\t\t// open the data network" << endl;
-  m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "StringFactory gtf \n\t\t\t= FactoryRepository.get" << m_ns_name << m_root_name << "StringFactory();" << endl;
+  m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "StringFactory gtf \n\t\t\t= FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << "StringFactory();" << endl;
   m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "."  << m_root_name << " root \n\t\t\t= gtf.open(xmlString);" << endl;
   m_example_output << "\t\t" << endl;
   m_example_output << "\t\t// manipulate the data network" << endl;
@@ -212,15 +213,15 @@ void FactoryGen::generateExampleString( )
   m_example_output << endl;
   m_example_output << "\t/**" << endl;
   m_example_output << "\t * Opens an existing data network from a stream with root object <code>" << m_root_name << "</code> " << endl;
-  m_example_output << "\t * in namespace <code>" << m_ns_name << "</code>." << endl;
+  m_example_output << containerDescriptionDoc( ) << endl;
   m_example_output << "\t * @throws UdmException" << endl;
   m_example_output << "\t */" << endl;
-  m_example_output << "\tpublic void testOpenFromStream_" << m_root_name << "_" << m_ns_name << "(InputStream in) \n\t\tthrows UdmException " << endl;
+  m_example_output << "\tpublic void testOpenFromStream_" << m_root_name << "_" << containerDescriptionFunc( ) << "(InputStream in) \n\t\tthrows UdmException " << endl;
   m_example_output << "\t{" << endl; 
   m_example_output << "\t\t// open the data network" << endl;
-  m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "StringFactory gtf \n\t\t\t= FactoryRepository.get" << m_ns_name << m_root_name << "StringFactory();" << endl;
+  m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "StringFactory gtf \n\t\t\t= FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << "StringFactory();" << endl;
   m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "."  << m_root_name << " root \n\t\t\t= gtf.open(in);" << endl;
-  m_example_output << "\t\t//" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "FileFactory gtf \n\t\t\t//= FactoryRepository.get" << m_ns_name << m_root_name << "FileFactory();" << endl;
+  m_example_output << "\t\t//" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "FileFactory gtf \n\t\t\t//= FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << "FileFactory();" << endl;
   m_example_output << "\t\t//" << Utils::toPackageName( m_package_name ) << "."  << m_root_name << " root \n\t\t\t//= gtf.open(in);" << endl;
   m_example_output << "\t\t" << endl;
   m_example_output << "\t\t// manipulate the data network" << endl;
@@ -305,8 +306,8 @@ void FactoryGen::classJavadocFile( )
   m_output << " * <blockquote><pre>" << endl;
   m_output << " *         ....;" << endl;
   m_output << " *        // open the data network" << endl;
-  m_output << " *        " << m_root_name << "FileFactory gtf = FactoryRepository.get" << m_ns_name << m_root_name << "FileFactory();" << endl;
-  m_output << " *        " << m_root_name << " root = gtf.open(\"" << m_ns_name << "-existingmodel.xml\");" << endl;
+  m_output << " *        " << m_root_name << "FileFactory gtf = FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << "FileFactory();" << endl;
+  m_output << " *        " << m_root_name << " root = gtf.open(\"" << m_root_name << "-existingmodel.xml\");" << endl;
   m_output << " * " << endl;
   m_output << " *         // manipulate the data network" << endl;
   m_output << " *         ....;" << endl;
@@ -334,7 +335,7 @@ void FactoryGen::classJavadocString( )
   m_output << " *         ....;" << endl;
   m_output << " *         String xmlString = \"<...>\";" << endl;
   m_output << " *        // open the data network" << endl;
-  m_output << " *        " << m_root_name << "StringFactory gtf = FactoryRepository.get" << m_ns_name << m_root_name << "StringFactory();" << endl;
+  m_output << " *        " << m_root_name << "StringFactory gtf = FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << "StringFactory();" << endl;
   m_output << " *        " << m_root_name << " root = gtf.open(xmlString);" << endl;
   m_output << " * " << endl;
   m_output << " *         // manipulate the data network" << endl;
@@ -359,7 +360,7 @@ void FactoryGen::constructor( )
   m_output << "\t// resource information" << endl;
   m_output << "\tprivate static final String packagePath = \"/edu/vanderbilt/isis/meta/\";" << endl;
   m_output << "\tprivate static final String xmlMetaFile =\"" << m_inputfile << "\";" << endl;
-  m_output << "\tprivate static final String xsdMetaFile =\"" << m_ns_name << ".xsd\";" << endl;
+  m_output << "\tprivate static final String xsdMetaFile =\"" << containerDescriptionFunc( ) << ".xsd\";" << endl;
   m_output << "\tprivate static final String metaName =\"" << m_diag_name << "\";" << endl;
   m_output << "\t// the wrapped " << Utils::toLower( m_type ) << " factory instance" << endl;
   m_output << "\tprivate Udm" << m_type << "Factory factory;" << endl;
@@ -396,7 +397,7 @@ void FactoryGen::initializeMetaClasses( )
   m_output << "\t{" << endl;
 
   set< ::Uml::Class>::iterator classes_i;
-  set< ::Uml::Class> classes = m_ns.classes();
+  set< ::Uml::Class> classes = m_ns != ::Uml::Namespace( NULL ) ? m_ns.classes() : m_diagram.classes();
 
   for( classes_i = classes.begin(); classes_i != classes.end(); classes_i++ )
   {
@@ -424,12 +425,13 @@ void FactoryGen::initializeMetaClasses( )
 
   // load XSDs
   m_output << "\t\t// load XSDs" << endl;
+  m_output << "\t\tUdmHelper.StoreXsd(\"" << m_diag_name << ".xsd\", edu.vanderbilt.isis.meta." << m_diag_name << "_xsd.getString());" << endl;
   set< ::Uml::Namespace> nses = m_diagram.namespaces();
   set< ::Uml::Namespace>::iterator nses_i = nses.begin();
   for ( ; nses_i != nses.end(); nses_i++)
   {
     string n = nses_i->name();
-    m_output << "\t\tUdmHelper.StoreXsd(\"" << n << ".xsd\", edu.vanderbilt.isis.meta." << n << "_xsd.getString());" << endl;
+    m_output << "\t\tUdmHelper.StoreXsd(\"" << m_diag_name << "_" << n << ".xsd\", edu.vanderbilt.isis.meta." << m_diag_name << "_" << n << "_xsd.getString());" << endl;
   }
 
   m_output << "\t}" << endl;
@@ -702,4 +704,28 @@ void FactoryGen::closeDN( )
   m_output << "\t\tUdmHelper.ClearXsdStorage();" << endl;
   m_output << "\t\tfactory.unloadDiagram();" << endl;
   m_output << "\t}" << endl;
+}
+
+//! Returns the namespace name if it is not null, otherwise the diagram name.
+string FactoryGen::namespaceOrDiagramName( )
+{
+  if ( m_ns != ::Uml::Namespace( NULL ) )
+    return m_ns.name();
+  return m_diag_name;
+}
+
+//! Returns the Java code snippet that describes the container.
+string FactoryGen::containerDescriptionDoc( )
+{
+  if ( m_ns != ::Uml::Namespace( NULL ) )
+    return "\t * in namespace <code>" + (string) m_ns.name() + "</code>.";
+  return "\t * in diagram <code>" + m_diag_name + "</code>.";
+}
+
+//! Returns the function name part that combines the diagram name with the namespace name.
+string FactoryGen::containerDescriptionFunc( )
+{
+  if ( m_ns != ::Uml::Namespace( NULL ) )
+    return m_diag_name + "_" + (string) m_ns.name();
+  return m_diag_name;
 }

@@ -11,10 +11,12 @@
 */
 ClassGen::ClassGen( const ::Uml::Class &cl
       , const string & pckg_name
-      , const string &  diag_name)
+      , const string & diag_name
+      , const string & ns_name )
 :   m_cl( cl ), m_package_name(  pckg_name  ), m_diag_name(  diag_name  )
   , m_output(), m_cl_name ( cl.name() )
-  , m_ns_name( "" /*Utils::toLower((string)::Uml::Namespace(cl.parent()).name())  - to be done for udm_ns_2 */ )
+  , m_ns_name( Utils::toLower( ns_name ) )
+  , m_ns_name_orig( ns_name )
   , m_base_name( "UdmPseudoObject" )
 {
 }
@@ -112,7 +114,7 @@ void ClassGen::constructor( )
   if ( !m_cl.isAbstract() )
   {
     m_output << "\tpublic static final String META_TYPE = \"" << m_cl_name << "\";" << endl;
-    m_output << "\tpublic static final String META_TYPE_NS = \"" << m_diag_name << "\";" << endl;
+    m_output << "\tpublic static final String META_TYPE_NS = \"" << m_ns_name_orig << "\";" << endl;
     m_output << "\tprivate static UdmPseudoObject metaClass;" << endl;
     m_output << endl;
   }

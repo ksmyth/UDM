@@ -33,7 +33,7 @@ class Utils
     static string Utils::getTime();
 
     //! The possible root objects of the given namespace.
-    static vector< ::Uml::Class> getPossibleRootClasses( const ::Uml::Namespace & ns );
+    static vector< ::Uml::Class> getPossibleRootClasses( const set< ::Uml::Class> & classes );
 
     //! Returns the package signature for the specific class.
     static string getPackageSignature(const ::Uml::Class &cl
