@@ -66,8 +66,9 @@
 
 #token	INPUTEND				"@"				<< ; >>
 #token								"[\ \t]+"			<< skip(); >>
+#token								"\r\n"				<< skip(); newline(); >>
 #token								"\n"				<< skip(); newline(); >>
-#token								"\r"					<< skip(); >>
+#token								"\r"				<< skip(); newline(); >>
 #token								"//"					<< mode( COMMENT ); skip(); >>
 #token								"\-\-"				<< mode( COMMENT ); skip(); >>
 
@@ -157,7 +158,7 @@
 #token CARAT					"^"
 #token DOLLAR					"$"
 #token AMPERSAND				"&"
-#token SEPERATOR				":>"   << mode( LITERAL ); skip(); >>
+#token SEPARATOR				":>"   << mode( LITERAL ); skip(); >>
 //udmoclpat changes>
 
 //======================================================================================================================================
@@ -403,6 +404,40 @@ class OCLParser
 				}
 			}
 	>>
+
+//<udmoclpat changes
+	<<
+		private :
+			void PrintErrorToken2( const int iToken, const TokenSet& setFollow, const int iLine )
+			{
+				int iCurrent = LA(1);
+				string strToken = ( iCurrent == INPUTEND ) ? "InputEnd" : "\"" + string( LT(1)->getText() ) + "\"";
+				if ( iCurrent == IDENTIFIER && iToken != IDENTIFIER )
+					iCurrent = UNUSED;
+
+				string strViables = PrintToken( iToken, true );
+
+				if ( iToken != INPUTEND && Contains( setFollow, iToken ) ) {
+					AddException( "? is missing after the expression started on the given line number.", strViables, "", iLine );
+				}
+				else {
+					string strConsumed = Consume( setFollow, iCurrent == UNUSED );
+					if ( iToken == INPUTEND )
+						AddException( "Superfluous tokens [ \" ?\" ] are ignored after the expression started on the given line number.", strConsumed, "", iLine );
+					else {
+						if ( iCurrent == INPUTEND )
+							AddException( "? is missing after the expression started on the given line number.", strViables, "", iLine );
+						else {
+							string strMessage = "? is missing after the expression started on the given line number. Next Token is [ ? ].";
+							if ( ! strConsumed.empty() )
+								strMessage += " Ignored tokens are [ \" " + strConsumed + "\" ].";
+							AddException( strMessage, strViables, strToken, iLine );
+						}
+					}
+				}
+			}
+	>>
+//udmoclpat changes>
 
 	<<
 		private :
@@ -896,7 +931,7 @@ extendedExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pNode ] :
 	expression [ setFollow, $pNode ]
 	| printNode [ setFollow, $pNode ]
 	| fileNode [ setFollow, $pNode ]
-	| handleNode [setFollow, $pNode ]
+	| handleNode [ setFollow, $pNode ]
 	<< IF_EXC_NODE( pNode ) >>
 ;
 
@@ -910,36 +945,34 @@ enumeratedExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pTreeNode 
 			OclTree::TreeNodeVector vecElements;
 			PositionMap mapPositions;
 		>>	
-		expression [ Union( Union( setFollow, SEMICOLON ), First_expression ), pNode ]
-			<< IF_EXC_NODE( pNode ) >>
-			<< IF_NO_EXC( vecElements.push_back( pNode ); ) >>
-			<< IF_EXC_NODES( vecElements ) >>
-			<< IF_NO_EXC( $pTreeNode = CreateEnumeration( vecElements, mapPositions ); ) >>
+		expression [ setFollow, pNode ]
+		<< IF_EXC_NODE( pNode ) >>
+		<< IF_NO_EXC( vecElements.push_back( pNode ); $pTreeNode = CreateEnumeration( vecElements, mapPositions ); ) >>
 		|
 		(
-		wrap_left_brace [ Union( First_expressionListOrRange, RIGHT_BRACE ) ]
-		((extendedExpression [ Union( Union( setFollow, SEMICOLON ), First_expression ), pNode ]
-		wrap_semicolon [ First_expression ]
+			wrap_left_brace [ Union( Union( First_extendedExpression, First_textNode ), RIGHT_BRACE ) ]
+			(
+				(
+					( textNodeTester ) ?
+					textNode [ Union( First_extendedExpression, RIGHT_BRACE ), pNode ]
+					|
+					(
+						<< int iLine = LT(1)->getLine(); >>	// line number where the next expression starts
+						extendedExpression [ Union( First_textNode, SEMICOLON ), pNode ]
+						wrap_semicolon2 [ Union( First_extendedExpression, First_textNode ), iLine ]
+					)
+				)
+				<< IF_EXC_NODE( pNode ) >>
+				<< IF_NO_EXC( vecElements.push_back( pNode ); ) >>
+				<< pNode = NULL; /* other rules must not delete a Node already in vecElements */ >>
+			) *
+			wrap_right_brace [ setFollow ]
+			<< if(!m_bProcessingPat) { AddException( "Invalid expression. UdmPatError.", "", "", LT(1)->getLine() ); } >>
+		)
 		<< IF_EXC_NODE( pNode ) >>
-		<< IF_NO_EXC( vecElements.push_back( pNode ); ) >>)
-		| textNode [ Union( Union( setFollow, SEMICOLON ), First_expression ), pNode ]
-		<< IF_EXC_NODE( pNode ) >>
-		<< IF_NO_EXC( vecElements.push_back( pNode ); ) >>)
-		(
-			( extendedExpression [ Union( Union( setFollow, SEMICOLON ), First_expression ), pNode ]
-			wrap_semicolon [ First_expression ]
-			<< IF_EXC_NODE( pNode ) >>
-			<< IF_NO_EXC( vecElements.push_back( pNode ); ) >>)
-			| textNode [ Union( Union( setFollow, SEMICOLON ), First_expression ), pNode ]
-			<< IF_EXC_NODE( pNode ) >>
-			<< IF_NO_EXC( vecElements.push_back( pNode ); ) >>
-		) *
-		wrap_right_brace [ setFollow ]
-		<< if(!m_bProcessingPat) { AddException( "Invalid expression. UdmPatError.", "", "", LT(1)->getLine() ); } >>
-		)		
 		<< IF_EXC_NODES( vecElements ) >>
 		<< IF_NO_EXC( $pTreeNode = CreateEnumeration( vecElements, mapPositions ); ) >>
-	
+
 ;
 
 //======================================================================================================================================
@@ -947,19 +980,20 @@ enumeratedExpression [ const TokenSet& setFollow, OclTree::TreeNode*& pTreeNode 
 
 printNode [ const TokenSet& setFollow, OclTree::TreeNode*& pTreeNode ] :
 	<< OclTree::TreeNode* pNode = NULL; >>
-	wrap_print [ setFollow ]
-	LEFT_PARENTHESIS
-	expression [ setFollow, pNode ]
-	<< IF_EXC_NODE( pNode ) >>
-	RIGHT_PARENTHESIS
+	wrap_print [ Union( setFollow, LEFT_PARENTHESIS ) ]
+	wrap_left_parenthesis [ Union( setFollow, First_expression ) ]
+	expression [ Union( setFollow, RIGHT_PARENTHESIS ), pNode ]
+	wrap_right_parenthesis [ setFollow ]
 	<< IF_EXC_NODE( pNode ) >>
 	<< IF_NO_EXC( $pTreeNode = CreatePrint( pNode); ) >>
 ;
-exception default :
-	<< PrintErrorSelection( "Expression", First_expression, setFollow ); >>
 
 //======================================================================================================================================
 // 	textNode
+
+textNodeTester :
+	TEXT_LITERAL
+;
 
 textNode [  const TokenSet& setFollow, OclTree::TreeNode*&  pTextNode] :
 	<< PositionMap mapPositions; >>
@@ -976,13 +1010,13 @@ fileNode [ const TokenSet& setFollow, OclTree::TreeNode*&  pFileNode] :
 	<< OclTree::TreeNode* pNode = NULL; 
 		string strHandle;  
 		string strMode; >>
-	wrap_pat_open [ setFollow ]
-	wrap_left_parenthesis [ First_expression ]
-	expression [ First_right_parenthesis , pNode ]
-	wrap_comma [ First_name ]
-	wrap_string [ Union( First_delimiter, COMMA ), strMode ] 
-	wrap_comma [ First_name ]
-	name [ Union( First_delimiter, COMMA ) , strHandle ]
+	wrap_pat_open [ Union( setFollow, LEFT_PARENTHESIS ) ]
+	wrap_left_parenthesis [ Union( setFollow, First_expression ) ]
+	expression [ Union( setFollow, COMMA ), pNode ]
+	wrap_comma [ Union( setFollow, First_name ) ]
+	wrap_string [ Union( setFollow, COMMA ), strMode ] 
+	wrap_comma [ Union( setFollow, First_name ) ]
+	name [ Union( setFollow, RIGHT_PARENTHESIS ), strHandle ]
 	wrap_right_parenthesis [ setFollow ]
 	<< IF_EXC_NODE( pNode ) >>
 	<< IF_NO_EXC( $pFileNode = CreateFile( pNode, strHandle, strMode ); ) >>
@@ -994,11 +1028,11 @@ fileNode [ const TokenSet& setFollow, OclTree::TreeNode*&  pFileNode] :
 handleNode [ const TokenSet& setFollow, OclTree::TreeNode*&  pHandleNode] :
 
 	<<	string strHandle;  >> 
-	wrap_pat_switch [ setFollow ]
-	wrap_left_parenthesis [ First_name ]
-	name [ setFollow, strHandle ]
+	wrap_pat_switch [ Union( setFollow, LEFT_PARENTHESIS ) ]
+	wrap_left_parenthesis [ Union( setFollow, First_name ) ]
+	name [ Union( setFollow, RIGHT_PARENTHESIS ), strHandle ]
 	wrap_right_parenthesis [ setFollow ]
-	<< IF_NO_EXC( $pHandleNode = CreateHandle( strHandle ); ) >>
+	<< IF_NO_EXC( $pHandleNode = CreateHandle( strHandle ); ); >>
 ;
 
 //udmoclpat changes>
@@ -1686,6 +1720,13 @@ wrap_semicolon [ const TokenSet& setFollow ] :
 ;
 exception default : << PrintErrorToken( SEMICOLON, setFollow ); >>
 
+//<udmoclpat changes
+wrap_semicolon2 [ const TokenSet& setFollow, const int iLine ] :
+	SEMICOLON
+;
+exception default : << PrintErrorToken2( SEMICOLON, setFollow, iLine ); >>
+//udmoclpat changes>
+
 wrap_let [ const TokenSet& setFollow ] :
 	LET
 ;
@@ -1869,7 +1910,9 @@ exception default : << PrintErrorToken( PAT_SWITCH, setFollow ); >>
 //	BASIC TOKENS
 
 #token								"@"				<< ; >> // TODO; End of string
-#token								"[\n\r]"				<< mode( START ); skip(); newline(); >>
+#token								"\r\n"				<< mode( START ); skip(); newline(); >>
+#token								"\n"				<< mode( START ); skip(); newline(); >>
+#token								"\r"				<< mode( START ); skip(); newline(); >>
 #token								"~[\n\r]+"			<< skip(); >>
 
 //<udmoclpat changes
@@ -1883,13 +1926,16 @@ exception default : << PrintErrorToken( PAT_SWITCH, setFollow ); >>
 
 //======================================================================================================================================
 //	BASIC TOKENS
-#token 							"(~[<\\])+" 	<< more(); >>
-#token							"<"				<< more(); >>
-#token							"\\" << skip(); more(); >>
-#token 							"\\\n" << replstr(""); newline(); more(); >>
-#token							"\\\t" << replstr(""); more(); >>
-#token 							"\\n" << replstr("\n"); more(); >>
-#token 							"\\t" << replstr("\t"); more(); >>
-#token TEXT_LITERAL				"<:"  << replstr(""); mode( START ); >>
+#token 							"(~[<\r\n\\])+"		<< more(); >>
+#token							"<"		<< more(); >>
+#token							"\\"		<< replstr(""); more(); >>
+#token 							"\\r\\n"	<< replstr("\n"); more(); >>
+#token 							"\\n"		<< replstr("\n"); more(); >>
+#token 							"\\r"		<< replstr("\n"); more(); >>
+#token 							"\\t"		<< replstr("\t"); more(); >>
+#token 							"\r\n"		<< more(); newline(); >>
+#token 							"\n"		<< more(); newline(); >>
+#token 							"\r"		<< more(); newline(); >>
+#token TEXT_LITERAL					"<:"		<< replstr(""); mode( START ); >>
 //( (OCLParser*) getParser() )->SetTextNode( lextext() )
 //udmoclpat changes>
