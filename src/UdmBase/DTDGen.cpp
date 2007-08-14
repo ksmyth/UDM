@@ -2,6 +2,22 @@
 
 /*
 Changelog:
+  04/22/05 - kalmar
+    -added AddUMLNamespaceToIgnoreList - all the contained elements in a namespaces enlisted 
+      here will be ignored during parsing, see udm.exe -i switch
+
+   -added AddUMLNamespaceToQualifiedAttrsNSList - elementFormDefault=\"qualified\"
+      all the contained attributes in a namespaces enlisted 
+          here will be ignored prefixed with the UML namespace, see udm.exe -q switch
+          elementFormDefault="qualified" generated in the schema
+
+   - Text attribute xml representation changed, it hides the attribute name in
+      xml and the contained string is stored as a TEXT nodein the xml, the mixed ="true" is generated in schema sequence.
+      This feature allows parsing and writting mixed containment like
+      <A> Mixed <B size = "1"> containmnet </B> feature <A>
+      The meta has class A, which contains class B, which has attribute size:String 
+      and attribute value:Text
+  
 	11/07/04	-	endre
 
 		changed the DTD and the XSD generator to generate a different content model when
@@ -665,6 +681,14 @@ namespace DTDGen
 		return uri;
 	}
 
+  void AddUMLNamespaceToQualifiedAttrsNSList(const char *optp, set<string> &qualifiedAtrrsNS_set)
+ 	{
+		string opt(optp);
+  	if (opt.empty())
+				throw udm_exception("UML namespace must not be empty in argument \"" + opt + "\" of \"-q\" switch");
+    qualifiedAtrrsNS_set.insert(optp);
+	}
+
 	void AddUMLNamespaceToIgnoreList(const char *optp, set<string> &ns_ignore_set)
 	{
 		string opt(optp);
@@ -934,14 +958,18 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 	cwcp_order  cwcps = get_cwcp_order(c, uxsdi, has_text_attr || xsd_el_ta);
 
 	if (!uxsdi)
-		output << "\t<xsd:complexType name=\"" << name << "Type\">" << endl;
+		output << "\t<xsd:complexType name=\"" << name << "Type\"";
 	else
 	{
 		string isabs = c.isAbstract()?"true":"false";
 
-		output << "\t<xsd:complexType name=\"" << name << "Type\" abstract=\"" << isabs  << "\" >" << endl;
+		output << "\t<xsd:complexType name=\"" << name << "Type\" abstract=\"" << isabs  << "\"";
 	}
 
+  if (has_text_attr)
+    output << " mixed =\"true\"";
+
+  output << " >" << endl;
 	
 	::Uml::Uml::Class only_base;
 
@@ -972,6 +1000,7 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 		if (has_text_attr)
 		{
 			output << "\t\t<xsd:sequence minOccurs=\"0\" maxOccurs=\"unbounded\">" << endl;
+      /*
 			set< ::Uml::Uml::Attribute> text_attrs = ::Uml::TextAttributes(c);
 			set< ::Uml::Uml::Attribute>::iterator text_attrs_i = text_attrs.begin();
 			while (text_attrs_i != text_attrs.end())
@@ -980,7 +1009,7 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 					output << "\t\t\t<xsd:element name=\""<< (string)text_attrs_i->name() << "\" type=\"xsd:string\" minOccurs=\"0\"/>" << endl;				
 				text_attrs_i++;
 			};
-
+    */
 		}
 		else
 		{
@@ -1049,7 +1078,10 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 	output << "\t</xsd:complexType>" << endl << endl;
 }
 
-void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi, bool xsd_el_ta, map<string, string> *ns_map, set<string> *ns_ignore_set  )
+void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi, bool xsd_el_ta, 
+                       map<string, string> *ns_map, 
+                       set<string> *ns_ignore_set,  
+                       bool qualified_attrs_ns)
 {
 
 
@@ -1069,13 +1101,19 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 			other_ns.insert(other_ns_base.begin(), other_ns_base.end());
 		}
 
-		output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"" << NamespaceToURI(ns, ns_map) << "\" xmlns:" << ns.name() << "=\"" << NamespaceToURI(ns, ns_map) << "\"";
+		output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"" << NamespaceToURI(ns, ns_map) << "\"" <<endl;
+    output << " xmlns:" << ns.name() << "=\"" << NamespaceToURI(ns, ns_map) << "\"" << endl;
 
 		for (set< ::Uml::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
-			output << " xmlns:" << other_ns_i->name() << "=\"" << NamespaceToURI(*other_ns_i, ns_map) << "\"";
+			output << " xmlns:" << other_ns_i->name() << "=\"" << NamespaceToURI(*other_ns_i, ns_map) << "\"" << endl;
 		}
 
-		output << " elementFormDefault=\"qualified\">" << endl;
+		output << " elementFormDefault=\"qualified\" " << endl;
+
+    if (qualified_attrs_ns)
+      output << " attributeFormDefault=\"qualified\" " << endl;
+
+    output << ">" << endl;
 
 		output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
 

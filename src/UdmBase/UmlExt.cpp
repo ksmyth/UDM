@@ -17,6 +17,9 @@ this software.
 
 /*
 	CHANGELOG
+ 	04/22/05	-	kalmar
+        fixed OtherCompositionPeerParentRolesNamespaces : parents DescendantClasses need to be tested, too
+
 	12/06/04	-	endre
 
 			-		Added the GetChildRoleChain function, which returns all the possible paths how a class can be contained in an other
@@ -489,7 +492,7 @@ namespace Uml
 		return roles;
 	}
 
-	UDM_DLL set<CompositionParentRole> AncestorCompositionPeerParentRoles(const Class &c) 
+ 	UDM_DLL set<CompositionParentRole> AncestorCompositionPeerParentRoles(const Class &c) 
 	{
 		set<CompositionParentRole> roles;
 
@@ -506,20 +509,48 @@ namespace Uml
 	}
 
 
+	UDM_DLL set<CompositionParentRole> DescendantCompositionPeerParentRoles(const Class &c) 
+	{
+		set<CompositionParentRole> roles;
+
+		set<Class> desc = DescendantClasses(c);
+		set<Class>::iterator i = desc.begin();
+		while( i != desc.end() )
+		{
+			set<CompositionParentRole> a = CompositionPeerParentRoles(*i);
+			roles.insert(a.begin(), a.end());
+			++i;
+		}
+
+		return roles;
+	}
+
+      //this was not enough, what about derived classes, they going to have this child,too
+      // and those parents can be in other namespace....
+
 	UDM_DLL set<Namespace> OtherCompositionPeerParentRolesNamespaces(const Class &c)
 	{
 		set<Namespace> ret;
 		Namespace ns = c.parent();
+
 		set<CompositionParentRole> comps_c = AncestorCompositionPeerParentRoles(c);
-		for (set<CompositionParentRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++) {
+		for (set<CompositionParentRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++)
+    {
 			Class theother = j->target();
-			Namespace theother_ns = (Namespace)theother.parent();
-			if (ns != theother_ns)
-				ret.insert(theother_ns);
+
+      
+      set<Class> desc = DescendantClasses(theother);
+   		for (set<Class>::iterator jd = desc.begin(); jd != desc.end(); jd++)
+      {
+  			Class cc = *jd;
+
+			  Namespace theother_ns = (Namespace)cc.parent();
+			  if (ns != theother_ns)
+				  ret.insert(theother_ns);
+      }
 		}
 
 		return ret;
-
 	}
 
 	UDM_DLL bool IsCrossNSComposition(const Composition &c)

@@ -10,6 +10,21 @@ in an action of contract, negligence or other tortious action,
 arising out of or in connection with the use or performance of
 this software.
 
+  04/22/05 - kalmar
+   - getChildren fixed: the findClass tried to find elements belonging to a Text attribute
+   - added setDomParserExternalSchemaLocation, which allows the parser to use 
+        other xsd files to parse using different xsd's from 
+        those being defined in the xml instance
+   - Text attribute xml representation changed, it hides the attribute name in
+      xml and the contained string is stored as a TEXT nodein the xml, the mixed ="true" is generated in schema sequence.
+      This feature allows parsing and writting mixed containment like
+      <A> Mixed <B size = "1"> containmnet </B> feature <A>
+      The meta has class A, which contains class B, which has attribute size:String 
+      and attribute value:Text
+      only getTextValue and setTextValue need to be changed
+    - added getNSURI in order to ensure URI mapping in the generated xml, too
+      see AddURIToUMLNamespaceMapping, -u switch
+
   11/22/04	-	endre
 
 			-	VC7++ .NET porting issues
@@ -451,7 +466,7 @@ namespace UdmDom
 
 
 
-
+/*
 	void setTextValue(DOM_Element parent_element, const DOMString &value, const DOMString &name, const DOMString &ns_name, int no = 1)
 	{
 		DOM_Element parent = getElementNamed(parent_element, name, ns_name, true, no);
@@ -483,6 +498,54 @@ namespace UdmDom
 	};
 
 
+*/
+	void setTextValue(DOM_Element parent_element, const DOMString &value, const DOMString &name, const DOMString &ns_name, int no = 1)
+	{
+		
+		DOM_Text tn = parent_element.getOwnerDocument().createTextNode(value);
+		parent_element.appendChild(tn);
+		tn.setNodeValue(value);
+	};
+
+	void setTextValues(DOM_Element parent_element, const vector<string> &values, const DOMString &name, const DOMString &ns_name)
+	{
+    string str;
+		for(vector<string>::const_iterator v_i = values.begin(); v_i != values.end(); ++v_i)
+      str += *v_i;
+
+    setTextValue(parent_element, DOMString (str.c_str()), name, ns_name);
+	}
+
+
+ 	void getTextValues(DOM_Element parent_element, vector<string> &values, const DOMString &name, const DOMString &ns_name)
+	{
+    
+		for(DOM_Node n = parent_element.getFirstChild(); n != (DOM_NullPtr *)NULL;n = n.getNextSibling())	
+		{
+				DOM_Element ttn = static_cast<DOM_Element&>(n);
+
+				if ( (ttn.getNodeType() == DOM_Node::TEXT_NODE))
+        {
+        	DOM_Text tn = (DOM_Text&)ttn;
+          DOMString a = tn.getNodeValue();
+        
+          values.push_back(StrX(a).localForm());
+        }
+    }
+	}
+	DOMString getTextValue(DOM_Element parent_element, const DOMString &name, const DOMString& ns_name, int no = 1)
+	{
+    vector<string> values;
+    getTextValues(parent_element, values, name, ns_name);
+
+		DOMString a;
+    if (values.size())
+      a =DOMString(values[0].c_str());
+
+    return a;
+	}
+
+/*
 	DOMString getTextValue(DOM_Element parent_element, const DOMString &name, const DOMString& ns_name, int no = 1)
 	{
 		DOMString a;
@@ -495,9 +558,9 @@ namespace UdmDom
 			throw udm_exception("UdmDom::setTextValue:Existing node is not a child node!");
 		
 		DOM_Text tn = (DOM_Text&)ttn;
-
 		return tn.getNodeValue();
 	};
+
 
 	void getTextValues(DOM_Element parent_element, vector<string> &values, const DOMString &name, const DOMString &ns_name)
 	{
@@ -510,7 +573,7 @@ namespace UdmDom
 			if (a != (const DOM_NullPtr *)NULL ) values.push_back(StrX(a).localForm());
 		} while (a != (const DOM_NullPtr *)NULL);
 	};
-
+*/
 
 // --------------------------- DomObject
 
@@ -614,6 +677,7 @@ namespace UdmDom
 			key += cl_name.localForm();
 
 			map<string, ::Uml::Uml::Class>::iterator mcc_i = ((DomDataNetwork *)mydn)->meta_class_cache.find(key);
+
 			if (mcc_i != ((DomDataNetwork *)mydn)->meta_class_cache.end())
 				return mcc_i->second;
 
@@ -1760,12 +1824,32 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				compname = GetANameFor(::Uml::Uml::Composition(role.parent())).c_str();
 			}
 
+        set<string> textAttrNames;
+        set< ::Uml::Uml::Attribute> atts = ::Uml::AncestorAttributes(kind);
+		    for (set< ::Uml::Uml::Attribute>::iterator ai = atts.begin(); ai != atts.end(); ai++)
+			  if ( ((string)(ai->type()) == "Text"))
+        {
+            textAttrNames.insert((string)(ai->name()));
+        }
+
+
+
 			
 			for(DOM_Node n = dom_element.getFirstChild(); n != (DOM_NullPtr *)NULL;n = n.getNextSibling())	
 			{
 				if( n.getNodeType() == DOM_Node::ELEMENT_NODE )
 				{
 					DOM_Element e = static_cast<DOM_Element&>(n);
+
+
+    			StrX cl_name(e.getLocalName());		//class name
+          set<string>::const_iterator itf = textAttrNames.find(cl_name.localForm());
+          if (itf != textAttrNames.end())
+          {
+            continue;
+          }
+          
+
 					::Uml::Uml::Class m = findClass( e);
 
 					if(role &&  Uml::IsDerivedFrom(m, target) ) 
@@ -2974,7 +3058,6 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			{
 				//namespace + ":" + classname
 				string key = (string)(mni->name()) + ":" + (string)(mci->name());
-
 				pair<string, ::Uml::Uml::Class> mcc_item(key, *mci);
 				pair<map<string,  ::Uml::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
 				if (!ins_res.second)
