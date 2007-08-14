@@ -73,17 +73,21 @@ namespace Uml
 		return comp.parentRole();
 	}
 
-	// find an assoc.Class by name
-
+	// find an assoc.Class by name in a Diagram
 	UDM_DLL Class assocClassByName(const Diagram &d, const string &name)
 	{
-		Namespace ns = GetTheOnlyNamespace(d);
-		return assocClassByName(ns, name);
+		set<Class> ts = d.classes();
+		for(set<Class>::iterator i = ts.begin(); i != ts.end(); i++) 
+		{
+			if ((Association)(i->association()) && string(i->name()) == name) return(*i);
+		}
+		return NULL;
 	}
 
-	UDM_DLL Class assocClassByName(const Namespace &d, const string &name)
+	// find an assoc.Class by name in a Namespace
+	UDM_DLL Class assocClassByName(const Namespace &ns, const string &name)
 	{
-		set<Class> ts = d.classes();
+		set<Class> ts = ns.classes();
 		for(set<Class>::iterator i = ts.begin(); i != ts.end(); i++) 
 		{
 			if ((Association)(i->association()) && string(i->name()) == name) return(*i);
@@ -93,8 +97,20 @@ namespace Uml
 	};
 
 	
-	// find a class by name
-	UDM_DLL Class classByName(const Namespace &d, const string &name) 
+	// find a class by name in a Namespace
+	UDM_DLL Class classByName(const Namespace &ns, const string &name) 
+	{
+		set<Class> ts = ns.classes();
+			{
+				for(set<Class>::iterator i = ts.begin(); i != ts.end(); i++) {
+					if(string(i->name()) == name) return(*i);
+				}
+			}
+			return NULL;
+	}
+
+	// find a class by name in a Diagram
+	UDM_DLL Class classByName(const Diagram &d, const string &name) 
 	{
 		set<Class> ts = d.classes();
 			{
@@ -105,14 +121,8 @@ namespace Uml
 			return NULL;
 	}
 
-// find an association by name
+// find association by name in a Diagram
 	UDM_DLL Association associationByName(const Diagram &d, const string &name) 
-	{
-		Namespace ns = GetTheOnlyNamespace(d);
-		return associationByName(ns, name);
-	}
-
-	UDM_DLL Association associationByName(const Namespace &d, const string &name) 
 	{
 			set<Association> ts = d.associations();
 			{
@@ -123,16 +133,36 @@ namespace Uml
 			return NULL;
 	}
 
-
-	
-	UDM_DLL Composition compositionByName(const Diagram &d, const string &name) 
+// find association by name in a Namespace
+	UDM_DLL Association associationByName(const Namespace &ns, const string &name) 
 	{
-		return compositionByName(GetTheOnlyNamespace(d), name);
+			set<Association> ts = ns.associations();
+			{
+				for(set<Association>::iterator i = ts.begin(); i != ts.end(); i++) {
+					if(string(i->name()) == name) return(*i);
+				}
+			}
+			return NULL;
 	}
 
-	UDM_DLL Composition compositionByName(const Namespace &d, const string &name) 
+
+	
+// find composition by name in a Diagram
+	UDM_DLL Composition compositionByName(const Diagram &d, const string &name) 
 	{
 			set<Composition> ts = d.compositions();
+			{
+				for(set<Composition>::iterator i = ts.begin(); i != ts.end(); i++) {
+					if(string(i->name()) == name) return(*i);
+				}
+			}
+			return NULL;
+	}
+
+// find composition by name in a Namespace
+	UDM_DLL Composition compositionByName(const Namespace &ns, const string &name) 
+	{
+			set<Composition> ts = ns.compositions();
 			{
 				for(set<Composition>::iterator i = ts.begin(); i != ts.end(); i++) {
 					if(string(i->name()) == name) return(*i);
@@ -336,8 +366,8 @@ namespace Uml
 			set<CompositionParentRole> children = cl.parentRoles();
 			for(set<CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++) {
 				Class theother = (Class)(theOther(*i)).target();
-				Namespace theother_ns = (Namespace)theother.parent();
-				if (ns != theother_ns)
+				Namespace theother_ns = (Namespace)theother.parent_ns();
+				if (theother_ns != Namespace(NULL) && ns != theother_ns)
 					ret.insert(theother_ns);
 			}
 		}
@@ -380,18 +410,16 @@ namespace Uml
 
 	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Diagram & cross_dgr)
 	{
-		return AncestorCrossAssociationTargetRoles(c, GetTheOnlyNamespace(cross_dgr));
-	}
-	// All the other ends of associations this class can have (including those defined in ancestors)
-	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Namespace & cross_dgr)
-	{
 		set<AssociationRole> ret;
 		set<Class> anc_cs = AncestorClasses(c);
 		set<Class>::iterator i = anc_cs.begin();
 		while (i != anc_cs.end())
 		{
 			Class a_i = *i;
-			string cross_cl_name = string(a_i.name()) + "_cross_ph_" + string(Namespace(a_i.parent()).name());
+			Namespace ns_i = a_i.parent_ns();
+			string cross_cl_name = string(a_i.name()) + "_cross_ph_";
+			if (ns_i != Namespace(NULL))
+				cross_cl_name += string(ns_i.name());
 			//Class ph_a_i = classByName(cross_dgr, a_i.name());
 			Class ph_a_i = classByName(cross_dgr, cross_cl_name);
 			if (ph_a_i)
@@ -405,12 +433,8 @@ namespace Uml
 		return ret;
 	}
 
-	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Diagram & cross_dgr)
-	{
-		return AncestorCrossAssociationRoles(c, GetTheOnlyNamespace(cross_dgr));
-	}
-
-	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Namespace & cross_dgr)
+	// All the other ends of associations this class can have (including those defined in ancestors)
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Namespace & cross_dgr_ns)
 	{
 		set<AssociationRole> ret;
 		set<Class> anc_cs = AncestorClasses(c);
@@ -418,9 +442,62 @@ namespace Uml
 		while (i != anc_cs.end())
 		{
 			Class a_i = *i;
-			string cross_cl_name = string(a_i.name()) + Udm::cross_delimiter + string(Namespace(a_i.parent()).name());
+			Namespace ns_i = a_i.parent_ns();
+			string cross_cl_name = string(a_i.name()) + "_cross_ph_";
+			if (ns_i != Namespace(NULL))
+				cross_cl_name += string(ns_i.name());
+			//Class ph_a_i = classByName(cross_dgr, a_i.name());
+			Class ph_a_i = classByName(cross_dgr_ns, cross_cl_name);
+			if (ph_a_i)
+			{
+				set<AssociationRole> ret_i = AssociationTargetRoles(ph_a_i);
+				ret.insert(ret_i.begin(), ret_i.end());
+			}
+			i++;
+		};
+
+		return ret;
+	}
+
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Diagram & cross_dgr)
+	{
+		set<AssociationRole> ret;
+		set<Class> anc_cs = AncestorClasses(c);
+		set<Class>::iterator i = anc_cs.begin();
+		while (i != anc_cs.end())
+		{
+			Class a_i = *i;
+			Namespace ns_i = a_i.parent_ns();
+			string cross_cl_name = string(a_i.name()) + Udm::cross_delimiter;
+			if (ns_i != Namespace(NULL))
+				cross_cl_name += string(ns_i.name());
 			//Class ph_a_i = classByName(cross_dgr, a_i.name());
 			Class ph_a_i = classByName(cross_dgr, cross_cl_name);
+			if (ph_a_i)
+			{
+				set<AssociationRole> ret_i = ph_a_i.associationRoles();
+				ret.insert(ret_i.begin(), ret_i.end());
+			}
+			i++;
+		};
+
+		return ret;
+	}
+
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Namespace & cross_dgr_ns)
+	{
+		set<AssociationRole> ret;
+		set<Class> anc_cs = AncestorClasses(c);
+		set<Class>::iterator i = anc_cs.begin();
+		while (i != anc_cs.end())
+		{
+			Class a_i = *i;
+			Namespace ns_i = a_i.parent_ns();
+			string cross_cl_name = string(a_i.name()) + Udm::cross_delimiter;
+			if (ns_i != Namespace(NULL))
+				cross_cl_name += string(ns_i.name());
+			//Class ph_a_i = classByName(cross_dgr, a_i.name());
+			Class ph_a_i = classByName(cross_dgr_ns, cross_cl_name);
 			if (ph_a_i)
 			{
 				set<AssociationRole> ret_i = ph_a_i.associationRoles();
@@ -480,29 +557,6 @@ namespace Uml
 	
 	};
 
-	UDM_DLL set<Namespace> CompositionPeerChildNamespaces(const Namespace &ns)
-	{
-		set<Namespace> ret;
-
-		set<Class> classes = ns.classes();
-		for (set<Class>::iterator i = classes.begin(); i != classes.end(); i++) {
-			set<CompositionChildRole> comps_c = CompositionPeerChildRoles(*i);
-			for (set<CompositionChildRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++) {
-				Class theother = j->target();
-				set<Class> theother_descs = DescendantClasses(theother);
-				theother_descs.insert(theother);
-				for (set<Class>::iterator descs_i = theother_descs.begin(); descs_i != theother_descs.end(); descs_i++) {
-					Namespace theother_ns = (Namespace)descs_i->parent();
-					if (ns != theother_ns)
-						ret.insert(theother_ns);
-				}
-
-			}
-		}
-
-		return ret;
-	}
-
 	UDM_DLL set<CompositionParentRole> CompositionPeerParentRoles(const Class &c) 
 	{
 		set<CompositionParentRole> roles;
@@ -551,43 +605,15 @@ namespace Uml
 		return roles;
 	}
 
-      //this was not enough, what about derived classes, they going to have this child,too
-      // and those parents can be in other namespace....
-
-	UDM_DLL set<Namespace> OtherCompositionPeerParentRolesNamespaces(const Class &c)
-	{
-		set<Namespace> ret;
-		Namespace ns = c.parent();
-
-		set<CompositionParentRole> comps_c = AncestorCompositionPeerParentRoles(c);
-		for (set<CompositionParentRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++)
-		{
-			Class theother = j->target();
-
-      
-			set<Class> desc = DescendantClasses(theother);
-			for (set<Class>::iterator jd = desc.begin(); jd != desc.end(); jd++)
-			{
-				Class cc = *jd;
-
-				Namespace theother_ns = (Namespace)cc.parent();
-				if (ns != theother_ns)
-					ret.insert(theother_ns);
-			}
-		}
-
-		return ret;
-	}
-
 	UDM_DLL bool IsCrossNSComposition(const Composition &c)
 	{
 		CompositionParentRole p_r = c.parentRole();
 		Class p_c = p_r.target();
-		Namespace p_ns = p_c.parent();
+		Namespace p_ns = p_c.parent_ns();
 
 		CompositionChildRole c_r = c.childRole();
 		Class c_c = c_r.target();
-		Namespace c_ns = c_c.parent();
+		Namespace c_ns = c_c.parent_ns();
 
 		return p_ns != c_ns;
 
@@ -666,24 +692,6 @@ namespace Uml
 		}
 
 		return false;
-	}
-
-	UDM_DLL set<Namespace> BaseTypesNamespaces(const Namespace &ns)
-	{
-		set<Namespace> ret;
-
-		set<Class> classes = ns.classes();
-		for (set<Class>::iterator i = classes.begin(); i != classes.end(); i++) {
-			set<Class> bases = i->baseTypes();
-			for (set<Class>::iterator j = bases.begin(); j != bases.end(); j++) {
-				Class theother = *j;
-				Namespace theother_ns = (Namespace)theother.parent();
-				if (ns != theother_ns)
-					ret.insert(theother_ns);
-			}
-		}
-
-		return ret;
 	}
 
 
@@ -866,19 +874,14 @@ namespace Uml
 	// find a class by name
 	UDM_DLL Class classByName(const Diagram &d, const string &ns_name,const string &name )
 	{
+		if (ns_name.length() == 0)
+			return classByName(d, name);
 		Namespace ns = namespaceByName(d, ns_name);
 		if (ns) return classByName(ns, name);
 		else return Class();
 	};
 
 
-	UDM_DLL Class classByName(const Diagram &d, const string &name )
-	{
-			Namespace ns = GetTheOnlyNamespace(d);
-			return classByName(ns, name);
-	};
-
-	
 // find a namespace by name
 	UDM_DLL Namespace namespaceByName(const Diagram &d, const string &name)
 	{
