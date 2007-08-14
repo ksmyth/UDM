@@ -5,21 +5,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmBase", "UdmBase\UdmBase.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Udm", "Udm.vcproj", "{2B0484D0-D5BB-4238-BBC3-A37A20CDC493}"
 	ProjectSection(ProjectDependencies) = postProject
-		{EF8C7C28-568A-4335-9861-84ED3917E1A6} = {EF8C7C28-568A-4335-9861-84ED3917E1A6}
-		{E663042B-F135-4502-B7A1-D62F21126E3B} = {E663042B-F135-4502-B7A1-D62F21126E3B}
-		{0763153D-E646-403A-93B7-6033B1D13A0C} = {0763153D-E646-403A-93B7-6033B1D13A0C}
-		{5097453D-0CF4-4DE8-9C2D-8D4B2078AD1D} = {5097453D-0CF4-4DE8-9C2D-8D4B2078AD1D}
-		{9A094C52-E029-4333-AC60-580B9B928E4E} = {9A094C52-E029-4333-AC60-580B9B928E4E}
-		{7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E} = {7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E}
-		{5106C980-BC3D-48C5-A033-0D58C20F9980} = {5106C980-BC3D-48C5-A033-0D58C20F9980}
-		{69CD1785-0B3B-467C-87F6-71F679E5577A} = {69CD1785-0B3B-467C-87F6-71F679E5577A}
-		{CA16ED97-F738-4FAF-985C-FAE05AED8D07} = {CA16ED97-F738-4FAF-985C-FAE05AED8D07}
-		{1D7BFE97-37FA-48A3-8952-2B9D60114F42} = {1D7BFE97-37FA-48A3-8952-2B9D60114F42}
 		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D} = {30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}
-		{3321A2AD-4DCE-4767-BF7C-32C8B5FA9A97} = {3321A2AD-4DCE-4767-BF7C-32C8B5FA9A97}
-		{48FFD6BF-0BB7-4BAA-9943-F3B6DEA30C9C} = {48FFD6BF-0BB7-4BAA-9943-F3B6DEA30C9C}
-		{C2E74DE0-8084-42E2-941D-F18816C98D88} = {C2E74DE0-8084-42E2-941D-F18816C98D88}
-		{3CAE3DEE-065E-426C-9C3C-F1F59217C00B} = {3CAE3DEE-065E-426C-9C3C-F1F59217C00B}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Component", "UML GME\Interpreter\BONComponent.vcproj", "{207DA527-EC80-4A83-B5C2-B2A02281AFBA}"
@@ -98,40 +84,39 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmCint", "UdmCint\UdmCint.
 		{BDBC842F-099C-4263-AB8B-46511D82C56C} = {BDBC842F-099C-4263-AB8B-46511D82C56C}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GOCL", "UdmOcl\GOCL\src\GOCL.vcproj", "{7AC34CA0-DCE1-4510-A75F-503603EB151A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 6
-		SccProjectUniqueName0 = Udm.vcproj
-		SccProjectName0 = \u0022$/MoBIESTransition/UDM\u0022,\u0020YOXAAAAA
-		SccLocalPath0 = ..
+		SccNumberOfProjects = 5
+		SccProjectUniqueName0 = UdmOcl\\UdmOcl.vcproj
+		SccProjectName0 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl\u0022,\u0020INZAAAAA
+		SccLocalPath0 = UdmOcl
 		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
 		CanCheckoutShared = false
-		SccProjectFilePathRelativizedFromConnection0 = src\\
-		SccProjectUniqueName1 = UML\u0020GME\\Interpreter\\BONComponent.vcproj
-		SccProjectName1 = \u0022$/old_Udm/src/UML\u0020GME/Interpreter\u0022,\u0020QSOAAAAA
-		SccLocalPath1 = UML\u0020GME\\Interpreter
+		SccProjectUniqueName1 = UML\u0020GME\\ExprChecker\\GmeOclExprChecker.vcproj
+		SccProjectName1 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/ExprChecker\u0022,\u0020WOZAAAAA
+		SccLocalPath1 = UML\u0020GME\\ExprChecker
 		SccProvider1 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
 		CanCheckoutShared = false
-		SccProjectUniqueName2 = UdmOcl\\UdmOcl.vcproj
-		SccProjectName2 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl\u0022,\u0020INZAAAAA
-		SccLocalPath2 = UdmOcl
+		SccProjectUniqueName2 = UdmOclPat\\UDMOclPat.vcproj
+		SccProjectName2 = \u0022$/MoBIESTransition/udm_ns/src/UdmOclPat\u0022,\u0020QNZAAAAA
+		SccLocalPath2 = UdmOclPat
 		SccProvider2 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
 		CanCheckoutShared = false
-		SccProjectUniqueName3 = UML\u0020GME\\ExprChecker\\GmeOclExprChecker.vcproj
-		SccProjectName3 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/ExprChecker\u0022,\u0020WOZAAAAA
-		SccLocalPath3 = UML\u0020GME\\ExprChecker
+		SccProjectUniqueName3 = UdmCint\\UdmCint.vcproj
+		SccProjectName3 = \u0022$/MoBIESTransition/udm_ns/src/UdmCint\u0022,\u0020RNABAAAA
+		SccLocalPath3 = UdmCint
 		SccProvider3 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
 		CanCheckoutShared = false
-		SccProjectUniqueName4 = UdmOclPat\\UDMOclPat.vcproj
-		SccProjectName4 = \u0022$/MoBIESTransition/udm_ns/src/UdmOclPat\u0022,\u0020QNZAAAAA
-		SccLocalPath4 = UdmOclPat
+		SccProjectUniqueName4 = UdmOcl\\GOCL\\src\\GOCL.vcproj
+		SccProjectName4 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl/GOCL\u0022,\u0020AWBBAAAA
+		SccLocalPath4 = UdmOcl\\Gocl
 		SccProvider4 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
 		CanCheckoutShared = false
-		SccProjectUniqueName5 = UdmCint\\UdmCint.vcproj
-		SccProjectName5 = \u0022$/MoBIESTransition/udm_ns/src/UdmCint\u0022,\u0020RNABAAAA
-		SccLocalPath5 = UdmCint
-		SccProvider5 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
-		CanCheckoutShared = false
+		SccProjectFilePathRelativizedFromConnection4 = src\\
 	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -253,6 +238,12 @@ Global
 		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release.Build.0 = Release|Win32
 		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release MinDependency.ActiveCfg = Release|Win32
 		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release MinDependency.Build.0 = Release|Win32
+		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Debug.ActiveCfg = Debug|Win32
+		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Debug.Build.0 = Debug|Win32
+		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Release.ActiveCfg = Release|Win32
+		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Release.Build.0 = Release|Win32
+		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Release MinDependency.ActiveCfg = Release|Win32
+		{7AC34CA0-DCE1-4510-A75F-503603EB151A}.Release MinDependency.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 	EndGlobalSection
