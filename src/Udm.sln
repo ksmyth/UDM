@@ -89,6 +89,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UDMPat", "UdmOclPat\UDMOclP
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmInt", "UdmInt\UdmInt.vcproj", "{BDBC842F-099C-4263-AB8B-46511D82C56C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -198,6 +202,12 @@ Global
 		{EF8C7C28-568A-4335-9861-84ED3917E1A6}.Release.Build.0 = Release|Win32
 		{EF8C7C28-568A-4335-9861-84ED3917E1A6}.Release MinDependency.ActiveCfg = Release|Win32
 		{EF8C7C28-568A-4335-9861-84ED3917E1A6}.Release MinDependency.Build.0 = Release|Win32
+		{BDBC842F-099C-4263-AB8B-46511D82C56C}.Debug.ActiveCfg = Debug|Win32
+		{BDBC842F-099C-4263-AB8B-46511D82C56C}.Debug.Build.0 = Debug|Win32
+		{BDBC842F-099C-4263-AB8B-46511D82C56C}.Release.ActiveCfg = Release|Win32
+		{BDBC842F-099C-4263-AB8B-46511D82C56C}.Release.Build.0 = Release|Win32
+		{BDBC842F-099C-4263-AB8B-46511D82C56C}.Release MinDependency.ActiveCfg = Release|Win32
+		{BDBC842F-099C-4263-AB8B-46511D82C56C}.Release MinDependency.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 	EndGlobalSection
