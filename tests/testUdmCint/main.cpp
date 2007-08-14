@@ -10,11 +10,6 @@
 #include "GeneTF_xsd.h"
 
 
-namespace Uml_xsd
-{
- const std::string& getString();
-}
-
 void UdmTests::Test::readFromFile(std::istream& in, std::string& str)
 {
 	if (!in.good())
@@ -44,7 +39,7 @@ void UdmTests::Test::testRead(const std::string& result)
   char diagram_file[] = "GeneTF_udm.xml";
   char xsd_name[] = "GeneTF.xsd";
 
-  StoreXsd("Uml.xsd",cint_string (Uml_xsd::getString().c_str()));
+
   UdmPseudoObject diagram;
 
   std::ifstream ind(diagram_file);
@@ -293,14 +288,6 @@ void UdmTests::Test::testWrite(std::string& result)
      
    }
 
-   if(!  StoreXsd("Uml.xsd",cint_string (Uml_xsd::getString().c_str())))
-   {
-     cint_string str;
-     diagram.GetLastError(str);
-     std::cout << __LINE__ <<std::endl;
-     std::cout << str.buffer() <<std::endl;
-     exit(1);
-   }
 
 
   if(!  UPO_LoadDiagram(diagram_file,diagram))
@@ -493,7 +480,7 @@ void UdmTests::Test::testWrite(std::string& result)
 
   UPO_UnLoadDiagram(diagram_file);
   RemoveXsd(xsdn);
-  RemoveXsd("Uml.xsd");
+
 
 }
 
