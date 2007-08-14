@@ -3043,15 +3043,19 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 //========================================================
   void setDomParserExternalSchemaLocation(DOMParser& parser)
   {
-      string all_ns;
-  	xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.begin();
-		for(;it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end();++it_ns_map)
-    {
+   string all_ns;
+   if (xsd_ns_mapping_storage::static_xsd_ns_mapping_container.empty())
+      return;
+   
+   xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.begin();
+	for(;it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end();++it_ns_map)
+   {
       
-			const string& uri = it_ns_map->first;
+		const string& uri = it_ns_map->first;
       const string& ns = it_ns_map->second;
       all_ns += uri + " " + ns + ".xsd ";
     }
+   
     all_ns.resize(all_ns.size()-2);//cut the space
     parser.setExternalSchemaLocation(all_ns.c_str());
   }
