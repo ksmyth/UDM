@@ -1280,14 +1280,9 @@ namespace OclTree
 
 		// Remove Implicit variable if it was
 
-		if ( m_vecDeclarators[ 0 ].substr( 0, 1 ) == "!" ) 
+		if ( m_vecDeclarators[ 0 ].substr( 0, 1 ) == "!" )
 		{
-			/*
-			StringVector::iterator it = context.m_vecImplicits.end();
-			context.m_vecImplicits.erase( it-- );
-			*/
 			context.m_vecImplicits.pop_back();
-
 		}
 
 		return ! m_vecType.empty();
@@ -1370,7 +1365,7 @@ namespace OclTree
 						pIIterator->SetArguments( vecArguments );
 						pIIterator->SetSubResult( spAccu );
 						pIIterator->SetSubOriResult( objectIter );
-						(*pIIterator)(); 
+						(*pIIterator)();
 						if ( pIIterator->DoStop() )
 							bDoStop = true;
 					}
@@ -1534,10 +1529,6 @@ namespace OclTree
 				// Remove the newly created implicit iterator
 
 				contextIterator.m_ctxTypes.RemoveVariable( std::string( chBuffer ) );
-				/*
-				StringVector::iterator it = contextIterator.m_vecImplicits.end();
-				contextIterator.m_vecImplicits.erase( it-- );
-				*/
 				contextIterator.m_vecImplicits.pop_back();
 
 			TypeSeq vecTypeIterator = m_vecArguments[ 0 ]->m_vecType;
@@ -1695,11 +1686,11 @@ namespace OclTree
 			OclImplementation::Method* pIMethod = pMethod->GetImplementation();
 			if ( ! pIMethod )
 				THROWOCL0( ET_RUNTIME, EX_METHOD_NOT_IMPLEMENTED );
-			
+
 			if (((OclMeta::Feature*)pMethod)->IsDynamic()) // userdef method
 			{
 				lastFuncName = currFuncName;
-				currFuncName =  m_strName; // GetFullName(); 
+				currFuncName =  m_strName; // GetFullName();
 			}
 
 			pIMethod->Initialize();
@@ -1713,7 +1704,7 @@ namespace OclTree
 			pIMethod->Finalize();
 
 			// all of the violations collected in pIMethod (((OclGmeCM::ConstraintMethod*)pIMethod)->m_spFunction)
-			// will lose, one violation will be added to context depending on spResult 
+			// will lose, one violation will be added to context depending on spResult
 			// ?? !! terge
 			OclTree::ViolationVector vec = pIMethod->GetViolations();
 			pIMethod->ClearViolations();
