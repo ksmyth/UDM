@@ -27,6 +27,7 @@
 #define PARADIGMCOST 30000
 #define GME_VERSION "5.11.18"
 
+export prototype RenameFile_2005(HWND);
 
 prototype InitProgressBar(HWND, INT, INT, STRING, STRING, STRING);
 prototype SendMsgToProgressBar(HWND, STRING);
@@ -298,4 +299,9 @@ begin
 	MsiProcessMessage(hInstall, INSTALLMESSAGE_ERROR, hRec);
 	if (nFatal == 1) then abort;
 	endif;
-end;                                         
+end;
+
+function RenameFile_2005(hInstall)   
+begin
+	RenameFile(INSTALLDIR^"readmeVS2005.txt",INSTALLDIR^"readme.txt" );
+end;                                    
