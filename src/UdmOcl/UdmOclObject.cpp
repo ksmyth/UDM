@@ -20,6 +20,13 @@
 */
 
 #include "UdmOclObject.h"
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#endif
+
 #include "UdmBase.h"
 #include "Uml.h"
 

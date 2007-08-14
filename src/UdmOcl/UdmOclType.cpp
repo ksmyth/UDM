@@ -22,12 +22,20 @@
 #include "UdmOclType.h"
 #include "OCLObjectExBasic.h"
 #include "UdmOclObject.h"
+
+
+
+
+
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#endif
+
 #include "Uml.h"
 #include "UmlExt.h"
-
-
-
-
 using namespace Uml;
 
 namespace UmlOcl

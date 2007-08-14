@@ -270,9 +270,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Udm\Uml.cpp">
-			</File>
-			<File
 				RelativePath="UmlExt.cpp">
 				<FileConfiguration
 					Name="Release|Win32">

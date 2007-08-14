@@ -2867,7 +2867,7 @@ namespace UdmStatic
 								ass = (*anc_i).association();
 
 								if (ass)
-									 ass_asr_s = ass.AssociationRole_kind_children();
+									 ass_asr_s = ass.Uml_AssociationRole_kind_children();
 
 								
 								for(asr_s_i = asr_s.begin(); asr_s_i != asr_s.end(); asr_s_i++)
