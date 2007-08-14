@@ -45,7 +45,7 @@ namespace UmlOcl
 	{
 		// WARNING : m_Value not null
 		if ( (bool) m_Value )
-			m_strTypeName = "meta::" + (GOCL_STL_NS()string) m_Value.type().name();
+			m_strTypeName = (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (GOCL_STL_NS()string) m_Value.type().name();
 	}
 
 	Any* Object::Clone() const
@@ -65,7 +65,8 @@ namespace UmlOcl
 		m_Value = value;
 		// WARNING : m_Value not null
 		if ( (bool) m_Value )
-			m_strTypeName = "meta::" + (GOCL_STL_NS()string) m_Value.type().name();
+			m_strTypeName = (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (GOCL_STL_NS()string) m_Value.type().name();
+			
 	}
 
 	bool Object::Equals( const Any& object ) const
@@ -89,7 +90,8 @@ namespace UmlOcl
 			return "null";
 		char chBuffer[ 300 ];
 		_ltoa( m_Value.uniqueId(), chBuffer, 10 );
-		return "meta::" + (GOCL_STL_NS()string) m_Value.type().name() + " { id : " + GOCL_STL_NS()string( chBuffer ) + " }";
+		return (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (GOCL_STL_NS()string) m_Value.type().name() + " { id : " + GOCL_STL_NS()string( chBuffer ) + " }";
+		
 	}
 
 //##############################################################################################################################################

@@ -378,7 +378,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		: ConstraintBase( pFacade ), m_objConstraint( objConstraint )
 	{
 		::Uml::Uml::Class context = objConstraint.parent();
-		GOCL_STL_NS()string strType = "meta::" + (GOCL_STL_NS()string) context.name();
+		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
 		GOCL_STL_NS()string strName = objConstraint.name();
 		GOCL_STL_NS()string strExpression = objConstraint.expression();
 
@@ -393,7 +393,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 	{
 		char chBuffer[ 30 ];
 		sprintf( chBuffer, "UdmPatConstraint%d", lCounter++ );
-		GOCL_STL_NS()string strType = "meta::" + _strContext;
+		GOCL_STL_NS()string strType = /*"meta::" + */_strContext;	//strContext should be fullt qualified!
 		GOCL_STL_NS()string strName = chBuffer;
 		GOCL_STL_NS()string strExpression = _strExpression;
 		Define( strType + "::" + strName, "context " + strType + " inv " + strName + " : " + LINE_END + LINE_END + strExpression, true );
@@ -487,7 +487,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		::Uml::Uml::Class context;
 		if(!b_PatProcessing) {
 			context = m_objConstraint.parent();
-			strType = "meta::" + (GOCL_STL_NS()string) context.name();
+			strType = (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
 			strName = (GOCL_STL_NS()string) m_objConstraint.name();
 		} else {
 			strType = "Failure in pattern file";
@@ -520,7 +520,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		: ConstraintBase( pFacade ), m_objDefinition( objDefinition )
 	{
 		::Uml::Uml::Class context = objDefinition.parent();
-		GOCL_STL_NS()string strType = "meta::" + (GOCL_STL_NS()string) context.name();
+		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
 		GOCL_STL_NS()string strName = objDefinition.name();
 		GOCL_STL_NS()string strExpression = objDefinition.expression();
 		GOCL_STL_NS()string strParameterList = objDefinition.parameterList();
@@ -535,7 +535,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 	GOCL_STL_NS()string ConstraintDefEx::Print( bool bOnlyIdentity ) const
 	{
 		::Uml::Uml::Class context = m_objDefinition.parent();
-		GOCL_STL_NS()string strType = "meta::" + (GOCL_STL_NS()string) context.name();
+		GOCL_STL_NS()string strType = (GOCL_STL_NS()string) ((::Uml::Uml::Namespace)context.parent()).name() + "::" + (GOCL_STL_NS()string) context.name();
 		GOCL_STL_NS()string strName = (GOCL_STL_NS()string) m_objDefinition.name();
 		GOCL_STL_NS()string strParameterList = m_objDefinition.parameterList();
 		GOCL_STL_NS()string strReturnType = m_objDefinition.returnType();
