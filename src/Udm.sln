@@ -66,6 +66,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmToXmi", "UdmToXmi\UdmToX
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmBackendDump", "UdmBackendDump\UdmBackendDump.vcproj", "{69CD1785-0B3B-467C-87F6-71F679E5577A}"
 	ProjectSection(ProjectDependencies) = postProject
+		{6A53E343-14C2-4463-A9C8-332DAE560EAF} = {6A53E343-14C2-4463-A9C8-332DAE560EAF}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmViz", "UdmViz\UdmViz.vcproj", "{48FFD6BF-0BB7-4BAA-9943-F3B6DEA30C9C}"
