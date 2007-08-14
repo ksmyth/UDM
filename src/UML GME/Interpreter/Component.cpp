@@ -881,16 +881,12 @@ IMPLEMENT_CUSTOMMODEL(CClassDiagramBuilder, CBuilderModel, "ClassDiagram")
 
 CString CClassDiagramBuilder::GetNamespace() const
 {
-	CString ret;
-	GetAttribute("namespace", ret);
-	if (ret.IsEmpty()) {
-		const CBuilderModel *parent = this->GetParent();
-		if (parent->IsKindOf(RUNTIME_CLASS(CClassDiagramBuilder))) {
-			return BUILDER_CAST(CClassDiagramBuilder, parent)->GetNamespace();
-		}
-		return parent->GetName();
+	const CBuilderModel *parent = this->GetParent();
+	ASSERT(parent);
+	if (parent->IsKindOf(RUNTIME_CLASS(CClassDiagramBuilder))) {
+		return BUILDER_CAST(CClassDiagramBuilder, parent)->GetNamespace();
 	}
-	else return ret;
+	return parent->GetName();
 };
 
 void CClassDiagramBuilder::Build(CCompositeClassList &compositeClasses)
