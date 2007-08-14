@@ -92,18 +92,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmSwig", "UdmSwig\UdmSwig.
 EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 9
-		SccProjectUniqueName0 = UdmOcl\\UdmOcl.vcproj
-		SccProjectName0 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl\u0022,\u0020INZAAAAA
-		SccLocalPath0 = UdmOcl
+		SccNumberOfProjects = 7
+		SccLocalPath0 = .
 		CanCheckoutShared = false
-		SccProjectUniqueName1 = UML\u0020GME\\ExprChecker\\GmeOclExprChecker.vcproj
-		SccProjectName1 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/ExprChecker\u0022,\u0020WOZAAAAA
-		SccLocalPath1 = UML\u0020GME\\ExprChecker
+		SolutionUniqueID = {2DFFE7B3-B81B-40FC-931E-49F8FC071E92}
+		SccProjectUniqueName1 = UdmOcl\\UdmOcl.vcproj
+		SccProjectName1 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl\u0022,\u0020INZAAAAA
+		SccLocalPath1 = UdmOcl
 		CanCheckoutShared = false
-		SccProjectUniqueName2 = UdmOclPat\\UDMOclPat.vcproj
-		SccProjectName2 = \u0022$/MoBIESTransition/udm_ns/src/UdmOclPat\u0022,\u0020QNZAAAAA
-		SccLocalPath2 = UdmOclPat
+		SccProjectUniqueName2 = UML\u0020GME\\ExprChecker\\GmeOclExprChecker.vcproj
+		SccProjectName2 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/ExprChecker\u0022,\u0020WOZAAAAA
+		SccLocalPath2 = UML\u0020GME\\ExprChecker
 		CanCheckoutShared = false
 		SccProjectUniqueName3 = Udm\\File2Code\\File2Code.vcproj
 		SccProjectName3 = \u0022$/MoBIESTransition/udm_ns/src/Udm/File2Code\u0022,\u0020PBCBAAAA
@@ -121,14 +120,6 @@ Global
 		SccProjectName6 = \u0022$/MoBIESTransition/udm_ns/src/UdmSwig\u0022,\u0020MDCBAAAA
 		SccLocalPath6 = UdmSwig
 		CanCheckoutShared = false
-		SccLocalPath7 = .
-		CanCheckoutShared = false
-		SolutionUniqueID = {2DFFE7B3-B81B-40FC-931E-49F8FC071E92}
-		SccProjectUniqueName8 = UdmBase\\UdmBase.vcproj
-		SccProjectName8 = \u0022$/MoBIESTransition/udm_ns/src/UdmBase\u0022,\u0020FKZAAAAA
-		SccLocalPath8 = ..
-		CanCheckoutShared = false
-		SccProjectFilePathRelativizedFromConnection8 = src\\UdmBase\\
 	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
