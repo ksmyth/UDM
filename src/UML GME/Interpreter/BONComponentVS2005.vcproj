@@ -183,11 +183,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/FORCE:MULTIPLE"
 				AdditionalDependencies="ANTLR.lib UdmDll.lib"
 				OutputFile="..\..\..\bin\UML2XML.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\..\lib;&quot;$(UDM_3RDPARTY_PATH)\antlr-2.7.1\lib&quot;"
+				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile=".\Component.def"
 				ProgramDatabaseFile=".\ReleaseMinDependency/UML2XML.pdb"
 				SubSystem="2"
