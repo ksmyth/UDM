@@ -363,7 +363,7 @@ void AttributeObject::addDefReal(const std::string str)
 	if (!real_int_set)
 		real_int = atol(str.c_str());
 	else
-		defval_real.push_back( (double)real_int + (double)atof(str.c_str())/ pow(10, str.size()) );
+		defval_real.push_back( (double)real_int + (double)atof(str.c_str())/ pow((double)10, (int)str.size()) );
 	
 	
 

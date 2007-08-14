@@ -15,7 +15,7 @@ CHANGELOG
 
 //Visibility specifiers
 
-class AttributeObjectException : public exception
+class AttributeObjectException : public std::exception
 {
 	const std::string err;
 public:

@@ -2,7 +2,7 @@
 #define CARDINALITY_OBJECT_H
 
 
-class CardinalityObjectException : public exception
+class CardinalityObjectException : public std::exception
 {
 	const std::string err;
 public:
