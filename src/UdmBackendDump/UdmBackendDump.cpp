@@ -11,6 +11,11 @@
 #include "BackendDump.h"
 #include "Uml.h"
 
+UDM_USE_DOM
+#ifdef _WIN32
+UDM_USE_MGA
+#endif
+
 void dummy(void) {; } // Dummy function for initialization
 
 
