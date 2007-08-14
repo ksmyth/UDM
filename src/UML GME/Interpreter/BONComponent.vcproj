@@ -51,8 +51,8 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 				Outputs="$(OutDir)\regsvr32.trg"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ANTLR_vc7D.lib zlibD.lib"
-				OutputFile="..\..\..\bin.net\UML2XMLD.dll"
+				AdditionalDependencies="ANTLRD.lib zlibD.lib"
+				OutputFile="..\..\..\bin\UML2XMLD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\Component.def"
@@ -122,8 +122,8 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 				Outputs="$(OutDir)\regsvr32.trg"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ANTLR_vc7.lib zlib.lib"
-				OutputFile="..\..\..\bin.net\UML2XML.dll"
+				AdditionalDependencies="ANTLR.lib zlib.lib"
+				OutputFile="..\..\..\bin\UML2XML.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\Component.def"
