@@ -19,6 +19,7 @@
 		<property name="udm_3rdparty.dir" location="${env.UDM_3RDPARTY_PATH}" />
 		<property name="build.dir" location="build/build_win" />
 		<property name="junit.dir" location="${udm_3rdparty.dir}/junit" />
+		<property name="srcdir" location="${basedir}" />
 
 		<!--
 			If UdmD.exe exists and it is newer than Udm.exe or Udm.exe does not exist,
@@ -66,11 +67,31 @@
 		<echo> "Linux platform" </echo>
 		<property environment="env" />
 		<property name="udm.dir" location=".." />
-		<property name="udm.bin.dir" location="../bin" />
-		<property name="udm.etc.dir" location="../etc/" />
+		<property name="udm.src.dir" location=".." />
+		<property name="udm.bin.dir" location="${udm.dir}/bin" />
+		<property name="udm.etc.dir" location="${udm.src.dir}/etc" />
 		<property name="udm_3rdparty.dir" location="/usr" />
 		<property name="build.dir" location="build/build_linux" />
-		<property name="junit.dir" location="${env.JUNIT_HOME}" />
+		<property name="srcdir" location="${basedir}" />
+	</target>
+
+	<!-- Set Classpath on Windows -->
+	<target name="init-windows-compile.classpath" if="isWindows">
+		<path id="compile.classpath">
+			<pathelement location="${judm.classes.dir}" />
+			<pathelement location="${judmhelper.classes.dir}" />
+			<fileset dir="${junit.dir}">
+				<include name="junit.jar" />
+			</fileset>
+		</path>
+	</target>
+
+	<!-- Set Classpath on UNIX -->
+	<target name="init-linux-compile.classpath" unless="isWindows">
+		<path id="compile.classpath">
+			<pathelement location="${judm.classes.dir}" />
+			<pathelement location="${judmhelper.classes.dir}" />
+		</path>
 	</target>
 
 	<!-- Initialize directories and properties of the build -->
@@ -83,7 +104,7 @@
 		<property name="java.build.dir" location="${build.dir}/classes/main" />
 
 		<!-- Directory of the documentation -->
-		<property name="doc.dir" location="doc" />
+		<property name="doc.dir" location="${srcdir}/doc" />
 
 		<!-- Directory where the distribution goes -->
 		<property name="dist.dir" location="${build.dir}/dist" />
@@ -101,29 +122,24 @@
 		<property name="judmhelper.dist.dir" location="${dist.dir}/jUdmHelper" />
 
 		<!-- Helper classes -->
-		<property name="util.src.dir" location="src/util" />
+		<property name="util.src.dir" location="${srcdir}/src/util" />
 
 		<!-- Swig generated Java code -->
-		<property name="udmswig.src.dir" location="src/UdmSwig" />
+		<property name="udmswig.src.dir" location="${srcdir}/src/UdmSwig" />
 
 		<!-- Convenience wrapper for the Swig generated Java code -->
-		<property name="udmswiglight.src.dir" location="src/UdmSwigLight" />
+		<property name="udmswiglight.src.dir" location="${srcdir}/src/UdmSwigLight" />
 
 		<!-- jUdmHelper code -->
-		<property name="judmhelper.src.dir" location="src/jUdmHelper" />
+		<property name="judmhelper.src.dir" location="${srcdir}/src/jUdmHelper" />
 		<property name="judmhelper.classes.dir" location="${judmhelper.dir}/classes" />
 
 		<!-- Directory of the batch files -->
-		<property name="batch.dir" location="etc" />
+		<property name="batch.dir" location="${srcdir}/etc" />
 
 		<!-- Classpath -->
-		<path id="compile.classpath">
-			<pathelement location="${judm.classes.dir}" />
-			<pathelement location="${judmhelper.classes.dir}" />
-			<fileset dir="${junit.dir}">
-				<include name="junit.jar" />
-			</fileset>
-		</path>
+		<antcall target="init-windows-compile.classpath" />
+		<antcall target="init-linux-compile.classpath" />
 	</target>
 
 	<!-- Clean all jUdm build products -->
@@ -301,7 +317,7 @@
 		<javac srcdir="samples/${dspackage}/src/main" destdir="${build.dir}/${dspackage}/classes/main" deprecation="false" debug="true" classpathref="compile.classpath" />
 
 		<!-- Compile the test classes -->
-		<javac srcdir="samples/${dspackage}/src/test" destdir="${build.dir}/${dspackage}/classes/test" deprecation="false" debug="true">
+		<javac srcdir="${srcdir}/samples/${dspackage}/src/test" destdir="${build.dir}/${dspackage}/classes/test" deprecation="false" debug="true">
 			<classpath>
 				<path refid="compile.classpath" />
 				<pathelement location="${build.dir}/${dspackage}/classes/main" />
@@ -480,17 +496,26 @@
 
 	</target>
 
+	<!-- Copy the jUnit to the build directory -->
+	<target name="judm-build-windows-junit" if="isWindows">
+		<copy todir="${judm.dir}" file="${junit.dir}/junit.jar" />
+	</target>
+
+	<target name="judm-build-linux-junit" unless="isWindows">
+	</target>
+
 	<!-- Update the jUdm build -->
 	<target name="judm-build" description="Update the jUdm build">
 		
 		<!-- Copy the jUnit to the build directory -->
-		<copy todir="${judm.dir}" file="${junit.dir}/junit.jar" />
+		<antcall target="judm-build-windows-junit" />
+		<antcall target="judm-build-linux-junit" />
 
 		<!-- Copy the Uml.xsd to the build directory -->
 		<copy todir="${judm.meta.dir}" file="${udm.etc.dir}/Uml.xsd" />
 
 		<!-- Create judm.jar in the build directory -->
-		<jar destfile="${judm.dir}/judm.jar" manifest="etc/MANIFEST.MF">
+		<jar destfile="${judm.dir}/judm.jar" manifest="${srcdir}/etc/MANIFEST.MF">
 			<fileset dir="${judm.classes.dir}"/>
 		</jar>
 		
@@ -507,6 +532,30 @@
 
 	</target>
 
+	<!-- Create domain specific test jar file -->
+	<target name="ds-test-jar-windows" if="isWindows">
+		<jar destfile="${build.dir}/${dspackage}/${dspackage}-test.jar">
+			<fileset dir="${build.dir}/${dspackage}/classes/test" />
+			<manifest>
+				<attribute name="Main-Class" value="edu.vanderbilt.isis.${dspackagelower}.test.AllTests" />
+				<attribute name="Class-Path" value="../judm/judm.jar ../judm/junit.jar ${dspackage}.jar" />
+			</manifest>
+		</jar>
+		
+	</target>
+
+	<!-- Create domain specific test jar file, without a Class-Path,
+		as recommened by JPackage -->
+	<target name="ds-test-jar-linux" unless="isWindows">
+		<jar destfile="${build.dir}/${dspackage}/${dspackage}-test.jar">
+			<fileset dir="${build.dir}/${dspackage}/classes/test" />
+			<manifest>
+				<attribute name="Main-Class" value="edu.vanderbilt.isis.${dspackagelower}.test.AllTests" />
+			</manifest>
+		</jar>
+		
+	</target>
+
 	<!-- Update domain-specific builds -->
 	<target name="ds-build" description="Update the ${dspackage} build">
 		<!-- There is no easy way in Ant to convert a string to lowercase
@@ -520,14 +569,14 @@
 		<!-- Copy all the XML sample files -->
 		<copy todir="${build.dir}/${dspackage}/samples">
 			<mapper type="flatten" />
-			<fileset dir="samples/${dspackage}/samples" casesensitive="no">
+			<fileset dir="${srcdir}/samples/${dspackage}/samples" casesensitive="no">
 				<include name="**/*.xml" />
 			</fileset>
 		</copy>
 		
 		<!-- Copy all the meta files -->
 		<copy todir="${build.dir}/${dspackage}/meta">
-			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
+			<fileset dir="${srcdir}/samples/${dspackage}/meta" casesensitive="no">
 				<include name="${dspackage}_udm.xml" />
 				<include name="${dspackage}.xsd" />
 				<include name="${dspackage}_uml.xme" />
@@ -536,18 +585,13 @@
 		</copy>
 
 		<!-- Create domain specific jar file -->
-		<jar destfile="${build.dir}/${dspackage}/${dspackage}.jar" manifest="samples/${dspackage}/ETC/MANIFEST.MF">
+		<jar destfile="${build.dir}/${dspackage}/${dspackage}.jar" manifest="${srcdir}/samples/${dspackage}/ETC/MANIFEST.MF">
 			<fileset dir="${build.dir}/${dspackage}/classes/main" />
 		</jar>
 		
 		<!-- Create domain specific test jar file -->
-		<jar destfile="${build.dir}/${dspackage}/${dspackage}-test.jar">
-			<fileset dir="${build.dir}/${dspackage}/classes/test" />
-			<manifest>
-				<attribute name="Main-Class" value="edu.vanderbilt.isis.${dspackagelower}.test.AllTests" />
-				<attribute name="Class-Path" value="../judm/judm.jar ../judm/junit.jar ${dspackage}.jar" />
-			</manifest>
-		</jar>
+		<antcall target="ds-test-jar-windows"/>
+		<antcall target="ds-test-jar-linux"/>
 		
 		<!-- Copy the domain specific source  -->
 		<mkdir dir="${build.dir}/${dspackage}/src/main/edu" />
@@ -557,7 +601,7 @@
 		
 		<mkdir dir="${build.dir}/${dspackage}/src/test" />
 		<copy todir="${build.dir}/${dspackage}/src/test">
-			<fileset dir="samples/${dspackage}/src/test">
+			<fileset dir="${srcdir}/samples/${dspackage}/src/test">
 				<include name="**/*.java" />
 				<include name="**/*.html" />
 			</fileset>
