@@ -13,6 +13,7 @@
 
 //--------------------------8><----------
 #ifndef _WIN32
+#include <ctype.h>
 char *_strupr( char *string )
 {
 	if (string)
