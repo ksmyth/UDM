@@ -290,7 +290,7 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(UDM_PATH)\bin\UdmD.exe&quot; -n &quot;$(InputPath)&quot;
+					CommandLine="&quot;$(UDM_PATH)\bin\UdmD.exe&quot; &quot;$(InputPath)&quot;
 "
 					Outputs="CD1.cpp;CD2.cpp;CD3.cpp;CL.cpp;CD1.h;CD2.h;CD3.h;CL.h"/>
 			</FileConfiguration>
@@ -298,7 +298,7 @@
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -n &quot;$(InputPath)&quot;
+					CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; &quot;$(InputPath)&quot;
 "
 					Outputs="CD1.cpp;CD2.cpp;CD3.cpp;CL.cpp;CD1.h;CD2.h;CD3.h;CL.h"/>
 			</FileConfiguration>
