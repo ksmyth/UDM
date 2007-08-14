@@ -11,6 +11,9 @@ arising out of or in connection with the use or performance of
 this software.
 */
 /*
+12/31/05	-	endre
+		-	added CreateNewMeta() to UdmProject to create a new meta specifier UDM project
+
 11/23/05	-	endre
 		-	free string returned by _tempnam/tempnam
 
@@ -365,6 +368,7 @@ namespace Udm
 			string systempath = temp_path + PATHDELIM + systemname;
 			cross_meta_dn = new SmartDataNetwork(Uml::diagram);
 			cross_meta_dn->OpenExisting(systempath, "Uml", Udm::CHANGES_LOST_DEFAULT);
+			cross_meta_dn_sem = Udm::CHANGES_LOST_DEFAULT;
 		}
 		
 		::UdmProject::Datanetwork cross_links_pdn = _project.crosslinks();
@@ -499,8 +503,13 @@ namespace Udm
 
 				if (cross_meta_dn)
 				{
-					cross_meta_dn->CloseNoUpdate();//we never save this
+					if (cross_meta_dn_sem != Udm::CHANGES_LOST_DEFAULT)
+						cross_meta_dn->CloseWithUpdate();
+					else
+						cross_meta_dn->CloseNoUpdate();
 
+					delete cross_meta_dn;
+					cross_meta_dn = NULL;
 				}
 
 				//project data network
@@ -633,6 +642,119 @@ namespace Udm
 			
 		cross_links->CreateNew(temp_path + PATHDELIM + (string)(_udm_pr_dn.systemname()), _udm_pr_dn.metalocator(), Uml::classByName(*cross_diag.dgr, "_gen_cont"));
 		
+		//restoring DTD path 
+		UdmDom::DomDataNetwork::DTDPath = saved_dtd_path;	
+	};
+
+	void UDM_DLL UdmProject::CreateNewMeta(const string &project_name, const string &pr_file, vector<DataNetworkSpecifier> spec, enum BackendSemantics _sem)
+	{
+		//saving the original DTDPath
+		//and setting to the project's temporary directory
+		string saved_dtd_path = UdmDom::DomDataNetwork::DTDPath;
+		UdmDom::DomDataNetwork::DTDPath = temp_path;
+
+		sem = _sem;
+		if (zipfile.size())
+			throw udm_exception(string("UdmProject error: Project already opened:") + zipfile);
+
+		if (Project || project_dn)
+			throw udm_exception("UdmProject error: Project already opened. Project object exists");
+
+		if (!temp_path.size())
+			throw udm_exception("UdmProject error: Temporary folder is not set!");
+
+		//create UdmProject::Project (this will initialize the UdmProject meta-diagram)
+		project_dn = new Udm::SmartDataNetwork(::UdmProject::diagram);
+
+		//generate UdmProject.dtd into the project(this requires the Project meta to be initialized)
+		ofstream ff;
+		ff.open(string(temp_path + PATHDELIM + "UdmProject.xsd").c_str());
+		if(!ff.good()) throw udm_exception("Error opening for write UdmProject.dtd");
+		else DTDGen::GenerateXMLSchema(*::UdmProject::diagram.dgr, ff);
+		ff.close();
+		ff.clear();
+
+
+		//this requires the above generated DTD
+		project_dn->CreateNew(temp_path + PATHDELIM + "_project_.xml", "UdmProject",::UdmProject::Project::meta,sem);
+		Project = project_dn->GetRootObject();
+		::UdmProject::Project _project = ::UdmProject::Project::Cast(Project);
+
+		
+
+		
+		_project.name() = project_name;
+
+		zipfile = pr_file;
+		vector<DataNetworkSpecifier>::iterator i = spec.begin();
+		while (i != spec.end())
+		{	
+
+			//this will initialize the meta diagram
+			//Udm::SmartDataNetwork * dn = new SmartDataNetwork(Udm::MetaDepository::LocateDiagram(i->metalocator), this);
+			Udm::SmartDataNetwork * dn = new SmartDataNetwork(LocateDiagram(i->metalocator()), this);
+			//generate the corresponding DTD( this needs the diagram to be initialized)
+			::Uml::Diagram *dgr = LocateDiagram(i->metalocator()).dgr;
+			ff.open(string(temp_path + PATHDELIM + (string)dgr->name() + ".xsd").c_str());
+			if (!ff.good()) throw udm_exception("Error opening for write DTD file");
+			else DTDGen::GenerateXMLSchema(*dgr, ff);
+			ff.close();
+			ff.clear();
+
+			set< ::Uml::Namespace> nses = dgr->namespaces();
+			for(set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+			{
+				::Uml::Namespace ns = *nses_i;
+				ff.open(string(temp_path + PATHDELIM + (string)ns.name() + ".xsd").c_str());
+				if(!ff.good()) throw udm_exception("Error opening for write DTD file");
+				//else DTDGen::GenerateDTD(*(Udm::MetaDepository::LocateDiagram(i->metalocator).dgr), ff);
+				else DTDGen::GenerateXMLSchema(ns, ff);
+				ff.close();
+				ff.clear();
+			}
+			
+			//create the data network (this needs the DTD)
+			dn->CreateNew(temp_path + PATHDELIM + i->filename(), i->metalocator(), i->rootclass(),sem);
+			
+			datanetworks.insert(pair<string, Udm::DataNetwork*>(i->filename(), dn->testdn()));
+			rev_datanetworks.insert(pair<Udm::DataNetwork*, string>(dn->testdn(), i->filename()));
+			
+			
+			::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::Datanetwork::Create(_project,::UdmProject::Project::meta_instances);
+			_udm_pr_dn.metalocator() = i->metalocator();
+			_udm_pr_dn.systemname() = i->filename();
+			//_udm_pr_dn.metaDgr() = (*(Udm::MetaDepository::LocateDiagram(i->metalocator).dgr)).name();
+			_udm_pr_dn.metaDgr() = (string)((*(LocateDiagram(i->metalocator()).dgr)).name());
+			
+			
+			i++;
+		};
+
+		//create cross meta data network
+		cross_meta_dn = new Udm::SmartDataNetwork(::Uml::diagram);
+		cross_meta_dn_sem = Udm::CHANGES_PERSIST_ALWAYS;
+
+		::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::Datanetwork::Create(_project,::UdmProject::Project::meta_cross_associations);
+		_udm_pr_dn.metalocator() = "Uml";
+		_udm_pr_dn.systemname() = project_name + ".xml";
+		_udm_pr_dn.metaDgr() = (string)((*(LocateDiagram("Uml").dgr)).name());
+
+		cross_meta_dn->CreateNew(temp_path + PATHDELIM + (string)(_udm_pr_dn.systemname()), _udm_pr_dn.metalocator(), ::Uml::Diagram::meta, Udm::CHANGES_PERSIST_ALWAYS);
+
+		::Uml::Diagram cross_meta_dgr = ::Uml::Diagram::Cast(cross_meta_dn->GetRootObject());
+		cross_meta_dgr.name() = project_name;
+		cross_meta_dgr.version() = "1.00";
+
+		::Uml::Class cont_class = ::Uml::Class::Create(cross_meta_dgr);
+		cont_class.name() = "_gen_cont";
+		cont_class.isAbstract() = false;
+
+		ff.open(string(temp_path + PATHDELIM + "Uml.xsd").c_str());
+		if(!ff.good()) throw udm_exception("Error opening for write XSD file");
+		else DTDGen::GenerateXMLSchema(*Uml::diagram.dgr, ff);
+		ff.close();
+		ff.clear();
+
 		//restoring DTD path 
 		UdmDom::DomDataNetwork::DTDPath = saved_dtd_path;	
 	};
