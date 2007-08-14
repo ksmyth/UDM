@@ -60,3 +60,22 @@ void GenerateDSD(const ::Uml::Namespace &ns,
 	else DTDGen::GenerateXMLSchema(ns, ff, ns_map, ns_ignore_set, uxsdi, xsd_el_ta, qualifiedAtrrsNS);
 	ff.close();
 }
+
+bool SingleCPPNamespace(const ::Uml::Diagram &diagram)
+{
+	set< ::Uml::Namespace> nses = diagram.namespaces();
+	set< ::Uml::Namespace>::iterator nses_i = nses.begin();
+
+	return nses.size() == 1 && (string) diagram.name() == (string) nses_i->name();
+}
+
+
+bool SingleCPPNamespace(const ::Uml::Namespace &ns)
+{
+	return SingleCPPNamespace(ns.parent());
+}
+
+bool SingleCPPNamespace(const ::Uml::Class &cl)
+{
+	return SingleCPPNamespace(((::Uml::Namespace)cl.parent()).parent());
+}

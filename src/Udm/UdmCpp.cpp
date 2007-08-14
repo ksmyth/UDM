@@ -41,7 +41,7 @@ string UmlClassCPPName(const ::Uml::Class &cl)
 {
 	::Uml::Namespace cl_ns = (::Uml::Namespace)cl.parent();
 	::Uml::Diagram diagr = (::Uml::Diagram)cl_ns.parent();
-	if (single_cpp_namespace)
+	if (SingleCPPNamespace(diagr))
 		return "::" + (string)diagr.name() + "::" + (string)cl.name();
 	else
 		return "::" + (string)diagr.name() + "::" + (string)cl_ns.name() + "::" + (string)cl.name();
@@ -363,13 +363,8 @@ void GenerateCPPInitClassesAttributes(const ::Uml::Namespace & ns, const ::Uml::
 				set< ::Uml::AssociationRole>::iterator asrs_i = asrs.begin();
 				while (asrs_i != asrs.end())
 				{
-					string cname = string("::") + string(cross_dgr.name());
-					if (!single_cpp_namespace)
-						cname += "::" + string(::Uml::GetTheOnlyNamespace(cross_dgr).name());
-					cname += "::" + string(((::Uml::Class)((::Uml::theOther(*asrs_i)).target())).name());
-
 					output << " \t\t\t" << cl.name() << "::meta_" << asrs_i->name() << "_end_ = " 
-						<< cname << "::meta_" << asrs_i->name() << ";" <<endl;
+					       << "::" << cross_dgr.name() << "::" << ((::Uml::Class)((::Uml::theOther(*asrs_i)).target())).name() << "::meta_" << asrs_i->name() << ";" <<endl;
 					asrs_i++;
 				}
 			};
@@ -506,13 +501,8 @@ void GenerateCPPCrossObjectInits(const ::Uml::Namespace &ns, const ::Uml::Diagra
 				set< ::Uml::AssociationRole>::iterator ar_i = ar.begin();
 				while (ar_i != ar.end())
 				{
-					string cname = string("::") + string(cross_dgr.name());
-					if (!single_cpp_namespace)
-						cname += "::" + string(::Uml::GetTheOnlyNamespace(cross_dgr).name());
-					cname += "::" + string(cross_cl.name());
-
 					output << "\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
-					" = " << cname << "::meta_" << ::Uml::theOther((*ar_i)).name() << ";" << endl;
+					  " = " << "::" << cross_dgr.name() << "::" << cross_cl.name() << "::meta_" << ::Uml::theOther((*ar_i)).name() << ";" << endl;
 
 					::Uml::AssociationRole zz	= ::Uml::theOther(*ar_i);
 					string aname(MakeRoleName(zz));
@@ -525,7 +515,7 @@ void GenerateCPPCrossObjectInits(const ::Uml::Namespace &ns, const ::Uml::Diagra
 						::Uml::Class cl2 = zz.target();
 						
 						output << "\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
-							"_rev = " << "::" << cross_dgr.name()<< "::" << ::Uml::GetTheOnlyNamespace(cross_dgr).name() << "::" << cl2.name() << "::meta_"<<ar_i->name()<< ";" <<endl;
+						  "_rev = " << "::" << cross_dgr.name() << "::" << cl2.name() << "::meta_"<<ar_i->name()<< ";" <<endl;
 
 					}
 					ar_i++;
@@ -780,6 +770,7 @@ void GenerateCPPNamespace(const ::Uml::Namespace &ns, const ::Uml::Diagram &cros
 	::Uml::Diagram diagram = ns.parent();
 	string hname = NameToFilename(diagram.name());
 	string ns_fname = fname + "_" + NameToFilename(ns.name());
+	bool single_cpp_namespace = SingleCPPNamespace(diagram);
 
 	if (source_unit == CPP_SOURCE_UNIT_NAMESPACE)
 	{

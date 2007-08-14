@@ -24,8 +24,6 @@ enum CPPSourceUnit {
 	CPP_SOURCE_UNIT_CLASS,		// one .h and one .cpp file per namespace, one .h file per class
 };
 
-extern bool single_cpp_namespace;
-
 //cross-link-approved
 void GenerateHExport(const ::Uml::Diagram &diagram,  ostream &output, string fname, const string& macro);
 void GenerateH(const ::Uml::Diagram &diagram,  ostream &output, string fname, bool visitor_sup = false, const ::Uml::Diagram& cross_dgr = NULL, const string& macro = "", const int source_unit = CPP_SOURCE_UNIT_DIAGRAM);
@@ -66,5 +64,8 @@ void GenerateDSD(const ::Uml::Namespace &ns,
 		 const map<string, string> &ns_map,
 		 const set<string> &ns_ignore_set,
 		 bool qualifiedAtrrsNS);
+bool SingleCPPNamespace(const ::Uml::Diagram &diagram);
+bool SingleCPPNamespace(const ::Uml::Namespace &ns);
+bool SingleCPPNamespace(const ::Uml::Class &cl);
 
 #endif //MOBIES_UDM_H

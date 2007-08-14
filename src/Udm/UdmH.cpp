@@ -501,6 +501,7 @@ void GenerateHClassBasic(const ::Uml::Class & cl, const InheritenceSolver& is, o
 void GenerateHClassAssocEnds(const ::Uml::Class &cl, const ::Uml::Class& cross_cl, ostream & output, bool isCrossDgr)
 {
 	::Uml::Namespace ns = (::Uml::Namespace)cl.parent();
+	::Uml::Diagram dgr = (::Uml::Diagram)ns.parent();
 
 	::Uml::Association assoc = cl.association();
 	string s = assoc.meta.name();
@@ -536,7 +537,7 @@ void GenerateHClassAssocEnds(const ::Uml::Class &cl, const ::Uml::Class& cross_c
 				string from_str(((::Uml::Class)(*i).target()).from());
 
 				string from = string("::") + GetDgrfromFromStr(from_str);
-				if (!single_cpp_namespace)
+				if (!SingleCPPNamespace(::Uml::diagramByName(dgr, GetDgrfromFromStr(from_str))))
 					from += "::" + GetNsfromFromStr(from_str);
 
 				if(aname.size()) 
@@ -653,7 +654,7 @@ void GenerateHClassChildren(const ::Uml::Class &cl, const ::Uml::Namespace & ns,
 			if(Uml::IsDerivedFrom(*j, *k) || Uml::IsDerivedFrom(*k, *j)) 
 			{
 				string kind_children_name;
-				if (single_cpp_namespace)
+				if (SingleCPPNamespace(*j))
 					kind_children_name = (*j).name();
 				else {
 					kind_children_name = ns_name + "_";
@@ -677,7 +678,8 @@ void GenerateHClassChildren(const ::Uml::Class &cl, const ::Uml::Namespace & ns,
 void GenerateHClassAssociations(const ::Uml::Class& cl, const ::Uml::Class& cross_cl, ostream & output, bool isCrossDgr)
 {
 	::Uml::Namespace ns = (::Uml::Namespace)cl.parent();
-	string dgr_name = ::Uml::Diagram(::Uml::Namespace(cl.parent()).parent()).name();
+	::Uml::Diagram dgr = (::Uml::Diagram)ns.parent();
+	string dgr_name = dgr.name();
 
 	set< ::Uml::AssociationRole> assocs = cl.associationRoles();
 	for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
@@ -758,7 +760,7 @@ void GenerateHClassAssociations(const ::Uml::Class& cl, const ::Uml::Class& cros
 			//
 			string from_name(((::Uml::Class)Uml::theOther(*i).target()).from());
 			string cname = string("::") + GetDgrfromFromStr(from_name);
-			if (!single_cpp_namespace)
+			if (!SingleCPPNamespace(::Uml::diagramByName(dgr, GetDgrfromFromStr(from_name))))
 				cname += "::" + GetNsfromFromStr(from_name);
 
 			if(!aclass) 
@@ -797,7 +799,7 @@ void GenerateHClassAssociations(const ::Uml::Class& cl, const ::Uml::Class& cros
 	
 				string from_str(aclass.from());
 				string cl_dgr = string("::") + GetDgrfromFromStr(from_str);
-				if (!single_cpp_namespace)
+				if (!SingleCPPNamespace(::Uml::diagramByName(dgr, GetDgrfromFromStr(from_str))))
 					cl_dgr += "::" + GetNsfromFromStr(from_str);
 
 				output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << ", meta_" << aname << "_rev;" << endl;
@@ -876,6 +878,7 @@ void GenerateHVisitorClass(const ::Uml::Namespace& ns, const string &fname, ostr
 	{
 		::Uml::Diagram diagram = ns.parent();
 		string visitor_fname = NameToFilename(fname + "_" + (string)ns.name() + "_Visitor");
+		bool single_cpp_namespace = SingleCPPNamespace(diagram);
 
 		ofstream ff;
 		ff.open( (visitor_fname + ".h").c_str() );
@@ -924,6 +927,7 @@ void GenerateHClass(const ::Uml::Class &cl, const ::Uml::Class &cross_cl, bool i
 		::Uml::Namespace ns = cl.parent();
 		::Uml::Diagram diagram = ns.parent();
 		string cl_fname = NameToFilename(fname + "_" + (string)ns.name() + "_" + (string)cl.name());
+		bool single_cpp_namespace = SingleCPPNamespace(diagram);
 
 		ofstream ff;
 		ff.open( (cl_fname + ".h").c_str() );
@@ -978,6 +982,7 @@ void GenerateHCrossForwardDeclarations(const ::Uml::Diagram &dgr, ostream &outpu
 		}
 		for(map<string, UmlClassesByName>::iterator j = cr_cls_nsp.begin(); j != cr_cls_nsp.end(); j++)
 		{
+			bool single_cpp_namespace = SingleCPPNamespace(::Uml::diagramByName(dgr, j->first));
 			output << "namespace " << j->first << endl << "{ " << endl;
 			map<string, UmlClasses>  cr_cls = j->second;
 			for(map<string, UmlClasses>::iterator jj = cr_cls.begin(); jj != cr_cls.end(); jj++)
@@ -1032,6 +1037,7 @@ void GenerateHExport(const ::Uml::Diagram &diagram, ostream &output, string fnam
 
 void GenerateHForwardDeclarations(const ::Uml::Namespace& ns, ostream & output, const string &fname, bool visitor_sup, const string& macro, int source_unit)
 {
+	bool single_cpp_namespace = SingleCPPNamespace(ns);
 
 	if (!single_cpp_namespace)
 		output << "\tnamespace " << ns.name() << " {" << endl;
@@ -1087,6 +1093,7 @@ void GenerateHNamespace(const ::Uml::Namespace &ns, const ::Uml::Diagram &cross_
 {
 	if (source_unit != CPP_SOURCE_UNIT_DIAGRAM) {
 		string ns_fname = NameToFilename(fname + "_" + (string)ns.name());
+		bool single_cpp_namespace = SingleCPPNamespace(ns);
 
 		output << "#include \"" << ns_fname << ".h\"" << endl;
 
@@ -1247,11 +1254,11 @@ void GenerateH(const ::Uml::Diagram &diagram, ostream &output, string fname, boo
 				if (current_ns != ns)
 				{
 					if (gio_i != is.good_inheritence_order.begin()) {
-						if (!single_cpp_namespace)
+						if (!SingleCPPNamespace(current_ns))
 							output << "\t}" << endl;
 						output << endl << endl;
 					}
-					if (!single_cpp_namespace)
+					if (!SingleCPPNamespace(ns))
 						output << "\tnamespace " << ns.name() << " {" << endl << endl;
 					current_ns = ns;
 				}
@@ -1266,7 +1273,7 @@ void GenerateH(const ::Uml::Diagram &diagram, ostream &output, string fname, boo
 				GenerateHClass(cl, cross_cl, (diagram == cross_dgr), is, fname, output, visitor_sup, macro, source_unit);
 			}
 
-			if (is.good_inheritence_order.size() > 0 && source_unit == CPP_SOURCE_UNIT_DIAGRAM && !single_cpp_namespace)
+			if (is.good_inheritence_order.size() > 0 && source_unit == CPP_SOURCE_UNIT_DIAGRAM && !SingleCPPNamespace(current_ns))
 				output << "\t}" << endl;
 		}
 
