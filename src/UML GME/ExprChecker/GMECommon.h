@@ -146,6 +146,8 @@ namespace GME
 	void GetKindFolders( CComPtr<IMgaFolder> spFolder, const GOCL_STL_NS()string& strKind, bool bKind, ObjectVector& vecObjects );
 	void GetInheritances( CComPtr<IMgaFCO> spFCO, bool bIsParent, FCOVector& vecFCOs );
 
+	GOCL_STL_NS()string GetNamespace( CComPtr<IMgaFCO> spFCO );
+
 /*
 	bool IsInLibrary( CComPtr<IMgaObject> spObject );
 	StringVector GetLibraryPath( CComPtr<IMgaObject> spObject );

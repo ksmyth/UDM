@@ -38,10 +38,12 @@ CHANGELOG
 
 namespace OCLUML
 {
-	TypeSeq GetAssociationTypeSeq( const GOCL_STL_NS()string& strMultiplicity, bool bOrdered, const GOCL_STL_NS()string& strType )
+	TypeSeq GetAssociationTypeSeq( const GOCL_STL_NS()string& strMultiplicity, bool bOrdered, CComPtr<IMgaFCO> spFCO )
 	{
 		TypeSeq vecType;
 		bool bIsSet = true;
+		GOCL_STL_NS()string& strType = GME::GetObjectName( spFCO.p );
+		GOCL_STL_NS()string& strNs = GME::GetNamespace( spFCO.p );
 
 		/*
 		Multiplicity objMulti;
@@ -59,7 +61,7 @@ namespace OCLUML
 
 		if ( bIsSet )
 			vecType.push_back( ( bOrdered ) ? "ocl::Sequence" : "ocl::Set" );
-		vecType.push_back( "meta::" + strType );
+		vecType.push_back( strNs + "::" + strType );
 		return vecType;
 	}
 
@@ -96,10 +98,15 @@ namespace OCLUML
 				COMTHROW( m_spProject->AllFCOs( spFilter, &spFCOs ) );
 				MGACOLL_ITERATE( IMgaFCO, spFCOs ) {
 					GOCL_STL_NS()string strKind = GME::GetObjectName( MGACOLL_ITER.p );
+					GOCL_STL_NS()string strNs = GME::GetNamespace( MGACOLL_ITER.p );
 					GOCL_STL_NS()string strRole = GME::LowerFirst( strKind );
-					if ( strRole == signature.GetName() ) {
+					GOCL_STL_NS()string strRole_Ns = GME::LowerFirst( strNs ) + "::" + strKind;
+					GOCL_STL_NS()string strSig = signature.GetName();
+					bool bHasNamespace = strSig.find( "::" ) != GOCL_STL_NS()string::npos;	// true if qualified type, false if local type
+
+					if ( ( bHasNamespace && ( strRole_Ns == strSig ) ) || ( (!bHasNamespace) && ( strRole == strSig ) ) ) {
 						TypeSeq vecType( 1, "ocl::Set" );
-						vecType.push_back( "meta::" + strKind );
+						vecType.push_back( strNs + "::" + strKind );
 						vecFeatures.push_back( new OclMeta::Association( strRole, "", vecType, NULL, true ) );
 					}
 				} MGACOLL_ITERATE_END;
@@ -233,7 +240,7 @@ namespace OCLUML
 								if ( ! strRole.empty() && strRole == signature.GetName() || strRole.empty() && strRoleKind == signature.GetName() ) {
 									bool bOrdered = false; //// WARNING.... Where is ordered information????
 									GOCL_STL_NS()string strCardinality = ( strCPRole == "src" ) ? GME::GetStringAttribute( vecConnections[ i ].p, "Cardinality" ) : "1";
-									TypeSeq vecType = GetAssociationTypeSeq( strCardinality, bOrdered, strKind );
+									TypeSeq vecType = GetAssociationTypeSeq( strCardinality, bOrdered, spAssocEnd.p );
 									vecFeatures.push_back( new OclMeta::Association( signature.GetName(), "", vecType, NULL, true ) );
 								}
 							}
@@ -267,7 +274,7 @@ namespace OCLUML
 								if ( ! strRole.empty() && strRole == signature.GetName() || strRole.empty() && strRoleKind == signature.GetName() ) {
 									bool bOrdered = false; //// WARNING.... Where is ordered information????
 									GOCL_STL_NS()string strCardinality = GME::GetStringAttribute( vecConnections[ i ].p, ( strCPRole == "src" ) ? "srcCardinality" : "dstCardinality" );
-									TypeSeq vecType = GetAssociationTypeSeq( strCardinality, bOrdered, strKind );
+									TypeSeq vecType = GetAssociationTypeSeq( strCardinality, bOrdered, spAssocEnd );
 									vecFeatures.push_back( new OclMeta::Association( signature.GetName(), "", vecType, NULL, true ) );
 								}
 							}
@@ -296,7 +303,7 @@ namespace OCLUML
 						if ( ! strRole.empty() && strRole == signature.GetName() || strRole.empty() && strRoleKind == signature.GetName() ) {
 							bool bOrdered = false; //// WARNING.... Where is ordered information????
 							GOCL_STL_NS()string strCardinality = GME::GetStringAttribute( vecConnections[ i ].p, "Cardinality" );
-							TypeSeq vecType = GetAssociationTypeSeq( strCardinality, bOrdered, strKind );
+							TypeSeq vecType = GetAssociationTypeSeq( strCardinality, bOrdered, spAssocEnd );
 							vecFeatures.push_back( new OclMeta::Association( signature.GetName(), "", vecType, NULL, true ) );
 						}
 					}
@@ -324,7 +331,7 @@ namespace OCLUML
 								if ( strAcceptable.empty() && strRoleKind == signature.GetName() || ! strAcceptable.empty() && ! strRole.empty() && strRole == signature.GetName() && strAcceptable == strRoleKind ) {
 									bool bOrdered = false; //// WARNING.... Where is ordered information????
 									GOCL_STL_NS()string strCardinality = GME::GetStringAttribute( vecConnections[ k].p, "Cardinality" );
-									TypeSeq vecType = GetAssociationTypeSeq( strCardinality, bOrdered, strKind );
+									TypeSeq vecType = GetAssociationTypeSeq( strCardinality, bOrdered, spAssocEnd );
 									vecFeatures.push_back( new OclMeta::Association( signature.GetName(), strAcceptable, vecType, NULL, true ) );
 								}
 							}
@@ -352,7 +359,7 @@ namespace OCLUML
 						GOCL_STL_NS()string strRoleKind = GME::LowerFirst( strKind );
 						if ( ! strRole.empty() && strRole == signature.GetName() || strRole.empty() && strRoleKind == signature.GetName() ) {
 							bool bOrdered = false; //// WARNING.... Where is ordered information????
-							TypeSeq vecType = GetAssociationTypeSeq( "1", bOrdered, strKind );
+							TypeSeq vecType = GetAssociationTypeSeq( "1", bOrdered, spAssocEnd );
 							vecFeatures.push_back( new OclMeta::Association( signature.GetName(), "", vecType, NULL, true ) );
 						}
 					}
@@ -439,14 +446,14 @@ namespace OCLUML
 
 	void TypeFactory::GetTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes )
 	{
-		bool bHasNamespace = strName.find( "::" ) != GOCL_STL_NS()string::npos;
+		bool bHasNamespace = strName.find( "::" ) != GOCL_STL_NS()string::npos;	// true if qualified type, false if local type
 
-		GetDynamicTypes( strName, vecTypes );
-		if ( ! bHasNamespace && ! vecTypes.empty() )
+		GetDynamicTypes( strName, vecTypes );	//get the types from metamodel
+		if ( ! bHasNamespace && ! vecTypes.empty() )	//if local type, and results not empty - return the results
 			return;
 
-		GetPredefinedTypes( strName, vecTypes );
-		if ( ! bHasNamespace && ! vecTypes.empty() )
+		GetPredefinedTypes( strName, vecTypes );	//get the predefined types
+		if ( ! bHasNamespace && ! vecTypes.empty() )	//if local type, and results not empty - return the results
 			return;
 
 		// WARNING :
@@ -482,13 +489,22 @@ namespace OCLUML
 
 	void TypeFactory::GetDynamicTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes )
 	{
-		GOCL_STL_NS()string strRealName = strName;
-		if ( strName.size() > 6 && strName.substr( 0, 6 ) == "meta::" )
-			strRealName = strName.substr( 6 );
+
+		bool bHasNamespace = strName.find( "::" ) != GOCL_STL_NS()string::npos; // true if qualified type, false if local type
+
+		GOCL_STL_NS()string strNsName, strClassName;
+
+		if (bHasNamespace)
+		{
+			strClassName = strName.substr(strName.find("::") + 2, GOCL_STL_NS()string::npos);
+			strNsName = strName.substr(0, strName.find("::"));
+		}
+		else
+			strClassName = strName;
 
 		CComPtr<IMgaFilter> spFilter;
 		COMTHROW( m_spProject->CreateFilter( &spFilter ) );
-		COMTHROW( spFilter->put_Name( CComBSTR( GME::Convert( strRealName ) ) ) );
+		COMTHROW( spFilter->put_Name( CComBSTR( GME::Convert( strClassName ) ) ) );
 		COMTHROW( spFilter->put_ObjType( CComBSTR( "OBJTYPE_ATOM" ) ) );
 
 		CComPtr<IMgaFCOs> spFCOs;
@@ -496,15 +512,19 @@ namespace OCLUML
 		MGACOLL_ITERATE( IMgaFCO, spFCOs ) {
 			if ( GME::GetObjectKind( MGACOLL_ITER.p ) == "Class" ) {
 
-				StringVector vecSuperTypes;
-				GME::FCOVector vecSuperFCOs;
-				GME::GetInheritances( MGACOLL_ITER, true, vecSuperFCOs );
-				for ( int i = 0 ; i < vecSuperFCOs.size() ; i++ )
-					vecSuperTypes.push_back( "meta::" + GME::GetObjectName( vecSuperFCOs[ i ].p ) );
-				if ( vecSuperFCOs.empty() )
-					vecSuperTypes.push_back( "udm::Object" );
+				GOCL_STL_NS()string strIterNsName = GME::GetNamespace( MGACOLL_ITER.p );
+				if ( (!bHasNamespace) || ( strNsName == strIterNsName ) ) {
+					StringVector vecSuperTypes;
+					GME::FCOVector vecSuperFCOs;
+					GME::GetInheritances( MGACOLL_ITER, true, vecSuperFCOs );
+					for ( int i = 0 ; i < vecSuperFCOs.size() ; i++ ) {
+						vecSuperTypes.push_back( GME::GetNamespace( vecSuperFCOs[ i ].p ) + "::" + GME::GetObjectName( vecSuperFCOs[ i ].p ) );
+					}
+					if ( vecSuperFCOs.empty() )
+						vecSuperTypes.push_back( "udm::Object" );
 
-				vecTypes.push_back( new OclMeta::Type( "meta::" + strRealName, vecSuperTypes, new TObjectDerived_AttributeFactory( MGACOLL_ITER ), new TObjectDerived_AssociationFactory( MGACOLL_ITER ), new TObjectDerived_MethodFactory(), true ) );
+					vecTypes.push_back( new OclMeta::Type( strIterNsName + "::" + strClassName, vecSuperTypes, new TObjectDerived_AttributeFactory( MGACOLL_ITER ), new TObjectDerived_AssociationFactory( MGACOLL_ITER ), new TObjectDerived_MethodFactory(), true ) );
+				}
 			}
 		} MGACOLL_ITERATE_END;
 	}
