@@ -180,7 +180,7 @@ void CheckClass(const ::Uml::Class & cl)
 	unique_names.insert("archetype");
 	unique_names.insert("derived");
 	unique_names.insert("instances");
-	unique_names.insert("desycnhed_atts");
+	unique_names.insert("desynched_atts");
 	unique_names.insert((string)cl.name());
 	unsigned int i;
 
