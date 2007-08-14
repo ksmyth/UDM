@@ -64,7 +64,6 @@ std::string UmlClassCPPName(const ::Uml::Class &cl);
 std::string NameToFilename(const std::string src);
 //generate DTD (only if asked) and XSD
 void GenerateDSD(const ::Uml::Namespace &ns,
-		 const string &fname,
 		 bool generate_dtd,
 		 bool uxsdi,
 		 bool xsd_el_ta,
@@ -88,5 +87,8 @@ void CPPSetURIMapping(const ::Uml::Diagram &diagram,
                       ostream &output);
 
 void CPPIncludeXsdHeaders(const ::Uml::Diagram &diagram, ostream &output);
+ostream & IndentedOutput(int level, const string &s, ostream & output);
 
+void GenerateNamespaceStart(const ::Uml::Namespace &ns, ostream &output);
+void GenerateNamespaceStop(const ::Uml::Namespace &ns, ostream &output);
 #endif //MOBIES_UDM_H

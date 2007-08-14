@@ -330,13 +330,11 @@ usage:
 				::Uml::Diagram dgr = ::Uml::Diagram::Cast((*pr_dns_i)->GetRootObject());
 				string sname = dgr.name();
 				GenerateDSD(dgr, NameToFilename(sname), generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
-					
-				set< ::Uml::Namespace> nses = dgr.namespaces();
-				for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+
+				::Uml::DiagramNamespaces nses(dgr);
+				for (::Uml::DiagramNamespaces::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 				{
-					::Uml::Namespace ns = *nses_i;
-					string nsname = NameToFilename(ns.name());
-					GenerateDSD(ns, nsname, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
+					GenerateDSD(*nses_i, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
 				}
 
 				// "_export.h" already generated
@@ -449,16 +447,16 @@ usage:
 			GenerateDSD(diagram, fname, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, qualifiedAtrrsNS);
 		}
 
-		set< ::Uml::Namespace> nses = diagram.namespaces();
-		for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+		::Uml::DiagramNamespaces nses(diagram);
+		for (::Uml::DiagramNamespaces::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 		{
 			::Uml::Namespace ns = *nses_i;
-			string nsname = ns.name();
+			string nspath = ns.getPath2("::", false);
 
-			set<string>::const_iterator itf = qualifiedAtrrsNS_set.find(nsname);
+			set<string>::const_iterator itf = qualifiedAtrrsNS_set.find(nspath);
 			bool qualifiedAtrrsNS = (itf != qualifiedAtrrsNS_set.end());
 
-			GenerateDSD(ns, nsname, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, qualifiedAtrrsNS);
+			GenerateDSD(ns, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, qualifiedAtrrsNS);
 		}
 
 		// call java API generation
