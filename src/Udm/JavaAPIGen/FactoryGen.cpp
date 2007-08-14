@@ -410,12 +410,13 @@ void FactoryGen::initializeMetaClasses( )
     }
   }
 
+  
   // map namespace to uri
   map<string, string>::const_iterator ns_iter = m_ns_map.begin();
   if ( ns_iter != m_ns_map.end() )
   {
     m_output << "\t\t// map namespace to uri" << endl;
-
+    //m_output << "\t\tUdmHelper.ClearURIToUMLNamespaceMappings();" << std::endl;
     for(; ns_iter != m_ns_map.end(); ++ns_iter )
     {
       const std::string& ns = ns_iter->first;

@@ -81,7 +81,7 @@ void UtilsGen::header( )
   //////
   // generate imports
   m_output << "import edu.vanderbilt.isis.udm.*;" << endl;
-  m_output << "import java.lang.reflect.Array;" << endl;
+  //m_output << "import java.lang.reflect.Array;" << endl;
   m_output << endl;
 
   // generate class documentation
@@ -152,7 +152,7 @@ void UtilsGen::wrapper( )
   m_output << "\t\t{" << endl;
   m_output << "\t\t\tthrow new IllegalArgumentException(\"\" + arrayClass + \" is not a subtype of \"+ UdmPseudoObject.class.getName());" << endl;
   m_output << "\t\t}" << endl;
-  m_output << "\t\tUdmPseudoObject[] res = (UdmPseudoObject[]) Array.newInstance(arrayClass, objs.getLength());" << endl;
+  m_output << "\t\tUdmPseudoObject[] res = (UdmPseudoObject[]) java.lang.reflect.Array.newInstance(arrayClass, objs.getLength());" << endl;
   m_output << "\t\tfor (int i = 0; i < res.length; i++) " << endl;
   m_output << "\t\t{" << endl;
   m_output << "\t\t\tUdmPseudoObject obj = objs.getAt(i);" << endl;
