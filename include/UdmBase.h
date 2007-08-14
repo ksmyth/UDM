@@ -2476,18 +2476,24 @@ namespace Udm
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves the adjacent objects of an object associated via simple association or association class. 
 		// The returned set can be empty. Composition relationships are not considered here.
-		set<Object> GetAdjacentObjects();
+		multiset<Object> GetAdjacentObjects();
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves the adjacent objects of an object. The adjacent objects 
 		// are of the type of clsType or derived from it. The returned set can 
 		// be empty. Composition relationships are not considered here.
-		set<Object> GetAdjacentObjects(const ::Uml::Class & clsDstType);
+		multiset<Object> GetAdjacentObjects(const ::Uml::Class & clsDstType);
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves the adjacent objects of an object via link instance of ascType. 
 		// The adjacent objects are of the type of clsType or derived from it. 
 		// The returned set can be empty. Composition relationships are not considered here. 
 		// Parameter clsType can be null.
-		set<Object> GetAdjacentObjects(const ::Uml::Class & clsDstType, const AssociationInfo& ascType);
+		multiset<Object> GetAdjacentObjects(const ::Uml::Class & clsDstType, const AssociationInfo& ascType);
+		// UDM TOMI Paradigm Independent Interface
+		// Retrieves the adjacent objects, together with the association class, of an object via link instance of ascType. 
+		// The adjacent objects are of the type of clsType or derived from it. 
+		// The returned set can be empty. Composition relationships are not considered here. Associations without an association class are ignored.
+		// Parameter clsType can be null.
+		multiset< pair<Object, Object> > GetAdjacentObjectsWithAssocClasses(const ::Uml::Class & clsDstType, const AssociationInfo& ascType);
 		// UDM TOMI Paradigm Independent Interface
 		// Get attributes by name. These are INEFFICIENT functions using iteration.
 		// These functions return false if the attribute with the specified type

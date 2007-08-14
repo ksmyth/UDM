@@ -190,6 +190,10 @@ namespace Uml
 
 	UDM_DLL Namespace GetTheOnlyNamespace(const Diagram & dgr);
 
+	UDM_DLL Diagram GetDiagram(const Class &c);
+	UDM_DLL Diagram GetDiagram(const Association &assoc);
+	UDM_DLL Diagram GetDiagram(const Composition &comp);
+
 // Safe type mechanism
 
 	class SafeTypeContainer
