@@ -84,7 +84,15 @@ namespace Uml
 
 // find a class by name
 	UDM_DLL Class classByName(const Diagram &d, const string &ns_name,const string &name );
+	//non-namespace versions
 	UDM_DLL Class classByName(const Diagram &d, const string &name );
+	UDM_DLL Class assocClassByName(const Diagram &d, const string &name);
+	UDM_DLL Association associationByName(const Diagram &d, const string &name);
+	UDM_DLL Composition compositionByName(const Diagram &d, const string &name);
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Diagram & cross_dgr);
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Diagram & cross_dgr);
+
+
 // find a namespace by name
 	UDM_DLL Namespace namespaceByName(const Diagram &d, const string &name);
 // find a class by name
