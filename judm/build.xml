@@ -87,7 +87,8 @@
 
 	<!-- Clean all jUdm build products -->
 	<target name="clean" depends="init" description="Clean all build products.">
-		<delete dir="${build_main.dir}" />
+		<!--delete dir="${build_main.dir}" /-->
+		<delete dir="${build.dir}" />
 	</target>
 
 	<!-- Copy the DLLs in the directory of the distribution -->
