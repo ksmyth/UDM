@@ -657,7 +657,8 @@ namespace UdmGme
 		//cout << "MGA BACKEND DEBUG: size of kvect  is: " << kvect.size() << endl;
 		//cout << "MGA BACKEND DEBUG: size of pvect  is: " << pvect.size() << endl;
 
-		for(vector<ObjectImpl*>::iterator i = kvect.begin(); i != kvect.end(); ) 
+		vector<ObjectImpl*>::iterator i;
+		for(i = kvect.begin(); i != kvect.end(); ) 
 		{
 			//cout <<"MGA BACKEND DEBUG: Object present in original kvect: " <<  (char *)(static_cast<GmeObject *>(*i)->self->GetName()) << ", id:" << (char*)(static_cast<GmeObject *>(*i)->self->GetID()) <<  endl;
 			for(vector<ObjectImpl*>::iterator j = pvect.begin(); j != pvect.end(); j++) 
@@ -1413,7 +1414,8 @@ bbreak:			;
 // keep children with other roles
 			if(rr != NULL && rr != MGACOLL_ITER->MetaRole) continue;
 // keep children if they are about to be moved here
-			for(vector<ObjectImpl *>::iterator i = aa.begin(); i != aa.end(); i++) 
+			vector<ObjectImpl *>::iterator i;
+			for(i = aa.begin(); i != aa.end(); i++) 
 			{
 				if(*i && MGACOLL_ITER == static_cast<GmeObject *const>(*i)->self) 
 				{
@@ -2300,8 +2302,9 @@ bbreak:			;
 			default:
 				CloseNoUpdate();
 		}
-		delete &priv; 
-		for(gdnmap::iterator ff = GDNMap.begin(); ff != GDNMap.end(); ff++) {
+		delete &priv;
+		gdnmap::iterator ff;
+		for(ff = GDNMap.begin(); ff != GDNMap.end(); ff++) {
 			if(*ff == this) break;
 		}
 		if(ff == GDNMap.end()) throw udm_exception("Corrupt GME DN map");
@@ -2590,7 +2593,8 @@ bbreak:			;
 					{
 						// the assoc name is not empty; 
 						// if it matches any of the end class names, it is a reference or a set
-						for(set< ::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
+						set< ::Uml::AssociationRole>::iterator j;
+						for(j = roles.begin(); j != roles.end(); j++) 
 						{
 							if(searchname == NAMEGET((::Uml::Class)j->target()) && Uml::theOther(*j).isNavigable()) 
 							{
