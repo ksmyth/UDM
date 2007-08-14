@@ -93,7 +93,41 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmInt", "UdmInt\UdmInt.vcp
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmCint", "UdmCint\UdmCint.vcproj", "{51AA434D-E6EE-494B-9DA6-85B511B019FC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BDBC842F-099C-4263-AB8B-46511D82C56C} = {BDBC842F-099C-4263-AB8B-46511D82C56C}
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 5
+		SccProjectUniqueName0 = Udm.vcproj
+		SccProjectName0 = \u0022$/MoBIESTransition/UDM\u0022,\u0020YOXAAAAA
+		SccLocalPath0 = ..
+		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectFilePathRelativizedFromConnection0 = src\\
+		SccProjectUniqueName1 = UML\u0020GME\\Interpreter\\BONComponent.vcproj
+		SccProjectName1 = \u0022$/Udm/src/UML\u0020GME/Interpreter\u0022,\u0020QSOAAAAA
+		SccLocalPath1 = UML\u0020GME\\Interpreter
+		SccProvider1 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectUniqueName2 = UdmOcl\\UdmOcl.vcproj
+		SccProjectName2 = \u0022$/Udm/src/UdmOcl\u0022,\u0020SAPAAAAA
+		SccLocalPath2 = UdmOcl
+		SccProvider2 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectUniqueName3 = UML\u0020GME\\ExprChecker\\GmeOclExprChecker.vcproj
+		SccProjectName3 = \u0022$/Udm/src/UML\u0020GME/ExprChecker\u0022,\u0020ABPAAAAA
+		SccLocalPath3 = UML\u0020GME\\ExprChecker
+		SccProvider3 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectUniqueName4 = UdmOclPat\\UDMOclPat.vcproj
+		SccProjectName4 = \u0022$/MoBIESTransition/UDM\u0022,\u0020YOXAAAAA
+		SccLocalPath4 = UdmOclPat
+		SccProvider4 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
@@ -208,6 +242,12 @@ Global
 		{BDBC842F-099C-4263-AB8B-46511D82C56C}.Release.Build.0 = Release|Win32
 		{BDBC842F-099C-4263-AB8B-46511D82C56C}.Release MinDependency.ActiveCfg = Release|Win32
 		{BDBC842F-099C-4263-AB8B-46511D82C56C}.Release MinDependency.Build.0 = Release|Win32
+		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Debug.ActiveCfg = Debug|Win32
+		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Debug.Build.0 = Debug|Win32
+		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release.ActiveCfg = Release|Win32
+		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release.Build.0 = Release|Win32
+		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release MinDependency.ActiveCfg = Release|Win32
+		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release MinDependency.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 	EndGlobalSection
