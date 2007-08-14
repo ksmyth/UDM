@@ -8,7 +8,7 @@ void writeTest(const std::string& fname)
 {
 
 	Udm::SmartDataNetwork  out(test_ns::diagram);
-  out.CreateNew(fname.c_str(), "AB.xsd",	test_ns::AB::AB::meta, Udm::CHANGES_PERSIST_ALWAYS);
+  out.CreateNew(fname.c_str(), "test_ns_AB.xsd",	test_ns::AB::AB::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
   test_ns::AB::AB ab = test_ns::AB::AB::Cast(out.GetRootObject());
   test_ns::B::B1 b1 = test_ns::B::B1::Create(ab);
@@ -22,7 +22,7 @@ void readTest(const std::string& fname)
 {
 
 	Udm::SmartDataNetwork  out(test_ns::diagram);
-  out.OpenExisting(fname.c_str(), "test_ns.xsd");
+  out.OpenExisting(fname.c_str(), "test_ns_AB.xsd");
 
   
   test_ns::AB::AB ab = test_ns::AB::AB::Cast(out.GetRootObject());

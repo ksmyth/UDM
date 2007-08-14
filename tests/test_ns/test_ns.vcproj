@@ -153,7 +153,7 @@
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%\bin\UdmD.exe&quot; $(InputPath) -t -v
 "
-					Outputs="test_ns.cpp;test_ns.h"/>
+					Outputs="test_ns.cpp;test_ns.h;test_ns.dtd;test_ns.xsd;test_ns_A.dtd;test_ns_A.xsd;test_ns_B.dtd;test_ns_B.xsd;test_ns_AB.dtd;test_ns_AB.xsd"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
@@ -161,7 +161,7 @@
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%\bin\Udm.exe&quot; $(InputPath) -t -v
 "
-					Outputs="test_ns.cpp;test_ns.h"/>
+					Outputs="test_ns.cpp;test_ns.h;test_ns.dtd;test_ns.xsd;test_ns_A.dtd;test_ns_A.xsd;test_ns_B.dtd;test_ns_B.xsd;test_ns_AB.dtd;test_ns_AB.xsd"/>
 			</FileConfiguration>
 		</File>
 		<File
