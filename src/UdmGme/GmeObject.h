@@ -90,6 +90,7 @@ namespace UdmGme
 		virtual uniqueId_type uniqueId() const;
 		
 	// --- attributes, single values
+		IMgaAttributePtr getAttribute(BSTR name);
 
 		virtual string getStringAttr(const ::Uml::Attribute &meta) const;
 		virtual void setStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct = true);
@@ -100,6 +101,8 @@ namespace UdmGme
 		virtual double getRealAttr(const ::Uml::Attribute &meta) const;
 		virtual void setRealAttr(const ::Uml::Attribute &meta, double a, const bool direct = true);
 	
+		virtual long getAttrStatus(const ::Uml::Attribute &meta) const;
+
 	
 	// array attribute setters/getters are wrapped in ObjectImpl 
 	// relaying on set/get StringAttr

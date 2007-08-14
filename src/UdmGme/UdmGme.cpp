@@ -1830,6 +1830,14 @@ bbreak:			;
 		return rr;
 	};
 */
+
+	IMgaAttributePtr GmeObject::getAttribute(BSTR name)
+	{
+		IMgaMetaAttributePtr attr_meta;
+		COMTHROW(MetaFCO()->get_AttributeByName(name, &attr_meta));
+		return testself->GetAttribute(attr_meta);
+	}
+
 	string GmeObject::getStringAttr(const ::Uml::Attribute &meta) const
 	{
 		SmartBSTR val;
@@ -1945,7 +1953,7 @@ bbreak:			;
 				COMTHROW(folderself->get_RegistryNode(reg_node_name, &reg_node));
 			else
 				COMTHROW(self->get_RegistryNode(reg_node_name, &reg_node));
-				
+
 			COMTHROW(reg_node->put_Value(SmartBSTR(a.c_str())));
 
 
@@ -2020,6 +2028,38 @@ bbreak:			;
 		testself->FloatAttrByName[SmartBSTR(NAMEGET(meta))] = a;
 	}
 
+	long GmeObject::getAttrStatus(const ::Uml::Attribute &meta) const
+	{
+		if ((string)meta.name() == "name")
+		{
+			return ATTSTATUS_HERE;
+		}
+		else if ((string)meta.name() == "position")
+		{
+			// XXX for now
+			return ATTSTATUS_HERE;
+		}
+		else if (meta.registry())
+		{
+			IMgaRegNodePtr reg_node;
+			BSTR reg_node_name = SmartBSTR(((string)meta.name()).c_str());
+		
+			if (folderself)
+				COMTHROW(folderself->get_RegistryNode(reg_node_name, &reg_node));
+			else
+				COMTHROW(self->get_RegistryNode(reg_node_name, &reg_node));
+
+			long status;
+			reg_node->GetStatus(&status);
+			return status;
+		}
+		else
+		{
+			IMgaMetaAttributePtr attr_meta;
+			COMTHROW(MetaFCO()->get_AttributeByName(SmartBSTR(NAMEGET(meta)), &attr_meta));
+			return testself->GetAttribute(attr_meta)->GetStatus();
+		}
+	}
 	
 
 	uniqueId_type GmeObject::uniqueId() const 
