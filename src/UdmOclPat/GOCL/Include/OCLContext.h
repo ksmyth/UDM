@@ -152,7 +152,7 @@ namespace OclCommon
 				CItemVector vecItems;
 				CItem selfItem;
 				bool bHasSelf = false;
-				for ( TMap::const_iterator i = m_mapVariables.begin() ; i != m_mapVariables.end() ; ++i ) {
+				for ( typename TMap::const_iterator i = m_mapVariables.begin() ; i != m_mapVariables.end() ; ++i ) {
 					if ( (*i).first == "self" ) {
 						bHasSelf = true;
 						selfItem.name = "self";
@@ -177,7 +177,7 @@ namespace OclCommon
 		private :
 			bool GetVariable( const std::string& strName, StoreItem& item ) const
 			{
-				TMap::const_iterator i = m_mapVariables.find( strName );
+				typename TMap::const_iterator i = m_mapVariables.find( strName );
 				if ( i == m_mapVariables.end() )
 					return false;
 				item = (*i).second;
@@ -199,7 +199,7 @@ namespace OclCommon
 	class ContextStack
 	{
 		public :
-			typedef RealContext< TItem >::CItem StateItem;
+			typedef typename RealContext< TItem >::CItem StateItem;
 			typedef std::vector< StateItem > StateItemVector;
 
 		private :
@@ -230,7 +230,7 @@ namespace OclCommon
 			bool RemoveContext()
 			{
 				if ( ! m_vecContexts.empty() ) {
-					CTVector::iterator i = m_vecContexts.end();
+					typename CTVector::iterator i = m_vecContexts.end();
 					i--;
 					m_vecContexts.erase( i );
 					return true;
