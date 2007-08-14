@@ -76,6 +76,7 @@
 #define IDC_STATIC2                     1018
 #define IDC_PARINDEP                    1019
 #define IDC_TBICON                      1020
+#define IDC_TOOLTIP                     1022
 #define IDS_HEADERSUBTITLE1             57345
 #define IDS_HEADERSUBTITLE2             57346
 #define IDS_HEADERSUBTITLE3             57347
@@ -86,7 +87,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        147
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1019
+#define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

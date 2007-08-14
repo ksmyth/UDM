@@ -367,13 +367,15 @@ BOOL CGenerator::GenerateComponentConfig()
 				"#define COCLASS_PROGID \"%s\"\n\n\n"
 				"// This name will appear in the popup window for interpreter selection.\n"
 				"#define COMPONENT_NAME \"%s\"\n\n\n"
+				"#define TOOLTIP_TEXT \"%s\"\n\n\n"
 				"// This #define determines the interpreter type:\n",
 				 m_ComponentData.m_strTypeLibUUID, 
 				 m_ComponentData.m_strTypeLibName,
 				 m_ComponentData.m_strClassUUID, 
 				 m_ComponentData.m_strClassName, 
 				 m_ComponentData.m_strProgID, 
-				 m_ComponentData.m_strComponentName	);
+				 m_ComponentData.m_strComponentName,
+				 m_ComponentData.m_strToolTip);
 
 	// This is an interpreter
 	fprintf(fCompCfgFile, "#define GME_INTERPRETER\n");
@@ -618,7 +620,14 @@ bool CGenerator::GenerateProjectFile()
 
 	CString strFileName=m_strDestinationPath+_INTERPRETER_CODE_PATH+"Component.dsp";
 	CString strUdmHeaderPath=m_UdmData.m_strUdmPath+"\\Include\\Udm";
-	CString strSTLHeaderPath=m_UdmData.m_strUdmPath+"\\Include\\Stl";
+	CString strSTLHeaderPath=m_UdmData.m_strUdmPath+"\\Include\\Stl";	
+	
+	CString strGMEPath;
+	char l_strSingleVal[255];
+	if(GetEnvironmentVariable("GME_ROOT", l_strSingleVal,255)) {
+		strGMEPath=l_strSingleVal;
+	}	
+	CString strGMEBONPath = strGMEPath + "\\SDK\\BON";
 
 	CString strHeaderFileName=m_UdmData.m_strHeaderPath.Right(m_UdmData.m_strHeaderPath.GetLength()-m_UdmData.m_strHeaderPath.ReverseFind('\\')-1);
 	CString strCppFileName=m_UdmData.m_strCppPath.Right(m_UdmData.m_strCppPath.GetLength()-m_UdmData.m_strCppPath.ReverseFind('\\')-1);
@@ -692,7 +701,7 @@ bool CGenerator::GenerateProjectFile()
 	End comment by Ananth
 	*/
 	//Added by Ananth
-	fprintf(fDspFile,"# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I \".\\\\\" /I \"C:/Program Files/GME/sdk/BON/\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"_DEBUG\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /D \"GME_INTERPRETER_USED\" /D \"UML_CLASS_DIAGRAM\" /FR /FD /GZ /Zm200 /c\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
+	fprintf(fDspFile,"# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I \".\\\\\" /I \".\\\" /I \"%s\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"_DEBUG\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /D \"GME_INTERPRETER_USED\" /D \"UML_CLASS_DIAGRAM\" /FR /FD /GZ /Zm200 /c\n",strGMEBONPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
 	//End add by Ananth
 
 	/* Commented by Ananth
@@ -754,14 +763,14 @@ bool CGenerator::GenerateProjectFile()
 	}
 	*/
 	//Added by Ananth
-	fprintf(fDspFile,"# ADD BASE CPP /nologo /MD /W3 /GX /O1 /I \".\\\\\" /I \"C:/Program Files/GME/sdk/BON/\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_DLL\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /D \"GME_INTERPRETER_USED\" /D \"UML_CLASS_DIAGRAM\" /FR /FD /Zm200 /c\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
+	fprintf(fDspFile,"# ADD BASE CPP /nologo /MD /W3 /GX /O1 /I \".\\\\\" /I \".\\\" /I \"%s/\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_DLL\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /D \"GME_INTERPRETER_USED\" /D \"UML_CLASS_DIAGRAM\" /FR /FD /Zm200 /c\n",strGMEBONPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
 	//
 	/*Commented by Ananth
 	fprintf(fDspFile,"# SUBTRACT CPP /YX /Yc /Yu\n");
 	fprintf(fDspFile,"# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /win32\n");
 	*/
 	//Added by Ananth
-	fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \".\\\\\" /I \"C:/Program Files/GME/sdk/BON/\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_DLL\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /D \"GME_INTERPRETER_USED\" /D \"UML_CLASS_DIAGRAM\" /FR /FD /Zm200 /c\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
+	fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \".\\\\\" /I \".\\\" /I \"%s\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_DLL\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /D \"GME_INTERPRETER_USED\" /D \"UML_CLASS_DIAGRAM\" /FR /FD /Zm200 /c\n",strGMEBONPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
 	//end
 	fprintf(fDspFile,"# ADD BASE RSC /l 0x409 /d \"NDEBUG\" /d \"_AFXDLL\"\n");
 	fprintf(fDspFile,"# ADD RSC /l 0x409 /d \"NDEBUG\" /d \"_AFXDLL\"\n");
@@ -816,7 +825,7 @@ bool CGenerator::GenerateProjectFile()
 	*/
 	//Added by Ananth
 	//fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_STATIC_REGISTRY\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /Yu\"stdafx.h\" /FD /c\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_STATIC_REGISTRY\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /FD /c\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
+	fprintf(fDspFile,"# ADD CPP /nologo /MD /W3 /GX /O1 /I \".\\\" /I \"%s\" /I \"%s\\include\" /I \"%s\\3rdParty\\stl\" /D \"NDEBUG\" /D \"_ATL_STATIC_REGISTRY\" /D \"WIN32\" /D \"_WINDOWS\" /D \"_WINDLL\" /D \"_AFXDLL\" /D \"_MBCS\" /D \"_USRDLL\" /FD /c\n",strGMEBONPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
 	//end
 	fprintf(fDspFile,"# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /win32\n");
 	fprintf(fDspFile,"# ADD BASE RSC /l 0x409 /d \"NDEBUG\" /d \"_AFXDLL\"\n");
@@ -854,7 +863,7 @@ bool CGenerator::GenerateProjectFile()
 	fprintf(fDspFile,"# PROP Default_Filter \"cpp;c;cxx;rc;def;r;odl;idl;hpj;bat\"\n");
 	fprintf(fDspFile,"# Begin Source File\n");
 	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\ComHelp.cpp\n");
+	fprintf(fDspFile,"SOURCE=\"%s\\ComHelp.cpp\"\n", strGMEBONPath);
 	fprintf(fDspFile,"# End Source File\n");
 	fprintf(fDspFile,"# Begin Source File\n");
 	fprintf(fDspFile,"\n");
@@ -866,7 +875,7 @@ bool CGenerator::GenerateProjectFile()
 	fprintf(fDspFile,"# End Source File\n");
 	fprintf(fDspFile,"# Begin Source File\n");
 	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\ComponentDll.cpp\n");
+	fprintf(fDspFile,"SOURCE=\"%s\\ComponentDll.cpp\"\n", strGMEBONPath);
 	fprintf(fDspFile,"# End Source File\n");
 	fprintf(fDspFile,"# Begin Source File\n");
 	fprintf(fDspFile,"\n");
@@ -934,7 +943,7 @@ bool CGenerator::GenerateProjectFile()
 	fprintf(fDspFile,"# End Source File\n");
 	fprintf(fDspFile,"# Begin Source File\n");
 	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\ComponentObj.cpp\n");
+	fprintf(fDspFile,"SOURCE=\"%s\\ComponentObj.cpp\"\n", strGMEBONPath);
 	fprintf(fDspFile,"# End Source File\n");
 	fprintf(fDspFile,"# Begin Source File\n");
 	fprintf(fDspFile,"\n");
@@ -965,23 +974,7 @@ bool CGenerator::GenerateProjectFile()
 	fprintf(fDspFile,"# PROP Default_Filter \"h;hpp;hxx;hm;inl\"\n");
 	fprintf(fDspFile,"# Begin Source File\n");
 	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\ComHelp.h\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
 	fprintf(fDspFile,"SOURCE=.\\ComponentConfig.h\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\ComponentDll.h\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\ComponentObj.h\n");
-	fprintf(fDspFile,"# End Source File\n");
-	fprintf(fDspFile,"# Begin Source File\n");
-	fprintf(fDspFile,"\n");
-	fprintf(fDspFile,"SOURCE=.\\GMECOM.H\n");
 	fprintf(fDspFile,"# End Source File\n");
 	fprintf(fDspFile,"# Begin Source File\n");
 	fprintf(fDspFile,"\n");

@@ -46,6 +46,7 @@ public:
 		CString	m_strInterfacePath;
 		CString	m_strClassName;
 		CString	m_strComponentName;
+		CString m_strToolTip;
 		BOOL	m_bParadigmIndependent;
 		CString	m_strParadigmName;
 		CString	m_strProgID;

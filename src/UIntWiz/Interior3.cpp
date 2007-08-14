@@ -38,6 +38,7 @@ CInterior3::CInterior3() : CPropertyPageEx(CInterior3::IDD, 0, IDS_HEADERTITLE, 
 	m_strInterfacePath = _T("");
 	m_strClassName = _T("");
 	m_strComponentName = _T("");
+	m_strToolTip = _T("");
 	m_bParadigmIndependent = FALSE;
 	m_strParadigmName = _T("");
 	m_strProgID = _T("");
@@ -60,6 +61,7 @@ void CInterior3::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_IFPATH, m_strInterfacePath);
 	DDX_Text(pDX, IDC_CLASSNAME, m_strClassName);
 	DDX_Text(pDX, IDC_COMPNAME, m_strComponentName);
+	DDX_Text(pDX, IDC_TOOLTIP, m_strToolTip);
 	DDX_Check(pDX, IDC_PARINDEP, m_bParadigmIndependent);
 	DDX_Text(pDX, IDC_PARNAME, m_strParadigmName);
 	DDX_Text(pDX, IDC_PROGID, m_strProgID);
@@ -229,6 +231,7 @@ LRESULT CInterior3::OnWizardNext()
 	Generator.m_ComponentData.m_strInterfacePath=m_strInterfacePath;
 	Generator.m_ComponentData.m_strClassName=m_strClassName;
 	Generator.m_ComponentData.m_strComponentName=m_strComponentName;
+	Generator.m_ComponentData.m_strToolTip=m_strToolTip;
 	Generator.m_ComponentData.m_bParadigmIndependent=m_bParadigmIndependent;
 	Generator.m_ComponentData.m_strParadigmName=m_strParadigmName;
 	Generator.m_ComponentData.m_strProgID=m_strProgID;
