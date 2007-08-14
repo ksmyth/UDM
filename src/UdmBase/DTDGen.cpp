@@ -668,29 +668,18 @@ namespace DTDGen
 	void AddUMLNamespaceToURIMapping(const char *optp, map<string, string> &ns_map)
 	{
 		string opt(optp);
-		int eq_loc = opt.find('=');
-    int comma_loc = opt.find(',', eq_loc);
-    int end_loc = -1;
-    bool found = false;
-		while (eq_loc != string::npos) 
-    {
-      
-			string uml_ns = opt.substr(end_loc+1, eq_loc - end_loc-1);
-			string uri = opt.substr(eq_loc + 1, comma_loc - eq_loc-1);
+		int loc = opt.find('=');
+		if (loc != string::npos) {
+			string uml_ns = opt.substr(0, loc);
+			string uri = opt.substr(loc + 1);
 
 			if (uml_ns.length() == 0 || uri.length() == 0)
 				throw udm_exception("UML namespace and the URI must not be empty in argument \"" + opt + "\" of \"-u\" switch");
 
 			map<string, string>::value_type item(uml_ns, uri);
 			ns_map.insert(item);
-      found = true;
-      end_loc = comma_loc;
-      eq_loc = opt.find('=', comma_loc);
-      comma_loc = opt.find(',', eq_loc);
-		}
-    if (!found)
-    {
- 			throw udm_exception("argument \"" + opt + "\" of \"-u\" switch must be in this form: uml_namespace1=URI1,uml_namespace2=URI2");
+		} else {
+			throw udm_exception("argument \"" + opt + "\" of \"-u\" switch must be in this form: uml_namespace=URI");
 		}
 	}
 
@@ -927,14 +916,14 @@ namespace DTDGen
 		}
 };
 
-void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi)	
+void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi, bool xsd_el_ta)	
 {
 	string name = c.name();
 	bool has_text_attr = Uml::HasTextAttributes(c);
 	::Uml::Uml::Namespace ns = c.parent();
 
 	//we need a different content model generation if the class also has text attributes
-	cwcp_order  cwcps = get_cwcp_order(c, uxsdi, has_text_attr);
+	cwcp_order  cwcps = get_cwcp_order(c, uxsdi, has_text_attr || xsd_el_ta);
 
 	if (!uxsdi)
 		output << "\t<xsd:complexType name=\"" << name << "Type\">" << endl;
@@ -986,8 +975,12 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 
 		}
 		else
-			output << "\t\t<xsd:sequence>" << endl;
-
+		{
+			if (xsd_el_ta)
+				output << "\t\t<xsd:sequence minOccurs=\"0\" maxOccurs=\"unbounded\">" << endl;
+			else
+				output << "\t\t<xsd:sequence>" << endl;
+		}
 
 		cwcp_order::iterator cwcps_i = cwcps.begin();
 		while (cwcps_i != cwcps.end())
@@ -1028,7 +1021,7 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 	output << "\t</xsd:complexType>" << endl << endl;
 }
 
-void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi, map<string, string> *ns_map )
+void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi, bool xsd_el_ta, map<string, string> *ns_map )
 {
 
 
@@ -1070,7 +1063,7 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 		{
 			if(uxsdi || !(bool)i->isAbstract() )
 			{
-				GenerateXMLSchemaElement(*i,  output, uxsdi);
+				GenerateXMLSchemaElement(*i,  output, uxsdi, xsd_el_ta);
 				// XSD elements can't be of abstract types,
 				// don't make them globals
 				if (!uxsdi || !(bool)i->isAbstract()) {
