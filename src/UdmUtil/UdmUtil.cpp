@@ -9,6 +9,9 @@ using namespace Uml;
 using namespace Udm;
 
 /*
+09/11/06	-	endre
+			-		Add utility functions to convert array of strings attributes to a string and back
+
 06/07/06	-	endre
 			-		When copying to the same data network, also copy archetypes that are not out-of-the-box.
 
@@ -580,4 +583,107 @@ namespace UdmUtil
 		return ret;
 
 	}
+
+
+	UDM_DLL string escape_chars(const string &src, const char escape_char, const string &to_escape_chars)
+	{
+		string dst;
+		dst.reserve(src.length());
+
+		for (string::const_iterator i = src.begin(); i != src.end(); i++)
+		{
+			if (to_escape_chars.find(*i) != string::npos)
+				dst.append(1, escape_char);
+
+			dst.append(1, *i);
+		}
+
+		return dst;
+	}
+
+
+	UDM_DLL string vector_to_string(const vector<string> &v, const char separator, bool add_sep_at_end, bool unquote_strings)
+	{
+		string ret;
+
+		string to_escape("\\");
+		to_escape.append(1, separator);
+
+		for (vector<string>::const_iterator i = v.begin(); i != v.end(); i++)
+		{
+			string src = *i;
+
+			//if asked, remove double quotes from the beginning and the end of the string
+			if (unquote_strings && src.length() > 1)
+			{
+				if (src.at(0) == '"')
+					src.erase(0, 1);
+				if (src.at(src.length() - 1) == '"')
+					src.erase(src.length() - 1, 1);
+			}
+
+			ret.append(escape_chars(src, '\\', to_escape));
+			ret.append(1, separator);
+		}
+
+		if (!add_sep_at_end && ret.length() >= 1)
+			ret.erase(ret.length() - 1, 1);
+
+		return ret;
+	}
+
+
+	UDM_DLL vector<string> string_to_vector(const string &src, const char separator)
+	{
+		vector<string> ret;
+
+		bool in_escape = false;
+		string w;
+		for (string::const_iterator i = src.begin(); i != src.end(); i++)
+		{
+			if (*i == separator)
+			{
+				if (!in_escape)
+				{
+					// a not-escaped separator => end of an array token
+					ret.push_back(w);
+					w.clear();
+				}
+				else
+				{
+					// escaped separator
+					in_escape = false;
+					w.append(1, *i);
+				}
+			}
+			else if (*i == '\\')
+			{
+				if (!in_escape)
+					// beginning of an escape sequence
+					in_escape = true;
+				else
+				{
+					// escaped escape character
+					in_escape = false;
+					w.append(1, '\\');
+				}
+			}
+			else
+			{
+				if (in_escape)
+				{
+					// unknown escape sequence; keep it
+					in_escape = false;
+					w.append(1, '\\');
+				}
+				w.append(1, *i);
+			}
+		}
+
+		if (w.length())
+			ret.push_back(w);
+
+		return ret;
+	}
+
 };
