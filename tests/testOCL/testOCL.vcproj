@@ -38,7 +38,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies=" UdmDllD.lib cppunitd.lib testrunnerd.lib Xalan-C_1d.lib xerces-c_2d.lib "
-				OutputFile="$(OutDir)/testOCL.exe"
+				OutputFile="$(OutDir)/testOCLD.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(UDM_PATH)/lib"
 				GenerateDebugInformation="TRUE"
