@@ -361,6 +361,7 @@ UDM_DLL void AddInheritance(const Class &baseType, const Class &subType);
 // --------------------------- Static Corba Initialization 
 
 Diagram CreateCORBADiagram();
+Namespace CreateCORBANamespace();
 Class CreateCORBAClass();
 Attribute CreateCORBAAttribute();
 Association CreateCORBAAssociation();
@@ -370,12 +371,16 @@ CompositionParentRole CreateCORBACompositionParentRole();
 CompositionChildRole CreateCORBACompositionChildRole();
 
 void InitCORBADiagram(const Diagram &obj, const char *name, const char * version = "1.00");
+void InitCORBANamespace(const Namespace &obj, const Diagram &parent, const char *name);
 void InitCORBAClass(const Class &obj, const Diagram &parent, const char *name, bool isAbstract, const char *stereo = NULL);
+void InitCORBAClass(const Class &obj, const Namespace &parent, const char *name, bool isAbstract, const char *stereo = NULL);
 void InitCORBAAttribute(const Attribute &obj, const Class &parent, const char *name, const char *type, bool np, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval = vector<string>());
 void InitCORBAAssociation(const Association &obj, const Diagram &parent, const char *name);
+void InitCORBAAssociation(const Association &obj, const Namespace &parent, const char *name);
 void InitCORBAAssociationClass(const Association &aobj, const Class &cobj);
 void InitCORBAAssociationRole(const AssociationRole &obj, const Association &parent, const char *name, bool navigable, bool primary, long min, long max, const Class &target);
 void InitCORBAComposition(const Composition &obj, const Diagram &parent, const char *name);
+void InitCORBAComposition(const Composition &obj, const Namespace &parent, const char *name);
 void InitCORBACompositionParentRole(const CompositionParentRole &obj, const Composition &parent, const char *name, bool navigable, const Class &target);
 void InitCORBACompositionChildRole(const CompositionChildRole &obj,const Composition &parent, const char *name, bool navigable, long min, long max, const Class &target);
 void AddCORBAInheritance(const Class &baseType, const Class &subType);
