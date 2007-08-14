@@ -824,13 +824,14 @@ namespace Uml
 	}
 
 	// find a class by name
-	UDM_DLL Class classByName(const Diagram &d, const string &ns_name,const string &name )
+	UDM_DLL Class classByName(const Diagram &d, const string &ns_path, const string &name, const string &delim)
 	{
-		if (ns_name.length() == 0)
-			return classByName(d, name);
-		Namespace ns = namespaceByName(d, ns_name);
-		if (ns) return classByName(ns, name);
-		else return Class();
+		string path(ns_path);
+		if (path.length())
+			path += delim + name;
+		else
+			path += name;
+		return classByPath(d, path, delim);
 	};
 
 	// find a class by path
