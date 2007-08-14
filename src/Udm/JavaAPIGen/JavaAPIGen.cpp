@@ -74,7 +74,6 @@ void JavaAPIGen::createDirs() const
 {
    Utils::makeDir ( m_example_dir );
    Utils::makeDir ( m_edu_dir );
-   Utils::makeDir ( m_edu_dir );
    Utils::makeDir ( m_vu_dir );
    Utils::makeDir ( m_isis_dir );
    Utils::makeDir ( m_meta_dir );
