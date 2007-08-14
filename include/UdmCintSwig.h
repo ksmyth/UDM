@@ -60,12 +60,19 @@ struct UdmBool
 	UdmBool(bool val) {boolVal = val;};
 	bool boolVal;
 };
+#ifdef _WIN32
+  typedef  __int64 UDM__int64;
+#else
+  typedef long long UDM__int64; 
+#endif
 
 struct UdmLong {
 	UdmLong() {longVal = 0;};
-	UdmLong(__int64 val) {longVal = val;};
-	__int64 longVal;
+	UdmLong(UDM__int64 val) {longVal = val;};
+	UDM__int64 longVal;
 };
+
+
 
 class UdmPseudoObject;
 
@@ -211,7 +218,7 @@ public:
 
 
 	//attribute setters
-	bool SetIntVal(const char * name, __int64 value);
+	bool SetIntVal(const char * name, UDM__int64 value);
 	bool SetRealVal(const char * name, double value);
 	bool SetStrVal(const char * name, const char * value);
 	bool SetBoolVal(const char * name, bool value);
@@ -291,6 +298,7 @@ public:
 	bool CloseAs(const char * systemname);
 	bool isOpen(UdmBool &value);
 	bool uniqueId(UdmLong &value);
+  bool OCL_Evaluate(cint_string& res);
 };
 
 // ---------------------------- Dynamic Meta Initialization
@@ -298,6 +306,7 @@ public:
 
 
 bool UDM_DLL UPO_LoadDiagram(const char *  xml_meta_file, UdmPseudoObject & diagram);
+bool UDM_DLL UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_string, UdmPseudoObject & diagram);
 bool UDM_DLL UPO_UnLoadDiagram(const char * xml_meta_file);
 bool UDM_DLL UPO_SetDiagram(UdmPseudoObject &diagram_what, const char * name);
 bool UDM_DLL UPO_SetNamespace(UdmPseudoObject &ns_what, UdmPseudoObject &parent_dgr, const char * name);
@@ -308,6 +317,7 @@ bool UDM_DLL UPO_SetParentRole(UdmPseudoObject &cpr_what, UdmPseudoObject &what_
 bool UDM_DLL UPO_SetAssocRole(UdmPseudoObject &ar_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char *target_name);
 bool UDM_DLL StoreXsd(const cint_string& key, const cint_string& xsd_str);
 bool UDM_DLL RemoveXsd(const cint_string& key);
+bool UDM_DLL ClearXsdStorage();
 bool UDM_DLL AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, const cint_string& namespaceUML);
 bool UDM_DLL ClearURIToUMLNamespaceMappings();
 

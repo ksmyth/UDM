@@ -151,7 +151,14 @@ namespace UdmDom
 			
 			static_xsd_container.erase(key);
 
-		};
+		}
+ 		static void ClearXsdStorage()
+		{
+			
+			static_xsd_container.clear();
+
+		}
+
 	};
 
 
