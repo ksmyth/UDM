@@ -136,14 +136,12 @@ namespace Uml
 	UDM_DLL set<AssociationRole> AncestorAssociationTargetRoles(const Class &c);
 
 	// All the other ends of associations this class can have (including those defined in ancestors)
-	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Namespace & ns);
 	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Diagram & cross_dgr);
 
 	// All local ends of associations this class can have (including those defined in ancestors)
 	UDM_DLL set<AssociationRole> AncestorAssociationRoles(const Class &c);
 
 	// All local ends of associations this class can have (including those defined in ancestors)
-	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Namespace& cross_ns);
 	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Diagram & cross_dgr);
 
 	// returns all the Text Attributes for class C

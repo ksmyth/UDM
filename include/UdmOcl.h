@@ -156,13 +156,18 @@ namespace Ocl
 
 
 	UDM_DLL bool Initialize( const ::Uml::Diagram& objDiagram, const SErrorNotification& sErrorNotification = SErrorNotification() );
-  UDM_DLL void UnInitialize();
+	UDM_DLL void UnInitialize();
 	UDM_DLL bool ProcessPat( const ::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression);
 
 }; // namespace Ocl
 
 namespace UdmPat {
 	UDM_DLL bool ProcessPat( const ::Uml::Diagram& metaDiagram, const Udm::Object& dataNetwork , const std::string& strExpression);
-}; //namespace Ocl
+}; //namespace UdmPat
+
+namespace UdmOcl {
+	std::string LowerFirst( const std::string& strValue );
+	std::string GetQualifiedName(const ::Uml::Class &c);
+}; //namespace UdmOcl
 
 #endif // UDMOCL_h
