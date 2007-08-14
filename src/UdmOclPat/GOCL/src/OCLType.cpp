@@ -163,6 +163,29 @@ namespace OclMeta
 		return true;
 	}
 
+	template < class TTypeableFeature >
+	class TypeHierarchyAsc : std::binary_function< TTypeableFeature, TTypeableFeature, bool >
+	{
+		private:
+			TypeManager*	m_pTypeManager;
+
+		public:
+			TypeHierarchyAsc( TypeManager*& pTypeManager ) : m_pTypeManager( pTypeManager ) { }
+
+			bool operator()( first_argument_type a, second_argument_type b )
+			{
+				std::string strAType = a->GetTypeName();
+				std::string strBType = b->GetTypeName();
+
+				if ( !strAType.empty() && !strBType.empty() )
+					return ( m_pTypeManager->IsTypeA( strAType, strBType ) >= 0 );
+				if ( strAType.empty() )
+					return false;
+				else
+					return true;
+			}
+	};
+
 //##############################################################################################################################################
 //
 //	C L A S S : OclMeta::TypeManager
@@ -598,6 +621,8 @@ namespace OclMeta
 		try {
 			m_pMethodFactory->GetFeatures( signature, vecMethods);
 			m_pTypeManager->GetDefinitionFactory()->GetFeatures( signature, vecMethods );
+
+			std::sort( vecMethods.begin(), vecMethods.end(), TypeHierarchyAsc<Method*>( m_pTypeManager ) );
 
 			FilterParametralFeature<Method,OclSignature::Method>( m_pTypeManager, signature, vecMethods, EX_METHOD_AMBIGUOUS, EX_METHOD_DOESNT_EXIST, callResult );
 			if ( callResult.bIsValid || callResult.uResult.pException->GetCode() != EX_METHOD_DOESNT_EXIST )
