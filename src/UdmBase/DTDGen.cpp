@@ -653,9 +653,12 @@ namespace DTDGen
 	string NamespaceToURI(const ::Uml::Uml::Namespace &ns, map<string, string> *ns_map)
 	{
 		if (ns_map != NULL) {
-			map<string, string>::iterator i = ns_map->find(ns.name());
+      const std::string& nsn = ns.name();
+			map<string, string>::iterator i = ns_map->find(nsn);
 			if (i != ns_map->end())
+      {
 				return i->second;
+      }
 		}
 		string uri("http://www.isis.vanderbilt.edu/2004/schemas/");
 		uri += ns.name();
@@ -665,18 +668,29 @@ namespace DTDGen
 	void AddUMLNamespaceToURIMapping(const char *optp, map<string, string> &ns_map)
 	{
 		string opt(optp);
-		int loc = opt.find('=');
-		if (loc != string::npos) {
-			string uml_ns = opt.substr(0, loc);
-			string uri = opt.substr(loc + 1);
+		int eq_loc = opt.find('=');
+    int comma_loc = opt.find(',', eq_loc);
+    int end_loc = -1;
+    bool found = false;
+		while (eq_loc != string::npos) 
+    {
+      
+			string uml_ns = opt.substr(end_loc+1, eq_loc - end_loc-1);
+			string uri = opt.substr(eq_loc + 1, comma_loc - eq_loc-1);
 
 			if (uml_ns.length() == 0 || uri.length() == 0)
 				throw udm_exception("UML namespace and the URI must not be empty in argument \"" + opt + "\" of \"-u\" switch");
 
 			map<string, string>::value_type item(uml_ns, uri);
 			ns_map.insert(item);
-		} else {
-			throw udm_exception("argument \"" + opt + "\" of \"-u\" switch must be in this form: uml_namespace=URI");
+      found = true;
+      end_loc = comma_loc;
+      eq_loc = opt.find('=', comma_loc);
+      comma_loc = opt.find(',', eq_loc);
+		}
+    if (!found)
+    {
+ 			throw udm_exception("argument \"" + opt + "\" of \"-u\" switch must be in this form: uml_namespace1=URI1,uml_namespace2=URI2");
 		}
 	}
 
