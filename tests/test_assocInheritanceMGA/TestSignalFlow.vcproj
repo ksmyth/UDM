@@ -226,7 +226,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="SignaFlow_udm.xml -&gt; C++ API"
-						CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot;
+						CommandLine="&quot;$(UDM_PATH)\bin\UdmD.exe&quot; &quot;$(InputPath)&quot;
 "
 						Outputs="SignalFlow.h SignalFlow.cpp SignalFlow.xsd"/>
 				</FileConfiguration>
@@ -235,7 +235,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="SignaFlow_udm.xml -&gt; C++ API"
-						CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot;"
+						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; &quot;$(InputPath)&quot;"
 						Outputs="SignalFlow.h SignalFlow.cpp SignalFlow.xsd"/>
 				</FileConfiguration>
 			</File>
@@ -316,7 +316,7 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					Description="SignalFlow_uml.xmw -&gt; SignalFlow_udm.xml "
+					Description="SignalFlow_uml.xme -&gt; SignalFlow_udm.xml "
 					CommandLine="cd &quot;$(InputDir)&quot;
 &quot;$(UDM_PATH)\etc\Xme2UdmXml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
 "
@@ -326,7 +326,7 @@
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					Description="SignalFlow_uml.xmw -&gt; SignalFlow_udm.xml "
+					Description="SignalFlow_uml.xme -&gt; SignalFlow_udm.xml "
 					CommandLine="cd &quot;$(InputDir)&quot;
 &quot;$(UDM_PATH)\etc\Xme2UdmXml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
 "

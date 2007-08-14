@@ -8,7 +8,7 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-using namespace SignalFlow::SignalFlow;
+using namespace SignalFlow;
 
 CAssociationInheritanceTest::CAssociationInheritanceTest()
 {
@@ -23,7 +23,7 @@ CAssociationInheritanceTest::~CAssociationInheritanceTest()
 void CAssociationInheritanceTest::TestAssociationInheritance()
 {
 	try {
-	Udm::SmartDataNetwork nw1(SignalFlow::diagram);
+	Udm::SmartDataNetwork nw1(diagram);
 	nw1.OpenExisting("sf1.mga");
 
 	RootFolder rf = RootFolder::Cast(nw1.GetRootObject());
