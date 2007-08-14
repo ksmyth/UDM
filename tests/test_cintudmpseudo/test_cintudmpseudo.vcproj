@@ -4,8 +4,10 @@
 	Version="7.10"
 	Name="test_cintudmpseudo"
 	RootNamespace="test_cintudmpseudo"
-	SccProjectName=""
-	SccLocalPath="">
+	SccProjectName="&quot;$/MoBIESTransition/udm_ns&quot;, RIZAAAAA"
+	SccAuxPath=""
+	SccLocalPath="..\.."
+	SccProvider="MSSCCI:Microsoft Visual SourceSafe">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
