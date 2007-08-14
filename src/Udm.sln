@@ -123,7 +123,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Uml", "Uml\Uml.vcproj", "{6
 EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 10
 		SccLocalPath0 = .
 		CanCheckoutShared = false
 		SolutionUniqueID = {2DFFE7B3-B81B-40FC-931E-49F8FC071E92}
@@ -155,19 +155,14 @@ Global
 		SccProjectName7 = \u0022$/MoBIESTransition/udm_ns/src/UdmSwig\u0022,\u0020MDCBAAAA
 		SccLocalPath7 = UdmSwig
 		CanCheckoutShared = false
-		SccProjectUniqueName8 = StrResGen\\StrResGen.vcproj
-		SccProjectName8 = \u0022$/Translators/Helpers/StrResGen\u0022,\u0020IQAAAAAA
-		SccLocalPath8 = StrResGen
+		SccProjectUniqueName8 = UML\u0020GME\\Interpreter\\BONComponent.vcproj
+		SccProjectName8 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/Interpreter\u0022,\u0020XOZAAAAA
+		SccLocalPath8 = UML\u0020GME\\Interpreter
 		CanCheckoutShared = false
-		SccProjectUniqueName9 = UML\u0020GME\\Interpreter\\BONComponent.vcproj
-		SccProjectName9 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/Interpreter\u0022,\u0020XOZAAAAA
-		SccLocalPath9 = UML\u0020GME\\Interpreter
+		SccProjectUniqueName9 = StrResGen\\StrResGen.vcproj
+		SccLocalPath9 = .
 		CanCheckoutShared = false
-		SccProjectUniqueName10 = Udm\\Udm.vcproj
-		SccProjectName10 = \u0022$/MoBIESTransition/udm_ns/src/Udm\u0022,\u0020OBCBAAAA
-		SccLocalPath10 = .
-		CanCheckoutShared = false
-		SccProjectFilePathRelativizedFromConnection10 = Udm\\
+		SccProjectFilePathRelativizedFromConnection9 = StrResGen\\
 	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
