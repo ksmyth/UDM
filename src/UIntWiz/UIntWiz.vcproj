@@ -106,7 +106,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="zlib.lib"
-				OutputFile=".\../../bin/UIntWiz.exe"
+				OutputFile="../../bin/UIntWiz.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\../../bin/UIntWiz.pdb"
