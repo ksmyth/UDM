@@ -381,7 +381,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		: ConstraintBase( pFacade ), m_objConstraint( objConstraint )
 	{
 		::Uml::Class context = objConstraint.parent();
-		std::string strType = (std::string) ((::Uml::Namespace)context.parent()).name() + "::" + (std::string) context.name();
+		std::string strType = (std::string) ((::Uml::Namespace)context.parent_ns()).name() + "::" + (std::string) context.name();
 		std::string strName = objConstraint.name();
 		std::string strExpression = objConstraint.expression();
 
@@ -490,7 +490,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		::Uml::Class context;
 		if(!b_PatProcessing) {
 			context = m_objConstraint.parent();
-			strType = (std::string) ((::Uml::Namespace)context.parent()).name() + "::" + (std::string) context.name();
+			strType = (std::string) ((::Uml::Namespace)context.parent_ns()).name() + "::" + (std::string) context.name();
 			strName = (std::string) m_objConstraint.name();
 		} else {
 			strType = "Failure in pattern file";
@@ -523,7 +523,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		: ConstraintBase( pFacade ), m_objDefinition( objDefinition )
 	{
 		::Uml::Class context = objDefinition.parent();
-		std::string strType = (std::string) ((::Uml::Namespace)context.parent()).name() + "::" + (std::string) context.name();
+		std::string strType = (std::string) ((::Uml::Namespace)context.parent_ns()).name() + "::" + (std::string) context.name();
 		std::string strName = objDefinition.name();
 		std::string strExpression = objDefinition.expression();
 		std::string strParameterList = objDefinition.parameterList();
@@ -538,7 +538,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 	std::string ConstraintDefEx::Print( bool bOnlyIdentity ) const
 	{
 		::Uml::Class context = m_objDefinition.parent();
-		std::string strType = (std::string) ((::Uml::Namespace)context.parent()).name() + "::" + (std::string) context.name();
+		std::string strType = (std::string) ((::Uml::Namespace)context.parent_ns()).name() + "::" + (std::string) context.name();
 		std::string strName = (std::string) m_objDefinition.name();
 		std::string strParameterList = m_objDefinition.parameterList();
 		std::string strReturnType = m_objDefinition.returnType();
@@ -1037,7 +1037,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 
 	UDM_DLL EEvaluationResult Evaluator::Check( const SEvaluationOptions& sOptions ) const
 	{
-		FacadeMap::iterator it = globalFacadeMap.find( ( (::Uml::Namespace)((::Uml::Class) m_objObject.type() ).parent()).parent() );
+		//FacadeMap::iterator it = globalFacadeMap.find( ( (::Uml::Namespace)((::Uml::Class) m_objObject.type() ).parent()).parent() );
+		FacadeMap::iterator it = globalFacadeMap.find( ( (::Uml::Namespace)((::Uml::Class) m_objObject.type() ).parent_ns()).parent() );
 		if ( it == globalFacadeMap.end() ) {
 			return CER_UNDEFINED;
 		}

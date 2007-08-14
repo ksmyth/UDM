@@ -51,8 +51,13 @@ namespace UmlOcl
 		: Any( pManager, "udm::Object" ), m_Value( value )
 	{
 		// WARNING : m_Value not null
-		if ( (bool) m_Value )
-			m_strTypeName = (std::string) ((::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (std::string) m_Value.type().name();
+		if ( (bool) m_Value ) {
+			::Uml::Namespace ns = m_Value.type().parent_ns();
+			if (ns != ::Uml::Namespace(NULL))
+				m_strTypeName = (std::string) ns.name() + "::" + (std::string) m_Value.type().name();
+			else
+				m_strTypeName = (std::string) m_Value.type().name();
+		}
 	}
 
 	Any* Object::Clone() const
@@ -71,8 +76,13 @@ namespace UmlOcl
 	{
 		m_Value = value;
 		// WARNING : m_Value not null
-		if ( (bool) m_Value )
-			m_strTypeName = (std::string) ((::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (std::string) m_Value.type().name();
+		if ( (bool) m_Value ) {
+			::Uml::Namespace ns = m_Value.type().parent_ns();
+			if (ns != ::Uml::Namespace(NULL))
+				m_strTypeName = (std::string) ns.name() + "::" + (std::string) m_Value.type().name();
+			else
+				m_strTypeName = (std::string) m_Value.type().name();
+		}
 			
 	}
 
@@ -97,7 +107,13 @@ namespace UmlOcl
 			return "null";
 		char chBuffer[ 300 ];
 		_ltoa( m_Value.uniqueId(), chBuffer, 10 );
-		return (std::string) ((::Uml::Namespace)(m_Value.type().parent())).name() + "::" + (std::string) m_Value.type().name() + " { id : " + std::string( chBuffer ) + " }";
+		std::string to_print;
+		::Uml::Namespace ns = m_Value.type().parent_ns();
+		if (ns != ::Uml::Namespace(NULL))
+			to_print = (std::string) ns.name() + "::" + (std::string) m_Value.type().name();
+		else
+			to_print = (std::string) m_Value.type().name();
+		return to_print + " { id : " + std::string( chBuffer ) + " }";
 		
 	}
 

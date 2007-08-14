@@ -131,7 +131,7 @@ char *_strlwr( char *string )
 					for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
 					{
 						std::string strClass = vecClasses[ i ].name();
-						std::string strNs = ((::Uml::Namespace)vecClasses[ i ].parent()).name();
+						std::string strNs = ((::Uml::Namespace)vecClasses[ i ].parent_ns()).name();
 						std::string strRole = LowerFirst( strClass );
 						std::string strRole_Ns = LowerFirst( strNs ) +"::" + strClass ;
 						std::string strSig = signature.GetName();
@@ -348,7 +348,7 @@ char *_strlwr( char *string )
 			 			std::string strRole = parentRole.name();
 			 			::Uml::Class parent = parentRole.target();
 			 			std::string strClass = parent.name();
-						std::string strNs = ((::Uml::Namespace)parent.parent()).name();
+						std::string strNs = ((::Uml::Namespace)parent.parent_ns()).name();
 			 			TypeSeq vecType( 1, strNs + "::" + strClass );
 			 			if ( ! strRole.empty() && strRole == strName )
 			 				vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, new TObjectDerived_Parent( parentRole, parent ), true ) );
@@ -373,7 +373,7 @@ char *_strlwr( char *string )
 		 			std::string strRole = childRole.name();
 		 			::Uml::Class child = childRole.target();
 		 			std::string strClass = child.name();
-					std::string strNs = ((::Uml::Namespace)child.parent()).name();
+					std::string strNs = ((::Uml::Namespace)child.parent_ns()).name();
 
 					if ( ! strRole.empty() && strRole == strName || strName == LowerFirst( strClass ) ) {
 		 				TypeSeq vecType;
@@ -405,7 +405,7 @@ char *_strlwr( char *string )
 							std::string strRole = (*itTo).name();
 							::Uml::Class peer = (*itTo).target();
 							std::string strClass = peer.name();
-							std::string strNs = ((::Uml::Namespace)peer.parent()).name();
+							std::string strNs = ((::Uml::Namespace)peer.parent_ns()).name();
 							if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == LowerFirst( strClass ) ) {
 								TypeSeq vecType;
 		 						if ( (*itTo).max() > 1 ||  (*itTo).max() == -1 )
@@ -430,7 +430,7 @@ char *_strlwr( char *string )
 					::Uml::Class assocClass = association.assocClass();
 					if ( assocClass ) {
 						std::string strClass = assocClass.name();
-						std::string strNs = ((::Uml::Namespace)assocClass.parent()).name();
+						std::string strNs = ((::Uml::Namespace)assocClass.parent_ns()).name();
 						std::string strRole = (*itFrom).name();
 						std::string strClassRole = LowerFirst( strClass );
 						if ( strAcceptable.empty() && strClassRole == strName || ! strAcceptable.empty() && ! strRole.empty() && strRole == strName && strAcceptable == strClassRole ) {
@@ -465,7 +465,7 @@ char *_strlwr( char *string )
 					for ( set< ::Uml::AssociationRole>::iterator it = setRoles.begin() ; it != setRoles.end() ; it++ ) {
 			 			::Uml::Class target = (*it).target();
 			 			std::string strClass = target.name();
-						std::string strNs = ((::Uml::Namespace)target.parent()).name();
+						std::string strNs = ((::Uml::Namespace)target.parent_ns()).name();
 			 			std::string strRole = (*it).name();
 			 			if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == LowerFirst( strClass ) ) {
 			 				TypeSeq vecType( 1, strNs + "::" + strClass );
@@ -685,11 +685,11 @@ char *_strlwr( char *string )
 						StringVector vecSuperTypes;
 						set< ::Uml::Class> setBases = vecClasses[ i ].baseTypes();
 						for ( set< ::Uml::Class>::iterator it = setBases.begin(); it != setBases.end() ; it++ )
-							vecSuperTypes.push_back( (std::string)((::Uml::Namespace)it->parent()).name() + "::" + (std::string) (*it).name() );
+							vecSuperTypes.push_back( (std::string)((::Uml::Namespace)it->parent_ns()).name() + "::" + (std::string) (*it).name() );
 						if ( setBases.empty() )
 							vecSuperTypes.push_back( "udm::Object" );
 						::Uml::Class theClass = vecClasses[ i ];
-						vecTypes.push_back( new OclMeta::Type( (std::string)((::Uml::Namespace)theClass.parent()).name() + "::" + strClassName, vecSuperTypes, new TObjectDerived_AttributeFactory( theClass ), new TObjectDerived_AssociationFactory( theClass ), new TObjectDerived_MethodFactory(), true ) );
+						vecTypes.push_back( new OclMeta::Type( (std::string)((::Uml::Namespace)theClass.parent_ns()).name() + "::" + strClassName, vecSuperTypes, new TObjectDerived_AttributeFactory( theClass ), new TObjectDerived_AssociationFactory( theClass ), new TObjectDerived_MethodFactory(), true ) );
 					}
 				}
 			}
