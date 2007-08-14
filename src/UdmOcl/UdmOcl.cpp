@@ -164,7 +164,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 			bool Initialize( const SErrorNotification& sEN );
 
-			EEvaluationResult CheckAll( Udm::Object objObject, const set<::Uml::Uml::Constraint>& setConstraints, const SEvaluationOptions& options );
+			EEvaluationResult CheckAll( Udm::Object objObject, const set< ::Uml::Uml::Constraint>& setConstraints, const SEvaluationOptions& options );
 
 		private :
 			bool LoadConstraintDefinitions( const SErrorNotification& sEN );
@@ -173,7 +173,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			GOCL_STL_NS()string GetSignature( ConstraintDefEx* pDefinition );
 
 			set<ConstraintEx*> GetAll( const ::Uml::Uml::Class& objClass );
-			set<ConstraintEx*> GetAll( const set<::Uml::Uml::Constraint>& setConstraints );
+			set<ConstraintEx*> GetAll( const set< ::Uml::Uml::Constraint>& setConstraints );
 
 			EEvaluationResult CheckAll( Udm::Object objObject, const set<ConstraintEx*>& vecConstraints, const SEvaluationOptions& options );
 			EEvaluationResult CheckAll( Udm::Object inObject, const set<ConstraintEx*>& vecConstraints, const SEvaluationOptions& options, int iDepth );
@@ -281,7 +281,10 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 				for ( int i = 0 ; i < vecDefs.size() ; i++ ) {
 					if ( vecDefs[ i ]->IsValid() && m_pFacade->m_pTreeManager->GetTypeManager()->IsTypeA( signature.GetTypeName(), vecDefs[ i ]->GetContextType() ) >= 0 )
 						if ( vecDefs[ i ]->GetName() == signature.GetName() && vecDefs[ i ]->IsMethod() && vecDefs[ i ]->GetFormalParameters().size() == signature.GetParameterCount() )
-							vecFeatures.push_back( new OclMeta::Method( signature.GetName(), CreateFormalParameters( vecDefs[ i ]->GetFormalParameters() ), CreateReturnType( vecDefs[ i ]->GetReturnType() ), new ConstraintMethod( vecDefs[ i ] ), true, true ) );
+							const std::string name = signature.GetName();
+							const  OclCommon::FormalParameterVector fpv  = CreateFormalParameters( vecDefs[ i ]->GetFormalParameters() );
+							TypeSeq ts = CreateReturnType( vecDefs[ i ]->GetReturnType() );
+							vecFeatures.push_back( new OclMeta::Method(signature.GetName(), fpv , ts , new ConstraintMethod( vecDefs[ i ] ), true, true ) );
 				}
 			}
 
@@ -586,14 +589,14 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		GOCL_STL_NS()string strErrAll( "" );
 		bool bResult = true;
 
-		set<::Uml::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
-		for(set<::Uml::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++)
+		set< ::Uml::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
+		for(set< ::Uml::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++)
 		{
-			set<::Uml::Uml::Class> setClasses = itNamespace->classes();
-			for ( set<::Uml::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) 
+			set< ::Uml::Uml::Class> setClasses = itNamespace->classes();
+			for ( set< ::Uml::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) 
 			{
-				set<::Uml::Uml::ConstraintDefinition> setConstraintDefs = (*itClass).definitions();
-				for ( set<::Uml::Uml::ConstraintDefinition>::iterator itDefinition = setConstraintDefs.begin() ; itDefinition != setConstraintDefs.end() ; itDefinition++ ) {
+				set< ::Uml::Uml::ConstraintDefinition> setConstraintDefs = (*itClass).definitions();
+				for ( set< ::Uml::Uml::ConstraintDefinition>::iterator itDefinition = setConstraintDefs.begin() ; itDefinition != setConstraintDefs.end() ; itDefinition++ ) {
 
 					ConstraintDefEx* pDefinition = new ConstraintDefEx( this, *itDefinition );
 
@@ -790,13 +793,13 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		GOCL_STL_NS()string strErrAll( "" );
 		bool bResult = true;
 
-		set<::Uml::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
-		for(set<::Uml::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++)
+		set< ::Uml::Uml::Namespace> setNamespaces = m_objDiagram.namespaces();
+		for(set< ::Uml::Uml::Namespace>::iterator itNamespace = setNamespaces.begin(); itNamespace != setNamespaces.end(); itNamespace++)
 		{
-			set<::Uml::Uml::Class> setClasses = itNamespace->classes();
-			for ( set<::Uml::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
-			set<::Uml::Uml::Constraint> setConstraints = (*itClass).constraints();
-			for ( set<::Uml::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ ) {
+			set< ::Uml::Uml::Class> setClasses = itNamespace->classes();
+			for ( set< ::Uml::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
+			set< ::Uml::Uml::Constraint> setConstraints = (*itClass).constraints();
+			for ( set< ::Uml::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ ) {
 
 				ConstraintEx* pConstraint = new ConstraintEx( this, *itConstraint );
 			//printf("UDMOCL: CompileConstraints\t");
@@ -864,24 +867,24 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 	set<ConstraintEx*> Facade::GetAll( const ::Uml::Uml::Class& objClass )
 	{
 		set<ConstraintEx*> setResult;
-		set<::Uml::Uml::Class> setClasses = Uml::AncestorClasses( objClass );
-		for ( set<::Uml::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
-			set<::Uml::Uml::Constraint> setConstraints = (*itClass).constraints();
-			for ( set<::Uml::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ )
+		set< ::Uml::Uml::Class> setClasses = Uml::AncestorClasses( objClass );
+		for ( set< ::Uml::Uml::Class>::iterator itClass = setClasses.begin() ; itClass != setClasses.end() ; itClass++ ) {
+			set< ::Uml::Uml::Constraint> setConstraints = (*itClass).constraints();
+			for ( set< ::Uml::Uml::Constraint>::iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ )
 				setResult.insert( (*m_mapConstraints.find( *itConstraint )).second );
 		}
 		return setResult;
 	}
 
-	set<ConstraintEx*> Facade::GetAll( const set<::Uml::Uml::Constraint>& setConstraints )
+	set<ConstraintEx*> Facade::GetAll( const set< ::Uml::Uml::Constraint>& setConstraints )
 	{
 		set<ConstraintEx*> setResult;
-		for ( set<::Uml::Uml::Constraint>::const_iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ )
+		for ( set< ::Uml::Uml::Constraint>::const_iterator itConstraint = setConstraints.begin() ; itConstraint != setConstraints.end() ; itConstraint++ )
 			setResult.insert( (*m_mapConstraints.find( *itConstraint )).second );
 		return setResult;
 	}
 
-	EEvaluationResult Facade::CheckAll( Udm::Object objObject, const set<::Uml::Uml::Constraint>& setConstraints, const SEvaluationOptions& options )
+	EEvaluationResult Facade::CheckAll( Udm::Object objObject, const set< ::Uml::Uml::Constraint>& setConstraints, const SEvaluationOptions& options )
 	{
 		set<ConstraintEx*> setConstraints2 = GetAll( setConstraints );
 		return CheckAll( objObject, setConstraints2, options, 0 );
@@ -996,7 +999,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 //
 //###############################################################################################################################################
 
-	UDM_DLL Evaluator::Evaluator( const Udm::Object& objObject, const set<::Uml::Uml::Constraint>& setConstraints )
+	UDM_DLL Evaluator::Evaluator( const Udm::Object& objObject, const set< ::Uml::Uml::Constraint>& setConstraints )
 		: m_objObject( objObject ), m_setConstraints( setConstraints )
 	{
 	}
@@ -1020,9 +1023,9 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		return ( Udm::Object& ) m_objObject;
 	}
 
-	UDM_DLL set<::Uml::Uml::Constraint>& Evaluator::constraints() const
+	UDM_DLL set< ::Uml::Uml::Constraint>& Evaluator::constraints() const
 	{
-		return ( set<::Uml::Uml::Constraint>& ) m_setConstraints;
+		return ( set< ::Uml::Uml::Constraint>& ) m_setConstraints;
 	}
 
 	UDM_DLL EEvaluationResult Evaluator::Check( const SEvaluationOptions& sOptions ) const

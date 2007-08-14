@@ -27,8 +27,20 @@
 
 
 #ifndef _WIN32
-//will be defined in GOCL
-char *_strlwr( char *string );
+
+char *_strlwr( char *string )
+{
+	if (string)
+	{
+		for (int i = 0; i< strlen(string); i++)
+			*(string + i) = tolower(*(string+i));
+	};
+	return string;
+};
+
+
+
+
 #endif
 
 
@@ -103,11 +115,11 @@ namespace UmlOcl
 				if ( ! signature.GetAcceptableTypeName().empty() )
 					return;
 
-				GOCL_STL_NS()vector<::Uml::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
+				GOCL_STL_NS()vector< ::Uml::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
 				for( int j = 0; j < vecNamespaces.size(); j++)
 				{
 
-					GOCL_STL_NS()vector<::Uml::Uml::Class> vecClasses = vecNamespaces[j].classes();
+					GOCL_STL_NS()vector< ::Uml::Uml::Class> vecClasses = vecNamespaces[j].classes();
 					for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
 					{
 						GOCL_STL_NS()string strClass = vecClasses[ i ].name();
@@ -312,11 +324,11 @@ namespace UmlOcl
 					return;
 
 				GOCL_STL_NS()string strName = signature.GetName();
-				set<::Uml::Uml::Class> setAncestors = ::Uml::AncestorClasses( m_class );
+				set< ::Uml::Uml::Class> setAncestors = ::Uml::AncestorClasses( m_class );
 				bool bClassAccessFound = false;
-				for ( set<::Uml::Uml::Class>::iterator itClass =  setAncestors.begin() ; itClass != setAncestors.end() ; itClass++ ) {
-					set<::Uml::Uml::CompositionChildRole> setChildRoles = (*itClass).childRoles();
-					for ( set<::Uml::Uml::CompositionChildRole>::iterator itChild = setChildRoles.begin() ; itChild != setChildRoles.end() ; itChild++ ) {
+				for ( set< ::Uml::Uml::Class>::iterator itClass =  setAncestors.begin() ; itClass != setAncestors.end() ; itClass++ ) {
+					set< ::Uml::Uml::CompositionChildRole> setChildRoles = (*itClass).childRoles();
+					for ( set< ::Uml::Uml::CompositionChildRole>::iterator itChild = setChildRoles.begin() ; itChild != setChildRoles.end() ; itChild++ ) {
 						::Uml::Uml::CompositionParentRole parentRole = ( (::Uml::Uml::Composition)(*itChild).parent() ).parentRole();
 			 			GOCL_STL_NS()string strRole = parentRole.name();
 			 			::Uml::Uml::Class parent = parentRole.target();
@@ -338,8 +350,8 @@ namespace UmlOcl
 					return;
 
 				GOCL_STL_NS()string strName = signature.GetName();
-				set<::Uml::Uml::CompositionParentRole> setParentRoles = m_class.parentRoles();
-				for ( set<::Uml::Uml::CompositionParentRole>::iterator itParent = setParentRoles.begin() ; itParent != setParentRoles.end() ; itParent++ ) {
+				set< ::Uml::Uml::CompositionParentRole> setParentRoles = m_class.parentRoles();
+				for ( set< ::Uml::Uml::CompositionParentRole>::iterator itParent = setParentRoles.begin() ; itParent != setParentRoles.end() ; itParent++ ) {
 					::Uml::Uml::Composition composition = (*itParent).parent();
 					::Uml::Uml::CompositionChildRole childRole = composition.childRole();
 		 			GOCL_STL_NS()string strRole = childRole.name();
@@ -366,11 +378,11 @@ namespace UmlOcl
 					return;
 
 				GOCL_STL_NS()string strName = signature.GetName();
-				set<::Uml::Uml::AssociationRole> setFromRoles = m_class.associationRoles();
-				for ( set<::Uml::Uml::AssociationRole>::iterator itFrom = setFromRoles.begin() ; itFrom != setFromRoles.end() ; itFrom++ ) {
+				set< ::Uml::Uml::AssociationRole> setFromRoles = m_class.associationRoles();
+				for ( set< ::Uml::Uml::AssociationRole>::iterator itFrom = setFromRoles.begin() ; itFrom != setFromRoles.end() ; itFrom++ ) {
 					::Uml::Uml::Association association = (*itFrom).parent();
-					set<::Uml::Uml::AssociationRole> setToRoles = association.roles();
-					for ( set<::Uml::Uml::AssociationRole>::iterator itTo = setToRoles.begin() ; itTo != setToRoles.end() ; itTo++ ) {
+					set< ::Uml::Uml::AssociationRole> setToRoles = association.roles();
+					for ( set< ::Uml::Uml::AssociationRole>::iterator itTo = setToRoles.begin() ; itTo != setToRoles.end() ; itTo++ ) {
 						if ( *itTo != *itFrom ) {
 							GOCL_STL_NS()string strRole = (*itTo).name();
 							::Uml::Uml::Class peer = (*itTo).target();
@@ -393,8 +405,8 @@ namespace UmlOcl
 				GOCL_STL_NS()string strName = signature.GetName();
 				GOCL_STL_NS()string strAcceptable = signature.GetAcceptableTypeName();
 
-				set<::Uml::Uml::AssociationRole> setFromRoles = m_class.associationRoles();
-				for ( set<::Uml::Uml::AssociationRole>::iterator itFrom = setFromRoles.begin() ; itFrom != setFromRoles.end() ; itFrom++ ) {
+				set< ::Uml::Uml::AssociationRole> setFromRoles = m_class.associationRoles();
+				for ( set< ::Uml::Uml::AssociationRole>::iterator itFrom = setFromRoles.begin() ; itFrom != setFromRoles.end() ; itFrom++ ) {
 					::Uml::Uml::Association association = (*itFrom).parent();
 					::Uml::Uml::Class assocClass = association.assocClass();
 					if ( assocClass ) {
@@ -402,9 +414,9 @@ namespace UmlOcl
 						GOCL_STL_NS()string strRole = (*itFrom).name();
 						GOCL_STL_NS()string strClassRole = LowerFirst( strClass );
 						if ( strAcceptable.empty() && strClassRole == strName || ! strAcceptable.empty() && ! strRole.empty() && strRole == strName && strAcceptable == strClassRole ) {
-							set<::Uml::Uml::AssociationRole> setToRoles = association.roles();
+							set< ::Uml::Uml::AssociationRole> setToRoles = association.roles();
 							TypeSeq vecType;
-							set<::Uml::Uml::AssociationRole>::iterator itTo;
+							set< ::Uml::Uml::AssociationRole>::iterator itTo;
 							for (  itTo = setToRoles.begin() ; itTo != setToRoles.end() ; itTo++ ) {
 								if ( *itTo != *itFrom ) {
 									long lMax = (*itTo).max();
@@ -429,8 +441,8 @@ namespace UmlOcl
 		 		GOCL_STL_NS()string strName = signature.GetName();
 				::Uml::Uml::Association association = m_class.association();
 		 		if ( association ) {
-					set<::Uml::Uml::AssociationRole> setRoles = association.roles();
-					for ( set<::Uml::Uml::AssociationRole>::iterator it = setRoles.begin() ; it != setRoles.end() ; it++ ) {
+					set< ::Uml::Uml::AssociationRole> setRoles = association.roles();
+					for ( set< ::Uml::Uml::AssociationRole>::iterator it = setRoles.begin() ; it != setRoles.end() ; it++ ) {
 			 			::Uml::Uml::Class target = (*it).target();
 			 			GOCL_STL_NS()string strClass = target.name();
 			 			GOCL_STL_NS()string strRole = (*it).name();
@@ -538,8 +550,8 @@ namespace UmlOcl
 			{
 				GOCL_STL_NS()string strName = signature.GetName();
 
-				set<::Uml::Uml::Attribute> setAttribs = m_class.attributes();
-				for ( set<::Uml::Uml::Attribute>::iterator it = setAttribs.begin() ; it != setAttribs.end() ; it++ ) {
+				set< ::Uml::Uml::Attribute> setAttribs = m_class.attributes();
+				for ( set< ::Uml::Uml::Attribute>::iterator it = setAttribs.begin() ; it != setAttribs.end() ; it++ ) {
 					if ( strName == (GOCL_STL_NS()string) (*it).name() ) {
 						TypeSeq vecType;
 			 			int iCompound = ( (*it).max() > 1 || (*it).max() == -1 ) ? 1 : 0;
@@ -624,17 +636,17 @@ namespace UmlOcl
 		if ( strName.size() > 6 && strName.substr( 0, 6 ) == "meta::" )
 			strRealName = strName.substr( 6 );
 
-		GOCL_STL_NS()vector<::Uml::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
+		GOCL_STL_NS()vector< ::Uml::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
 		for ( int j = 0; j < vecNamespaces.size(); j++)
 		{
-			GOCL_STL_NS()vector<::Uml::Uml::Class> vecClasses = vecNamespaces[j].classes();
+			GOCL_STL_NS()vector< ::Uml::Uml::Class> vecClasses = vecNamespaces[j].classes();
 			for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
 			{
 				if ( strRealName == (GOCL_STL_NS()string) vecClasses[ i ].name() ) 
 				{
 					StringVector vecSuperTypes;
-					set<::Uml::Uml::Class> setBases = vecClasses[ i ].baseTypes();
-					for ( set<::Uml::Uml::Class>::iterator it = setBases.begin(); it != setBases.end() ; it++ )
+					set< ::Uml::Uml::Class> setBases = vecClasses[ i ].baseTypes();
+					for ( set< ::Uml::Uml::Class>::iterator it = setBases.begin(); it != setBases.end() ; it++ )
 						vecSuperTypes.push_back( "meta::" + (GOCL_STL_NS()string) (*it).name() );
 					if ( setBases.empty() )
 						vecSuperTypes.push_back( "udm::Object" );
