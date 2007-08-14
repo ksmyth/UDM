@@ -1072,6 +1072,22 @@ UDM_DLL set<Object> Object::GetChildObjects(const CompositionInfo& cmpType, cons
 };
 
 
+// UDM TOMI Paradigm Independent Interface
+// Test if the object is in the tree rooted at where
+UDM_DLL bool Object::IsNodeOfTree(const Object &where)
+{
+	//object is this
+	Object parent = GetParent();
+
+	while (parent) {
+		if (parent == where)
+			return true;
+		parent = parent.GetParent();
+	}
+
+	return false;
+};
+
 
 // Functions for associations and links
 
