@@ -1301,7 +1301,10 @@ namespace UdmDom
 				//possible compositions and the current composition doesn't match
 				//the requested compostion
 				if(!comp && DSFind(dom_element.getAttribute("__child_as"), DOMString(GetANameFor(role.parent()).c_str())) < 0)
+				{
+					delete do_parent;
 					return &Udm::_null;
+				}
 
 				//still need to check the type
 				//even if there is only on possible composition between me as child
@@ -1923,6 +1926,8 @@ namespace UdmDom
 //#endif
 
 					else n = n.getNextSibling();
+
+					delete existing_child;
 				}
 			}
 
@@ -1979,11 +1984,11 @@ namespace UdmDom
 							{
 								dom_element.insertBefore(de.dom_element, n);
 								inserted = true;
-								delete child_type_name;
+								delete [] child_type_name;
 								break;
 							}
 
-							delete child_type_name;
+							delete [] child_type_name;
 
 						}
 					}
