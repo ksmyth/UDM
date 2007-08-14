@@ -1,5 +1,8 @@
 #include "Test.h"
+#ifdef _WIN32
 #include <afx.h>
+#endif
+#include <stdexcept>
 #include <sstream>
 #include <UdmBase.h>
 #define CS_IN_UDMCINT
@@ -484,7 +487,6 @@ void UdmTests::Test::testWrite(std::string& result)
   std::ofstream out("lofax.xml");
   out << result << std::endl;
 
-  
   UPO_UnLoadDiagram(diagram_file);
   RemoveXsd(xsdn);
   RemoveXsd("Uml.xsd");
