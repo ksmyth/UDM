@@ -41,6 +41,8 @@ this software.
 #include <stdio.h>
 #include <stdlib.h>
 
+#define METADEPOSITORY_KEY(key) (string("__UdmPOI__") + string(key))
+
 using namespace Udm;
 using namespace Uml;
 
@@ -1198,7 +1200,7 @@ UdmPseudoDataNetwork::UdmPseudoDataNetwork(const char * mn, UdmBool& meta_found)
 	try
 	{
 		//just to check if exists
-		const Udm::UdmDiagram& dgr = Udm::MetaDepository::LocateDiagram(mn);
+		const Udm::UdmDiagram& dgr = Udm::MetaDepository::LocateDiagram(METADEPOSITORY_KEY(mn));
 		dgr.init();
 		meta_name = mn;
 		meta_found.boolVal = true;
@@ -1220,7 +1222,7 @@ bool UdmPseudoDataNetwork::CreateNew(const char * sys_name, const char * meta_lo
 		if (dn_id != -1) throw udm_exception("UdmPseudoDataNetwork already opened!");
 		//make sure root class is a Uml::Class and it is valid
 
-		const Udm::UdmDiagram &dgr = Udm::MetaDepository::LocateDiagram(meta_name.buffer());
+		const Udm::UdmDiagram &dgr = Udm::MetaDepository::LocateDiagram(METADEPOSITORY_KEY(meta_name.buffer()));
 
 			
 		::Uml::Class rc;
@@ -1273,7 +1275,7 @@ bool UdmPseudoDataNetwork::CreateNewToString(const char * meta_locator, const Ud
 		if (dn_id != -1) throw udm_exception("UdmPseudoDataNetwork already opened!");
 		//make sure root class is a Uml::Class and it is valid
 
-		const Udm::UdmDiagram &dgr = Udm::MetaDepository::LocateDiagram(meta_name.buffer());
+		const Udm::UdmDiagram &dgr = Udm::MetaDepository::LocateDiagram(METADEPOSITORY_KEY(meta_name.buffer()));
 
 			
     ::Uml::Class rc;
@@ -1315,7 +1317,7 @@ bool UdmPseudoDataNetwork::OpenExisting(const char * sys_name, const char * meta
 		if (dn_id != -1) throw udm_exception("UdmPseudoDataNetwork already opened!");
 		//make sure root class is a Uml::Class and it is valid
 
-		const Udm::UdmDiagram &dgr = Udm::MetaDepository::LocateDiagram(meta_name.buffer());
+		const Udm::UdmDiagram &dgr = Udm::MetaDepository::LocateDiagram(METADEPOSITORY_KEY(meta_name.buffer()));
 
 		//init dgr!
 		UdmDom::DomDataNetwork * ddn = new UdmDom::DomDataNetwork(dgr);
@@ -1364,7 +1366,7 @@ bool UdmPseudoDataNetwork::OpenExistingFromString(const char * sys_name, const c
 		if (dn_id != -1) throw udm_exception("UdmPseudoDataNetwork already opened!");
 		//make sure root class is a Uml::Class and it is valid
 
-		const Udm::UdmDiagram &dgr = Udm::MetaDepository::LocateDiagram(meta_name.buffer());
+		const Udm::UdmDiagram &dgr = Udm::MetaDepository::LocateDiagram(METADEPOSITORY_KEY(meta_name.buffer()));
 
 		//init dgr!
 		UdmDom::DomDataNetwork * ddn = new UdmDom::DomDataNetwork(dgr);
@@ -1477,7 +1479,7 @@ bool UdmPseudoDataNetwork::OCL_Evaluate(cint_string& res)
   CINT_DN_TRY(dn_id);
      
   const Udm::Object& root = dn->GetRootObject();
-  const Udm::UdmDiagram& ud = Udm::MetaDepository::LocateDiagram(meta_name.buffer());
+  const Udm::UdmDiagram& ud = Udm::MetaDepository::LocateDiagram(METADEPOSITORY_KEY(meta_name.buffer()));
   const ::Uml::Diagram& metaDiagram = *(ud.dgr);
 
 
@@ -1508,7 +1510,7 @@ bool UPO_SetDiagram(UdmPseudoObject &diagram_what, const char* name)
 {
 	try
 	{
-		const Udm::UdmDiagram & dgr = Udm::MetaDepository::LocateDiagram(name);
+		const Udm::UdmDiagram & dgr = Udm::MetaDepository::LocateDiagram(METADEPOSITORY_KEY(name));
 		/*diagram_what.dn_id = dgr.dgr->__impl()->__getdn()->uniqueId();
 		diagram_what.ob_id = dgr.dgr->uniqueId();*/
 
@@ -1538,16 +1540,28 @@ bool  UPO_SetNamespace(UdmPseudoObject &ns_what, UdmPseudoObject &parent_dgr, co
 	return true;
 	CINT_CATCH;
 }
-bool UPO_SetClass(UdmPseudoObject &class_what, UdmPseudoObject &parent_ns, const char* target_name)
+bool UPO_SetClass(UdmPseudoObject &class_what, UdmPseudoObject &parent, const char* target_name)
 {
 //	CINT_TRY(dn_id, ob_id);
 
-	CINT_TRY(parent_ns._dn_id(), parent_ns._ob_id());
-	::Uml::Namespace ns = ::Uml::Namespace::Cast(upi_o);
-	if (!ns) throw udm_exception("The provided namespace is NULL!");
+	CINT_TRY(parent._dn_id(), parent._ob_id());
+	cint_string parent_type;
+	if (!parent.type(parent_type)) throw udm_exception("Couldn't determine the parent type!");
 
 	::Uml::Class what;
-	SetClass(what, ns, target_name);
+
+	if (parent_type.comp("Namespace") == 0) {
+		::Uml::Namespace ns = ::Uml::Namespace::Cast(upi_o);
+		if (!ns) throw udm_exception("The provided namespace is NULL!");
+		SetClass(what, ns, target_name);
+	} else if (parent_type.comp("Diagram") == 0) {
+		::Uml::Diagram dgr = ::Uml::Diagram::Cast(upi_o);
+		if (!dgr) throw udm_exception("The provided diagram is NULL!");
+		SetClass(what, dgr, target_name);
+	} else {
+		throw udm_exception("Unknown parent provided to UPO_SetClass!");
+	}
+
 	if (!what) throw udm_exception("SetClass() failed!");
 /*	class_what.dn_id = what.__impl()->__getdn()->uniqueId();
 	class_what.ob_id = what.__impl()->uniqueId();
@@ -1657,7 +1671,7 @@ public:
 	UPO_metainfo(Udm::DataNetwork *_dn, ::Uml::Diagram * _udgr, Udm::UdmDiagram * _dgr) : dn(_dn), udgr(_udgr), dgr(_dgr) {} ;
 	~UPO_metainfo()
 	{
-		Udm::MetaDepository::RemoveDiagram(udgr->name());
+		Udm::MetaDepository::RemoveDiagram(METADEPOSITORY_KEY(udgr->name()));
 
 		delete udgr;
 		delete dgr;
@@ -1721,7 +1735,7 @@ bool  UPO_LoadDiagram(const char * xml_meta_file, UdmPseudoObject & diagram)
 		dgr->init = UPO_dummy;
 		dgr->dgr = loaded_dgr;
 		
-		Udm::MetaDepository::StoreDiagram(loaded_dgr->name(),*dgr);
+		Udm::MetaDepository::StoreDiagram(METADEPOSITORY_KEY(loaded_dgr->name()), *dgr);
 
 		//return value set-up
 		/*
@@ -1777,7 +1791,7 @@ bool  UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_str
 		dgr->init = UPO_dummy;
 		dgr->dgr = loaded_dgr;
 		
-		Udm::MetaDepository::StoreDiagram(loaded_dgr->name(),*dgr);
+		Udm::MetaDepository::StoreDiagram(METADEPOSITORY_KEY(loaded_dgr->name()), *dgr);
 
 		//return value set-up
 		/*
