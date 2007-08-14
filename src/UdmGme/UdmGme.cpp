@@ -1280,10 +1280,8 @@ bbreak:			;
 				if(mfco) CASSERT("Multiple child kinds match");
 				IMgaFolderPtr nf;
 				nf = folderself->CreateFolder(mf);
-				//string ns_name = (::Uml::Namespace)m_type.parent_ns() != ::Uml::Namespace(NULL) ? (string)((::Uml::Namespace)m_type.parent_ns()).name() : "";
-				//COMTHROW(nf->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 				::Uml::Namespace m_type_ns = m_type.parent_ns();
-				COMTHROW(nf->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? ((string)m_type_ns.name()).c_str() : NULL)));
+				COMTHROW(nf->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? m_type_ns.getPath2(":", false).c_str() : NULL)));
 				GmeObject * retval = new GmeObject( nf, mydn);
 				retval->setDefaultAttributes(false);
 				return retval;
@@ -1294,10 +1292,8 @@ bbreak:			;
 				if (!archetype)
 				{
 					nfco = folderself->CreateRootObject(mfco);
-					//string ns_name = (::Uml::Namespace)m_type.parent_ns() != ::Uml::Namespace(NULL) ? (string)((::Uml::Namespace)m_type.parent_ns()).name() : "";
-					//COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 					::Uml::Namespace m_type_ns = m_type.parent_ns();
-					COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? ((string)m_type_ns.name()).c_str() : NULL)));
+					COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? m_type_ns.getPath2(":", false).c_str() : NULL)));
 					GmeObject * retval =   new GmeObject( nfco, mydn);
 					retval->setDefaultAttributes(false);
 					return retval;
@@ -1306,10 +1302,8 @@ bbreak:			;
 				{
 					nfco = folderself->DeriveRootObject(((GmeObject *)archetype)->self, subtype ? VARIANT_FALSE : VARIANT_TRUE);
 					
-					//string ns_name = (::Uml::Namespace)m_type.parent_ns() != ::Uml::Namespace(NULL) ? (string)((::Uml::Namespace)m_type.parent_ns()).name() : "";
-					//COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 					::Uml::Namespace m_type_ns = m_type.parent_ns();
-					COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? ((string)m_type_ns.name()).c_str() : NULL)));
+					COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? m_type_ns.getPath2(":", false).c_str() : NULL)));
 				
 					GmeObject * retval =   new GmeObject( nfco, mydn);
 					return retval;
@@ -1372,10 +1366,8 @@ bbreak:			;
 		{
 			nfco = m->CreateChildObject(rr);
 			
-			//string ns_name = (::Uml::Namespace)m_type.parent_ns() != ::Uml::Namespace(NULL) ? (string)((::Uml::Namespace)m_type.parent_ns()).name() : "";
-			//COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 			::Uml::Namespace m_type_ns = m_type.parent_ns();
-			COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? ((string)m_type_ns.name()).c_str() : NULL)));
+			COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? m_type_ns.getPath2(":", false).c_str() : NULL)));
 				
 			GmeObject * retval =  new GmeObject( nfco, mydn);
 			retval->setDefaultAttributes(false);
@@ -1385,10 +1377,8 @@ bbreak:			;
 		{
 			
 			nfco = m->DeriveChildObject( ((GmeObject *)archetype)->self,  rr, subtype ? VARIANT_FALSE : VARIANT_TRUE );
-			//string ns_name = (::Uml::Namespace)m_type.parent_ns() != ::Uml::Namespace(NULL) ? (string)((::Uml::Namespace)m_type.parent_ns()).name() : "";
-			//COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 			::Uml::Namespace m_type_ns = m_type.parent_ns();
-			COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? ((string)m_type_ns.name()).c_str() : NULL)));
+			COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? m_type_ns.getPath2(":", false).c_str() : NULL)));
 				
 			GmeObject * retval =  new GmeObject( nfco, mydn);
 			return retval;
@@ -2218,18 +2208,12 @@ bbreak:			;
 	::Uml::Class GmeObject::findClass() 
 	{
 		SmartBSTR name = Meta()->Name;
-		SmartBSTR ns_name = Meta()->RegistryValue[NS_REGNODE_NAME];
+		SmartBSTR ns_path = Meta()->RegistryValue[NS_REGNODE_NAME];
 		string key;
-		if (!ns_name)
-		{
-			string dgr_name= mydn->GetRootMeta().name();
-			//key = string((const char *)dgr_name.c_str()) + ':' + string((const char *)name);
+		if (!ns_path)
 			key = string((const char *)name);
-		}
 		else
-		{
-			key = string((const char *)ns_name) + ':' + string((const char *)name);
-		}
+			key = string((const char *)ns_path) + ':' + string((const char *)name);
 
 
 		map<string, const ::Uml::Class>::iterator j = ((GmeDataNetwork*)mydn)->meta_class_cache.find(key);
@@ -2413,32 +2397,18 @@ bbreak:			;
 		}
 		hasOpened=false;
 
-		//create a cache for meta-classes 
-		set< ::Uml::Class> meta_classes = dia.dgr->classes();
-		for (set< ::Uml::Class>::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
+		//create a cache for meta-classes
+		::Uml::DiagramClasses meta_classes(*dia.dgr);
+		for (::Uml::DiagramClasses::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
 		{
-			string key = (string)mci->name();//class
+			string key = mci->getPath2(":", false);
 			pair<string const, const ::Uml::Class> mcc_item(key, *mci);
 			pair<map<string, const ::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
 			if (!ins_res.second)
 				throw udm_exception("Insert failed when creating meta classes by name map!");
 		}
-
-		set< ::Uml::Namespace> meta_namespaces = dia.dgr->namespaces();
-		for (set< ::Uml::Namespace>::iterator mni = meta_namespaces.begin(); mni != meta_namespaces.end(); mni++)
-		{
-			set< ::Uml::Class> meta_classes = mni->classes();
-			for (set< ::Uml::Class>::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
-			{
-				string key =(string)mni->name() + ':' + (string)mci->name();//namespace:class
-				pair<string const, const ::Uml::Class> mcc_item(key, *mci);
-				pair<map<string, const ::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
-				if (!ins_res.second)
-					throw udm_exception("Insert failed when creating meta classes by name map!");
-
-			}
-		}
 	}
+
 	UDM_DLL GmeDataNetwork::~GmeDataNetwork() 
 	{ 
 		switch(semantics) {
@@ -2516,18 +2486,8 @@ bbreak:			;
 
 	void GmeDataNetwork::amapInitialize(const ::Uml::Diagram &dgr, IMgaMetaProject *metaproj) 
 	{
-		set< ::Uml::Association> assocs;
-		set< ::Uml::Association> dgr_assocs = dgr.associations();
-		assocs.insert(dgr_assocs.begin(), dgr_assocs.end());
-
-		set< ::Uml::Namespace> nses = dgr.namespaces();
-		for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
-		{
-			set< ::Uml::Association> ns_assocs = nses_i->associations();
-			assocs.insert(ns_assocs.begin(), ns_assocs.end());
-		}
-
-		for(set< ::Uml::Association>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+		::Uml::DiagramAssociations assocs(dgr);
+		for(::Uml::DiagramAssociations::iterator i = assocs.begin(); i != assocs.end(); i++) 
 		{
 			//for each association in the meta 
 			::Uml::Association assoc = *i;
@@ -3023,7 +2983,7 @@ bbreak:			;
 			}
 
 			::Uml::Namespace rootclass_ns = rootclass.parent_ns();
-			COMTHROW(project->RootFolder->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(rootclass_ns ? ((string)rootclass_ns.name()).c_str() : NULL)));
+			COMTHROW(project->RootFolder->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(rootclass_ns ? rootclass_ns.getPath2(":", false).c_str() : NULL)));
 			rootobject = bb;
 		}
 		catch(gme_exc &s) { 
