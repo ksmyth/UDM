@@ -652,8 +652,8 @@ namespace OclTree
 						HandleNode*				CreateHandleNode() const;
 						EnumerationNode*				CreateEnumerationNode() const;
 
-		friend ObjectNode;
-		friend CollectionNode;
+		friend class ObjectNode;
+		friend class CollectionNode;
 	};
 
 
