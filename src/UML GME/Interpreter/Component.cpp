@@ -13,6 +13,10 @@
  */
 
 /*
+	-	12/31/05	-	endre
+
+		- use UdmDom data networks and UdmProjects to build the result of interpretation
+
 	-	11/24/05	-	endre
 
 				- change cross class names to class_name + "_cross_ph_" + diagram_name [ + "_cross_ph_" + namespace_name ]
@@ -88,9 +92,6 @@
 
 #include "stdafx.h"
 
-//stream in memory
-#include <strstream>
-
 #include "Lattrib.hpp"
 #include "Pattrib.hpp"
 
@@ -105,16 +106,13 @@
 #include "Component.h"
 #include "int_exception.h"
 
-//zip 
-#include <zlib.h>
-#include <contrib\minizip\zip.h>
-
-//DTDs as resources
 #include "Resource.h"
 
-#define IDBASE	"id0000"
-
-static int idcount = 1;
+#include "Uml.h"
+#include "UmlExt.h"
+#include "UdmDom.h"
+#include "UdmProject.h"
+#include "UdmStatic.h"
 
 char* GetRelativeFilename(const char *currentDirectory,const char *absoluteFilename);
 
@@ -127,23 +125,9 @@ CComponent *CComponent::theInstance = 0;
 
 
 
+
 //////////////////////////////// CComponent //////////////////////////////////
 
-
-CComponent::~CComponent()
-{
-	POSITION pos = compositeClasses.GetHeadPosition();
-	while(pos)
-		delete compositeClasses.GetNext(pos);
-}
-
-CString CComponent::GetID()
-{
-	CString id;
-	id.Format("%s%d",IDBASE,idcount);
-	idcount++;
-	return id;
-}
 
 BOOL CALLBACK resenum(
   HMODULE hModule,   // module handle
@@ -175,8 +159,6 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		
 		theInstance = this;		// cannot use this in Initialize() functions!!!
 		
-		//open Udm Project dialog
-//		CBuilderFolder *root = builder.GetRootFolder();
 		name = root->GetName();
 
 		//getting the packages
@@ -191,25 +173,14 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		{
 			//only one diagram
 			CPackageBuilder * package = packages->GetHead();
+			package->Build();
+			package->BuildInheritance();
+			package->CheckInheritance();
+			package->BuildCompositions();
+			package->BuildAssociations();
 
-			name = package->GetNameorAlias();
-			
-			GatherPackageSheets(package,sheets);
-			POSITION pos = sheets.GetHeadPosition();
-			while(pos)
-				sheets.GetNext(pos)->Build(compositeClasses);
-		
-				
-			BuildInheritance();
-			CheckInheritance();
+			CString name = package->GetNameorAlias();
 
-			BuildCompositions();
-			BuildAssociations();
-
-			std::strstream package_xml; 
-			DumpXML(package_xml, package->GetVersion());
-			
-			
 			CString filepath;
 
 			if (param & GME_SILENT_MODE && (!isUMT) )
@@ -220,14 +191,19 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 			if(filepath == "")
 			{	throw int_exception("");
 			}
-			////////////////////////////////////////////////////
-			FILE * f = fopen((LPCTSTR)(filepath),"w");
-			if (!f)
-			{	CString msg = "Uml2Xml Error: File " + filepath + " could not be opened!" ;
-				throw int_exception((LPCTSTR)msg);
-			}
-			fwrite((void*)(package_xml.str()),sizeof(char), package_xml.pcount(), f);
-			fclose(f);
+
+			::UdmDom::DomDataNetwork dn(::Uml::diagram);
+			dn.CreateNew((LPCTSTR) filepath, "Uml", ::Uml::Diagram::meta);
+
+			package->SetUmlDiagram(::Uml::Diagram::Cast(dn.GetRootObject()));
+			package->BuildUML();
+			package->BuildUMLClasses();
+			package->BuildUMLInheritance();
+			package->BuildUMLCompositions();
+			package->BuildUMLAssociations();
+
+			dn.CloseWithUpdate();
+
 			if(isUMT)
 			{	
 				CString sysCall = "call \"%UDM_PATH%\\bin\\Udm.exe\" \"" + filepath + "\"";
@@ -238,7 +214,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 			return;
 		}
 
-		
+
 		CString filepath;
 		
 		if (param & GME_SILENT_MODE && (!isUMT) )
@@ -249,170 +225,66 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		{	throw int_exception("");
 			
 		}
-		////////////////////////////////////////////////////
 
-		//zip initialization
-		CString project_file = filepath;
-		zipFile zip_pf = zipOpen(project_file, 0);
-		if (zip_pf == NULL)
 		{
-			throw int_exception("Uml2Xml Error: File could not be opened for writing!");
-		}
-
-		//timestamp on ZIP-ed files
-		time_t now;
-		time(&now);
-
-		struct tm *newtime = localtime(&now);
-		zip_fileinfo zfi;
-		zfi.tmz_date.tm_sec = newtime->tm_sec;
-		zfi.tmz_date.tm_min = newtime->tm_min;
-		zfi.tmz_date.tm_mday = newtime->tm_mday;
-		zfi.tmz_date.tm_mon = newtime->tm_mon;
-		zfi.tmz_date.tm_year = newtime->tm_year;
-		zfi.dosDate = 0;
-		zfi.internal_fa = 0;
-		zfi.external_fa = 0;
-
-
-
-		
-		//map to store the generated XML for each package
-		std::map<CString, std::strstream*> package_xmls;
-		
-		//generate XML for each package
-		POSITION mPos = packages->GetHeadPosition();
-		while (mPos)
-		{
-			CPackageBuilder * package = packages->GetNext(mPos);
-			name = package->GetNameorAlias();
-			
-			GatherPackageSheets(package,sheets);
-			POSITION pos = sheets.GetHeadPosition();
-			while(pos)
-				sheets.GetNext(pos)->Build(compositeClasses);
-
-			BuildInheritance();
-			CheckInheritance();
-
-			BuildCompositions();
-			BuildIsoAssociations();
-			
-			std::strstream* package_xml = new std::strstream();
-			DumpIsolatedXML(*package_xml,package->GetVersion());
-			std::map<CString, std::strstream*>::value_type item(package->GetNameorAlias() + CString(".xml"), package_xml);
-			package_xmls.insert(item);
-
-
-			compositeClasses.RemoveAll();
-			compositions.RemoveAll();
-			associations.RemoveAll();
-			sheets.RemoveAll();
-		};
-		
-
-		//generate the cross package associations
-
-		name = root->GetName();
-		GatherAllSheets(sheets);
-
-
-		POSITION pos = sheets.GetHeadPosition();
-		while(pos)
-			sheets.GetNext(pos)->Build(compositeClasses);
-
-		BuildInheritance();
-		CheckInheritance();
-		BuildCompositions();
-		BuildAssociations();
-
-		std::strstream cross_xml;
-
-		//if (HasCrossAssociations())
-		//{
-			DumpCrossXML(cross_xml,"1.00");
-		//}
-
-
-		//Generate &output _project_.xml
-		std::strstream project_xml;		//all the XML will be generated in the memory
-		zipOpenNewFileInZip(zip_pf, "_project_.xml", &zfi, NULL,0, NULL, 0,  "UDM Project description. (XML)", 0, Z_DEFAULT_COMPRESSION);
-		DumpProjectXML(root, project_xml, "1.00");
-		zipWriteInFileInZip(zip_pf, (void*)project_xml.str(), (unsigned long)project_xml.pcount());
-		zipCloseFileInZip(zip_pf);
-		project_xml.clear();
-		
-		//output cross_xml
-		if ((unsigned long)cross_xml.pcount() > 0)
-		{
-			zipOpenNewFileInZip(zip_pf, (LPCTSTR)(root->GetName() + CString(".xml")), &zfi, NULL,0, NULL, 0,  "Cross-package specification(XML)", 0, Z_DEFAULT_COMPRESSION);
-			zipWriteInFileInZip(zip_pf, (void*)cross_xml.str(), (unsigned long)cross_xml.pcount());
-			zipCloseFileInZip(zip_pf);
-			cross_xml.clear();
-		}
-
-
-		//output instance_xmls
-		for (std::map<CString, std::strstream*>::iterator i = package_xmls.begin(); i != package_xmls.end(); i++)
-		{
-			zipOpenNewFileInZip(zip_pf, (LPCTSTR)(i->first), &zfi, NULL,0, NULL, 0,  "Instance data network(XML)", 0, Z_DEFAULT_COMPRESSION);
-			
-			zipWriteInFileInZip(zip_pf, (void*)(i->second->str()), (unsigned long)(i->second->pcount()));
-			zipCloseFileInZip(zip_pf);
-			i->second->clear();
-			delete i->second;		//they were created on the heap
-		};
-
-
-
-		
-
-		HRSRC res;
-		HGLOBAL resgl;
-		HMODULE thisModule = GetModuleHandle(DLL_NAME);
-		if (thisModule)
-		{
-			//EnumResourceNames(thisModule, "XSD", resenum, 0);
-			//add Uml.xsd and UdmProject.xsd
-			res = FindResource(thisModule,(const char *)XSD_UDMPROJECT,"XSD");
-			if (res)
+			vector<Udm::DataNetworkSpecifier> dnsvec;
+			POSITION mPos = packages->GetHeadPosition();
+			while (mPos)
 			{
-				resgl = LoadResource(thisModule, res);
-				if (resgl)
-				{
-					void * buff = LockResource(resgl);
-					DWORD size = SizeofResource(thisModule, res);
-
-					zipOpenNewFileInZip(zip_pf, "UdmProject.xsd", &zfi, NULL,0, NULL, 0,  "XSD", 0, Z_DEFAULT_COMPRESSION);
-				
-					zipWriteInFileInZip(zip_pf, buff, size);
-					zipCloseFileInZip(zip_pf);
-				}
+				CPackageBuilder * package = packages->GetNext(mPos);
+				dnsvec.push_back(Udm::DataNetworkSpecifier((LPCTSTR) (package->GetNameorAlias() + ".xml"), "Uml", ::Uml::Diagram::meta));
 			}
-			res = FindResource(thisModule,(const char *)XSD_UML,"XSD");
-			if (res)
-			{
-				resgl = LoadResource(thisModule, res);
-				if (resgl)
-				{
-					void * buff = LockResource(resgl);
-					DWORD size = SizeofResource(thisModule, res);
 
-					zipOpenNewFileInZip(zip_pf, "Uml.xsd", &zfi, NULL,0, NULL, 0,  "XSD", 0, Z_DEFAULT_COMPRESSION);
-				
-					zipWriteInFileInZip(zip_pf, buff, size);
-					zipCloseFileInZip(zip_pf);
-				}
+			Udm::UdmProject pr;
+			pr.CreateNewMeta((LPCTSTR) name, (LPCTSTR) filepath, dnsvec);
+			cross_uml_dgr = ::Uml::Diagram::Cast(pr.GetCrossMetaNetwork().GetRootObject());
+
+			mPos = packages->GetHeadPosition();
+			while (mPos)
+				packages->GetNext(mPos)->Build();
+
+			mPos = packages->GetHeadPosition();
+			while (mPos)
+			{
+				CPackageBuilder * package = packages->GetNext(mPos);
+				package->BuildInheritance();
+				package->CheckInheritance();
+				package->BuildCompositions();
+				package->BuildAssociations();
+
+				::Uml::Diagram dgr = ::Uml::Diagram::Cast(pr.GetDataNetwork((LPCTSTR) (package->GetNameorAlias() + ".xml")).GetRootObject());
+
+				package->SetUmlDiagram(dgr);
+				package->BuildUML();
+				package->BuildUMLClasses();
+				package->BuildUMLInheritance();
+				package->BuildUMLCompositions();
+				package->BuildUMLAssociations();
+			}
+
+			mPos = packages->GetHeadPosition();
+			while (mPos)
+				packages->GetNext(mPos)->BuildCrossUMLClasses();
+
+			mPos = packages->GetHeadPosition();
+			while (mPos)
+				packages->GetNext(mPos)->BuildCrossUMLInheritance();
+
+			mPos = packages->GetHeadPosition();
+			while (mPos)
+			{
+				CPackageBuilder * package = packages->GetNext(mPos);
+				package->BuildCrossUMLCompositions();
+				package->BuildCrossUMLAssociations();
 			}
 		}
-		//close ZIP file
-		zipClose(zip_pf, "UDM Project file(regular zip) containing metainformation. Generated by the UML2XML interpreter.");
 
 		if(isUMT)
 		{	CString sysCall = "call \"%UDM_PATH%\\bin\\Udm.exe\" \"" + filepath + "\"";
 			if(system(LPCSTR(sysCall))!=0)
 				throw int_exception("Uml2Xml Error: Unable to run command: "+ sysCall);
 		}
+
 	}
 	catch (int_exception &e)
 	{
@@ -425,48 +297,6 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 	};
 }
 
-void CComponent::AddComposition(CCompositionBuilder *comp)
-{
-	compositions.AddTail(comp);
-}
-
-void CComponent::AddAssociation(CAssociationBase *ass)
-{
-	associations.AddTail(ass);
-}
-/*
-int CComponent::GatherPackageFolders(CBuilderFolder*folder,CBuilderFolderList &packageFolders)
-{
-	int foldercount = 0;
-	if(folder->GetKindName() == "RootFolder")
-	{
-		const CBuilderModelList *models =folder->GetRootModels();
-		const CBuilderFolderList *subfolders = folder->GetSubFolders();
-		if(subfolders)
-		{
-			POSITION pos = subfolders->GetHeadPosition();
-			while(pos)
-			{
-				CBuilderFolder *subfolder = subfolders->GetNext(pos);
-				foldercount += GatherPackageFolders(subfolder, packageFolders);
-			}
-		}
-	
-		POSITION pacPos = models->GetHeadPosition();
-		While(pacPos)
-		{
-			CBuilderModel *model = models->GetNext(pacPos);
-			if(model->GetKindName() == "Package")
-			{
-				packageFolders.AddTail(folder);
-				foldercount = 1;
-			}
-		}
-		return foldercount;
-	}
-	return foldercount;
-}
-*/
 int CComponent::GatherPackageFolders(CBuilderFolder *folder,CPackageBuilderList &packages)
 {
 	int foldercount = 0;
@@ -504,52 +334,50 @@ int CComponent::GatherPackageFolders(CBuilderFolder *folder,CPackageBuilderList 
 	return foldercount;
 }
 
-void CComponent::GatherAllSheets(CClassDiagramList &sheets)
-{
-	POSITION pos = packageList.GetHeadPosition();
-	while(pos)
-	{	CPackageBuilder *package = packageList.GetNext(pos);
-		GatherPackageSheets(package, sheets);
-	}
-	
-}
 
-void CComponent::GatherModelSheets(const CBuilderModelList *roots, CClassDiagramList &sheets)
-{
-	POSITION pos = roots->GetHeadPosition();
-	while(pos) 
-	{
-		CBuilderModel *model = roots->GetNext(pos);
-		if(model->GetKindName() == "ClassDiagram")
-		{	CClassDiagramBuilder *sheet = dynamic_cast<CClassDiagramBuilder *>(model);
-			if(!sheet) 
-			{
-				AfxMessageBox("Unexpected model kind found: " + sheet->GetName());
-				continue;
-			}
-			sheets.AddTail(sheet);
-			GatherModelSheets(sheet->GetModels(), sheets);
-		}
-		if(model->GetKindName() == "Namespace")
-			GatherModelSheets(model->GetModels(), sheets);
-	}
-}
+///////////////////////////// CContainer ///////////////////////////////
 
-void CComponent::GatherPackageSheets(CPackageBuilder *folder, CClassDiagramList &sheets)
-{
-	GatherModelSheets(folder->GetModels(), sheets);
-}
-
-void CComponent::BuildInheritance()
+CContainer::~CContainer()
 {
 	POSITION pos = compositeClasses.GetHeadPosition();
+	while(pos)
+		delete compositeClasses.GetNext(pos);
+}
+
+void CContainer::AddCompositeClass(CCompositeClass *cls)
+{
+	compositeClasses.AddTail(cls);
+}
+
+void CContainer::AddComposition(CCompositionBuilder *comp)
+{
+	compositions.AddTail(comp);
+}
+
+void CContainer::AddAssociation(CAssociationBase *ass)
+{
+	associations.AddTail(ass);
+}
+
+void CContainer::BuildInheritance()
+{
+	POSITION pos = namespaces.GetHeadPosition();
+	while(pos)
+		namespaces.GetNext(pos)->BuildInheritance();
+
+	pos = compositeClasses.GetHeadPosition();
 	while(pos)
 		compositeClasses.GetNext(pos)->FindSubClasses();
 }
 
-bool CComponent::CheckInheritance()
+bool CContainer::CheckInheritance()
 {
-	POSITION pos = compositeClasses.GetHeadPosition();
+	POSITION pos = namespaces.GetHeadPosition();
+	while(pos)
+		if(!namespaces.GetNext(pos)->CheckInheritance())
+			return false;
+
+	pos = compositeClasses.GetHeadPosition();
 	while(pos) {
 		CStringList trace;
 		CCompositeClass *comp = compositeClasses.GetNext(pos);
@@ -567,323 +395,120 @@ bool CComponent::CheckInheritance()
 	return true;
 }
 
-void CComponent::BuildCompositions()
+void CContainer::BuildCompositions()
 {
-	POSITION pos = compositeClasses.GetHeadPosition();
+	POSITION pos = namespaces.GetHeadPosition();
+	while(pos)
+		namespaces.GetNext(pos)->BuildCompositions();
+
+	pos = compositeClasses.GetHeadPosition();
 	while(pos)
 		compositeClasses.GetNext(pos)->BuildCompositions();
 }
 
-void CComponent::BuildIsoAssociations()
+void CContainer::BuildAssociations()
 {
-	POSITION pos = compositeClasses.GetHeadPosition();
+	POSITION pos = namespaces.GetHeadPosition();
 	while(pos)
-		compositeClasses.GetNext(pos)->BuildIsoAssociations();
+		namespaces.GetNext(pos)->BuildAssociations();
 
-}
-
-void CComponent::BuildAssociations()
-{
-	POSITION pos = compositeClasses.GetHeadPosition();
+	pos = compositeClasses.GetHeadPosition();
 	while(pos)
 		compositeClasses.GetNext(pos)->BuildAssociations();
 }
 
-void CComponent::DumpProjectXML(CBuilderFolder *root, std::strstream& xml, const CString& version)
+void CContainer::BuildUMLClasses()
 {
-
-	idcount = 1;
-
-	xml << "<?xml version=\"1.0\"?>"  << std::endl << std::endl;
-	//XSD
-
-	//xml << "<!DOCTYPE Project SYSTEM \"UdmProject.dtd\">" << std::endl << std::endl;
-	//xml << "<Project name =\"" << (LPCTSTR)root->GetName() <<"\">" << std::endl << std::endl;
-	/*xml << "<Project name =\"" << (LPCTSTR)root->GetName() << "\"" << std::endl <<
-	"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" << std::endl <<
-	"   xsi:noNamespaceSchemaLocation=\"UdmProject.xsd\">" << std::endl << std::endl;
-	*/
-	//xml << "<UdmProject:Project name =\"" << (LPCTSTR)root->GetName() << "\"" << std::endl <<
-	//"xmlns:UdmProject=\'http://www.isis.vanderbilt.edu/2004/schemas/UdmProject\' " << std::endl << 
-	//"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" << std::endl <<
-	//"xsi:schemaLocation=\'http://www.isis.vanderbilt.edu/2004/schemas/UdmProject UdmProject.xsd\'>" << std::endl << std::endl;
-	xml << "<Project name =\"" << (LPCTSTR)root->GetName() << "\"" << std::endl <<
-	"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" << std::endl <<
-	"xsi:noNamespaceSchemaLocation=\'UdmProject.xsd\'>" << std::endl << std::endl;
-
-	//eo XSD
-
-	xml << "   <!-- Generated by the UML2XML interpreter -->" << std::endl << std::endl;
-
-	idcount = 1;
-	
-
-	//if (HasCrossAssociations())
-	xml << "\t<Datanetwork _id=\"" << (LPCTSTR)GetID() << "\" systemname=\"" << (LPCTSTR)(root->GetName() + CString(".xml")) << "\" __child_as=\"cross_associations\" metaDgr=\"Uml\"/>" << std::endl;
-
-	
-	CPackageBuilderList *folders = &packageList;
-	POSITION pos = folders->GetHeadPosition();
+	POSITION pos = namespaces.GetHeadPosition();
 	while(pos)
-	{
-		CPackageBuilder * package = folders->GetNext(pos);
-		xml << "\t<Datanetwork _id=\"" << (LPCTSTR)GetID() << "\" systemname=\"" << (LPCTSTR) (package->GetNameorAlias() + CString(".xml")) << "\" __child_as=\"instances\" metaDgr=\"Uml\"/>" << std::endl;
-	}
+		namespaces.GetNext(pos)->BuildUMLClasses();
 
-	xml << "</Project>" << std::endl;
-};
-
-void CComponent::DumpCrossXML(std::strstream & xml, const CString & version)
-{
-
-	//std::ofstream xml((LPCTSTR)filename);
-	xml << "<?xml version=\"1.0\"?>" <<	std::endl << std::endl;
-	//XSD
-	//xml<< "<!DOCTYPE Diagram SYSTEM \"uml.dtd\">" << std::endl << std::endl;
-	//xml << "<Diagram name =\"" << (LPCTSTR)name << "\">" << std::endl << std::endl;
-
-	xml << "<Diagram name =\"" << (LPCTSTR)name << "\"" << std::endl <<
-	"version=\"" << (LPCTSTR)version << "\"" << std::endl << 
-	//"xmlns:Uml=\'http://www.isis.vanderbilt.edu/2004/schemas/Uml\' " << std::endl << 
-	"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" << std::endl <<
-	"xsi:noNamespaceSchemaLocation=\'Uml.xsd\'>" << std::endl << std::endl;
-
-	//eo. XSD
-
-	xml << "   <!-- Generated by the UML2XML interpreter -->" << std::endl << std::endl;
-
-	DumpCrossAssociations(xml);
-	DumpCrossClasses(xml);
-
-	xml << "</Diagram>" << std::endl;
-	//xml.close();
-
-};
-
-
-
-void CComponent::DumpIsolatedXML(std::strstream & xml, const CString & version)
-{
-	//std::ofstream xml((LPCTSTR)filename);
-	xml << "<?xml version=\"1.0\"?>" <<	std::endl << std::endl;
-	//XSD
-	//xml << "<!DOCTYPE Diagram SYSTEM \"uml.dtd\">" << std::endl << std::endl;
-	//xml << "<Diagram name =\"" << (LPCTSTR)name << "\">" << std::endl << std::endl;
-
-	xml << "<Diagram name =\"" << (LPCTSTR)name << "\"" << std::endl <<
-	"version=\"" << (LPCTSTR)version << "\"" << std::endl << 
-	//"xmlns:Uml=\'http://www.isis.vanderbilt.edu/2004/schemas/Uml\' " << std::endl << 
-	"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" << std::endl <<
-	"xsi:noNamespaceSchemaLocation=\'Uml.xsd\'>" << std::endl << std::endl;
-
-
-	//eo XSD
-
-	xml << "   <!-- Generated by the UML2XML interpreter -->" << std::endl << std::endl;
-
-	std::set<std::string> namespaces;
-	POSITION pos = sheets.GetHeadPosition();
-	while (pos)
-	{
-		CClassDiagramBuilder * ccdb = sheets.GetNext(pos);
-		CString ns = ccdb->GetNamespace();
-		if (ns.GetLength())
-			namespaces.insert((const char*)ns);
-	};
-
-	DumpIsolatedAssociations(xml, "");
-	DumpClasses(xml, "");
-	DumpCompositions(xml, "");
-
-	std::set<std::string>::iterator ns_i = namespaces.begin();
-	while (ns_i != namespaces.end())
-	{
-
-		CString ns = ns_i->c_str();
-		xml << "<Namespace name=\"" << (LPCTSTR) ns << "\">" << std::endl ;
-		DumpIsolatedAssociations(xml, ns);
-		DumpClasses(xml,ns);
-		DumpCompositions(xml,ns);
-		xml << "</Namespace>" << std::endl;
-		ns_i++;
-	}
-	xml << "</Diagram>" << std::endl;
-	//xml.close();
-};
-
-void CComponent::DumpXML(std::strstream & xml, const CString & version)
-{
-	xml << "<?xml version=\"1.0\"?>" <<	std::endl << std::endl;
-	//XSD
-	//xml << "<!DOCTYPE Diagram SYSTEM \"uml.dtd\">" << std::endl << std::endl;
-	//xml << "<Diagram name =\"" << (LPCTSTR)name << "\">" << std::endl << std::endl;
-	xml << "<Diagram name =\"" << (LPCTSTR)name << "\"" << std::endl <<
-	"version=\"" << (LPCTSTR)version << "\"" << std::endl << 
-	//"xmlns:Uml=\'http://www.isis.vanderbilt.edu/2004/schemas/Uml\' " << std::endl << 
-	"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" << std::endl <<
-	"xsi:noNamespaceSchemaLocation=\'Uml.xsd\'>" << std::endl << std::endl;
-
-	//eo XSD
-	xml << "   <!-- Generated by the UML2XML interpreter -->" << std::endl << std::endl;
-
-	std::set<std::string> namespaces;
-	
-	POSITION pos = sheets.GetHeadPosition();
-
-	while (pos)
-	{
-		CClassDiagramBuilder * ccdb = sheets.GetNext(pos);
-		const CString &ns = ccdb->GetNamespace();
-		if (ns && ns.GetLength())
-			namespaces.insert((const char*)ns);
-	};
-
-	DumpAssociations(xml, "");
-	DumpClasses(xml, "");
-	DumpCompositions(xml, "");
-
-	std::set<std::string>::iterator ns_i = namespaces.begin();
-	while (ns_i != namespaces.end())
-	{
-
-		CString ns = ns_i->c_str();
-
-		xml << "<Namespace name=\"" << (LPCTSTR) ns << "\">" << std::endl ;
-		
-		DumpAssociations(xml, ns);
-		DumpClasses(xml, ns);
-		DumpCompositions(xml,ns);
-		ns_i++;
-
-		xml << "</Namespace>" << std::endl;
-
-	};
-
-
-	xml << "</Diagram>" << std::endl;
-	//xml.close();
-
+	pos = compositeClasses.GetHeadPosition();
+	while(pos)
+		compositeClasses.GetNext(pos)->BuildUML();
 }
 
-void CComponent::DumpCrossClasses(std::strstream &xml)
+void CContainer::BuildUMLInheritance()
 {
-	std::strstream compositions; //this stream will contain the compositions
-	std::strstream cont_class;	//this stream will contain the container class definition
-
-	CString cont_class_id = GetID();//id for the container class
-
-	//cont_class << "<Class _id=\"" << (LPCTSTR)cont_class_id << "\" name=\"_gen_cont\" isAbstract=\"false\" parentRoles = \"";  
-	cont_class << "<Class _id=\"" << (LPCTSTR)cont_class_id << "\" name=\"_gen_cont\" isAbstract=\"false\"";  
-
-	
-	bool prole_added = false;
-	POSITION pos = compositeClasses.GetHeadPosition();
+	POSITION pos = namespaces.GetHeadPosition();
 	while(pos)
-	{
-		CString childrole_id = GetID();
-		CString parentrole_id = GetID();
-		
-		CCompositeClass * ccl = compositeClasses.GetNext(pos);
+		namespaces.GetNext(pos)->BuildUMLInheritance();
 
-		CString comp_id = childrole_id;
-		if (ccl->DumpCrossXML(xml, comp_id))//comp_id will be overwritten with the ID of the class
-		{
-			compositions << "<Composition>" << std::endl;;
-		
-			compositions << "\t<CompositionChildRole _id=\"" << (LPCTSTR)childrole_id << "\" target=\"" << (LPCTSTR)comp_id << "\" min=\"0\" max=\"-1\"/>" << std::endl;
-			compositions << "\t<CompositionParentRole _id=\"" << (LPCTSTR)parentrole_id << "\" target=\"" << (LPCTSTR)cont_class_id << "\"/>" << std::endl;
-			compositions << "</Composition>" << std::endl;;	
-
-			if (!prole_added)
-			{
-				cont_class << " parentRoles = \"";  
-				prole_added = true;
-			}
-			cont_class << (LPCTSTR) parentrole_id << " ";
-		}
-	}
-
-	if (prole_added)
-		cont_class << "\"/>" << std::endl;
-	else
-		cont_class << "/>" << std::endl;
-
-
-	char * tmp;
-	tmp = new char[cont_class.pcount() + 1];
-	strncpy(tmp, cont_class.str(), cont_class.pcount());
-	*(tmp + cont_class.pcount()) = '\0';
-	xml << std::string(tmp);
-	delete [] tmp;
-	tmp = new char[compositions.pcount() + 1];
-	strncpy(tmp, compositions.str(), compositions.pcount());
-	*(tmp + compositions.pcount()) = '\0';
-	xml << std::string(tmp);
-	delete [] tmp;
-	
-
-	
-
-};
-void CComponent::DumpClasses(std::strstream &xml, const CString& ns)
-{
-	POSITION pos = compositeClasses.GetHeadPosition();
+	pos = compositeClasses.GetHeadPosition();
 	while(pos)
-		compositeClasses.GetNext(pos)->DumpXML(xml,ns);
+		compositeClasses.GetNext(pos)->BuildUMLInheritance();
 }
 
-
-
-void CComponent::DumpCrossAssociations(std::strstream &xml)
+void CContainer::BuildUMLAssociations()
 {
-	
-	POSITION pos = associations.GetHeadPosition();
+	POSITION pos = namespaces.GetHeadPosition();
 	while(pos)
-	{
-		CAssociationBase * ass = associations.GetNext(pos);
-		if (ass->IsCrossPackage())
-			ass->DumpCrossXML(xml);
-	}
-};
+		namespaces.GetNext(pos)->BuildUMLAssociations();
 
-bool CComponent::HasCrossAssociations()
-{
-	POSITION pos = associations.GetHeadPosition();
-	while(pos) 
-		if (associations.GetNext(pos)->IsCrossPackage()) return true;
-	return false;
-};
-
-void CComponent::DumpIsolatedAssociations(std::strstream &xml, const CString &ns)
-{
-	POSITION pos = associations.GetHeadPosition();
+	pos = associations.GetHeadPosition();
 	while(pos)
-	{
-		CAssociationBase * ass = associations.GetNext(pos);
-		if (!ass->IsCrossPackage())
-			ass->DumpXML(xml, ns);
-	}
-
-
-};
-
-void CComponent::DumpAssociations(std::strstream &xml, const CString &ns)
-{
-	POSITION pos = associations.GetHeadPosition();
-	while(pos)
-		associations.GetNext(pos)->DumpXML(xml, ns);
+		associations.GetNext(pos)->BuildUML();
 }
 
-void CComponent::DumpCompositions(std::strstream &xml, const CString& ns)
+void CContainer::BuildUMLCompositions()
 {
-	POSITION pos = compositions.GetHeadPosition();
+	POSITION pos = namespaces.GetHeadPosition();
 	while(pos)
-		compositions.GetNext(pos)->DumpXML(xml,ns);
+		namespaces.GetNext(pos)->BuildUMLCompositions();
+
+	pos = compositions.GetHeadPosition();
+	while(pos)
+		compositions.GetNext(pos)->BuildUML();
+}
+
+void CContainer::BuildCrossUMLClasses()
+{
+	POSITION pos = namespaces.GetHeadPosition();
+	while(pos)
+		namespaces.GetNext(pos)->BuildCrossUMLClasses();
+
+	pos = compositeClasses.GetHeadPosition();
+	while(pos)
+		compositeClasses.GetNext(pos)->BuildCrossUML();
+}
+
+void CContainer::BuildCrossUMLInheritance()
+{
+	POSITION pos = namespaces.GetHeadPosition();
+	while(pos)
+		namespaces.GetNext(pos)->BuildCrossUMLInheritance();
+
+	pos = compositeClasses.GetHeadPosition();
+	while(pos)
+		compositeClasses.GetNext(pos)->BuildCrossUMLInheritance();
+}
+
+void CContainer::BuildCrossUMLAssociations()
+{
+	POSITION pos = namespaces.GetHeadPosition();
+	while(pos)
+		namespaces.GetNext(pos)->BuildCrossUMLAssociations();
+
+	pos = associations.GetHeadPosition();
+	while(pos)
+		associations.GetNext(pos)->BuildCrossUML();
+}
+
+void CContainer::BuildCrossUMLCompositions()
+{
+	POSITION pos = namespaces.GetHeadPosition();
+	while(pos)
+		namespaces.GetNext(pos)->BuildCrossUMLCompositions();
+
+	pos = compositeClasses.GetHeadPosition();
+	while(pos)
+		compositeClasses.GetNext(pos)->BuildCrossUMLCompositions();
 }
 
 ///////////////////////////// CPackage /////////////////////////////////
 
 IMPLEMENT_CUSTOMMODEL(CPackageBuilder, CBuilderModel, "Package")
+
 CString CPackageBuilder::GetVersion() const
 {
 	CString ret;
@@ -899,24 +524,113 @@ CString CPackageBuilder::GetNameorAlias() const
 	else return GetName();
 };
 
+void CPackageBuilder::BuildUML()
+{
+	uml_dgr.name() = (LPCTSTR) GetNameorAlias();
+	uml_dgr.version() = (LPCTSTR) GetVersion();
+
+	POSITION pos = namespaces.GetHeadPosition();
+	while(pos)
+		namespaces.GetNext(pos)->BuildUML();
+}
+
+void CPackageBuilder::Build()
+{
+	TraverseModels((void *) GetModels());
+}
+
+void CPackageBuilder::TraverseModels(void *pointer)
+{
+	if (pointer == NULL) return;
+	CBuilderModelList *models = (CBuilderModelList *) pointer;
+	POSITION pos = models->GetHeadPosition();
+	while(pos)
+	{
+		CBuilderModel *model = models->GetNext(pos);
+		if(model->GetKindName() == "ClassDiagram")
+		{
+			CClassDiagramBuilder *sheet = dynamic_cast<CClassDiagramBuilder *>(model);
+			if(!sheet)
+			{
+				AfxMessageBox("Unexpected model kind found: " + sheet->GetName());
+				continue;
+			}
+			sheet->Build();
+			TraverseModels((void *) sheet->GetModels());
+		}
+		if(model->GetKindName() == "Namespace")
+		{
+			CNamespaceBuilder *ns = dynamic_cast<CNamespaceBuilder *>(model);
+			namespaces.AddTail(ns);
+			ns->Build();
+		}
+	}
+}
+
+///////////////////////////// CNamespace ////////////////////////////////////
+
+IMPLEMENT_CUSTOMMODEL(CNamespaceBuilder, CBuilderModel, "Namespace")
+
+CPackageBuilder * CNamespaceBuilder::GetPackage() const
+{
+    CPackageBuilder * package;
+	const CBuilderModel * parent = GetParent();
+	while (parent && parent->GetKindName() != "Package")
+		parent = parent->GetParent();
+	package = BUILDER_CAST(CPackageBuilder, parent);
+	ASSERT(package);
+	return package;
+
+};
+
+void CNamespaceBuilder::BuildUML()
+{
+	uml_ns = ::Uml::Namespace::Create(GetPackage()->GetUmlDiagram());
+	uml_ns.name() = (LPCTSTR) GetName();
+}
+
+void CNamespaceBuilder::Build()
+{
+	TraverseModels((void *) GetModels());
+}
+
+void CNamespaceBuilder::TraverseModels(void *pointer)
+{
+	if (pointer == NULL) return;
+	CBuilderModelList *models = (CBuilderModelList *) pointer;
+	POSITION pos = models->GetHeadPosition();
+	while(pos)
+	{
+		CBuilderModel *model = models->GetNext(pos);
+		if(model->GetKindName() == "ClassDiagram")
+		{
+			CClassDiagramBuilder *sheet = dynamic_cast<CClassDiagramBuilder *>(model);
+			if(!sheet)
+			{
+				AfxMessageBox("Unexpected model kind found: " + sheet->GetName());
+				continue;
+			}
+			sheet->Build();
+			TraverseModels((void *) sheet->GetModels());
+		}
+	}
+}
+
 ///////////////////////////// CClassDiagram /////////////////////////////////
 
 IMPLEMENT_CUSTOMMODEL(CClassDiagramBuilder, CBuilderModel, "ClassDiagram")
 
-CString CClassDiagramBuilder::GetNamespace() const
+CNamespaceBuilder * CClassDiagramBuilder::GetNamespace() const
 {
-	const CBuilderModel *parent = this->GetParent();
-	if (!parent)
-		return "";
-	if (parent->GetKindName() == "Namespace") {
-		return parent->GetName();
-	}
-	if (parent->IsKindOf(RUNTIME_CLASS(CClassDiagramBuilder)))
-		return BUILDER_CAST(CClassDiagramBuilder, parent)->GetNamespace();
-	return "";
+	CNamespaceBuilder * ns;
+	const CBuilderModel *parent = GetParent();
+	while (parent && parent->GetKindName() != "Namespace")
+		parent = parent->GetParent();
+	ns = BUILDER_CAST(CNamespaceBuilder, parent);
+	return ns;
 };
 
-void CClassDiagramBuilder::Build(CCompositeClassList &compositeClasses)
+void CClassDiagramBuilder::Build()
 {
 	const CBuilderAtomList *classes = GetAtoms("Class");
 	POSITION pos = classes->GetHeadPosition();
@@ -927,11 +641,15 @@ void CClassDiagramBuilder::Build(CCompositeClassList &compositeClasses)
 		cls->GetReferencedBy(copies);
 
 		CCompositeClass *comp = new CCompositeClass(cls,copies);
-		compositeClasses.AddTail(comp);
+		CNamespaceBuilder *ns = GetNamespace();
+		if (ns)
+			ns->AddCompositeClass(comp);
+		else
+			GetPackage()->AddCompositeClass(comp);
 	}
 }
 
-CPackageBuilder * CClassDiagramBuilder::GetPackage()
+CPackageBuilder * CClassDiagramBuilder::GetPackage() const
 {
     CPackageBuilder * package;
 	const CBuilderModel * parent = GetParent();
@@ -959,7 +677,155 @@ CCompositeClass::CCompositeClass(CClassBuilder *c,CBuilderObjectList &copies) : 
 		ASSERT(copy);
 		parts.AddTail(copy);
 	}
-	id = CComponent::GetID();
+}
+
+void CCompositeClass::BuildUML()
+{
+	CNamespaceBuilder *ns = cls->GetClassDiagram()->GetNamespace();
+	if (ns)
+		uml_cls = ::Uml::Class::Create(ns->GetUmlNamespace());
+	else
+		uml_cls = ::Uml::Class::Create(cls->GetClassDiagram()->GetPackage()->GetUmlDiagram());
+
+	uml_cls.name() = (LPCTSTR) GetName();
+	if(!cls->stereotype.IsEmpty())
+		uml_cls.stereotype() = (LPCTSTR) cls->stereotype;
+	uml_cls.isAbstract() = IsAbstract();
+
+	std::vector<AttributeObject>::iterator aoi = cls->attributes.begin();
+	while (aoi != cls->attributes.end())
+	{
+		aoi->BuildUML(uml_cls);
+		aoi++;
+	}
+
+	//Dump the constraints, if any
+	const CBuilderConnectionList *  constraints = cls->GetInConnections("HasConstraint");
+
+	POSITION mPos = constraints->GetHeadPosition();
+	while (mPos)
+		//this line should not fail. The paradigm allows only constraint source
+		//for HasConstraint type connection
+		BUILDER_CAST(CConstraintBuilder, constraints->GetNext(mPos)->GetSource())->BuildUML(uml_cls);
+
+	//Dump the constraintDefinitions, if any
+	const CBuilderConnectionList *  constraintdefs = cls->GetInConnections("HasDefinition");
+	POSITION cdPos = constraintdefs->GetHeadPosition();
+	while (cdPos)
+		//this line should not fail. The paradigm allows only constraint source
+		//for HasConstraint type connection
+		BUILDER_CAST(CConstraintDefinitionBuilder, constraintdefs->GetNext(cdPos)->GetSource())->BuildUML(uml_cls);
+}
+
+void CCompositeClass::BuildUMLInheritance()
+{
+	if(!baseClasses.IsEmpty())
+	{
+		POSITION pos = baseClasses.GetHeadPosition();
+		while(pos)
+			uml_cls.baseTypes() += baseClasses.GetNext(pos)->GetUmlClass();
+	}
+	if(!subClasses.IsEmpty()) {
+		POSITION pos = subClasses.GetHeadPosition();
+		while(pos)
+			uml_cls.subTypes() += subClasses.GetNext(pos)->GetUmlClass();
+	}
+}
+
+void CCompositeClass::BuildCrossUML()
+{
+	if(!IsCrossClass()) return;
+
+	CNamespaceBuilder * cls_ns = cls->GetClassDiagram()->GetNamespace();
+
+	CString class_ph_name = GetName() + "_cross_ph_" + cls->GetPackage()->GetNameorAlias();
+	if(cls_ns)
+		class_ph_name += "_cross_ph_" + cls_ns->GetName();
+
+	CString from = cls->GetPackage()->GetNameorAlias();
+	if(cls_ns)
+		from += ":" + cls_ns->GetName();
+
+	cross_uml_cls = ::Uml::Class::Create(CComponent::theInstance->GetCrossUmlDiagram());
+	cross_uml_cls.name() = (LPCTSTR) class_ph_name;
+	cross_uml_cls.isAbstract() = false;
+	cross_uml_cls.from() = (LPCTSTR) from;
+
+	if(!HasCrossBases())
+	{
+		AttributeObject rem_sysname("rem_sysname:String[1..1]");
+		rem_sysname.BuildUML(cross_uml_cls);
+		AttributeObject rem_id("rem_id:Integer[1..1]");
+		rem_id.BuildUML(cross_uml_cls);
+	}
+}
+
+bool CCompositeClass::HasCrossBases()
+{
+	bool has_cross_bases = false;
+
+	if (!baseClasses.IsEmpty())
+	{
+		//we only care about baseclasses when this class actually inherits a cross-package association
+		//so we simply check if any of the baseclasses is part of a cross-package association
+		POSITION bc_pos = baseClasses.GetHeadPosition();
+		while (!has_cross_bases && bc_pos)
+		{
+			CCompositeClass * cccl = baseClasses.GetNext(bc_pos);
+			has_cross_bases = cccl->IsCrossClass();
+		};
+	}
+
+	return has_cross_bases;
+}
+
+void CCompositeClass::BuildCrossUMLInheritance()
+{
+	if(!IsCrossClass()) return;
+
+	if(HasCrossBases())
+	{
+		/*
+			Multiple inheritence bug: Only base-classes which are CrossClasses (or inherited from cross-classes)
+			should be listed here, because for the other ones no placeholders classes are generated.
+
+			Although we sure that at least one such class will exist once HasCrossBases() is true ...
+		*/
+		POSITION pos = baseClasses.GetHeadPosition();
+		while (pos)
+		{
+			CCompositeClass * cccl = baseClasses.GetNext(pos);
+			if (cccl->IsCrossClass())
+				cross_uml_cls.baseTypes() += cccl->GetCrossUmlClass();
+		};
+	}
+
+	if(!subClasses.IsEmpty()) {
+		POSITION pos = subClasses.GetHeadPosition();
+		while(pos)
+			cross_uml_cls.subTypes() += subClasses.GetNext(pos)->GetCrossUmlClass();
+	}
+}
+
+void CCompositeClass::BuildCrossUMLCompositions()
+{
+	if(!IsCrossClass()) return;
+
+	// if it's a derived class, no composition is generated - it uses the base's composition */
+	if(HasCrossBases()) return;
+
+	::Uml::Diagram cross_dgr = CComponent::theInstance->GetCrossUmlDiagram();
+	::Uml::Class cont_class = ::Uml::classByName(cross_dgr, "_gen_cont");
+	ASSERT(cont_class != ::Uml::Class(NULL));
+
+	::Uml::Composition comp = ::Uml::Composition::Create(cross_dgr);
+	::Uml::CompositionChildRole crole = ::Uml::CompositionChildRole::Create(comp);
+	crole.target() = cross_uml_cls;
+	crole.min() = 0;
+	crole.max() = -1;
+
+	::Uml::CompositionParentRole prole = ::Uml::CompositionParentRole::Create(comp);
+	prole.target() = cont_class;
 }
 
 CString CCompositeClass::GetName()
@@ -1064,86 +930,34 @@ void CCompositeClass::BuildCompositions()
 				CClassBase *src = dynamic_cast<CClassBase *>(composition->GetSource());
 				ASSERT(src);
 				composition->child.cls = src->composite;
-				if(!FindEquivalentComposition(composition)) {
-					parentCompositions.AddTail(composition);
-					composition->child.cls->childCompositions.AddTail(composition);
-					CComponent::theInstance->AddComposition(composition);
-				}
+				RegisterComposition(composition);
 			}
 		}
 	}
 }
 
-CCompositionBuilder *CCompositeClass::FindEquivalentComposition(CCompositionBuilder *composition)
+void CCompositeClass::RegisterComposition(CCompositionBuilder *composition)
 {
 	POSITION pos = parentCompositions.GetHeadPosition();
 	while(pos) {
 		CCompositionBuilder *candidate = parentCompositions.GetNext(pos);
 		if(candidate->child.cls == composition->child.cls &&
 				candidate->child.name == composition->child.name)
-			return candidate;
+			return;
 	}
-	return 0;
-};
 
-void CCompositeClass::BuildIsoAssociations()
-{
-	POSITION pos = parts.GetHeadPosition();
-	while(pos) 
+	parentCompositions.AddTail(composition);
+	composition->child.cls->childCompositions.AddTail(composition);
+
+	CNamespaceBuilder *comp_ns = composition->GetNamespace();
+	if (comp_ns)
+		comp_ns->AddComposition(composition);
+	else
 	{
-		CClassBase *part = parts.GetNext(pos);
-		CBuilderObjectList connectors;
-
-//		AfxMessageBox(CString("Part name:") + part->GetComposite()->GetName());
-		part->builder->GetOutConnectedObjects("Src",connectors);
-/*		char tmp[30];
-		CClassBuilder * ccbl = dynamic_cast<CClassBuilder *>(part);
-		if (ccbl) AfxMessageBox("ccbl is a CClassBuilder.");
-*/		
-		CClassCopyBuilder * cccbl = dynamic_cast<CClassCopyBuilder *>(part);
-//		if (cccbl) AfxMessageBox("cccbl is a CClassCopyBuilder.");
-		//if (cccbl && (cccbl->GetFolder() != cls->GetFolder()))
-		//if (cccbl && (cccbl->GetParent()->GetParent() != cls->GetParent()->GetParent() ))
-		if (cccbl && (cccbl->GetPackage() != cls->GetPackage() ))
-		{
-//			it is a cross-package link ...
-//			AfxMessageBox("....in different folder!");
-			continue; 
-		}
-//		sprintf(tmp,"%d", connectors.GetCount());
-//		AfxMessageBox(CString("number of connectors:") + tmp);
-		POSITION cpos = connectors.GetHeadPosition();
-		while(cpos) 
-		{
-			CAssociationBuilder *connector = dynamic_cast<CAssociationBuilder *>(connectors.GetNext(cpos));
-			CBuilderObjectList dstList;
-			connector->GetOutConnectedObjects("Dst",dstList);
-			if(dstList.IsEmpty())
-				AfxMessageBox("Partially specified association for class " + GetName());
-			else if(dstList.GetCount() > 1)
-				AfxMessageBox("Overspecified association for class " + GetName());
-			else 
-			{
-				CClassBase *dst = dynamic_cast<CClassBase *>(dstList.GetHead());
-
-				ASSERT(dst);
-				if (dst->composite) RegisterAssociation(connector,dst->composite);
-			}
-		}
-		const CBuilderConnectionList *directs = part->builder->GetOutConnections("Association");
-		if(directs) {
-			cpos = directs->GetHeadPosition();
-			while(cpos) {
-				CDirectAssociationBuilder *direct = dynamic_cast<CDirectAssociationBuilder *>(directs->GetNext(cpos));
-				ASSERT(direct);
-				CClassBase *dst = dynamic_cast<CClassBase *>(direct->GetDestination());
-				ASSERT(dst);
-				if (dst->composite) RegisterAssociation(direct,dst->composite);
-			}
-		}
+		CPackageBuilder *comp_package = composition->GetPackage();
+		comp_package->AddComposition(composition);
 	}
-
-};
+}
 
 void CCompositeClass::BuildAssociations()
 {
@@ -1167,8 +981,8 @@ void CCompositeClass::BuildAssociations()
 			{
 				CClassBase *dst = dynamic_cast<CClassBase *>(dstList.GetHead());
 
-				ASSERT(dst);
-				if (dst->composite) RegisterAssociation(connector,dst->composite);
+				ASSERT(dst && dst->composite);
+				RegisterAssociation(connector,dst->composite);
 			}
 		}
 		const CBuilderConnectionList *directs = part->builder->GetOutConnections("Association");
@@ -1178,8 +992,8 @@ void CCompositeClass::BuildAssociations()
 				CDirectAssociationBuilder *direct = dynamic_cast<CDirectAssociationBuilder *>(directs->GetNext(cpos));
 				ASSERT(direct);
 				CClassBase *dst = dynamic_cast<CClassBase *>(direct->GetDestination());
-				ASSERT(dst);
-				if (dst->composite) RegisterAssociation(direct,dst->composite);
+				ASSERT(dst && dst->composite);
+				RegisterAssociation(direct,dst->composite);
 			}
 		}
 	}
@@ -1197,7 +1011,15 @@ void CCompositeClass::RegisterAssociation(CAssociationBase *assoc,CCompositeClas
 	}
 	srcAssociations.AddTail(assoc);
 	dst->dstAssociations.AddTail(assoc);
-	CComponent::theInstance->AddAssociation(assoc);
+
+	CNamespaceBuilder *ass_ns = assoc->GetNamespace();
+	if (ass_ns)
+		ass_ns->AddAssociation(assoc);
+	else
+	{
+        CPackageBuilder *ass_package = assoc->GetPackage();
+		ass_package->AddAssociation(assoc);
+	}
 }
 
 bool CCompositeClass::IsAbstract()
@@ -1237,273 +1059,11 @@ bool CCompositeClass::IsCrossClass()
 
 };
 
-bool CCompositeClass::DumpCrossXML(std::strstream &xml, CString& role_id)
-{
-	/*
-	bool cross_package = false;
-
-	cross_package = association && (association->IsCrossPackage());
-
-	POSITION pos = dstAssociations.GetHeadPosition();
-
-	while (!cross_package && pos)
-		cross_package = dstAssociations.GetNext(pos)->IsCrossPackage();
-
-	pos = srcAssociations.GetHeadPosition();
-	while (!cross_package && pos)
-		cross_package = srcAssociations.GetNext(pos)->IsCrossPackage();
-*/
-	bool cross_package = IsCrossClass();
-
-	if(!cross_package) return false;
-
-	bool has_base = false;
-
-	if (!baseClasses.IsEmpty())
-	{
-		//we only care about baseclasses when this class actually inherits a cross-package association
-		//so we simply check if any of the baseclasses is part of a cross-package association
-		POSITION bc_pos = baseClasses.GetHeadPosition();
-		while (!has_base && bc_pos)
-		{
-			CCompositeClass * cccl = baseClasses.GetNext(bc_pos);
-			has_base = cccl->IsCrossClass();
-		};
-	}
-
-	//bool has_base = !baseClasses.IsEmpty();
-
-	CString PHname = "__udm_ph_";
-	PHname += GetName();
-	PHname += "_from_";
-	//PHname += cls->GetFolder()->GetName();
-	//PHname += cls->GetParent()->GetParent()->GetName();
-	PHname += cls->GetPackage()->GetNameorAlias();
-	CString cls_ns = cls->GetClassDiagram()->GetNamespace();
-
-	//CString class_ph_name = GetName() + CString("_cross_ph_") + cls->GetFolder()->GetName();
-	//CString class_ph_name = GetName() + CString("_cross_ph_") + cls->GetParent()->GetParent()->GetName();
-	//CString class_ph_name = GetName() + CString("_cross_ph_") + cls->GetPackage()->GetName();
-	//CString class_ph_name = GetName() + CString("_cross_ph_") + cls->GetPackage()->GetName() + CString("_cross_ns_") + cls->GetClassDiagram()->GetNamespace();
-	//CString class_ph_name = GetName() + CString("_cross_ph_") + cls_ns;
-	CString class_ph_name = GetName() + CString("_cross_ph_") + cls->GetPackage()->GetNameorAlias();
-	if (cls_ns.GetLength())
-		class_ph_name += CString("_cross_ph_") + cls_ns;
-	//--//CString class_ph_name = GetName();
-
-	// if it's a derived class, no composition is generated - it uses the base's composition */
-	if (has_base)
-		xml << "<Class _id=\"" << (LPCTSTR) id << "\" name= \"" << (LPCTSTR)class_ph_name << "\" " << " isAbstract= \"false\" " ;
-	else
-		xml << "<Class _id=\"" << (LPCTSTR) id << "\" name= \"" << (LPCTSTR)class_ph_name << "\" " << " isAbstract= \"false\" childRoles=\"" << (LPCTSTR)role_id << "\"" ;
-
-	if(association && association->IsCrossPackage())
-		xml << " association = \"" << (LPCTSTR) association->GetID() << "\"";
-
-	if(has_base) {
-		xml << " baseTypes= \"";
-		POSITION pos = baseClasses.GetHeadPosition();
-		/*
-			Multiple inheritence bug: Only base-classes which are CrossClasses (or inherited from cross-classes)
-			should be listed here, because for the other ones no placeholders classes are generated.
-
-			Although we sure that at least one such class will exist once has_base is true ...
-		*/
-		while(pos)
-		{
-			CCompositeClass * cccl = baseClasses.GetNext(pos);
-			if (cccl->IsCrossClass())
-				xml << " " << (LPCTSTR) cccl->id;
-		}
-		xml << "\" ";
-	}
-	if(!subClasses.IsEmpty()) {
-		xml << " subTypes= \"";
-		POSITION pos = subClasses.GetHeadPosition();
-		while(pos)
-			xml << " " << (LPCTSTR) subClasses.GetNext(pos)->id;
-		xml << "\" ";
-	}
-
-
-	if(!srcAssociations.IsEmpty() || !dstAssociations.IsEmpty()) 
-	{
-		POSITION pos;
-		pos = srcAssociations.GetHeadPosition();
-		bool ar_needed = false;
-		while (pos && !ar_needed)
-		{
-			ar_needed = srcAssociations.GetNext(pos)->IsCrossPackage();
-		}
-
-		pos = dstAssociations.GetHeadPosition();
-		while (pos && !ar_needed)
-			ar_needed = dstAssociations.GetNext(pos)->IsCrossPackage();
-
-
-		if (ar_needed)
-		{
-			xml << " associationRoles= \"";
-			
-			
-			pos = srcAssociations.GetHeadPosition();
-			while(pos)
-			{
-				CAssociationBase * cab =srcAssociations.GetNext(pos);
-				if (cab->IsCrossPackage())
-					xml << " " << (LPCTSTR) cab->GetSrcRoleID(this);
-			}
-			pos = dstAssociations.GetHeadPosition();
-			while(pos)
-			{
-				CAssociationBase * cab =dstAssociations.GetNext(pos);
-				if (cab->IsCrossPackage())
-					xml << " " << (LPCTSTR) cab->GetDstRoleID(this);
-			}
-			xml << "\" ";
-		}
-	}
-
-	//xml << " from=\"" << (LPCTSTR)cls->GetFolder()->GetName() <<"\" >" << std::endl;
-	//xml << " from=\"" << (LPCTSTR)cls->GetParent()->GetParent()->GetName() <<"\" >" << std::endl;
-	xml << " from=\"" << (LPCTSTR)(cls->GetPackage()->GetNameorAlias());
-	if (cls_ns.GetLength())
-		xml << ":" << (LPCTSTR)cls_ns;
-	xml << "\" >" << std::endl;
-	
-	if (!has_base)
-	{
-		//the base class already has these attributes defined
-		xml << "\t<Attribute name=\"rem_sysname\" type=\"String\" min=\"1\" max=\"1\" />" << std::endl;
-		xml << "\t<Attribute name=\"rem_id\" type=\"Integer\" min=\"1\" max=\"1\"/>" << std::endl;
-	}
-	xml << "</Class>" << std::endl;
-
-	role_id = id;	//the caller needs this
-
-	return !has_base;	//if it has a base class, it's not necesary to generate another containment
-
-}
-
-void CCompositeClass::DumpXML(std::strstream &xml, const CString& ns)
-{
-	if (ns.Compare ( BUILDER_CAST(CClassDiagramBuilder,cls->builder->GetParent())->GetNamespace())) return;
-
-	xml << "<Class _id=\"" << (LPCTSTR) id << "\" name= \"" << (LPCTSTR)GetName() << "\" ";
-	if(!cls->stereotype.IsEmpty())
-		xml << "stereotype= \"" << (LPCTSTR)  cls->stereotype << "\" ";
-	xml << "isAbstract= \"" << (IsAbstract() ? "true" : "false") << "\" ";
-	if(!baseClasses.IsEmpty()) {
-		xml << "baseTypes= \"";
-		POSITION pos = baseClasses.GetHeadPosition();
-		while(pos)
-			xml << " " << (LPCTSTR) baseClasses.GetNext(pos)->id;
-		xml << "\" ";
-	}
-	if(!subClasses.IsEmpty()) {
-		xml << "subTypes= \"";
-		POSITION pos = subClasses.GetHeadPosition();
-		while(pos)
-			xml << " " << (LPCTSTR) subClasses.GetNext(pos)->id;
-		xml << "\" ";
-	}
-
-	if(!srcAssociations.IsEmpty() || !dstAssociations.IsEmpty()) 
-	{
-		POSITION pos = srcAssociations.GetHeadPosition();
-		bool are_assocs = false;
-		while (pos && !are_assocs)
-		{
-			CAssociationBase * cab = srcAssociations.GetNext(pos);
-			if (!(cab->IsCrossPackage())) are_assocs = true;
-		}
-
-		pos = dstAssociations.GetHeadPosition();
-		while (pos && !are_assocs)
-		{
-			CAssociationBase * cab = dstAssociations.GetNext(pos);
-			if (!(cab->IsCrossPackage())) are_assocs = true;
-		}
-
-
-	
-		if (are_assocs)
-		{
-			xml << "associationRoles= \"";
-			pos = srcAssociations.GetHeadPosition();
-			while(pos)
-			{
-				CAssociationBase * cab = srcAssociations.GetNext(pos);
-				if (!(cab->IsCrossPackage()))
-					xml << " " << (LPCTSTR) cab->GetSrcRoleID(this);
-			}
-		
-
-			pos = dstAssociations.GetHeadPosition();
-			while(pos)
-			{
-				CAssociationBase * cab = dstAssociations.GetNext(pos);
-				if (!(cab->IsCrossPackage()))
-					xml << " " << (LPCTSTR) cab->GetDstRoleID(this);
-			}
-			xml << "\" ";
-		}
-	}
-	if(!parentCompositions.IsEmpty()) {
-		xml << "parentRoles= \"";
-		POSITION pos = parentCompositions.GetHeadPosition();
-		while(pos)
-			xml << " " << (LPCTSTR) parentCompositions.GetNext(pos)->GetParentRoleID();
-		xml << "\" ";
-	}
-	if(!childCompositions.IsEmpty()) {
-		xml << "childRoles= \"";
-		POSITION pos = childCompositions.GetHeadPosition();
-		while(pos)
-			xml << " " << (LPCTSTR) childCompositions.GetNext(pos)->GetChildRoleID();
-		xml << "\" ";
-	}
-	if(association)
-		xml << " association = \"" << (LPCTSTR) association->GetID() << "\"";
-
-	xml << ">" << std::endl;
-
-	ASSERT(cls);
-
-	//Dump out the attributes
-	std::vector<AttributeObject>::iterator aoi = cls->attributes.begin();
-	while (aoi != cls->attributes.end())
-		*aoi++ >> xml;
-
-
-	//Dump the constraints, if any
-	const CBuilderConnectionList *  constraints = cls->GetInConnections("HasConstraint");
-
-	POSITION mPos = constraints->GetHeadPosition();
-	while (mPos)
-		//this line should not fail. The paradigm allows only constraint source
-		//for HasConstraint type connection
-		*BUILDER_CAST(CConstraintBuilder, constraints->GetNext(mPos)->GetSource()) >> xml;
-
-	//Dump the constraintDefinitions, if any
-	const CBuilderConnectionList *  constraintdefs = cls->GetInConnections("HasDefinition");
-	POSITION cdPos = constraintdefs->GetHeadPosition();
-	while (cdPos)
-		//this line should not fail. The paradigm allows only constraint source
-		//for HasConstraint type connection
-		*BUILDER_CAST(CConstraintDefinitionBuilder, constraintdefs->GetNext(cdPos)->GetSource()) >> xml;
-
-	//End of the class definition
-	xml << "</Class>" << std::endl;
-}
-
-////////////////////////////////// CRole //////////////////////////////////////
 
 ////////////////////////////////// CRole //////////////////////////////////////
 
 CRole::CRole() : cls(0), minc(1), maxc(1)
 {
-	id = CComponent::GetID();
 }
 
 void CRole::ParseCardinality()
@@ -1522,6 +1082,8 @@ void CRole::ParseCardinality()
 	}
 
 };
+
+
 /////////////////////////////// CClassBuilder /////////////////////////////////
 
 IMPLEMENT_CUSTOMATOM(CClassBuilder, CBuilderAtom, "Class")
@@ -1547,11 +1109,7 @@ void CClassBuilder::GetConstraintDefinitions()
 
 CPackageBuilder * CClassBuilder::GetPackage()
 {
-    CPackageBuilder * package;
-	const CBuilderModel * parent = GetParent();
-	while (parent && parent->GetKindName() != "Package")
-		parent = parent->GetParent();
-	package = BUILDER_CAST(CPackageBuilder, parent);
+	CPackageBuilder *package = BUILDER_CAST(CClassDiagramBuilder, GetParent())->GetPackage();
 	ASSERT(package);
 	return package;
 
@@ -1620,11 +1178,7 @@ void CClassCopyBuilder::Initialize()
 
 CPackageBuilder * CClassCopyBuilder::GetPackage()
 {
-    CPackageBuilder * package;
-	const CBuilderModel * parent = GetParent();
-	while (parent && parent->GetKindName() != "Package")
-		parent = parent->GetParent();
-	package = BUILDER_CAST(CPackageBuilder, parent);
+	CPackageBuilder *package = BUILDER_CAST(CClassDiagramBuilder, GetParent())->GetPackage();
 	ASSERT(package);
 	return package;
 
@@ -1644,70 +1198,55 @@ void CCompositionBuilder::Initialize()
 	child.ParseCardinality();
 }
 
-CString CCompositionBuilder::GetParentRoleID()
+CPackageBuilder* CCompositionBuilder::GetPackage() const
 {
-	return parent.id;
-};
+	CPackageBuilder *package = BUILDER_CAST(CClassDiagramBuilder, GetParent())->GetPackage();
+	ASSERT(package);
+	return package;
+}
 
-CString CCompositionBuilder::GetChildRoleID()
+CNamespaceBuilder* CCompositionBuilder::GetNamespace() const
 {
-	return child.id;
+	return BUILDER_CAST(CClassDiagramBuilder, GetParent())->GetNamespace();
+}
 
-};
-
-/*
-	//-- removed, unable to handle self-contained objects,
-	//	06/03/02
-CString CCompositionBuilder::GetRoleID(CCompositeClass *cls)
+void CCompositionBuilder::BuildUML()
 {
-	if(parent.cls == cls)
-		return parent.id;
-	if(child.cls == cls)
-		return child.id;
-	ASSERT(false);
-	return "-1";
-}*/
-
-void CCompositionBuilder::DumpXML(std::strstream &xml, const CString& ns)
-{
-	if (ns.Compare(BUILDER_CAST(CClassDiagramBuilder, GetParent())->GetNamespace())) return;
-
 	CString childName = child.name;
 	CString parentName = parent.name;
 	CString nm = GetName();
-	if(nm == "Composition")
-		nm.Empty();
 
-	xml << "<Composition";
-	if(!nm.IsEmpty())
-		xml << " name= \"" << (LPCTSTR) nm << "\"";
-	xml << ">" << std::endl;
+	CNamespaceBuilder *ns = GetNamespace();
+	if(ns)
+		uml_comp = ::Uml::Composition::Create(ns->GetUmlNamespace());
+	else
+		uml_comp = ::Uml::Composition::Create(GetPackage()->GetUmlDiagram());
 
+	if(!nm.IsEmpty() && nm != "Composition")
+		uml_comp.name() = (LPCTSTR) nm;
 
-	xml << "   <CompositionChildRole _id= \"" << (LPCTSTR) child.id << "\"";
+	::Uml::CompositionChildRole crole = ::Uml::CompositionChildRole::Create(uml_comp);
 	if(!child.name.IsEmpty())
-		xml << " name= \"" << (LPCTSTR) child.name << "\"";
-	xml << " min= \"" << child.minc << "\" max= \"" << child.maxc << "\" target= \"" << (LPCTSTR) child.cls->GetID() << "\"/>" << std::endl;
+		crole.name() = (LPCTSTR) child.name;
+	crole.min() = child.minc;
+	crole.max() = child.maxc;
+	crole.target() = child.cls->GetUmlClass();
 
-	xml << "   <CompositionParentRole _id= \"" << (LPCTSTR) parent.id << "\"";
+	::Uml::CompositionParentRole prole = ::Uml::CompositionParentRole::Create(uml_comp);
 	if(!parent.name.IsEmpty())
-		xml << " name= \"" << (LPCTSTR) parent.name << "\"";
-	xml << " target= \"" << (LPCTSTR) parent.cls->GetID() << "\"/>" << std::endl;
-
-
-
-
-	xml << "</Composition>" << std::endl;
+		prole.name() = (LPCTSTR) parent.name;
+	prole.target() = parent.cls->GetUmlClass();
 }
+
 
 //////////////////////////////// CAssociationBase /////////////////////////////////
 
 CAssociationBase::CAssociationBase() : associationClass(0)
 {
-	id = CComponent::GetID();
 }
 bool CAssociationBase::IsCrossPackage()
 {
+
 
 	if (dest.cls->cls->GetPackage() != source.cls->cls->GetPackage()) return true;
 
@@ -1770,64 +1309,70 @@ bool CAssociationBase::IsEquivalent(CAssociationBase *ass)
 	return true;
 }
 
-CString CAssociationBase::GetSrcRoleID(CCompositeClass *cls)
+void CAssociationBase::BuildUML()
 {
-	if(source.cls == cls)
-		return source.id;
-	ASSERT(false);
-	return "-1";
+	if (!IsCrossPackage())
+	{
+		CNamespaceBuilder *ns = GetNamespace();
+		if(ns)
+			uml_ass = ::Uml::Association::Create(ns->GetUmlNamespace());
+		else
+			uml_ass = ::Uml::Association::Create(GetPackage()->GetUmlDiagram());
+		_BuildUML(uml_ass, false);
+	}
+
 }
 
-CString CAssociationBase::GetDstRoleID(CCompositeClass *cls)
+void CAssociationBase::BuildCrossUML()
 {
-	if(dest.cls == cls)
-		return dest.id;
-	ASSERT(false);
-	return "-1";
+	if (IsCrossPackage())
+	{
+		cross_uml_ass = ::Uml::Association::Create(CComponent::theInstance->GetCrossUmlDiagram());
+		_BuildUML(cross_uml_ass, true);
+	}
 }
 
-void CAssociationBase::DumpCrossXML(std::strstream &xml)
+void CAssociationBase::_BuildUML(::Uml::Association &ass, bool is_cross)
 {
-	if (!IsCrossPackage()) return;
-	DumpXML(xml, BUILDER_CAST(CClassDiagramBuilder, parent_classdgr)->GetNamespace());
-}
-
-void CAssociationBase::DumpXML(std::strstream &xml, const CString& ns)
-{
-	if (ns.Compare(BUILDER_CAST(CClassDiagramBuilder, parent_classdgr)->GetNamespace())) return;
-
 	CString srcName = source.name;
 	bool src_isnavig = true;
-	bool dst_isnavig = true;
-
 	if(srcName.IsEmpty())
 	{
 		srcName = source.cls->GetName();
 		src_isnavig = false;
 	}
+
 	CString dstName = dest.name;
+	bool dst_isnavig = true;
 	if(dstName.IsEmpty())
 	{
 		dstName = dest.cls->GetName();
 		dst_isnavig = false;
 	}
+
 	CString nm = association;
-	if(nm == "Association")
-		nm.Empty();
+	if(!nm.IsEmpty() && nm != "Association")
+		ass.name() = (LPCTSTR) nm;
 
-	xml << "<Association _id=\"" << (LPCTSTR) id << "\"";
-	if(!nm.IsEmpty())
-		xml << " name= \"" << (LPCTSTR) nm << "\"";
 	if(associationClass)
-		xml << " assocClass = \"" << (LPCTSTR) associationClass->GetID() << "\"";
-	xml << ">" << std::endl;
+		ass.assocClass() = is_cross ? associationClass->GetCrossUmlClass() : associationClass->GetUmlClass();
 
-	xml << "   <AssociationRole _id= \"" << (LPCTSTR) source.id << "\" name= \"" << (LPCTSTR) srcName;
-	xml << "\" min= \"" << source.minc << "\" max= \"" << source.maxc << "\" target= \"" << (LPCTSTR) source.cls->GetID() << "\"" << " isNavigable=\"" << (src_isnavig ? "true" : "false" ) << "\" />" << std::endl;
-	xml << "   <AssociationRole _id= \"" << (LPCTSTR) dest.id << "\" name= \"" << (LPCTSTR) dstName;
-	xml << "\" min= \"" << dest.minc << "\" max= \"" << dest.maxc << "\" target= \"" << (LPCTSTR) dest.cls->GetID() << "\"" << " isNavigable=\"" << (dst_isnavig ? "true" : "false") << "\" />" << std::endl;
-	xml << "</Association>" << std::endl;
+	::Uml::AssociationRole role = ::Uml::AssociationRole::Create(ass);
+	role.name() = (LPCTSTR) srcName;
+	role.min() = source.minc;
+	role.max() = source.maxc;
+	role.target() = is_cross ? source.cls->GetCrossUmlClass() : source.cls->GetUmlClass();
+	role.isNavigable() = src_isnavig;
+	//role.isPrimary() = true;
+
+	::Uml::AssociationRole orole = ::Uml::AssociationRole::Create(ass);
+	orole.name() = (LPCTSTR) dstName;
+	orole.min() = dest.minc;
+	orole.max() = dest.maxc;
+	orole.target() = is_cross ? dest.cls->GetCrossUmlClass() : dest.cls->GetUmlClass();
+	orole.isNavigable() = dst_isnavig;
 }
+
 
 ///////////////////////////// CDirectAssociationBuilder ///////////////////////////////
 
@@ -1837,7 +1382,6 @@ void CDirectAssociationBuilder::Initialize()
 {
 	CBuilderConnection::Initialize();
 	parent_classdgr = GetParent();
-
 }
 
 void CDirectAssociationBuilder::SetSourceAndDestination(CCompositeClass *s,CCompositeClass *d)
@@ -1857,6 +1401,7 @@ void CDirectAssociationBuilder::SetRolesAndCardinalities()
 	GetAttribute("dstCardinality",dest.cardinality);
 	dest.ParseCardinality();
 }
+
 
 /////////////////////////////// CAssociationBuilder ///////////////////////////////
 
@@ -1908,6 +1453,7 @@ void CAssociationBuilder::SetRolesAndCardinalities()
 	}
 }
 
+
 //////////////////////////////CConstraintBuilder//////////////////////////////
 
 IMPLEMENT_CUSTOMATOM(CConstraintBuilder, CBuilderAtom, "Constraint")
@@ -1917,20 +1463,19 @@ void CConstraintBuilder::Initialize()
 	CBuilderAtom::Initialize();
 	GetAttribute("ConstraintDescription", desc);
 	GetAttribute("ConstraintEqn", expr);
-	expr.Replace( "&" , "&amp;" );
 	expr.Replace( "\n" , "\\n" );
 	expr.Replace( "\r" , "\\r" );
-	expr.Replace( "\"" , "\\&quot;" );
-	expr.Replace( "<" , "&lt;" );
-	expr.Replace( ">" , "&gt;" );
+	expr.Replace( "\"" , "\\\"" );
 };
 
-std::strstream& CConstraintBuilder::operator >>(std::strstream& out)
+void CConstraintBuilder::BuildUML(::Uml::Class &uml_class)
 {
-	out << "   <Constraint name=\"" << (LPCTSTR)GetName() << "\" description=\""
-	<< (LPCTSTR)desc << "\" expression=\"" << (LPCTSTR)expr << "\"/>" <<std::endl;
-	return out;
-};
+	::Uml::Constraint c = ::Uml::Constraint::Create(uml_class);
+	c.name() = (LPCTSTR) GetName();
+	c.description() = (LPCTSTR) desc;
+	c.expression() = (LPCTSTR) expr;
+}
+
 
 //////////////////////////////CConstraintDefinitionBuilder//////////////////////////////
 
@@ -1941,12 +1486,9 @@ void CConstraintDefinitionBuilder::Initialize()
 	CBuilderAtom::Initialize();
 
 	GetAttribute( "DefinitionEqn", expr );
-	expr.Replace( "&" , "&amp;" );
 	expr.Replace( "\n" , "\\n" );
 	expr.Replace( "\r" , "\\r" );
-	expr.Replace( "\"" , "\\&quot;" );
-	expr.Replace( "<" , "&lt;" );
-	expr.Replace( ">" , "&gt;" );
+	expr.Replace( "\"" , "\\\"" );
 	
 	CString sStereo;
 	GetAttribute( "DefinitionStereo", sStereo );
@@ -1958,16 +1500,15 @@ void CConstraintDefinitionBuilder::Initialize()
 	paramList.Replace( ",", ";" );
 };
 
-std::strstream& CConstraintDefinitionBuilder::operator >>(std::strstream& out)
+void CConstraintDefinitionBuilder::BuildUML(::Uml::Class &uml_class)
 {
-	out << "   <ConstraintDefinition name=\"" << (LPCTSTR)GetName() << "\" "
-		<< "expression=\"" << (LPCTSTR)expr << "\" "
-		<< "stereotype=\"" << ( ( stereo ) ? "method" : "attribute" )<< "\" "
-		<< "returnType=\"" << (LPCTSTR)retType << "\" "
-		<< "parameterList=\"" << (LPCTSTR)paramList << "\" "
-		<< "/>" << std::endl;
-	return out;
-};
+	::Uml::ConstraintDefinition c = ::Uml::ConstraintDefinition::Create(uml_class);
+	c.name() = (LPCTSTR) GetName();
+	c.expression() = (LPCTSTR) expr;
+	c.stereotype() = ( stereo ) ? "method" : "attribute";
+	c.returnType() = (LPCTSTR) retType;
+	c.parameterList() = (LPCTSTR) paramList;
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////

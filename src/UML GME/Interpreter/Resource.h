@@ -3,8 +3,6 @@
 // Used by Component.rc
 //
 #define IDS_PROJNAME                    100
-#define XSD_UDMPROJECT                  207
-#define XSD_UML                         208
 
 // Next default values for new objects
 // 
