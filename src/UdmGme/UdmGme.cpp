@@ -13,6 +13,9 @@ this software.
 /*
 CHANGELOG
 
+  09/11/06	-	endre
+			-	add support to get/set annotations
+
   03/22/06	-	endre
 			-	change amapInitialize to use all subtypes of an association class, even if the meta contains an object named like the assoc class
 
@@ -213,6 +216,7 @@ using namespace MGALib;
 #define NS_REGNODE_NAME "__udm_namespace"
 #include "UdmGme.h"
 #include "GmeObject.h"
+#include <UdmUtil.h>
 
 
 
@@ -2026,6 +2030,106 @@ bbreak:			;
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
 		testself->FloatAttrByName[SmartBSTR(NAMEGET(meta))] = a;
+	}
+
+
+	// Walk a collection of registry nodes, part of annotations tree. Convert the node path and value
+	// to a string and collect the string. Recurse on subnodes until finished.
+	// Conversion to string: node path (without leading "annotations/") + '=' + node value
+	//                       '=' and '\\' are escaped in node path and in node value
+	void walkAnnoRegistry(const IMgaRegNodesPtr &registry, vector<string> &ret, const string &path_prefix = "")
+	{
+		MGACOLL_ITERATE(IMgaRegNode, registry) 
+		{
+			SmartBSTR name = MGACOLL_ITER->GetName();
+
+			// path of this node
+			string path(path_prefix);
+			if (path.length())
+				path.append("/");
+			path.append(name);
+
+			SmartBSTR val = MGACOLL_ITER->GetValue();
+
+			vector<string> v;
+			v.push_back(path);
+			if (!(!val))
+				v.push_back((string)val);
+			else
+				v.push_back("");
+
+			ret.push_back(UdmUtil::vector_to_string(v, '='));
+
+
+			IMgaRegNodesPtr reg_subnodes = MGACOLL_ITER->GetSubNodes(VARIANT_FALSE);
+			if (reg_subnodes->Count)
+				walkAnnoRegistry(reg_subnodes, ret, path);
+		}
+		MGACOLL_ITERATE_END;
+	}
+
+	vector<string> GmeObject::getStringAttrArr(const ::Uml::Attribute &meta) const
+	{
+		if (meta.registry() && (string)meta.name() == "annotations")
+		{
+			IMgaRegNodePtr reg_node;
+			BSTR reg_node_name = SmartBSTR(((string)meta.name()).c_str());
+		
+			if (folderself)
+				COMTHROW(folderself->get_RegistryNode(reg_node_name, &reg_node));
+			else
+				COMTHROW(self->get_RegistryNode(reg_node_name, &reg_node));
+				
+			IMgaRegNodesPtr reg_subnodes = reg_node->GetSubNodes(VARIANT_FALSE);
+
+			vector<string> ret;
+
+			if (reg_subnodes->Count)
+				walkAnnoRegistry(reg_subnodes, ret);
+
+			return ret;
+		}
+		else
+			return this->ObjectImpl::getStringAttrArr(meta);
+	}
+
+	void GmeObject::setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct)
+	{
+		if (meta.registry() && (string)meta.name() == "annotations")
+		{
+			((GmeDataNetwork*)mydn)->CountWriteOps();
+
+			IMgaRegNodePtr reg_node;
+			BSTR reg_node_name = SmartBSTR(((string)meta.name()).c_str());
+		
+			if (folderself)
+				COMTHROW(folderself->get_RegistryNode(reg_node_name, &reg_node));
+			else
+				COMTHROW(self->get_RegistryNode(reg_node_name, &reg_node));
+
+			//remove all existing annotations
+			reg_node->RemoveTree();
+
+			for (vector<string>::const_iterator i = a.begin(); i != a.end(); i++)
+			{
+				vector<string> v = UdmUtil::string_to_vector(*i, '=');
+
+				if (v.size() == 1)
+					v.push_back("");
+				else if (v.size() == 0 || v.size() > 2)
+					throw udm_exception("Annotation value can not be parsed: " + *i);
+
+				string path("annotations/");
+				path.append(v[0]);				//full path
+
+				if (folderself)
+					COMTHROW(folderself->put_RegistryValue(SmartBSTR(path.c_str()), SmartBSTR(v[1].c_str())));
+				else
+					COMTHROW(self->put_RegistryValue(SmartBSTR(path.c_str()), SmartBSTR(v[1].c_str())));
+			}
+		}
+		else
+			this->ObjectImpl::setStringAttrArr(meta, a, direct);
 	}
 
 	long GmeObject::getAttrStatus(const ::Uml::Attribute &meta) const
