@@ -1081,6 +1081,7 @@ void GenerateHForwardDeclarations(const ::Uml::Diagram &diagram, const ::Uml::Na
 	output << "\t\t" << macro << " void CreateMetaObjs();" << endl;
 	output << "\t\t" << macro << " void InitCrossNSInheritence();" << endl;
 	output << "\t\t" << macro << " void InitCrossNSCompositions();" << endl;
+	output << "\t\t" << macro << " void InitCrossNSAssociations();" << endl;
 
 	if (ns) {
 		output << "\t\t" << macro << " void InitializeNS();" << endl;

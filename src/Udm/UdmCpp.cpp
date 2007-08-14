@@ -40,6 +40,7 @@ CHANGELOG:
 
 using namespace Uml;
 typedef vector< ::Uml::Class> UmlClasses;
+typedef pair<set<int>, set<int> > UmlAssociationInitFuncInfo;
 typedef pair<set<int>, set<int> > UmlCompositionInitFuncInfo;
 
 string UmlClassCPPName(const ::Uml::Class &cl)
@@ -490,13 +491,21 @@ void GenerateAssociationInit(const ::Uml::Association &a,  const string &meta_na
 
 }
 
-int GenerateCPPAssociationInitFunctions(const set< ::Uml::Association> & associations, const string &meta_name, ostream &output)
+UmlAssociationInitFuncInfo GenerateCPPAssociationInitFunctions(const set< ::Uml::Association> & associations, const string &meta_name, ostream &output)
 {
-	int ass_inits = 0;
+	UmlCompositionInitFuncInfo assoc_inits;
+	int assoc_init_index = 0;
 	set< ::Uml::Association>::const_iterator a;
-	for(a = associations.begin(); a != associations.end(); a++ )	
-		GenerateAssociationInit(*a, meta_name, output, ass_inits++);
-	return ass_inits;	
+	for(a = associations.begin(); a != associations.end(); a++ ) {
+		GenerateAssociationInit(*a, meta_name, output, assoc_init_index);
+		if (IsCrossNSAssociation(*a)) {
+			assoc_inits.second.insert(assoc_init_index);
+		} else {
+			assoc_inits.first.insert(assoc_init_index);
+		}
+		assoc_init_index++;
+	}
+	return assoc_inits;	
 };
 
 UmlCompositionInitFuncInfo GenerateCPPCompositionInitFunctions(const set< ::Uml::Composition> & comps, const string &meta_name, ostream &output)
@@ -602,6 +611,17 @@ void GenerateCPPInitializeCrossNSCompositions(const UmlCompositionInitFuncInfo &
 	output << "\t\t}" << endl;
 };
 
+void GenerateCPPInitializeCrossNSAssociations(const UmlAssociationInitFuncInfo &assoc_inits, ostream & output)
+{
+	output << "\t\tvoid InitCrossNSAssociations()" << endl << "\t\t{" << endl;
+
+	for (set<int>::const_iterator assoc_inits_i = assoc_inits.second.begin(); assoc_inits_i != assoc_inits.second.end(); assoc_inits_i++) {
+		output << "\t\t\tInitAssociation" << *assoc_inits_i << "();" << endl;
+	}
+
+	output << "\t\t}" << endl;
+};
+
 void GenerateCPPStaticClass(const ::Uml::Diagram &diagram, ostream & output)
 {
 	output << "\tstatic struct _regClass" << endl;
@@ -619,7 +639,7 @@ void GenerateCPPStaticClass(const ::Uml::Diagram &diagram, ostream & output)
 
 };
 
-void GenerateCPPInitialize(const ::Uml::Diagram &dgr, const ::Uml::Diagram & cross_dgr, ostream & output, const string& hname, int ass_inits, const UmlCompositionInitFuncInfo &comp_inits, bool isCrossDgr)
+void GenerateCPPInitialize(const ::Uml::Diagram &dgr, const ::Uml::Diagram & cross_dgr, ostream & output, const string& hname, const UmlAssociationInitFuncInfo &assoc_inits, const UmlCompositionInitFuncInfo &comp_inits, bool isCrossDgr)
 {
 	output << "\t\tvoid InitializeDgr()" << endl
 	       << "\t\t{" << endl; //begin of InitializeDgr()
@@ -629,9 +649,11 @@ void GenerateCPPInitialize(const ::Uml::Diagram &dgr, const ::Uml::Diagram & cro
 	output << "\t\t\tCreatesNamespaces();" << endl;
 	output << "\t\t\tInitNamespaces();" << endl;
 
-	//call the InitAssociation functions
+	//call the InitAssociation functions (only those that initialize local namespace compositions)
 
-	for (int ass_inits_i = 0; ass_inits_i < ass_inits; ass_inits_i++) output << "\t\t\tInitAssociation" << ass_inits_i << "();" << endl;
+	for (set<int>::const_iterator assoc_inits_i = assoc_inits.first.begin(); assoc_inits_i != assoc_inits.first.end(); assoc_inits_i++) {
+		output << "\t\t\tInitAssociation" << *assoc_inits_i << "();" << endl;
+	}
 			
 	//call the InitComposition calls (only those that initialize local namespace compositions)
 
@@ -649,7 +671,7 @@ void GenerateCPPInitialize(const ::Uml::Diagram &dgr, const ::Uml::Diagram & cro
 	output << "\t\t}" << endl;	//end of InitializeDgr()
 };
 
-void GenerateCPPInitialize(const ::Uml::Namespace &ns, const ::Uml::Diagram & cross_dgr, ostream & output, const string& hname, int ass_inits, const UmlCompositionInitFuncInfo &comp_inits, bool isCrossDgr)
+void GenerateCPPInitialize(const ::Uml::Namespace &ns, const ::Uml::Diagram & cross_dgr, ostream & output, const string& hname, const UmlAssociationInitFuncInfo &assoc_inits, const UmlCompositionInitFuncInfo &comp_inits, bool isCrossDgr)
 {
 	output << "\t\tvoid InitializeNS()" << endl << "\t\t{" << endl; //begin of InitializeNS()
 	output << "\t\t\tCreates();" << endl;
@@ -658,9 +680,11 @@ void GenerateCPPInitialize(const ::Uml::Namespace &ns, const ::Uml::Diagram & cr
 	output << "\t\t\tCreatesNamespaces();" << endl;
 	output << "\t\t\tInitNamespaces();" << endl;
 
-	//call the InitAssociation functions
+	//call the InitAssociation functions (only those that initialize local namespace compositions)
 
-	for (int ass_inits_i = 0; ass_inits_i < ass_inits; ass_inits_i++) output << "\t\t\tInitAssociation" << ass_inits_i << "();" << endl;
+	for (set<int>::const_iterator assoc_inits_i = assoc_inits.first.begin(); assoc_inits_i != assoc_inits.first.end(); assoc_inits_i++) {
+		output << "\t\t\tInitAssociation" << *assoc_inits_i << "();" << endl;
+	}
 			
 	//call the InitComposition calls (only those that initialize local namespace compositions)
 
@@ -847,7 +871,8 @@ void GenerateCPPDiagram(const ::Uml::Diagram &diagram, const ::Uml::Diagram &cro
 	GenerateCPPCreatesNamespacesFunction(diagram.namespaces(), "umldiagram", output);
 	GenerateCPPInitNamespacesFunction(diagram.namespaces(), output);
 
-	int ass_inits = GenerateCPPAssociationInitFunctions(diagram.associations(), "umldiagram", output);
+	UmlAssociationInitFuncInfo assoc_inits = GenerateCPPAssociationInitFunctions(diagram.associations(), "umldiagram", output);
+	GenerateCPPInitializeCrossNSAssociations(assoc_inits, output);
 
 	UmlCompositionInitFuncInfo comps_inits = GenerateCPPCompositionInitFunctions(diagram.compositions(), "umldiagram", output);
 	GenerateCPPInitializeCrossNSCompositions(comps_inits, output);
@@ -857,7 +882,7 @@ void GenerateCPPDiagram(const ::Uml::Diagram &diagram, const ::Uml::Diagram &cro
 	GenerateCPPInitializeInheritence(diagram.classes(), output, true); // across namespaces
 
 	//generate Initialize() function
-	GenerateCPPInitialize(diagram, cross_dgr, output, hname, ass_inits, comps_inits, isCrossDgr);
+	GenerateCPPInitialize(diagram, cross_dgr, output, hname, assoc_inits, comps_inits, isCrossDgr);
 
 
 	// initialize from another diagram
@@ -899,7 +924,8 @@ void GenerateCPPNamespace(const ::Uml::Namespace &ns, const ::Uml::Diagram &cros
 	GenerateCPPCreatesNamespacesFunction(ns.namespaces(), "meta", output);
 	GenerateCPPInitNamespacesFunction(ns.namespaces(), output);
 
-	int ass_inits = GenerateCPPAssociationInitFunctions(ns.associations(), "meta", output);
+	UmlAssociationInitFuncInfo assoc_inits = GenerateCPPAssociationInitFunctions(ns.associations(), "meta", output);
+	GenerateCPPInitializeCrossNSAssociations(assoc_inits, output);
 
 	UmlCompositionInitFuncInfo comps_inits = GenerateCPPCompositionInitFunctions(ns.compositions(), "meta", output);
 	GenerateCPPInitializeCrossNSCompositions(comps_inits, output);
@@ -909,7 +935,7 @@ void GenerateCPPNamespace(const ::Uml::Namespace &ns, const ::Uml::Diagram &cros
 	GenerateCPPInitializeInheritence(ns.classes(), output, true); // across namespaces
 
 	//generate Initialize() function
-	GenerateCPPInitialize(ns, cross_dgr, output, hname, ass_inits, comps_inits, isCrossDgr);
+	GenerateCPPInitialize(ns, cross_dgr, output, hname, assoc_inits, comps_inits, isCrossDgr);
 			
 
 	// initialize from another namespace
@@ -962,6 +988,7 @@ void GenerateCPPDiagramInitialize(const ::Uml::Diagram &diagram, const ::Uml::Di
 	//call cross namespace inheritence and compositions initializers
 	output << "\t\tInitCrossNSInheritence();" << endl;
 	output << "\t\tInitCrossNSCompositions();" << endl;
+	output << "\t\tInitCrossNSAssociations();" << endl;
 
 	::Uml::DiagramNamespaces all_nses(diagram);
 	for (::Uml::DiagramNamespaces::iterator all_nses_i = all_nses.begin(); all_nses_i != all_nses.end(); all_nses_i++)
@@ -969,6 +996,7 @@ void GenerateCPPDiagramInitialize(const ::Uml::Diagram &diagram, const ::Uml::Di
 		::Uml::Namespace ns = *all_nses_i;
 		output << "\t\t" << ns.getPath2("::", false) << "::InitCrossNSInheritence();" << endl;
 		output << "\t\t" << ns.getPath2("::", false) << "::InitCrossNSCompositions();" << endl;
+		output << "\t\t" << ns.getPath2("::", false) << "::InitCrossNSAssociations();" << endl;
 	}
 	output << endl;
 
