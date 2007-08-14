@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{16618DDB-4B18-41A4-96A4-FAB813D71FF5}" cdate="Wed Jun 15 16:11:00 2005" mdate="Wed Jun 15 16:11:00 2005" version="" metaguid="{59EBDD54-0EA9-4CDF-96D2-11DF2C3C0EF5}" metaversion="" metaname="UML">
+<project guid="{2271A31F-E74C-4917-AFB8-06201A78948B}" cdate="Tue Sep 27 00:02:06 2005" mdate="Tue Sep 27 00:02:06 2005" version="" metaguid="{FB4641D2-A80D-4BAC-B0AA-570519CD80D0}" metaversion="" metaname="UML">
 	<name>SBML2_uml</name>
 	<comment></comment>
 	<author></author>
@@ -188,7 +188,7 @@
 							<value>The variable referencedor parameter element. by a rule must be an existing species, compartment, </value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.sbml::species
+							<value>let s = dn.SBML2::sbml::species
 in
 let c = dn.compartment
 in 
@@ -1819,7 +1819,7 @@ in
 							<value>A species reference in a reaction needs to be to a defined species. The reference can be from reactants, products, or modifiers</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.sbml::species
+							<value>let s = dn.SBML2::sbml::species
 in
 if (s.isUndefined()) then
  true

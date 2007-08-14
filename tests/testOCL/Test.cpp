@@ -185,27 +185,26 @@ void UdmTests::Test::evaluate(const ::Uml::Diagram& metaDiagram,
               std::ostream& out)
 {
 
-  Ocl::SErrorNotification en(false, Ocl::ENT_ALL) ;
-  
-  Ocl::Initialize( metaDiagram, en );
+	Ocl::SErrorNotification en(false, Ocl::ENT_ALL) ;
 
-  Ocl::Evaluator eval(objContext);
-  Ocl::SEvaluationOptions options;
-  options.sErrorNotification = en;
-  try
-  {
+	Ocl::Initialize( metaDiagram, en );
 
-    Ocl::EEvaluationResult eResult = eval.Check(options);
-  }
-  catch ( const udm_exception& ex )
-  {
-    out << "failed" << std::endl;
-    out << ex.what() ;
-  }
-  catch (... )
-  {
-  }
+	Ocl::Evaluator eval(objContext);
+	Ocl::SEvaluationOptions options;
+	options.sErrorNotification = en;
 
+	try
+	{
+		Ocl::EEvaluationResult eResult = eval.Check(options);
+	}
+	catch ( const udm_exception& ex )
+	{
+		out << "failed" << std::endl;
+		out << ex.what() ;
+	}
+	catch (... )
+	{
+	}
 }
 
 
