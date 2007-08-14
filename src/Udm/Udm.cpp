@@ -80,8 +80,6 @@ CHANGELOG
 
 #include "Udm.h"
 
-bool single_cpp_namespace;
-
 int main(int argc, char **argv) {
 	try
 	{
@@ -107,7 +105,6 @@ int main(int argc, char **argv) {
       // flag to indicate java api generation
 		bool generate_java = false;
 		int source_unit = CPP_SOURCE_UNIT_DIAGRAM;
-		bool force_multiple_cpp_namespaces = false;
 
 
 		if (argc <= 1)
@@ -162,11 +159,6 @@ int main(int argc, char **argv) {
 				else if (c == 'g')
 				{
 					integrate_xsd = true;
-					continue;
-				}
-				else if (c == 'n')
-				{
-					force_multiple_cpp_namespaces = true;
 					continue;
 				}
 				
@@ -267,7 +259,6 @@ usage:
 			const ::Uml::Namespace cross_meta_ns = ::Uml::GetTheOnlyNamespace(cross_meta);
 
 			string cm_name = NameToFilename(cross_meta.name());
-			single_cpp_namespace = !force_multiple_cpp_namespaces;
 
 			GenerateDSD(cross_meta_ns, cm_name, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
 
@@ -303,7 +294,6 @@ usage:
 				string sname = dgr.name();
 					
 				set< ::Uml::Namespace> nses = dgr.namespaces();
-				single_cpp_namespace = nses.size() == 1 && !force_multiple_cpp_namespaces;
 				for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 				{
 					::Uml::Namespace ns = *nses_i;
@@ -418,9 +408,6 @@ usage:
 		}
 
 		set< ::Uml::Namespace> nses = diagram.namespaces();
-
-		single_cpp_namespace = nses.size() == 1 && !force_multiple_cpp_namespaces;
-
 		for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 		{
 			::Uml::Namespace ns = *nses_i;
