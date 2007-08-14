@@ -167,6 +167,9 @@ namespace Uml
 	UDM_DLL bool IsAssocClass(const Uml::Class &cl);
 	UDM_DLL bool IsAssocClass(const Uml::Association &ass);
 
+// The namespaces of all the base classes having derived classes in this namespace
+	UDM_DLL set<Uml::Namespace> BaseTypesNamespaces(const Uml::Namespace &ns);
+
 	UDM_DLL string MakeRoleName(const Uml::GenericRole &r);
 	UDM_DLL string MakeShortRoleName(const Uml::GenericRole &r);
 
