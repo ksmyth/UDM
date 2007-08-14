@@ -203,8 +203,7 @@ void GenerateMetaCPPInitMetaObjects(const set< ::Uml::Class> &classes, const str
 			if (cross_dgr)
 			{
 				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
-				cross_cl = GetCrossClass(cross_dgr, cl);
-			}
+				cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);			}
 			if (cross_cl)
 				ass = cross_cl.association();
 			if (ass)
@@ -316,7 +315,7 @@ void GenerateMetaCPPInitCrossAssociations(const set< ::Uml::Class> & classes, co
 			if (cross_dgr)
 			{
 				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
-				cross_cl = GetCrossClass(cross_dgr, cl);
+				cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 			}
 			if (cross_cl)
 			{

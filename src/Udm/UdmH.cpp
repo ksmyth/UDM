@@ -14,6 +14,11 @@ this software.
 /*
 CHANGELOG:
 
+	11/24/05	-	endre
+		fix GenerateHCrossForwardDeclarations() to not generate a namespace declaration when the namespace is empty
+		add GetCPPNamefromFromStr()
+		in InheritenceSolver constructor sort classes by namespace only when needed
+
 	11/13/05	-	endre
 		declare static members individually, to prevent VC++ compiler error C2487
 
@@ -73,15 +78,13 @@ class InheritenceSolver
 				return true;
 			if (a_ns != active_ns && b_ns == active_ns)
 				return false;
-			if ((a_ns == active_ns && b_ns == active_ns) ||
-			    (a_ns != active_ns && b_ns != active_ns))
-				return a < b;
+			return a_ns < b_ns;
 		}
 	};
 
 public:
 
-	InheritenceSolver(const ::Uml::Diagram& diagram)
+	InheritenceSolver(const ::Uml::Diagram& diagram, bool sort_by_namespace = false)
 	{
 		vector< ::Uml::Class> classes;
 
@@ -128,10 +131,11 @@ public:
 			// sort classes, putting classes from the same
 			// namespace as "cl" to the beginning
 			classes.erase(c);
-			if (!classes.empty())
+			if (sort_by_namespace && !classes.empty() && ns_set.size())
 			{
 				::Uml::Namespace cl_ns = cl.parent_ns();
-				sort(classes.begin(), classes.end(), sortByActiveNamespace(cl_ns));
+				if (cl_ns != classes.begin()->parent_ns())
+					sort(classes.begin(), classes.end(), sortByActiveNamespace(cl_ns));
 			}
 
 			virtualchildren.insert(cltoclsmap::value_type(cl, set< ::Uml::Class>()));
@@ -381,6 +385,15 @@ string GetNsfromFromStr(const string& fromstr )
 	return fromstr.substr(i +1, string::npos);
 };
 
+string GetCPPNamefromFromStr(const string& fromstr)
+{
+	unsigned int i = fromstr.find(':');
+	string ret = "::" + fromstr.substr(0, i);
+	if (i != string::npos)
+		ret += "::" + fromstr.substr(i + 1, string::npos);
+	return ret;
+}
+
 void CheckNamespaceFlips(const InheritenceSolver &is)
 {
 	typedef map< ::Uml::Namespace, int> ns_flips_t;
@@ -550,11 +563,7 @@ void GenerateHClassAssocEnds(const ::Uml::Class &cl, const ::Uml::Class& cross_c
 				//Attention !
 				oname = oname.substr(0, oname.find(Udm::cross_delimiter));
 				//end of dangerous zone 
-				string from_str(((::Uml::Class)(*i).target()).from());
-
-				string from = string("::") + GetDgrfromFromStr(from_str);
-				if (!SingleCPPNamespace(::Uml::diagramByName(dgr, GetDgrfromFromStr(from_str))))
-					from += "::" + GetNsfromFromStr(from_str);
+				string from = GetCPPNamefromFromStr(((::Uml::Class)(*i).target()).from());
 
 				if(aname.size()) 
 				{
@@ -772,10 +781,7 @@ void GenerateHClassAssociations(const ::Uml::Class& cl, const ::Uml::Class& cros
 			//Attention !!!
 			oname = oname.substr(0,oname.find(Udm::cross_delimiter));
 			//
-			string from_name(((::Uml::Class)Uml::theOther(*i).target()).from());
-			string cname = string("::") + GetDgrfromFromStr(from_name);
-			if (!SingleCPPNamespace(::Uml::diagramByName(dgr, GetDgrfromFromStr(from_name))))
-				cname += "::" + GetNsfromFromStr(from_name);
+			string cname = GetCPPNamefromFromStr(((::Uml::Class)Uml::theOther(*i).target()).from());
 
 			if(!aclass) 
 			{
@@ -811,10 +817,7 @@ void GenerateHClassAssociations(const ::Uml::Class& cl, const ::Uml::Class& cros
 				clname = clname.substr(0,clname.find(Udm::cross_delimiter));
 				//end of dangerous zone
 	
-				string from_str(aclass.from());
-				string cl_dgr = string("::") + GetDgrfromFromStr(from_str);
-				if (!SingleCPPNamespace(::Uml::diagramByName(dgr, GetDgrfromFromStr(from_str))))
-					cl_dgr += "::" + GetNsfromFromStr(from_str);
+				string cl_dgr = GetCPPNamefromFromStr(aclass.from());
 
 				output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << ";" << endl;
 				output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << "_rev;" << endl;
@@ -1007,7 +1010,7 @@ void GenerateHCrossForwardDeclarations(const ::Uml::Diagram &dgr, ostream &outpu
 			map<string, UmlClasses>  cr_cls = j->second;
 			for(map<string, UmlClasses>::iterator jj = cr_cls.begin(); jj != cr_cls.end(); jj++)
 			{
-				if (!single_cpp_namespace)
+				if (!single_cpp_namespace && !jj->first.empty())
 					output << "\tnamespace " << jj->first << endl << "\t{ " << endl;
 				set< ::Uml::Class>& clss = jj->second;
 				for(set< ::Uml::Class>::iterator jjj = clss.begin(); jjj != clss.end(); jjj++)
@@ -1018,7 +1021,7 @@ void GenerateHCrossForwardDeclarations(const ::Uml::Diagram &dgr, ostream &outpu
 					//end of dangerous zone
 					output << "\t\tclass " << macro << " " << class_name << ";" << endl;
 				};
-				if (!single_cpp_namespace)
+				if (!single_cpp_namespace && !jj->first.empty())
 					output << "\t};" << endl;
 			};
 			output << "};" << endl;
@@ -1152,7 +1155,7 @@ void GenerateHNamespace(const ::Uml::Diagram &diagram, const ::Uml::Namespace &n
 		if (ns == ns_cl)
 		{
 			if (cross_dgr)
-				cross_cl = GetCrossClass(cross_dgr, cl);
+				cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 
 			GenerateHClass(cl, cross_cl, (diagram == cross_dgr), is, fname, ff, visitor_sup, macro, source_unit);
 		}
@@ -1174,7 +1177,7 @@ void GenerateHClassesHeaders(const ::Uml::Diagram &diagram, const set< ::Uml::Cl
 		::Uml::Class cross_cl;
 
 		if (cross_dgr)
-			cross_cl = GetCrossClass(cross_dgr, cl);
+			cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 
 		GenerateHClass(cl, cross_cl, (diagram == cross_dgr), is, fname, output, visitor_sup, macro, source_unit);
 	}
@@ -1214,7 +1217,7 @@ void GenerateHIncludeClasses(const ::Uml::Diagram &diagram, const InheritenceSol
 
 void GenerateHN(const ::Uml::Diagram &diagram, ostream &output, string fname, bool visitor_sup, const ::Uml::Diagram& cross_dgr, const string& macro, int source_unit)	
 {
-	InheritenceSolver is(diagram);
+	InheritenceSolver is(diagram, true);
 
 	CheckNamespaceFlips(is);
 
@@ -1257,7 +1260,7 @@ void GenerateHN(const ::Uml::Diagram &diagram, ostream &output, string fname, bo
 					{
 						::Uml::Class cross_cl;
 						if (cross_dgr)
-							cross_cl = GetCrossClass(cross_dgr, cl);
+							cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 						GenerateHClass(cl, cross_cl, (diagram == cross_dgr), is, fname, output, visitor_sup, macro, source_unit);
 					}
 				}
@@ -1314,7 +1317,7 @@ void GenerateHD(const ::Uml::Diagram &diagram, ostream &output, string fname, bo
 
 		::Uml::Class cross_cl;
 		if (cross_dgr)
-			cross_cl = GetCrossClass(cross_dgr, cl);
+			cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 
 		GenerateHClass(cl, cross_cl, (diagram == cross_dgr), is, fname, output, visitor_sup, macro, source_unit);
 	}

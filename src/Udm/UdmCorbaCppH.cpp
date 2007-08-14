@@ -155,7 +155,7 @@ void GenerateCORBACPPInitMetaObjects(const set< ::Uml::Class> &classes, const st
 			if (cross_dgr)
 			{
 				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
-				cross_cl = GetCrossClass(cross_dgr, cl);
+				cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 			}
 			if (cross_cl)
 				ass = cross_cl.association();
@@ -278,7 +278,7 @@ void GenerateCORBACPPInitCrossAssociations(const set< ::Uml::Class> & classes, c
 			if (cross_dgr)
 			{
 				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
-				cross_cl = GetCrossClass(cross_dgr, cl);
+				cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 			}
 			if (cross_cl)
 			{

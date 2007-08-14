@@ -14,6 +14,9 @@ this software.
 /*
 CHANGELOG:
 
+  11/23/05 - endre
+   - remove redundant call to SingleCPPNamespace from UmlClassCPPName
+
 	05/17/05	-	kalmar
               changed in genertion
               "Uml::SetClass" to
@@ -40,7 +43,7 @@ string UmlClassCPPName(const ::Uml::Class &cl)
 {
 	::Uml::Namespace cl_ns = (::Uml::Namespace)cl.parent_ns();
 	::Uml::Diagram diagr = ::Uml::GetDiagram(cl);
-	if (SingleCPPNamespace(diagr) || cl_ns == ::Uml::Namespace(NULL))
+	if (cl_ns == ::Uml::Namespace(NULL))
 		return "::" + (string)diagr.name() + "::" + (string)cl.name();
 	else
 		return "::" + (string)diagr.name() + "::" + (string)cl_ns.name() + "::" + (string)cl.name();
@@ -121,7 +124,7 @@ void GenerateCPPDeclareAssociationRoles(const set< ::Uml::Class> &classes, const
 		if (isCrossDgr)
 		{
 			//--//::Uml::Class cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
-			::Uml::Class cross_cl = GetCrossClass(cross_dgr, cl);
+			::Uml::Class cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 			if(cross_cl)
 				DeclareAssociationRoles(cl, cross_cl.associationRoles(), output);
 		};
@@ -131,7 +134,7 @@ void GenerateCPPDeclareAssociationRoles(const set< ::Uml::Class> &classes, const
 		//if (cross_dgr &&(cross_dgr != dgr) )
 		{
 			//--//::Uml::Class cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
-			::Uml::Class cross_cl = GetCrossClass(cross_dgr, cl);
+			::Uml::Class cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 			if(cross_cl)
 				DeclareAssociationRolesFromAssoc(cl, cross_cl.association(), output);
 		};
@@ -317,7 +320,7 @@ void GenerateCPPInitClassesAttributes(const set< ::Uml::Class> & classes, const 
 			if (cross_dgr)
 			{
 				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
-				cross_cl = GetCrossClass(cross_dgr, cl);
+				cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 			}
 			if (cross_cl)
 				ass = cross_cl.association();
@@ -455,7 +458,7 @@ void GenerateCPPCrossObjectInits(const set< ::Uml::Class> &classes, const ::Uml:
 			::Uml::Class cross_cl;
 			if (cross_dgr)
 			{
-				cross_cl = GetCrossClass(cross_dgr, cl);
+				cross_cl = ::Uml::GetClassFromCrossDgr(cross_dgr, cl);
 				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
 			}
 			if (cross_cl)
