@@ -289,7 +289,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 							const std::string name = signature.GetName();
 							const  OclCommon::FormalParameterVector fpv  = CreateFormalParameters( vecDefs[ i ]->GetFormalParameters() );
 							TypeSeq ts = CreateReturnType( vecDefs[ i ]->GetReturnType() );
-							vecFeatures.push_back( new OclMeta::Method(signature.GetName(), fpv , ts , new ConstraintMethod( vecDefs[ i ] ), true, true ) );
+							vecFeatures.push_back( new OclMeta::Method(signature.GetName(), vecDefs[ i ]->GetContextType(), fpv , ts , new ConstraintMethod( vecDefs[ i ] ), true, true ) );
 						}
 				}
 			}
