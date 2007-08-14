@@ -37,13 +37,14 @@ AppCopyright=Copyright (C) 2000-2006 ISIS, Vanderbilt University
 Name: english; MessagesFile: compiler:Default.isl
 
 [Types]
-Name: Full; Description: Full(C++ and Java)
+Name: Full; Description: Full(C++ and Java); Flags: iscustom
 Name: Typical; Description: Typical(C++); Flags: iscustom
 
 [Components]
 Name: Core; Description: Core UDM; Types: Typical Full; Flags: fixed
 Name: C; Description: C++ UDM; Types: Typical Full; Flags: fixed
 Name: Java; Description: Java UDM; Types: Full; Flags: fixed
+Name: System; Description: Register Environment Variables System-Wide (recommended); Types: Typical Full;
 
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
@@ -154,9 +155,9 @@ Source: {#UDMPATH}\samples\CreateLampModel\CreateLampModel.cpp; DestDir: {app}\s
 Source: {#UDMPATH}\samples\cross_links\cross_links.cpp; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\samples\cross_links\cross_links.vcproj; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\samples\cross_links\CL.xme; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
-Source: {#UDMPATH}\samples\Java\GeneTF\*; DestDir: {app}\samples\Java\GeneTF; Excludes: *.scc; Components: Java; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: {#UDMPATH}\samples\Java\GeneTRE\*; DestDir: {app}\samples\Java\GeneTRE; Excludes: *.scc; Components: Java; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: {#UDMPATH}\samples\Java\SBML2Ex\*; DestDir: {app}\samples\Java\SBML2Ex; Excludes: *.scc; Components: Java; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDMPATH}\samples\Java\GeneTF\*; DestDir: {app}\samples\Java\GeneTF; Excludes: *.scc; Components: Java; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDMPATH}\samples\Java\GeneTRE\*; DestDir: {app}\samples\Java\GeneTRE; Excludes: *.scc; Components: Java; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDMPATH}\samples\Java\SBML2Ex\*; DestDir: {app}\samples\Java\SBML2Ex; Excludes: *.scc; Components: Java; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Dirs]
 Name: {app}\include; Components: C
@@ -166,10 +167,14 @@ Name: {app}\lib; Components: C
 SelectComponentsLabel2=Select the setup type that best suits your needs. Click Next when you are ready to continue.
 
 [Registry]
-Root: HKCU; Subkey: Environment; ValueType: string; ValueName: UDM_PATH; ValueData: {app}; Flags: uninsdeletevalue deletevalue
-Root: HKCU; Subkey: Environment; ValueType: string; ValueName: UDM_3RDPARTY_PATH; ValueData: {app}\3rdparty; Flags: uninsdeletevalue deletevalue
+Root: HKCU; Subkey: Environment; ValueType: string; ValueName: UDM_PATH; ValueData: {app}; Flags: uninsdeletevalue deletevalue; Components: not System
+Root: HKCU; Subkey: Environment; ValueType: string; ValueName: UDM_3RDPARTY_PATH; ValueData: {app}\3rdparty; Flags: uninsdeletevalue deletevalue; Components: not System
+Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: UDM_PATH; ValueData: {app}; Flags: uninsdeletevalue deletevalue; Components: System
+Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: UDM_3RDPARTY_PATH; ValueData: {app}\3rdparty; Flags: uninsdeletevalue deletevalue; Components: System
 
 [Code]
+var
+  InstallSystemWide: Boolean;
 function InitializeSetup(): Boolean;
 var
   GME_Path : String;
@@ -189,6 +194,12 @@ begin
 	end;
   end;
 end;
+function InitializeUninstall(): Boolean;
+begin
+  //Need to know if this was a system wide install or not
+  InstallSystemWide := RegValueExists(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment', 'UDM_PATH');
+  Result := True;
+end;
 
 Procedure ModPath(const ValueName, pathdir: String);
 var
@@ -201,7 +212,11 @@ begin
 	if UsingWinNT() = true then begin
 
 		// Get current path, split into an array
-		RegQueryStringValue(HKEY_CURRENT_USER, 'Environment', ValueName, oldpath);
+		if InstallSystemWide then begin
+		  RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment', ValueName, oldpath);
+		end else begin
+		  RegQueryStringValue(HKEY_CURRENT_USER, 'Environment', ValueName, oldpath);
+    end;
 		if oldpath <> '' then
 			oldpath := oldpath + ';';
 		i := 0;
@@ -239,7 +254,11 @@ begin
 		end;
 
 		// Write new path
-		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', ValueName, newpath);
+		if InstallSystemWide then begin
+		  RegWriteStringValue(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment', ValueName, newpath);
+		end else begin
+		  RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', ValueName, newpath);
+    end;
 	end;
 end;
 
@@ -271,4 +290,21 @@ begin
 		ModPath('PATH', path+'\3rdparty\xalan-c_1_8_0\bin');
 		ModPath('CLASSPATH', '.');
 	end;
+end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+var
+  MyComponents : String;
+  MyCompLen : Integer;
+begin
+  if CurPageID = wpSelectComponents then begin
+    MyComponents := WizardSelectedComponents(false);
+    MyCompLen := length(MyComponents);
+    if MyComponents[MyCompLen] = 'm' then begin
+      InstallSystemWide := true;
+    end else begin
+      InstallSystemWide := false;
+    end;
+  end;
+  Result := True;
 end;
