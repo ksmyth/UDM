@@ -178,7 +178,7 @@
 		<antcall target="ds-compile">
 			<param name="dspackage" value="SBML2Ex" />
 			<param name="dspackagelower" value="sbml2ex" />
-			<param name="udm_options" value=" -j -q jigcell -e -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon" />
+			<param name="udm_options" value=" -j -i jigcell -q jigcell -e -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon" />
 		</antcall>
 	</target>
 
