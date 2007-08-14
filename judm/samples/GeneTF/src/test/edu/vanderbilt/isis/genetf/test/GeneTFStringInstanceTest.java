@@ -11,11 +11,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.Vector;
+
 import junit.framework.TestCase;
 import edu.vanderbilt.isis.genetf.FactoryRepository;
 import edu.vanderbilt.isis.genetf.genetf.Container;
-import edu.vanderbilt.isis.genetf.genetf.Gene;
 import edu.vanderbilt.isis.genetf.genetf.ContainerStringFactory;
+import edu.vanderbilt.isis.genetf.genetf.Gene;
 import edu.vanderbilt.isis.genetf.genetf.Regulation;
 import edu.vanderbilt.isis.genetf.genetf.TF;
 import edu.vanderbilt.isis.udm.UdmException;
@@ -122,7 +123,7 @@ public class GeneTFStringInstanceTest extends TestCase {
     * @throws UdmException
     */
     public void testCreateBlankInstance() throws UdmException {
-        ContainerStringFactory gtf = FactoryRepository.getGeneTFContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetfContainerStringFactory();
         Container con = gtf.create();
 
         fillContainer(con);
@@ -148,7 +149,7 @@ public class GeneTFStringInstanceTest extends TestCase {
         } catch (IOException e) {
         }
 
-        ContainerStringFactory gtf = FactoryRepository.getGeneTFContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetfContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
         Container con = null;
         if (rootUPO instanceof Container) {
@@ -180,7 +181,7 @@ public class GeneTFStringInstanceTest extends TestCase {
         } catch (IOException e) {
         }
 
-        ContainerStringFactory gtf = FactoryRepository.getGeneTFContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetfContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
         Container con = null;
         if (rootUPO instanceof Container) {
@@ -199,7 +200,7 @@ public class GeneTFStringInstanceTest extends TestCase {
      * @throws UdmException
      */
     public void testCreateToStreamBlankInstance() throws UdmException {
-        ContainerStringFactory gtf = FactoryRepository.getGeneTFContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetfContainerStringFactory();
         Container con = gtf.create();
 
         fillContainer(con);
@@ -219,7 +220,7 @@ public class GeneTFStringInstanceTest extends TestCase {
         } catch (IOException e) {
         }
 
-        ContainerStringFactory gtf = FactoryRepository.getGeneTFContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetfContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
         Container con = null;
         if (rootUPO instanceof Container) {
@@ -245,7 +246,7 @@ public class GeneTFStringInstanceTest extends TestCase {
         } catch (IOException e) {
         }
 
-        ContainerStringFactory gtf = FactoryRepository.getGeneTFContainerStringFactory();
+        ContainerStringFactory gtf = FactoryRepository.getgenetfContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
         Container con = null;
         if (rootUPO instanceof Container) {

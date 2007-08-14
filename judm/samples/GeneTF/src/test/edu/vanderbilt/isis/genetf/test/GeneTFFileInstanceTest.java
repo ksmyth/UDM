@@ -9,12 +9,13 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector; 
+import java.util.Vector;
+
 import junit.framework.TestCase;
 import edu.vanderbilt.isis.genetf.FactoryRepository;
 import edu.vanderbilt.isis.genetf.genetf.Container;
-import edu.vanderbilt.isis.genetf.genetf.Gene;
 import edu.vanderbilt.isis.genetf.genetf.ContainerFileFactory;
+import edu.vanderbilt.isis.genetf.genetf.Gene;
 import edu.vanderbilt.isis.genetf.genetf.Regulation;
 import edu.vanderbilt.isis.genetf.genetf.TF;
 import edu.vanderbilt.isis.udm.UdmException;
@@ -104,6 +105,19 @@ public class GeneTFFileInstanceTest extends TestCase {
         r1.setgene(g1);
         r1.settf(t1);
         r1.settype(2);
+        
+        /*g1.setAssociation("tf_end", r1);
+        t1.setAssociation("gene_end", r1);*/
+        
+        /*Regulation[] r_array = new Regulation[] {r1};
+        
+        g1.settf(r_array);
+        t1.setgene(r_array);*/
+        
+        /*Regulation r1 = Regulation.create(con);
+        r1.setgene(t1);
+        r1.settf(t1);
+        r1.settype(2);*/
     }
 
     /**
@@ -135,17 +149,17 @@ public class GeneTFFileInstanceTest extends TestCase {
      * @throws UdmException
      */
     public void testCreateBlankInstance() throws UdmException {
-        ContainerFileFactory gtf = FactoryRepository.getGeneTFContainerFileFactory();
+        ContainerFileFactory gtf = FactoryRepository.getgenetfContainerFileFactory();
         Container con = gtf.create(NEW_INSTANCE_FILE);
 
         fillContainer(con);
 
         System.out.println("\ntestCreateBlankInstance():");
-        printContainer(con);
+        //printContainer(con);
         
         // call constraint checker
-        String res = gtf.checkConstraints();
-        System.out.println("\nResult of constraint evaluation: " + res + "\n");
+        //String res = gtf.checkConstraints();
+        //System.out.println("\nResult of constraint evaluation: " + res + "\n");
 
         gtf.save();
     }
@@ -155,7 +169,7 @@ public class GeneTFFileInstanceTest extends TestCase {
      * @throws UdmException
      */
     public void testOpenExistingFromFile() throws UdmException {
-        ContainerFileFactory gtf = FactoryRepository.getGeneTFContainerFileFactory();
+        ContainerFileFactory gtf = FactoryRepository.getgenetfContainerFileFactory();
         Container con = gtf.open(NEW_INSTANCE_FILE);
 
         System.out.println("\ntestOpenExistingFromFile():\n");
@@ -170,7 +184,7 @@ public class GeneTFFileInstanceTest extends TestCase {
      */
     public void testOpenExistingFromFileSaveToStream()
         throws UdmException {
-        ContainerFileFactory gtf = FactoryRepository.getGeneTFContainerFileFactory();
+        ContainerFileFactory gtf = FactoryRepository.getgenetfContainerFileFactory();
         Container con = gtf.open(NEW_INSTANCE_FILE);
 
         InputStream a = gtf.saveAsStream();
@@ -196,7 +210,7 @@ public class GeneTFFileInstanceTest extends TestCase {
             return;
         }
 
-        ContainerFileFactory gtf = FactoryRepository.getGeneTFContainerFileFactory();
+        ContainerFileFactory gtf = FactoryRepository.getgenetfContainerFileFactory();
         Container con = gtf.open(xml);
 
         gtf.saveAs(BM_FILE_OUT);
