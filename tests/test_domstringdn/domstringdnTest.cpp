@@ -12,7 +12,7 @@
 CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::domstringdnTest );
 
 
-using namespace LampDiagram::LampDiagram;
+using namespace LampDiagram;
 
 
 void UdmTests::domstringdnTest::test()
@@ -222,7 +222,7 @@ string xml_verify_str =
 	UdmDom::DomDataNetwork ddn(LampDiagram::diagram);
 	ddn.OpenExistingFromString(xml_str,"LampDiagram.xsd");
 	RootFolder rf = RootFolder::Cast(ddn.GetRootObject());
-	Lamp l = *( (set<Lamp>(rf.LampDiagram_Lamp_kind_children())).begin());
+	Lamp l = *( (set<Lamp>(rf.Lamp_kind_children())).begin());
 	l.name() = " name changed!";
 	ddn.CloseWithUpdate();
 
