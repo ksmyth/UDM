@@ -1,7 +1,7 @@
 #ifndef MOBIES_UML_H
 #define MOBIES_UML_H
 // header file Uml.h generated from diagram Uml
-// generated on Sat Oct 28 21:17:15 2006
+// generated on Mon Jul 02 20:48:17 2007
 
 #ifndef MOBIES_UDMBASE_H
 #include "UdmBase.h"
@@ -38,6 +38,7 @@ namespace Uml {
 		UDM_DLL void CreateMetaObjs();
 		UDM_DLL void InitCrossNSInheritence();
 		UDM_DLL void InitCrossNSCompositions();
+		UDM_DLL void InitCrossNSAssociations();
 		class UDM_DLL Attribute :  public Udm::Object {
 		public:
 			static ::Uml::Class meta;
@@ -59,7 +60,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::Attribute> Derived() { return Udm::DerivedAttr< ::Uml::Attribute>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::Attribute, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::Attribute, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::Attribute> Archetype() { return Udm::ArchetypeAttr< ::Uml::Attribute>(impl);}
+			Udm::ArchetypeAttr< ::Uml::Attribute> Archetype() const { return Udm::ArchetypeAttr< ::Uml::Attribute>(impl);}
 
 			static ::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
@@ -114,7 +115,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::ConstraintDefinition> Derived() { return Udm::DerivedAttr< ::Uml::ConstraintDefinition>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::ConstraintDefinition, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::ConstraintDefinition, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::ConstraintDefinition> Archetype() { return Udm::ArchetypeAttr< ::Uml::ConstraintDefinition>(impl);}
+			Udm::ArchetypeAttr< ::Uml::ConstraintDefinition> Archetype() const { return Udm::ArchetypeAttr< ::Uml::ConstraintDefinition>(impl);}
 
 			static ::Uml::Attribute meta_stereotype;
 			Udm::StringAttr stereotype() const { return Udm::StringAttr(impl, meta_stereotype); }
@@ -157,7 +158,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::GenericRole> Derived() { return Udm::DerivedAttr< ::Uml::GenericRole>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::GenericRole, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::GenericRole, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::GenericRole> Archetype() { return Udm::ArchetypeAttr< ::Uml::GenericRole>(impl);}
+			Udm::ArchetypeAttr< ::Uml::GenericRole> Archetype() const { return Udm::ArchetypeAttr< ::Uml::GenericRole>(impl);}
 
 			static ::Uml::Attribute meta_isNavigable;
 			Udm::BooleanAttr isNavigable() const { return Udm::BooleanAttr(impl, meta_isNavigable); }
@@ -189,7 +190,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::Constraint> Derived() { return Udm::DerivedAttr< ::Uml::Constraint>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::Constraint, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::Constraint, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::Constraint> Archetype() { return Udm::ArchetypeAttr< ::Uml::Constraint>(impl);}
+			Udm::ArchetypeAttr< ::Uml::Constraint> Archetype() const { return Udm::ArchetypeAttr< ::Uml::Constraint>(impl);}
 
 			static ::Uml::Attribute meta_description;
 			Udm::StringAttr description() const { return Udm::StringAttr(impl, meta_description); }
@@ -226,7 +227,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::Class> Derived() { return Udm::DerivedAttr< ::Uml::Class>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::Class, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::Class, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::Class> Archetype() { return Udm::ArchetypeAttr< ::Uml::Class>(impl);}
+			Udm::ArchetypeAttr< ::Uml::Class> Archetype() const { return Udm::ArchetypeAttr< ::Uml::Class>(impl);}
 
 			static ::Uml::Attribute meta_isAbstract;
 			Udm::BooleanAttr isAbstract() const { return Udm::BooleanAttr(impl, meta_isAbstract); }
@@ -320,7 +321,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::Namespace> Derived() { return Udm::DerivedAttr< ::Uml::Namespace>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::Namespace, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::Namespace, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::Namespace> Archetype() { return Udm::ArchetypeAttr< ::Uml::Namespace>(impl);}
+			Udm::ArchetypeAttr< ::Uml::Namespace> Archetype() const { return Udm::ArchetypeAttr< ::Uml::Namespace>(impl);}
 
 			static ::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
@@ -382,7 +383,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::Composition> Derived() { return Udm::DerivedAttr< ::Uml::Composition>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::Composition, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::Composition, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::Composition> Archetype() { return Udm::ArchetypeAttr< ::Uml::Composition>(impl);}
+			Udm::ArchetypeAttr< ::Uml::Composition> Archetype() const { return Udm::ArchetypeAttr< ::Uml::Composition>(impl);}
 
 			static ::Uml::Attribute meta_nonpersistent;
 			Udm::BooleanAttr nonpersistent() const { return Udm::BooleanAttr(impl, meta_nonpersistent); }
@@ -434,7 +435,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::TaggedValue> Derived() { return Udm::DerivedAttr< ::Uml::TaggedValue>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::TaggedValue, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::TaggedValue, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::TaggedValue> Archetype() { return Udm::ArchetypeAttr< ::Uml::TaggedValue>(impl);}
+			Udm::ArchetypeAttr< ::Uml::TaggedValue> Archetype() const { return Udm::ArchetypeAttr< ::Uml::TaggedValue>(impl);}
 
 			static ::Uml::Attribute meta_value;
 			Udm::StringAttr value() const { return Udm::StringAttr(impl, meta_value); }
@@ -472,7 +473,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::Association> Derived() { return Udm::DerivedAttr< ::Uml::Association>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::Association, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::Association, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::Association> Archetype() { return Udm::ArchetypeAttr< ::Uml::Association>(impl);}
+			Udm::ArchetypeAttr< ::Uml::Association> Archetype() const { return Udm::ArchetypeAttr< ::Uml::Association>(impl);}
 
 			static ::Uml::Attribute meta_nonpersistent;
 			Udm::BooleanAttr nonpersistent() const { return Udm::BooleanAttr(impl, meta_nonpersistent); }
@@ -529,7 +530,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::AssociationRole> Derived() { return Udm::DerivedAttr< ::Uml::AssociationRole>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::AssociationRole, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::AssociationRole, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::AssociationRole> Archetype() { return Udm::ArchetypeAttr< ::Uml::AssociationRole>(impl);}
+			Udm::ArchetypeAttr< ::Uml::AssociationRole> Archetype() const { return Udm::ArchetypeAttr< ::Uml::AssociationRole>(impl);}
 
 			static ::Uml::Attribute meta_max;
 			Udm::IntegerAttr max() const { return Udm::IntegerAttr(impl, meta_max); }
@@ -569,7 +570,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::CompositionParentRole> Derived() { return Udm::DerivedAttr< ::Uml::CompositionParentRole>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::CompositionParentRole, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::CompositionParentRole, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::CompositionParentRole> Archetype() { return Udm::ArchetypeAttr< ::Uml::CompositionParentRole>(impl);}
+			Udm::ArchetypeAttr< ::Uml::CompositionParentRole> Archetype() const { return Udm::ArchetypeAttr< ::Uml::CompositionParentRole>(impl);}
 
 			static ::Uml::AssociationRole meta_target;
 			Udm::PointerAttr< ::Uml::Class> target() const { return Udm::PointerAttr< ::Uml::Class>(impl, meta_target); }
@@ -600,7 +601,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::CompositionChildRole> Derived() { return Udm::DerivedAttr< ::Uml::CompositionChildRole>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::CompositionChildRole, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::CompositionChildRole, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::CompositionChildRole> Archetype() { return Udm::ArchetypeAttr< ::Uml::CompositionChildRole>(impl);}
+			Udm::ArchetypeAttr< ::Uml::CompositionChildRole> Archetype() const { return Udm::ArchetypeAttr< ::Uml::CompositionChildRole>(impl);}
 
 			static ::Uml::Attribute meta_max;
 			Udm::IntegerAttr max() const { return Udm::IntegerAttr(impl, meta_max); }
@@ -637,7 +638,7 @@ namespace Uml {
 			Udm::DerivedAttr< ::Uml::Diagram> Derived() { return Udm::DerivedAttr< ::Uml::Diagram>(impl);}
 			template <class Pred> Udm::DerivedAttr< ::Uml::Diagram, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr< ::Uml::Diagram, Pred>(impl);}
 
-			Udm::ArchetypeAttr< ::Uml::Diagram> Archetype() { return Udm::ArchetypeAttr< ::Uml::Diagram>(impl);}
+			Udm::ArchetypeAttr< ::Uml::Diagram> Archetype() const { return Udm::ArchetypeAttr< ::Uml::Diagram>(impl);}
 
 			static ::Uml::Attribute meta_version;
 			Udm::StringAttr version() const { return Udm::StringAttr(impl, meta_version); }
