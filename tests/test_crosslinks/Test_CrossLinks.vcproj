@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="Test_CrossLinks"
+	RootNamespace="Test_CrossLinks"
 	SccProjectName="SAK"
 	SccAuxPath="SAK"
 	SccLocalPath="SAK"
@@ -41,7 +42,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="cppunitd.lib testrunnerd.lib UdmDlld.lib zlibD.lib xerces-c_2D.lib"
-				OutputFile=".\Debug/Test_CrossLinks.exe"
+				OutputFile="..\..\bin\Test_CrossLinksD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="../../lib"
@@ -105,7 +106,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="cppunit.lib testrunner.lib UdmDll.lib zlib.lib xerces-c_2.lib"
-				OutputFile=".\Release/Test_CrossLinks.exe"
+				OutputFile="..\..\bin\Test_CrossLinks.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="../../lib"
