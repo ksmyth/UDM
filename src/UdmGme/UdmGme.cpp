@@ -213,7 +213,6 @@ using namespace MGALib;
 
 
 #define WRITE_OP_REFRESH_RATE 26		//this value was approximated by binary search, try&error
-#define NS_REGNODE_NAME "__udm_namespace"
 #include "UdmGme.h"
 #include "GmeObject.h"
 #include <UdmUtil.h>
@@ -287,7 +286,7 @@ namespace UdmGme
 	{
 		::Uml::Class acl = ass.assocClass();
 		string ret;
-		if(acl) ret = acl.name();
+		if(acl) ret = PATHGET(acl);
 		else 
 		{
 			ret = ass.name();
@@ -296,14 +295,20 @@ namespace UdmGme
 				set< ::Uml::AssociationRole> roles = ass.roles();
 				set< ::Uml::AssociationRole>::iterator j = roles.begin(); 
 				ret = "noname_";
-				ret += (string)((::Uml::Class)j->target()).name();
+				ret += PATHGET((::Uml::Class)j->target());
 				ret += "_to_";
-				ret += (string)((::Uml::Class)(++j)->target()).name();
+				ret += PATHGET((::Uml::Class)(++j)->target());
 			}
 		}
 		return ret;
 	}
-	
+
+	int CompareKindToClass(IMgaMetaFCOPtr kind, ::Uml::Class meta)
+	{
+		return ((string)PATHGET(meta)).compare(kind->Name);
+	}
+
+
 	
 
 	typedef pair<bool, string> RpHelperID;	// pair<role_is_navigable, object_id>
@@ -1272,16 +1277,14 @@ bbreak:			;
 			}
 			IMgaMetaFolderPtr mf;
 			IMgaMetaFCOPtr mfco;
-			HRESULT hr1 = (folderself->MetaFolder->get_LegalRootObjectByName(SmartBSTR(NAMEGET(kind)), &mfco));
-			HRESULT hr2 = (folderself->MetaFolder->get_LegalChildFolderByName(SmartBSTR(NAMEGET(kind)), &mf));
+			HRESULT hr1 = (folderself->MetaFolder->get_LegalRootObjectByName(SmartBSTR(PATHGET(kind)), &mfco));
+			HRESULT hr2 = (folderself->MetaFolder->get_LegalChildFolderByName(SmartBSTR(PATHGET(kind)), &mf));
 			
 			if(mf) 
 			{
 				if(mfco) CASSERT("Multiple child kinds match");
 				IMgaFolderPtr nf;
 				nf = folderself->CreateFolder(mf);
-				::Uml::Namespace m_type_ns = m_type.parent_ns();
-				COMTHROW(nf->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? m_type_ns.getPath2(":", false).c_str() : NULL)));
 				GmeObject * retval = new GmeObject( nf, mydn);
 				retval->setDefaultAttributes(false);
 				return retval;
@@ -1292,8 +1295,6 @@ bbreak:			;
 				if (!archetype)
 				{
 					nfco = folderself->CreateRootObject(mfco);
-					::Uml::Namespace m_type_ns = m_type.parent_ns();
-					COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? m_type_ns.getPath2(":", false).c_str() : NULL)));
 					GmeObject * retval =   new GmeObject( nfco, mydn);
 					retval->setDefaultAttributes(false);
 					return retval;
@@ -1302,9 +1303,6 @@ bbreak:			;
 				{
 					nfco = folderself->DeriveRootObject(((GmeObject *)archetype)->self, subtype ? VARIANT_FALSE : VARIANT_TRUE);
 					
-					::Uml::Namespace m_type_ns = m_type.parent_ns();
-					COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? m_type_ns.getPath2(":", false).c_str() : NULL)));
-				
 					GmeObject * retval =   new GmeObject( nfco, mydn);
 					return retval;
 				}
@@ -1351,7 +1349,7 @@ bbreak:			;
 			IMgaMetaRolesPtr rrs = pmeta->Roles;
 			MGACOLL_ITERATE(IMgaMetaRole, rrs) 
 			{
-				if(MGACOLL_ITER->kind->Name == SmartBSTR(NAMEGET(kind))) 
+				if(CompareKindToClass(MGACOLL_ITER->kind, kind) == 0) 
 				{
 					if(rr) 
 						throw udm_exception("Multiple childroles match, role must be specified");
@@ -1366,9 +1364,6 @@ bbreak:			;
 		{
 			nfco = m->CreateChildObject(rr);
 			
-			::Uml::Namespace m_type_ns = m_type.parent_ns();
-			COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? m_type_ns.getPath2(":", false).c_str() : NULL)));
-				
 			GmeObject * retval =  new GmeObject( nfco, mydn);
 			retval->setDefaultAttributes(false);
 			return retval;
@@ -1377,8 +1372,6 @@ bbreak:			;
 		{
 			
 			nfco = m->DeriveChildObject( ((GmeObject *)archetype)->self,  rr, subtype ? VARIANT_FALSE : VARIANT_TRUE );
-			::Uml::Namespace m_type_ns = m_type.parent_ns();
-			COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(m_type_ns ? m_type_ns.getPath2(":", false).c_str() : NULL)));
 				
 			GmeObject * retval =  new GmeObject( nfco, mydn);
 			return retval;
@@ -1630,7 +1623,7 @@ bbreak:			;
 		if(role)  
 		{
 			rr = GetMetaRoleForChildRole(Uml::theOther(role), parent->Meta);
-			if(rr->kind->Name != SmartBSTR(NAMEGET(m_type))) CASSERT("Role-Kindname mismatch");
+			if(CompareKindToClass(rr->kind, m_type)) CASSERT("Role-Kindname mismatch");
 		}
 #ifndef DEDUCE_NULLROLES
 		else 
@@ -1695,7 +1688,7 @@ bbreak:			;
 				while (!found && d_i != descendants.end())
 				{
 					::Uml::Class descendant = *d_i++;
-					found = (real_role->Name == SmartBSTR( ((string)descendant.name()).c_str() ));
+					found = (real_role->Name == SmartBSTR( ((string)PATHGET(descendant)).c_str() ));
 				}
 
 				//and it also may be one of inherited multiple chilroles,
@@ -1704,7 +1697,7 @@ bbreak:			;
 				while (!found && d_i != descendants.end())
 				{
 					::Uml::Class descendant = *d_i++;
-					found = (real_role->Name == SmartBSTR( ((string)descendant.name() + (string)ccr.name()).c_str()  ));
+					found = (real_role->Name == SmartBSTR( (PATHGET(descendant) + (string)ccr.name()).c_str() ));
 				}
 
 				//if still not found, than the this is not contained via the requested role
@@ -1751,19 +1744,19 @@ bbreak:			;
 				//first we try without rolename appended, this happens more often
 				try 
 				{
-					mn = kind.name();
+					mn = PATHGET(kind);
 					rr = mmodel->RoleByName[SmartBSTR(mn.c_str())];
 				}
 				catch(...)
 				{
-					mn = (string)kind.name() + (string)ccr.name();
+					mn = PATHGET(kind) + (string)ccr.name();
 					rr = mmodel->RoleByName[SmartBSTR(mn.c_str())];
 
 				}
 			}
 			else
 			{
-				mn = (string)kind.name() + (string)ccr.name();
+				mn = PATHGET(kind) + (string)ccr.name();
 				rr = mmodel->RoleByName[SmartBSTR(mn.c_str())];
 			}
 		}
@@ -1779,7 +1772,7 @@ bbreak:			;
 			string rn = ccr.name();
 			if (rn.empty())
 			{
-				string kn = kind.name();
+				string kn = PATHGET(kind);
 				rr = mmodel->RoleByName[SmartBSTR(kn.c_str())];
 			}
 			else
@@ -1804,7 +1797,7 @@ bbreak:			;
 			throw udm_exception("Metamodel not found");
 		string mn = Uml::MakeShortRoleName(meta);
 		if(mn.empty()) 
-			mn = NAMEGET(::Uml::Class(meta.target()));
+			mn = PATHGET(::Uml::Class(meta.target()));
 		rr = mmodel->RoleByName[SmartBSTR(mn.c_str())];
 		if(rr == NULL) 
 			throw udm_exception("Role not found in model: " + mn);
@@ -2208,13 +2201,7 @@ bbreak:			;
 	::Uml::Class GmeObject::findClass() 
 	{
 		SmartBSTR name = Meta()->Name;
-		SmartBSTR ns_path = Meta()->RegistryValue[NS_REGNODE_NAME];
-		string key;
-		if (!ns_path)
-			key = string((const char *)name);
-		else
-			key = string((const char *)ns_path) + ':' + string((const char *)name);
-
+		string key(name);
 
 		map<string, const ::Uml::Class>::iterator j = ((GmeDataNetwork*)mydn)->meta_class_cache.find(key);
 
@@ -2401,7 +2388,7 @@ bbreak:			;
 		::Uml::DiagramClasses meta_classes(*dia.dgr);
 		for (::Uml::DiagramClasses::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
 		{
-			string key = mci->getPath2(":", false);
+			string key = PATHGET(*mci);
 			pair<string const, const ::Uml::Class> mcc_item(key, *mci);
 			pair<map<string, const ::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
 			if (!ins_res.second)
@@ -2516,7 +2503,7 @@ bbreak:			;
 					//check if the rolename is reference or set-member relationship
 					if(!aclass && (rolename == "ref" || rolename == "members")) 
 					{
-						nn.metaobj = MetaObjLookup(metaproj, ((::Uml::Class)Uml::theOther(*j).target()).name());
+						nn.metaobj = MetaObjLookup(metaproj, PATHGET((::Uml::Class)Uml::theOther(*j).target()));
 
 						// the reference could be an abstract UML class
 						if (nn.metaobj == NULL && rolename == "ref")
@@ -2528,7 +2515,7 @@ bbreak:			;
 							set< ::Uml::Class> other_descs = Uml::DescendantClasses((::Uml::Class)Uml::theOther(*j).target());
 							for (set< ::Uml::Class>::iterator desc_i = other_descs.begin(); desc_i != other_descs.end(); desc_i++)
 							{	
-								IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_i->name());
+								IMgaMetaFCOPtr p = MetaObjLookup(metaproj, PATHGET(*desc_i));
 								if (p)
 								{
 									if (p->GetObjType() != OBJTYPE_REFERENCE) continue;
@@ -2599,7 +2586,7 @@ bbreak:			;
 								int real_size = 0;
 								for (set< ::Uml::Class>::iterator desc_i = descs.begin();desc_i != descs.end();desc_i++)
 								{	
-									IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_i->name());
+									IMgaMetaFCOPtr p = MetaObjLookup(metaproj, PATHGET(*desc_i));
 									if (p) real_size++;
 								};
 
@@ -2611,7 +2598,7 @@ bbreak:			;
 								//copy the MgaMetaFCOPtrs to the allocated array in the nn structure
 								for (set< ::Uml::Class>::iterator desc_ii = descs.begin();desc_ii != descs.end();desc_ii++)
 								{	
-									IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_ii->name());
+									IMgaMetaFCOPtr p = MetaObjLookup(metaproj, PATHGET(*desc_ii));
 									if (p)
 									{
 										nn.metaobjs[j] = p;
@@ -2646,13 +2633,11 @@ bbreak:			;
 						for(j = roles.begin(); j != roles.end(); j++) 
 						{
 							if(!Uml::theOther(*j).isNavigable()) continue;
-							string lookupstr = ((::Uml::Class)j->target()).name();
-							string lookupstr1 = j->name();
 
 							bool isnavi1 = j->isNavigable();
 							bool isnavi2 = Uml::theOther(*j).isNavigable();
 
-							IMgaMetaFCOPtr bt = MetaObjLookup(metaproj, ((::Uml::Class)j->target()).name());
+							IMgaMetaFCOPtr bt = MetaObjLookup(metaproj, PATHGET((::Uml::Class)j->target()));
 							if(bt) 
 							{   // not abstract, etc;
 								SmartBSTR herename, therename, sRefParent, dRefParent;
@@ -2703,10 +2688,11 @@ bbreak:			;
 						set< ::Uml::AssociationRole>::iterator j;
 						for(j = roles.begin(); j != roles.end(); j++) 
 						{
+							// XXX what namespace?
 							if(searchname == NAMEGET((::Uml::Class)j->target()) && Uml::theOther(*j).isNavigable()) 
 							{
 								nn.primary = *j;
-								nn.metaobj = MetaObjLookup(metaproj, ((::Uml::Class)j->target()).name());
+								nn.metaobj = MetaObjLookup(metaproj, PATHGET((::Uml::Class)j->target()));
 								expect = nn.metaobj->GetObjType();
 								break;
 							}
@@ -2714,7 +2700,7 @@ bbreak:			;
 						if(j == roles.end()) 
 						{  
 							// otherwise it is a connection
-							nn.metaobj = MetaObjLookup(metaproj, searchname);
+							nn.metaobj = MetaObjLookup(metaproj, searchname); // XXX what namespace?
 							expect = OBJTYPE_CONNECTION;
 						}
 					}//else if(searchname.empty()) 
@@ -2728,7 +2714,7 @@ bbreak:			;
 					set< ::Uml::Class> descs = Uml::DescendantClasses(aclass);
 					if (descs.size() <= 1)
 					{
-						nn.metaobj = MetaObjLookup(metaproj, aclass.name());
+						nn.metaobj = MetaObjLookup(metaproj, PATHGET(aclass));
 					}
 					else
 					{
@@ -2740,7 +2726,7 @@ bbreak:			;
 						int real_size = 0;
 						for (set< ::Uml::Class>::iterator desc_i = descs.begin();desc_i != descs.end();desc_i++)
 						{	
-							IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_i->name());
+							IMgaMetaFCOPtr p = MetaObjLookup(metaproj, PATHGET(*desc_i));
 							if (p) real_size++;
 						};
 
@@ -2752,7 +2738,7 @@ bbreak:			;
 						//copy the MgaMetaFCOPtrs to the allocated array in the nn structure
 						for (set< ::Uml::Class>::iterator desc_ii = descs.begin();desc_ii != descs.end();desc_ii++)
 						{	
-							IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_ii->name());
+							IMgaMetaFCOPtr p = MetaObjLookup(metaproj, PATHGET(*desc_ii));
 							if (p)
 							{
 								nn.metaobjs[j] = p;
@@ -2982,8 +2968,6 @@ bbreak:			;
 				CASSERT("Cannot create this object as root");
 			}
 
-			::Uml::Namespace rootclass_ns = rootclass.parent_ns();
-			COMTHROW(project->RootFolder->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(rootclass_ns ? rootclass_ns.getPath2(":", false).c_str() : NULL)));
 			rootobject = bb;
 		}
 		catch(gme_exc &s) { 
@@ -3118,8 +3102,8 @@ bbreak:			;
 		set< ::Uml::Class> des = Uml::DescendantClasses(role.target());
 		for (set< ::Uml::Class>::iterator des_i = des.begin(); des_i != des.end(); des_i++)
 		{
-			MetaRoleFilter.insert((string)(*des_i).name());
-			MetaRoleFilter.insert((string)(*des_i).name() + (string)role.name());
+			MetaRoleFilter.insert(PATHGET(*des_i));
+			MetaRoleFilter.insert(PATHGET(*des_i) + (string)role.name());
 		}
 
 		//insert the newly created set<string> in a cache
