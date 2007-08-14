@@ -60,16 +60,14 @@ struct UdmBool
 	UdmBool(bool val) {boolVal = val;};
 	bool boolVal;
 };
-#ifdef _WIN32
-  typedef  __int64 UDM__int64;
-#else
-  typedef long long UDM__int64; 
+#ifndef _WIN32
+  typedef long long __int64; 
 #endif
 
 struct UdmLong {
 	UdmLong() {longVal = 0;};
-	UdmLong(UDM__int64 val) {longVal = val;};
-	UDM__int64 longVal;
+	UdmLong(__int64 val) {longVal = val;};
+	__int64 longVal;
 };
 
 
