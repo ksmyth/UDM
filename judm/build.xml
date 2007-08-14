@@ -253,6 +253,18 @@
 			<fileset dir="${udmswig.classes.dir}" casesensitive="no"/>
 		</copy>
 
+		<!-- Delete UML XSD JAVA -->
+		<!--delete>
+			<fileset dir="${udmswiglight.src.dir}/edu/vanderbilt/isis/udm/meta">
+				<filename name="Uml_xsd.java" />
+			</fileset>
+		</delete-->
+
+		<!-- Generate UML XSD JAVA -->
+		<!--exec dir="${udmswiglight.src.dir}/edu/vanderbilt/isis/udm/meta" executable="cmd">
+			<arg line="/c ${udm.etc.dir}/StrResGen ${udm.etc.dir}/Uml.xsd Uml_xsd JAVA edu.vanderbilt.isis.udm.meta" />
+		</exec-->
+
 		<!-- Compile wrapper for the SWIG generated Java code classes (UdmCintLight)-->
 		<mkdir dir="${udmswiglight.classes.dir}" />
 		<javac srcdir="${udmswiglight.src.dir}" destdir="${udmswiglight.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
@@ -385,12 +397,16 @@
 		
 		<!-- Copy the jUnit to the distribution directory -->
 		<copy todir="${judm.dist.dir}" file="lib/junit/junit.jar" />
+
 		<!-- Copy the Uml.xsd to the distribution directory -->
 		<copy todir="${judm.dist.dir}" file="${udm.etc.dir}/Uml.xsd" />
+
 		<!-- Copy the documentation to the distribution directory -->
 		<copy todir="${judm.dist.dir}/doc">
 			<mapper type="flatten" />
-			<fileset dir="${doc.dir}" casesensitive="no"/>
+			<fileset dir="${doc.dir}" casesensitive="no">
+				<include name="*.pdf" />
+			</fileset>
 		</copy>
 		
 		<!-- Create judm.jar in the distribution directory -->
@@ -443,12 +459,16 @@
 		
 		<!-- Copy the jUnit to the distribution directory -->
 		<copy todir="${judm.dist.dir}" file="lib/junit/junit.jar" />
+
 		<!-- Copy the Uml.xsd to the distribution directory -->
 		<copy todir="${judm.dist.dir}" file="${udm.etc.dir}/Uml.xsd" />
+
 		<!-- Copy the documentation to the distribution directory -->
 		<copy todir="${judm.dist.dir}/doc">
 			<mapper type="flatten" />
-			<fileset dir="${doc.dir}" casesensitive="no"/>
+			<fileset dir="${doc.dir}" casesensitive="no">
+				<include name="*.pdf" />
+			</fileset>
 		</copy>
 		
 		<!-- Create judm.jar in the distribution directory -->
