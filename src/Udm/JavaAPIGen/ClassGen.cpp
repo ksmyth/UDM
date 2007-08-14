@@ -9,12 +9,12 @@
 /*!
   Creates and initializes the Java API generation.
 */
-ClassGen::ClassGen( const ::Uml::Uml::Class &cl
+ClassGen::ClassGen( const ::Uml::Class &cl
       , const string & pckg_name
       , const string &  diag_name)
 :   m_cl( cl ), m_package_name(  pckg_name  ), m_diag_name(  diag_name  )
   , m_output(), m_cl_name ( cl.name() )
-  , m_ns_name( Utils::toLower((string)::Uml::Uml::Namespace(cl.parent()).name()) )
+  , m_ns_name( Utils::toLower((string)::Uml::Namespace(cl.parent()).name()) )
   , m_base_name( "UdmPseudoObject" )
 {
 }
@@ -134,7 +134,7 @@ void ClassGen::constructor( )
 //! Find the base class. Note: java does not support multiple inheritance.
 void ClassGen::findBaseClass( )
 {
-  set< ::Uml::Uml::Class> bases = m_cl.baseTypes();
+  set< ::Uml::Class> bases = m_cl.baseTypes();
   if ( bases.size() > 1 )
     throw udm_exception( string( "Java does not support multiple inheritence. Class:" ) + m_cl_name );
 
@@ -172,14 +172,14 @@ void ClassGen::construction( )
   m_output << "\t/* Construction */" << endl << endl;
 
   // the first non-abstract ancestor
-  ::Uml::Uml::Class ret_type = Utils::getFirstNonAbstractAncestor( m_cl );
+  ::Uml::Class ret_type = Utils::getFirstNonAbstractAncestor( m_cl );
   string ret_type_name = ret_type.name( );
 
-  set< ::Uml::Uml::Class> conts = Uml::AncestorContainerClasses( m_cl );
-  for ( set< ::Uml::Uml::Class>::iterator c_i = conts.begin(); c_i != conts.end(); c_i++ )
+  set< ::Uml::Class> conts = Uml::AncestorContainerClasses( m_cl );
+  for ( set< ::Uml::Class>::iterator c_i = conts.begin(); c_i != conts.end(); c_i++ )
   {
     string c_i_name = c_i->name();
-    ::Uml::Uml::Composition comp = Uml::matchChildToParent( m_cl, *c_i );
+    ::Uml::Composition comp = Uml::matchChildToParent( m_cl, *c_i );
 
     m_output << "\t/**" << endl;
     m_output << "\t * Creates an instance of the class in the container specified by the parameter. " << endl;
@@ -201,13 +201,13 @@ void ClassGen::construction( )
     else
     {
       // with childroles
-      set< ::Uml::Uml::CompositionChildRole> ccrs = ::Uml::CompositionPeerChildRoles(*c_i);
-      for( set< ::Uml::Uml::CompositionChildRole>::iterator ccrs_i = ccrs.begin(); ccrs_i != ccrs.end(); ccrs_i++ )
+      set< ::Uml::CompositionChildRole> ccrs = ::Uml::CompositionPeerChildRoles(*c_i);
+      for( set< ::Uml::CompositionChildRole>::iterator ccrs_i = ccrs.begin(); ccrs_i != ccrs.end(); ccrs_i++ )
       {
-        ::Uml::Uml::Class parent = Uml::theOther(*ccrs_i).target();
-        ::Uml::Uml::Class child = ccrs_i->target();
+        ::Uml::Class parent = Uml::theOther(*ccrs_i).target();
+        ::Uml::Class child = ccrs_i->target();
         string child_name = child.name();
-        ::Uml::Uml::Composition comp = Uml::matchChildToParent(child, parent);
+        ::Uml::Composition comp = Uml::matchChildToParent(child, parent);
         if ( !comp )
         {
           //will reach here only if more than one composition is possible
@@ -231,24 +231,24 @@ void ClassGen::accessChildren( )
   m_output << "\t/* Accessing children */" << endl << endl;
 
   // set of contained classes
-  set< ::Uml::Uml::Class> conts = Uml::ContainedClasses( m_cl );
-  for ( set< ::Uml::Uml::Class>::iterator c_i = conts.begin(); c_i != conts.end(); c_i++ )
+  set< ::Uml::Class> conts = Uml::ContainedClasses( m_cl );
+  for ( set< ::Uml::Class>::iterator c_i = conts.begin(); c_i != conts.end(); c_i++ )
   {
     // the descendants of the contained class
-    set < ::Uml::Uml::Class> conts_der = Uml::DescendantClasses( *c_i );
-    for ( set< ::Uml::Uml::Class>::iterator c_d_i = conts_der.begin(); c_d_i != conts_der.end(); c_d_i++ )
+    set < ::Uml::Class> conts_der = Uml::DescendantClasses( *c_i );
+    for ( set< ::Uml::Class>::iterator c_d_i = conts_der.begin(); c_d_i != conts_der.end(); c_d_i++ )
     {
       if ( c_d_i->isAbstract() )
         continue;
 
-      ::Uml::Uml::Composition comp = Uml::matchChildToParent( *c_d_i, m_cl );
+      ::Uml::Composition comp = Uml::matchChildToParent( *c_d_i, m_cl );
       string c_i_name = c_d_i->name();
       string pkg_name = Utils::getPackageSignature( *c_d_i, m_ns_name, m_package_name );
 
       // without child role
       if ( comp )
       {
-        ::Uml::Uml::CompositionChildRole ccr = comp.childRole();
+        ::Uml::CompositionChildRole ccr = comp.childRole();
         string ccr_name = ccr.name();
 
         if ( (ccr.max() == -1) || (ccr.max() > 1) )
@@ -330,14 +330,14 @@ void ClassGen::accessChildren( )
         m_output << "\t}" << endl;
         //end of common getter function generation
 
-        set < ::Uml::Uml::CompositionChildRole> ccrs = ::Uml::CompositionPeerChildRoles( m_cl );
-        for ( set< ::Uml::Uml::CompositionChildRole>::iterator ccrs_i = ccrs.begin(); ccrs_i != ccrs.end(); ccrs_i++ )
+        set < ::Uml::CompositionChildRole> ccrs = ::Uml::CompositionPeerChildRoles( m_cl );
+        for ( set< ::Uml::CompositionChildRole>::iterator ccrs_i = ccrs.begin(); ccrs_i != ccrs.end(); ccrs_i++ )
         {
-          ::Uml::Uml::Class parent = Uml::theOther(*ccrs_i).target();
-          ::Uml::Uml::Class child = ccrs_i->target();
+          ::Uml::Class parent = Uml::theOther(*ccrs_i).target();
+          ::Uml::Class child = ccrs_i->target();
           string child_name = child.name( );
           pkg_name = Utils::getPackageSignature( child, m_ns_name, m_package_name );
-          ::Uml::Uml::Composition comp = Uml::matchChildToParent( child, parent );
+          ::Uml::Composition comp = Uml::matchChildToParent( child, parent );
 
           if ( !comp )
           {
@@ -403,8 +403,8 @@ void ClassGen::accessAttributes( )
   m_output << "\t/* Attribute setters, getters */" << endl << endl;
 
   // set of attributes
-  set < ::Uml::Uml::Attribute> atts = m_cl.attributes();
-  for ( set< ::Uml::Uml::Attribute>::iterator atts_i = atts.begin(); atts_i != atts.end(); atts_i++ )
+  set < ::Uml::Attribute> atts = m_cl.attributes();
+  for ( set< ::Uml::Attribute>::iterator atts_i = atts.begin(); atts_i != atts.end(); atts_i++ )
   {
     string att_name = atts_i->name();
 
@@ -504,15 +504,15 @@ void ClassGen::associations( )
   m_output << "\t/* Associations */" << endl << endl;
 
   // association classes
-  ::Uml::Uml::Association ass = Uml::GetAncestorAssociation( m_cl );
+  ::Uml::Association ass = Uml::GetAncestorAssociation( m_cl );
 
   if ( ass )
   {
     // set of association roles
-    set < ::Uml::Uml::AssociationRole> ass_roles = ass.roles();
-    for( set< ::Uml::Uml::AssociationRole>::iterator a_r_i = ass_roles.begin(); a_r_i != ass_roles.end(); a_r_i++ )
+    set < ::Uml::AssociationRole> ass_roles = ass.roles();
+    for( set< ::Uml::AssociationRole>::iterator a_r_i = ass_roles.begin(); a_r_i != ass_roles.end(); a_r_i++ )
     {
-      ::Uml::Uml::Class target_cl = a_r_i->target();
+      ::Uml::Class target_cl = a_r_i->target();
 
       string tname = target_cl.name();
       string ar_name = a_r_i->name();
@@ -556,19 +556,19 @@ void ClassGen::associations( )
 
   // associations
   // set of associations
-  set < ::Uml::Uml::AssociationRole> assroles = m_cl.associationRoles();
+  set < ::Uml::AssociationRole> assroles = m_cl.associationRoles();
 
   if ( assroles.size() )
     {
-    for( set< ::Uml::Uml::AssociationRole>::iterator ar_i = assroles.begin(); ar_i != assroles.end(); ar_i++ )
+    for( set< ::Uml::AssociationRole>::iterator ar_i = assroles.begin(); ar_i != assroles.end(); ar_i++ )
     {
       string asr_name = ar_i->name();
       string to_asr_name = (string)Uml::theOther(*ar_i).name();
 
-      ::Uml::Uml::Class to_class = (::Uml::Uml::Class)((Uml::theOther(*ar_i)).target());
+      ::Uml::Class to_class = (::Uml::Class)((Uml::theOther(*ar_i)).target());
       string helper_mode = "TARGET_FROM_PEER";
-      ::Uml::Uml::Association ass = ar_i->parent();
-      ::Uml::Uml::Class ass_class = ass.assocClass();
+      ::Uml::Association ass = ar_i->parent();
+      ::Uml::Class ass_class = ass.assocClass();
 
       if ( ass_class )
       {
