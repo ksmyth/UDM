@@ -381,9 +381,9 @@ void GenerateMetaCPPInitInheritance(const ::Uml::Uml::Namespace &ns, ostream & o
 };
 void GenerateMetaCPPInitialize(const ::Uml::Uml::Namespace & ns, const ::Uml::Uml::Diagram & cross_dgr, ostream & output, const string& macro, const string& hname, bool isCrossDgr)
 {
-		//Generate the Initialize() function
+		//Generate the InitializeNS() function
 
-	output << "\t\t" << macro << " void Initialize()" << endl << "\t\t{" << endl;
+	output << "\t\t" << macro << " void InitializeNS()" << endl << "\t\t{" << endl;
 /*
 	output << "\t\tstatic bool first = true;" << endl;
 	output << "\t\tif(!first) return;" << endl;
@@ -453,7 +453,7 @@ void GenerateMetaCPPDiagramInitialize(const ::Uml::Uml::Diagram &dgr,
 		output << "\t\t" << endl;
 		::Uml::Uml::Namespace ns = *nses_i;
 		output << "\t\t" << ns.name() << "::meta = ::Uml::CreateNamespace();" <<endl;
-		output << "\t\t" << ns.name() << "::Initialize();" <<endl;
+		output << "\t\t" << ns.name() << "::InitializeNS();" <<endl;
 		output << "\t\t::Uml::InitNamespace("<< ns.name() << "::meta, umldiagram,\"" << ns.name() <<  "\");" <<endl;
 	}
 
@@ -517,7 +517,8 @@ void GenerateCPP(const ::Uml::Uml::Diagram &diagram,
 		{
 			::Uml::Uml::Namespace ns = *nses_i;
 				//begin of namespace
-			output << "\tnamespace " << ns.name() << " {" << endl << endl;
+			if (!single_cpp_namespace)
+				output << "\tnamespace " << ns.name() << " {" << endl << endl;
 			
 			output << "\t\t::Uml::Uml::Namespace meta;" << endl<< endl;
 
@@ -533,7 +534,8 @@ void GenerateCPP(const ::Uml::Uml::Diagram &diagram,
 		
 
 			//end of namespace
-			output << "\t}// END namespace " << ns.name()  <<endl;
+			if (!single_cpp_namespace)
+				output << "\t}// END namespace " << ns.name()  <<endl;
 
 		};
 
