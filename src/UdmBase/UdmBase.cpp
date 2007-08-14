@@ -101,11 +101,11 @@ long long _atoi64(const char *x)  { long long i; sscanf(x,"%lld",&i);return i;};
 
 
 //unix - windows portability issues
-//1. stricmp, strnicmp on WIN32 are strcasecmp, strncasecmp on UNIX
+//1. _stricmp, _strnicmp on WIN32 are strcasecmp, strncasecmp on UNIX
 
 #ifndef WIN32
-#define stricmp(a, b) strcasecmp(a,b)
-#define strnicmp(a, b, n) strncasecmp(a,b,n)
+#define _stricmp(a, b) strcasecmp(a,b)
+#define _strnicmp(a, b, n) strncasecmp(a,b,n)
 #endif
 
 namespace Udm
@@ -1227,7 +1227,7 @@ namespace Udm
 		if(l >= 3) {
 			bid.erase(l);
 			while(p) {
-				if(!stricmp(p->sig.c_str(), bid.c_str())) {
+				if(!_stricmp(p->sig.c_str(), bid.c_str())) {
 					return p->crea(metainfo);
 				}
 				p = p->next;
