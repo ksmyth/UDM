@@ -38,7 +38,7 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 6
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
+# PROP Output_Dir "../../bin"
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -54,14 +54,6 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
 # ADD LINK32 zlib.lib /nologo /subsystem:windows /machine:I386
-# Begin Custom Build
-InputPath=.\Release\UIntWiz.exe
-SOURCE="$(InputPath)"
-
-"UdmInterpreter.zip" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	../../3rdparty/Info-zip/zip.exe -r UdmInterpreter.zip res/UdmInterpreter
-
-# End Custom Build
 
 !ELSEIF  "$(CFG)" == "UIntWiz - Win32 Debug"
 
@@ -72,12 +64,13 @@ SOURCE="$(InputPath)"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 6
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
+# PROP Output_Dir "../../bin"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
 # ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Yu"stdafx.h" /FD /c
+# SUBTRACT CPP /Fr
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -240,6 +233,15 @@ SOURCE=.\res\icon1.ico
 SOURCE=.\res\Resources.txt
 
 !IF  "$(CFG)" == "UIntWiz - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\res\Resources.txt
+
+"UdmInterpreter.zip" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	cd res 
+	..\..\..\3rdParty\Info-zip\zip.exe -r UdmInterpreter.zip UdmInterpreter 
+	
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "UIntWiz - Win32 Debug"
 
