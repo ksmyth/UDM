@@ -1960,7 +1960,10 @@ CString CComponent::GetFilePath(CBuilder &builder, CBuilderObject *focus, char *
 				const CBuilderModelList *cfgs = subfolder->GetRootModels();
 				POSITION cmpos = cfgs->GetHeadPosition();
 				while(cmpos)
-				{	configs.AddTail(cfgs->GetNext(cmpos));
+				{
+					CBuilderModel *curr_model = cfgs->GetNext(cmpos);
+					if ( curr_model->GetKindName() == "Configuration")
+						configs.AddTail( curr_model);
 				}
 			}
 			if(configs.GetCount() == 0)
