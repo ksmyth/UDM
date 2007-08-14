@@ -1197,7 +1197,7 @@ value: Text[0..1]</value>
 							<value>The variable referencedor parameter element. by a rule must be an existing species, compartment, </value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.sbml::species
+							<value>let s = dn.SBML2Ex::sbml::species
 in
 let c = dn.compartment
 in
@@ -1620,7 +1620,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>A Model that has a Species must also have at least one Compartment</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.sbml::species in
+							<value>let s = dn.SBML2Ex::sbml::species in
 let c = dn.compartment in 
   s-&gt;size &gt; 0
     implies
@@ -3040,7 +3040,7 @@ in
 							<value>A species reference in a reaction needs to be to a defined species. The reference can be from reactants, products, or modifiers</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.sbml::species
+							<value>let s = dn.SBML2Ex::sbml::species
 in
 if (s.isUndefined()) then
  true
