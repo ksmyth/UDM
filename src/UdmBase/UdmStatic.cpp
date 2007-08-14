@@ -69,7 +69,7 @@ CHANGELOG
 
 			StaticObject checks if the m_type reference is valid before invoking RemoveSafeType(m_type)
 			Since we can not control the construction/destruction of global objects, 
-			it can happen the the meta-meta objects (::Uml::Uml::Class::meta, Uml::Diagram::meta) are deleted 
+			it can happen the the meta-meta objects (Uml::Class::meta, Uml::Diagram::meta) are deleted 
 			before the metaobjects.
 
 		
@@ -237,7 +237,7 @@ namespace UdmStatic
 		hack: To be GME-backend conformant,
 		this tells whether a link is a GME reference
 	*/
-	bool isRefLink(const ::Uml::Uml::AssociationRole &meta, const int mode, const vector<Udm::ObjectImpl*>& nvect)
+	bool isRefLink(const ::Uml::AssociationRole &meta, const int mode, const vector<Udm::ObjectImpl*>& nvect)
 	{
 		return ( ((string)(meta.name()) == "ref") && (mode == Udm::TARGETFROMPEER) && nvect.size()==1);
 	};
@@ -312,7 +312,7 @@ namespace UdmStatic
 	// --------------------------- StaticObject
 
 
-	StaticObject::StaticObject(const ::Uml::Uml::Class &meta, 
+	StaticObject::StaticObject(const ::Uml::Class &meta, 
 								int ref, StaticObject * archetype, 
 								bool subtype,
 								const bool real_archetype) :
@@ -448,8 +448,8 @@ namespace UdmStatic
 
 	}
 
-	const ::Uml::Uml::Class& StaticObject::type() const { return m_type; };
-//	const ::Uml::Uml::Class& StaticObject::type() const { return ret_m_type; };
+	const ::Uml::Class& StaticObject::type() const { return m_type; };
+//	const ::Uml::Class& StaticObject::type() const { return ret_m_type; };
 
 	
 	uniqueId_type StaticObject::uniqueId() const 
@@ -460,7 +460,7 @@ namespace UdmStatic
 
 	//atribute setters/getters for single value
 
-	string StaticObject::getStringAttr(const ::Uml::Uml::Attribute &meta) const
+	string StaticObject::getStringAttr(const ::Uml::Attribute &meta) const
 	{
 		stringAttrs_type::const_iterator i = stringAttrs.find(meta.uniqueId());
 		if ( i != stringAttrs.end())
@@ -486,7 +486,7 @@ namespace UdmStatic
 		//return i == stringAttrs.end() ? string() : (*i).second;
 	}
 
-	void StaticObject::setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct)
+	void StaticObject::setStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct)
 	{
 		
 		/*1.
@@ -535,7 +535,7 @@ namespace UdmStatic
 		}
 	}
 
-	bool StaticObject::getBooleanAttr(const ::Uml::Uml::Attribute &meta) const
+	bool StaticObject::getBooleanAttr(const ::Uml::Attribute &meta) const
 	{
 		booleanAttrs_type::const_iterator i = booleanAttrs.find(meta.uniqueId());
 		
@@ -546,7 +546,7 @@ namespace UdmStatic
 		//return i == booleanAttrs.end() ? false : (*i).second;
 	}
 
-	void StaticObject::setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a, const bool direct)
+	void StaticObject::setBooleanAttr(const ::Uml::Attribute &meta, bool a, const bool direct)
 	{
 		if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 		{
@@ -583,7 +583,7 @@ namespace UdmStatic
 		//booleanAttrs[meta.uniqueId()] = a;
 	}
 
-	__int64 StaticObject::getIntegerAttr(const ::Uml::Uml::Attribute &meta) const
+	__int64 StaticObject::getIntegerAttr(const ::Uml::Attribute &meta) const
 	{
 		longintAttrs_type::const_iterator i = longintAttrs.find(meta.uniqueId());
 		
@@ -597,7 +597,7 @@ namespace UdmStatic
 		//return i == integerAttrs.end() ? false : (*i).second;
 	}
 
-	void StaticObject::setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a, const bool direct)
+	void StaticObject::setIntegerAttr(const ::Uml::Attribute &meta, __int64 a, const bool direct)
 	{
 		if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 		{
@@ -634,7 +634,7 @@ namespace UdmStatic
 		//integerAttrs[meta.uniqueId()] = a;
 	}
 
-	double StaticObject::getRealAttr(const ::Uml::Uml::Attribute &meta) const
+	double StaticObject::getRealAttr(const ::Uml::Attribute &meta) const
 	{
 		realAttrs_type::const_iterator i = realAttrs.find(meta.uniqueId());
 		if ( i != realAttrs.end()) return (*i).second;
@@ -646,7 +646,7 @@ namespace UdmStatic
 		//return i == realAttrs.end() ? false : (*i).second;
 	}
 
-	void StaticObject::setRealAttr(const ::Uml::Uml::Attribute &meta, double a, const bool direct)
+	void StaticObject::setRealAttr(const ::Uml::Attribute &meta, double a, const bool direct)
 	{
 		if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 		{
@@ -686,7 +686,7 @@ namespace UdmStatic
 
 	//	--- attribute setters/getters for multiple value (array) type attributes
 
-	vector<string> StaticObject::getStringAttrArr(const ::Uml::Uml::Attribute &meta) const
+	vector<string> StaticObject::getStringAttrArr(const ::Uml::Attribute &meta) const
 	{
 
 		stringAttrArrs_type::const_iterator i = stringAttrArrs.find(meta.uniqueId());
@@ -695,13 +695,13 @@ namespace UdmStatic
 			return (*i).second;
 
 		//avoid stack overflow here ;-)
-		if (meta == ::Uml::Uml::Attribute::meta_defvalue)
+		if (meta == ::Uml::Attribute::meta_defvalue)
 			return vector<string>();	//it has no default value
 
 		return meta.defvalue();
 	};
 
-	void StaticObject::setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct)
+	void StaticObject::setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct)
 	{
 		if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 		{
@@ -739,7 +739,7 @@ namespace UdmStatic
 		//stringAttrArrs[meta.uniqueId()] = a;
 	};
 
-	vector<bool> StaticObject::getBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const
+	vector<bool> StaticObject::getBooleanAttrArr(const ::Uml::Attribute &meta) const
 	{
 		booleanAttrArrs_type::const_iterator i = booleanAttrArrs.find(meta.uniqueId());
 		if (i != booleanAttrArrs.end())
@@ -760,7 +760,7 @@ namespace UdmStatic
 		return a;
 	};
 
-	void StaticObject::setBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct)
+	void StaticObject::setBooleanAttrArr(const ::Uml::Attribute &meta, const vector<bool> &a, const bool direct)
 	{
 		if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 		{
@@ -798,7 +798,7 @@ namespace UdmStatic
 		//booleanAttrArrs[meta.uniqueId()] = a;
 	};
 
-	vector<__int64> StaticObject::getIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const
+	vector<__int64> StaticObject::getIntegerAttrArr(const ::Uml::Attribute &meta) const
 	{
 		longintAttrArrs_type::const_iterator i = longintAttrArrs.find(meta.uniqueId());
 		if (i != longintAttrArrs.end())
@@ -828,7 +828,7 @@ namespace UdmStatic
 		return a;
 	};
 
-	void StaticObject::setIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct)
+	void StaticObject::setIntegerAttrArr(const ::Uml::Attribute &meta, const vector<__int64> &a, const bool direct)
 	{
 		if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 		{
@@ -883,7 +883,7 @@ namespace UdmStatic
 		//integerAttrArrs[meta.uniqueId()] = a;
 	};
 
-	vector<double> StaticObject::getRealAttrArr(const ::Uml::Uml::Attribute &meta) const
+	vector<double> StaticObject::getRealAttrArr(const ::Uml::Attribute &meta) const
 	{
 		realAttrArrs_type::const_iterator i = realAttrArrs.find(meta.uniqueId());
 		if (i != realAttrArrs.end())
@@ -902,7 +902,7 @@ namespace UdmStatic
 		return a;
 	};
 
-	void StaticObject::setRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct)
+	void StaticObject::setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct)
 	{
 		if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 		{
@@ -941,7 +941,7 @@ namespace UdmStatic
 	};
 
 
-	ObjectImpl * StaticObject::getParent(const ::Uml::Uml::CompositionParentRole &role) const 
+	ObjectImpl * StaticObject::getParent(const ::Uml::CompositionParentRole &role) const 
 	{
 
 		if (!m_parent) 
@@ -959,11 +959,11 @@ namespace UdmStatic
 			
 			ObjectImpl * comp_o = role.__impl()->getParent(Udm::NULLPARENTROLE);
 			if (!comp_o) throw udm_exception("parent of type meta object is NULL");
-			vector<ObjectImpl*> vec = comp_o->getChildren(::Uml::Uml::Composition::meta_childRole, ::Uml::Uml::CompositionChildRole::meta); 			
+			vector<ObjectImpl*> vec = comp_o->getChildren(::Uml::Composition::meta_childRole, ::Uml::CompositionChildRole::meta); 			
 			if (vec.size() != 1) throw udm_exception("Meta Composition does not contain 1 and only 1 childRole!");
 			
 			ObjectImpl * ccr_o = *(vec.begin());
-			::Uml::Uml::CompositionChildRole ccr = ccr_o;
+			::Uml::CompositionChildRole ccr = ccr_o;
 
 			//get my parent's children with this rolename
 			//don't use the API because it increments the ref. counters,
@@ -988,9 +988,9 @@ namespace UdmStatic
 		else return m_parent->clone(); 
 	}
 
-	void StaticObject::setParent(ObjectImpl *a, const ::Uml::Uml::CompositionParentRole &role, const bool direct) 
+	void StaticObject::setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct) 
 	{ 
-		::Uml::Uml::CompositionChildRole ccr;
+		::Uml::CompositionChildRole ccr;
 
 		//check no 1
 		//children of instances can not be removed
@@ -1016,7 +1016,7 @@ namespace UdmStatic
 
 
 					
-			::Uml::Uml::Composition comp = Uml::matchChildToParent(m_type, aa.m_type);
+			::Uml::Composition comp = Uml::matchChildToParent(m_type, aa.m_type);
 
 			if(!role) 
 			{
@@ -1037,11 +1037,11 @@ namespace UdmStatic
 					comp = role.parent();
 					
 					// if different, or comp is 0 because of 0 roles, one of the followings will catch it:
-					if(!Uml::IsDerivedFrom(m_type,::Uml::Uml::CompositionChildRole(comp.childRole()).target())) {
+					if(!Uml::IsDerivedFrom(m_type,::Uml::CompositionChildRole(comp.childRole()).target())) {
 						throw udm_exception("Invalid parentrole specified");
 					}
 
-					if(!Uml::IsDerivedFrom(aa.m_type, ::Uml::Uml::CompositionParentRole(comp.parentRole()).target())) {
+					if(!Uml::IsDerivedFrom(aa.m_type, ::Uml::CompositionParentRole(comp.parentRole()).target())) {
 						throw udm_exception("Invalid parent specified");
 					}
 					//comp should have the right composition.
@@ -1306,7 +1306,7 @@ namespace UdmStatic
 		setParent(NULL,NULL);
 	}
 
-   	vector<ObjectImpl*> StaticObject::getChildren(const ::Uml::Uml::CompositionChildRole &meta, const ::Uml::Uml::Class &cls) const
+   	vector<ObjectImpl*> StaticObject::getChildren(const ::Uml::CompositionChildRole &meta, const ::Uml::Class &cls) const
 	{
 		vector<ObjectImpl*> ret;
 
@@ -1396,11 +1396,11 @@ namespace UdmStatic
 		return ret;
 	}
 
-	void StaticObject::setChildren(const ::Uml::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct) 
+	void StaticObject::setChildren(const ::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct) 
 	{ 
 		
 		
-		set< ::Uml::Uml::CompositionChildRole> inserted_via;			//this will contain the roles altered this time
+		set< ::Uml::CompositionChildRole> inserted_via;			//this will contain the roles altered this time
 		children_type already_there;							//this will contain the childrens which where there (only for the previous rolenames)
 		children_type inserted_now;								//this will contain the inserted items (including thos already there)
 		
@@ -1413,14 +1413,14 @@ namespace UdmStatic
 		for (vector<ObjectImpl*>::const_iterator i = a.begin(); i != a.end(); i++)
 		{
 			//find out the rolename		
-			::Uml::Uml::Class type = (*i)->type();
+			::Uml::Class type = (*i)->type();
 			string casestr = (string)type.name() + "-s in " + (string)m_type.name() + "-s";
 		
 
-			::Uml::Uml::CompositionChildRole role = meta;
+			::Uml::CompositionChildRole role = meta;
 			if(!role) 
 			{
-				::Uml::Uml::Composition comp = Uml::matchChildToParent(type, m_type);
+				::Uml::Composition comp = Uml::matchChildToParent(type, m_type);
 				if(!comp) throw  udm_exception("Role must be specified for " + casestr);
 				role = comp.childRole();
 			}
@@ -1437,7 +1437,7 @@ namespace UdmStatic
 			//role is ok!
 			
 			
-			pair<set< ::Uml::Uml::CompositionChildRole>::iterator, bool> ins_res = inserted_via.insert(role);
+			pair<set< ::Uml::CompositionChildRole>::iterator, bool> ins_res = inserted_via.insert(role);
 			
 			if (ins_res.second)
 			{
@@ -1468,7 +1468,7 @@ namespace UdmStatic
 		//get the inserted now childrens
 		//if not found detach it..
 
-		for(set< ::Uml::Uml::CompositionChildRole> ::iterator j = inserted_via.begin(); j!= inserted_via.end(); j++)
+		for(set< ::Uml::CompositionChildRole> ::iterator j = inserted_via.begin(); j!= inserted_via.end(); j++)
 		{
 			pair<children_type::iterator, children_type::iterator> m = 	already_there.equal_range((*j).uniqueId());
 			while(m.first != m.second)
@@ -1567,8 +1567,8 @@ namespace UdmStatic
 	}
 
 	ObjectImpl* StaticObject::createChild(
-		const ::Uml::Uml::CompositionChildRole &childrole,
-		const ::Uml::Uml::Class &meta, 
+		const ::Uml::CompositionChildRole &childrole,
+		const ::Uml::Class &meta, 
 		const Udm::ObjectImpl* archetype, 
 		const bool subtype,
 		const bool real_archetype,
@@ -1584,10 +1584,10 @@ namespace UdmStatic
 			throw udm_exception("Instance objects can not be modified!");
 
 		string casestr = (string)meta.name() + "-s in " + (string)m_type.name() + "-s";
-		::Uml::Uml::CompositionChildRole role = childrole;
+		::Uml::CompositionChildRole role = childrole;
 		if(!role) 
 		{
- 			::Uml::Uml::Composition comp = Uml::matchChildToParent(meta, m_type);
+ 			::Uml::Composition comp = Uml::matchChildToParent(meta, m_type);
 			if(!comp) throw  udm_exception("Role must be specified for " + casestr);
 			role = comp.childRole();
 		}
@@ -1640,16 +1640,16 @@ namespace UdmStatic
 				cam.erase(cam.begin(), cam.end());
 		
 			
-			set< ::Uml::Uml::Class> ancestorClasses=Uml::AncestorClasses(archetype->type());
+			set< ::Uml::Class> ancestorClasses=Uml::AncestorClasses(archetype->type());
 
-			for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); 
+			for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); 
 			p_currClass!=ancestorClasses.end(); p_currClass++)
 			{
-				set< ::Uml::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
-				for(set< ::Uml::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
+				set< ::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
+				for(set< ::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
 					p_currRole!=compParentRoles.end(); p_currRole++)
 					{
-						::Uml::Uml::Class childClass=Uml::theOther(*p_currRole).target();
+						::Uml::Class childClass=Uml::theOther(*p_currRole).target();
 						vector<ObjectImpl*>children= archetype->getChildren(Uml::theOther(*p_currRole),childClass);
 						for(vector<ObjectImpl*>::iterator p_currImpl=children.begin();
 							p_currImpl!=children.end();p_currImpl++)
@@ -1754,7 +1754,7 @@ namespace UdmStatic
 	}
 
 
-	vector<ObjectImpl*> StaticObject::getAssociation(const ::Uml::Uml::AssociationRole &meta, int mode ) const
+	vector<ObjectImpl*> StaticObject::getAssociation(const ::Uml::AssociationRole &meta, int mode ) const
 	{
 		/*
 
@@ -1771,7 +1771,7 @@ namespace UdmStatic
 
 		vector<ObjectImpl*> ret;
 		
-		if (m_type == ::Uml::Uml::Association::meta && meta == ::Uml::Uml::Association::meta_assocClass)
+		if (m_type == ::Uml::Association::meta && meta == ::Uml::Association::meta_assocClass)
 		{
 		
 
@@ -1825,14 +1825,14 @@ namespace UdmStatic
 				//(meta-meta, meta, instance)
 
 				//i believe this next line is free of inheritence issues ... 
-				::Uml::Uml::Class assClass = ::Uml::Uml::Association(meta.parent()).assocClass();	
+				::Uml::Class assClass = ::Uml::Association(meta.parent()).assocClass();	
 				if (assClass)
 				{
 
 					//now let's deal with assoc. classes.
 					//we can be a descendant of an assoc. class either
-					set< ::Uml::Uml::Class> dsc_s = Uml::DescendantClasses(assClass);
-					set< ::Uml::Uml::Class>::iterator dsc_i = dsc_s.find(assoc_so->m_type);	
+					set< ::Uml::Class> dsc_s = Uml::DescendantClasses(assClass);
+					set< ::Uml::Class>::iterator dsc_i = dsc_s.find(assoc_so->m_type);	
 
 					//if (assClass == assoc_so->m_type)	
 					if (dsc_i != dsc_s.end())
@@ -1925,7 +1925,7 @@ namespace UdmStatic
 	};
 		
 	void StaticObject::setAssociation(
-		const ::Uml::Uml::AssociationRole &meta, 
+		const ::Uml::AssociationRole &meta, 
 		const vector<ObjectImpl*> &nvect, 
 		int mode,
 		const bool direct) 
@@ -2052,7 +2052,7 @@ namespace UdmStatic
 
 
 		//we will need our ancestors 
-		set< ::Uml::Uml::Class> anc_s = Uml::AncestorClasses(m_type);
+		set< ::Uml::Class> anc_s = Uml::AncestorClasses(m_type);
 		//check the mode parameter			
 		if (mode != Udm::TARGETFROMPEER)
 		{
@@ -2068,11 +2068,11 @@ namespace UdmStatic
 				//one target is needed
 
 				//find the association
-				::Uml::Uml::Association ass = m_type.association();				
+				::Uml::Association ass = m_type.association();				
 			
 				if (!ass) 
 				{
-					for ( set< ::Uml::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
+					for ( set< ::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
 					{
 						ass = (*anc_i).association();
 						if (ass) break;
@@ -2082,7 +2082,7 @@ namespace UdmStatic
 				if (!ass)
 					throw udm_exception("TARGETFROMCLASS was requested and I'm not an association class!");
 				
-				set< ::Uml::Uml::AssociationRole> ass_roles = ass.roles();
+				set< ::Uml::AssociationRole> ass_roles = ass.roles();
 				if (ass_roles.size() != 2) 
 				{
 					string err_str;
@@ -2090,9 +2090,9 @@ namespace UdmStatic
 					throw udm_exception(err_str);
 				}
 
-				set< ::Uml::Uml::AssociationRole >::iterator role_it = ass_roles.begin();
+				set< ::Uml::AssociationRole >::iterator role_it = ass_roles.begin();
 
-				::Uml::Uml::AssociationRole role_end = *(role_it);
+				::Uml::AssociationRole role_end = *(role_it);
 
 				if (role_end != meta)
 				{
@@ -2103,7 +2103,7 @@ namespace UdmStatic
 
 				//now role_end is the right AssociationRole
 				
-				::Uml::Uml::Class target_class = role_end.target();
+				::Uml::Class target_class = role_end.target();
 		
 
 				for(vector<ObjectImpl*>::const_iterator vect_it_1 = nvect.begin(); vect_it_1 != nvect.end(); vect_it_1++)
@@ -2126,15 +2126,15 @@ namespace UdmStatic
 
 				//get all my rolenames (from ancestor classes, too)
 
-				set< ::Uml::Uml::AssociationRole> roles;
-				for ( set< ::Uml::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
+				set< ::Uml::AssociationRole> roles;
+				for ( set< ::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
 				{
-					set< ::Uml::Uml::AssociationRole> c_roles = (*anc_i).associationRoles();
+					set< ::Uml::AssociationRole> c_roles = (*anc_i).associationRoles();
 					roles.insert(c_roles.begin(), c_roles.end());
 				}
 				
 				//find the role provided
-				set< ::Uml::Uml::AssociationRole>::iterator i = roles.find(Uml::theOther(meta));
+				set< ::Uml::AssociationRole>::iterator i = roles.find(Uml::theOther(meta));
 			
 				if (i == roles.end()) 
 					throw udm_exception("Invalid meta specified in StaticObject::setAssociation!");
@@ -2151,14 +2151,14 @@ namespace UdmStatic
 	
 			//get all my rolenames (from ancestor classes, too)
 
-			set< ::Uml::Uml::AssociationRole> roles;
-			for ( set< ::Uml::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
+			set< ::Uml::AssociationRole> roles;
+			for ( set< ::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
 			{
-				set< ::Uml::Uml::AssociationRole> c_roles = (*anc_i).associationRoles();
+				set< ::Uml::AssociationRole> c_roles = (*anc_i).associationRoles();
 				roles.insert(c_roles.begin(), c_roles.end());
 			}
 			
-			set< ::Uml::Uml::AssociationRole>::iterator i = roles.find(Uml::theOther(meta));
+			set< ::Uml::AssociationRole>::iterator i = roles.find(Uml::theOther(meta));
 			if (i == roles.end()) 
 				throw udm_exception("Invalid meta specified in StaticObject::setAssociation!");
 			
@@ -2490,12 +2490,12 @@ namespace UdmStatic
 	unsigned long StaticDataNetwork::DeSerialize(FILE *f, map<unsigned long, const StaticObject*>& tr_map,  Object & root_o)
 	{
 		//make some caches
-		typedef pair< ::Uml::Uml::Class, string> role_key_t; 
+		typedef pair< ::Uml::Class, string> role_key_t; 
 
 		//cache maps
-		typedef map<string, ::Uml::Uml::Class> type_cache_t;
-		typedef map<role_key_t, ::Uml::Uml::CompositionChildRole> ccr_cache_t;
-		typedef map<role_key_t, ::Uml::Uml::AssociationRole> asr_cache_t;
+		typedef map<string, ::Uml::Class> type_cache_t;
+		typedef map<role_key_t, ::Uml::CompositionChildRole> ccr_cache_t;
+		typedef map<role_key_t, ::Uml::AssociationRole> asr_cache_t;
 
 
 		//cache attributes
@@ -2510,9 +2510,9 @@ namespace UdmStatic
 
 
 		//map items
-		typedef pair<string const, ::Uml::Uml::Class> type_cache_item_t;
-		typedef pair<role_key_t const, ::Uml::Uml::CompositionChildRole> ccr_cache_item_t;
-		typedef pair<role_key_t const, ::Uml::Uml::AssociationRole> asr_cache_item_t;
+		typedef pair<string const, ::Uml::Class> type_cache_item_t;
+		typedef pair<role_key_t const, ::Uml::CompositionChildRole> ccr_cache_item_t;
+		typedef pair<role_key_t const, ::Uml::AssociationRole> asr_cache_item_t;
 
 		//insert results
 		typedef pair<type_cache_t::iterator, bool> type_cache_ir_t;
@@ -2545,7 +2545,7 @@ namespace UdmStatic
 		if (!f) throw udm_exception("Invalid file handler in StaticDataNetwork::Deserialize()!");
 
 		list<StaticObject*> read_list;			//put the read object in a simple list, than translate the id's 			
-		static ::Uml::Uml::Class type;
+		static ::Uml::Class type;
 
 
 		while (!feof(f))
@@ -2643,7 +2643,7 @@ namespace UdmStatic
 
 
 			//create &obtain reference to  a safe type
-			const ::Uml::Uml::Class &safe_type = Uml::SafeTypeContainer::GetSafeType(type);
+			const ::Uml::Class &safe_type = Uml::SafeTypeContainer::GetSafeType(type);
 			
 			//create the `so` object with the meta information
 			StaticObject * so = new StaticObject(safe_type, 1, reinterpret_cast<StaticObject *>(archetype_id), subtype_val, real_archetype_val );
@@ -2672,10 +2672,10 @@ namespace UdmStatic
 			
 			//read in my type's ancestors
 			//we will need them 
-			static set< ::Uml::Uml::Class> ancestors;
+			static set< ::Uml::Class> ancestors;
 			ancestors = Uml::AncestorClasses(type);
 
-			static set< ::Uml::Uml::Class>::iterator anc_i;
+			static set< ::Uml::Class>::iterator anc_i;
 
 			//read the childrens
 			static unsigned long children_no;
@@ -2689,7 +2689,7 @@ namespace UdmStatic
 			//so we just make use of this
 
 			static char ccr_name_prev[MAX_NAME + 1];
-			static ::Uml::Uml::CompositionChildRole ccr;
+			static ::Uml::CompositionChildRole ccr;
 
 			*ccr_name_prev = '\0';	//reset previous child role name to empty string
 			ccr = &Udm::_null;		//reset previous composition child role to null
@@ -2737,8 +2737,8 @@ namespace UdmStatic
 						{
 							if (!ccr)
 							{
-								static set< ::Uml::Uml::CompositionParentRole> cpr_s;
-								static set< ::Uml::Uml::CompositionParentRole>::iterator cpr_s_i;
+								static set< ::Uml::CompositionParentRole> cpr_s;
+								static set< ::Uml::CompositionParentRole>::iterator cpr_s_i;
 								static string ccr_try_name;
 								
 								cpr_s.erase(cpr_s.begin(), cpr_s.end());
@@ -2805,7 +2805,7 @@ namespace UdmStatic
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
 			read+= sizeof(unsigned long);
 
-			static ::Uml::Uml::AssociationRole asr;
+			static ::Uml::AssociationRole asr;
 			static char asr_name_prev[MAX_NAME+1];
 
 			asr = &Udm::_null;
@@ -2834,7 +2834,7 @@ namespace UdmStatic
 				//find composition childrole
 				//as theother's of my composition parent roles
 				//need to consider here my ancestor's, too
-				//static ::Uml::Uml::AssociationRole asr;
+				//static ::Uml::AssociationRole asr;
 				
 				if (strcmp(asr_name, asr_name_prev) || !asr)
 				{	//level 1 cache failed
@@ -2854,20 +2854,20 @@ namespace UdmStatic
 							if (!asr)
 							{
 							
-								static set< ::Uml::Uml::AssociationRole> asr_s, ass_asr_s;
-								static set< ::Uml::Uml::AssociationRole>::iterator asr_s_i ;
+								static set< ::Uml::AssociationRole> asr_s, ass_asr_s;
+								static set< ::Uml::AssociationRole>::iterator asr_s_i ;
 
 								asr_s.erase(asr_s.begin(), asr_s.end());
 								ass_asr_s.erase(ass_asr_s.begin(), ass_asr_s.end());
 
-								static ::Uml::Uml::Association ass ;
+								static ::Uml::Association ass ;
 								ass = &Udm::_null;
 						
 								asr_s = (*anc_i).associationRoles();
 								ass = (*anc_i).association();
 
 								if (ass)
-									 ass_asr_s = ass.Uml_AssociationRole_kind_children();
+									 ass_asr_s = ass.AssociationRole_kind_children();
 
 								
 								for(asr_s_i = asr_s.begin(); asr_s_i != asr_s.end(); asr_s_i++)
@@ -2945,8 +2945,8 @@ namespace UdmStatic
 				
 				for (anc_i = ancestors.begin(); anc_i != ancestors.end(); anc_i++)
 				{
-					set< ::Uml::Uml::Attribute> att_l = (*anc_i).attributes();
-					for(set< ::Uml::Uml::Attribute>::iterator att_i = att_l.begin(); att_i != att_l.end(); att_i++)
+					set< ::Uml::Attribute> att_l = (*anc_i).attributes();
+					for(set< ::Uml::Attribute>::iterator att_i = att_l.begin(); att_i != att_l.end(); att_i++)
 					{
 						//this can't be static
 						pair<string const, uniqueId_type> att_map_item((string)(*att_i).name(), (*att_i).uniqueId());
@@ -3554,7 +3554,7 @@ namespace UdmStatic
 		type_cache.erase(type_cache.begin(), type_cache.end());
 		
 		//the other caches may remain as they are,
-		//since their key is ::Uml::Uml::Class, which won't be the same for other paradigms
+		//since their key is ::Uml::Class, which won't be the same for other paradigms
 		type = &Udm::_null;
 
 		return read;
@@ -3578,7 +3578,7 @@ namespace UdmStatic
 		//m_type
 		//write the name of my type to file
 		//namespacename:classname
-		string ns_name = ::Uml::Uml::Namespace(m_type.parent()).name();
+		string ns_name = ::Uml::Namespace(m_type.parent()).name();
 		long type_str_length = ns_name.size() + 1 + ((string)m_type.name()).size();
 		char * m_type_name = new char[type_str_length + 1];
 		strcpy(m_type_name, (ns_name + ':' + (string)m_type.name()).c_str());
@@ -3620,7 +3620,7 @@ namespace UdmStatic
 		length += sizeof(unsigned long);
 		
 		
-		static set< ::Uml::Uml::Class> ancestors;
+		static set< ::Uml::Class> ancestors;
 		ancestors = Uml::AncestorClasses(m_type);
 				
 		static map<uniqueId_type, string> ccr_map;
@@ -3636,7 +3636,7 @@ namespace UdmStatic
 		for (; ch_i != m_children.end(); ch_i++)
 		{
 			
-			const ::Uml::Uml::CompositionChildRole ccr = ::Uml::Uml::CompositionChildRole::Cast(meta_dn->ObjectById((*ch_i).first));
+			const ::Uml::CompositionChildRole ccr = ::Uml::CompositionChildRole::Cast(meta_dn->ObjectById((*ch_i).first));
 			
 
 			//ccr_name_str might be empty,
@@ -3672,7 +3672,7 @@ namespace UdmStatic
 		for (; as_i != associations.end(); as_i ++)
 		{
 
-			::Uml::Uml::AssociationRole asr = 	::Uml::Uml::AssociationRole::Cast(meta_dn->ObjectById((*as_i).first));
+			::Uml::AssociationRole asr = 	::Uml::AssociationRole::Cast(meta_dn->ObjectById((*as_i).first));
 			string asr_name_stl = asr.name();
 
 			//write the name of the association role
@@ -3702,7 +3702,7 @@ namespace UdmStatic
 		
 		for (; sa_i != stringAttrs.end(); sa_i++)
 		{
-			::Uml::Uml::Attribute sa = ::Uml::Uml::Attribute::Cast(meta_dn->ObjectById(sa_i->first));
+			::Uml::Attribute sa = ::Uml::Attribute::Cast(meta_dn->ObjectById(sa_i->first));
 			string sa_name_stl = sa.name();
 
 			//write the name of the string Attribute role
@@ -3741,7 +3741,7 @@ namespace UdmStatic
 		
 		for (; ba_i != booleanAttrs.end(); ba_i++)
 		{
-			::Uml::Uml::Attribute ba = ::Uml::Uml::Attribute::Cast(meta_dn->ObjectById(ba_i->first));
+			::Uml::Attribute ba = ::Uml::Attribute::Cast(meta_dn->ObjectById(ba_i->first));
 			string ba_name_stl = ba.name();
 
 			//write the name of the boolean Attribute role
@@ -3778,7 +3778,7 @@ namespace UdmStatic
 		for (; ia_i != longintAttrs.end(); ia_i++)
 		{
 
-			::Uml::Uml::Attribute ia = ::Uml::Uml::Attribute::Cast(meta_dn->ObjectById(ia_i->first));
+			::Uml::Attribute ia = ::Uml::Attribute::Cast(meta_dn->ObjectById(ia_i->first));
 			string ia_name_stl = ia.name();
 
 			//write the name of the integer Attribute role
@@ -3816,7 +3816,7 @@ namespace UdmStatic
 		
 		for (; ra_i != realAttrs.end(); ra_i++)
 		{
-			::Uml::Uml::Attribute ra = ::Uml::Uml::Attribute::Cast(meta_dn->ObjectById(ra_i->first));
+			::Uml::Attribute ra = ::Uml::Attribute::Cast(meta_dn->ObjectById(ra_i->first));
 			string ra_name_stl = ra.name();
 
 
@@ -3853,7 +3853,7 @@ namespace UdmStatic
 		
 		for (; sa_arr_i != stringAttrArrs.end(); sa_arr_i++)
 		{
-			::Uml::Uml::Attribute sa_arr = ::Uml::Uml::Attribute::Cast(meta_dn->ObjectById(sa_arr_i->first));
+			::Uml::Attribute sa_arr = ::Uml::Attribute::Cast(meta_dn->ObjectById(sa_arr_i->first));
 			string sa_arr_name_stl = sa_arr.name();
 
 			//write the name of the string Attribute role
@@ -3906,7 +3906,7 @@ namespace UdmStatic
 		
 		for (; ba_arr_i != booleanAttrArrs.end(); ba_arr_i++)
 		{
-			::Uml::Uml::Attribute ba = ::Uml::Uml::Attribute::Cast(meta_dn->ObjectById(ba_arr_i->first));
+			::Uml::Attribute ba = ::Uml::Attribute::Cast(meta_dn->ObjectById(ba_arr_i->first));
 			static string ba_name_stl;
 			ba_name_stl = ba.name();
 
@@ -3966,7 +3966,7 @@ namespace UdmStatic
 		
 		for (; ia_arr_i != longintAttrArrs.end(); ia_arr_i++)
 		{
-			::Uml::Uml::Attribute ia = ::Uml::Uml::Attribute::Cast(meta_dn->ObjectById(ia_arr_i->first));
+			::Uml::Attribute ia = ::Uml::Attribute::Cast(meta_dn->ObjectById(ia_arr_i->first));
 			static string ia_name_stl;
 			ia_name_stl = ia.name();
 
@@ -4026,7 +4026,7 @@ namespace UdmStatic
 		
 		for (; ra_arr_i != realAttrArrs.end(); ra_arr_i++)
 		{
-			::Uml::Uml::Attribute ra = ::Uml::Uml::Attribute::Cast(meta_dn->ObjectById(ra_arr_i->first));
+			::Uml::Attribute ra = ::Uml::Attribute::Cast(meta_dn->ObjectById(ra_arr_i->first));
 			static string ra_name_stl;
 			ra_name_stl = ra.name();
 
@@ -4220,7 +4220,7 @@ namespace UdmStatic
 
 	
 	void StaticDataNetwork::CreateNew(const string &systemname, const string &metalocator, 
-		const ::Uml::Uml::Class &rootclass, enum Udm::BackendSemantics sem) 
+		const ::Uml::Class &rootclass, enum Udm::BackendSemantics sem) 
 	{
 		rootobject = new StaticObject(rootclass, 1);
 	//	rootobject.__impl()->setDefaultAttributes();
@@ -4333,13 +4333,13 @@ namespace UdmStatic
 
 	// --------------------------- Public functions
 
-	UDM_DLL Object CreateObject(const ::Uml::Uml::Class &meta)
+	UDM_DLL Object CreateObject(const ::Uml::Class &meta)
 	{
 		return new StaticObject(meta, 1);
 	}
 
-	void CreateComposition(const Object &p, const ::Uml::Uml::CompositionChildRole &childRole,
-		const Object &c, const ::Uml::Uml::CompositionParentRole &parentRole)
+	void CreateComposition(const Object &p, const ::Uml::CompositionChildRole &childRole,
+		const Object &c, const ::Uml::CompositionParentRole &parentRole)
 	{
 		// TODO: check the type
 		StaticObject *parent = static_cast<StaticObject*>(p.__impl());
@@ -4353,8 +4353,8 @@ namespace UdmStatic
 			childRole.uniqueId(), child));
 	}
 
-	void CreateAssociation(const Object &s, const ::Uml::Uml::AssociationRole &dstRole,
-		const Object &d, const ::Uml::Uml::AssociationRole &srcRole)
+	void CreateAssociation(const Object &s, const ::Uml::AssociationRole &dstRole,
+		const Object &d, const ::Uml::AssociationRole &srcRole)
 	{
 		// TODO: check the type
 		StaticObject *src = static_cast<StaticObject*>(s.__impl());
@@ -4381,79 +4381,79 @@ namespace Uml
 	class Diagram;
 
 
-	Uml::Diagram CreateDiagram() 
+	Diagram CreateDiagram() 
 	{
-		return Uml::Diagram::Cast(UdmStatic::CreateObject(Uml::Diagram::meta)); 
+		return Diagram::Cast(UdmStatic::CreateObject(Diagram::meta)); 
 	}
 
-	Uml::Namespace CreateNamespace() 
+	Namespace CreateNamespace() 
 	{
-		return Uml::Namespace::Cast(UdmStatic::CreateObject(Uml::Namespace::meta)); 
+		return Namespace::Cast(UdmStatic::CreateObject(Namespace::meta)); 
 	}
 
 
-	Uml::Class CreateClass() 
+	Class CreateClass() 
 	{
-		return Uml::Class::Cast(UdmStatic::CreateObject(Uml::Class::meta)); 
+		return Class::Cast(UdmStatic::CreateObject(Class::meta)); 
 	}
 
-	Uml::Attribute CreateAttribute() 
+	Attribute CreateAttribute() 
 	{
-		return Uml::Attribute::Cast(UdmStatic::CreateObject(Uml::Attribute::meta));
+		return Attribute::Cast(UdmStatic::CreateObject(Attribute::meta));
 	}
 
-	Uml::Association CreateAssociation() 
+	Association CreateAssociation() 
 	{
-		return Uml::Association::Cast(UdmStatic::CreateObject(Uml::Association::meta)); 
+		return Association::Cast(UdmStatic::CreateObject(Association::meta)); 
 	}
 
-	Uml::AssociationRole CreateAssociationRole()
+	AssociationRole CreateAssociationRole()
 	{ 
-		return Uml::AssociationRole::Cast(UdmStatic::CreateObject(Uml::AssociationRole::meta));
+		return AssociationRole::Cast(UdmStatic::CreateObject(AssociationRole::meta));
 	}
 
-	Uml::Composition CreateComposition() 
+	Composition CreateComposition() 
 	{ 
-		return Uml::Composition::Cast(UdmStatic::CreateObject(Uml::Composition::meta)); 
+		return Composition::Cast(UdmStatic::CreateObject(Composition::meta)); 
 	}
 
-	Uml::CompositionParentRole CreateCompositionParentRole()
+	CompositionParentRole CreateCompositionParentRole()
 	{ 
-		return Uml::CompositionParentRole::Cast(UdmStatic::CreateObject(Uml::CompositionParentRole::meta));
+		return CompositionParentRole::Cast(UdmStatic::CreateObject(CompositionParentRole::meta));
 	}
 
-	Uml::CompositionChildRole CreateCompositionChildRole()
+	CompositionChildRole CreateCompositionChildRole()
 	{
-		return Uml::CompositionChildRole::Cast(UdmStatic::CreateObject(Uml::CompositionChildRole::meta));
+		return CompositionChildRole::Cast(UdmStatic::CreateObject(CompositionChildRole::meta));
 	}
 
-	Uml::Constraint CreateConstraint()
+	Constraint CreateConstraint()
 	{
-		return Uml::Constraint::Cast(UdmStatic::CreateObject(Uml::Constraint::meta));
+		return Constraint::Cast(UdmStatic::CreateObject(Constraint::meta));
 	}
 
-	Uml::ConstraintDefinition CreateConstraintDefinition()
+	ConstraintDefinition CreateConstraintDefinition()
 	{
-		return Uml::ConstraintDefinition::Cast(UdmStatic::CreateObject(Uml::ConstraintDefinition::meta));
+		return ConstraintDefinition::Cast(UdmStatic::CreateObject(ConstraintDefinition::meta));
 	}
 
-	void InitDiagram(const Uml::Diagram &obj, const char *name, const char * version)
+	void InitDiagram(const Diagram &obj, const char *name, const char * version)
 	{
 		obj.name() = name;
 		obj.version() = version;
 	}
 
-	void InitNamespace(const Uml::Namespace &obj, const Uml::Diagram &parent, const char *name)
+	void InitNamespace(const Namespace &obj, const Diagram &parent, const char *name)
 	{
-		UdmStatic::CreateComposition(parent, Uml::Diagram::meta_namespaces, obj, Uml::Namespace::meta_parent);
+		UdmStatic::CreateComposition(parent, Diagram::meta_namespaces, obj, Namespace::meta_parent);
 
 		obj.name() = name;
 
 	}
 
-	void InitClass(const Uml::Class &obj, const Uml::Namespace &parent, const char *name, bool isAbstract, const char *stereo, const char * from)
+	void InitClass(const Class &obj, const Namespace &parent, const char *name, bool isAbstract, const char *stereo, const char * from)
 	{
-		UdmStatic::CreateComposition(parent, Uml::Namespace::meta_classes, obj, Uml::Class::meta_parent);
+		UdmStatic::CreateComposition(parent, Namespace::meta_classes, obj, Class::meta_parent);
 
 		obj.name() = name;
 		if(stereo) obj.stereotype() = stereo;
@@ -4473,9 +4473,9 @@ namespace Uml
 	}
 */
 
-	void InitAttribute(const Uml::Attribute &obj, const Uml::Class &parent, const char *name, const char *type, bool np, bool reg_val, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval)
+	void InitAttribute(const Attribute &obj, const Class &parent, const char *name, const char *type, bool np, bool reg_val, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval)
 	{
-		UdmStatic::CreateComposition(parent, Uml::Class::meta_attributes, obj, Uml::Attribute::meta_parent);
+		UdmStatic::CreateComposition(parent, Class::meta_attributes, obj, Attribute::meta_parent);
 
 		obj.name() = name;
 		obj.type() = type;
@@ -4488,23 +4488,23 @@ namespace Uml
 		obj.defvalue() = defval;
 	}
 	
-	void InitAssociation(const Uml::Association &obj, const Uml::Namespace &parent, const char *name)
+	void InitAssociation(const Association &obj, const Namespace &parent, const char *name)
 	{
-		UdmStatic::CreateComposition(parent, Uml::Namespace::meta_associations, obj, Uml::Association::meta_parent);
+		UdmStatic::CreateComposition(parent, Namespace::meta_associations, obj, Association::meta_parent);
 
 		obj.name() = name;
 	}
 
-	void InitAssociationClass(const Uml::Association &aobj, const Uml::Class &cobj)
+	void InitAssociationClass(const Association &aobj, const Class &cobj)
 	{
-		UdmStatic::CreateAssociation(aobj, Uml::Association::meta_assocClass, cobj, Uml::Class::meta_association);
+		UdmStatic::CreateAssociation(aobj, Association::meta_assocClass, cobj, Class::meta_association);
 	}
 
-	void InitAssociationRole(const Uml::AssociationRole &obj, const Uml::Association &parent, 
-		const char *name, bool isnavigable, bool isprimary, long min, long max, const Uml::Class &target)
+	void InitAssociationRole(const AssociationRole &obj, const Association &parent, 
+		const char *name, bool isnavigable, bool isprimary, long min, long max, const Class &target)
 	{
-		UdmStatic::CreateComposition(parent, Uml::Association::meta_roles, obj, Uml::AssociationRole::meta_parent);
-		UdmStatic::CreateAssociation(obj, Uml::AssociationRole::meta_target, target, Uml::Class::meta_associationRoles);
+		UdmStatic::CreateComposition(parent, Association::meta_roles, obj, AssociationRole::meta_parent);
+		UdmStatic::CreateAssociation(obj, AssociationRole::meta_target, target, Class::meta_associationRoles);
 
 		obj.name() = name;
 		obj.isNavigable() = isnavigable;
@@ -4513,28 +4513,28 @@ namespace Uml
 		obj.max() = max;
 	}
 
-	void InitComposition(const Uml::Composition &obj, const Uml::Namespace &parent, const char *name)
+	void InitComposition(const Composition &obj, const Namespace &parent, const char *name)
 	{
-		UdmStatic::CreateComposition(parent, Uml::Namespace::meta_compositions, obj, Uml::Composition::meta_parent);
+		UdmStatic::CreateComposition(parent, Namespace::meta_compositions, obj, Composition::meta_parent);
 
 		obj.name() = name;
 	}
 
-	void InitCompositionParentRole(const Uml::CompositionParentRole &obj, 
-		const Uml::Composition &parent, const char *name, bool isnavigable, const Uml::Class &target)
+	void InitCompositionParentRole(const CompositionParentRole &obj, 
+		const Composition &parent, const char *name, bool isnavigable, const Class &target)
 	{
-		UdmStatic::CreateComposition(parent, Uml::Composition::meta_parentRole, obj, Uml::CompositionParentRole::meta_parent);
-		UdmStatic::CreateAssociation(obj, Uml::CompositionParentRole::meta_target, target, Uml::Class::meta_parentRoles);
+		UdmStatic::CreateComposition(parent, Composition::meta_parentRole, obj, CompositionParentRole::meta_parent);
+		UdmStatic::CreateAssociation(obj, CompositionParentRole::meta_target, target, Class::meta_parentRoles);
 
 		obj.name() = name;
 		obj.isNavigable() = isnavigable;
 	}
 
-	void InitCompositionChildRole(const Uml::CompositionChildRole &obj,
-		const Uml::Composition &parent, const char *name, bool isnavigable, long min, long max, const Uml::Class &target)
+	void InitCompositionChildRole(const CompositionChildRole &obj,
+		const Composition &parent, const char *name, bool isnavigable, long min, long max, const Class &target)
 	{
-		UdmStatic::CreateComposition(parent, Uml::Composition::meta_childRole, obj, Uml::CompositionChildRole::meta_parent);
-		UdmStatic::CreateAssociation(obj, Uml::CompositionChildRole::meta_target, target, Uml::Class::meta_childRoles);
+		UdmStatic::CreateComposition(parent, Composition::meta_childRole, obj, CompositionChildRole::meta_parent);
+		UdmStatic::CreateAssociation(obj, CompositionChildRole::meta_target, target, Class::meta_childRoles);
 
 		obj.name() = name;
 		obj.isNavigable() = isnavigable;
@@ -4542,19 +4542,19 @@ namespace Uml
 		obj.max() = max;
 	}
 
-	void InitConstraint(const Uml::Constraint &obj, const Uml::Class &parent, const char * name, const char * description, const char * expression)
+	void InitConstraint(const Constraint &obj, const Class &parent, const char * name, const char * description, const char * expression)
 	{
 
-		UdmStatic::CreateComposition(parent, Uml::Class::meta_constraints, obj, Uml::Constraint::meta_parent); 
+		UdmStatic::CreateComposition(parent, Class::meta_constraints, obj, Constraint::meta_parent); 
 		
 		obj.name() = name;
 		obj.expression() = expression;
 		obj.description() = description;
 	};
 
-	void InitConstraintDefinition(const Uml::ConstraintDefinition &obj, const Uml::Class &parent, const char * name, const char * stereotype, const char * parameterList, const char * expression, const char * returnType)
+	void InitConstraintDefinition(const ConstraintDefinition &obj, const Class &parent, const char * name, const char * stereotype, const char * parameterList, const char * expression, const char * returnType)
 	{
-		UdmStatic::CreateComposition(parent, Uml::Class::meta_definitions, obj, Uml::ConstraintDefinition::meta_parent);
+		UdmStatic::CreateComposition(parent, Class::meta_definitions, obj, ConstraintDefinition::meta_parent);
 
 		obj.name() = name;
 		obj.parameterList() = parameterList;
@@ -4564,31 +4564,31 @@ namespace Uml
 
 	};
 	
-	void AddInheritance(const Uml::Class &baseType, const Uml::Class &subType)
+	void AddInheritance(const Class &baseType, const Class &subType)
 	{
-		UdmStatic::CreateAssociation(baseType, Uml::Class::meta_subTypes, subType, Uml::Class::meta_baseTypes);
+		UdmStatic::CreateAssociation(baseType, Class::meta_subTypes, subType, Class::meta_baseTypes);
 	}
 
-	UDM_DLL void SetDiagram(Uml::Diagram &what, const Uml::Diagram &target)
+	UDM_DLL void SetDiagram(Diagram &what, const Diagram &target)
 	{
 		what = target;
 	};
 
-	UDM_DLL void SetClass(Uml::Class &what, const Uml::Namespace &what_ns, const char *target_name)
+	UDM_DLL void SetClass(Class &what, const Namespace &what_ns, const char *target_name)
 	{
 		what = classByName(what_ns, target_name);
 	};
 
-	UDM_DLL void SetNamespace(Uml::Namespace &what, const Uml::Diagram &what_dgr, const char *target_name)
+	UDM_DLL void SetNamespace(Namespace &what, const Diagram &what_dgr, const char *target_name)
 	{
 		what = namespaceByName(what_dgr, target_name);
 	};
 
-	UDM_DLL void SetAttribute(Uml::Attribute &what, Uml::Class &what_class,  const char *target_name)
+	UDM_DLL void SetAttribute(Attribute &what, Class &what_class,  const char *target_name)
 	{
-		set<Uml::Attribute> atts = what_class.attributes();
+		set<Attribute> atts = what_class.attributes();
 		bool found = false;
-		for(set< ::Uml::Uml::Attribute>::iterator i = atts.begin(); i != atts.end(); i++)
+		for(set<Attribute>::iterator i = atts.begin(); i != atts.end(); i++)
 		{
 			if (!strcmp(target_name, ((string)i->name()).c_str()))
 			{
@@ -4605,16 +4605,16 @@ namespace Uml
 
 	
 
-	UDM_DLL void SetChildRole(Uml::CompositionChildRole &what, Uml::Class &what_target_class, Uml::Class &what_theo_target_class, const char *target_name, const char * orole_name)
+	UDM_DLL void SetChildRole(CompositionChildRole &what, Class &what_target_class, Class &what_theo_target_class, const char *target_name, const char * orole_name)
 	{
 		bool found = false;
-		set<Uml::CompositionChildRole> ccrs = what_theo_target_class.childRoles();
+		set<CompositionChildRole> ccrs = what_theo_target_class.childRoles();
 
-		for ( set<Uml::CompositionChildRole>::iterator ccrs_i = ccrs.begin(); ccrs_i != ccrs.end(); ccrs_i++)
+		for ( set<CompositionChildRole>::iterator ccrs_i = ccrs.begin(); ccrs_i != ccrs.end(); ccrs_i++)
 		{
-			Uml::CompositionParentRole cpr = theOther(*ccrs_i);
+			CompositionParentRole cpr = theOther(*ccrs_i);
 
-			if ((Uml::Class)(cpr.target()) == what_target_class)
+			if ((Class)(cpr.target()) == what_target_class)
 			{
 				string cmp_to = cpr.name();
 				string o_cmp_to = ccrs_i->name();
@@ -4634,16 +4634,16 @@ namespace Uml
 	};
 
 
-	UDM_DLL void SetParentRole(Uml::CompositionParentRole &what, Uml::Class &what_target_class, Uml::Class &what_theo_target_class, const char *target_name, const char * orole_name)
+	UDM_DLL void SetParentRole(CompositionParentRole &what, Class &what_target_class, Class &what_theo_target_class, const char *target_name, const char * orole_name)
 	{
 		bool found = false;
-		set<Uml::CompositionParentRole> cprs = what_theo_target_class.parentRoles();
+		set<CompositionParentRole> cprs = what_theo_target_class.parentRoles();
 
-		for ( set<Uml::CompositionParentRole>::iterator cprs_i = cprs.begin(); cprs_i != cprs.end(); cprs_i++)
+		for ( set<CompositionParentRole>::iterator cprs_i = cprs.begin(); cprs_i != cprs.end(); cprs_i++)
 		{
-			Uml::CompositionChildRole ccr = theOther(*cprs_i);
+			CompositionChildRole ccr = theOther(*cprs_i);
 
-			if ((Uml::Class)(ccr.target()) == what_target_class)
+			if ((Class)(ccr.target()) == what_target_class)
 			{
 				string cmp_to = ccr.name();
 				string o_cmp_to = cprs_i->name();
@@ -4662,16 +4662,16 @@ namespace Uml
 
 	};
 
-	UDM_DLL void SetAssocRole(Uml::AssociationRole &what, Uml::Class &what_target_class, Uml::Class &what_theo_target_class, const char *target_name)
+	UDM_DLL void SetAssocRole(AssociationRole &what, Class &what_target_class, Class &what_theo_target_class, const char *target_name)
 	{
 		bool found = false;
-		set<Uml::AssociationRole> ars = what_theo_target_class.associationRoles();
+		set<AssociationRole> ars = what_theo_target_class.associationRoles();
 
-		for ( set<Uml::AssociationRole>::iterator ars_i = ars.begin(); ars_i != ars.end(); ars_i++)
+		for ( set<AssociationRole>::iterator ars_i = ars.begin(); ars_i != ars.end(); ars_i++)
 		{
-			Uml::AssociationRole ar = theOther(*ars_i);
+			AssociationRole ar = theOther(*ars_i);
 
-			if ((Uml::Class)(ar.target()) == what_target_class)
+			if ((Class)(ar.target()) == what_target_class)
 			{
 				string cmp_to = ar.name();
 

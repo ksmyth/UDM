@@ -45,7 +45,6 @@ this software.
 
 namespace Uml
 {
-	using namespace Uml;
 
 	UDM_DLL const AssociationRole theOther(const AssociationRole &role)
 	{
@@ -77,8 +76,8 @@ namespace Uml
 	// find an assoc.Class by name
 	UDM_DLL Class assocClassByName(const Namespace &d, const string &name)
 	{
-		set<Uml::Class> ts = d.classes();
-		for(set<Uml::Class>::iterator i = ts.begin(); i != ts.end(); i++) 
+		set<Class> ts = d.classes();
+		for(set<Class>::iterator i = ts.begin(); i != ts.end(); i++) 
 		{
 			if ((Association)(i->association()) && string(i->name()) == name) return(*i);
 		}
@@ -90,9 +89,9 @@ namespace Uml
 	// find a class by name
 	UDM_DLL Class classByName(const Namespace &d, const string &name) 
 	{
-		set<Uml::Class> ts = d.classes();
+		set<Class> ts = d.classes();
 			{
-				for(set<Uml::Class>::iterator i = ts.begin(); i != ts.end(); i++) {
+				for(set<Class>::iterator i = ts.begin(); i != ts.end(); i++) {
 					if(string(i->name()) == name) return(*i);
 				}
 			}
@@ -102,9 +101,9 @@ namespace Uml
 // find an association by name
 	UDM_DLL Association associationByName(const Namespace &d, const string &name) 
 	{
-			set<Uml::Association> ts = d.associations();
+			set<Association> ts = d.associations();
 			{
-				for(set<Uml::Association>::iterator i = ts.begin(); i != ts.end(); i++) {
+				for(set<Association>::iterator i = ts.begin(); i != ts.end(); i++) {
 					if(string(i->name()) == name) return(*i);
 				}
 			}
@@ -114,9 +113,9 @@ namespace Uml
 
 	UDM_DLL Composition compositionByName(const Namespace &d, const string &name) 
 	{
-			set<Uml::Composition> ts = d.compositions();
+			set<Composition> ts = d.compositions();
 			{
-				for(set<Uml::Composition>::iterator i = ts.begin(); i != ts.end(); i++) {
+				for(set<Composition>::iterator i = ts.begin(); i != ts.end(); i++) {
 					if(string(i->name()) == name) return(*i);
 				}
 			}
@@ -166,13 +165,13 @@ namespace Uml
 #ifdef  ERASE_RETURNS_ITERATOR
 			while(++ci != cs.end()) {
 				for(set<Class>::iterator ri = ret.begin(); ri != ret.end();) {
-					if(!IsDerivedFrom(*ci, *ri)) ri = ret.erase(ri);
+					if(!::Uml::IsDerivedFrom(*ci, *ri)) ri = ret.erase(ri);
 					else ++ri;
 				}
 			}
 			for(set<Class>::iterator ri = ret.begin(); ri != ret.end();) {
 				for(set<Class>::iterator ri2 = ret.begin(); ri2 != ret.end(); ri2++) {
-					if(ri != ri2 && IsDerivedFrom(*ri, *ri2)) break;
+					if(ri != ri2 && ::Uml::IsDerivedFrom(*ri, *ri2)) break;
 				}
 				if(ri2 == ret.end()) ri = ret.erase(ri);
 				else ++ri;
@@ -306,19 +305,19 @@ namespace Uml
 		return ret;
 	}
 
-	UDM_DLL set<Uml::Namespace> TargetNSForAllContainerClasses(const Uml::Namespace &ns)
+	UDM_DLL set<Namespace> TargetNSForAllContainerClasses(const Namespace &ns)
 	{
-		set<Uml::Namespace> ret;
+		set<Namespace> ret;
 
-		set<Uml::Class> classes = ns.classes();
-		set<Uml::Class>::iterator c;
+		set<Class> classes = ns.classes();
+		set<Class>::iterator c;
 	
 		for(c = classes.begin(); c != classes.end(); c++ ) {
-			Uml::Class cl = *c;
-			set<Uml::CompositionParentRole> children = cl.parentRoles();
-			for(set<Uml::CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++) {
-				Uml::Class theother = (Uml::Class)(theOther(*i)).target();
-				Uml::Namespace theother_ns = (Uml::Namespace)theother.parent();
+			Class cl = *c;
+			set<CompositionParentRole> children = cl.parentRoles();
+			for(set<CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++) {
+				Class theother = (Class)(theOther(*i)).target();
+				Namespace theother_ns = (Namespace)theother.parent();
 				if (ns != theother_ns)
 					ret.insert(theother_ns);
 			}
@@ -369,7 +368,7 @@ namespace Uml
 		while (i != anc_cs.end())
 		{
 			Class a_i = *i;
-			string cross_cl_name = string(a_i.name()) + "_cross_ph_" + string(::Uml::Uml::Namespace(a_i.parent()).name());
+			string cross_cl_name = string(a_i.name()) + "_cross_ph_" + string(Namespace(a_i.parent()).name());
 			//Class ph_a_i = classByName(cross_dgr, a_i.name());
 			Class ph_a_i = classByName(cross_dgr, cross_cl_name);
 			if (ph_a_i)
@@ -392,7 +391,7 @@ namespace Uml
 		while (i != anc_cs.end())
 		{
 			Class a_i = *i;
-			string cross_cl_name = string(a_i.name()) + Udm::cross_delimiter + string(Uml::Namespace(a_i.parent()).name());
+			string cross_cl_name = string(a_i.name()) + Udm::cross_delimiter + string(Namespace(a_i.parent()).name());
 			//Class ph_a_i = classByName(cross_dgr, a_i.name());
 			Class ph_a_i = classByName(cross_dgr, cross_cl_name);
 			if (ph_a_i)
@@ -670,17 +669,17 @@ namespace Uml
 
 
 
-	UDM_DLL string MakeRoleName(const Uml::GenericRole &r) 
+	UDM_DLL string MakeRoleName(const GenericRole &r) 
 	{
 			string name = r.name();
 
 			if(name.empty()) {
 				string anonbase, auxname;
 	
-				if(::Uml::IsDerivedFrom(r.type(), Uml::AssociationRole::meta)) { 
-					Uml::AssociationRole ar = Uml::AssociationRole::Cast(r);
+				if(::Uml::IsDerivedFrom(r.type(), AssociationRole::meta)) { 
+					AssociationRole ar = AssociationRole::Cast(r);
 					anonbase = "arole"; 
-					auxname = (string)((Uml::Class)ar.target()).name();	
+					auxname = (string)((Class)ar.target()).name();	
 					auxname[0] = _tolower(auxname[0]);
 					if((int)ar.max() != 1) {
 						if(strchr("hsy", *auxname.rbegin())) {
@@ -690,16 +689,16 @@ namespace Uml
 					}	
 				}
 
-				if(::Uml::IsDerivedFrom(r.type(), Uml::CompositionParentRole::meta)) { 
-					Uml::CompositionParentRole pr = Uml::CompositionParentRole::Cast(r);
-					string revname = ::Uml::theOther(pr).name();
+				if(::Uml::IsDerivedFrom(r.type(), CompositionParentRole::meta)) { 
+					CompositionParentRole pr = CompositionParentRole::Cast(r);
+					string revname = theOther(pr).name();
 					if(!revname.empty()) revname += "_";
-					anonbase = "crole"; auxname = revname +	(string)((Uml::Class)pr.target()).name() + "_parent"; 
+					anonbase = "crole"; auxname = revname +	(string)((Class)pr.target()).name() + "_parent"; 
 				}
 
-				if(::Uml::IsDerivedFrom(r.type(), Uml::CompositionChildRole::meta)) { 
-					Uml::CompositionChildRole cr = Uml::CompositionChildRole::Cast(r);
-					anonbase = "prole"; auxname = (string)((Uml::Class)cr.target()).name() + ((int)cr.max() == 1 ? "_child" : "_children");	
+				if(::Uml::IsDerivedFrom(r.type(), CompositionChildRole::meta)) { 
+					CompositionChildRole cr = CompositionChildRole::Cast(r);
+					anonbase = "prole"; auxname = (string)((Class)cr.target()).name() + ((int)cr.max() == 1 ? "_child" : "_children");	
 				}
 
 				if(!anonbase.length()) {
@@ -724,7 +723,7 @@ namespace Uml
 			return name;
 	}
 
-	UDM_DLL string MakeShortRoleName(const Uml::GenericRole &r) 
+	UDM_DLL string MakeShortRoleName(const GenericRole &r) 
 	{
 			string name = r.name();
 
@@ -732,22 +731,22 @@ namespace Uml
 				string anonbase, auxname;
 
 /*				
-				if(Uml::IsDerivedFrom(r.type(), Uml::AssociationRole::meta)) { 
-					Uml::AssociationRole ar = Uml::AssociationRole::Cast(r);
-					anonbase = "arole"; auxname = (string)((Uml::Class)ar.target()).name() + ((int)ar.max() == 1 ? "_assoc" : "_assocs");	
+				if(::Uml::IsDerivedFrom(r.type(), AssociationRole::meta)) { 
+					AssociationRole ar = AssociationRole::Cast(r);
+					anonbase = "arole"; auxname = (string)((Class)ar.target()).name() + ((int)ar.max() == 1 ? "_assoc" : "_assocs");	
 				}
 
-				if(Uml::IsDerivedFrom(r.type(), Uml::CompositionParentRole::meta)) { 
-					Uml::CompositionParentRole pr = Uml::CompositionParentRole::Cast(r);
-					string revname = Uml::theOther(pr).name();
+				if(::Uml::IsDerivedFrom(r.type(), CompositionParentRole::meta)) { 
+					CompositionParentRole pr = CompositionParentRole::Cast(r);
+					string revname = theOther(pr).name();
 					if(!revname.empty()) revname += "_";
-					anonbase = "crole"; auxname = revname +	(string)((Uml::Class)pr.target()).name() + "_parent"; 
+					anonbase = "crole"; auxname = revname +	(string)((Class)pr.target()).name() + "_parent"; 
 				}
 */
 
-				if(::Uml::IsDerivedFrom(r.type(), Uml::CompositionChildRole::meta)) { 
-					Uml::CompositionChildRole cr = Uml::CompositionChildRole::Cast(r);
-					anonbase = "prole"; auxname = (string)((Uml::Class)cr.target()).name();	
+				if(::Uml::IsDerivedFrom(r.type(), CompositionChildRole::meta)) { 
+					CompositionChildRole cr = CompositionChildRole::Cast(r);
+					anonbase = "prole"; auxname = (string)((Class)cr.target()).name();	
 				}
 
 				if(!anonbase.length()) {
@@ -763,11 +762,11 @@ namespace Uml
 	}
 
 
-	UDM_DLL bool HasChildRoleMultipleTargets(const Uml::CompositionChildRole & ccr)
+	UDM_DLL bool HasChildRoleMultipleTargets(const CompositionChildRole & ccr)
 	{
 		int i = 0;
-		set<Uml::Class> descs = DescendantClasses(ccr.target());
-		set<Uml::Class>::iterator descs_i = descs.begin();
+		set<Class> descs = DescendantClasses(ccr.target());
+		set<Class>::iterator descs_i = descs.begin();
 
 		while (descs_i != descs.end())
 		{
@@ -805,21 +804,21 @@ namespace Uml
 		returns all the possibile composition child role chains(paths), how 'what' can be contained in 'origin'
 		the results are vectors of CompositionChildRoles
 	*/
-	UDM_DLL void GetChildRoleChain(const Uml::Class & origin, const Uml::Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain)
+	UDM_DLL void GetChildRoleChain(const Class & origin, const Class &what, vector<ChildRoleChain> &chains, ChildRoleChain curr_chain)
 	{
-		set<Uml::CompositionParentRole> cprs = origin.parentRoles();
+		set<CompositionParentRole> cprs = origin.parentRoles();
 		if (cprs.size())
 		{
-			set<Uml::CompositionParentRole>::iterator cprs_i = cprs.begin();
+			set<CompositionParentRole>::iterator cprs_i = cprs.begin();
 			while (cprs_i != cprs.end())
 			{
-				const Uml::CompositionChildRole ccr = ::Uml::theOther(*cprs_i);
+				const CompositionChildRole ccr = theOther(*cprs_i);
 				curr_chain.insert(curr_chain.begin(), ccr);
 				
-				const Uml::Class new_orig  = ccr.target();
-				set<Uml::Class> new_orig_descs = ::Uml::DescendantClasses(new_orig);
+				const Class new_orig  = ccr.target();
+				set<Class> new_orig_descs = DescendantClasses(new_orig);
 				
-				for (set<Uml::Class>::iterator nod_i = new_orig_descs.begin(); nod_i != new_orig_descs.end(); nod_i++)
+				for (set<Class>::iterator nod_i = new_orig_descs.begin(); nod_i != new_orig_descs.end(); nod_i++)
 					GetChildRoleChain(*nod_i, what, chains, curr_chain);
 				
 				cprs_i++;
@@ -829,30 +828,30 @@ namespace Uml
 		else if(::Uml::IsDerivedFrom(origin, what)) chains.push_back(curr_chain);
 	};
 
-	UDM_DLL Uml::Namespace GetTheOnlyNamespace(const Uml::Diagram & dgr)
+	UDM_DLL Namespace GetTheOnlyNamespace(const Diagram & dgr)
 	{
 		if (!dgr) return NULL;
-		set<Uml::Namespace> nses = dgr.namespaces();
+		set<Namespace> nses = dgr.namespaces();
 		if (nses.size() != 1) throw udm_exception("Uml::Namespace GetTheOnlyNamespace: More than one namespace found in diagram!");
 		return *(nses.begin());
 	};
 
 	// find a class by name
-	UDM_DLL Uml::Class classByName(const Uml::Diagram &d, const string &ns_name,const string &name )
+	UDM_DLL Class classByName(const Diagram &d, const string &ns_name,const string &name )
 	{
-		Uml::Namespace ns = namespaceByName(d, ns_name);
+		Namespace ns = namespaceByName(d, ns_name);
 		if (ns) return classByName(ns, name);
-		else return Uml::Class();
+		else return Class();
 	};
 	
 // find a namespace by name
-	UDM_DLL Uml::Namespace namespaceByName(const Uml::Diagram &d, const string &name)
+	UDM_DLL Namespace namespaceByName(const Diagram &d, const string &name)
 	{
-		set<Uml::Namespace> nses = d.namespaces();
-		for (set<Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+		set<Namespace> nses = d.namespaces();
+		for (set<Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 			if ((string)(nses_i->name()) == name) return *nses_i;
 		
-		return Uml::Namespace();
+		return Namespace();
 	};
 
 

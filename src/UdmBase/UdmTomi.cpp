@@ -21,7 +21,7 @@ this software.
 	12/06/04	-	endre
 			Added new function
 
-			UDM_DLL set<Object> Object::getChildrenByChildRoleChain(const ::Uml::Uml::Class& meta, vector< ::Uml::::Uml::Uml::CompositionChildRole> chain) const
+			UDM_DLL set<Object> Object::getChildrenByChildRoleChain(const ::Uml::Class& meta, vector< ::Uml::::Uml::CompositionChildRole> chain) const
 
 			which recursively obtains objects of a certain type down in the hierarchi rooted at this.
 			The function uses a CompositionChildRole chain which was previously obtained by Uml::GetChildRoleChain() function.
@@ -89,7 +89,7 @@ this software.
 
 	04/22/03    -   aditya
 
-		Added new method 'Object CreateObject(const ::Uml::Uml::Class & clsType, const CompositionInfo& compType)'
+		Added new method 'Object CreateObject(const ::Uml::Class & clsType, const CompositionInfo& compType)'
 	05/02/03	-	endre
 
 		Added new method 'Object Object::GetAssociationEnd(string roleName)' provided by Feng.
@@ -136,14 +136,14 @@ UDM_DLL set<Object> Object::GetAdjacentObjects()
 {
 		
 	set<Udm::Object> objAdjacentObs;
-	const ::Uml::Uml::Class & srcClass= type();
-	set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+	const ::Uml::Class & srcClass= type();
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
-	for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();p_currClass!=ancestorClasses.end(); p_currClass++)
+	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
 		// Getting the association roles and iterating through them
-		set< ::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
-		for(set< ::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin(); p_currAssocRole!=assocRoles.end();p_currAssocRole++)
+		set< ::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+		for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin(); p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
 			vector<ObjectImpl*>dstPeers=impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::TARGETFROMPEER);
 			for(vector<ObjectImpl*>::iterator p_currDstPeer=dstPeers.begin(); p_currDstPeer!=dstPeers.end(); p_currDstPeer++)
@@ -173,18 +173,18 @@ UDM_DLL set<Object> Object::GetAdjacentObjects()
 // Retrieves the adjacent objects of an object. The adjacent objects 
 // are of the type of clsType or derived from it. The returned set can 
 // be empty. Composition relationships are not considered here.
-UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Uml::Class & clsDstType)
+UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType)
 {
 	set<Udm::Object> objAdjacentObs;
-	::Uml::Uml::Class srcClass= type();
-	set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+	::Uml::Class srcClass= type();
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
-	for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 					p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
 		// Getting the association roles and iterating through them
-		set< ::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
-		for(set< ::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
+		set< ::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+		for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
 							p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
 
@@ -216,7 +216,7 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Uml::Class & clsDstT
 		{
 			if (pr->HasCrossMeta())
 			{
-				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter+(string)(::Uml::Uml::Diagram::Cast(clsDstType.parent()).name());
+				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter+(string)(::Uml::Diagram::Cast(clsDstType.parent()).name());
 				set<Object> ret = src_o.GetAdjacentObjects(Uml::classByName(::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)),clsDst_cross_ph_name));
 				for(set<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
 					objAdjacentObs.insert(pr->GetRealObject(*ret_i));
@@ -234,18 +234,18 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Uml::Class & clsDstT
 // The adjacent objects are of the type of clsType or derived from it. 
 // The returned set can be empty. Composition relationships are not considered here. 
 // Parameter clsType can be null.
-UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Uml::Class & clsDstType, const AssociationInfo& ascType)
+UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType, const AssociationInfo& ascType)
 {
 	set<Udm::Object> objAdjacentObs;
-	::Uml::Uml::Class srcClass= type();
-	set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+	::Uml::Class srcClass= type();
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
-	for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 					p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
 		// Getting the association roles and iterating through them
-		set< ::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
-		for(set< ::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
+		set< ::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+		for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
 							p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
 
@@ -258,14 +258,14 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Uml::Class & clsDstT
 				Udm::Object dstObject(*p_currDstPeer);
 						
 					// Checking class type
-				if(clsDstType!=::Uml::Uml::Class(NULL) && !::Uml::IsDerivedFrom(dstObject.type(),clsDstType))
+				if(clsDstType!=::Uml::Class(NULL) && !::Uml::IsDerivedFrom(dstObject.type(),clsDstType))
 				{
 					continue;		
 				}
 		
 				// Checking association class type
-				::Uml::Uml::Class clsAssociation=::Uml::Uml::Association(p_currAssocRole->parent()).assocClass();
-				if(ascType.clsAssociation!=::Uml::Uml::Class(NULL)&& ascType.clsAssociation!=clsAssociation)
+				::Uml::Class clsAssociation=::Uml::Association(p_currAssocRole->parent()).assocClass();
+				if(ascType.clsAssociation!=::Uml::Class(NULL)&& ascType.clsAssociation!=clsAssociation)
 				{
 					continue;
 				}
@@ -297,10 +297,10 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Uml::Class & clsDstT
 		{
 			if (pr->HasCrossMeta())
 			{
-				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter+(string)(::Uml::Uml::Diagram::Cast(clsDstType.parent()).name());
+				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter+(string)(::Uml::Diagram::Cast(clsDstType.parent()).name());
 
 				//we have to translate ascType as well
-				AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), (string)ascType.clsAssociation.name()+ Udm::cross_delimiter+(string)(::Uml::Uml::Diagram::Cast(ascType.clsAssociation.parent()).name())) :  ascType.clsAssociation);
+				AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), (string)ascType.clsAssociation.name()+ Udm::cross_delimiter+(string)(::Uml::Diagram::Cast(ascType.clsAssociation.parent()).name())) :  ascType.clsAssociation);
 				newAscType.strSrcRoleName = ascType.strSrcRoleName;
 				newAscType.strDstRoleName = ascType.strDstRoleName;
 
@@ -324,15 +324,15 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Uml::Class & clsDstT
 UDM_DLL bool Object::GetIntValue(string strAttrName, __int64& value) const
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=::Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=::Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -368,15 +368,15 @@ UDM_DLL bool Object::GetIntValue(string strAttrName, string& value) const
 UDM_DLL bool Object::GetIntValues(string strAttrName, vector<__int64>& values) const
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -396,15 +396,15 @@ UDM_DLL bool Object::GetIntValues(string strAttrName, vector<__int64>& values) c
 UDM_DLL bool Object::GetStrValue( string strAttrName, string& value) const
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -422,15 +422,15 @@ UDM_DLL bool Object::GetStrValue( string strAttrName, string& value) const
 UDM_DLL bool Object::GetStrValues(string strAttrName, vector<string>& values) const
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -474,15 +474,15 @@ UDM_DLL bool Object::GetStrValue( string strAttrName, __int64& value) const
 UDM_DLL bool Object::GetRealValue( string strAttrName, double& value) const
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -500,15 +500,15 @@ UDM_DLL bool Object::GetRealValue( string strAttrName, double& value) const
 UDM_DLL bool Object::GetRealValues(string strAttrName, vector<double>& values) const
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=::Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=::Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -528,15 +528,15 @@ UDM_DLL bool Object::GetRealValues(string strAttrName, vector<double>& values) c
 UDM_DLL bool Object::GetBoolValue( string strAttrName, bool& value) const
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -554,15 +554,15 @@ UDM_DLL bool Object::GetBoolValue( string strAttrName, bool& value) const
 UDM_DLL bool Object::GetBoolValues(string strAttrName, vector<bool>& values) const
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -583,15 +583,15 @@ UDM_DLL bool Object::GetBoolValues(string strAttrName, vector<bool>& values) con
 UDM_DLL bool Object::SetIntValue( string strAttrName, const __int64& value)
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -623,15 +623,15 @@ UDM_DLL bool Object::SetIntValue( string strAttrName, const string& value)
 UDM_DLL bool Object::SetIntValues(string strAttrName, const vector<__int64>& values)
 {
 	// Getting Attributes from meta
-  ::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+  ::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -652,15 +652,15 @@ UDM_DLL bool Object::SetIntValues(string strAttrName, const vector<__int64>& val
 UDM_DLL bool Object::SetStrValue(string strAttrName, const string& value)
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -692,15 +692,15 @@ UDM_DLL bool Object::SetStrValue(string strAttrName, const __int64& value)
 UDM_DLL bool Object::SetStrValues(string strAttrName, const vector<string>& values)
 {
 	// Getting Attributes from meta
-  ::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+  ::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -722,15 +722,15 @@ UDM_DLL bool Object::SetStrValues(string strAttrName, const vector<string>& valu
 UDM_DLL bool Object::SetRealValue( string strAttrName, double value)
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 		
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 			
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 				
@@ -747,15 +747,15 @@ UDM_DLL bool Object::SetRealValue( string strAttrName, double value)
 UDM_DLL bool Object::SetRealValues(string strAttrName, const vector<double>& values)
 {
 	// Getting Attributes from meta
-  ::Uml::Uml::Class cls= type();
-  set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+  ::Uml::Class cls= type();
+  set< ::Uml::Attribute> attrs=cls.attributes();	
 		
 	// Adding parent attributes
-  set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+  set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 			
-  for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+  for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 				
@@ -775,15 +775,15 @@ UDM_DLL bool Object::SetRealValues(string strAttrName, const vector<double>& val
 UDM_DLL bool Object::SetBoolValue( string strAttrName, bool value)
 {
 	// Getting Attributes from meta
-	::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+	::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -801,15 +801,15 @@ UDM_DLL bool Object::SetBoolValue( string strAttrName, bool value)
 UDM_DLL bool Object::SetBoolValues(string strAttrName, const vector<bool>& values)
 {
 	// Getting Attributes from meta
-  ::Uml::Uml::Class cls= type();
-	set< ::Uml::Uml::Attribute> attrs=cls.attributes();	
+  ::Uml::Class cls= type();
+	set< ::Uml::Attribute> attrs=cls.attributes();	
 	
 	// Adding parent attributes
-	set< ::Uml::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
+	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 	{
 		string strCurrAttrName=ai->name();
 		
@@ -858,7 +858,7 @@ UDM_DLL set<Object> Object::GetChildObjects() const
 
 // UDM TOMI Paradigm Independent Interface
 // Retrieves all children considering child types but not role names.
-UDM_DLL set<Object> Object::GetChildObjects(const ::Uml::Uml::Class &clsType)
+UDM_DLL set<Object> Object::GetChildObjects(const ::Uml::Class &clsType)
 {
 	//object is this
 	//object is this
@@ -879,21 +879,21 @@ UDM_DLL set<Object> Object::GetChildObjects(const ::Uml::Uml::Class &clsType)
 // UDM TOMI Paradigm Independent Interface
 // Retrieves all children considering role names and child types.
 // To ignore child types set clsChildType to ClassType(NULL).
-UDM_DLL set<Object> Object::GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Uml::Class &clsChildType)
+UDM_DLL set<Object> Object::GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Class &clsChildType)
 {
 	//object is this
 	set<Udm::Object> objChildren;
 
 
 
-	set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(type());
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(type());
 
-	for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 					p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
 		// Traversing the containtment hierarchy
-		set< ::Uml::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
-		for(set< ::Uml::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
+		set< ::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
+		for(set< ::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
 			p_currRole!=compParentRoles.end(); p_currRole++)
 		{
 			
@@ -940,23 +940,23 @@ UDM_DLL set<Object> Object::GetAssociationClassObjects(Object dstObject, const A
 	// Return value, initially NULL.
 	set<Udm::Object> objsRet;
 
-	::Uml::Uml::Class srcClass= type();
-	set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+	::Uml::Class srcClass= type();
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
-	for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 				p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
 		// Getting the association roles and iterating through them
-		set< ::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
-		for(set< ::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
+		set< ::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+		for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
 					p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
-						::Uml::Uml::Class assocClass=::Uml::Uml::Association(p_currAssocRole->parent()).assocClass();
+						::Uml::Class assocClass=::Uml::Association(p_currAssocRole->parent()).assocClass();
 
 			bool	isAssocClass=assocClass?true:false;
 
 			// Checking the type given in ascType, ignoring if it was NULL
-			if(ascType.clsAssociation!=::Uml::Uml::Class(NULL) && !Uml::IsDerivedFrom(ascType.clsAssociation,assocClass) ) continue;
+			if(ascType.clsAssociation!=::Uml::Class(NULL) && !Uml::IsDerivedFrom(ascType.clsAssociation,assocClass) ) continue;
 	
 
 			// We want to find assoc. class. If it does not exist...
@@ -1003,7 +1003,7 @@ UDM_DLL set<Object> Object::GetAssociationClassObjects(Object dstObject, const A
 
 		//it's ok for dst_o to be NULL
 		//we have to translate ascType as well
-		AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), (string)ascType.clsAssociation.name()+ Udm::cross_delimiter+(string)(::Uml::Uml::Diagram::Cast(ascType.clsAssociation.parent()).name())) :  ascType.clsAssociation);
+		AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), (string)ascType.clsAssociation.name()+ Udm::cross_delimiter+(string)(::Uml::Diagram::Cast(ascType.clsAssociation.parent()).name())) :  ascType.clsAssociation);
 		newAscType.strSrcRoleName = ascType.strSrcRoleName;
 		newAscType.strDstRoleName = ascType.strDstRoleName;
 
@@ -1026,12 +1026,12 @@ UDM_DLL pair<Object,Object> Object::GetPeersFromAssociationClassObject()
 	//objassocclass is this
 	pair<Udm::Object,Udm::Object> objsRet;
 
-	::Uml::Uml::Association Assoc =type().association();
+	::Uml::Association Assoc =type().association();
 
 	if(Assoc) 
 	{
 	
-		set< ::Uml::Uml::AssociationRole> peerRoles=Assoc.roles();
+		set< ::Uml::AssociationRole> peerRoles=Assoc.roles();
 
 		#ifdef _DEBUG
 		assert(peerRoles.size()==2);
@@ -1086,23 +1086,23 @@ UDM_DLL pair<Object,Object> Object::GetPeersFromAssociationClassObject()
 // UDM TOMI Paradigm Independent Interface
 // Creates an object of clsType
 /*
-static Object Create(const ::Uml::Uml::Class &meta, const Object &parent, 
-			const ::Uml::::Uml::Uml::CompositionChildRole &role, 
+static Object Create(const ::Uml::Class &meta, const Object &parent, 
+			const ::Uml::::Uml::CompositionChildRole &role, 
 			const ObjectImpl * archetype = &_null,
 			const bool subtype = false) 
 		{ 
 			return  __Create(meta, parent, role, archetype, subtype); 
 		}
 */
-//Object CreateObject(const ::Uml::Uml::Class & clsType, const Udm::Object& archetype = &Udm::_null, const bool subtype = false);
-UDM_DLL Object Object::CreateObject(const ::Uml::Uml::Class & clsType, const Udm::Object& archetype, const bool subtype)
+//Object CreateObject(const ::Uml::Class & clsType, const Udm::Object& archetype = &Udm::_null, const bool subtype = false);
+UDM_DLL Object Object::CreateObject(const ::Uml::Class & clsType, const Udm::Object& archetype, const bool subtype)
 {
 	Udm::Object objRet;
 	//objectparent is this
 	if (!impl->__getdn()->IsTypeSafe())
 	{
 
-		const ::Uml::Uml::Class & clsSafeType = Uml::SafeTypeContainer::GetSafeType(clsType);
+		const ::Uml::Class & clsSafeType = Uml::SafeTypeContainer::GetSafeType(clsType);
 		objRet=Udm::Object::Create(clsSafeType,*this,NULL, archetype.__impl(), subtype);
 	}
 	else
@@ -1116,26 +1116,26 @@ UDM_DLL Object Object::CreateObject(const ::Uml::Uml::Class & clsType, const Udm
 };
 
 
-UDM_DLL Object Object::CreateObject(const ::Uml::Uml::Class & clsType, const CompositionInfo& compType,const Udm::Object& archetype, const bool subtype)
+UDM_DLL Object Object::CreateObject(const ::Uml::Class & clsType, const CompositionInfo& compType,const Udm::Object& archetype, const bool subtype)
 {
 	Udm::Object objRet;
 	if( compType.strParentRoleName==""  && compType.strChildRoleName=="")
 	{	return CreateObject(clsType);
 	}
 	//objectparent is this
-	::Uml::Uml::Class srcClass= type();
-	set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+	::Uml::Class srcClass= type();
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
-	for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 			p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
 		// Getting the association roles and iterating through them
-		set< ::Uml::Uml::CompositionParentRole> parentRoles=p_currClass->parentRoles();
-		for(set< ::Uml::Uml::CompositionParentRole>::iterator p_currParentRole=parentRoles.begin();
+		set< ::Uml::CompositionParentRole> parentRoles=p_currClass->parentRoles();
+		for(set< ::Uml::CompositionParentRole>::iterator p_currParentRole=parentRoles.begin();
 							p_currParentRole!=parentRoles.end();p_currParentRole++)
 		{
-			::Uml::Uml::CompositionParentRole currParentRole = *p_currParentRole;
-			::Uml::Uml::CompositionChildRole currChildRole =::Uml::theOther(currParentRole);
+			::Uml::CompositionParentRole currParentRole = *p_currParentRole;
+			::Uml::CompositionChildRole currChildRole =::Uml::theOther(currParentRole);
 			string strParentRoleName = currParentRole.name();
 			string strChildRoleName  = currChildRole.name();
 			
@@ -1145,7 +1145,7 @@ UDM_DLL Object Object::CreateObject(const ::Uml::Uml::Class & clsType, const Com
 				if (!impl->__getdn()->IsTypeSafe())
 				{
 
-					const ::Uml::Uml::Class & clsSafeType = Uml::SafeTypeContainer::GetSafeType(clsType);
+					const ::Uml::Class & clsSafeType = Uml::SafeTypeContainer::GetSafeType(clsType);
 					objRet=Udm::Object::Create(clsSafeType,*this, currChildRole,archetype.__impl(), subtype);
 				} 
 				else
@@ -1176,15 +1176,15 @@ UDM_DLL bool Object::CreateLink(Object dstObject, const AssociationInfo& ascType
 	// if no local associationroles are found, we will try cross-links
 	bool tryCrossLink = true;
 
-	::Uml::Uml::Class srcClass= type();
-	set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+	::Uml::Class srcClass= type();
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
-	for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 			p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
 		// Getting the association roles and iterating through them
-		set< ::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
-		for(set< ::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
+		set< ::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+		for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
 							p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
 			string strSrcRoleName= p_currAssocRole->name();
@@ -1195,7 +1195,7 @@ UDM_DLL bool Object::CreateLink(Object dstObject, const AssociationInfo& ascType
 			{
 
 				tryCrossLink = false; //this works, no need to check the cross-link version
-				::Uml::Uml::Class assocClass=::Uml::Uml::Association(p_currAssocRole->parent()).assocClass();
+				::Uml::Class assocClass=::Uml::Association(p_currAssocRole->parent()).assocClass();
 
 				
 				vector<ObjectImpl*>srcPeers=impl->getAssociation(::Uml::theOther(*p_currAssocRole), assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
@@ -1277,15 +1277,15 @@ UDM_DLL bool Object::DeleteLink(Object dstObject, const Object::AssociationInfo 
 	// if no local associationroles are found, we will try cross-links
 	bool tryCrossLink = true;
 
-	::Uml::Uml::Class srcClass= type();
-	set< ::Uml::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+	::Uml::Class srcClass= type();
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
-	for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 			p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
 		// Getting the association roles and iterating through them
-		set< ::Uml::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
-		for(set< ::Uml::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
+		set< ::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+		for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
 							p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
 			string strSrcRoleName= p_currAssocRole->name();
@@ -1296,7 +1296,7 @@ UDM_DLL bool Object::DeleteLink(Object dstObject, const Object::AssociationInfo 
 			{
 				tryCrossLink = false;
 
-				::Uml::Uml::Class assocClass=::Uml::Uml::Association(p_currAssocRole->parent()).assocClass();
+				::Uml::Class assocClass=::Uml::Association(p_currAssocRole->parent()).assocClass();
 
 				
 				vector<ObjectImpl*>srcPeers=impl->getAssociation(::Uml::theOther(*p_currAssocRole), assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
@@ -1375,18 +1375,18 @@ UDM_DLL Object Object::GetAssociationEnd(string roleName)
 
 //	Association Assoc =type().association();
 
-	::Uml::Uml::Association Assoc = ::Uml::GetAncestorAssociation(type());
+	::Uml::Association Assoc = ::Uml::GetAncestorAssociation(type());
 
 	if(Assoc) 
 	{
-		set< ::Uml::Uml::AssociationRole> peerRoles=Assoc.roles();
+		set< ::Uml::AssociationRole> peerRoles=Assoc.roles();
 		#ifdef _DEBUG
 		assert(peerRoles.size()==2);
 		#endif
 
-		for(set< ::Uml::Uml::AssociationRole>::iterator i=peerRoles.begin();i!=peerRoles.end();i++)
+		for(set< ::Uml::AssociationRole>::iterator i=peerRoles.begin();i!=peerRoles.end();i++)
 		{
-			::Uml::Uml::AssociationRole peerRole = *i;
+			::Uml::AssociationRole peerRole = *i;
 			if((string)peerRole.name() == roleName)
 			{
 				tryCrossLink = false;//we found the association role
@@ -1679,10 +1679,10 @@ UDM_DLL Object Object::getInstantiatedObjectInPrimarilyDerivedBlock(const Udm::O
 
 UDM_DLL Object Object::getReferencedObject(const string refrole) const
 {
-	set< ::Uml::Uml::AssociationRole> aroles = Uml::AncestorAssociationTargetRoles(type());
-	for (set< ::Uml::Uml::AssociationRole>::iterator aroles_i = aroles.begin(); aroles_i!= aroles.end(); aroles_i++)
+	set< ::Uml::AssociationRole> aroles = Uml::AncestorAssociationTargetRoles(type());
+	for (set< ::Uml::AssociationRole>::iterator aroles_i = aroles.begin(); aroles_i!= aroles.end(); aroles_i++)
 	{
-		::Uml::Uml::AssociationRole arole = *aroles_i;
+		::Uml::AssociationRole arole = *aroles_i;
 		if ((string)arole.name() == refrole)
 		{
 			set<Object> referenced  = getAssociation(arole);
@@ -1751,7 +1751,7 @@ UDM_DLL bool Object::SetBoolVal( const cint_string &cstrAttrName, bool value)
 
 /*UDM_DLL bool Object::CreateObject(const cint_string &type, Object &value )
 {
-	::Uml::Uml::Class kind = classByName(__impl()->__getdn()->GetRootMeta(), type.buffer());
+	::Uml::Class kind = classByName(__impl()->__getdn()->GetRootMeta(), type.buffer());
 	if (!kind) return false;
 
 	value = CreateObject(kind);
@@ -1810,12 +1810,12 @@ UDM_DLL string Object::getPath( const std::string& strDelimiter , bool bReverseO
 	recursively obtains objects of a certain type down in the hierarchi rooted at this.
 	The function uses a CompositionChildRole chain which was previously obtained by Uml::GetChildRoleChain() function.
 */
-UDM_DLL set<Object> Object::getChildrenByChildRoleChain(const ::Uml::Uml::Class& meta, vector< ::Uml::Uml::CompositionChildRole> chain) const
+UDM_DLL set<Object> Object::getChildrenByChildRoleChain(const ::Uml::Class& meta, vector< ::Uml::CompositionChildRole> chain) const
 {
 	set<Object> ret;
 	if (chain.size())
 	{
-		const ::Uml::Uml::CompositionChildRole ccr = *(chain.rbegin());
+		const ::Uml::CompositionChildRole ccr = *(chain.rbegin());
 		chain.pop_back();
 
 		vector<ObjectImpl*> children = impl->getChildren(ccr, &Udm::_null);

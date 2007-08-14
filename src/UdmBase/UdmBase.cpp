@@ -19,7 +19,7 @@ CHANGELOG
 	12/06/04	-	endre
 
 		New function 
-			set<Object> DataNetwork::GetAllInstancesOf(const ::Uml::Uml::Class& meta)
+			set<Object> DataNetwork::GetAllInstancesOf(const ::Uml::Class& meta)
 		added, which retrives all instances of an Class in a DataNetwork
 
 
@@ -107,11 +107,11 @@ long long _atoi64(const char *x)  { long long i; sscanf(x,"%lld",&i);return i;};
 namespace Udm
 {
 
-	const ::Uml::Uml::CompositionChildRole NULLCHILDROLE;
-	const ::Uml::Uml::CompositionParentRole NULLPARENTROLE;
+	const ::Uml::CompositionChildRole NULLCHILDROLE;
+	const ::Uml::CompositionParentRole NULLPARENTROLE;
 
 	
-	UDM_DLL ObjectImpl *Object::__Cast(const Object &a, const ::Uml::Uml::Class &meta)
+	UDM_DLL ObjectImpl *Object::__Cast(const Object &a, const ::Uml::Class &meta)
 	{
 		if(a && !Uml::IsDerivedFrom(a.type(), meta) )
 			throw udm_exception("Invalid cast");
@@ -119,8 +119,8 @@ namespace Udm
 		return a.impl->clone();
 	}
 
-	UDM_DLL ObjectImpl *Object::__Create(const ::Uml::Uml::Class &meta, const Object &parent, 
-		const ::Uml::Uml::CompositionChildRole &role, const ObjectImpl * archetype, const bool subtype )
+	UDM_DLL ObjectImpl *Object::__Create(const ::Uml::Class &meta, const Object &parent, 
+		const ::Uml::CompositionChildRole &role, const ObjectImpl * archetype, const bool subtype )
 	{
 		if (archetype && archetype != &_null)
 		{
@@ -179,7 +179,7 @@ namespace Udm
 
 	udm_exception NullObject::e("Object handle is null");
 
-	UDM_DLL bool IsDerivedFrom(const ::Uml::Uml::Class &derived, const ::Uml::Uml::Class &base) {
+	UDM_DLL bool IsDerivedFrom(const ::Uml::Class &derived, const ::Uml::Class &base) {
 		return Uml::IsDerivedFrom(derived, base);
 	}
 
@@ -235,10 +235,10 @@ namespace Udm
 	/*
 		Returns all instances of a certain class in a Data Network
 	*/
-	UDM_DLL set<Object> DataNetwork::GetAllInstancesOf(const ::Uml::Uml::Class& meta)
+	UDM_DLL set<Object> DataNetwork::GetAllInstancesOf(const ::Uml::Class& meta)
 	{
 		set<Object> ret;
-		const ::Uml::Uml::Class root_meta = rootobject.type();
+		const ::Uml::Class root_meta = rootobject.type();
 		vector<Uml::ChildRoleChain> chains;
 		Uml::GetChildRoleChain(root_meta, meta, chains);
 		while (chains.size())
@@ -273,7 +273,7 @@ namespace Udm
 	*/
 
 
-	UDM_DLL vector<string> ObjectImpl::getStringAttrArr(const ::Uml::Uml::Attribute &meta) const
+	UDM_DLL vector<string> ObjectImpl::getStringAttrArr(const ::Uml::Attribute &meta) const
 	{
 		/*
 		Special characters:
@@ -355,7 +355,7 @@ namespace Udm
 		return ret;										//return the vector
 	};
 
-	UDM_DLL void ObjectImpl::setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct)
+	UDM_DLL void ObjectImpl::setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct)
 	{
 		/*
 		Special characters:
@@ -396,7 +396,7 @@ namespace Udm
 
 	};
 
-	UDM_DLL vector<bool> ObjectImpl::getBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const
+	UDM_DLL vector<bool> ObjectImpl::getBooleanAttrArr(const ::Uml::Attribute &meta) const
 	{
 		vector<bool> ret;
 		string sc_delimited = getStringAttr(meta);
@@ -460,7 +460,7 @@ namespace Udm
 
 	};
 
-	UDM_DLL void ObjectImpl::setBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct)
+	UDM_DLL void ObjectImpl::setBooleanAttrArr(const ::Uml::Attribute &meta, const vector<bool> &a, const bool direct)
 	{
 		string encoded_attr;
 		vector<bool>::const_iterator a_ci = a.begin();
@@ -480,7 +480,7 @@ namespace Udm
 
 	};
 
-	UDM_DLL vector<__int64> ObjectImpl::getIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const
+	UDM_DLL vector<__int64> ObjectImpl::getIntegerAttrArr(const ::Uml::Attribute &meta) const
 	{
 		vector<__int64> ret;
 		string sc_delimited = getStringAttr(meta);
@@ -521,7 +521,7 @@ namespace Udm
 
 	};
 
-	UDM_DLL void ObjectImpl::setIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct)
+	UDM_DLL void ObjectImpl::setIntegerAttrArr(const ::Uml::Attribute &meta, const vector<__int64> &a, const bool direct)
 	{
 		string encoded_attr;
 		vector<__int64>::const_iterator a_ci = a.begin();
@@ -553,7 +553,7 @@ namespace Udm
 
 	};
 
-	UDM_DLL vector<double> ObjectImpl::getRealAttrArr(const ::Uml::Uml::Attribute &meta) const
+	UDM_DLL vector<double> ObjectImpl::getRealAttrArr(const ::Uml::Attribute &meta) const
 	{
 		vector<double> ret;
 		string sc_delimited = getStringAttr(meta);
@@ -597,7 +597,7 @@ namespace Udm
 
 	};
 
-	UDM_DLL void ObjectImpl::setRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct)
+	UDM_DLL void ObjectImpl::setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct)
 	{
 		string encoded_attr;
 		vector<double>::const_iterator a_ci = a.begin();
@@ -642,19 +642,19 @@ namespace Udm
 
 	//non-persistent , single-value attributes 
 ///
-	UDM_DLL string ObjectImpl::getTempStringAttr(const ::Uml::Uml::Attribute &meta) const 
+	UDM_DLL string ObjectImpl::getTempStringAttr(const ::Uml::Attribute &meta) const 
 	{
 			tmap &tempvarmap = locatemap(false);
 			string ret;
-			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@string");
+			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@string");
 			if(f != tempvarmap.end()) ret = f->second.strval;
 			return ret;
 	}
 
-	UDM_DLL void ObjectImpl::setTempStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct) 
+	UDM_DLL void ObjectImpl::setTempStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct) 
 	{
 			tmap &tempvarmap = locatemap(true);
-			string sig = string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@string";
+			string sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@string";
 			
 
 			ObjectImpl * archetype = getArchetype();
@@ -716,19 +716,19 @@ namespace Udm
 	}
 
 ///
-	UDM_DLL __int64 ObjectImpl::getTempIntegerAttr(const ::Uml::Uml::Attribute &meta) const
+	UDM_DLL __int64 ObjectImpl::getTempIntegerAttr(const ::Uml::Attribute &meta) const
 	{
 			tmap &tempvarmap = locatemap(false);
 			__int64 ret=0;
-			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@long");
+			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@long");
 			if(f != tempvarmap.end()) ret = f->second.longval;
 			return ret;
 	}
 
-	UDM_DLL void ObjectImpl::setTempIntegerAttr(const ::Uml::Uml::Attribute &meta, const __int64 &a, const bool direct) 
+	UDM_DLL void ObjectImpl::setTempIntegerAttr(const ::Uml::Attribute &meta, const __int64 &a, const bool direct) 
 	{
 			tmap &tempvarmap = locatemap(true);
-			string sig = string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@long";
+			string sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@long";
 			
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
@@ -795,19 +795,19 @@ namespace Udm
 	}
 
 ///
-	UDM_DLL double ObjectImpl::getTempRealAttr(const ::Uml::Uml::Attribute &meta) const 
+	UDM_DLL double ObjectImpl::getTempRealAttr(const ::Uml::Attribute &meta) const 
 	{
 			tmap &tempvarmap = locatemap(false);
 			double ret=0;
-			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@double");
+			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@double");
 			if(f != tempvarmap.end()) ret = f->second.doubleval;
 			return ret;
 	}
 
-	UDM_DLL void ObjectImpl::setTempRealAttr(const ::Uml::Uml::Attribute &meta, const double &a, const bool direct) 
+	UDM_DLL void ObjectImpl::setTempRealAttr(const ::Uml::Attribute &meta, const double &a, const bool direct) 
 	{
 			tmap &tempvarmap = locatemap(true);
-			string sig = string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@double";
+			string sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@double";
 
 
 
@@ -876,19 +876,19 @@ namespace Udm
 	}
 
 ///
-	UDM_DLL bool ObjectImpl::getTempBooleanAttr(const ::Uml::Uml::Attribute &meta) const
+	UDM_DLL bool ObjectImpl::getTempBooleanAttr(const ::Uml::Attribute &meta) const
 	{
 			tmap &tempvarmap = locatemap(false);
 			bool ret=false;
-			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@bool");
+			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@bool");
 			if(f != tempvarmap.end()) ret = f->second.boolval;
 			return ret;
 	}
 
-	UDM_DLL void ObjectImpl::setTempBooleanAttr(const ::Uml::Uml::Attribute &meta, const bool &a, const bool direct) 
+	UDM_DLL void ObjectImpl::setTempBooleanAttr(const ::Uml::Attribute &meta, const bool &a, const bool direct) 
 	{
 			tmap &tempvarmap = locatemap(true);
-			string sig = string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@bool";
+			string sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@bool";
 	
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
@@ -957,19 +957,19 @@ namespace Udm
 
 	//non-persistent , array attributes
 ///
-	UDM_DLL vector<string> ObjectImpl::getTempStringAttrArr(const ::Uml::Uml::Attribute &meta) const
+	UDM_DLL vector<string> ObjectImpl::getTempStringAttrArr(const ::Uml::Attribute &meta) const
 	{
 			tmap &tempvarmap = locatemap(false);
 			vector<string> ret;
-			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@string_array");
+			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@string_array");
 			if(f != tempvarmap.end()) ret = f->second.strarrval;
 			return ret;
 	}
 
-	UDM_DLL void ObjectImpl::setTempStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct) 
+	UDM_DLL void ObjectImpl::setTempStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct) 
 	{
 			tmap &tempvarmap = locatemap(true);
-			string sig = string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@string_array";
+			string sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@string_array";
 
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
@@ -1036,19 +1036,19 @@ namespace Udm
 	}
 
 ///
-	UDM_DLL vector<__int64> ObjectImpl::getTempIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const
+	UDM_DLL vector<__int64> ObjectImpl::getTempIntegerAttrArr(const ::Uml::Attribute &meta) const
 	{
 			tmap &tempvarmap = locatemap(false);
 			vector<__int64> ret;
-			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@long_array");
+			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@long_array");
 			if(f != tempvarmap.end()) ret = f->second.longarrval;
 			return ret;
 	}
 
-	UDM_DLL void ObjectImpl::setTempIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct) 
+	UDM_DLL void ObjectImpl::setTempIntegerAttrArr(const ::Uml::Attribute &meta, const vector<__int64> &a, const bool direct) 
 	{
 			tmap &tempvarmap = locatemap(true);
-			string sig = string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@long_array";
+			string sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@long_array";
 
 
 			ObjectImpl * archetype = getArchetype();
@@ -1116,19 +1116,19 @@ namespace Udm
 	}
 
 ///
-	UDM_DLL vector<double> ObjectImpl::getTempRealAttrArr(const ::Uml::Uml::Attribute &meta) const
+	UDM_DLL vector<double> ObjectImpl::getTempRealAttrArr(const ::Uml::Attribute &meta) const
 	{
 			tmap &tempvarmap = locatemap(false);
 			vector<double> ret;
-			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@double_array");
+			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@double_array");
 			if(f != tempvarmap.end()) ret = f->second.doublearrval;
 			return ret;
 	}
 
-	UDM_DLL void ObjectImpl::setTempRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct) 
+	UDM_DLL void ObjectImpl::setTempRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct) 
 	{
 			tmap &tempvarmap = locatemap(true);
-			string sig = string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@double_array";
+			string sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@double_array";
 
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
@@ -1196,19 +1196,19 @@ namespace Udm
 	}
 
 ///
-	UDM_DLL vector<bool> ObjectImpl::getTempBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const
+	UDM_DLL vector<bool> ObjectImpl::getTempBooleanAttrArr(const ::Uml::Attribute &meta) const
 	{
 			tmap &tempvarmap = locatemap(false);
 			vector<bool> ret;
-			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@bool_array");
+			map<string, udmvariant>::iterator f = tempvarmap.find(string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@bool_array");
 			if(f != tempvarmap.end()) ret = f->second.boolarrval;
 			return ret;
 	}
 
-	UDM_DLL void ObjectImpl::setTempBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct) 
+	UDM_DLL void ObjectImpl::setTempBooleanAttrArr(const ::Uml::Attribute &meta, const vector<bool> &a, const bool direct) 
 	{
 			tmap &tempvarmap = locatemap(true);
-			string sig = string(meta.name()) + "@" + string(::Uml::Uml::Class(meta.parent()).name()) + "@bool_array";
+			string sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@bool_array";
 
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
@@ -1342,7 +1342,7 @@ namespace Udm
 	}
 
 
-	UDM_DLL bool CheckAttributeOrdering(const ::Uml::Uml::Attribute & att)
+	UDM_DLL bool CheckAttributeOrdering(const ::Uml::Attribute & att)
 	{
 		return (bool) att.ordered();
 	};
@@ -1401,12 +1401,12 @@ namespace Udm
 	{
 	
 		//if all is false, only nonpersistent attributes will be modified
-		set< ::Uml::Uml::Attribute> attributes = Uml::AncestorAttributes(type());
-		set< ::Uml::Uml::Attribute>::const_iterator c_i = attributes.begin();
+		set< ::Uml::Attribute> attributes = Uml::AncestorAttributes(type());
+		set< ::Uml::Attribute>::const_iterator c_i = attributes.begin();
 
 			while (c_i != attributes.end())
 			{
-				::Uml::Uml::Attribute att = *c_i++;
+				::Uml::Attribute att = *c_i++;
 				if (att.defvalue() || (att.min() > 0))
 				{
 
@@ -1555,7 +1555,7 @@ namespace Udm
 			}
 		}
 
-		UDM_DLL void ObjectImpl::CopyAttributeFrom(const ::Uml::Uml::Attribute& which, const ObjectImpl*  from, bool direct)
+		UDM_DLL void ObjectImpl::CopyAttributeFrom(const ::Uml::Attribute& which, const ObjectImpl*  from, bool direct)
 		{
 			string attrType=which.type();
 			bool attrArray = ((which.max() != 0) && (which.max() != 1));
@@ -1631,13 +1631,13 @@ namespace Udm
 
 		UDM_DLL void ObjectImpl::CopyAttributesFrom(const ObjectImpl*  from, bool direct)
 		{
-			set < ::Uml::Uml::Attribute> attributes = Uml::AncestorAttributes(type());
-			set < ::Uml::Uml::Attribute>::iterator attr_i = attributes.begin();
+			set < ::Uml::Attribute> attributes = Uml::AncestorAttributes(type());
+			set < ::Uml::Attribute>::iterator attr_i = attributes.begin();
 			while (attr_i != attributes.end())
 				CopyAttributeFrom(*attr_i++, from, direct);
 		};
 
-		UDM_DLL void ObjectImpl::CopyAttributeFromArchetype(const ::Uml::Uml::Attribute& which)
+		UDM_DLL void ObjectImpl::CopyAttributeFromArchetype(const ::Uml::Attribute& which)
 		{
 			ObjectImpl * archetype = getArchetype();
 			CopyAttributeFrom(which, archetype);

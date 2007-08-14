@@ -40,9 +40,9 @@ void Dump(Udm::SmartDataNetwork *sdnBackend);
 // Paradigm-independent dump functions
 void ExtractAttributes(Udm::Object ob, int nDepthLevel=0);
 string ExtractName(Udm::Object ob);
-void DumpClasses(::Uml::Uml::Diagram dgr);
-void DumpCompositions(::Uml::Uml::Diagram dgr);
-void DumpAssociations(::Uml::Uml::Diagram dgr);
+void DumpClasses(::Uml::Diagram dgr);
+void DumpCompositions(::Uml::Diagram dgr);
+void DumpAssociations(::Uml::Diagram dgr);
 
 void ExtractLinks(Udm::Object ob);
 void VisitObjects(Udm::Object ob, int nDepthLevel=0);
