@@ -516,7 +516,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 
 //###############################################################################################################################################
 //
-// CLASS : ConstraintEx - IMPLEMENTATION
+// CLASS : ConstraintDefEx - IMPLEMENTATION
 //
 //###############################################################################################################################################
 
@@ -1078,16 +1078,60 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 	{
 		std::string strContext = (string)objContext.type().name();
 		SErrorNotification en = SErrorNotification();
+		Constraint::setPatProcessFlag(true);
+		size_t _pos = 0;
+		size_t _start = strExpression.find("<:$", _pos);
+		size_t _end;
+		size_t _exprStart = 0;
+		const std::string strWhitespace = "\n\r\t ";
+		while (_start != -1) {
+			_pos = _start+3;
+			_start = strExpression.find_first_not_of(strWhitespace, _pos);
+			_end = strExpression.find("::", _start);
+			if(_end < 0) throw(udm_exception("Error defining method"));
+			std::string strClassName = strExpression.substr(_start,
+_end - _start);
+
+			_start = _end + 2;
+			_end = strExpression.find('(', _start);
+			if(_end < 0) throw(udm_exception("Error defining method"));
+			std::string strMethodName = strExpression.substr(_start, _end - _start);
+
+			_start = _end + 1;
+			_end = strExpression.find(')', _start);
+			if(_end < 0) throw(udm_exception("Error defining method"));
+			std::string strArgList = strExpression.substr(_start, _end - _start);
+
+			_pos = strExpression.find(':', _end);
+			_start = strExpression.find_first_not_of(strWhitespace, _pos + 1);
+			_end = strExpression.find_first_of(strWhitespace, _start);
+			std::string strReturnType = strExpression.substr(_start, _end - _start);
+
+			_pos = strExpression.find("defmethod", _end);
+			_start = strExpression.find(':', _pos) + 1;
+			_end = strExpression.find("$:>", _start);
+			if(_end < 0) throw(udm_exception("Error defining method"));
+			std::string strMethodExpression = strExpression.substr(_start, _end - _start);
+
+			::Uml::ConstraintDefinition cd = ::Uml::ConstraintDefinition::Create(::Uml::classByName(metaDiagram, metaDiagram.name(), strClassName));
+			cd.name() = strMethodName;
+			cd.expression() = strMethodExpression;
+			cd.parameterList() = strArgList;
+			cd.stereotype() = "method";
+			cd.returnType() = strReturnType;
+
+			_exprStart = _end + 4;
+			_start = strExpression.find("<:$",_end);
+		}
 		Initialize( metaDiagram, en );
 		Constraint::setPatProcessFlag(true);
-		//Constraint::setPatOutputFile("testoutput.out");
-		ConstraintEx cons = ConstraintEx( globalFacadeMap[ metaDiagram ], strContext, strExpression);
+		ConstraintEx cons = ConstraintEx( globalFacadeMap[ metaDiagram ], strContext, "{:>"+strExpression.substr(_exprStart)+"<:}");
 		SEvaluationOptions options = SEvaluationOptions();
 		cons.Compile(en);
 		EEvaluationResult eResult = cons.Evaluate( objContext, options );
 		OclTree::PatHelper::clean();
 		Constraint::setPatProcessFlag(false);
-		//Constraint::closePatOutputFile();
+
 		return true;
 	}
 
