@@ -69,7 +69,7 @@ public:
 	udm_multimap<T,Z>() : multimap<T,Z>(){};
 	pair<typename multimap<T, Z>::iterator, bool> safe_insert(typename multimap<T,Z>::value_type& item)
 	{
-		pair<TYPENAME multimap<T, Z>::iterator, TYPENAME multimap<T, Z>::iterator> it_pair = equal_range(item.first);
+		pair<TYPENAME multimap<T, Z>::iterator, TYPENAME multimap<T, Z>::iterator> it_pair = this->equal_range(item.first);
 		TYPENAME multimap<T, Z>::iterator i = it_pair.first;
 		bool found = false;
 		while (i != it_pair.second && !found)
@@ -298,6 +298,9 @@ namespace UdmStatic
 		vector<double> getRealAttrArr(const ::Uml::Attribute &meta) const;
 		void setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
 
+	//	--- attribute status
+
+		long getAttrStatus(const ::Uml::Attribute &meta) const;
 
 
 	// --- containment, maintance(create, delete)
