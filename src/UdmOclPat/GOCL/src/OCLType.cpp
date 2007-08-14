@@ -311,7 +311,8 @@ namespace OclMeta
 				return strName1;
 		StringVector vecTypes;
 		const StringVector& vecSuperTypes = GetType( strName1 )->GetSuperTypeNames();
-		for ( int i = 0 ; i < vecSuperTypes.size() ; i++ )
+		int i;
+		for ( i = 0 ; i < vecSuperTypes.size() ; i++ )
 			vecTypes.push_back( GetTypeBase( vecSuperTypes[ i ], strName2 ) );
 		int iIsA = -1;
 		GOCL_STL_NS()string strResult = "ocl::Any";

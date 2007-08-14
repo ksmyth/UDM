@@ -11,6 +11,32 @@
 #include "math.h"
 #include "algorithm"
 
+#ifndef _WIN32
+char *_strupr( char *string )
+{
+	if (string)
+	{
+		for (int i = 0; i< strlen(string); i++)
+			*(string + i) = toupper(*(string+i));
+	};
+	return string;
+};
+
+char *_strlwr( char *string )
+{
+	if (string)
+	{
+		for (int i = 0; i< strlen(string); i++)
+			*(string + i) = tolower(*(string+i));
+	};
+	return string;
+};
+
+
+
+
+#endif
+
 namespace OclBasic
 {
 	typedef OclCommon::FormalParameterVector 	FPV;
@@ -520,7 +546,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_REAL( dArg, GetArgument( 0 ) );
-			SetResult( CREATE_INTEGER( GetTypeManager(), floor( dArg ) ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), (int)floor( dArg ) ) );
 		}
 	};
 
@@ -529,8 +555,8 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_REAL( dArg, GetArgument( 0 ) );
-			long lFloor = floor( dArg );
-			SetResult( CREATE_INTEGER( GetTypeManager(), lFloor + ( ( lFloor + 0.5 <= dArg && dArg >= 0 ) ? 1 : 0 ) ) );
+			long lFloor = (long) floor(dArg );
+			SetResult( CREATE_INTEGER( GetTypeManager(), (int)(lFloor + ( ( lFloor + 0.5 <= dArg && dArg >= 0 ) ? 1 : 0 )) ) );
 		}
 	};
 
@@ -568,7 +594,7 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_REAL( dThis, GetThis() );
-			SetResult( CREATE_INTEGER( GetTypeManager(), floor( dThis ) ) );
+			SetResult( CREATE_INTEGER( GetTypeManager(), (long int)(floor( dThis )) ) );
 		}
 	};
 
@@ -577,8 +603,8 @@ namespace OclBasic
 		void operator()()
 		{
 			DECL_REAL( dThis, GetThis() );
-			long lFloor = floor( dThis );
-			SetResult( CREATE_INTEGER( GetTypeManager(), lFloor + ( ( lFloor + 0.5 <= dThis && dThis >= 0 ) ? 1 : 0 ) ) );
+			long lFloor = (long) floor( dThis );
+			SetResult( CREATE_INTEGER( GetTypeManager(), (long int)(lFloor + ( ( lFloor + 0.5 <= dThis && dThis >= 0 ) ? 1 : 0 ) )) );
 		}
 	};
 
@@ -2818,3 +2844,4 @@ namespace OclBasic
 	}
 
 }; // namespace OclBasic
+

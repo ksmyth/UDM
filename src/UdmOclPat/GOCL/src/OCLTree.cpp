@@ -25,6 +25,12 @@ namespace OclTree
 		OclCommon::Exception( OclCommon::Exception::ET_SEMANTIC, iCode, param1, param2, pos.iLine, pos.iColumn )
 
 	#define ADDEX( ex ) \
+	{\
+		OclCommon::Exception exp(ex);\
+		context.m_poolExceptions.Add( exp );\
+	}
+
+	#define ADDEXS( ex ) \
 		context.m_poolExceptions.Add( ex )
 
 	#define SETEXPOS( ex, pos ) \
@@ -127,8 +133,8 @@ namespace OclTree
 	TypeSeq TreeNode::GetParametralTypeSeq( const TypeSeq& vecType1, const TypeSeq& vecType2, const TypeSeq& vecTypeReturn )
 	{
 		m_vecType.clear();
-
-		for ( int i = 0 ; i < vecTypeReturn.size() - 1 ; i++ )
+		int i;
+		for ( i = 0 ; i < vecTypeReturn.size() - 1 ; i++ )
 			m_vecType.push_back( vecTypeReturn[ i ] );
 
 		GOCL_STL_NS()string strLastType = vecTypeReturn[ vecTypeReturn.size() - 1 ];
@@ -229,7 +235,8 @@ namespace OclTree
 			if ( feature1 || ! feature1 && exception.GetCode() == vecAmbiguities[ 0 ] ) {
 				if ( feature1 )
 					vecAmbiguities[ 0 ] = 0;
-				exAmbiguity.Add( OclCommon::Exception( OclCommon::Exception::ET_SEMANTIC, vecAmbiguities[ 2 ], vecSignatures[ 0 ]->Print(), vecSignatures[ 1 ]->Print() ) );
+				OclCommon::Exception exp(OclCommon::Exception::ET_SEMANTIC, vecAmbiguities[ 2 ], vecSignatures[ 0 ]->Print(), vecSignatures[ 1 ]->Print() ); 
+				exAmbiguity.Add( exp  );
 				return NULL;
 			}
 			iPrecedence = 1;
@@ -245,7 +252,8 @@ namespace OclTree
 				if ( feature1 || ! feature1 && exception.GetCode() == vecAmbiguities[ 0 ] ) {
 					if ( feature1 )
 						vecAmbiguities[ 0 ] = 0;
-					exAmbiguity.Add( OclCommon::Exception( OclCommon::Exception::ET_SEMANTIC, vecAmbiguities[ 2 ], vecSignatures[ 0 ]->Print(), vecSignatures[ 1 ]->Print() ) );
+					OclCommon::Exception exp( OclCommon::Exception::ET_SEMANTIC, vecAmbiguities[ 2 ], vecSignatures[ 0 ]->Print(), vecSignatures[ 1 ]->Print() ) ;
+					exAmbiguity.Add( exp);
 					return NULL;
 				}
 				else {
@@ -484,7 +492,7 @@ namespace OclTree
 		// Check if variable already exists , Add variable
 
 		if ( context.m_ctxTypes.ExistsVariable( m_strName ) )
-			ADDEX( EXCEPTION1( EX_VARIABLE_ALREADY_EXISTS, m_strName, m_mapPositions[ LID_VARIABLE_NAME ] ) );
+			ADDEX( EXCEPTION1( EX_VARIABLE_ALREADY_EXISTS, m_strName, m_mapPositions[ LID_VARIABLE_NAME ] ) )
 		else
 			if ( ! m_vecTypeDecl.empty() )
 				context.m_ctxTypes.AddVariable( m_strName, m_vecTypeDecl, true );
@@ -1031,7 +1039,7 @@ namespace OclTree
 				m_pThisNode = NULL;
 				int iLastCode = GetLastExceptionCode( contextIterator );
 				if ( iLastCode != EX_ITERATOR_DOESNT_EXIST && iLastCode != EX_TYPE_NOT_COMPOUND_ITERATOR && iLastCode != -1 ) {
-					ADDEX( contextIterator.m_poolExceptions );
+					ADDEXS( contextIterator.m_poolExceptions );
 					return false;
 				}
 			}
@@ -1344,7 +1352,8 @@ namespace OclTree
 			if ( ! pType->IsCompound() || m_vecArguments.size() != 1 ) {
 
 				bool bArgumentsValid = true;
-				for ( int i = 0 ; i < m_vecArguments.size() ; i++ )
+				int i;
+				for ( i = 0 ; i < m_vecArguments.size() ; i++ )
 					bArgumentsValid = m_vecArguments[ i ]->Check( context ) && bArgumentsValid;
 
 				if ( bArgumentsValid ) {
@@ -1418,12 +1427,12 @@ namespace OclTree
 
 				OclMeta::Feature* pFeature = CheckAmbiguity( vecTypes, vecSignatures, vecCodes, iPrecedence, poolResult );
 				if ( ! pFeature ) {
-					ADDEX( poolResult );
+					ADDEXS( poolResult );
 					return false;
 				}
 				else {
 					if ( iPrecedence == -1 ) {
-						ADDEX( contextMethod.m_poolExceptions );
+						ADDEXS( contextMethod.m_poolExceptions );
 						TypeContext contextTemp = context;
 						m_vecArguments[ 0 ]->Check( contextTemp );
 						GetParametralTypeSeq( m_pThisNode->m_vecType, vecTypeMethod, pFeature->GetReturnTypeSeq() );
@@ -1432,7 +1441,7 @@ namespace OclTree
 						return true;
 					}
 					else {
-						ADDEX( contextIterator.m_poolExceptions );
+						ADDEXS( contextIterator.m_poolExceptions );
 						if ( ! bIteratorValid )
 							return false;
 						if ( vecTypeMethod != vecTypeIterator )
@@ -1469,18 +1478,18 @@ namespace OclTree
 
 				OclMeta::Feature* pFeature = CheckAmbiguity( vecTypes, vecSignatures, vecCodes, iPrecedence, poolResult );
 				if ( ! pFeature ) {
-					ADDEX( poolResult );
+					ADDEXS( poolResult );
 					return false;
 				}
 				else {
 					if ( iPrecedence == 1 ) {
-						ADDEX( contextMethod.m_poolExceptions );
+						ADDEXS( contextMethod.m_poolExceptions );
 						if ( pFeature->IsDependence() )
 							context.m_setDependencies.insert( OclMeta::Dependency( sigMethod.Print(), m_mapPositions[ LID_FEATURE_NAME ] ) );
 						return true;
 					}
 					else {
-						ADDEX( contextIterator.m_poolExceptions );
+						ADDEXS( contextIterator.m_poolExceptions );
 						m_pIterator= GetTreeManager()->CreateIterator();
 						m_pIterator->m_bTester = true;
 						m_pIterator->m_pThisNode = m_pThisNode;
@@ -1499,9 +1508,9 @@ namespace OclTree
 				}
 			}
 			if ( m_strCallOperator == "->" )
-				ADDEX( contextIterator.m_poolExceptions );
+				ADDEXS( contextIterator.m_poolExceptions );
 			else
-				ADDEX( contextMethod.m_poolExceptions );
+				ADDEXS( contextMethod.m_poolExceptions );
 			return false;
 		}
 		return false;
@@ -1515,7 +1524,8 @@ namespace OclTree
 		int iLineFeatureName = m_mapPositions[ LID_FEATURE_NAME ].iLine;
 
 		StringVector vecTypes;
-		for ( int i = 0 ; i < m_vecArguments.size() ; i++ )
+		int i;
+		for ( i = 0 ; i < m_vecArguments.size() ; i++ )
 			vecTypes.push_back( m_vecArguments[ i ]->m_vecType[ 0 ] );
 		OclSignature::Method signature( m_strName, m_pThisNode->m_vecType[ 0 ], vecTypes );
 
@@ -1614,7 +1624,8 @@ namespace OclTree
 		contextFunction.m_poolExceptions.Clear();
 
 		bool bArgumentsValid = true;
-		for ( int i = 0 ; i < m_vecArguments.size() ; i++ )
+		int i;
+		for ( i = 0 ; i < m_vecArguments.size() ; i++ )
 			bArgumentsValid = m_vecArguments[ i ]->Check( contextFunction ) && bArgumentsValid;
 
 		OclCommon::Exception exFunction;
@@ -1627,7 +1638,7 @@ namespace OclTree
 
 			try {
 				OclMeta::Function* pFunction = GetTreeManager()->GetTypeManager()->GetFunction( sigFunction );
-				ADDEX( contextFunction.m_poolExceptions );
+				ADDEXS( contextFunction.m_poolExceptions );
 				GetParametralTypeSeq( TypeSeq(), ( m_vecArguments.empty() ) ? TypeSeq() : m_vecArguments[ 0 ]->m_vecType, pFunction->GetReturnTypeSeq() );
 				if ( pFunction->IsDependence() )
 					context.m_setDependencies.insert( OclMeta::Dependency( sigFunction.Print(), m_mapPositions[ LID_FEATURE_NAME ] ) );
@@ -1636,8 +1647,8 @@ namespace OclTree
 			catch ( OclCommon::Exception ex ) {
 				SETEXPOS( ex, m_mapPositions[ LID_FEATURE_NAME ] );
 				if ( ex.GetCode() != EX_FUNCTION_DOESNT_EXIST ) {
-					ADDEX( contextFunction.m_poolExceptions );
-					ADDEX( ex );
+					ADDEXS( contextFunction.m_poolExceptions );
+					ADDEX( ex )
 					return false;
 				}
 				exFunction = ex;
@@ -1661,7 +1672,7 @@ namespace OclTree
 			m_pMethod->m_vecArguments = m_vecArguments;
 
 			if ( m_pMethod->Check( contextMethod ) ) {
-				ADDEX( contextMethod.m_poolExceptions );
+				ADDEXS( contextMethod.m_poolExceptions );
 				m_pMethod->m_bTester = false;
 				m_bSelfTester = true;
 				m_vecType = m_pMethod->m_vecType;
@@ -1674,7 +1685,7 @@ namespace OclTree
 				m_pMethod = NULL;
 				int iLastCode = GetLastExceptionCode( contextMethod);
 				if ( iLastCode != EX_METHOD_DOESNT_EXIST && iLastCode != EX_ITERATOR_DOESNT_EXIST &&  iLastCode != EX_TYPE_NOT_COMPOUND_ITERATOR && iLastCode != -1 ) {
-					ADDEX( contextMethod.m_poolExceptions );
+					ADDEXS( contextMethod.m_poolExceptions );
 					return false;
 				}
 			}
@@ -1690,7 +1701,8 @@ namespace OclTree
 
 		int iLineFeatureName = m_mapPositions[ LID_FEATURE_NAME ].iLine;
 		StringVector vecTypes;
-		for ( int i = 0 ; i < m_vecArguments.size() ; i++ )
+		int i;
+		for ( i = 0 ; i < m_vecArguments.size() ; i++ )
 			vecTypes.push_back( m_vecArguments[ i ]->m_vecType[ 0 ] );
 		OclSignature::Function signature( m_strName, vecTypes );
 
@@ -1795,7 +1807,7 @@ namespace OclTree
 				m_pThisNode = NULL;
 				int iLastCode = GetLastExceptionCode( contextAssociation );
 				if ( iLastCode != EX_ASSOCIATION_DOESNT_EXIST ) {
-					ADDEX( contextAssociation.m_poolExceptions );
+					ADDEXS( contextAssociation.m_poolExceptions );
 					return false;
 				}
 			}
@@ -1971,7 +1983,7 @@ namespace OclTree
 
 				OclMeta::Feature* pFeature = CheckAmbiguity( vecTypes, vecSignatures, vecCodes, iPrecedence, poolResult );
 				if ( ! pFeature ) {
-					ADDEX( poolResult );
+					ADDEXS( poolResult );
 					return false;
 				}
 				else {
@@ -2020,7 +2032,7 @@ namespace OclTree
 
 				OclMeta::Feature* pFeature = CheckAmbiguity( vecTypes, vecSignatures, vecCodes, iPrecedence, poolResult );
 				if ( ! pFeature ) {
-					ADDEX( poolResult );
+					ADDEXS( poolResult );
 					return false;
 				}
 				else {
@@ -2167,7 +2179,7 @@ namespace OclTree
 			delete m_pType;
 			m_pType = NULL;
 			if ( m_strName.find( ":" ) != GOCL_STL_NS()string::npos ) {
-				ADDEX( contextType.m_poolExceptions );
+				ADDEXS( contextType.m_poolExceptions );
 				return false;
 			}
 		}
@@ -2209,7 +2221,7 @@ namespace OclTree
 				m_pAttribute = NULL;
 				int iLastCode = GetLastExceptionCode( contextAttribute );
 				if ( iLastCode != EX_ATTRIBUTE_DOESNT_EXIST && iLastCode != EX_ASSOCIATION_DOESNT_EXIST ) {
-					ADDEX( contextAttribute.m_poolExceptions );
+					ADDEXS( contextAttribute.m_poolExceptions );
 					return false;
 				}
 			}
@@ -2302,7 +2314,7 @@ namespace OclTree
 			if ( ParseTypeSeq( context, m_mapPositions[ LID_PARAMETER_TYPE + i ], strType, vecType ) )
 				m_vecParameters[ i ] = OclCommon::FormalParameter( strName, strType, m_vecParameters[ i ].IsRequired() );
 			if ( context.m_ctxTypes.ExistsVariable( strName ) )
-				ADDEX( EXCEPTION1( EX_VARIABLE_ALREADY_EXISTS, strName, m_mapPositions[ LID_PARAMETER_NAME + i ] ) );
+				ADDEX( EXCEPTION1( EX_VARIABLE_ALREADY_EXISTS, strName, m_mapPositions[ LID_PARAMETER_NAME + i ] ) )
 			else
 				if ( ! vecType.empty() )
 					context.m_ctxTypes.AddVariable( strName, vecType );
@@ -2770,7 +2782,8 @@ namespace OclTree
 	bool EnumerationNode::CheckImplementation( TypeContext& context )
 	{
 		bool bResult = true;
-		for ( int i = 0 ; i < m_vecNodes.size() ; i++ ) {
+		int i;
+		for ( i = 0 ; i < m_vecNodes.size() ; i++ ) {
 			bResult = m_vecNodes[ i ]->Check( context )  && bResult;
 		}
 		if ( bResult )
@@ -2781,7 +2794,8 @@ namespace OclTree
 	OclMeta::Object EnumerationNode::Evaluate( ObjectContext& context )
 	{
 		OclMeta::ObjectVector vecObjects;
-		for ( int i = 0 ; i < m_vecNodes.size() ; i++ ) {
+		int i;
+		for ( i = 0 ; i < m_vecNodes.size() ; i++ ) {
 			vecObjects.push_back( m_vecNodes[ i ]->Evaluate( context ) );
 		}
 		return vecObjects[ i - 1];

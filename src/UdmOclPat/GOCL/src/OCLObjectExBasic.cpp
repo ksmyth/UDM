@@ -293,7 +293,7 @@ namespace OclBasic
 
 	void Integer::SetValue( long value )
 	{
-		SetValue( (double) value );
+		SetValue(  value );
 	}
 
 	Any* Integer::Clone() const
