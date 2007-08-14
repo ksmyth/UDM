@@ -280,5 +280,17 @@
   >
     <solution configuration="${Configuration}" includevsfolders="true" solutionfile="${File.solution}" verbose="true"/>
   </target>
+  
+  <target
+   name="register"
+   depends="build"
+   description="register UML2XML.dll"
+   >
+    <exec program="regsvr32.exe" workingdir="..\bin">
+      <arg line="/s"/>
+      <arg line="/c"/>
+      <arg line="UML2XML.dll"/>
+    </exec>
+   </target>
 
 </project>
