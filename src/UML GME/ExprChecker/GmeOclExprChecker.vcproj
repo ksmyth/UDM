@@ -52,6 +52,7 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 				OutputFile="..\..\..\bin.net\GmeOclExprCheckerD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="..\..\..\lib\"
 				IgnoreDefaultLibraryNames="nafxcwd.lib"
 				ModuleDefinitionFile=".\GmeOclExprChecker.def"
 				GenerateDebugInformation="TRUE"
@@ -122,6 +123,7 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 				OutputFile="..\..\..\bin.net\GmeOclExprChecker.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="..\..\..\lib\"
 				IgnoreDefaultLibraryNames="nafxcw.lib,msvcrtd.lib"
 				ModuleDefinitionFile=".\GmeOclExprChecker.def"
 				ProgramDatabaseFile=".\ReleaseMinDependency/GmeOclExprChecker.pdb"
@@ -613,10 +615,10 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 			<File
-				RelativePath="resources\compicon.ico">
+				RelativePath="CompIcon.ico">
 			</File>
 			<File
-				RelativePath="CompIcon.ico">
+				RelativePath="resources\compicon.ico">
 			</File>
 			<File
 				RelativePath="resources\constraint_icons.bmp">
