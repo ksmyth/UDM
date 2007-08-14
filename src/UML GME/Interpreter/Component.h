@@ -14,6 +14,11 @@
 /*
 CHANGELOG
 =========
+	-	11/24/05	-	endre
+
+		- add CAssociationBase::DumpCrossXML to fix the generation of Association elements in the cross XML file
+		(previously no XML was generated if the association was in a namespace)
+
 	-	27/02/04	-	endre
 				
 		-	added the call GetPackage() for CClassBuilder and CClassCopyBuilder and the abstract method for CClassBase
@@ -115,7 +120,7 @@ CHANGELOG
     	void DumpCrossClasses(std::strstream &xml);	
     	void DumpCompositions(std::strstream &xml, const CString& ns);
     	void DumpAssociations(std::strstream &xml, const CString& ns);
-    	void DumpCrossAssociations(std::strstream &xml, const CString& ns);
+    	void DumpCrossAssociations(std::strstream &xml);
     	bool HasCrossAssociations();
     	void DumpIsolatedAssociations(std::strstream &xml, const CString& ns);
     	static CString GetID();
@@ -304,7 +309,8 @@ CHANGELOG
     	CString GetDstRoleID(CCompositeClass *cls);
     	bool IsEquivalent(CAssociationBase *ass);
     	bool IsCrossPackage();
-		void DumpXML(std::strstream &xml, const CString& ns);
+    	void DumpXML(std::strstream &xml, const CString& ns);
+    	void DumpCrossXML(std::strstream &xml);
     	virtual void SetSourceAndDestination(CCompositeClass *s,CCompositeClass *d) = 0;
     	virtual void SetRolesAndCardinalities() = 0;
     };
