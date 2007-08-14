@@ -190,7 +190,7 @@
 						Description="Generating UDM API files..."
 						CommandLine="%UDM_PATH%\bin\udmD.exe $(InputPath)
 "
-						Outputs="PackageA.cpp;PackageA.h;PackageB.cpp;PackageB.h;testAssociationScenartios.cpp;testAssociationScenartios.h"/>
+						Outputs="PackageA.cpp;PackageA.h;PackageA.xsd;PackageB.cpp;PackageB.h;PackageB.xsd;testAssociationScenarios.cpp;testAssociationScenarios.h;testAssociationScenarios.xsd"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
@@ -199,7 +199,7 @@
 						Description="Generating UDM API files..."
 						CommandLine="%UDM_PATH%\bin\udm.exe $(InputPath)
 "
-						Outputs="PackageA.cpp;PackageA.h;PackageB.cpp;PackageB.h;testAssociationScenartios.cpp;testAssociationScenartios.h"/>
+						Outputs="PackageA.cpp;PackageA.h;PackageA.xsd;PackageB.cpp;PackageB.h;PackageB.xsd;testAssociationScenarios.cpp;testAssociationScenarios.h;testAssociationScenarios.xsd"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
