@@ -687,7 +687,7 @@ namespace Uml
 				else {
 					char buf[12];
 #ifdef _WIN32
-					ultoa(r.__impl()->uniqueId(),buf,10);
+					_ultoa(r.__impl()->uniqueId(),buf,10);
 #else
 					snprintf(buf, 11, "%ld", r.__impl()->uniqueId());
 #endif
