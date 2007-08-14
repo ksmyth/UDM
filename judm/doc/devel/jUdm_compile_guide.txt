@@ -18,45 +18,57 @@ Step-by-step guide:
 		2.1 Add <j2sdk_root>\jre\lib\rt.jar to the CLASSPATH
 		2.2 Add <j2sdk_root>\lib\tools.jar  to the CLASSPATH
 		2.3 Add '.', i.e., the current directory to the CLASSPATH
+	
 	3. Compile and build the UDM_NS solution
 		follow the guidelines described in the "Udm_ns compile guide" to compile UDM_ns
 
-	4. Add the ANT tool to the PATH:  %UDM_3RDPARTY_PATH%\ant-1.6.2\bin
+	4. Set up ANT tool
+	   Before running ant, some additional set up must be done:
+		  - Add the bin directory to the PATH 
+		  - Set the ANT_HOME environment variable to the directory 
+		    where Ant is  installed (you can use the 3rdparty/ant directory)
+		  - Set the JAVA_HOME environment variable to the directory 
+		    where JDK (< 1.4.2) is installed
+		  - Add the tools.jar to the classpath
+		
+		    Example: Windows OS
+		             Ant is installed in c:\ant\
+		
+		             set ANT_HOME=c:\ant
+		             set JAVA_HOME=c:\jdk1.4.2
+		             set PATH=%PATH%;%ANT_HOME%\bin
+		             set CLASSPATH=%CLASSPATH%;%JAVA_HOME%\lib\tools.jar
 
 	5. Open a command shell and go to the directory <udm_ns>\judm. 
 		Using ANT you can run the following targets:
 
-		5.1 ant dist-all
-			Target “dist-all” initializes the build’s distribution environment 
+		5.1 ant rebuild
+			Target “rebuild” re-initializes the build’s distribution environment 
 			(<udm_ns>\judm\build\build_win) after completely removing any previous build
 			from the disk, copies the necessary dll-s into this build directory, 
-			updates, re-generates, and compiles the swig and domain-specific source codes, 
-			generates javadoc API documentation, and updates the domain-specific distribution 
-			by generating the necessary zip files in <udm_ns>\judm\build\build_win\dist.
+			updates, re-generates and compiles the swig and domain-specific source codes, 
+			creates jar files (jUdm and other domain-specific jar files), updates batch files, and
+			generates javadoc API documentation.
 
-		5.2 ant dist
-			Target “dist” re-initializes the build’s distribution environment 
+		5.2 ant build
+			Target “build” re-initializes the build’s distribution environment 
 			(<udm_ns>\judm\build\build_win), copies the necessary dll-s into this build directry, 
-			updates and compiles the swig and domain-specific source codes, 
-			updates javadoc API documentation, and updates the domain-specific distribution 
-			by generating the necessary jar files in <udm_ns>\judm\build\build_win\dist.
+			compiles the swig and domain-specific source codes.
 			This task requires the existence of the swig and domain-specific source codes, so you
-			have to run either "dist-all" or "compile-gen" tasks prior running this task.
+			have to run either "rebuild" or "generate" task prior running this task.
 
-		5.3 ant compile-gen
-			Target “compile-gen” re-initializes the build’s distribution environment 
-			(<udm_ns>\judm\build\build_win), copies the necessary dll-s into this build directory, 
-			updates, re-generates, and compiles the swig and domain-specific source codes.
-			This task does not update the <udm_ns>\judm\build\build_win\dist directory.
-
-		5.4 ant compile
+		5.3 ant compile
 			Target “compile” re-initializes the build’s distribution environment 
-			(<udm_ns>\judm\build\build_win), copies the necessary dll-s into this build directory, 
-			and compiles the swig and domain-specific source codes.
-			updates javadoc API documentation, and updates the domain-specific distribution 
-			by generating the necessary jar files in <udm_ns>\judm\build\build_win\dist.
-			This task does not update the <udm_ns>\judm\build\build_win\dist directory and
-			does not re-generate the source files.
+			(<udm_ns>\judm\build\build_win) by copying the necessary dll-s into this build directory 
+			and compiling the swig and domain-specific source codes.
+			This task does not update the source codes.
 			This task requires the existence of the swig and domain-specific source codes, so you
-			have to run "compile-gen" task prior running this task.
+			have to run either "rebuild" or "generate" task prior running this task.
+
+		5.4 ant generate
+			Target “generate” re-initializes the build’s distribution environment 
+			(<udm_ns>\judm\build\build_win) by copying the necessary dll-s into this build directory, 
+			and updating, re-generating the swig and domain-specific source codes.
+			This task updates the source codes.
+			
 

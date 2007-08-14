@@ -14,8 +14,8 @@ Step-by-step guide:
 
 	1. Versioning
 
-		The <udm_ns>\judm\etc folder contains the manifest files that will be added to the 
-		judm.jar when compiling the jUdm core classes. Check out this manifest and increase the
+		The <udm_ns>\judm\etc folder contains the manifest file that will be added to the 
+		judm.jar when compiling the jUdm core classes. Check out this manifest and increment the
 		verison number if necessary.
 
 		Similarly, <udm_ns>\judm\samples\GeneTF\etc, <udm_ns>\judm\samples\GeneTRE\etc, and
@@ -27,35 +27,27 @@ Step-by-step guide:
 
 	3. Using ANT you have to run the following target:
 
-		ant dist-all
-			Target “dist-all” initializes the build’s distribution environment 
-			(<udm_ns>\judm\build\build_win) after completely removing any previous builds
-			from the disk, copies the necessary dll-s into this build directry, 
-			updates, re-generates, and compiles the swig and domain-specific source codes, 
-			generates javadoc API documentation, and updates the domain-specific distribution 
-			by generating the necessary zip files in <udm_ns>\judm\build\build_win\dist in case
-			you use windows or in <udm_ns>\judm\build\build_linux\dist in case you use linux.
-
+		ant rebuild
+			Target “rebuild” re-initializes the build’s distribution environment 
+			(<udm_ns>\judm\build\build_win) after completely removing any previous build
+			from the disk, copies the necessary dll-s into this build directory, 
+			updates, re-generates and compiles the swig and domain-specific source codes, 
+			creates jar files (jUdm and other domain-specific jar files), updates batch files, 
+			and	generates javadoc API documentation.
+			
 	4. InstallShield
 
 		4.1 Create a group (optional) in the install wizard for the jUdm core module
-		4.2 Add <udm_ns>\judm\build\build_win\dist\judm to this newly created group
-		4.3 Create a group (optional) in the install wizard for the jUdm samples
-		4.4 Add <udm_ns>\judm\build\build_win\dist\GeneTF to this newly created samples group
-		4.5 Add <udm_ns>\judm\build\build_win\dist\GeneTRE to this newly created samples group
-		4.6 Add <udm_ns>\judm\build\build_win\dist\SBML2Ex to this newly created samples group
+		4.2 Add <udm_ns>\judm\build\build_win\judm\judm.jar to the install package
+		4.3 Add <udm_ns>\judm\build\build_win\GeneTF to the install package
+		4.4 Add <udm_ns>\judm\build\build_win\GeneTRE to the install package
+		4.5 Add <udm_ns>\judm\build\build_win\SBML2Ex to the install package
 
 			When the user intalls the UDM, he or she should be able to decide whether to install 
-			the jUdm or not; moreover, he or she sould be able to decide whether to install the 
-			samples with the jUdm or not. The directory structure can follow the following
-			directory structure:
+			the jUdm or not; moreover. See the directory structure below:
 
-			<some_udm_install>...\judm
-			<some_udm_install>...\judm\samples\GeneTF
-			<some_udm_install>...\judm\samples\GeneTRE
-			<some_udm_install>...\judm\samples\SBML2Ex
-
-		4.7 Create the environment variable JUDM_PATH:
-
-			JUDM_PATH=<some_udm_install>...\judm
+			<some_udm_install>\bin\judm.jar
+			<some_udm_install>\samples\Java\GeneTF
+			<some_udm_install>\samples\Java\GeneTRE
+			<some_udm_install>\samples\Java\SBML2Ex
 			
