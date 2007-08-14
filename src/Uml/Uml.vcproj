@@ -40,8 +40,7 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="copy .\Uml.h ..\..\include"/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -242,7 +241,8 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				Name="BootUdmCompile Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="%UDM_PATH%\bin.net\UdmD.exe &quot;$(InputPath)&quot; -g -m -l UDM_DLL"
+					CommandLine="%UDM_PATH%\bin.net\UdmD.exe &quot;$(InputPath)&quot; -g -m -l UDM_DLL
+"
 					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
 			</FileConfiguration>
 		</File>
