@@ -194,13 +194,13 @@ namespace DTDGen
 			ccr_set_i++;
 		}
 
-		//stage 2: create the product of the cardinalities as a sequence sorted by typename
+		//stage 2: create the product of the cardinalities as a sequence sorted by path of typename
 		map<const string, class_w_cp> cwcp_seq_map;
 
 		map<const ::Uml::Class, cp_vector_type>::iterator cc_i = class_cps.begin();
 		while (cc_i != class_cps.end())
 		{
-			cwcp_seq_map[(cc_i->first).name()] = class_w_cp(cc_i->first, sum_cardinalities(cc_i->second));
+			cwcp_seq_map[(cc_i->first).getPath2("::")] = class_w_cp(cc_i->first, sum_cardinalities(cc_i->second));
 			cc_i++;
 		}
 
@@ -724,6 +724,7 @@ namespace DTDGen
 	void GenerateXMLSchemaAttributes(const ::Uml::Class &c,  ostream &output, bool uxsdi)	
 {
 		string name = c.name();
+		::Uml::Namespace c_ns = c.parent_ns();
 		set< ::Uml::AssociationRole> associations;
 		if (uxsdi)
 			associations = Uml::AssociationTargetRoles(c);
@@ -736,7 +737,7 @@ namespace DTDGen
 
 			if(::Uml::Association(iii->association())) {
 				if(ass) {
-					throw udm_exception("Class " + name + "has multiple associations"); 
+					throw udm_exception("Class " + c.getPath2("::", false) + "has multiple associations"); 
 				}
 				else ass = iii->association();
 			}
@@ -793,8 +794,11 @@ namespace DTDGen
 						else
 						{
 							::Uml::Class target = ccr_i->target();
-							output << "\t\t\t\t\t<xsd:enumeration value=\"" <<
-								(string)(target.name()) << "\"/>" << endl;
+							output << "\t\t\t\t\t<xsd:enumeration value=\"";
+							::Uml::Namespace target_ns = target.parent_ns();
+							if (c_ns != target_ns && target_ns)
+								output << target_ns.getPath2("_", false) << ":";
+							output << (string)(target.name()) << "\"/>" << endl;
 						}
 						++ccr_i;
 					}
