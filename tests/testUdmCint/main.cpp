@@ -29,6 +29,7 @@ void UdmTests::Test::readFromFile(std::istream& in, std::string& str)
 //===========================
 
 
+void replaceAll( string &s, const char *from, const char *to );
 void UdmTests::Test::testRead(const std::string& result)
 {
   char metaname[] = "GeneTF";
@@ -44,6 +45,7 @@ void UdmTests::Test::testRead(const std::string& result)
   std::string dxml;
   readFromFile(ind, dxml);
 
+    cout << dxml;
   if(!UPO_LoadDiagramFromString(diagram_file,dxml.c_str(), diagram))
   {
      cint_string str;
