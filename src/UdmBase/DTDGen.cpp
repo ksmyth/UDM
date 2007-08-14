@@ -616,7 +616,7 @@ namespace DTDGen
 	{
 		::Uml::Uml::Diagram dgr = ns.parent();
 			output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
-			output << "<?udm interface=\"" << ns.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
+			output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
 			output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
 
 			set<::Uml::Uml::Class> classes = ns.classes();
@@ -887,6 +887,7 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 {
 	string name = c.name();
 	bool has_text_attr = Uml::HasTextAttributes(c);
+	::Uml::Uml::Namespace ns = c.parent();
 
 	//we need a different content model generation if the class also has text attributes
 	cwcp_order  cwcps = get_cwcp_order(c, uxsdi, has_text_attr);
@@ -947,8 +948,12 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 		while (cwcps_i != cwcps.end())
 		{
 			string i_name = cwcps_i->first.name();
-			output << "\t\t\t<xsd:element name=\"" << i_name << "\" type=\"" <<
-				i_name << "Type\"";
+			::Uml::Uml::Namespace i_ns = cwcps_i->first.parent();
+			output << "\t\t\t<xsd:element";
+			if (ns == i_ns)
+				output << " name=\"" << i_name << "\" type=\"" <<	i_name << "Type\"";
+			else
+				output << " ref=\"" << i_ns.name() << ":" << i_name << "\"";
 			if (cwcps_i->second.first != 1)
 				output << " minOccurs=\"" << cwcps_i->second.first << "\"";
 			if (cwcps_i->second.second == -1)
@@ -977,6 +982,7 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 
 	output << "\t</xsd:complexType>" << endl << endl;
 }
+
 void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi )	
 {
 
@@ -984,11 +990,25 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 	::Uml::Uml::Diagram dgr = ns.parent();
 
 		output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
-		output << "<?udm interface=\"" << ns.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
+		output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
 
-		output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://www.isis.vanderbilt.edu/2004/schemas/"<< ns.name() << "\" xmlns:" << ns.name() << "=\"http://www.isis.vanderbilt.edu/2004/schemas/" << ns.name() << "\" elementFormDefault=\"qualified\">";
+
+		set<::Uml::Uml::Namespace> other_ns = Uml::CompositionPeerChildNamespaces(ns);
+
+		output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://www.isis.vanderbilt.edu/2004/schemas/"<< ns.name() << "\" xmlns:" << ns.name() << "=\"http://www.isis.vanderbilt.edu/2004/schemas/" << ns.name() << "\"";
+
+		for (set<::Uml::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
+			output << " xmlns:" << other_ns_i->name() << "=\"http://www.isis.vanderbilt.edu/2004/schemas/" << other_ns_i->name() << "\"";
+		}
+
+		output << " elementFormDefault=\"qualified\">" << endl;
 
 		output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
+
+		for (set<::Uml::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
+			output << "<xsd:import namespace=\"http://www.isis.vanderbilt.edu/2004/schemas/" << other_ns_i->name() << "\" schemaLocation=\"" << other_ns_i->name() << ".xsd\"/>" << endl;
+		}
+		output << endl;
 
 		vector<::Uml::Uml::Class> globalElements;
 		set<::Uml::Uml::Class> classes = ns.classes();
@@ -999,11 +1019,13 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 			{
 				GenerateXMLSchemaElement(*i,  output, uxsdi);
 				set<::Uml::Uml::Class> p_c = Uml::AncestorContainerClasses(*i);		//all possible containers
+				set<::Uml::Uml::Namespace> o_ns = Uml::OtherCompositionPeerParentRolesNamespaces(*i);
+				// namespaces, other than this one, containing the parent ends of compositions having this class as child
 
 			
 				
 				//the condition: It's not contained or it's only container is itself
-				if ( (p_c.size() == 0) || ( (p_c.size() == 1) && ( *(p_c.begin()) == *i )) )
+				if ( (p_c.size() == 0) || ( (p_c.size() == 1) && ( *(p_c.begin()) == *i )) || (o_ns.size() > 0))
 				//if  (Uml::AncestorContainerClasses(*i).size() < 1 ) //it's not self contained
 					globalElements.push_back(*i);
 
