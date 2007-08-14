@@ -263,7 +263,7 @@ bool  UPO_SetAssocRole(UdmPseudoObject &ar_what, UdmPseudoObject &what_target_cl
 bool  StoreXsd(const cint_string& key, const cint_string& xsd_str);
 bool  RemoveXsd(const cint_string& key);
 bool  ClearXsdStorage();
-bool  AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, const cint_string& namespaceUML);
+bool  AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, const cint_string& namespaceUML, const cint_string& xsdName);
 bool  ClearURIToUMLNamespaceMappings();
 
 #endif//UDMCINTSWIG_H

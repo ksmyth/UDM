@@ -170,9 +170,10 @@ namespace UdmDom
 		typedef map<const string, const string> str_str_map;
 		static UDM_DLL str_str_map static_xsd_ns_mapping_container;
     static UDM_DLL str_str_map static_xsd_ns_back_mapping_container;
+    static UDM_DLL str_str_map uri2xsdname;
 	};
 
-	UDM_DLL void AddURIToUMLNamespaceMapping(const string & namespaceURI, const string & namespaceUML);
+	UDM_DLL void AddURIToUMLNamespaceMapping(const string & namespaceURI, const string & namespaceUML, const string & xsdName);
 	UDM_DLL void RemoveURIToUMLNamespaceMapping(const string & namespaceURI);
 	UDM_DLL void ClearURIToUMLNamespaceMappings();
 
