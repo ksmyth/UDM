@@ -65,6 +65,15 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+05/31/04	-	Release 2.17
+
+		-	Various code generation bugfixes
+		-	Changed the generated Initialize(const Uml::Diagram&) function to allow
+			intialization of the API from Diagrams that contain more than one role with the same 
+			target and name.
+
+
+
 05/21/04	-	Release 2.16
 
 		-	Recompiled with GME 4.5.18
