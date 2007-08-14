@@ -1271,7 +1271,7 @@ bbreak:			;
 			{
 				if(mfco) CASSERT("Multiple child kinds match");
 				IMgaFolderPtr nf;
-				COMTHROW(folderself->CreateFolder(mf, &nf));
+				COMTHROW(nf= folderself->CreateFolder(mf));
 				//string ns_name = (::Uml::Namespace)m_type.parent_ns() != ::Uml::Namespace(NULL) ? (string)((::Uml::Namespace)m_type.parent_ns()).name() : "";
 				//COMTHROW(nf->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 				::Uml::Namespace m_type_ns = m_type.parent_ns();
@@ -1285,7 +1285,7 @@ bbreak:			;
 				IMgaFCOPtr nfco;
 				if (!archetype)
 				{
-					COMTHROW(folderself->CreateRootObject(mfco, &nfco));
+					COMTHROW(nfco= folderself->CreateRootObject(mfco));
 					//string ns_name = (::Uml::Namespace)m_type.parent_ns() != ::Uml::Namespace(NULL) ? (string)((::Uml::Namespace)m_type.parent_ns()).name() : "";
 					//COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 					::Uml::Namespace m_type_ns = m_type.parent_ns();
@@ -1296,7 +1296,7 @@ bbreak:			;
 				}
 				else
 				{
-					COMTHROW(folderself->DeriveRootObject(((GmeObject *)archetype)->self, subtype ? VARIANT_FALSE : VARIANT_TRUE, &nfco));
+					COMTHROW(nfco= folderself->DeriveRootObject(((GmeObject *)archetype)->self, subtype ? VARIANT_FALSE : VARIANT_TRUE));
 					
 					//string ns_name = (::Uml::Namespace)m_type.parent_ns() != ::Uml::Namespace(NULL) ? (string)((::Uml::Namespace)m_type.parent_ns()).name() : "";
 					//COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
@@ -1362,7 +1362,7 @@ bbreak:			;
 
 		if (!archetype)
 		{
-			COMTHROW(m->CreateChildObject(rr, &nfco));
+			COMTHROW(nfco= m->CreateChildObject(rr));
 			
 			//string ns_name = (::Uml::Namespace)m_type.parent_ns() != ::Uml::Namespace(NULL) ? (string)((::Uml::Namespace)m_type.parent_ns()).name() : "";
 			//COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
@@ -1376,7 +1376,7 @@ bbreak:			;
 		else
 		{
 			
-			COMTHROW(m->DeriveChildObject( ((GmeObject *)archetype)->self,  rr, subtype ? VARIANT_FALSE : VARIANT_TRUE, &nfco));
+			COMTHROW(nfco= m->DeriveChildObject( ((GmeObject *)archetype)->self,  rr, subtype ? VARIANT_FALSE : VARIANT_TRUE));
 			//string ns_name = (::Uml::Namespace)m_type.parent_ns() != ::Uml::Namespace(NULL) ? (string)((::Uml::Namespace)m_type.parent_ns()).name() : "";
 			//COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 			::Uml::Namespace m_type_ns = m_type.parent_ns();
