@@ -1,16 +1,17 @@
 #include <iostream>
 #include <fstream>
 #include <cstdio>
-#include <uml.h>
-#include <umlext.h>
+#include <Uml.h>
+#include <UmlExt.h>
+#include "OCLConfig.h"
+#include "UdmOcl.h"
 
-#include "oclconfig.h"
 UDM_USE_DOM
 
 #ifdef _WIN32
 UDM_USE_MGA
 #endif
-#include "udmocl.h"
+
 void dummy(void) {; }
 
 int main(int argc, char **argv) {
@@ -27,7 +28,7 @@ int main(int argc, char **argv) {
 	try
 	{		
 		Udm::SmartDataNetwork  nmeta(Uml::diagram);
-		nmeta.OpenExisting(argv[2],"uml.dtd", Udm::CHANGES_LOST_DEFAULT);
+		nmeta.OpenExisting(argv[2],"Uml.dtd", Udm::CHANGES_LOST_DEFAULT);
 
 		::Uml::Diagram thedgr = ::Uml::Diagram::Cast(nmeta.GetRootObject());
 		Udm::UdmDiagram datadiagram;
