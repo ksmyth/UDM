@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{1ED96FA3-F582-4FB7-AC9F-4729E98D7CCA}" cdate="Fri Feb 11 12:55:21 2005" mdate="Fri Feb 11 12:55:21 2005" version="" metaguid="{3E75E147-3375-43A3-89D4-EC1EC55F775A}" metaversion="" metaname="UML">
+<project guid="{B688DCC8-DBE9-4E67-BE14-18045739EE4F}" cdate="Tue Apr 19 10:29:05 2005" mdate="Tue Apr 19 10:29:05 2005" version="" metaguid="{F9663D62-3422-4A2B-A613-2E8453675A03}" metaversion="" metaname="UML">
 	<name>GeneTF</name>
 	<comment></comment>
 	<author></author>
@@ -12,8 +12,11 @@
 			<attribute kind="version" status="meta">
 				<value>1.00</value>
 			</attribute>
-			<model id="id-0065-00000002" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x1e">
+			<model id="id-0065-00000002" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x20">
 				<name>Binding</name>
+				<attribute kind="namespace" status="meta">
+					<value></value>
+				</attribute>
 				<atom id="id-0066-00000001" kind="Class" role="Class" relid="0x1">
 					<name>Container</name>
 					<regnode name="PartRegs" isopaque="yes">
@@ -136,6 +139,24 @@
 						<value></value>
 					</attribute>
 				</atom>
+				<atom id="id-0066-00000006" kind="Constraint" role="Constraint" relid="0x1f">
+					<name>Regulation_type</name>
+					<regnode name="PartRegs" isopaque="yes">
+						<value></value>
+						<regnode name="Constraints" isopaque="yes">
+							<value></value>
+							<regnode name="Position" isopaque="yes">
+								<value>300,293</value>
+							</regnode>
+						</regnode>
+					</regnode>
+					<attribute kind="ConstraintDescription">
+						<value>Regulation Type must be 1</value>
+					</attribute>
+					<attribute kind="ConstraintEqn">
+						<value>self.type = 1</value>
+					</attribute>
+				</atom>
 				<connection id="id-0068-00000001" kind="Composition" role="Composition" relid="0x5">
 					<name>Composition</name>
 					<regnode name="autorouterPref" isopaque="yes">
@@ -222,6 +243,14 @@
 					</attribute>
 					<connpoint role="dst" target="id-0066-00000003"/>
 					<connpoint role="src" target="id-0066-00000004"/>
+				</connection>
+				<connection id="id-0068-00000007" kind="HasConstraint" role="HasConstraint" relid="0x20">
+					<name>HasConstraint</name>
+					<regnode name="autorouterPref" isopaque="yes">
+						<value>e</value>
+					</regnode>
+					<connpoint role="dst" target="id-0066-00000005"/>
+					<connpoint role="src" target="id-0066-00000006"/>
 				</connection>
 			</model>
 		</model>

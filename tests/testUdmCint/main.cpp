@@ -232,6 +232,21 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
 
 
     }//end gene
+
+   cint_string res;
+   if(!dn.OCL_Evaluate(res))
+   {
+     cint_string str;
+     diagram.GetLastError(str);
+     std::cout << __LINE__ <<std::endl;
+     std::cout << str.buffer() <<std::endl;
+     exit(1);
+     
+   }
+  
+   //cout << string(res.buffer()) << endl;
+  
+
   RemoveXsd(xsdn);
   UPO_UnLoadDiagram(diagram_file);
 }
@@ -339,7 +354,7 @@ void UdmTests::Test::testWrite(std::string& result)
     exit(1);
   }
 
-  int gn = 10;
+  int gn = 1;
   for (int i = 0; i < gn; ++i)
   {
     UdmPseudoObject gene;
