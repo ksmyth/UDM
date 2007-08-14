@@ -13,6 +13,10 @@ this software.
 /*
 CHANGELOG
 
+  11/29/05	-	endre
+
+			-	add support for references that are an abstract UML class
+
   01/12/05	-	endre
 
 			-	More detailed error message in amapInitialize
@@ -223,15 +227,23 @@ namespace UdmGme
 		// if in UML there is a supertype association class,
 		// metaobjs will contain the connection objects which are inherited from the UML assocclass
 		// and also can be instantiated in the MGA layer
+		//
+		// we also set metaobj to null and use metaobjs when this association represents
+		// a reference and the reference is an abstract UML class; in this case metaobjs
+		// will contain the non-abstract descendants of the class
 		IMgaMetaFCOPtr* metaobjs;		
 		int metaobjs_count;
 		objtype_enum ot;
 
 		//we need a flag showing that this is just a refport container helper connection
-		//if this is true, primary will be the rolw with the name
+		//if this is true, primary will be the role with the name
 		//and metaobj will be the MGA Meta Connection object
 		bool rp_helper;
-		assocmapitem() : metaobjs_count(0),  metaobjs(NULL), rp_helper(false) {};
+
+		// the target of primary is an abstract UML class
+		bool pt_abstract;
+
+		assocmapitem() : metaobjs_count(0),  metaobjs(NULL), rp_helper(false), pt_abstract(false) {};
 	};
 
 	
@@ -1183,8 +1195,20 @@ bbreak:			;
 										IMgaFCOsPtr peers = self->ReferencedBy;
 										MGACOLL_ITERATE(IMgaFCO, peers) 
 										{
-											if(MGACOLL_ITER->Meta->GetMetaRef() != nn.metaobj->GetMetaRef()) continue;
-											ret.push_back(new GmeObject( MGACOLL_ITER, mydn));
+											if (!nn.pt_abstract)
+											{
+												if(MGACOLL_ITER->Meta->GetMetaRef() != nn.metaobj->GetMetaRef()) continue;
+												ret.push_back(new GmeObject( MGACOLL_ITER, mydn));
+											}
+											else
+											{
+												// return all instances of the descendants that are references to the target
+												for (int i = 0; i < nn.metaobjs_count; i++)
+												{
+													if (MGACOLL_ITER->Meta->GetMetaRef() != nn.metaobjs[i]->GetMetaRef()) continue;
+													ret.push_back(new GmeObject( MGACOLL_ITER, mydn ));
+												}
+											}
 										}
 										MGACOLL_ITERATE_END;
 									}
@@ -2383,6 +2407,59 @@ bbreak:			;
 					if(!aclass && (rolename == "ref" || rolename == "members")) 
 					{
 						nn.metaobj = MetaObjLookup(metaproj, ((::Uml::Class)Uml::theOther(*j).target()).name());
+
+						// the reference could be an abstract UML class
+						if (nn.metaobj == NULL && rolename == "ref")
+						{
+							typedef map<string, IMgaMetaFCOPtr> role_to_MetaFCO_map;
+							role_to_MetaFCO_map role_map;
+
+							// get rolenames of all descendants that are a reference
+							set< ::Uml::Class> other_descs = Uml::DescendantClasses((::Uml::Class)Uml::theOther(*j).target());
+							for (set< ::Uml::Class>::iterator desc_i = other_descs.begin(); desc_i != other_descs.end(); desc_i++)
+							{	
+								IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_i->name());
+								if (p)
+								{
+									if (p->GetObjType() != OBJTYPE_REFERENCE) continue;
+									SmartBSTR herename = p->RegistryValue["rrName"];
+									SmartBSTR therename = p->RegistryValue["rName"];
+									if (!(!therename) && !(!herename))
+									{
+										if (string((const char *) therename) != "ref") continue;
+										role_map.insert(role_to_MetaFCO_map::value_type(string((const char *) herename), p));
+									}
+								}
+							}
+
+							role_to_MetaFCO_map::iterator i = role_map.find(::Uml::MakeRoleName(Uml::theOther(*j)));
+							if (i != role_map.end())
+							{
+								// the reference is a single non-abstract descendant because a descendant exists
+								// with the searched for rolename
+								nn.metaobj = i->second;
+							}
+							else
+							{
+								// the reference is abstract because there is no descendant with the
+								// searched for rolename;
+								// add to nn.metaobjs all descendants; getAssociation on a refered instance
+								// will return all instances of nn.metaobjs that are a reference to that
+								// refered instance
+								nn.metaobjs_count = role_map.size();
+								if (nn.metaobjs_count > 0)
+								{
+									nn.metaobjs = new IMgaMetaFCOPtr[nn.metaobjs_count];
+									nn.pt_abstract = true;
+									int j = 0;
+									for (i = role_map.begin(); i != role_map.end(); i++)
+									{
+										nn.metaobjs[j] = i->second;
+										j++;
+									}
+								}
+							}
+						}
 						nn.primary = Uml::theOther(*j);
 						expect = rolename == "ref" ? OBJTYPE_REFERENCE : OBJTYPE_SET;
 						break;
