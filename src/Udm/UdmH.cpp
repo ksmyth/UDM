@@ -1084,7 +1084,8 @@ void GenerateHForwardDeclarations(const ::Uml::Diagram &diagram, const ::Uml::Na
 
 	if (ns) {
 		output << "\t\t" << macro << " void InitializeNS();" << endl;
-		output << "\t\t" << macro << " void InitializeNS(const ::Uml::Namespace &ns);" << endl;
+		output << "\t\t" << macro << " void InitializeNS2();" << endl;
+		output << "\t\t" << macro << " void InitializeNSSetupMeta(const ::Uml::Namespace &ns);" << endl;
 		output << endl;
 	}
 
