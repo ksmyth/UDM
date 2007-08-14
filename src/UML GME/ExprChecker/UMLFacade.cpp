@@ -90,7 +90,7 @@ namespace OCLUML
 					for ( int i = 0 ; i < vecFCOs.size() ; i++ ) {
 						std::string strType = GME::GetObjectName( vecFCOs[ i ].p );
 						if ( ! strType.empty() ) {
-							strType = GME::GetNamespace( vecFCOs[ i ].p ) + "::" + strType;
+							strType = GME::GetQualifiedName( vecFCOs[ i ].p );
 							SpConstraintDef spConstraintDef( new ConstraintDef( strType, MGACOLL_ITER ) );
 							spConstraintDef->Register( m_pTreeManager );
 							Ocl::Constraint::State eState = spConstraintDef->ParseContext();
@@ -191,7 +191,7 @@ namespace OCLUML
 				sprintf( chNum, "%d", i );
 				strType = "UntitledClass_" + std::string( chNum );
 			} else {
-				strType = GME::GetNamespace( vecFCOs[ i ].p ) + "::" + strType;
+				strType = GME::GetQualifiedName( vecFCOs[ i ].p );
 			}
 			SpConstraint pConstraint( new Constraint( strType, spConstraint ) );
 			pConstraint->Register( m_pTreeManager );
@@ -225,7 +225,7 @@ namespace OCLUML
 				sprintf( chNum, "%d", i );
 				strType = "UntitledClass_" + std::string( chNum );
 			} else {
-				strType = GME::GetNamespace( vecFCOs[ i ].p ) + "::" + strType;
+				strType = GME::GetQualifiedName( vecFCOs[ i ].p );
 			}
 			SpConstraintDef pConstraintDef( new ConstraintDef( strType, spConstraintDef ) );
 			pConstraintDef->Register( m_pTreeManager );

@@ -146,7 +146,9 @@ namespace GME
 	void GetKindFolders( CComPtr<IMgaFolder> spFolder, const std::string& strKind, bool bKind, ObjectVector& vecObjects );
 	void GetInheritances( CComPtr<IMgaFCO> spFCO, bool bIsParent, FCOVector& vecFCOs );
 
-	std::string GetNamespace( CComPtr<IMgaFCO> spFCO );
+	std::string GetNamespaceName( CComPtr<IMgaFCO> spFCO );
+	std::string GetDiagramName( CComPtr<IMgaFCO> spFCO );
+	std::string GetQualifiedName( CComPtr<IMgaFCO> spFCO );
 
 /*
 	bool IsInLibrary( CComPtr<IMgaObject> spObject );

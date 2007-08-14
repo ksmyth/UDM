@@ -42,8 +42,7 @@ namespace OCLUML
 	{
 		TypeSeq vecType;
 		bool bIsSet = true;
-		std::string& strType = GME::GetObjectName( spFCO.p );
-		std::string& strNs = GME::GetNamespace( spFCO.p );
+		std::string& strType = GME::GetQualifiedName( spFCO.p );
 
 		/*
 		Multiplicity objMulti;
@@ -61,7 +60,7 @@ namespace OCLUML
 
 		if ( bIsSet )
 			vecType.push_back( ( bOrdered ) ? "ocl::Sequence" : "ocl::Set" );
-		vecType.push_back( strNs + "::" + strType );
+		vecType.push_back( strType );
 		return vecType;
 	}
 
@@ -98,15 +97,14 @@ namespace OCLUML
 				COMTHROW( m_spProject->AllFCOs( spFilter, &spFCOs ) );
 				MGACOLL_ITERATE( IMgaFCO, spFCOs ) {
 					std::string strKind = GME::GetObjectName( MGACOLL_ITER.p );
-					std::string strNs = GME::GetNamespace( MGACOLL_ITER.p );
 					std::string strRole = GME::LowerFirst( strKind );
-					std::string strRole_Ns = GME::LowerFirst( strNs ) + "::" + strKind;
+					std::string strRole_Q = GME::GetQualifiedName( MGACOLL_ITER.p );
 					std::string strSig = signature.GetName();
-					bool bHasNamespace = strSig.find( "::" ) != std::string::npos;	// true if qualified type, false if local type
+					bool bIsQualified = strSig.find( "::" ) != std::string::npos;	// true if qualified type, false if local type
 
-					if ( ( bHasNamespace && ( strRole_Ns == strSig ) ) || ( (!bHasNamespace) && ( strRole == strSig ) ) ) {
+					if ( ( bIsQualified && ( strRole_Q == strSig ) ) || ( (!bIsQualified) && ( strRole == strSig ) ) ) {
 						TypeSeq vecType( 1, "ocl::Set" );
-						vecType.push_back( strNs + "::" + strKind );
+						vecType.push_back( strRole_Q );
 						vecFeatures.push_back( new OclMeta::Association( strRole, "", vecType, NULL, true ) );
 					}
 				} MGACOLL_ITERATE_END;
@@ -446,14 +444,14 @@ namespace OCLUML
 
 	void TypeFactory::GetTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes )
 	{
-		bool bHasNamespace = strName.find( "::" ) != std::string::npos;	// true if qualified type, false if local type
+		bool bIsQualified = strName.find( "::" ) != std::string::npos;	// true if qualified type, false if local type
 
 		GetDynamicTypes( strName, vecTypes );	//get the types from metamodel
-		if ( ! bHasNamespace && ! vecTypes.empty() )	//if local type, and results not empty - return the results
+		if ( ! bIsQualified && ! vecTypes.empty() )	//if local type, and results not empty - return the results
 			return;
 
 		GetPredefinedTypes( strName, vecTypes );	//get the predefined types
-		if ( ! bHasNamespace && ! vecTypes.empty() )	//if local type, and results not empty - return the results
+		if ( ! bIsQualified && ! vecTypes.empty() )	//if local type, and results not empty - return the results
 			return;
 
 		// WARNING :
@@ -490,40 +488,52 @@ namespace OCLUML
 	void TypeFactory::GetDynamicTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes )
 	{
 
-		bool bHasNamespace = strName.find( "::" ) != std::string::npos; // true if qualified type, false if local type
+		bool bIsQualified = strName.find( "::" ) != std::string::npos; // true if qualified type, false if local type
 
-		std::string strNsName, strClassName;
+		std::string strDgrName, strNsName, strClassName;
 
-		if (bHasNamespace)
+		if (bIsQualified)
 		{
-			strClassName = strName.substr(strName.find("::") + 2, std::string::npos);
-			strNsName = strName.substr(0, strName.find("::"));
+			unsigned int loc1 = strName.find("::");
+			unsigned int loc2 = strName.find("::", loc1 + 2);
+			if (loc2 != std::string::npos)
+			{
+				strDgrName = strName.substr(0, loc1);
+				strNsName = strName.substr(loc1 + 2, loc2 - loc1 - 2);
+				strClassName = strName.substr(loc2 + 2);
+			}
+			else
+			{
+				strDgrName = strName.substr(0, loc1);
+				strClassName = strName.substr(loc1 + 2);
+			}
 		}
 		else
 			strClassName = strName;
 
 		CComPtr<IMgaFilter> spFilter;
 		COMTHROW( m_spProject->CreateFilter( &spFilter ) );
-		COMTHROW( spFilter->put_Name( CComBSTR( GME::Convert( strClassName ) ) ) );
+		COMTHROW( spFilter->put_Kind( CComBSTR( "Class" ) ) );
 		COMTHROW( spFilter->put_ObjType( CComBSTR( "OBJTYPE_ATOM" ) ) );
 
 		CComPtr<IMgaFCOs> spFCOs;
 		COMTHROW( m_spProject->AllFCOs( spFilter, &spFCOs ) );
 		MGACOLL_ITERATE( IMgaFCO, spFCOs ) {
-			if ( GME::GetObjectKind( MGACOLL_ITER.p ) == "Class" ) {
+			if ( GME::LowerFirst( GME::GetObjectName( MGACOLL_ITER.p ) ) == strClassName ) {
 
-				std::string strIterNsName = GME::GetNamespace( MGACOLL_ITER.p );
-				if ( (!bHasNamespace) || ( strNsName == strIterNsName ) ) {
+				std::string strIterNsName = GME::GetNamespaceName( MGACOLL_ITER.p );
+				std::string strIterDgrName = GME::GetDiagramName( MGACOLL_ITER.p );
+				if ( (!bIsQualified) || ( strNsName == strIterNsName && strDgrName == strIterDgrName ) ) {
 					StringVector vecSuperTypes;
 					GME::FCOVector vecSuperFCOs;
 					GME::GetInheritances( MGACOLL_ITER, true, vecSuperFCOs );
 					for ( int i = 0 ; i < vecSuperFCOs.size() ; i++ ) {
-						vecSuperTypes.push_back( GME::GetNamespace( vecSuperFCOs[ i ].p ) + "::" + GME::GetObjectName( vecSuperFCOs[ i ].p ) );
+						vecSuperTypes.push_back( GME::GetQualifiedName( vecSuperFCOs[ i ].p ) );
 					}
 					if ( vecSuperFCOs.empty() )
 						vecSuperTypes.push_back( "udm::Object" );
 
-					vecTypes.push_back( new OclMeta::Type( strIterNsName + "::" + strClassName, vecSuperTypes, new TObjectDerived_AttributeFactory( MGACOLL_ITER ), new TObjectDerived_AssociationFactory( MGACOLL_ITER ), new TObjectDerived_MethodFactory(), true ) );
+					vecTypes.push_back( new OclMeta::Type( GME::GetQualifiedName( MGACOLL_ITER.p ), vecSuperTypes, new TObjectDerived_AttributeFactory( MGACOLL_ITER ), new TObjectDerived_AssociationFactory( MGACOLL_ITER ), new TObjectDerived_MethodFactory(), true ) );
 				}
 			}
 		} MGACOLL_ITERATE_END;
