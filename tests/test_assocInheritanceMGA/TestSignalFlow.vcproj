@@ -54,7 +54,8 @@
 				TypeLibraryName=".\Debug/TestSignalFlow.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="$(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -116,7 +117,8 @@
 				TypeLibraryName=".\Release/TestSignalFlow.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="$(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -223,6 +225,7 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
+						Description="SignaFlow_udm.xml -&gt; C++ API"
 						CommandLine="..\..\bin.net\Udm.exe &quot;$(InputPath)&quot;
 "
 						Outputs="SignalFlow.h SignalFlow.cpp SignalFlow.xsd"/>
@@ -230,11 +233,91 @@
 			</File>
 		</Filter>
 		<File
+			RelativePath=".\sf1.xme">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="sf1.xml -&gt; sf1.mga"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; SignalFlow
+"
+					AdditionalDependencies=""
+					Outputs="$(InputDir)$(InputName).mga"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="sf1.xml -&gt; sf1.mga"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; SignalFlow
+"
+					Outputs="$(InputDir)$(InputName).mga"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\SignalFlow_meta.mga">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="SignalFlow_meta.mga -&gt; SignalFlow_meta.xmp, Registering SignalFlow paradigm"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot; 
+"
+					Outputs="$(InputDir)$(InputName).xmp, sf1.xme"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="SignalFlow_meta.mga -&gt; SignalFlow_meta.xmp, Registering SignalFlow paradigm"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot; "
+					Outputs="$(InputDir)$(InputName).xmp, sf1.xme"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\SignalFlow_meta.xme">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Signalflow_meta.xme -&gt; Signalflow_meta.mga"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME
+"
+					Outputs="$(InputDir)$(InputName).mga"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Signalflow_meta.xme -&gt; Signalflow_meta.mga"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME
+"
+					Outputs="$(InputDir)$(InputName).mga"/>
+			</FileConfiguration>
+		</File>
+		<File
 			RelativePath=".\SingalFlow_uml.xme">
 			<FileConfiguration
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
+					Description="SignalFlow_uml.xmw -&gt; SignalFlow_udm.xml "
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\Xme2UdmXml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(InputDir)$(InputName).mga;$(InputDir)SignalFow.xml"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="SignalFlow_uml.xmw -&gt; SignalFlow_udm.xml "
 					CommandLine="cd &quot;$(InputDir)&quot;
 &quot;$(UDM_PATH)\etc\Xme2UdmXml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
 "
