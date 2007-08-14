@@ -35,6 +35,9 @@
 		<property name="classes.dir" location="${build.dir}/classes" />
 		<property name="java.build.dir" location="${build.dir}/classes/main" />
 
+		<!-- Directory of the documentation -->
+		<property name="doc.dir" location="doc" />
+
 		<!-- Directory where the distribution goes -->
 		<property name="dist.dir" location="${build.dir}/dist" />
 		<property name="judm.dist.dir" location="${dist.dir}/judm" />
@@ -220,7 +223,7 @@
 		</copy>
 
 		<!-- Copy the Uml.xsd -->
-		<copy todir="${build.dir}/${dspackage}" file="${udm.etc.dir}/Uml.xsd" />
+		<!--copy todir="${build.dir}/${dspackage}" file="${udm.etc.dir}/Uml.xsd" /-->
 
 		<!-- Copy every class in the build/classes directory -->
 		<copy todir="${classes.dir}">
@@ -345,7 +348,7 @@
 		</copy>
 
 		<!-- Copy the Uml.xsd -->
-		<copy todir="${build.dir}/${dspackage}" file="${udm.etc.dir}/Uml.xsd" />
+		<!--copy todir="${build.dir}/${dspackage}" file="${udm.etc.dir}/Uml.xsd" /-->
 
 		<!-- Copy every class in the build/classes directory -->
 		<copy todir="${classes.dir}">
@@ -364,12 +367,12 @@
 			<fileset dir="samples/${dspackage}/meta">
 				<filename name="*.xml" />
 				<filename name="*.xsd" />
-				<exclude name="Uml.xsd" />
+				<!--exclude name="Uml.xsd" /-->
 			</fileset>
 		</delete>
 		<delete dir="samples/${dspackage}/src/main/edu" />
 		<!-- Copy Uml.xsd next to the meta files -->
-		<copy todir="samples/${dspackage}/meta" file="${udm.etc.dir}/Uml.xsd" />
+		<!--copy todir="samples/${dspackage}/meta" file="${udm.etc.dir}/Uml.xsd" /-->
 		<!-- Generate UDM XML from the XME XML file -->
 		<exec dir="samples/${dspackage}/meta" executable="cmd">
 			<arg line="/c ${udm.etc.dir}/xme2udmxml ${dspackage}_uml.xme ${dspackage}.mga " />
@@ -381,7 +384,8 @@
 		<!-- Update source code -->
 		<copy todir="samples/${dspackage}/src/main">
 			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
-			<include name="**/*.java" />
+				<include name="**/*.java" />
+				<include name="**/*.html" />
 		</fileset>
 		</copy>
 		<!-- Delete intermediate files -->
@@ -398,6 +402,8 @@
 	<target name="dist" depends="compile" description="Update the distribution">
 		<!-- Create the jUdm distribution directory -->
 		<mkdir dir="${judm.dist.dir}" />
+		<!-- Create the jUdm distribution documentation directory -->
+		<mkdir dir="${judm.dist.dir}/doc" />
 		
 		<!-- Copy the binaries from the build to the distribution directory -->
 		<antcall target="copy-binaries-win"/>
@@ -407,6 +413,11 @@
 		<copy todir="${judm.dist.dir}" file="lib/junit/junit.jar" />
 		<!-- Copy the Uml.xsd to the distribution directory -->
 		<copy todir="${judm.dist.dir}" file="${udm.etc.dir}/Uml.xsd" />
+		<!-- Copy the documentation to the distribution directory -->
+		<copy todir="${judm.dist.dir}/doc">
+			<mapper type="flatten" />
+			<fileset dir="${doc.dir}" casesensitive="no"/>
+		</copy>
 		
 		<!-- Create judm.jar in the distribution directory -->
 		<zip destfile="${judm.dist.dir}/judm.jar">
@@ -447,6 +458,8 @@
 	<target name="dist-all" depends="clean,init,compile-gen" description="Create the distribution">
 		<!-- Create the jUdm distribution directory -->
 		<mkdir dir="${judm.dist.dir}" />
+		<!-- Create the jUdm distribution documentation directory -->
+		<mkdir dir="${judm.dist.dir}/doc" />
 		
 		<!-- Copy the binaries from the build to the distribution directory -->
 		<antcall target="copy-binaries-win"/>
@@ -456,6 +469,11 @@
 		<copy todir="${judm.dist.dir}" file="lib/junit/junit.jar" />
 		<!-- Copy the Uml.xsd to the distribution directory -->
 		<copy todir="${judm.dist.dir}" file="${udm.etc.dir}/Uml.xsd" />
+		<!-- Copy the documentation to the distribution directory -->
+		<copy todir="${judm.dist.dir}/doc">
+			<mapper type="flatten" />
+			<fileset dir="${doc.dir}" casesensitive="no"/>
+		</copy>
 		
 		<!-- Create judm.jar in the distribution directory -->
 		<zip destfile="${judm.dist.dir}/judm.jar">
@@ -470,7 +488,7 @@
 			<param name="dspackage" value="GeneTF" />
 			<param name="dspackagelower" value="genetf" />
 		</antcall>
-		<!-- Generate JavaAPI documentation for the domain specific code  -->
+		<!-- Generate JavaAPI documentation -->
 		<mkdir dir="${dist.dir}/GeneTF/apidoc" />
 		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/GeneTF/apidoc" windowtitle="GeneTF UDM API">
 			<fileset dir="${dist.dir}/GeneTF/src" defaultexcludes="yes">
@@ -482,6 +500,7 @@
 			<param name="dspackage" value="GeneTRE" />
 			<param name="dspackagelower" value="genetre" />
 		</antcall>
+		<!-- Generate JavaAPI documentation -->
 		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/GeneTRE/apidoc" windowtitle="GeneTRE UDM API">
 			<fileset dir="${dist.dir}/GeneTRE/src" defaultexcludes="yes">
 			</fileset>
@@ -492,6 +511,7 @@
 			<param name="dspackage" value="SBML2Ex" />
 			<param name="dspackagelower" value="sbml2ex" />
 		</antcall>
+		<!-- Generate JavaAPI documentation -->
 		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/SBML2Ex/apidoc" windowtitle="SBML2Ex UDM API">
 			<fileset dir="${dist.dir}/SBML2Ex/src" defaultexcludes="yes">
 			</fileset>
@@ -572,6 +592,7 @@
 			<fileset dir="samples/${dspackage}/src">
 				<include name="**/*.java" />
 				<include name="**/*.xml" />
+				<include name="**/*.html" />
 				<include name="**/*.xsd" />
 			</fileset>
 		</copy>
@@ -652,4 +673,58 @@
 		<replace file="${dist.dir}/${dspackage}/runtests.sh" token="@DSPACKAGE@" value="${dspackage}" />
 	</target>
 
+	<!-- Run unit test on the distribution packages -->
+	<target name="test" depends="init" description="Run unit tests.">
+		<!-- directory where junit reports go -->
+		<property name="build.reports.tests.dir" location="${build.dir}/report" />
+		<mkdir dir="${build.reports.tests.dir}/xml" />
+	
+		<antcall target="ds-test">
+			<param name="dspackage" value="GeneTF" />
+		</antcall>
+
+		<antcall target="ds-test">
+			<param name="dspackage" value="GeneTRE" />
+		</antcall>
+
+		<antcall target="ds-test">
+			<param name="dspackage" value="SBML2Ex" />
+		</antcall>
+		
+		<mkdir dir="${build.reports.tests.dir}/html" />
+		<junitreport todir="${build.reports.tests.dir}/html">
+			<fileset dir="${build.reports.tests.dir}/xml">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${build.reports.tests.dir}/html" />
+		</junitreport>
+	</target>
+		
+	<!-- Run a batch test for a domain specific package -->
+	<target name="ds-test">
+		<echo> "Test ${dspackage}... ${build.dir}/${dspackage}" </echo>
+		<fail unless="dspackage" message="Missing parameter: dspackage" />
+		<echo> "parameter ready" </echo>
+		<echo> "${build.dir}/${dspackage}" </echo>
+		<junit fork="yes" >
+			<!-- This is necessary for System.loadLibrary("UdmCint") to succeed -->
+			<jvmarg value="-Djava.library.path=${judm.dir}" />
+			<!-- We need to add the dir containing the DLLs that UdmCint depends on
+				to the PATH rather than java.library.path. Unfortunately they won't be
+				loaded when they are not added. -->
+			<env key="PATH" path="${judm.dir}"/>
+			<classpath>
+				<path refid="compile.classpath" />
+				<pathelement location="${build.dir}/${dspackage}/classes/main" />
+				<pathelement location="${build.dir}/${dspackage}/classes/test" />
+			</classpath>
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${build.reports.tests.dir}/xml">
+				<fileset dir="${build.dir}/dist/${dspackage}/src/test">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
 </project>
