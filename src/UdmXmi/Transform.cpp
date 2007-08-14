@@ -1,5 +1,5 @@
 // Base header file.  Must be first.
-#include <Include/PlatformDefinitions.hpp>
+#include <xalanc/Include/PlatformDefinitions.hpp>
 
 
 
@@ -20,7 +20,7 @@ XALAN_USING_STD(cout)
 
 #include <xercesc/util/PlatformUtils.hpp>
 
-#include <XalanTransformer/XalanTransformer.hpp>
+#include <xalanc/XalanTransformer/XalanTransformer.hpp>
 
 XERCES_CPP_NAMESPACE_USE
 
