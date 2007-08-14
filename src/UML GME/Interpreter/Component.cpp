@@ -499,23 +499,30 @@ void CComponent::GatherAllSheets(CClassDiagramList &sheets)
 	
 }
 
-void CComponent::GatherPackageSheets(CPackageBuilder *folder, CClassDiagramList &sheets)
+void CComponent::GatherModelSheets(const CBuilderModelList *roots, CClassDiagramList &sheets)
 {
-	const CBuilderModelList *roots = folder->GetModels();
 	POSITION pos = roots->GetHeadPosition();
 	while(pos) 
-	{	CBuilderModel *model = roots->GetNext(pos);
+	{
+		CBuilderModel *model = roots->GetNext(pos);
 		if(model->GetKindName() == "ClassDiagram")
 		{	CClassDiagramBuilder *sheet = dynamic_cast<CClassDiagramBuilder *>(model);
 			if(!sheet) 
 			{
-				AfxMessageBox("Unexpected root model kind found");
+				AfxMessageBox("Unexpected model kind found: " + sheet->GetName());
 				continue;
 			}
 			sheets.AddTail(sheet);
+			GatherModelSheets(sheet->GetModels(), sheets);
 		}
+		if(model->GetKindName() == "Namespace")
+			GatherModelSheets(model->GetModels(), sheets);
 	}
+}
 
+void CComponent::GatherPackageSheets(CPackageBuilder *folder, CClassDiagramList &sheets)
+{
+	GatherModelSheets(folder->GetModels(), sheets);
 }
 
 void CComponent::BuildInheritance()
@@ -876,8 +883,13 @@ CString CClassDiagramBuilder::GetNamespace() const
 {
 	CString ret;
 	GetAttribute("namespace", ret);
-	if (ret.IsEmpty())
-		return this->GetParent()->GetName();
+	if (ret.IsEmpty()) {
+		const CBuilderModel *parent = this->GetParent();
+		if (parent->IsKindOf(RUNTIME_CLASS(CClassDiagramBuilder))) {
+			return BUILDER_CAST(CClassDiagramBuilder, parent)->GetNamespace();
+		}
+		return parent->GetName();
+	}
 	else return ret;
 };
 
@@ -895,6 +907,18 @@ void CClassDiagramBuilder::Build(CCompositeClassList &compositeClasses)
 		compositeClasses.AddTail(comp);
 	}
 }
+
+CPackageBuilder * CClassDiagramBuilder::GetPackage()
+{
+    CPackageBuilder * package;
+	const CBuilderModel * parent = GetParent();
+	while (parent && parent->GetKindName() != "Package")
+		parent = parent->GetParent();
+	package = BUILDER_CAST(CPackageBuilder, parent);
+	ASSERT(package);
+	return package;
+
+};
 
 ////////////////////////////// CCompositeClass ////////////////////////////////
 
@@ -1493,7 +1517,11 @@ void CClassBuilder::GetConstraintDefinitions()
 
 CPackageBuilder * CClassBuilder::GetPackage()
 {
-	CPackageBuilder * package = BUILDER_CAST(CPackageBuilder, GetParent()->GetParent());
+    CPackageBuilder * package;
+	const CBuilderModel * parent = GetParent();
+	while (parent && parent->GetKindName() != "Package")
+		parent = parent->GetParent();
+	package = BUILDER_CAST(CPackageBuilder, parent);
 	ASSERT(package);
 	return package;
 
@@ -1561,7 +1589,11 @@ void CClassCopyBuilder::Initialize()
 
 CPackageBuilder * CClassCopyBuilder::GetPackage()
 {
-	CPackageBuilder * package = BUILDER_CAST(CPackageBuilder, GetParent()->GetParent());
+    CPackageBuilder * package;
+	const CBuilderModel * parent = GetParent();
+	while (parent && parent->GetKindName() != "Package")
+		parent = parent->GetParent();
+	package = BUILDER_CAST(CPackageBuilder, parent);
 	ASSERT(package);
 	return package;
 
@@ -1663,7 +1695,7 @@ bool CAssociationBase::IsCrossPackage()
 		//there is an assoc class,
 		//so this is really  a CAssociationBuilder
 		const CAssociationBuilder * cab =  (CAssociationBuilder *)this;
-		owner_package = BUILDER_CAST(CPackageBuilder, cab->GetParent()->GetParent());
+		owner_package = BUILDER_CAST(CClassDiagramBuilder, cab->GetParent())->GetPackage();
 		
 	}
 	else
@@ -1671,7 +1703,7 @@ bool CAssociationBase::IsCrossPackage()
 		//there isn't an association  class
 		//so this is a CDirectConnectionBuilder
 		const CDirectAssociationBuilder * cdab =(CDirectAssociationBuilder *) this;
-		owner_package = BUILDER_CAST(CPackageBuilder, cdab->GetParent()->GetParent());
+		owner_package = BUILDER_CAST(CClassDiagramBuilder, cdab->GetParent())->GetPackage();
 
 		
 	}
