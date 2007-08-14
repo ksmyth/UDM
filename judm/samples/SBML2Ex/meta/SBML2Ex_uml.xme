@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{D59AF65B-AC7A-4C76-864C-1A25DD6B2989}" cdate="Sun Jul 10 18:47:25 2005" mdate="Sun Jul 10 18:47:25 2005" version="" metaguid="{FB4641D2-A80D-4BAC-B0AA-570519CD80D0}" metaversion="" metaname="UML">
+<project guid="{D640768F-E95C-42F4-8864-7A7C07022591}" cdate="Tue Aug 02 15:40:33 2005" mdate="Tue Aug 02 15:40:33 2005" version="" metaguid="{6B839344-87CA-4084-B675-B061E7158F17}" metaversion="" metaname="UML">
 	<name>SBML2Ex</name>
 	<comment></comment>
-	<author></author>
+	<author>Vanderbilt University, ISIS</author>
 	<folder id="id-006a-00000001" relid="0x1" childrelidcntr="0x2" kind="RootFolder">
 		<name>SBML2Ex</name>
 		<model id="id-0065-00000001" kind="Package" relid="0x1" childrelidcntr="0x25">
 			<name>SBML2Ex</name>
-			<attribute kind="version" status="meta">
+			<attribute kind="version">
 				<value>1.00</value>
 			</attribute>
 			<model id="id-0065-00000002" kind="Namespace" role="Namespace" relid="0x1c" childrelidcntr="0x1">
@@ -1194,7 +1194,7 @@ value: Text[0..1]</value>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>The variable referencedor parameter element. by a rule must be an existing species, compartment, </value>
+							<value>A RuleVariable&apos;s variable must be the id of a Compartment, Species, or Parameter (L2v1 Section 4.8.3 and 4.8.4).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>let s = dn.SBML2Ex::sbml::species
@@ -1579,7 +1579,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>unit definition identifiers need to be unique</value>
+							<value>The id of a UnitDefinition must not be a predefined kind of unit  (L2v1 erratum).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>self.child -&gt; 
@@ -1598,7 +1598,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>parameter identifiers need to be unique</value>
+							<value>Parameter identifiers need to be unique.</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>self.child -&gt;
@@ -1617,11 +1617,11 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>A Model that has a Species must also have at least one Compartment</value>
+							<value>A Model that has a Species must also have at least one Compartment (L2v1 Section 4.5).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>let s = dn.SBML2Ex::sbml::species in
-let c = dn.compartment in 
+let c = dn.SBML2Ex::sbml::compartment in 
   s-&gt;size &gt; 0
     implies
   c-&gt;size &gt; 0</value>
@@ -2138,14 +2138,16 @@ let c = dn.compartment in
 						<attribute kind="ConstraintEqn">
 							<value>self.id = &quot;substance&quot;
  implies
-(let c = self.listOfUnits.unit in
-  c-&gt;size = 1 and
-  c-&gt;forAll( u | 
+let c = self.listOfUnits in
+  c-&gt;forAll( lu | 
+    let uns = lu.child in
+      uns-&gt;size = 1 and
+      uns-&gt;forAll( u |
         ( u.kind = &quot;mole&quot; or u.kind = &quot;item&quot; )
            and
           u.exponent = 1
-  )
-)</value>
+       )
+   )</value>
 						</attribute>
 					</atom>
 					<atom id="id-0066-0000002b" kind="Constraint" role="Constraint" relid="0xc">
@@ -2165,12 +2167,14 @@ let c = dn.compartment in
 						<attribute kind="ConstraintEqn">
 							<value>self.id = &quot;time&quot;
  implies
-(let c = self.listOfUnits.unit in
-  c-&gt;size = 1 and
-  c-&gt;forAll( u | 
+let c = self.listOfUnits in
+  c-&gt;forAll( lu | 
+    let uns = lu.child in
+      uns-&gt;size = 1 and
+      uns-&gt;forAll( u |
         ( u.kind = &quot;second&quot;  and   u.exponent = 1 ) 
-  )
-)</value>
+       )
+   )</value>
 						</attribute>
 					</atom>
 					<atom id="id-0066-0000002c" kind="Constraint" role="Constraint" relid="0xd">
@@ -2190,15 +2194,17 @@ let c = dn.compartment in
 						<attribute kind="ConstraintEqn">
 							<value>self.id = &quot;volume&quot;
  implies
-(let c = self.listOfUnits.unit in
-  c-&gt;size = 1 and
-  c-&gt;forAll( u | 
+let c = self.listOfUnits in
+  c-&gt;forAll( lu | 
+    let uns = lu.child in
+      uns-&gt;size = 1 and
+      uns-&gt;forAll( u |
         ( u.kind = &quot;meter&quot;  and   u.exponent = 3 ) 
 	 or
         ( u.kind = &quot;litre&quot;  and   u.exponent = 1 ) 
           
-  )
-)</value>
+       )
+   )</value>
 						</attribute>
 					</atom>
 					<atom id="id-0066-0000002d" kind="Constraint" role="Constraint" relid="0xe">
@@ -2218,14 +2224,16 @@ let c = dn.compartment in
 						<attribute kind="ConstraintEqn">
 							<value>self.id = &quot;area&quot;
  implies
-(let c = self.listOfUnits.unit in
-  c-&gt;size = 1 and
-  c-&gt;forAll( u | 
+let c = self.listOfUnits in
+  c-&gt;forAll( lu | 
+    let uns = lu.child in
+      uns-&gt;size = 1 and
+      uns-&gt;forAll( u |
         u.kind = &quot;meter&quot;
            and
           u.exponent = 2
-  )
-)</value>
+       )
+   )</value>
 						</attribute>
 					</atom>
 					<atom id="id-0066-0000002e" kind="Constraint" role="Constraint" relid="0xf">
@@ -2245,14 +2253,16 @@ let c = dn.compartment in
 						<attribute kind="ConstraintEqn">
 							<value>self.id = &quot;length&quot;
  implies
-(let c = self.listOfUnits.unit in
-  c-&gt;size = 1 and
-  c-&gt;forAll( u | 
+let c = self.listOfUnits in
+  c-&gt;forAll( lu | 
+    let uns = lu.child in
+      uns-&gt;size = 1 and
+      uns-&gt;forAll( u |
         u.kind = &quot;meter&quot;
            and
           u.exponent = 1
-  )
-)</value>
+       )
+   )</value>
 						</attribute>
 					</atom>
 					<reference id="id-0067-0000003c" kind="ClassCopy" role="ClassCopy" relid="0x2" referred="id-0066-00000037">
@@ -2357,7 +2367,7 @@ let c = dn.compartment in
 						<connpoint role="dst" target="id-0067-0000003c"/>
 					</connection>
 				</model>
-				<model id="id-0065-00000008" kind="ClassDiagram" role="ClassDiagram" relid="0xb" childrelidcntr="0xb3">
+				<model id="id-0065-00000008" kind="ClassDiagram" role="ClassDiagram" relid="0xb" childrelidcntr="0xcc">
 					<name>SBMLTypes</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -2759,7 +2769,7 @@ version:String=&quot;1&quot;</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>575,831</value>
+									<value>565,832</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -2904,7 +2914,7 @@ name:String [0..1]</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>90,433</value>
+									<value>104,839</value>
 								</regnode>
 							</regnode>
 						</regnode>
@@ -2912,7 +2922,7 @@ name:String [0..1]</value>
 							<value>The ci elements in any of the trigger elements in an event element may only refer to global identifiers associated with element types allowed to vary.</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>dn.species -&gt; select( class | class.id = self.id  ) -&gt; size = 1</value>
+							<value>(dn.SBML2Ex::sbml::species -&gt; select( class | class.id = self.id  )) -&gt; size = 1</value>
 						</attribute>
 					</atom>
 					<atom id="id-0066-00000044" kind="Constraint" role="Constraint" relid="0x75">
@@ -2984,12 +2994,12 @@ endif</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>909,377</value>
+									<value>944,356</value>
 								</regnode>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>outside definitions on compartments must exist and must not be self referential</value>
+							<value>Outside definitions on compartments must exist and must not be self referential (L2v1 Section 4.5.6).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>let c =  dn.compartment
@@ -3008,12 +3018,12 @@ in
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>58,548</value>
+									<value>174,832</value>
 								</regnode>
 							</regnode>
 						</regnode>
 						<attribute kind="DefinitionEqn">
-							<value>dn.sbml.listOfSpecies.species</value>
+							<value>dn.SBML2Ex::sbml.listOfSpecies.species</value>
 						</attribute>
 						<attribute kind="DefinitionParamList" status="meta">
 							<value></value>
@@ -3032,12 +3042,12 @@ in
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>783,769</value>
+									<value>783,741</value>
 								</regnode>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>A species reference in a reaction needs to be to a defined species. The reference can be from reactants, products, or modifiers</value>
+							<value>A SpeciesReference must refer to a Species (L2v1 Section 4.9.5). The reference can be from reactants, products, or modifiers</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>let s = dn.SBML2Ex::sbml::species
@@ -3056,7 +3066,7 @@ endif</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>951,279</value>
+									<value>1042,237</value>
 								</regnode>
 							</regnode>
 						</regnode>
@@ -3085,7 +3095,7 @@ endif</value>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>The timeUnits attribute must reference one of the predefined unit identifiers time or  seconds or the identifier for a unitDefinition structure.</value>
+							<value>An Event&apos;s timeUnits must be &apos;time&apos;, &apos;second&apos;, or the id of a UnitDefinition that defines a variant of &apos;second&apos; with exponent=&apos;1&apos; (L2v1 Section 4.10.4).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>let ud = dn.unitDefinition 
@@ -3138,16 +3148,15 @@ offset:Real=0[0..1]</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>146,650</value>
+									<value>69,510</value>
 								</regnode>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>The compartment reference for a species definition must refer to a defined compartment.</value>
+							<value>If a Species refers to a Compartment it must exist in the Model (L2v1 Section 4.6.2).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let c =  dn.compartment
-in 
+							<value>let c =  dn.compartment in 
  c-&gt;exists(cv  |  cv.id = self.compartment)</value>
 						</attribute>
 					</atom>
@@ -3163,7 +3172,7 @@ in
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>Unit references in a parameter definition must exist</value>
+							<value>Unit references in a parameter definition must exist.</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>let ud = dn.unitDefinition
@@ -3182,7 +3191,7 @@ endif</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>226,737</value>
+									<value>34,825</value>
 								</regnode>
 							</regnode>
 						</regnode>
@@ -3206,12 +3215,12 @@ endif</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>748,13</value>
+									<value>657,13</value>
 								</regnode>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>The timeUnits attribute must reference one of the predefined unit identifiers time or  seconds or the identifier for a unitDefinition structure.</value>
+							<value>A KineticLaw&apos;s timeUnits must be &apos;time&apos;, &apos;second&apos;, or the id of a UnitDefnition that defines a variant of &apos;second&apos; with exponent=&apos;1&apos; (L2v1 Section 4.9.7).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>let ud = dn.unitDefinition 
@@ -3313,12 +3322,12 @@ endif</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>1035,370</value>
+									<value>1049,300</value>
 								</regnode>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>Restrictions on compartment with spatial dimensions zero</value>
+							<value>Restrictions on compartment with spatial dimensions zero (L2v1 Section 4.5.3 and 4.5.4 and 4.5.5).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>self.spatialDimensions = 0
@@ -3337,12 +3346,12 @@ endif</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>293,713</value>
+									<value>545,629</value>
 								</regnode>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>A species can&apos;t define both hasOnlySubstanceUnits and spatialSizeUnits</value>
+							<value>A Species with hasOnlySubstanceUnits=&apos;true&apos; must not have spatialSizeUnits (L2v1 Section 4.6.4).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>self.hasOnlySubstanceUnits 
@@ -3357,12 +3366,12 @@ self.spatialSizeUnits.isUndefined()</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>1014,461</value>
+									<value>1049,370</value>
 								</regnode>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>The compartment with spatial dimension 1 must have units of length </value>
+							<value>A Compartment with spatialDimensions=&apos;1&apos; must have units of &apos;length&apos; &apos;metre&apos;, or the id of a UnitDefinition that defines a variant of &apos;metre&apos; with exponent=&apos;1&apos; (L2v1 Section 4.5.4).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>self.spatialDimensions = 1
@@ -3386,12 +3395,12 @@ self.spatialSizeUnits.isUndefined()</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>1042,538</value>
+									<value>1049,447</value>
 								</regnode>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>The compartment with spatial dimension 3 must have units of volume</value>
+							<value>A Compartment with spatialDimensions=&apos;3&apos; must have units of &apos;volume&apos;, &apos;litre&apos;, or the id of a UnitDefinition that defines a variant of &apos;metre&apos; with exponent=&apos;3&apos; or a variant of &apos;litre&apos; (L2v1 Section 4.5.4).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>self.spatialDimensions = 3
@@ -3418,12 +3427,12 @@ self.spatialSizeUnits.isUndefined()</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>958,517</value>
+									<value>1049,538</value>
 								</regnode>
 							</regnode>
 						</regnode>
 						<attribute kind="ConstraintDescription">
-							<value>The compartment with spatial dimension 2 must have units of area</value>
+							<value>A Compartment with spatialDimensions=&apos;2&apos; must have units of &apos;area&apos; or the id of a UnitDefinition that defines a variant of &apos;metre&apos; with exponent=&apos;2&apos; (L2v1 Section 4.5.4).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
 							<value>self.spatialDimensions = 2
@@ -3440,6 +3449,293 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 )</value>
 						</attribute>
 					</atom>
+					<atom id="id-0066-000000a4" kind="Constraint" role="Constraint" relid="0xb5">
+						<name>spatialSizeUnits_check</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>69,566</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A Species must not have spatialSizeUnits if its Compartment has spatialDimensions=&apos;0&apos; (L2v1 Section 4.6.4).</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>let comp_v =  dn.compartment in 
+let c_s = comp_v -&gt; select ( cv | cv.id = self.compartment ) in
+c_s -&gt;  forAll ( c | ( not c.isUndefined() 
+     and c.spatialDimensions = 0 ) 
+     implies self.spatialSizeUnits.isUndefined() ) 
+</value>
+						</attribute>
+					</atom>
+					<atom id="id-0066-000000a5" kind="Constraint" role="Constraint" relid="0xb7">
+						<name>initialConcentration_check1</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>69,615</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A Species with hasOnlySubstanceUnits=&apos;true&apos; must not have an initialConcentration (L2v1 Section 4.6.3).</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>self.hasOnlySubstanceUnits 
+  implies
+     self.initialConcentration.isUndefined()</value>
+						</attribute>
+					</atom>
+					<atom id="id-0066-000000a6" kind="Constraint" role="Constraint" relid="0xbb">
+						<name>initialConcentration_check2</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>69,671</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A Species whose Compartment has spatialDimensions=&apos;0&apos; must not have an initialConcentration (L2v1 Section 4.6.3).</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>let comp_v =  dn.compartment in 
+let c_s = comp_v -&gt; select ( cv | cv.id = self.compartment ) in
+c_s -&gt;  forAll ( c | ( not c.isUndefined() 
+     and c.spatialDimensions = 0 )
+     implies self.initialConcentration.isUndefined() ) </value>
+						</attribute>
+					</atom>
+					<atom id="id-0066-000000a7" kind="Constraint" role="Constraint" relid="0xbd">
+						<name>spDim1_check</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>114,751</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A Species whose Compartment has spatialDimensions=&apos;1&apos; must have spatialSizeUnits of &apos;length&apos;, &apos;metre&apos;, or the id of a UnitDefinition that defines a variant of &apos;metre&apos; with exponent=&apos;1&apos; (L2v1 Section 4.6.4).</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>let comp_v =  dn.compartment in 
+let c_s = comp_v -&gt; select ( cv | cv.id = self.compartment ) in
+c_s -&gt;  forAll ( c | ( not c.isUndefined() 
+     and c.spatialDimensions = 1 )
+     implies 
+        ( 
+           let ud = dn.unitDefinition in 
+           if (self.spatialSizeUnits.trim() &lt;&gt; &quot;&quot;) then
+              (self.spatialSizeUnits = &quot;length&quot;) or 
+              (self.spatialSizeUnits = &quot;meter&quot;) or
+              ud-&gt;exists( udv | udv.id = self.spatialSizeUnits  and udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; ) )
+           else
+              true
+           endif
+         ) ) 
+</value>
+						</attribute>
+					</atom>
+					<atom id="id-0066-000000a8" kind="Constraint" role="Constraint" relid="0xbf">
+						<name>spDim2_check</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>202,748</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A Species whose Compartment has spatialDimensions=&apos;2&apos; must have spatialSizeUnits of &apos;area&apos; or the id of a unitDefinition that defines a variant of &apos;metre&apos; with exponent=&apos;2&apos; (L2v1 Section 4.6.4).</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>let comp_v =  dn.compartment in 
+let c_s = comp_v -&gt; select ( cv | cv.id = self.compartment ) in
+c_s -&gt;  forAll ( c | ( not c.isUndefined() 
+     and c.spatialDimensions = 2 )
+     implies 
+        ( 
+           let ud = dn.unitDefinition in 
+           if (self.spatialSizeUnits.trim() &lt;&gt; &quot;&quot;) then
+              (self.spatialSizeUnits = &quot;area&quot;) or 
+              ud-&gt;exists( udv | udv.id = self.spatialSizeUnits  and udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = 
+&quot;meter&quot; and uv.exponent = 2 ) )
+           else
+              true
+           endif
+         ) ) 
+</value>
+						</attribute>
+					</atom>
+					<atom id="id-0066-000000a9" kind="Constraint" role="Constraint" relid="0xc1">
+						<name>spDim3_check</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>293,748</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A Species whose Compartment has spatialDimensions=3 must have spatialSizeUnits of &apos;volume&apos; or &apos;litre&apos; or the id of a UnitDefinition that defines a variant of &apos;metre&apos; with exponent=&apos;3&apos; or a variant of &apos;litre&apos; (L2v1 Section 4.6.4).</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>let comp_v =  dn.compartment in 
+let c_s = comp_v -&gt; select ( cv | cv.id = self.compartment ) in
+c_s -&gt;  forAll ( c | ( not c.isUndefined() 
+     and c.spatialDimensions = 3 )
+     implies 
+        ( 
+           let ud = dn.unitDefinition in 
+           if (self.spatialSizeUnits.trim() &lt;&gt; &quot;&quot;) then
+              (self.spatialSizeUnits = &quot;volume&quot;) or 
+              (self.spatialSizeUnits = &quot;litre&quot;) or
+              ud-&gt;exists( udv | udv.id = self.spatialSizeUnits  and udv.listOfUnits.unit-&gt;exists(uv |  (uv.kind = 
+&quot;meter&quot; and uv.exponent = 3) or (uv.kind = &quot;litre&quot;) ) )
+           else
+              true
+           endif
+         ) ) </value>
+						</attribute>
+					</atom>
+					<atom id="id-0066-000000aa" kind="Constraint" role="Constraint" relid="0xc3">
+						<name>substUnit_check</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>566,524</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A Species&apos; substanceUnits must be &apos;substance&apos;, &apos;item&apos;, &apos;mole&apos;, or the id of a UnitDefinition that defines a variant of &apos;item&apos; or &apos;mole&apos; (L2v1 Section 4.6.4).</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>self.substanceUnits.trim() &lt;&gt; &quot;&quot;
+   implies
+      (
+         self.substanceUnits = &quot;substance&quot; or
+         self.substanceUnits = &quot;item&quot; or
+         self.substanceUnits = &quot;mole&quot; or
+         (
+             let ud = dn.unitDefinition in 
+             ud-&gt;exists( udv | udv.id = self.substanceUnits and udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;item&quot; or 
+uv.kind = &quot;mole&quot; ) )
+         )
+      ) 
+</value>
+						</attribute>
+					</atom>
+					<atom id="id-0066-000000ab" kind="Constraint" role="Constraint" relid="0xc5">
+						<name>invSpeciesRef_check</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>356,69</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A Reaction must contain at least one SpeciesReference in its list of reactants or products.</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>self.listOfReactants.speciesReference-&gt;size &gt; 0 
+  or 
+self.listOfProducts.speciesReference-&gt;size &gt; 0
+</value>
+						</attribute>
+					</atom>
+					<atom id="id-0066-000000ac" kind="Constraint" role="Constraint" relid="0xc7">
+						<name>speciesRefSp_check</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>811,811</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A SpeciesReference may not refer to a Species with constant=&apos;true&apos; and boundaryCondition=&apos;false&apos; (L2v1 Section 4.6.5).</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>let sp_v = dn.SBML2Ex::sbml::species in
+let sp = sp_v -&gt; select ( sp | sp.id = self.species ) in
+
+sp -&gt; forAll ( s | if ( not s.constant.isUndefined() ) then ( ( s.constant ) implies ( s.boundaryCondition ) )
+                   else true
+                   endif
+              )
+</value>
+						</attribute>
+					</atom>
+					<atom id="id-0066-000000ad" kind="Constraint" role="Constraint" relid="0xc9">
+						<name>spRefStiochiometry_check</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>811,867</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A SpeciesReference may not contain both a &apos;stoichiometry&apos; attribute and a &apos;stoichiometryMath&apos; subelement (L2v1 Section 4.9.5).</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>( self.stoichiometry.isUndefined()
+   implies
+      not self.stoichiometryMath.isUndefined() )
+</value>
+						</attribute>
+					</atom>
+					<atom id="id-0066-000000ae" kind="Constraint" role="Constraint" relid="0xcb">
+						<name>klawSubstUnitRef</name>
+						<regnode name="PartRegs">
+							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>825,13</value>
+								</regnode>
+							</regnode>
+						</regnode>
+						<attribute kind="ConstraintDescription">
+							<value>A KineticLaw&apos;s substanceUnits must be &apos;substance&apos;, &apos;item&apos;, &apos;mole&apos;, or the id of a UnitDefinition that defines a variant of &apos;item&apos; or &apos;mole&apos; (L2v1 Section 4.9.7).</value>
+						</attribute>
+						<attribute kind="ConstraintEqn">
+							<value>let ud = dn.unitDefinition in 
+if (self.substanceUnits.trim() &lt;&gt; &quot;&quot;) then
+      (self.substanceUnits = &quot;substance&quot;) or 
+      (self.substanceUnits = &quot;item&quot;) or
+      (self.substanceUnits = &quot;mole&quot;) or
+      (ud-&gt;exists( udv | udv.id = self.substanceUnits))
+else
+      true
+endif</value>
+						</attribute>
+					</atom>
 					<reference id="id-0067-00000002" kind="ClassCopy" role="ClassCopy" relid="0x94" referred="id-0066-00000023">
 						<name>listOfCompartments</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -3447,7 +3743,7 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>9,13</value>
+									<value>16,14</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -3489,7 +3785,7 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>285,13</value>
+									<value>278,14</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -3510,7 +3806,7 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>158,139</value>
+									<value>151,140</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -3594,7 +3890,7 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>339,342</value>
+									<value>332,343</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -3787,11 +4083,6 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 						<connpoint role="src" target="id-0066-0000003a"/>
 						<connpoint role="dst" target="id-0066-0000004a"/>
 					</connection>
-					<connection id="id-0068-00000060" kind="HasConstraint" role="HasConstraint" relid="0x85">
-						<name>HasConstraint</name>
-						<connpoint role="dst" target="id-0066-00000035"/>
-						<connpoint role="src" target="id-0066-0000004b"/>
-					</connection>
 					<connection id="id-0068-00000061" kind="HasConstraint" role="HasConstraint" relid="0x87">
 						<name>HasConstraint</name>
 						<connpoint role="dst" target="id-0066-00000030"/>
@@ -3947,6 +4238,102 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 						</regnode>
 						<connpoint role="dst" target="id-0066-00000036"/>
 						<connpoint role="src" target="id-0066-00000055"/>
+					</connection>
+					<connection id="id-0068-000000e5" kind="HasConstraint" role="HasConstraint" relid="0xb8">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>Ew</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-00000035"/>
+						<connpoint role="src" target="id-0066-000000a4"/>
+					</connection>
+					<connection id="id-0068-000000e6" kind="HasConstraint" role="HasConstraint" relid="0xb9">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>Ew</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-00000035"/>
+						<connpoint role="src" target="id-0066-000000a5"/>
+					</connection>
+					<connection id="id-0068-000000e7" kind="HasConstraint" role="HasConstraint" relid="0xba">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>Ew</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-00000035"/>
+						<connpoint role="src" target="id-0066-0000004b"/>
+					</connection>
+					<connection id="id-0068-000000e8" kind="HasConstraint" role="HasConstraint" relid="0xbc">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>Ew</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-00000035"/>
+						<connpoint role="src" target="id-0066-000000a6"/>
+					</connection>
+					<connection id="id-0068-000000e9" kind="HasConstraint" role="HasConstraint" relid="0xbe">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>Ns</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-00000035"/>
+						<connpoint role="src" target="id-0066-000000a7"/>
+					</connection>
+					<connection id="id-0068-000000ea" kind="HasConstraint" role="HasConstraint" relid="0xc0">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>Ns</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-00000035"/>
+						<connpoint role="src" target="id-0066-000000a8"/>
+					</connection>
+					<connection id="id-0068-000000eb" kind="HasConstraint" role="HasConstraint" relid="0xc2">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>Ns</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-00000035"/>
+						<connpoint role="src" target="id-0066-000000a9"/>
+					</connection>
+					<connection id="id-0068-000000ec" kind="HasConstraint" role="HasConstraint" relid="0xc4">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>We</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-00000035"/>
+						<connpoint role="src" target="id-0066-000000aa"/>
+					</connection>
+					<connection id="id-0068-000000ed" kind="HasConstraint" role="HasConstraint" relid="0xc6">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>Sn</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-00000031"/>
+						<connpoint role="src" target="id-0066-000000ab"/>
+					</connection>
+					<connection id="id-0068-000000ee" kind="HasConstraint" role="HasConstraint" relid="0xc8">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>We</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-0000003d"/>
+						<connpoint role="src" target="id-0066-000000ac"/>
+					</connection>
+					<connection id="id-0068-000000ef" kind="HasConstraint" role="HasConstraint" relid="0xca">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>We</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-0000003d"/>
+						<connpoint role="src" target="id-0066-000000ad"/>
+					</connection>
+					<connection id="id-0068-000000f0" kind="HasConstraint" role="HasConstraint" relid="0xcc">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>Sn</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-0000002f"/>
+						<connpoint role="src" target="id-0066-000000ae"/>
 					</connection>
 				</model>
 				<model id="id-0065-00000009" kind="ClassDiagram" role="ClassDiagram" relid="0x6" childrelidcntr="0x17">
@@ -4366,7 +4753,7 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>10,12</value>
+									<value>17,13</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -4421,7 +4808,7 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>121,289</value>
+									<value>201,238</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -4448,7 +4835,7 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>121,289</value>
+									<value>71,238</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -4517,7 +4904,7 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>9,83</value>
+									<value>51,70</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -6678,6 +7065,15 @@ value: String[0..1]</value>
 				<name>flux</name>
 				<model id="id-0065-00000015" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x10">
 					<name>flux</name>
+					<regnode name="PartRegs">
+						<value></value>
+						<regnode name="UML">
+							<value></value>
+							<regnode name="Position" isopaque="yes">
+								<value>28,49</value>
+							</regnode>
+						</regnode>
+					</regnode>
 					<regnode name="annotations" isopaque="yes">
 						<value></value>
 						<regnode name="Annotation0" isopaque="yes">
@@ -6686,6 +7082,9 @@ value: String[0..1]</value>
 								<value>469,97</value>
 								<regnode name="*" isopaque="yes">
 									<value>DefaultVisibility</value>
+								</regnode>
+								<regnode name="Constraints" isopaque="yes">
+									<value>673,29</value>
 								</regnode>
 								<regnode name="UML" isopaque="yes">
 									<value>347,60</value>
@@ -6745,7 +7144,7 @@ value: String[0..1]</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>394,233</value>
+									<value>334,175</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -6772,7 +7171,7 @@ value: String[0..1]</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>394,233</value>
+									<value>336,285</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -6801,7 +7200,7 @@ name : String
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>394,233</value>
+									<value>449,285</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -6831,7 +7230,7 @@ analysisType : String
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>394,233</value>
+									<value>513,108</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -6860,10 +7259,16 @@ enzymecommission : String [0..1]</value>
 						<name>AnnotationType</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
+							<regnode name="Constraints">
+								<value></value>
+								<regnode name="Position" isopaque="yes">
+									<value>9,14</value>
+								</regnode>
+							</regnode>
 							<regnode name="UML" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>219,13</value>
+									<value>212,14</value>
 								</regnode>
 							</regnode>
 						</regnode>
