@@ -109,7 +109,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JavaAPIGen", "Udm\JavaAPIGe
 EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 6
 		SccProjectUniqueName0 = UdmOcl\\UdmOcl.vcproj
 		SccProjectName0 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl\u0022,\u0020INZAAAAA
 		SccLocalPath0 = UdmOcl
@@ -134,6 +134,11 @@ Global
 		SccProjectName4 = \u0022$/MoBIESTransition/udm_ns/src/Udm/File2Code\u0022,\u0020PBCBAAAA
 		SccLocalPath4 = Udm\\File2Code
 		SccProvider4 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectUniqueName5 = Udm\\JavaAPIGen\\JavaAPIGen.vcproj
+		SccProjectName5 = \u0022$/MoBIESTransition/udm_ns/src/Udm/JavaAPIGen\u0022,\u0020YBCBAAAA
+		SccLocalPath5 = Udm\\JavaAPIGen
+		SccProvider5 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
 		CanCheckoutShared = false
 	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
