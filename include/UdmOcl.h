@@ -23,13 +23,16 @@
 
 #ifndef UDMOCL_h
 #define UDMOCL_h
+  
 
 #include "UdmBase.h"
 #include "Uml.h"
 
+
 namespace Ocl
 {
-	class UDM_DLL Evaluator;
+
+	//class UDM_DLL Evaluator;
 
 //##############################################################################################################################################
 //
@@ -149,6 +152,8 @@ namespace Ocl
 	//	Attention: In case of modification, this Function has to be called in order to avoid Evaluation failures
 	//		objDiagram : the Diagram as MetaDataNetwork's root object defining the constraints
 	//		sErrorNotification : See SErrorNotification
+
+
 
 	UDM_DLL bool Initialize( const ::Uml::Uml::Diagram& objDiagram, const SErrorNotification& sErrorNotification = SErrorNotification() );
 	UDM_DLL bool ProcessPat( const ::Uml::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression);

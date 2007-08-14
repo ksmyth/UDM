@@ -29,7 +29,6 @@ Step-by-step guide:
 	(or insert these into the INCLUDE and LIB environment variables when using MSDEV.exe from the command line)		
 		Include files:
 			%UDM_PATH%\
-				3RDPARTY\STL
 				3RDPARTY\XERCES\XERCES-C_2_5_0-WINDOWS_NT-MSVC_60\INCLUDE
 				3RDPARTY\XERCES\XERCES-C_2_5_0-WINDOWS_NT-MSVC_60\INCLUDE\XERCESC
 				3RDPARTY\XALAN\XALAN-C_1_8_0-WINDOWS_2000-MSVC_60\INCLUDE
