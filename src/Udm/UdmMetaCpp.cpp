@@ -28,7 +28,7 @@ CHANGELOG:
 #include "UmlExt.h"
 #include <time.h>
 #include <map>
-string GetTime();
+#include "Udm.h"
 
 typedef vector< ::Uml::Uml::Class> UmlClasses;
 
@@ -468,15 +468,14 @@ void GenerateMetaCPPDiagramInitialize(const ::Uml::Uml::Diagram &dgr,
 		}
 	}
 
-
 	output << "\t\t::Uml::InitDiagram(umldiagram, \"" << dgr.name() << "\", \"" << dgr.version() << "\");" <<endl;
 	output << "\t}" << endl;
 };
-void GenerateCPP(const ::Uml::Uml::Diagram &diagram,  
+void GenerateCPP(const ::Uml::Uml::Diagram &diagram,
 				 ostream &output, string fname, 
-				 const ::Uml::Uml::Diagram& cross_dgr = NULL, 
-				 const string& macro="",
-				 bool integrate_xsd = false) 
+				 const ::Uml::Uml::Diagram& cross_dgr, 
+				 const string& macro,
+				 bool integrate_xsd) 
 {
 		string hname = diagram.name();
 		string::iterator i;
@@ -490,8 +489,8 @@ void GenerateCPP(const ::Uml::Uml::Diagram &diagram,
 		output << "#include \"UmlExt.h\"" <<endl << endl; 
 //		output << "#include \"UdmStatic.h\"" << endl << endl; 
 
-  	if (integrate_xsd)
-  	{
+		if (integrate_xsd)
+  		{
 			output << "#include \"UdmDom.h\"" << endl; 
    			set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
   			for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
