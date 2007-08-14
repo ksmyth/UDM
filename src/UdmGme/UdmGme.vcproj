@@ -175,25 +175,6 @@
 				RelativePath="..\..\include\UdmGme.h">
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\ProcessHeader.trick">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCustomBuildTool"
-					CommandLine="set LIB=$(LIB);$(GME_ROOT)
-cl -TP -E $(InputName).trick  | sed &gt;MgaAndMetaImpl.cpp -e &quot;s/* _result;/* _result=NULL;/&quot; -e &quot;s/BSTR _result;/BSTR _result=NULL;/&quot; "
-					Outputs="MgaAndMetaImpl.cpp"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCustomBuildTool"
-					CommandLine="set LIB=$(LIB);$(GME_ROOT) 
-cl -TP -E $(InputName).trick  | sed &gt;MgaAndMetaImpl.cpp -e &quot;s/* _result;/* _result=NULL;/&quot; -e &quot;s/BSTR _result;/BSTR _result=NULL;/&quot; "
-					Outputs="MgaAndMetaImpl.cpp"/>
-			</FileConfiguration>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
