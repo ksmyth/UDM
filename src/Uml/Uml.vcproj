@@ -80,7 +80,8 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="copy .\Uml.h ..\..\include"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -130,7 +131,7 @@
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe &quot;$(InputPath)&quot; -l UDM_DLL -g
+					CommandLine="&quot;%UDM_PATH%&quot;\bin\Udm.exe &quot;$(InputPath)&quot; -l UDM_DLL -g
 
 "
 					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
