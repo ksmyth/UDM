@@ -308,78 +308,9 @@ namespace Udm
 			; - array field delimiter, unless escaped
 			\ - escape character, unless escaped 
 		*/
-		vector<string> ret;
-	
-		//we rely on this function
-		string sc_delimited = getStringAttr(meta);
-		if (!sc_delimited.size()) return ret;
 
-		char * sc_delimited_c_str = new char[sc_delimited.size()+1];
-		strcpy(sc_delimited_c_str, sc_delimited.c_str());
+		return UdmUtil::string_to_vector(getStringAttr(meta), ';');
 
-		bool escape_in = false;
-		char * scd_i = sc_delimited_c_str;
-
-		char * array_val = scd_i;
-		
-		while (*scd_i != '\0')
-		{
-			switch (*scd_i)
-			{
-			case ';':
-				if(!escape_in)
-				{
-					//a not-escaped ';' was received => end of an array token
-					//put the value in the vector and go on
-					char * t = scd_i;					//save the pointer
-					*scd_i='\0';						//end the string
-					ret.push_back(string(array_val));	//push the string in vector
-					scd_i = array_val = ++t;			//restore the pointer &
-														//set array_val to the beginning of
-														//of the next string, if any
-				}
-				else
-				{
-					escape_in = false;					//escape has effect only for the next character
-					scd_i++;
-				}
-				break;
-			case '\\':
-				if (!escape_in)
-				{
-					//it was an escape character, which must not be present in the value
-					//we need to take it out from the string
-					const char * t_src = scd_i;					//initialize the overwrinting copy
-					char * t_dst = scd_i;
-
-					t_src++;									//skip the escape character
-					do
-					{
-						*t_dst++ = *t_src++;
-					}while(*t_src!='\0');						//overcopy itself, skipping the first character
-					*t_dst = '\0';								//needs ending, it will be 1 character less
-					escape_in = true;
-				}
-				else
-				{
-					//this is a "\\" sequence, when the intent is to have a '\' in the 
-					//value, so we just go on, and we set back the escape_in to false
-					escape_in = false;
-					scd_i++;
-				}
-				break;
-			default:
-				if (escape_in)
-					throw udm_exception(string("Unknown escape sequence in: ") + sc_delimited);
-				scd_i++;								//go on the length of the string 
-
-			}//eo switch (*scd_i)
-
-		}//eo while *scd_i != '\0'
-		if (array_val != scd_i)
-			ret.push_back(string(array_val));			//last string in array
-		delete [] sc_delimited_c_str;						//clean up the buffer 
-		return ret;										//return the vector
 	};
 
 	UDM_DLL void ObjectImpl::setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct)
@@ -390,36 +321,8 @@ namespace Udm
 			- fields are delimited with ';'
 		*/
 
-		vector<string>::const_iterator a_ci = a.begin();
-		string encoded_attr;
-
-		while (a_ci != a.end())
-		{
-			const string a_item = *a_ci;
-			string::const_iterator a_item_ci = a_item.begin();
-			while (a_item_ci != a_item.end())
-			{
-
-				switch (*a_item_ci)
-				{
-				case ';':
-					encoded_attr.append("\\");		//escape the semicolon(;)
-					break;
-				case '\\':
-					encoded_attr.append("\\");		//escape the escape(\)
-					break;
-				}
-				
-				const char a[] = {*a_item_ci, '\0'};
-				encoded_attr.append(a);//append the character	
-				a_item_ci++;
-			};  //for each character in the string
-			encoded_attr.append(";");				//append the delimiter character
-			a_ci++;
-		};	//for each string in the vector
-
 		//use setStringAttr w/ the constructed string
-		setStringAttr(meta, encoded_attr, direct);
+		setStringAttr(meta, UdmUtil::vector_to_string(a, ';', true), direct);
 
 	};
 
@@ -429,128 +332,64 @@ namespace Udm
 		string sc_delimited = getStringAttr(meta);
 		if (!sc_delimited.size()) return ret;
 
+		vector<string> vals = UdmUtil::string_to_vector(sc_delimited, ';');
+		ret.reserve(vals.size());
 
-		char * sc_delimited_c_str = new char[sc_delimited.size()+1];
-		strcpy(sc_delimited_c_str, sc_delimited.c_str());
-
-		char * scd_i = sc_delimited_c_str;
-		char * array_val = scd_i;
-		
-		while (*scd_i != '\0')
+		for (vector<string>::const_iterator i = vals.begin(); i != vals.end(); i++)
 		{
-			switch (*scd_i)
-			{
-			case ';':
-				{
-					//delimiter character received
-					char * t = scd_i;				//save the pointer
-					*scd_i='\0';						//end the string
-					if (!strnicmp(array_val, "true", 4))
-					{
-						ret.push_back(true);
-						scd_i = array_val = ++t;	
-						break;
-					}
-
-					if (!strnicmp(array_val, "false", 5))
-					{
-						ret.push_back(false);
-						scd_i = array_val = ++t;	
-						break;
-					}
-					throw udm_exception(string("Parsing of bool-array failed: ") + sc_delimited);
-				}
-				throw udm_exception(string("Parsing of bool-array failed: ") + sc_delimited);
-				break;
-			default:
-				scd_i++;								//go on the length of the string 
-
-			}//eo switch (*scd_i)
-
-		}//eo while *scd_i != '\0'
-		
-		if (scd_i != array_val)
-		{
-			//get the last item in the array
-			if (!strnicmp(array_val, "true", 4))
+			if (!strnicmp(i->c_str(), "true", 4))
 				ret.push_back(true);
-
-			if (!strnicmp(array_val, "false", 5))
+			else if (!strnicmp(i->c_str(), "false", 5))
 				ret.push_back(false);
-
-			if (strnicmp(array_val, "true", 4) && strnicmp(array_val, "false", 5))
-				throw udm_exception(string("Parsing of bool-array(last value) failed: ") + sc_delimited);
+			else
+				throw udm_exception(string("Parsing of bool-array failed: ") + sc_delimited);
 		}
 
-		delete [] sc_delimited_c_str;						//clean up the buffer 
 		return ret;
 
 	};
 
 	UDM_DLL void ObjectImpl::setBooleanAttrArr(const ::Uml::Attribute &meta, const vector<bool> &a, const bool direct)
 	{
-		string encoded_attr;
+		vector<string> vals;
+		vals.reserve(a.size());
+
 		vector<bool>::const_iterator a_ci = a.begin();
 
 		while (a_ci != a.end())
 		{
-			if (encoded_attr.size())
-				encoded_attr.append(";");			//delimiter character
 			if (*a_ci)
-				encoded_attr+="true";				//literal true
+				vals.push_back("true");				//literal true
 			else
-				encoded_attr+="false";				//literal false
+				vals.push_back("false");			//literal false
 			a_ci++;									//go on 
 		}
 		
-		setStringAttr(meta, encoded_attr, direct);
+		setStringAttr(meta, UdmUtil::vector_to_string(vals, ';'), direct);
 
 	};
 
 	UDM_DLL vector<__int64> ObjectImpl::getIntegerAttrArr(const ::Uml::Attribute &meta) const
 	{
 		vector<__int64> ret;
-		string sc_delimited = getStringAttr(meta);
-		if (!sc_delimited.size()) return ret;
+		vector<string> vals = UdmUtil::string_to_vector(getStringAttr(meta), ';');
 
+		ret.reserve(vals.size());
 
-		char * sc_delimited_c_str = new char[sc_delimited.size()+1];
-		strcpy(sc_delimited_c_str, sc_delimited.c_str());
-
-		char * scd_i = sc_delimited_c_str;
-		char * array_val = scd_i;
-		
-		while (*scd_i != '\0')
+		for (vector<string>::const_iterator i = vals.begin(); i != vals.end(); i++)
 		{
-			switch (*scd_i)
-			{
-			case ';':
-				{
-					//delimiter character received
-					char * t = scd_i;				//save the pointer
-					*scd_i='\0';						//end the string
-					ret.push_back(_atoi64(array_val));
-					scd_i = array_val = ++t;	
-					
-				}								
-				break;
-			default:
-				scd_i++;								//go on the length of the string 
+			ret.push_back(_atoi64(i->c_str()));
+		}
 
-			}//eo switch (*scd_i)
-
-		}//eo while *scd_i != '\0'
-		
-		if (array_val != scd_i) ret.push_back(_atoi64(array_val));		//last value in array is not ended with ';'!
-		
-		delete [] sc_delimited_c_str;						//clean up the buffer 
 		return ret;
 
 	};
 
 	UDM_DLL void ObjectImpl::setIntegerAttrArr(const ::Uml::Attribute &meta, const vector<__int64> &a, const bool direct)
 	{
-		string encoded_attr;
+		vector<string> vals;
+		vals.reserve(a.size());
+
 		vector<__int64>::const_iterator a_ci = a.begin();
 		
 		char * lit_integer = new char[20];			//32-bit integers in decimal representation
@@ -559,8 +398,6 @@ namespace Udm
 			
 		while (a_ci != a.end())
 		{
-			if (encoded_attr.size())
-				encoded_attr.append(";");			//delimiter character
 
 #ifdef _WIN32
 			sprintf(lit_integer, "%I64d", *a_ci);		
@@ -568,15 +405,14 @@ namespace Udm
 			sprintf(lit_integer, "%lld", *a_ci);		
 #endif
 
-			encoded_attr.append(lit_integer);
+			vals.push_back(lit_integer);
 			
 			a_ci++;									//go on 
 		}
 		
 		delete [] lit_integer;
 
-		setStringAttr(meta, encoded_attr, direct);
-
+		setStringAttr(meta, UdmUtil::vector_to_string(vals, ';'), direct);
 
 	};
 
@@ -586,47 +422,24 @@ namespace Udm
 		string sc_delimited = getStringAttr(meta);
 		if (!sc_delimited.size()) return ret;
 
-		char * sc_delimited_c_str = new char[sc_delimited.size()+1];
-		strcpy(sc_delimited_c_str, sc_delimited.c_str());
+		vector<string> vals = UdmUtil::string_to_vector(sc_delimited, ';');
+		ret.reserve(vals.size());
 
-		char * scd_i = sc_delimited_c_str;
-		char * array_val = scd_i;
 		double d;
-					
-		
-		while (*scd_i != '\0')
+		for (vector<string>::const_iterator i = vals.begin(); i != vals.end(); i++)
 		{
-			switch (*scd_i)
-			{
-			case ';':
-				{
-					//delimiter character received
-					char * t = scd_i;				//save the pointer
-					*scd_i='\0';						//end the string
-					if(sscanf(array_val, "%lf", &d) != 1) throw udm_exception("Attr is of non-float format");
-					ret.push_back(d);
-					scd_i = array_val = ++t;	
-					
-				}								
-				break;
-			default:
-				scd_i++;								//go on the length of the string 
+			if(sscanf(i->c_str(), "%lf", &d) != 1) throw udm_exception("Attr is of non-float format: " + sc_delimited);
+			ret.push_back(d);
+		}
 
-			}//eo switch (*scd_i)
-
-		}//eo while *scd_i != '\0'
-
-		if((array_val != scd_i) && sscanf(array_val, "%lf", &d) != 1) throw udm_exception("Attr is of non-float format");
-		ret.push_back(d);								//last value in array is not ended with ';' !
-					
-		delete [] sc_delimited_c_str;						//clean up the buffer 
 		return ret;
-
 	};
 
 	UDM_DLL void ObjectImpl::setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct)
 	{
-		string encoded_attr;
+		vector<string> vals;
+		vals.reserve(a.size());
+
 		vector<double>::const_iterator a_ci = a.begin();
 		
 		char * lit_double = new char[(20+15+2)*2];			//first 20:before the decimal point
@@ -636,18 +449,18 @@ namespace Udm
 			
 		while (a_ci != a.end())
 		{
-			if (encoded_attr.size())
-				encoded_attr.append(";");			//delimiter character
 
 			sprintf(lit_double, "%.15lf", *a_ci);		
-			encoded_attr.append(lit_double);
+			vals.push_back(lit_double);
 			
 			a_ci++;									//go on 
 		}
 		
 		delete [] lit_double;
+
 		//set the attribute as a string attribute
-		setStringAttr(meta, encoded_attr, direct);
+		setStringAttr(meta, UdmUtil::vector_to_string(vals, ';'), direct);
+
 	};
 
 	
