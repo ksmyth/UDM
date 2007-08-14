@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?udm interface="Uml" version="2.04"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.isis.vanderbilt.edu/2004/schemas/Uml"
- xmlns:Uml="http://www.isis.vanderbilt.edu/2004/schemas/Uml"
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
  elementFormDefault="qualified" 
 >
-<!-- generated on Thu May 19 17:45:35 2005 -->
+<!-- generated on Sun Aug 21 10:57:10 2005 -->
 
 
 	<xsd:complexType name="CompositionChildRoleType">
@@ -24,6 +23,9 @@
 
 	<xsd:complexType name="DiagramType">
 		<xsd:sequence>
+			<xsd:element name="Association" type="AssociationType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Class" type="ClassType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Composition" type="CompositionType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="Namespace" type="NamespaceType" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 		<xsd:attribute name="version" type="xsd:string"/>

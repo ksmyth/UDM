@@ -1,5 +1,5 @@
 // cpp source file Uml.cpp generated from diagram Uml
-// generated on Tue Jul 19 15:10:55 2005
+// generated on Sun Aug 21 10:57:11 2005
 
 #include "Uml.h"
 #include "UmlExt.h"
@@ -10,8 +10,6 @@
 namespace Uml {
 
 	::Uml::Diagram umldiagram;
-
-		::Uml::Namespace meta;
 
 		::Uml::Class CompositionChildRole::meta;
 		::Uml::Class Diagram::meta;
@@ -76,15 +74,21 @@ namespace Uml {
 		::Uml::CompositionParentRole CompositionChildRole::meta_parent;
 		::Uml::CompositionParentRole CompositionParentRole::meta_parent;
 		::Uml::CompositionParentRole AssociationRole::meta_parent;
+		::Uml::CompositionParentRole Association::meta_parent_ns;
 		::Uml::CompositionParentRole Association::meta_parent;
 		::Uml::CompositionParentRole TaggedValue::meta_classParent;
 		::Uml::CompositionParentRole TaggedValue::meta_assocParent;
+		::Uml::CompositionParentRole Composition::meta_parent_ns;
 		::Uml::CompositionParentRole Composition::meta_parent;
 		::Uml::CompositionParentRole Namespace::meta_parent;
+		::Uml::CompositionParentRole Class::meta_parent_ns;
 		::Uml::CompositionParentRole Class::meta_parent;
 		::Uml::CompositionParentRole Constraint::meta_parent;
 		::Uml::CompositionParentRole Attribute::meta_parent;
 		::Uml::CompositionParentRole ConstraintDefinition::meta_parent;
+		::Uml::CompositionChildRole Diagram::meta_associations;
+		::Uml::CompositionChildRole Diagram::meta_classes;
+		::Uml::CompositionChildRole Diagram::meta_compositions;
 		::Uml::CompositionChildRole Diagram::meta_namespaces;
 		::Uml::CompositionChildRole Association::meta_tagValues;
 		::Uml::CompositionChildRole Association::meta_roles;
@@ -97,8 +101,8 @@ namespace Uml {
 		::Uml::CompositionChildRole Class::meta_definitions;
 		::Uml::CompositionChildRole Class::meta_constraints;
 		::Uml::CompositionChildRole Class::meta_tagValues;
-		UDM_DLL void InitializeNS()
-		{
+	UDM_DLL void InitializeDgr()
+	{
 			CompositionChildRole::meta = ::Uml::CreateClass();
 			Diagram::meta = ::Uml::CreateClass();
 			CompositionParentRole::meta = ::Uml::CreateClass();
@@ -162,15 +166,21 @@ namespace Uml {
 			CompositionChildRole::meta_parent = ::Uml::CreateCompositionParentRole();
 			CompositionParentRole::meta_parent = ::Uml::CreateCompositionParentRole();
 			AssociationRole::meta_parent = ::Uml::CreateCompositionParentRole();
+			Association::meta_parent_ns = ::Uml::CreateCompositionParentRole();
 			Association::meta_parent = ::Uml::CreateCompositionParentRole();
 			TaggedValue::meta_classParent = ::Uml::CreateCompositionParentRole();
 			TaggedValue::meta_assocParent = ::Uml::CreateCompositionParentRole();
+			Composition::meta_parent_ns = ::Uml::CreateCompositionParentRole();
 			Composition::meta_parent = ::Uml::CreateCompositionParentRole();
 			Namespace::meta_parent = ::Uml::CreateCompositionParentRole();
+			Class::meta_parent_ns = ::Uml::CreateCompositionParentRole();
 			Class::meta_parent = ::Uml::CreateCompositionParentRole();
 			Constraint::meta_parent = ::Uml::CreateCompositionParentRole();
 			Attribute::meta_parent = ::Uml::CreateCompositionParentRole();
 			ConstraintDefinition::meta_parent = ::Uml::CreateCompositionParentRole();
+			Diagram::meta_associations = ::Uml::CreateCompositionChildRole();
+			Diagram::meta_classes = ::Uml::CreateCompositionChildRole();
+			Diagram::meta_compositions = ::Uml::CreateCompositionChildRole();
 			Diagram::meta_namespaces = ::Uml::CreateCompositionChildRole();
 			Association::meta_tagValues = ::Uml::CreateCompositionChildRole();
 			Association::meta_roles = ::Uml::CreateCompositionChildRole();
@@ -184,19 +194,19 @@ namespace Uml {
 			Class::meta_constraints = ::Uml::CreateCompositionChildRole();
 			Class::meta_tagValues = ::Uml::CreateCompositionChildRole();
 		
-			::Uml::InitClass(CompositionChildRole::meta, meta, "CompositionChildRole", false);
-			::Uml::InitClass(Diagram::meta, meta, "Diagram", false);
-			::Uml::InitClass(CompositionParentRole::meta, meta, "CompositionParentRole", false);
-			::Uml::InitClass(AssociationRole::meta, meta, "AssociationRole", false);
-			::Uml::InitClass(Association::meta, meta, "Association", false);
-			::Uml::InitClass(TaggedValue::meta, meta, "TaggedValue", false);
-			::Uml::InitClass(Composition::meta, meta, "Composition", false);
-			::Uml::InitClass(Namespace::meta, meta, "Namespace", false);
-			::Uml::InitClass(Class::meta, meta, "Class", false);
-			::Uml::InitClass(Constraint::meta, meta, "Constraint", false);
-			::Uml::InitClass(GenericRole::meta, meta, "GenericRole", true);
-			::Uml::InitClass(Attribute::meta, meta, "Attribute", false);
-			::Uml::InitClass(ConstraintDefinition::meta, meta, "ConstraintDefinition", false);
+			::Uml::InitClass(CompositionChildRole::meta, umldiagram, "CompositionChildRole", false);
+			::Uml::InitClass(Diagram::meta, umldiagram, "Diagram", false);
+			::Uml::InitClass(CompositionParentRole::meta, umldiagram, "CompositionParentRole", false);
+			::Uml::InitClass(AssociationRole::meta, umldiagram, "AssociationRole", false);
+			::Uml::InitClass(Association::meta, umldiagram, "Association", false);
+			::Uml::InitClass(TaggedValue::meta, umldiagram, "TaggedValue", false);
+			::Uml::InitClass(Composition::meta, umldiagram, "Composition", false);
+			::Uml::InitClass(Namespace::meta, umldiagram, "Namespace", false);
+			::Uml::InitClass(Class::meta, umldiagram, "Class", false);
+			::Uml::InitClass(Constraint::meta, umldiagram, "Constraint", false);
+			::Uml::InitClass(GenericRole::meta, umldiagram, "GenericRole", true);
+			::Uml::InitClass(Attribute::meta, umldiagram, "Attribute", false);
+			::Uml::InitClass(ConstraintDefinition::meta, umldiagram, "ConstraintDefinition", false);
 		
 			::Uml::InitAttribute(CompositionChildRole::meta_max, CompositionChildRole::meta, "max", "Integer", false, false, 1, 1, false, "public");
 			::Uml::InitAttribute(CompositionChildRole::meta_min, CompositionChildRole::meta, "min", "Integer", false, false, 1, 1, false, "public");
@@ -256,114 +266,135 @@ namespace Uml {
 		
 			{
 				::Uml::Association ass = ::Uml::CreateAssociation();
-				::Uml::InitAssociation(ass , meta, "");
+				::Uml::InitAssociation(ass , umldiagram, "");
 				::Uml::InitAssociationRole(Class::meta_childRoles, ass, "childRoles", true, false, 0, -1, CompositionChildRole::meta);
 				::Uml::InitAssociationRole(CompositionChildRole::meta_target, ass, "target", true, false, 1, 1, Class::meta);
 			}
 			{
 				::Uml::Association ass = ::Uml::CreateAssociation();
-				::Uml::InitAssociation(ass , meta, "");
+				::Uml::InitAssociation(ass , umldiagram, "");
 				::Uml::InitAssociationRole(Class::meta_parentRoles, ass, "parentRoles", true, false, 0, -1, CompositionParentRole::meta);
 				::Uml::InitAssociationRole(CompositionParentRole::meta_target, ass, "target", true, false, 1, 1, Class::meta);
 			}
 			{
 				::Uml::Association ass = ::Uml::CreateAssociation();
-				::Uml::InitAssociation(ass , meta, "");
+				::Uml::InitAssociation(ass , umldiagram, "");
 				::Uml::InitAssociationRole(Class::meta_associationRoles, ass, "associationRoles", true, false, 0, -1, AssociationRole::meta);
 				::Uml::InitAssociationRole(AssociationRole::meta_target, ass, "target", true, false, 1, 1, Class::meta);
 			}
 			{
 				::Uml::Association ass = ::Uml::CreateAssociation();
-				::Uml::InitAssociation(ass , meta, "");
+				::Uml::InitAssociation(ass , umldiagram, "");
 				::Uml::InitAssociationRole(Class::meta_association, ass, "association", true, false, 0, 1, Association::meta);
 				::Uml::InitAssociationRole(Association::meta_assocClass, ass, "assocClass", true, false, 0, 1, Class::meta);
 			}
 			{
 				::Uml::Association ass = ::Uml::CreateAssociation();
-				::Uml::InitAssociation(ass , meta, "");
+				::Uml::InitAssociation(ass , umldiagram, "");
 				::Uml::InitAssociationRole(Class::meta_baseTypes, ass, "baseTypes", true, false, 0, -1, Class::meta);
 				::Uml::InitAssociationRole(Class::meta_subTypes, ass, "subTypes", true, false, 0, -1, Class::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
+			
+				::Uml::InitCompositionParentRole(Association::meta_parent, comp, "parent", true, Diagram::meta);
+				::Uml::InitCompositionChildRole(Diagram::meta_associations, comp, "associations", true, 0, -1, Association::meta);
+			}
+			{
+				::Uml::Composition comp = ::Uml::CreateComposition();
+				::Uml::InitComposition(comp , umldiagram, "");
+			
+				::Uml::InitCompositionParentRole(Class::meta_parent, comp, "parent", true, Diagram::meta);
+				::Uml::InitCompositionChildRole(Diagram::meta_classes, comp, "classes", true, 0, -1, Class::meta);
+			}
+			{
+				::Uml::Composition comp = ::Uml::CreateComposition();
+				::Uml::InitComposition(comp , umldiagram, "");
+			
+				::Uml::InitCompositionParentRole(Composition::meta_parent, comp, "parent", true, Diagram::meta);
+				::Uml::InitCompositionChildRole(Diagram::meta_compositions, comp, "compositions", true, 0, -1, Composition::meta);
+			}
+			{
+				::Uml::Composition comp = ::Uml::CreateComposition();
+				::Uml::InitComposition(comp , umldiagram, "");
 			
 				::Uml::InitCompositionParentRole(Namespace::meta_parent, comp, "parent", true, Diagram::meta);
 				::Uml::InitCompositionChildRole(Diagram::meta_namespaces, comp, "namespaces", true, 0, -1, Namespace::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
 				::Uml::InitCompositionParentRole(TaggedValue::meta_assocParent, comp, "assocParent", true, Association::meta);
 				::Uml::InitCompositionChildRole(Association::meta_tagValues, comp, "tagValues", true, 0, -1, TaggedValue::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
 				::Uml::InitCompositionParentRole(AssociationRole::meta_parent, comp, "parent", true, Association::meta);
 				::Uml::InitCompositionChildRole(Association::meta_roles, comp, "roles", true, 0, -1, AssociationRole::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
 				::Uml::InitCompositionParentRole(CompositionChildRole::meta_parent, comp, "parent", true, Composition::meta);
 				::Uml::InitCompositionChildRole(Composition::meta_childRole, comp, "childRole", true, 1, 1, CompositionChildRole::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
 				::Uml::InitCompositionParentRole(CompositionParentRole::meta_parent, comp, "parent", true, Composition::meta);
 				::Uml::InitCompositionChildRole(Composition::meta_parentRole, comp, "parentRole", true, 1, 1, CompositionParentRole::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
-				::Uml::InitCompositionParentRole(Composition::meta_parent, comp, "parent", true, Namespace::meta);
+				::Uml::InitCompositionParentRole(Composition::meta_parent_ns, comp, "parent_ns", true, Namespace::meta);
 				::Uml::InitCompositionChildRole(Namespace::meta_compositions, comp, "compositions", true, 0, -1, Composition::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
-				::Uml::InitCompositionParentRole(Class::meta_parent, comp, "parent", true, Namespace::meta);
+				::Uml::InitCompositionParentRole(Class::meta_parent_ns, comp, "parent_ns", true, Namespace::meta);
 				::Uml::InitCompositionChildRole(Namespace::meta_classes, comp, "classes", true, 0, -1, Class::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
-				::Uml::InitCompositionParentRole(Association::meta_parent, comp, "parent", true, Namespace::meta);
+				::Uml::InitCompositionParentRole(Association::meta_parent_ns, comp, "parent_ns", true, Namespace::meta);
 				::Uml::InitCompositionChildRole(Namespace::meta_associations, comp, "associations", true, 0, -1, Association::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
 				::Uml::InitCompositionParentRole(Attribute::meta_parent, comp, "parent", true, Class::meta);
 				::Uml::InitCompositionChildRole(Class::meta_attributes, comp, "attributes", true, 0, -1, Attribute::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
 				::Uml::InitCompositionParentRole(ConstraintDefinition::meta_parent, comp, "parent", true, Class::meta);
 				::Uml::InitCompositionChildRole(Class::meta_definitions, comp, "definitions", true, 0, -1, ConstraintDefinition::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
 				::Uml::InitCompositionParentRole(Constraint::meta_parent, comp, "parent", true, Class::meta);
 				::Uml::InitCompositionChildRole(Class::meta_constraints, comp, "constraints", true, 0, -1, Constraint::meta);
 			}
 			{
 				::Uml::Composition comp = ::Uml::CreateComposition();
-				::Uml::InitComposition(comp , meta, "");
+				::Uml::InitComposition(comp , umldiagram, "");
 			
 				::Uml::InitCompositionParentRole(TaggedValue::meta_classParent, comp, "classParent", true, Class::meta);
 				::Uml::InitCompositionChildRole(Class::meta_tagValues, comp, "tagValues", true, 0, -1, TaggedValue::meta);
@@ -371,8 +402,8 @@ namespace Uml {
 			::Uml::AddInheritance(GenericRole::meta, CompositionChildRole::meta);
 			::Uml::AddInheritance(GenericRole::meta, CompositionParentRole::meta);
 			::Uml::AddInheritance(GenericRole::meta, AssociationRole::meta);
-			
-		}
+		
+	}
 	UDM_DLL void Initialize()
 	{
 		static bool first = true;
@@ -382,11 +413,11 @@ namespace Uml {
 
 		ASSERT( umldiagram == Udm::null );
 		umldiagram = ::Uml::CreateDiagram();
-		
-		Uml::meta = ::Uml::CreateNamespace();
-		Uml::InitializeNS();
-		::Uml::InitNamespace(Uml::meta, umldiagram,"Uml");
-		UdmDom::str_xsd_storage::StoreXsd("Uml.xsd",Uml_xsd::getString());
+
+		InitializeDgr();
+
+		UdmDom::str_xsd_storage::StoreXsd("Uml.xsd", Uml_xsd::getString());
+
 		::Uml::InitDiagram(umldiagram, "Uml", "2.04");
 	}
 	UDM_DLL Udm::UdmDiagram diagram = { &umldiagram, Initialize };
