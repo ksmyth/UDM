@@ -10,6 +10,11 @@ in an action of contract, negligence or other tortious action,
 arising out of or in connection with the use or performance of
 this software.
 
+  18/07/06 - endre
+   - fix DomObject::isInstance()
+   - allow setAssociation to change links of instance objects when direct is false
+     (called from UdmUtil::reqCopyLinks for example)
+
   11/23/05 - endre
    - make DOM3GetElementAncestor non-recursive
    - optimize DOM3LookupNamespaceURI to fetch attribute prefix and value only
@@ -580,11 +585,11 @@ namespace UdmDom
 
 		bool isInstance() const
 		{
-			DOMString a = dom_element.getAttribute(_udm_dom_ia_subtype);
+			DOMString a = dom_element.getAttribute(_udm_dom_ia_archetype);
 
 			if(!a.length()) return false;		 // default is false!
 		
-			return a.charAt(0) == XMLCh('f');	 // true			
+			return !isSubtype();
 		}
 
 		Udm::DataNetwork *__getdn() 
@@ -2511,7 +2516,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 			DomObject * do_parent = (DomObject*)getParent(NULL);
 			if (do_parent && ((ObjectImpl*)do_parent != &Udm::_null))
 			{
-				if (do_parent->isInstance())
+				if (do_parent->isInstance() && direct)
 				{
 					throw udm_exception("Links can not be added/removed to/from children of instance objects!");				
 				}
@@ -2681,7 +2686,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 					set<Object> existing_corresp;//this really needs to be a set
 					for(set<Object>::iterator kk = existing_ass.begin(); kk != existing_ass.end(); kk++)
-						existing_corresp.insert(kk->FindCorrespondingObjectInInstancesTree(*oset_i, false));
+						existing_corresp.insert(kk->FindCorrespondingObjectInInstancesTree((*oset_i)->clone(), false));
 					
 					//get the current associations for this_o_inst
 					vector<ObjectImpl*> this_o_inst_curr_ass = this_o_inst.__impl()->getAssociation(role, mode);
@@ -2742,7 +2747,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 					set<Object> existing_corresp;
 					for(set<Object>::iterator kk = existing_ass.begin(); kk != existing_ass.end(); kk++)
-						existing_corresp.insert(kk->FindCorrespondingObjectInSubtypesTree(*oset_i, false));
+						existing_corresp.insert(kk->FindCorrespondingObjectInSubtypesTree((*oset_i)->clone(), false));
 					
 					//get the current associations for this_o_inst
 					vector<ObjectImpl*> this_o_inst_curr_ass = this_o_inst.__impl()->getAssociation(role, mode);
