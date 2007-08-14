@@ -20,7 +20,7 @@ namespace UdmTests
       void readSBML(const std::string& fname);
       void readTest();
       void selfTest();
-      void evaluate(const ::Uml::Uml::Diagram& metaDiagram,
+      void evaluate(const ::Uml::Diagram& metaDiagram,
               const Udm::Object& objContext,
               std::ostream& out);
     
