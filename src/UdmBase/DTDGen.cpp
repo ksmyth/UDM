@@ -1002,7 +1002,13 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 			{
 				output << "\t\t\t<xsd:element";
 				if (ns == i_ns)
-					output << " name=\"" << i_name << "\" type=\"" <<	i_name << "Type\"";
+				{
+					output << " name=\"" << i_name << "\"";
+					if (i_ns)
+						output << " type=\"" << i_ns.getPath2("_", false) << ":" << i_name << "Type\"";
+					else
+						output << " type=\"" << i_name << "Type\"";
+				}
 				else if (i_ns != ::Uml::Namespace(NULL))
 					output << " ref=\"" << i_ns.getPath2("_", false) << ":" << i_name << "\"";
 				else
@@ -1197,8 +1203,13 @@ static void GenerateXMLSchemaForClasses(const ::Uml::Diagram &dgr,
 
 	vector< ::Uml::Class>::iterator j = globalElements.begin();
 	while (j != globalElements.end()) {
-		output << " <xsd:element name=\"" << j->name() <<
-			"\" type=\"" << j->name() << "Type\"/>" << endl;
+		::Uml::Namespace j_ns = j->parent_ns();
+		output << " <xsd:element name=\"" << j->name() << "\"";
+		if (j_ns)
+			output << " type=\"" << j_ns.getPath2("_", false) << ":" << j->name() << "Type\"";
+		else
+			output << " type=\"" << j->name() << "Type\"";
+		output << "/>" << endl;
 		j++;
 	}
 }
