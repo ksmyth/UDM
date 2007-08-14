@@ -27,38 +27,38 @@ enum CPPSourceUnit {
 extern bool single_cpp_namespace;
 
 //cross-link-approved
-void GenerateHExport(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname, const string& macro);
-void GenerateH(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname, bool visitor_sup = false, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro = "", const int source_unit = CPP_SOURCE_UNIT_DIAGRAM);
-void GenerateHH(const ::Uml::Uml::Diagram &dgr, const std::string &fname, const bool visitor_sup, const ::Uml::Uml::Diagram &cross_dgr, const std::string &macro, int source_unit);
-void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram, 
+void GenerateHExport(const ::Uml::Diagram &diagram,  ostream &output, string fname, const string& macro);
+void GenerateH(const ::Uml::Diagram &diagram,  ostream &output, string fname, bool visitor_sup = false, const ::Uml::Diagram& cross_dgr = NULL, const string& macro = "", const int source_unit = CPP_SOURCE_UNIT_DIAGRAM);
+void GenerateHH(const ::Uml::Diagram &dgr, const std::string &fname, const bool visitor_sup, const ::Uml::Diagram &cross_dgr, const std::string &macro, int source_unit);
+void GenerateNewCPP(const ::Uml::Diagram &diagram, 
                     string fname, 
                     const map<string, string> &ns_map, 
-                    const ::Uml::Uml::Diagram& cross_dgr = NULL, 
+                    const ::Uml::Diagram& cross_dgr = NULL, 
                     const string& macro = "",
                     bool integrate_xsd = false,
 					int source_unit = CPP_SOURCE_UNIT_DIAGRAM);
 
-void GenerateCPP(	const ::Uml::Uml::Diagram &diagram, 
+void GenerateCPP(	const ::Uml::Diagram &diagram, 
 					ostream &output, string fname, 
-					const ::Uml::Uml::Diagram& cross_dgr = NULL, 
+					const ::Uml::Diagram& cross_dgr = NULL, 
 					const string& macro = "",
 					bool integrate_xsd = false);
-//void GenerateCORBACPP(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
+//void GenerateCORBACPP(const ::Uml::Diagram &diagram, ostream &output, string fname, const ::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
 
 // not cross-link approved
-void GenerateCSInit(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname);
-void GenerateNewCSInit(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname);
-void GenerateCSApi(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname);
-void GenerateCS(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname);
-void GenerateNewCS(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname);
-void CheckDiagram(const ::Uml::Uml::Diagram & diagram);
+void GenerateCSInit(const ::Uml::Diagram &diagram, ostream &output, string fname);
+void GenerateNewCSInit(const ::Uml::Diagram &diagram, ostream &output, string fname);
+void GenerateCSApi(const ::Uml::Diagram &diagram, ostream &output, string fname);
+void GenerateCS(const ::Uml::Diagram &diagram,  ostream &output, string fname);
+void GenerateNewCS(const ::Uml::Diagram &diagram,  ostream &output, string fname);
+void CheckDiagram(const ::Uml::Diagram & diagram);
 
 // utils
 std::string GetTime();
-std::string UmlClassCPPName(const ::Uml::Uml::Class &cl);
+std::string UmlClassCPPName(const ::Uml::Class &cl);
 std::string NameToFilename(const std::string src);
 //generate DTD (only if asked) and XSD
-void GenerateDSD(const ::Uml::Uml::Namespace &ns,
+void GenerateDSD(const ::Uml::Namespace &ns,
 		 const string &fname,
 		 bool generate_dtd,
 		 bool uxsdi,

@@ -31,39 +31,39 @@ CHANGELOG:
 #include <algorithm>
 #include "Udm.h"
 
-typedef set< ::Uml::Uml::Class> UmlClasses;
+typedef set< ::Uml::Class> UmlClasses;
 typedef map<string,  UmlClasses> UmlClassesByName;
 
 class InheritenceSolver
 {
-	friend void GenerateH(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname, bool visitor_sup, const ::Uml::Uml::Diagram& cross_dgr, const string& macro, const int source_unit);
-	friend void GenerateHIncludeClasses(const ::Uml::Uml::Diagram &diagram, const InheritenceSolver &is, ostream &output, const string &fname, bool visitor_sup);
+	friend void GenerateH(const ::Uml::Diagram &diagram, ostream &output, string fname, bool visitor_sup, const ::Uml::Diagram& cross_dgr, const string& macro, const int source_unit);
+	friend void GenerateHIncludeClasses(const ::Uml::Diagram &diagram, const InheritenceSolver &is, ostream &output, const string &fname, bool visitor_sup);
 	friend void CheckNamespaceFlips(const InheritenceSolver &is);
-	friend void GenerateHNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagram &cross_dgr, const InheritenceSolver &is, const string &fname, ostream &output, bool visitor_sup, const string &macro, int source_unit);
+	friend void GenerateHNamespace(const ::Uml::Namespace &ns, const ::Uml::Diagram &cross_dgr, const InheritenceSolver &is, const string &fname, ostream &output, bool visitor_sup, const string &macro, int source_unit);
 
-	typedef map< ::Uml::Uml::Class, set< ::Uml::Uml::Class> > cltoclsmap;
-	typedef map< ::Uml::Uml::Class, bool > cltoboolmap;
+	typedef map< ::Uml::Class, set< ::Uml::Class> > cltoclsmap;
+	typedef map< ::Uml::Class, bool > cltoboolmap;
 
 	cltoclsmap virtualchildren;
 	cltoclsmap explicitinits;
 	cltoboolmap objectneeded_map;
-	set< ::Uml::Uml::Class> virtualbaseclasses;
-	vector< ::Uml::Uml::Class> good_inheritence_order;
+	set< ::Uml::Class> virtualbaseclasses;
+	vector< ::Uml::Class> good_inheritence_order;
 
-	struct sortByActiveNamespace : public binary_function< ::Uml::Uml::Class, ::Uml::Uml::Class, bool>
+	struct sortByActiveNamespace : public binary_function< ::Uml::Class, ::Uml::Class, bool>
 	{
 	private:
-		::Uml::Uml::Namespace active_ns;
+		::Uml::Namespace active_ns;
 	public:
-		sortByActiveNamespace(const ::Uml::Uml::Namespace &ns)
+		sortByActiveNamespace(const ::Uml::Namespace &ns)
 		{
 			active_ns = ns;
 		}
 
-		bool operator()(const ::Uml::Uml::Class &a, const ::Uml::Uml::Class &b) const
+		bool operator()(const ::Uml::Class &a, const ::Uml::Class &b) const
 		{
-			::Uml::Uml::Namespace a_ns = a.parent();
-			::Uml::Uml::Namespace b_ns = b.parent();
+			::Uml::Namespace a_ns = a.parent();
+			::Uml::Namespace b_ns = b.parent();
 			if (a_ns == active_ns && b_ns != active_ns)
 				return true;
 			if (a_ns != active_ns && b_ns == active_ns)
@@ -76,32 +76,32 @@ class InheritenceSolver
 
 public:
 
-	InheritenceSolver(const ::Uml::Uml::Diagram& diagram)
+	InheritenceSolver(const ::Uml::Diagram& diagram)
 	{
-		vector< ::Uml::Uml::Class> classes;
+		vector< ::Uml::Class> classes;
 
-		set< ::Uml::Uml::Namespace> ns_set = diagram.namespaces();
-		for (set< ::Uml::Uml::Namespace>::iterator ns_set_i = ns_set.begin(); ns_set_i != ns_set.end(); ns_set_i++)
+		set< ::Uml::Namespace> ns_set = diagram.namespaces();
+		for (set< ::Uml::Namespace>::iterator ns_set_i = ns_set.begin(); ns_set_i != ns_set.end(); ns_set_i++)
 		{
-			::Uml::Uml::Namespace ns = *ns_set_i;
+			::Uml::Namespace ns = *ns_set_i;
 
-			set< ::Uml::Uml::Class> ns_classes = ns.classes();
-			for (set< ::Uml::Uml::Class>::iterator ns_classes_i = ns_classes.begin(); ns_classes_i != ns_classes.end(); ns_classes_i++) {
+			set< ::Uml::Class> ns_classes = ns.classes();
+			for (set< ::Uml::Class>::iterator ns_classes_i = ns_classes.begin(); ns_classes_i != ns_classes.end(); ns_classes_i++) {
 				classes.push_back(*ns_classes_i);
 			}
 		}
 
 		while (!classes.empty())
 		{
-			::Uml::Uml::Class cl;
-			set< ::Uml::Uml::Class> bases;
-			vector< ::Uml::Uml::Class>::iterator c;
+			::Uml::Class cl;
+			set< ::Uml::Class> bases;
+			vector< ::Uml::Class>::iterator c;
 			for( c = classes.begin(); c != classes.end(); c++ )	
 			{
 				cl = *c;
 				bases = cl.baseTypes();
 
-				set< ::Uml::Uml::Class>::iterator i;
+				set< ::Uml::Class>::iterator i;
 				for(i = bases.begin(); i != bases.end(); i++) 
 				{
 					if (find(classes.begin(), classes.end(), *i) != classes.end()) break;
@@ -120,25 +120,25 @@ public:
 			classes.erase(c);
 			if (!classes.empty())
 			{
-				::Uml::Uml::Namespace cl_ns = cl.parent();
+				::Uml::Namespace cl_ns = cl.parent();
 				sort(classes.begin(), classes.end(), sortByActiveNamespace(cl_ns));
 			}
 
-			virtualchildren.insert(cltoclsmap::value_type(cl, set< ::Uml::Uml::Class>()));
+			virtualchildren.insert(cltoclsmap::value_type(cl, set< ::Uml::Class>()));
 			
 			//filling up virtual base classes
 			if( bases.size() == 0) 
 			{
 // Object should be virtual, if any of the descendants has an immediate baseclass,
 // that is not derived from the current class   (only descendants with >=2 baseclasses are to be checked)
-				set< ::Uml::Uml::Class> descs = Uml::DescendantClasses(cl);
-				for(set< ::Uml::Uml::Class>::iterator i = descs.begin(); i != descs.end(); i++) 
+				set< ::Uml::Class> descs = Uml::DescendantClasses(cl);
+				for(set< ::Uml::Class>::iterator i = descs.begin(); i != descs.end(); i++) 
 				{
 					if(*i == cl) continue;
-					set< ::Uml::Uml::Class> dirancs = i->baseTypes();
+					set< ::Uml::Class> dirancs = i->baseTypes();
 					if(dirancs.size() > 1) 
 					{
-						for(set< ::Uml::Uml::Class>::iterator j = dirancs.begin(); j != dirancs.end(); j++) 
+						for(set< ::Uml::Class>::iterator j = dirancs.begin(); j != dirancs.end(); j++) 
 						{
 							if(!Uml::IsDerivedFrom(*j, cl)) 
 							{
@@ -151,7 +151,7 @@ public:
 			}
 			else 
 			{
-				set< ::Uml::Uml::Class>::iterator h;
+				set< ::Uml::Class>::iterator h;
 				for(h = bases.begin(); h != bases.end(); h++) 
 				{
 // the current base should be virtual, if any of the descendants has an immediate baseclass,
@@ -162,15 +162,15 @@ public:
 					{
 						throw udm_exception("internal error in class ordering");
 					}
-					set< ::Uml::Uml::Class> descs = Uml::DescendantClasses(cl);
-					set< ::Uml::Uml::Class>::iterator i;
+					set< ::Uml::Class> descs = Uml::DescendantClasses(cl);
+					set< ::Uml::Class>::iterator i;
 					for( i = descs.begin(); i != descs.end(); i++) 
 					{
 						if(*i == cl) continue;
-						set< ::Uml::Uml::Class> dirancs = i->baseTypes();
+						set< ::Uml::Class> dirancs = i->baseTypes();
 						if(dirancs.size() > 1) 
 						{
-							for(set< ::Uml::Uml::Class>::iterator j = dirancs.begin(); j != dirancs.end(); j++) 
+							for(set< ::Uml::Class>::iterator j = dirancs.begin(); j != dirancs.end(); j++) 
 							{
 								if(!Uml::IsDerivedFrom(*j, cl) && Uml::IsDerivedFrom(*j, *h)) 
 								{
@@ -195,14 +195,14 @@ public:
 			};
 
 			int object_needed = 0, object_notneeded = 0;
-			set< ::Uml::Uml::Class> ancestors = Uml::AncestorClasses(cl); 
-			set< ::Uml::Uml::Class> additionaexplicitinitializers;
+			set< ::Uml::Class> ancestors = Uml::AncestorClasses(cl); 
+			set< ::Uml::Class> additionaexplicitinitializers;
 
-			for(set< ::Uml::Uml::Class>::iterator i = ancestors.begin(); i != ancestors.end(); i++) 
+			for(set< ::Uml::Class>::iterator i = ancestors.begin(); i != ancestors.end(); i++) 
 			{
 				if(*i == cl) continue;
 
-				if(set< ::Uml::Uml::Class>(i->baseTypes()).size() == 0) 
+				if(set< ::Uml::Class>(i->baseTypes()).size() == 0) 
 				{
 					if(virtualbaseclasses.find(*i) != virtualbaseclasses.end()) object_needed++;
 					else object_notneeded++;
@@ -210,9 +210,9 @@ public:
 				if(bases.find(*i) != bases.end()) continue;
 			
 				cltoclsmap::iterator actmapi = virtualchildren.find(*i);
-				set< ::Uml::Uml::Class> subtypes = i->subTypes();
+				set< ::Uml::Class> subtypes = i->subTypes();
 				int found_inset = 0, found_notinset = 0;
-				for(set< ::Uml::Uml::Class>::iterator p = subtypes.begin(); p != subtypes.end(); p++) 
+				for(set< ::Uml::Class>::iterator p = subtypes.begin(); p != subtypes.end(); p++) 
 				{
 				
 					if(!Uml::IsDerivedFrom(cl, *p)) continue;
@@ -246,11 +246,11 @@ public:
 
 	};
 
-	string getAncestorList(const ::Uml::Uml::Class &cl) const
+	string getAncestorList(const ::Uml::Class &cl) const
 	{
 		string ret;
-		::Uml::Uml::Namespace ns = cl.parent();
-		set< ::Uml::Uml::Class> bases = cl.baseTypes();
+		::Uml::Namespace ns = cl.parent();
+		set< ::Uml::Class> bases = cl.baseTypes();
 		if( bases.size() == 0) 
 		{
 			if (virtualbaseclasses.find(cl) != virtualbaseclasses.end()) ret+= " virtual";
@@ -259,7 +259,7 @@ public:
 		else 
 		{
 			string sep("");
-			set< ::Uml::Uml::Class>::iterator h;
+			set< ::Uml::Class>::iterator h;
 			for(h = bases.begin(); h != bases.end(); h++) 
 			{
 				cltoclsmap::const_iterator actmapi = virtualchildren.find(*h);
@@ -284,10 +284,10 @@ public:
 		};
 		return ret;
 	};
-	string getInitializers(const ::Uml::Uml::Class &cl, const string& argument) const
+	string getInitializers(const ::Uml::Class &cl, const string& argument) const
 	{
-		::Uml::Uml::Namespace ns = cl.parent();
-		set< ::Uml::Uml::Class> bases = cl.baseTypes();
+		::Uml::Namespace ns = cl.parent();
+		set< ::Uml::Class> bases = cl.baseTypes();
 		string ret;
 
 		if( bases.size() == 0 ) 
@@ -299,7 +299,7 @@ public:
 		else 
 		{
 			string sep("");
-			set< ::Uml::Uml::Class>::iterator i;
+			set< ::Uml::Class>::iterator i;
 			for(i = bases.begin(); i != bases.end(); i++) 
 			{
 				ret += sep;
@@ -316,7 +316,7 @@ public:
 		if (ei_i == explicitinits.end())
 			throw udm_exception("InheritenceSolver error");
 
-		for(set< ::Uml::Uml::Class>::const_iterator i = ei_i->second.begin(); i != ei_i->second.end(); i++) 
+		for(set< ::Uml::Class>::const_iterator i = ei_i->second.begin(); i != ei_i->second.end(); i++) 
 		{
 			ret += ", ";
 			ret += UmlClassCPPName(*i);
@@ -372,14 +372,14 @@ string GetNsfromFromStr(const string& fromstr )
 
 void CheckNamespaceFlips(const InheritenceSolver &is)
 {
-	typedef map< ::Uml::Uml::Namespace, int> ns_flips_t;
+	typedef map< ::Uml::Namespace, int> ns_flips_t;
 	ns_flips_t ns_flips;
 
-	::Uml::Uml::Namespace current_ns;
+	::Uml::Namespace current_ns;
 
-	for(vector< ::Uml::Uml::Class>::const_iterator gio_i = is.good_inheritence_order.begin(); gio_i != is.good_inheritence_order.end(); gio_i++)
+	for(vector< ::Uml::Class>::const_iterator gio_i = is.good_inheritence_order.begin(); gio_i != is.good_inheritence_order.end(); gio_i++)
 	{
-		::Uml::Uml::Namespace ns = gio_i->parent();
+		::Uml::Namespace ns = gio_i->parent();
 
 		if (current_ns != ns)
 		{
@@ -399,7 +399,7 @@ void CheckNamespaceFlips(const InheritenceSolver &is)
 	}
 }
 
-void GenerateHPreamble(const ::Uml::Uml::Diagram &diagram, const string &fname, ostream &output, const string &macro)
+void GenerateHPreamble(const ::Uml::Diagram &diagram, const string &fname, ostream &output, const string &macro)
 {
 	string uhname = "MOBIES_" + fname + "_H";
 
@@ -433,33 +433,33 @@ void GenerateHPostamble(const string &fname, ostream &output)
 }
 
 
-void GenerateHClassConstraints(const ::Uml::Uml::Class &cl, ostream &output)
+void GenerateHClassConstraints(const ::Uml::Class &cl, ostream &output)
 {
 	//constraints
-	set< ::Uml::Uml::Constraint> constraints = cl.constraints();
-	set< ::Uml::Uml::Constraint>::iterator c_i = constraints.begin();
+	set< ::Uml::Constraint> constraints = cl.constraints();
+	set< ::Uml::Constraint>::iterator c_i = constraints.begin();
 	while (c_i != constraints.end())
 	{
-		output << "\t\t\tstatic ::Uml::Uml::Constraint meta_" << c_i->name() <<";" << endl;
+		output << "\t\t\tstatic ::Uml::Constraint meta_" << c_i->name() <<";" << endl;
 		c_i++;
 	}
 
 	//constraint definitions
-	set< ::Uml::Uml::ConstraintDefinition> definitions= cl.definitions();
-	set< ::Uml::Uml::ConstraintDefinition>::iterator d_i = definitions.begin();
+	set< ::Uml::ConstraintDefinition> definitions= cl.definitions();
+	set< ::Uml::ConstraintDefinition>::iterator d_i = definitions.begin();
 	while (d_i != definitions.end())
 	{
-		output << "\t\t\tstatic ::Uml::Uml::ConstraintDefinition meta_" << d_i->name() <<";" << endl;
+		output << "\t\t\tstatic ::Uml::ConstraintDefinition meta_" << d_i->name() <<";" << endl;
 		d_i++;
 	}
 };
-void GenerateHClassBasic(const ::Uml::Uml::Class & cl, const InheritenceSolver& is, ostream & output)
+void GenerateHClassBasic(const ::Uml::Class & cl, const InheritenceSolver& is, ostream & output)
 {
-	string ns_name = ::Uml::Uml::Namespace(cl.parent()).name();
-	string dgr_name = ::Uml::Uml::Diagram(::Uml::Uml::Namespace(cl.parent()).parent()).name();
+	string ns_name = ::Uml::Namespace(cl.parent()).name();
+	string dgr_name = ::Uml::Diagram(::Uml::Namespace(cl.parent()).parent()).name();
 
 	output << "\t\tpublic:" << endl;
-	output << "\t\t\tstatic ::Uml::Uml::Class meta;" << endl << endl;
+	output << "\t\t\tstatic ::Uml::Class meta;" << endl << endl;
 
 	output << "\t\t\t" << cl.name() << "() { }" << endl;
 	output << "\t\t\t" << cl.name() << "(Udm::ObjectImpl *impl) : " << is.getInitializers(cl, "impl");
@@ -470,13 +470,13 @@ void GenerateHClassBasic(const ::Uml::Uml::Class & cl, const InheritenceSolver& 
 
 			
 	output << "\t\t\tstatic " << cl.name() << " Cast(const Udm::Object &a) { return __Cast(a, meta); }" << endl << endl;
-	output << "\t\t\tstatic " << cl.name() << " Create(const Udm::Object &parent, const ::Uml::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE)"
+	output << "\t\t\tstatic " << cl.name() << " Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE)"
 			" { return __Create(meta, parent, role); }" << endl << endl;
 
-	output << "\t\t\t" << cl.name() << " CreateInstance(const Udm::Object &parent, const ::Uml::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE)"
+	output << "\t\t\t" << cl.name() << " CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE)"
 			" { return __Create(meta, parent, role, impl); }" << endl << endl;
 
-	output << "\t\t\t" << cl.name() << " CreateDerived(const Udm::Object &parent, const ::Uml::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE)"
+	output << "\t\t\t" << cl.name() << " CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE)"
 			" { return __Create(meta, parent, role, impl, true); }" << endl << endl;
 
 	output << "\t\t\t" << "Udm::InstantiatedAttr< " << UmlClassCPPName(cl) << "> Instances()"
@@ -498,22 +498,22 @@ void GenerateHClassBasic(const ::Uml::Uml::Class & cl, const InheritenceSolver& 
 
 };
 
-void GenerateHClassAssocEnds(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Class& cross_cl, ostream & output, bool isCrossDgr)
+void GenerateHClassAssocEnds(const ::Uml::Class &cl, const ::Uml::Class& cross_cl, ostream & output, bool isCrossDgr)
 {
-	::Uml::Uml::Namespace ns = (::Uml::Uml::Namespace)cl.parent();
+	::Uml::Namespace ns = (::Uml::Namespace)cl.parent();
 
-	::Uml::Uml::Association assoc = cl.association();
+	::Uml::Association assoc = cl.association();
 	string s = assoc.meta.name();
 	if(assoc) 
 	{
-		set< ::Uml::Uml::AssociationRole> assocs = assoc.roles();
-		for( set< ::Uml::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+		set< ::Uml::AssociationRole> assocs = assoc.roles();
+		for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
 		{
 			string aname(::Uml::MakeRoleName(*i));
-			::Uml::Uml::Class oclass = (::Uml::Uml::Class)(*i).target();
+			::Uml::Class oclass = (::Uml::Class)(*i).target();
 			if(aname.size()) 
 			{
-			      output << "\t\t\tstatic ::Uml::Uml::AssociationRole meta_" << aname << "_end_;" << endl;
+			      output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << "_end_;" << endl;
 				  output << "\t\t\tUdm::AssocEndAttr< " << UmlClassCPPName(oclass) << "> " << aname << 
 					  "_end() const { return Udm::AssocEndAttr< " << UmlClassCPPName(oclass) << ">(impl, meta_" << aname << "_end_); }\n\n";
 			}
@@ -521,19 +521,19 @@ void GenerateHClassAssocEnds(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Clas
 	}
 	if (cross_cl && !isCrossDgr)
 	{
-		::Uml::Uml::Association cross_cl_assoc = cross_cl.association();
+		::Uml::Association cross_cl_assoc = cross_cl.association();
 		string s = cross_cl_assoc.meta.name();
 		if (cross_cl_assoc)
 		{
-			set< ::Uml::Uml::AssociationRole> assocs = cross_cl_assoc.roles();
-			for( set< ::Uml::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+			set< ::Uml::AssociationRole> assocs = cross_cl_assoc.roles();
+			for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
 			{
 				string aname(::Uml::MakeRoleName(*i));
-				string oname(((::Uml::Uml::Class)(*i).target()).name());
+				string oname(((::Uml::Class)(*i).target()).name());
 				//Attention !
 				oname = oname.substr(0, oname.find(Udm::cross_delimiter));
 				//end of dangerous zone 
-				string from_str(((::Uml::Uml::Class)(*i).target()).from());
+				string from_str(((::Uml::Class)(*i).target()).from());
 
 				string from = string("::") + GetDgrfromFromStr(from_str);
 				if (!single_cpp_namespace)
@@ -541,7 +541,7 @@ void GenerateHClassAssocEnds(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Clas
 
 				if(aname.size()) 
 				{
-				      output << "\t\t\tstatic ::Uml::Uml::AssociationRole meta_" << aname << "_end_;" << endl;
+				      output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << "_end_;" << endl;
 				      output << "\t\t\tUdm::CrossAssocEndAttr< " << from << "::" << oname << "> " << aname << 
 					  "_end() const { return Udm::CrossAssocEndAttr< " << from<< "::" << oname << ">(impl, meta_" << aname << "_end_); }\n\n";
 				}
@@ -549,17 +549,17 @@ void GenerateHClassAssocEnds(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Clas
 		}
 	}
 };
-void GenerateHClassParents(const ::Uml::Uml::Class &cl, ostream& output)
+void GenerateHClassParents(const ::Uml::Class &cl, ostream& output)
 {
-	::Uml::Uml::Namespace ns = (::Uml::Uml::Namespace)cl.parent();
+	::Uml::Namespace ns = (::Uml::Namespace)cl.parent();
 
-	set< ::Uml::Uml::CompositionChildRole> children = cl.childRoles();
-	for( set< ::Uml::Uml::CompositionChildRole>::iterator i = children.begin(); i != children.end(); i++) 
+	set< ::Uml::CompositionChildRole> children = cl.childRoles();
+	for( set< ::Uml::CompositionChildRole>::iterator i = children.begin(); i != children.end(); i++) 
 	{
 		string aname(::Uml::MakeRoleName(Uml::theOther(*i)));
-		::Uml::Uml::Class oclass = (::Uml::Uml::Class)Uml::theOther(*i).target();
+		::Uml::Class oclass = (::Uml::Class)Uml::theOther(*i).target();
 
-		output << "\t\t\tstatic ::Uml::Uml::CompositionParentRole meta_" << aname << ";" << endl;
+		output << "\t\t\tstatic ::Uml::CompositionParentRole meta_" << aname << ";" << endl;
 		if(Uml::theOther(*i).isNavigable()) 
 		{
 			output << "\t\t\tUdm::" << "Parent" << "Attr< " << UmlClassCPPName(oclass) << "> " << aname << 
@@ -572,14 +572,14 @@ void GenerateHClassParents(const ::Uml::Uml::Class &cl, ostream& output)
 		}
 	}
 	bool parent_defined = false;
-	set< ::Uml::Uml::CompositionParentRole> parroles = Uml::AncestorCompositionPeerParentRoles(cl);
-	for( set< ::Uml::Uml::CompositionParentRole>::iterator ri = parroles.begin(); ri != parroles.end(); ri++) 
+	set< ::Uml::CompositionParentRole> parroles = Uml::AncestorCompositionPeerParentRoles(cl);
+	for( set< ::Uml::CompositionParentRole>::iterator ri = parroles.begin(); ri != parroles.end(); ri++) 
 	{
 		if(string(ri->name()) == "parent") parent_defined = true;
 	}
 	if(!parent_defined) 
 	{
-		set< ::Uml::Uml::Class> ans = Uml::CommonAncestorClasses(Uml::AncestorContainerClasses(cl));
+		set< ::Uml::Class> ans = Uml::CommonAncestorClasses(Uml::AncestorContainerClasses(cl));
 		if(ans.empty()) 
 		{
 			output << "\t\t\tUdm::ParentAttr<Udm::Object> parent() const " << "{ return Udm::ParentAttr<Udm::Object>(impl, Udm::NULLPARENTROLE); }" << endl;
@@ -588,13 +588,13 @@ void GenerateHClassParents(const ::Uml::Uml::Class &cl, ostream& output)
 		{
 			if (ans.size() == 1)
 			{
-				::Uml::Uml::Class ans_class = (::Uml::Uml::Class)(*ans.begin());
+				::Uml::Class ans_class = (::Uml::Class)(*ans.begin());
 				output << "\t\t\tUdm::ParentAttr< " << UmlClassCPPName(ans_class) << "> parent() const " << 
 					"{ return Udm::ParentAttr< " << UmlClassCPPName(ans_class) << ">(impl, Udm::NULLPARENTROLE); }" << endl;
 			}
 			else
 			{
-				for(set< ::Uml::Uml::Class>::iterator ccc = ans.begin(); ccc != ans.end(); ccc++) 
+				for(set< ::Uml::Class>::iterator ccc = ans.begin(); ccc != ans.end(); ccc++) 
 				{
 					string ccc_name(ccc->name());
 					output << "\t\t\tUdm::ParentAttr< " << UmlClassCPPName(*ccc) << "> " << ccc_name << "_parent() const " << 
@@ -604,21 +604,21 @@ void GenerateHClassParents(const ::Uml::Uml::Class &cl, ostream& output)
 		}
 	}
 };
-void GenerateHClassChildren(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Namespace & ns, ostream & output)
+void GenerateHClassChildren(const ::Uml::Class &cl, const ::Uml::Namespace & ns, ostream & output)
 {
-	string ns_name = ::Uml::Uml::Namespace(cl.parent()).name();
-	string dgr_name = ::Uml::Uml::Diagram(::Uml::Uml::Namespace(cl.parent()).parent()).name();
+	string ns_name = ::Uml::Namespace(cl.parent()).name();
+	string dgr_name = ::Uml::Diagram(::Uml::Namespace(cl.parent()).parent()).name();
 
 
-	set< ::Uml::Uml::Class> childrenkinds; 
-	set< ::Uml::Uml::CompositionParentRole> children = cl.parentRoles();
-	for( set< ::Uml::Uml::CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++) 
+	set< ::Uml::Class> childrenkinds; 
+	set< ::Uml::CompositionParentRole> children = cl.parentRoles();
+	for( set< ::Uml::CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++) 
 	{
-		::Uml::Uml::CompositionParentRole k;
+		::Uml::CompositionParentRole k;
 		string aname(::Uml::MakeRoleName(Uml::theOther(*i)));
-		::Uml::Uml::Class thischildkind = (::Uml::Uml::Class)Uml::theOther(*i).target();
+		::Uml::Class thischildkind = (::Uml::Class)Uml::theOther(*i).target();
 		childrenkinds.insert(thischildkind);
-		output << "\t\t\tstatic ::Uml::Uml::CompositionChildRole meta_" << aname << ";" << endl;
+		output << "\t\t\tstatic ::Uml::CompositionChildRole meta_" << aname << ";" << endl;
 		if(Uml::theOther(*i).isNavigable()) 
 		{
 			if ((int)Uml::theOther(*i).max() == 1 )
@@ -645,10 +645,10 @@ void GenerateHClassChildren(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Names
 	}
 
 
-	set< ::Uml::Uml::Class> allclasses = ns.classes();
-	for(set< ::Uml::Uml::Class>::iterator j = allclasses.begin(); j != allclasses.end(); j++) 
+	set< ::Uml::Class> allclasses = ns.classes();
+	for(set< ::Uml::Class>::iterator j = allclasses.begin(); j != allclasses.end(); j++) 
 	{
-		for(set< ::Uml::Uml::Class>::iterator k = childrenkinds.begin(); k != childrenkinds.end(); k++) 
+		for(set< ::Uml::Class>::iterator k = childrenkinds.begin(); k != childrenkinds.end(); k++) 
 		{
 			if(Uml::IsDerivedFrom(*j, *k) || Uml::IsDerivedFrom(*k, *j)) 
 			{
@@ -674,22 +674,22 @@ void GenerateHClassChildren(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Names
 	}
 };
 
-void GenerateHClassAssociations(const ::Uml::Uml::Class& cl, const ::Uml::Uml::Class& cross_cl, ostream & output, bool isCrossDgr)
+void GenerateHClassAssociations(const ::Uml::Class& cl, const ::Uml::Class& cross_cl, ostream & output, bool isCrossDgr)
 {
-	::Uml::Uml::Namespace ns = (::Uml::Uml::Namespace)cl.parent();
-	string dgr_name = ::Uml::Uml::Diagram(::Uml::Uml::Namespace(cl.parent()).parent()).name();
+	::Uml::Namespace ns = (::Uml::Namespace)cl.parent();
+	string dgr_name = ::Uml::Diagram(::Uml::Namespace(cl.parent()).parent()).name();
 
-	set< ::Uml::Uml::AssociationRole> assocs = cl.associationRoles();
-	for( set< ::Uml::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+	set< ::Uml::AssociationRole> assocs = cl.associationRoles();
+	for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
 	{
-		::Uml::Uml::Association pp = (*i).parent();
-		::Uml::Uml::Class aclass = pp.assocClass();
+		::Uml::Association pp = (*i).parent();
+		::Uml::Class aclass = pp.assocClass();
 
 		string aname(::Uml::MakeRoleName(Uml::theOther(*i)));
-		::Uml::Uml::Class oclass = (::Uml::Uml::Class)Uml::theOther(*i).target();
+		::Uml::Class oclass = (::Uml::Class)Uml::theOther(*i).target();
 		if(!aclass) 
 		{
-			output << "\t\t\tstatic ::Uml::Uml::AssociationRole meta_" << aname << ";" << endl;
+			output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << ";" << endl;
 			if(Uml::theOther(*i).isNavigable()) 
 			{
 				if (Uml::theOther(*i).max() == 1)
@@ -717,7 +717,7 @@ void GenerateHClassAssociations(const ::Uml::Uml::Class& cl, const ::Uml::Uml::C
 		}
 		else 
 		{
-			output << "\t\t\tstatic ::Uml::Uml::AssociationRole meta_" << aname << ", meta_" << aname << "_rev;" << endl;
+			output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << ", meta_" << aname << "_rev;" << endl;
 			if(Uml::theOther(*i).isNavigable()) 
 			{
 				if (Uml::theOther(*i).max() == 1)
@@ -745,25 +745,25 @@ void GenerateHClassAssociations(const ::Uml::Uml::Class& cl, const ::Uml::Uml::C
 	}
 	if (cross_cl && !isCrossDgr)
 	{
-		set< ::Uml::Uml::AssociationRole> assocs = cross_cl.associationRoles();
-		for( set< ::Uml::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+		set< ::Uml::AssociationRole> assocs = cross_cl.associationRoles();
+		for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
 		{
-			::Uml::Uml::Association pp = (*i).parent();
-			::Uml::Uml::Class aclass = pp.assocClass();
+			::Uml::Association pp = (*i).parent();
+			::Uml::Class aclass = pp.assocClass();
 
 			string aname(::Uml::MakeRoleName(Uml::theOther(*i)));
-			string oname(((::Uml::Uml::Class)Uml::theOther(*i).target()).name());
+			string oname(((::Uml::Class)Uml::theOther(*i).target()).name());
 			//Attention !!!
 			oname = oname.substr(0,oname.find(Udm::cross_delimiter));
 			//
-			string from_name(((::Uml::Uml::Class)Uml::theOther(*i).target()).from());
+			string from_name(((::Uml::Class)Uml::theOther(*i).target()).from());
 			string cname = string("::") + GetDgrfromFromStr(from_name);
 			if (!single_cpp_namespace)
 				cname += "::" + GetNsfromFromStr(from_name);
 
 			if(!aclass) 
 			{
-				output << "\t\t\tstatic ::Uml::Uml::AssociationRole meta_" << aname << ";" << endl;
+				output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << ";" << endl;
 				if(Uml::theOther(*i).isNavigable()) 
 				{
                     if (Uml::theOther(*i).max() == 1 )
@@ -800,7 +800,7 @@ void GenerateHClassAssociations(const ::Uml::Uml::Class& cl, const ::Uml::Uml::C
 				if (!single_cpp_namespace)
 					cl_dgr += "::" + GetNsfromFromStr(from_str);
 
-				output << "\t\t\tstatic ::Uml::Uml::AssociationRole meta_" << aname << ", meta_" << aname << "_rev;" << endl;
+				output << "\t\t\tstatic ::Uml::AssociationRole meta_" << aname << ", meta_" << aname << "_rev;" << endl;
 				if(Uml::theOther(*i).isNavigable()) 
 				{
 					if (Uml::theOther(*i).max() == 1)
@@ -827,16 +827,16 @@ void GenerateHClassAssociations(const ::Uml::Uml::Class& cl, const ::Uml::Uml::C
 		};
 	};
 };
-void GenerateHClassAttributes(const ::Uml::Uml::Class& cl, ostream & output)
+void GenerateHClassAttributes(const ::Uml::Class& cl, ostream & output)
 {
 	
-//		static ::Uml::Uml::Attribute meta_d;
+//		static ::Uml::Attribute meta_d;
 //		Udm::RealAttr d() const { return Udm::RealAttr(impl, meta_d); }
-	set< ::Uml::Uml::Attribute> attributes = cl.attributes();
-	for( set< ::Uml::Uml::Attribute>::iterator i = attributes.begin(); i != attributes.end(); i++) 
+	set< ::Uml::Attribute> attributes = cl.attributes();
+	for( set< ::Uml::Attribute>::iterator i = attributes.begin(); i != attributes.end(); i++) 
 	{
-		output << "\t\t\tstatic ::Uml::Uml::Attribute meta_" << (*i).name() << ";" << endl;
-		::Uml::Uml::Attribute k;
+		output << "\t\t\tstatic ::Uml::Attribute meta_" << (*i).name() << ";" << endl;
+		::Uml::Attribute k;
 		string np;
 		if(i->nonpersistent()) np = "Temp";
 		/*
@@ -852,15 +852,15 @@ void GenerateHClassAttributes(const ::Uml::Uml::Class& cl, ostream & output)
 	}
 };
 
-void GenerateHVisitorClassContent(const ::Uml::Uml::Namespace& ns, ostream & output, const string& macro)
+void GenerateHVisitorClassContent(const ::Uml::Namespace& ns, ostream & output, const string& macro)
 {
-	set< ::Uml::Uml::Class> classes = ns.classes();
-	set< ::Uml::Uml::Class>::iterator c;
+	set< ::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class>::iterator c;
 
 	output << endl << "\t\tclass " << macro << " Visitor : public Udm::BaseVisitor " << endl << "\t\t{" << endl << "\t\tpublic:" <<endl;
 	for(c = classes.begin(); c != classes.end(); c++ )
 	{
-		::Uml::Uml::Class cl = *c;
+		::Uml::Class cl = *c;
 		if (!cl.isAbstract())
 			output << "\t\t\tvirtual void Visit_" << (string)cl.name() << "(const " << (string)cl.name() << "&){};" << endl;	
 	}
@@ -870,11 +870,11 @@ void GenerateHVisitorClassContent(const ::Uml::Uml::Namespace& ns, ostream & out
 	output << "\t\t};" << endl;
 };
 
-void GenerateHVisitorClass(const ::Uml::Uml::Namespace& ns, const string &fname, ostream & output, const string& macro, int source_unit)
+void GenerateHVisitorClass(const ::Uml::Namespace& ns, const string &fname, ostream & output, const string& macro, int source_unit)
 {
 	if (source_unit == CPP_SOURCE_UNIT_CLASS)
 	{
-		::Uml::Uml::Diagram diagram = ns.parent();
+		::Uml::Diagram diagram = ns.parent();
 		string visitor_fname = NameToFilename(fname + "_" + (string)ns.name() + "_Visitor");
 
 		ofstream ff;
@@ -899,7 +899,7 @@ void GenerateHVisitorClass(const ::Uml::Uml::Namespace& ns, const string &fname,
 	}
 }
 
-void GenerateHClassContent(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Class &cross_cl, bool isCrossDgr, const InheritenceSolver &is, ostream &output, bool visitor_sup, const string &macro)
+void GenerateHClassContent(const ::Uml::Class &cl, const ::Uml::Class &cross_cl, bool isCrossDgr, const InheritenceSolver &is, ostream &output, bool visitor_sup, const string &macro)
 {
 
 	output << "\t\tclass " << macro << " " << (string)cl.name() << " : " << is.getAncestorList(cl) << " {" << endl;
@@ -918,11 +918,11 @@ void GenerateHClassContent(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Class 
 	output << "\t\t};" << endl;
 }
 
-void GenerateHClass(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Class &cross_cl, bool isCrossDgr, const InheritenceSolver &is, const string &fname, ostream &output, bool visitor_sup, const string &macro, int source_unit)
+void GenerateHClass(const ::Uml::Class &cl, const ::Uml::Class &cross_cl, bool isCrossDgr, const InheritenceSolver &is, const string &fname, ostream &output, bool visitor_sup, const string &macro, int source_unit)
 {
 	if (source_unit == CPP_SOURCE_UNIT_CLASS) {
-		::Uml::Uml::Namespace ns = cl.parent();
-		::Uml::Uml::Diagram diagram = ns.parent();
+		::Uml::Namespace ns = cl.parent();
+		::Uml::Diagram diagram = ns.parent();
 		string cl_fname = NameToFilename(fname + "_" + (string)ns.name() + "_" + (string)cl.name());
 
 		ofstream ff;
@@ -949,19 +949,19 @@ void GenerateHClass(const ::Uml::Uml::Class &cl, const ::Uml::Uml::Class &cross_
 	}
 }
 
-void GenerateHCrossForwardDeclarations(const ::Uml::Uml::Diagram &dgr, ostream &output,  const ::Uml::Uml::Namespace& cross_ns, const string& dgr_name, const string & macro)
+void GenerateHCrossForwardDeclarations(const ::Uml::Diagram &dgr, ostream &output,  const ::Uml::Namespace& cross_ns, const string& dgr_name, const string & macro)
 {
 	if (cross_ns)
 	{
-		set< ::Uml::Uml::Namespace> nses = dgr.namespaces();
+		set< ::Uml::Namespace> nses = dgr.namespaces();
 		
-		set< ::Uml::Uml::Class> cross_classes = cross_ns.classes();
+		set< ::Uml::Class> cross_classes = cross_ns.classes();
 		map<string, UmlClassesByName> cr_cls_nsp;
 
-		for(set< ::Uml::Uml::Class>::iterator i = cross_classes.begin(); i != cross_classes.end(); i++)
+		for(set< ::Uml::Class>::iterator i = cross_classes.begin(); i != cross_classes.end(); i++)
 		{
 			
-			for(set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+			for(set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 			{
 				string from = i->from();
 				string dgr_from = GetDgrfromFromStr(from);
@@ -972,7 +972,7 @@ void GenerateHCrossForwardDeclarations(const ::Uml::Uml::Diagram &dgr, ostream &
 				map<string, UmlClasses> & cr_cls = cr_cls_nsp[dgr_from];
 				UmlClasses & clss = cr_cls[ns_from];
 
-	//			vector< ::Uml::Uml::Class> & clss = cr_cls_nsp[from];
+	//			vector< ::Uml::Class> & clss = cr_cls_nsp[from];
 				clss.insert(*i);
 			};
 		}
@@ -984,8 +984,8 @@ void GenerateHCrossForwardDeclarations(const ::Uml::Uml::Diagram &dgr, ostream &
 			{
 				if (!single_cpp_namespace)
 					output << "\tnamespace " << jj->first << endl << "\t{ " << endl;
-				set< ::Uml::Uml::Class>& clss = jj->second;
-				for(set< ::Uml::Uml::Class>::iterator jjj = clss.begin(); jjj != clss.end(); jjj++)
+				set< ::Uml::Class>& clss = jj->second;
+				for(set< ::Uml::Class>::iterator jjj = clss.begin(); jjj != clss.end(); jjj++)
 				{
 					string class_name = jjj->name();
 					//Attention - dangerous zone
@@ -1001,7 +1001,7 @@ void GenerateHCrossForwardDeclarations(const ::Uml::Uml::Diagram &dgr, ostream &
 	};
 };
 
-void GenerateHExport(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname,  const string& macro)
+void GenerateHExport(const ::Uml::Diagram &diagram, ostream &output, string fname,  const string& macro)
 {
 	string hname = diagram.name();
 	string::iterator i;
@@ -1030,29 +1030,29 @@ void GenerateHExport(const ::Uml::Uml::Diagram &diagram, ostream &output, string
 	output << "#endif /* " << uhname << " */ " << endl;
 };
 
-void GenerateHForwardDeclarations(const ::Uml::Uml::Namespace& ns, ostream & output, const string &fname, bool visitor_sup, const string& macro, int source_unit)
+void GenerateHForwardDeclarations(const ::Uml::Namespace& ns, ostream & output, const string &fname, bool visitor_sup, const string& macro, int source_unit)
 {
 
 	if (!single_cpp_namespace)
 		output << "\tnamespace " << ns.name() << " {" << endl;
 
-	set< ::Uml::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class> classes = ns.classes();
 
 	if (classes.size()) 
 	{
 
-		set< ::Uml::Uml::Class>::iterator c;
+		set< ::Uml::Class>::iterator c;
 
 		for(c = classes.begin(); c != classes.end(); c++ )
 		{
-			::Uml::Uml::Class cl = *c;
+			::Uml::Class cl = *c;
 			output << "\t\tclass " << macro <<" "<< (string)cl.name() << ";" << endl;	
 		}
 	}
 
 	output << endl;
 
-	output << "\t\t" << macro << " extern ::Uml::Uml::Namespace meta;" << endl;
+	output << "\t\t" << macro << " extern ::Uml::Namespace meta;" << endl;
 
 	if (visitor_sup)
 	{
@@ -1061,8 +1061,8 @@ void GenerateHForwardDeclarations(const ::Uml::Uml::Namespace& ns, ostream & out
 	output << endl;
 
 	output << "\t\t" << macro << " void InitializeNS();" << endl;
-	output << "\t\t" << macro << " void InitializeNS(const ::Uml::Uml::Diagram &dgr);" << endl;
-	output << "\t\t" << macro << " void InitializeNS(const ::Uml::Uml::Namespace &ns);" << endl;
+	output << "\t\t" << macro << " void InitializeNS(const ::Uml::Diagram &dgr);" << endl;
+	output << "\t\t" << macro << " void InitializeNS(const ::Uml::Namespace &ns);" << endl;
 	output << "\t\t" << macro << " void InitCrossNSInheritence();" << endl;
 	output << "\t\t" << macro << " void InitCrossNSCompositions();" << endl;
 	output << endl;
@@ -1072,18 +1072,18 @@ void GenerateHForwardDeclarations(const ::Uml::Uml::Namespace& ns, ostream & out
 
 }
 
-void GenerateHIncludeNamespaceFwdDeclarations(const ::Uml::Uml::Diagram &diagram, ostream &output, const string &fname)
+void GenerateHIncludeNamespaceFwdDeclarations(const ::Uml::Diagram &diagram, ostream &output, const string &fname)
 {
-	set< ::Uml::Uml::Namespace> ns_set = diagram.namespaces();
+	set< ::Uml::Namespace> ns_set = diagram.namespaces();
 
-	for(set< ::Uml::Uml::Namespace>::const_iterator i = ns_set.begin(); i != ns_set.end(); i++)
+	for(set< ::Uml::Namespace>::const_iterator i = ns_set.begin(); i != ns_set.end(); i++)
 	{
 		string ns_fname = NameToFilename(fname + "_" + (string)i->name());
 		output << "#include \"" << ns_fname << "__fwd.h\"" << endl;
 	}
 }
 
-void GenerateHNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagram &cross_dgr, const InheritenceSolver &is, const string &fname, ostream &output, bool visitor_sup, const string &macro, int source_unit)
+void GenerateHNamespace(const ::Uml::Namespace &ns, const ::Uml::Diagram &cross_dgr, const InheritenceSolver &is, const string &fname, ostream &output, bool visitor_sup, const string &macro, int source_unit)
 {
 	if (source_unit != CPP_SOURCE_UNIT_DIAGRAM) {
 		string ns_fname = NameToFilename(fname + "_" + (string)ns.name());
@@ -1099,7 +1099,7 @@ void GenerateHNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagr
 
 			GenerateHPreamble(ns.parent(), ns_fname, ff, macro);
 
-			ff << "namespace " << NameToFilename(((::Uml::Uml::Diagram)ns.parent()).name()) << " {" << endl;
+			ff << "namespace " << NameToFilename(((::Uml::Diagram)ns.parent()).name()) << " {" << endl;
 			GenerateHForwardDeclarations(ns, ff, fname, visitor_sup, macro, source_unit);
 			ff << "}" << endl;
 			GenerateHPostamble(ns_fname, ff);
@@ -1112,7 +1112,7 @@ void GenerateHNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagr
 
 		GenerateHPreamble(ns.parent(), ns_fname, ff, macro);
 
-		ff << "namespace " << NameToFilename(((::Uml::Uml::Diagram)ns.parent()).name()) << " {" << endl;
+		ff << "namespace " << NameToFilename(((::Uml::Diagram)ns.parent()).name()) << " {" << endl;
 
 		if (source_unit == CPP_SOURCE_UNIT_CLASS)
 		{
@@ -1122,11 +1122,11 @@ void GenerateHNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagr
 			if (!single_cpp_namespace)
 				ff << "\tnamespace " << ns.name() << " {" << endl;
 
-		::Uml::Uml::Diagram diagram = ns.parent();
-		for(vector< ::Uml::Uml::Class>::const_iterator gio_i = is.good_inheritence_order.begin(); gio_i != is.good_inheritence_order.end(); gio_i++)
+		::Uml::Diagram diagram = ns.parent();
+		for(vector< ::Uml::Class>::const_iterator gio_i = is.good_inheritence_order.begin(); gio_i != is.good_inheritence_order.end(); gio_i++)
 		{
-			::Uml::Uml::Class cl, cross_cl;
-			::Uml::Uml::Namespace ns_cl;
+			::Uml::Class cl, cross_cl;
+			::Uml::Namespace ns_cl;
 			
 			cl = *gio_i;
 			ns_cl = cl.parent();
@@ -1154,24 +1154,24 @@ void GenerateHNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagr
 	}
 }
 
-void GenerateHIncludeClasses(const ::Uml::Uml::Diagram &diagram, const InheritenceSolver &is, ostream &output, const string &fname, bool visitor_sup)
+void GenerateHIncludeClasses(const ::Uml::Diagram &diagram, const InheritenceSolver &is, ostream &output, const string &fname, bool visitor_sup)
 {
 	// include visitor class headers
 	if (visitor_sup)
 	{
-		set< ::Uml::Uml::Namespace> ns_set = diagram.namespaces();
+		set< ::Uml::Namespace> ns_set = diagram.namespaces();
 
-		for (set< ::Uml::Uml::Namespace>::const_iterator ns_set_i = ns_set.begin(); ns_set_i != ns_set.end(); ns_set_i++)
+		for (set< ::Uml::Namespace>::const_iterator ns_set_i = ns_set.begin(); ns_set_i != ns_set.end(); ns_set_i++)
 			output << "#include \"" << NameToFilename(fname + "_" + (string)ns_set_i->name() + "_Visitor") << ".h\"" << endl;
 
 		output << endl;
 	}
 
 	// include class headers
-	for (vector< ::Uml::Uml::Class>::const_iterator gio_i = is.good_inheritence_order.begin(); gio_i != is.good_inheritence_order.end(); gio_i++)
+	for (vector< ::Uml::Class>::const_iterator gio_i = is.good_inheritence_order.begin(); gio_i != is.good_inheritence_order.end(); gio_i++)
 	{
-		::Uml::Uml::Class cl = *gio_i;
-		::Uml::Uml::Namespace ns = cl.parent();
+		::Uml::Class cl = *gio_i;
+		::Uml::Namespace ns = cl.parent();
 		string cl_fname = NameToFilename(fname + "_" + (string)ns.name() + "_" + (string)cl.name());
 		output << "#include \"" << cl_fname << ".h\"" << endl;
 
@@ -1179,9 +1179,9 @@ void GenerateHIncludeClasses(const ::Uml::Uml::Diagram &diagram, const Inheriten
 	output << endl;
 }
 
-void GenerateH(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname, bool visitor_sup, const ::Uml::Uml::Diagram& cross_dgr, const string& macro, int source_unit)	
+void GenerateH(const ::Uml::Diagram &diagram, ostream &output, string fname, bool visitor_sup, const ::Uml::Diagram& cross_dgr, const string& macro, int source_unit)	
 {
-		set< ::Uml::Uml::Namespace> ns_set = diagram.namespaces();
+		set< ::Uml::Namespace> ns_set = diagram.namespaces();
 		InheritenceSolver is(diagram);
 
 		if (source_unit == CPP_SOURCE_UNIT_NAMESPACE)
@@ -1200,10 +1200,10 @@ void GenerateH(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname
 			if (source_unit == CPP_SOURCE_UNIT_NAMESPACE)
 				GenerateHIncludeNamespaceFwdDeclarations(diagram, output, fname);
 
-			::Uml::Uml::Namespace current_ns;
-			for(vector< ::Uml::Uml::Class>::const_iterator gio_i = is.good_inheritence_order.begin(); gio_i != is.good_inheritence_order.end(); gio_i++)
+			::Uml::Namespace current_ns;
+			for(vector< ::Uml::Class>::const_iterator gio_i = is.good_inheritence_order.begin(); gio_i != is.good_inheritence_order.end(); gio_i++)
 			{
-				::Uml::Uml::Namespace ns = gio_i->parent();
+				::Uml::Namespace ns = gio_i->parent();
 				if (current_ns != ns)
 				{
 					GenerateHNamespace(ns, cross_dgr, is, fname, output, visitor_sup, macro, source_unit);
@@ -1222,24 +1222,24 @@ void GenerateH(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname
 		output << "namespace " << hname << " {" << endl;
 		output << "\textern " << macro << " Udm::UdmDiagram diagram;" << endl;
 
-		output << "\t" << macro << " void Initialize(const ::Uml::Uml::Diagram &dgr);" << endl;
+		output << "\t" << macro << " void Initialize(const ::Uml::Diagram &dgr);" << endl;
 		output << "\t" << macro << " void Initialize();" << endl << endl;
 
 
 		if (source_unit == CPP_SOURCE_UNIT_DIAGRAM)
 		{
 			// forward declarations
-			for (set< ::Uml::Uml::Namespace>::iterator ns_set_i = ns_set.begin(); ns_set_i != ns_set.end(); ns_set_i++)
+			for (set< ::Uml::Namespace>::iterator ns_set_i = ns_set.begin(); ns_set_i != ns_set.end(); ns_set_i++)
 			{
 				GenerateHForwardDeclarations(*ns_set_i, output, fname, visitor_sup, macro, source_unit);
 			}
 
-			::Uml::Uml::Namespace current_ns;
+			::Uml::Namespace current_ns;
 
-			for(vector< ::Uml::Uml::Class>::const_iterator gio_i = is.good_inheritence_order.begin();gio_i != is.good_inheritence_order.end(); gio_i++)
+			for(vector< ::Uml::Class>::const_iterator gio_i = is.good_inheritence_order.begin();gio_i != is.good_inheritence_order.end(); gio_i++)
 			{
-				::Uml::Uml::Class cl, cross_cl;
-				::Uml::Uml::Namespace ns;
+				::Uml::Class cl, cross_cl;
+				::Uml::Namespace ns;
 			
 				cl = *gio_i;
 				ns = cl.parent();
@@ -1259,7 +1259,7 @@ void GenerateH(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname
 
 				if (cross_dgr)
 				{
-					//--//cross_cl = ::Uml::Uml::ClassByName(cross_dgr, cl.name());
+					//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
 					cross_cl = ::Uml::classByName(::Uml::GetTheOnlyNamespace(cross_dgr), ((string)(cl.name()) + string(Udm::cross_delimiter) + (string)ns.name()) );
 				}
 
@@ -1277,7 +1277,7 @@ void GenerateH(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname
 		GenerateHPostamble(fname, output);
 }
 
-void GenerateHH(const ::Uml::Uml::Diagram &dgr, const std::string &fname, const bool visitor_sup, const ::Uml::Uml::Diagram &cross_dgr, const std::string &macro, int source_unit)
+void GenerateHH(const ::Uml::Diagram &dgr, const std::string &fname, const bool visitor_sup, const ::Uml::Diagram &cross_dgr, const std::string &macro, int source_unit)
 {
 	ofstream ff;
 

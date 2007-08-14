@@ -34,13 +34,13 @@ CHANGELOG:
 #include "Udm.h"
 
 using namespace Uml;
-typedef vector< ::Uml::Uml::Class> UmlClasses;
+typedef vector< ::Uml::Class> UmlClasses;
 typedef pair<set<int>, set<int> > UmlCompositionInitFuncInfo;
 
-string UmlClassCPPName(const ::Uml::Uml::Class &cl)
+string UmlClassCPPName(const ::Uml::Class &cl)
 {
-	::Uml::Uml::Namespace cl_ns = (::Uml::Uml::Namespace)cl.parent();
-	::Uml::Uml::Diagram diagr = (::Uml::Uml::Diagram)cl_ns.parent();
+	::Uml::Namespace cl_ns = (::Uml::Namespace)cl.parent();
+	::Uml::Diagram diagr = (::Uml::Diagram)cl_ns.parent();
 	if (single_cpp_namespace)
 		return "::" + (string)diagr.name() + "::" + (string)cl.name();
 	else
@@ -50,56 +50,56 @@ string UmlClassCPPName(const ::Uml::Uml::Class &cl)
 /*
 	Declarations in the namespace
 */
-void GenerateCPPDeclareMetaClasses(const ::Uml::Uml::Namespace & ns, ostream & output)
+void GenerateCPPDeclareMetaClasses(const ::Uml::Namespace & ns, ostream & output)
 {
-	//::Uml::Uml::Class A::meta;
-	set< ::Uml::Uml::Class> classes = ns.classes();
-	set< ::Uml::Uml::Class>::iterator c;
+	//::Uml::Class A::meta;
+	set< ::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class>::iterator c;
 	for(c = classes.begin(); c != classes.end(); c++ )
 	{
-		::Uml::Uml::Class cl = *c;
-		output << "\t\t::Uml::Uml::Class " << cl.name() << "::meta;" << endl;
+		::Uml::Class cl = *c;
+		output << "\t\t::Uml::Class " << cl.name() << "::meta;" << endl;
 	}
 };
-void GenerateCPPDeclareAttributes(const ::Uml::Uml::Namespace & ns, ostream & output)
+void GenerateCPPDeclareAttributes(const ::Uml::Namespace & ns, ostream & output)
 {
-	set< ::Uml::Uml::Class> classes = ns.classes();
-	set< ::Uml::Uml::Class>::iterator c;
-	//	::Uml::::Uml::Uml::Attribute A::meta_a;
+	set< ::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class>::iterator c;
+	//	::Uml::::Uml::Attribute A::meta_a;
 	for(c = classes.begin(); c != classes.end(); c++ )	
 	{
-		::Uml::Uml::Class cl = *c;
-		//::Uml::Uml::Class tempcl(::Uml::Uml::ClassByName(tempdiagram, cl.name()));
-		set< ::Uml::Uml::Attribute> attributes = cl.attributes();
-		for( set< ::Uml::Uml::Attribute>::iterator i = attributes.begin(); i != attributes.end(); i++) 
+		::Uml::Class cl = *c;
+		//::Uml::Class tempcl(::Uml::ClassByName(tempdiagram, cl.name()));
+		set< ::Uml::Attribute> attributes = cl.attributes();
+		for( set< ::Uml::Attribute>::iterator i = attributes.begin(); i != attributes.end(); i++) 
 		{
-			output << "\t\t::Uml::Uml::Attribute " << cl.name() << "::meta_" << (*i).name() << ";" << endl;
+			output << "\t\t::Uml::Attribute " << cl.name() << "::meta_" << (*i).name() << ";" << endl;
 		}
 	}
 };
-void GenerateCPPDeclareAssociationRoles(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagram &cross_dgr, ostream & output, bool isCrossDgr)
+void GenerateCPPDeclareAssociationRoles(const ::Uml::Namespace &ns, const ::Uml::Diagram &cross_dgr, ostream & output, bool isCrossDgr)
 {
 //declarations for associationroles
-	//	::Uml::Uml::AssociationRole A::meta_dst;
-	set< ::Uml::Uml::Class> classes = ns.classes();
-	set< ::Uml::Uml::Class>::iterator c;
+	//	::Uml::AssociationRole A::meta_dst;
+	set< ::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class>::iterator c;
 	for(c = classes.begin(); c != classes.end(); c++ ) 
 	{
-		::Uml::Uml::Class cl = *c;
+		::Uml::Class cl = *c;
 	
-		set< ::Uml::Uml::AssociationRole> assocs = cl.associationRoles();
-		for( set< ::Uml::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+		set< ::Uml::AssociationRole> assocs = cl.associationRoles();
+		for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
 		{
-			::Uml::Uml::Association pp = (*i).parent();
-			::Uml::Uml::Class aclass = pp.assocClass();
+			::Uml::Association pp = (*i).parent();
+			::Uml::Class aclass = pp.assocClass();
 			string aname(MakeRoleName(::Uml::theOther(*i)));
 			if(!aclass) 
 			{
-				output << "\t\t::Uml::Uml::AssociationRole " << cl.name() << "::meta_" << aname << ";" << endl;
+				output << "\t\t::Uml::AssociationRole " << cl.name() << "::meta_" << aname << ";" << endl;
 			}
 			else 
 			{
-				output << "\t\t::Uml::Uml::AssociationRole " << cl.name() << "::meta_" << aname << ", " << cl.name() << "::meta_" << aname << "_rev;" << endl;
+				output << "\t\t::Uml::AssociationRole " << cl.name() << "::meta_" << aname << ", " << cl.name() << "::meta_" << aname << "_rev;" << endl;
 			}
 		}
 
@@ -109,61 +109,61 @@ void GenerateCPPDeclareAssociationRoles(const ::Uml::Uml::Namespace &ns, const :
 		//if (cross_dgr &&(cross_dgr != dgr) )
 		if (isCrossDgr)
 		{
-			//--//::Uml::Uml::Class cross_cl = ::Uml::Uml::ClassByName(cross_dgr, cl.name());
+			//--//::Uml::Class cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
 			string cross_cl_name = string(cl.name()) + string(Udm::cross_delimiter) + string(ns.name());
 
-			::Uml::Uml::Class cross_cl = ::Uml::classByName(::Uml::GetTheOnlyNamespace(cross_dgr), cross_cl_name );
+			::Uml::Class cross_cl = ::Uml::classByName(::Uml::GetTheOnlyNamespace(cross_dgr), cross_cl_name );
 			if(cross_cl)
 			{
-				set< ::Uml::Uml::AssociationRole> assocs = cross_cl.associationRoles();
-				for( set< ::Uml::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+				set< ::Uml::AssociationRole> assocs = cross_cl.associationRoles();
+				for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
 				{
-					::Uml::Uml::Association pp = (*i).parent();
-					::Uml::Uml::Class aclass = pp.assocClass();
+					::Uml::Association pp = (*i).parent();
+					::Uml::Class aclass = pp.assocClass();
 					string aname(MakeRoleName(::Uml::theOther(*i)));
 					if(!aclass) 
 					{
-						output << "\t\t::Uml::Uml::AssociationRole " << cl.name() << "::meta_" << aname << ";" << endl;
+						output << "\t\t::Uml::AssociationRole " << cl.name() << "::meta_" << aname << ";" << endl;
 					}
 					else 
 					{
-						output << "\t\t::Uml::Uml::AssociationRole " << cl.name() << "::meta_" << aname << ", " << cl.name() << "::meta_" << aname << "_rev;" << endl;
+						output << "\t\t::Uml::AssociationRole " << cl.name() << "::meta_" << aname << ", " << cl.name() << "::meta_" << aname << "_rev;" << endl;
 					}
 				}
 			};
 		};
-		::Uml::Uml::Association assoc = cl.association();
+		::Uml::Association assoc = cl.association();
 		string s = assoc.meta.name();
 		if(assoc) 
 		{
-			set< ::Uml::Uml::AssociationRole> assocs = assoc.roles();
-			for( set< ::Uml::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+			set< ::Uml::AssociationRole> assocs = assoc.roles();
+			for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
 			{
 				string aname(MakeRoleName(*i));
 				if(aname.size()) 
 				{
-				  output << "\t\t::Uml::Uml::AssociationRole " << cl.name() << "::meta_" << aname << "_end_;" << endl;
+				  output << "\t\t::Uml::AssociationRole " << cl.name() << "::meta_" << aname << "_end_;" << endl;
 				}
 			}
 		};
 		if (isCrossDgr)
 		//if (cross_dgr &&(cross_dgr != dgr) )
 		{
-			//--//::Uml::Uml::Class cross_cl = ::Uml::Uml::ClassByName(cross_dgr, cl.name());
-			::Uml::Uml::Class cross_cl = ::Uml::classByName(::Uml::GetTheOnlyNamespace(cross_dgr), (string(cl.name()) + string(Udm::cross_delimiter) + string(ns.name())) );
+			//--//::Uml::Class cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
+			::Uml::Class cross_cl = ::Uml::classByName(::Uml::GetTheOnlyNamespace(cross_dgr), (string(cl.name()) + string(Udm::cross_delimiter) + string(ns.name())) );
 			if(cross_cl)
 			{
-				::Uml::Uml::Association assoc = cross_cl.association();
+				::Uml::Association assoc = cross_cl.association();
 				string s = assoc.meta.name();
 				if(assoc) 
 				{
-					set< ::Uml::Uml::AssociationRole> assocs = assoc.roles();
-					for( set< ::Uml::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+					set< ::Uml::AssociationRole> assocs = assoc.roles();
+					for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
 					{
 						string aname(MakeRoleName(*i));
 						if(aname.size()) 
 						{
-							output << "\t\t::Uml::Uml::AssociationRole " << cl.name() << "::meta_" << aname << "_end_;" << endl;
+							output << "\t\t::Uml::AssociationRole " << cl.name() << "::meta_" << aname << "_end_;" << endl;
 						}
 					}
 				}
@@ -171,53 +171,53 @@ void GenerateCPPDeclareAssociationRoles(const ::Uml::Uml::Namespace &ns, const :
 		};
 	};//end for cycle for declaration for associationRoles
 };
-void GenerateCPPDeclareCompositionRoles(const ::Uml::Uml::Namespace &ns, ostream& output)
+void GenerateCPPDeclareCompositionRoles(const ::Uml::Namespace &ns, ostream& output)
 {
-	set< ::Uml::Uml::Class> classes = ns.classes();
-	set< ::Uml::Uml::Class>::iterator c;
+	set< ::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class>::iterator c;
 	
-//	::Uml::Uml::CompositionParentRole A::meta_parent;
+//	::Uml::CompositionParentRole A::meta_parent;
 	for(c = classes.begin(); c != classes.end(); c++ ) 
 	{
-		::Uml::Uml::Class cl = *c;
-		set< ::Uml::Uml::CompositionChildRole> children = cl.childRoles();
-		for( set< ::Uml::Uml::CompositionChildRole>::iterator i = children.begin(); i != children.end(); i++) {
+		::Uml::Class cl = *c;
+		set< ::Uml::CompositionChildRole> children = cl.childRoles();
+		for( set< ::Uml::CompositionChildRole>::iterator i = children.begin(); i != children.end(); i++) {
 			string aname(MakeRoleName(::Uml::theOther(*i)));
-			output << "\t\t::Uml::Uml::CompositionParentRole " << cl.name() << "::meta_" << aname << ";" << endl;
+			output << "\t\t::Uml::CompositionParentRole " << cl.name() << "::meta_" << aname << ";" << endl;
 		}
 	}
-//	::Uml::Uml::CompositionChildRole D::meta_as;
+//	::Uml::CompositionChildRole D::meta_as;
 	for(c = classes.begin(); c != classes.end(); c++ ) 
 	{
-		::Uml::Uml::Class cl = *c;
-		set< ::Uml::Uml::CompositionParentRole> children = cl.parentRoles();
-		for( set< ::Uml::Uml::CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++) {
+		::Uml::Class cl = *c;
+		set< ::Uml::CompositionParentRole> children = cl.parentRoles();
+		for( set< ::Uml::CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++) {
 			string aname(MakeRoleName(::Uml::theOther(*i)));
-			output << "\t\t::Uml::Uml::CompositionChildRole " << cl.name() << "::meta_" << aname << ";" << endl;
+			output << "\t\t::Uml::CompositionChildRole " << cl.name() << "::meta_" << aname << ";" << endl;
 		}
 	}
 };
-void GenerateCPPDeclareConstraints(const ::Uml::Uml::Namespace &ns, ostream & output)
+void GenerateCPPDeclareConstraints(const ::Uml::Namespace &ns, ostream & output)
 {
-	set< ::Uml::Uml::Class> classes = ns.classes();
-	set< ::Uml::Uml::Class>::iterator c;
+	set< ::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class>::iterator c;
 	
-//  ::Uml::Uml::Constraint D::meta_constraint
+//  ::Uml::Constraint D::meta_constraint
 	for(c = classes.begin(); c != classes.end(); c++ ) 
 	{
-		::Uml::Uml::Class cl = *c;
-		set< ::Uml::Uml::Constraint> constraints = cl.constraints();
-		for( set< ::Uml::Uml::Constraint>::iterator i = constraints.begin(); i != constraints.end(); i++) 
-			output << "\t\t::Uml::Uml::Constraint " << cl.name() << "::meta_" << i->name() << ";" << endl;
+		::Uml::Class cl = *c;
+		set< ::Uml::Constraint> constraints = cl.constraints();
+		for( set< ::Uml::Constraint>::iterator i = constraints.begin(); i != constraints.end(); i++) 
+			output << "\t\t::Uml::Constraint " << cl.name() << "::meta_" << i->name() << ";" << endl;
 	}
 
-//	::Uml::Uml::ConstraintDefinition D::meta_constraint_definition
+//	::Uml::ConstraintDefinition D::meta_constraint_definition
 	for(c = classes.begin(); c != classes.end(); c++ ) 
 	{
-		::Uml::Uml::Class cl = *c;
-		set< ::Uml::Uml::ConstraintDefinition> definitions = cl.definitions();
-		for( set< ::Uml::Uml::ConstraintDefinition>::iterator i = definitions.begin(); i != definitions.end(); i++) 
-			output << "\t\t::Uml::Uml::ConstraintDefinition " << cl.name() << "::meta_" << i->name() << ";" << endl;
+		::Uml::Class cl = *c;
+		set< ::Uml::ConstraintDefinition> definitions = cl.definitions();
+		for( set< ::Uml::ConstraintDefinition>::iterator i = definitions.begin(); i != definitions.end(); i++) 
+			output << "\t\t::Uml::ConstraintDefinition " << cl.name() << "::meta_" << i->name() << ";" << endl;
 	}
 };
 
@@ -225,10 +225,10 @@ void GenerateCPPDeclareConstraints(const ::Uml::Uml::Namespace &ns, ostream & ou
 
 	Generators of functions, outside Initialize()
 */
-void GenerateCPPCreatesFunction(const ::Uml::Uml::Namespace &ns, ostream & output)
+void GenerateCPPCreatesFunction(const ::Uml::Namespace &ns, ostream & output)
 {
-	set< ::Uml::Uml::Class> classes = ns.classes();
-	set< ::Uml::Uml::Class>::iterator c;
+	set< ::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class>::iterator c;
 	
 //void Create()
 // {
@@ -238,48 +238,48 @@ void GenerateCPPCreatesFunction(const ::Uml::Uml::Namespace &ns, ostream & outpu
 //	A::meta = Uml::CreateClass();
 	for(c = classes.begin(); c != classes.end(); c++ )
 	{
-		::Uml::Uml::Class cl = *c;
-		output << "\t\t\t" << cl.name() << "::meta = ::Uml::Uml::Class::Create(meta);" << endl;
+		::Uml::Class cl = *c;
+		output << "\t\t\t" << cl.name() << "::meta = ::Uml::Class::Create(meta);" << endl;
 	}
 
 //	A::meta_a = Uml::CreateAttribute();
 	for(c = classes.begin(); c != classes.end(); c++ )	
 	{
-		::Uml::Uml::Class cl = *c;
+		::Uml::Class cl = *c;
 		
-		set< ::Uml::Uml::Attribute> attributes = cl.attributes();
-		for( set< ::Uml::Uml::Attribute>::iterator i = attributes.begin(); i != attributes.end(); i++) 
+		set< ::Uml::Attribute> attributes = cl.attributes();
+		for( set< ::Uml::Attribute>::iterator i = attributes.begin(); i != attributes.end(); i++) 
 		{
-			output << "\t\t\t" << cl.name() << "::meta_" << (*i).name() << " = ::Uml::Uml::Attribute::Create(" << cl.name()<<"::meta);" << endl;
+			output << "\t\t\t" << cl.name() << "::meta_" << (*i).name() << " = ::Uml::Attribute::Create(" << cl.name()<<"::meta);" << endl;
 		}
 
 			//constraints
-		set< ::Uml::Uml::Constraint> constraints = cl.constraints();
-		for (set< ::Uml::Uml::Constraint>::iterator j = constraints.begin(); j != constraints.end(); j++)
+		set< ::Uml::Constraint> constraints = cl.constraints();
+		for (set< ::Uml::Constraint>::iterator j = constraints.begin(); j != constraints.end(); j++)
 		{
-			output << "\t\t\t" << cl.name() << "::meta_" << j->name() << " = ::Uml::Uml::Constraint::Create(" << cl.name() << "::meta);" << endl;
+			output << "\t\t\t" << cl.name() << "::meta_" << j->name() << " = ::Uml::Constraint::Create(" << cl.name() << "::meta);" << endl;
 		}
 
 			//constraintdefinitions
-		set< ::Uml::Uml::ConstraintDefinition> definitions = cl.definitions();
-		for (set< ::Uml::Uml::ConstraintDefinition>::iterator k = definitions.begin(); k != definitions.end(); k++)
+		set< ::Uml::ConstraintDefinition> definitions = cl.definitions();
+		for (set< ::Uml::ConstraintDefinition>::iterator k = definitions.begin(); k != definitions.end(); k++)
 		{
-			output << "\t\t\t" << cl.name() << "::meta_" << k->name() << " = ::Uml::Uml::ConstraintDefinition::Create(" << cl.name() << "::meta);" << endl;
+			output << "\t\t\t" << cl.name() << "::meta_" << k->name() << " = ::Uml::ConstraintDefinition::Create(" << cl.name() << "::meta);" << endl;
 		}
 	}
 	output << "\t\t}" << endl;
 };
 
-void GenerateCPPInitClassesAttributes(const ::Uml::Uml::Namespace & ns, const ::Uml::Uml::Diagram & cross_dgr, ostream & output, bool isCrossDgr)
+void GenerateCPPInitClassesAttributes(const ::Uml::Namespace & ns, const ::Uml::Diagram & cross_dgr, ostream & output, bool isCrossDgr)
 {
 	//void InitAttributes()
 // {
 	output << "\t\tvoid InitClassesAttributes()" << endl << "\t\t{" << endl;
-	set< ::Uml::Uml::Class> classes = ns.classes();
-	set< ::Uml::Uml::Class>::iterator c;
+	set< ::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class>::iterator c;
 	for(c = classes.begin(); c != classes.end(); c++ )
 	{
-		::Uml::Uml::Class cl = *c;
+		::Uml::Class cl = *c;
 		string ster;
 		if(((string)cl.stereotype()).length()) ster = string(", \"")+(string)cl.stereotype()+"\"";
 		output << "\t\t\t" << cl.name() << "::meta.name() = \"" << cl.name() << "\";" <<endl;
@@ -298,9 +298,9 @@ void GenerateCPPInitClassesAttributes(const ::Uml::Uml::Namespace & ns, const ::
 //		Uml::InitAttribute(A::meta_a, A::meta, "a", "String");
 	for(c = classes.begin(); c != classes.end(); c++ )	
 	{
-		::Uml::Uml::Class cl = *c;
-		set< ::Uml::Uml::Attribute> attributes = cl.attributes();
-		for( set< ::Uml::Uml::Attribute>::iterator i = attributes.begin(); i != attributes.end(); i++) 
+		::Uml::Class cl = *c;
+		set< ::Uml::Attribute> attributes = cl.attributes();
+		for( set< ::Uml::Attribute>::iterator i = attributes.begin(); i != attributes.end(); i++) 
 		{
 			if (i->defvalue())
 			{
@@ -326,16 +326,16 @@ void GenerateCPPInitClassesAttributes(const ::Uml::Uml::Namespace & ns, const ::
 				output << "\t\t\t" << cl.name() << "::meta_" << (*i).name() << ".defvalue() = vector<string>();" << endl;
 		}
 
-		set< ::Uml::Uml::Constraint> constraints= cl.constraints();
-		for( set< ::Uml::Uml::Constraint>::iterator j = constraints.begin(); j != constraints.end(); j++) 
+		set< ::Uml::Constraint> constraints= cl.constraints();
+		for( set< ::Uml::Constraint>::iterator j = constraints.begin(); j != constraints.end(); j++) 
 		{
 			output << "\t\t\t" << cl.name() << "::meta_" << j->name() << ".name() = \"" << j->name() << "\";" << endl;
 			output << "\t\t\t" << cl.name() << "::meta_" << j->name() << ".description() = \"" << j->description() << "\";" << endl;
 			output << "\t\t\t" << cl.name() << "::meta_" << j->name() << ".expression() = \"" << j->expression() << "\";" << endl;
 		}
 
-		set< ::Uml::Uml::ConstraintDefinition> defs = cl.definitions();
-		for( set< ::Uml::Uml::ConstraintDefinition>::iterator k = defs.begin(); k != defs.end(); k++) 
+		set< ::Uml::ConstraintDefinition> defs = cl.definitions();
+		for( set< ::Uml::ConstraintDefinition>::iterator k = defs.begin(); k != defs.end(); k++) 
 		{
 			output << "\t\t\t" << cl.name() << "::meta_" << k->name() << ".name() = \"" << k->name() << "\";" << endl;
 			output << "\t\t\t" << cl.name() << "::meta_" << k->name() << ".stereotype() = \"" << k->stereotype() << "\";" << endl;
@@ -348,25 +348,25 @@ void GenerateCPPInitClassesAttributes(const ::Uml::Uml::Namespace & ns, const ::
 		if (isCrossDgr)
 		//if (cross_dgr &&(cross_dgr != diagram))
 		{
-			::Uml::Uml::Class cross_cl;
-			::Uml::Uml::Association ass;
+			::Uml::Class cross_cl;
+			::Uml::Association ass;
 			if (cross_dgr)
 			{
-				//--//cross_cl = ::Uml::Uml::ClassByName(cross_dgr, cl.name());
+				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
 				cross_cl = ::Uml::classByName(::Uml::GetTheOnlyNamespace(cross_dgr), (string(cl.name()) + string(Udm::cross_delimiter) + string(ns.name())) );
 			}
 			if (cross_cl)
 				ass = cross_cl.association();
 			if (ass)
 			{
-				set< ::Uml::Uml::AssociationRole> asrs = ass.roles();
-				set< ::Uml::Uml::AssociationRole>::iterator asrs_i = asrs.begin();
+				set< ::Uml::AssociationRole> asrs = ass.roles();
+				set< ::Uml::AssociationRole>::iterator asrs_i = asrs.begin();
 				while (asrs_i != asrs.end())
 				{
 					string cname = string("::") + string(cross_dgr.name());
 					if (!single_cpp_namespace)
 						cname += "::" + string(::Uml::GetTheOnlyNamespace(cross_dgr).name());
-					cname += "::" + string(((::Uml::Uml::Class)((::Uml::theOther(*asrs_i)).target())).name());
+					cname += "::" + string(((::Uml::Class)((::Uml::theOther(*asrs_i)).target())).name());
 
 					output << " \t\t\t" << cl.name() << "::meta_" << asrs_i->name() << "_end_ = " 
 						<< cname << "::meta_" << asrs_i->name() << ";" <<endl;
@@ -378,69 +378,69 @@ void GenerateCPPInitClassesAttributes(const ::Uml::Uml::Namespace & ns, const ::
 	output << "\t\t\t" << endl;
 	output << "\t\t}" << endl;
 };
-void GenerateCompositionInit(const ::Uml::Uml::Namespace & ns, const ::Uml::Uml::Composition &c, ostream &output, int funct_no)
+void GenerateCompositionInit(const ::Uml::Namespace & ns, const ::Uml::Composition &c, ostream &output, int funct_no)
 {
 	output << "\t\tvoid InitComposition" << funct_no << "()" << endl << "\t\t{" << endl;
-	output << "\t\t\t::Uml::Uml::Composition comp = ::Uml::Uml::Composition::Create(meta);" << endl;
+	output << "\t\t\t::Uml::Composition comp = ::Uml::Composition::Create(meta);" << endl;
 
 	if (!((string)c.name()).empty())output << "\t\t\tcomp.name() =\"" << c.name() << "\";" <<endl;
 	output << "\t\t\tcomp.nonpersistent() =" << (c.nonpersistent() ? "true" : "false") << ";" << endl;
 
-	::Uml::Uml::CompositionParentRole zzp = c.parentRole();
-	::Uml::Uml::CompositionChildRole zzc = c.childRole();
+	::Uml::CompositionParentRole zzp = c.parentRole();
+	::Uml::CompositionChildRole zzc = c.childRole();
 	string aname(MakeRoleName(zzp));
-	output << "\t\t\t" << UmlClassCPPName((::Uml::Uml::Class)zzc.target()) << "::meta_" << aname <<" = ::Uml::Uml::CompositionParentRole::Create(comp);" << endl;
-	output << "\t\t\t" << UmlClassCPPName((::Uml::Uml::Class)zzc.target()) << "::meta_" << aname <<".name() = \"" << aname << "\";" << endl;
-	output << "\t\t\t" << UmlClassCPPName((::Uml::Uml::Class)zzc.target()) << "::meta_" << aname <<".isNavigable() = " << (zzp.isNavigable() ? "true;" : "false;") << endl;
-	output << "\t\t\t" << UmlClassCPPName((::Uml::Uml::Class)zzc.target()) << "::meta_" << aname <<".target() = " << UmlClassCPPName((::Uml::Uml::Class)zzp.target()) << "::meta;" << endl;
+	output << "\t\t\t" << UmlClassCPPName((::Uml::Class)zzc.target()) << "::meta_" << aname <<" = ::Uml::CompositionParentRole::Create(comp);" << endl;
+	output << "\t\t\t" << UmlClassCPPName((::Uml::Class)zzc.target()) << "::meta_" << aname <<".name() = \"" << aname << "\";" << endl;
+	output << "\t\t\t" << UmlClassCPPName((::Uml::Class)zzc.target()) << "::meta_" << aname <<".isNavigable() = " << (zzp.isNavigable() ? "true;" : "false;") << endl;
+	output << "\t\t\t" << UmlClassCPPName((::Uml::Class)zzc.target()) << "::meta_" << aname <<".target() = " << UmlClassCPPName((::Uml::Class)zzp.target()) << "::meta;" << endl;
 
 	string cname(MakeRoleName(zzc));
-	output << "\t\t\t" << UmlClassCPPName((::Uml::Uml::Class)zzp.target()) << "::meta_" << cname << " = ::Uml::Uml::CompositionChildRole::Create(comp);" << endl;
+	output << "\t\t\t" << UmlClassCPPName((::Uml::Class)zzp.target()) << "::meta_" << cname << " = ::Uml::CompositionChildRole::Create(comp);" << endl;
 
-	output << "\t\t\t" << UmlClassCPPName((::Uml::Uml::Class)zzp.target()) << "::meta_" << cname << ".name() = \"" << MakeShortRoleName(zzc) << "\";" << endl;
-	output << "\t\t\t" << UmlClassCPPName((::Uml::Uml::Class)zzp.target()) << "::meta_" << cname << ".min() = " << zzc.min() << ";"<< endl;
-	output << "\t\t\t" << UmlClassCPPName((::Uml::Uml::Class)zzp.target()) << "::meta_" << cname << ".max() = " << zzc.max() << ";"<< endl;
-	output << "\t\t\t" << UmlClassCPPName((::Uml::Uml::Class)zzp.target()) << "::meta_" << cname << ".isNavigable() = " << (zzc.isNavigable() ? "true;" : "false;") << endl;
-	output << "\t\t\t" << UmlClassCPPName((::Uml::Uml::Class)zzp.target()) << "::meta_" << cname << ".target() = " << UmlClassCPPName((::Uml::Uml::Class)zzc.target()) << "::meta;" << endl;
+	output << "\t\t\t" << UmlClassCPPName((::Uml::Class)zzp.target()) << "::meta_" << cname << ".name() = \"" << MakeShortRoleName(zzc) << "\";" << endl;
+	output << "\t\t\t" << UmlClassCPPName((::Uml::Class)zzp.target()) << "::meta_" << cname << ".min() = " << zzc.min() << ";"<< endl;
+	output << "\t\t\t" << UmlClassCPPName((::Uml::Class)zzp.target()) << "::meta_" << cname << ".max() = " << zzc.max() << ";"<< endl;
+	output << "\t\t\t" << UmlClassCPPName((::Uml::Class)zzp.target()) << "::meta_" << cname << ".isNavigable() = " << (zzc.isNavigable() ? "true;" : "false;") << endl;
+	output << "\t\t\t" << UmlClassCPPName((::Uml::Class)zzp.target()) << "::meta_" << cname << ".target() = " << UmlClassCPPName((::Uml::Class)zzc.target()) << "::meta;" << endl;
 
 	output << "\t\t}" << endl;
 };
 
-void GenerateAssociationInit(const ::Uml::Uml::Namespace & ns, const ::Uml::Uml::Association &a,  ostream &output, int funct_no)
+void GenerateAssociationInit(const ::Uml::Namespace & ns, const ::Uml::Association &a,  ostream &output, int funct_no)
 {
 	output << "\t\tvoid InitAssociation" << funct_no << "()" << endl << "\t\t{" << endl;
 
-	set< ::Uml::Uml::AssociationRole> ar = a.roles();
+	set< ::Uml::AssociationRole> ar = a.roles();
 	ASSERT(ar.size() == 2);
 	
-	output << "\t\t\t::Uml::Uml::Association ass = ::Uml::Uml::Association::Create(meta);" << endl;
+	output << "\t\t\t::Uml::Association ass = ::Uml::Association::Create(meta);" << endl;
 
-	::Uml::Uml::Class aclass = a.assocClass();
+	::Uml::Class aclass = a.assocClass();
 	if (!((string)a.name()).empty())output << "\t\t\tass.name() = \"" << a.name() << "\";" <<endl;
 	if(aclass) 
 	{
 		output << "\t\t\tass.assocClass() = " << UmlClassCPPName(aclass) << "::meta;" << endl;
 	}
 
-	set< ::Uml::Uml::AssociationRole> roles = a.roles();
-	for( set< ::Uml::Uml::AssociationRole>::iterator i = roles.begin(); i != roles.end(); i++) 
+	set< ::Uml::AssociationRole> roles = a.roles();
+	for( set< ::Uml::AssociationRole>::iterator i = roles.begin(); i != roles.end(); i++) 
 	{
-		::Uml::Uml::AssociationRole zz	= ::Uml::theOther(*i);
+		::Uml::AssociationRole zz	= ::Uml::theOther(*i);
 		string aname(MakeRoleName(zz));
-		::Uml::Uml::Class cl = i->target();
+		::Uml::Class cl = i->target();
 		
-		output << "\t\t\t" << UmlClassCPPName(cl) << "::meta_" << aname << " = ::Uml::Uml::AssociationRole::Create(ass);" <<endl;
+		output << "\t\t\t" << UmlClassCPPName(cl) << "::meta_" << aname << " = ::Uml::AssociationRole::Create(ass);" <<endl;
 		output << "\t\t\t" << UmlClassCPPName(cl) << "::meta_" << aname << ".name() = \"" << aname << "\";" <<endl;
 		output << "\t\t\t" << UmlClassCPPName(cl) << "::meta_" << aname << ".min() = " << zz.min() << ";" <<endl;
 		output << "\t\t\t" << UmlClassCPPName(cl) << "::meta_" << aname << ".max() = " << zz.max() << ";" <<endl;
 		output << "\t\t\t" << UmlClassCPPName(cl) << "::meta_" << aname << ".isNavigable() = " << (zz.isNavigable() ? "true":"false") << ";" <<endl;
 		output << "\t\t\t" << UmlClassCPPName(cl) << "::meta_" << aname << ".isPrimary() = " << (zz.isPrimary() ? "true":"false") << ";" <<endl;
-		output << "\t\t\t" << UmlClassCPPName(cl) << "::meta_" << aname << ".target() = " << UmlClassCPPName((::Uml::Uml::Class)zz.target()) << "::meta;" <<endl;
+		output << "\t\t\t" << UmlClassCPPName(cl) << "::meta_" << aname << ".target() = " << UmlClassCPPName((::Uml::Class)zz.target()) << "::meta;" <<endl;
 
-		::Uml::Uml::Class aclass = a.assocClass();
+		::Uml::Class aclass = a.assocClass();
 		if(aclass) 
 		{
-			::Uml::Uml::Class cl2 = zz.target();
+			::Uml::Class cl2 = zz.target();
 			output << "\t\t\t" << UmlClassCPPName(aclass) << "::meta_" << aname << "_end_ = " <<
 							UmlClassCPPName(cl2) << "::meta_" << MakeRoleName(*i) << "_rev = " << 
 							UmlClassCPPName(cl) << "::meta_" << aname << ";" << endl;
@@ -452,21 +452,21 @@ void GenerateAssociationInit(const ::Uml::Uml::Namespace & ns, const ::Uml::Uml:
 
 }
 
-int GenerateCPPAssociationInitFunctions(const ::Uml::Uml::Namespace & ns, ostream &output)
+int GenerateCPPAssociationInitFunctions(const ::Uml::Namespace & ns, ostream &output)
 {
 	int ass_inits = 0;
-	const set< ::Uml::Uml::Association> &asss = ns.associations();
-	set< ::Uml::Uml::Association>::const_iterator a;
+	const set< ::Uml::Association> &asss = ns.associations();
+	set< ::Uml::Association>::const_iterator a;
 	for(a = asss.begin(); a != asss.end(); a++ )	
 		GenerateAssociationInit(ns, *a, output, ass_inits++);
 	return ass_inits;	
 };
-UmlCompositionInitFuncInfo GenerateCPPCompositionInitFunctions(const ::Uml::Uml::Namespace & ns, ostream &output)
+UmlCompositionInitFuncInfo GenerateCPPCompositionInitFunctions(const ::Uml::Namespace & ns, ostream &output)
 {
 	UmlCompositionInitFuncInfo comp_inits;
 	int comp_init_index = 0;
-	const set< ::Uml::Uml::Composition> &comps = ns.compositions();
-	set< ::Uml::Uml::Composition>::const_iterator c;
+	const set< ::Uml::Composition> &comps = ns.compositions();
+	set< ::Uml::Composition>::const_iterator c;
 	for(c = comps.begin(); c != comps.end(); c++ ) {
 		GenerateCompositionInit(ns, *c, output, comp_init_index);
 		if (IsCrossNSComposition(*c)) {
@@ -483,27 +483,27 @@ UmlCompositionInitFuncInfo GenerateCPPCompositionInitFunctions(const ::Uml::Uml:
 /*
 	Functions which build the Initalize() function
 */
-void GenerateCPPCrossObjectInits(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagram & cross_dgr, ostream & output, bool isCrossDgr)
+void GenerateCPPCrossObjectInits(const ::Uml::Namespace &ns, const ::Uml::Diagram & cross_dgr, ostream & output, bool isCrossDgr)
 {
-	set< ::Uml::Uml::Class> classes = ns.classes();
-	set< ::Uml::Uml::Class>::iterator c;
+	set< ::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class>::iterator c;
 	if (isCrossDgr)
 	//if (cross_dgr &&(cross_dgr != diagram))
 	{
 		//		M2::meta_src = CL::M2::meta_src;		
 		for(c = classes.begin(); c != classes.end(); c++ )	
 		{
-			::Uml::Uml::Class cl = *c;
-			::Uml::Uml::Class cross_cl;
+			::Uml::Class cl = *c;
+			::Uml::Class cross_cl;
 			if (cross_dgr)
 			{
 				cross_cl = ::Uml::classByName(::Uml::GetTheOnlyNamespace(cross_dgr), (string(cl.name()) + string(Udm::cross_delimiter) + string(ns.name())) );
-				//--//cross_cl = ::Uml::Uml::ClassByName(cross_dgr, cl.name());
+				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
 			}
 			if (cross_cl)
 			{
-				set< ::Uml::Uml::AssociationRole> ar = cross_cl.associationRoles();
-				set< ::Uml::Uml::AssociationRole>::iterator ar_i = ar.begin();
+				set< ::Uml::AssociationRole> ar = cross_cl.associationRoles();
+				set< ::Uml::AssociationRole>::iterator ar_i = ar.begin();
 				while (ar_i != ar.end())
 				{
 					string cname = string("::") + string(cross_dgr.name());
@@ -514,15 +514,15 @@ void GenerateCPPCrossObjectInits(const ::Uml::Uml::Namespace &ns, const ::Uml::U
 					output << "\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
 					" = " << cname << "::meta_" << ::Uml::theOther((*ar_i)).name() << ";" << endl;
 
-					::Uml::Uml::AssociationRole zz	= ::Uml::theOther(*ar_i);
+					::Uml::AssociationRole zz	= ::Uml::theOther(*ar_i);
 					string aname(MakeRoleName(zz));
 
-					::Uml::Uml::Association ass = ar_i->parent();
-					::Uml::Uml::Class a_class = ass.assocClass();
+					::Uml::Association ass = ar_i->parent();
+					::Uml::Class a_class = ass.assocClass();
 					
 					if(a_class) 
 					{
-						::Uml::Uml::Class cl2 = zz.target();
+						::Uml::Class cl2 = zz.target();
 						
 						output << "\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
 							"_rev = " << "::" << cross_dgr.name()<< "::" << ::Uml::GetTheOnlyNamespace(cross_dgr).name() << "::" << cl2.name() << "::meta_"<<ar_i->name()<< ";" <<endl;
@@ -535,45 +535,45 @@ void GenerateCPPCrossObjectInits(const ::Uml::Uml::Namespace &ns, const ::Uml::U
 	}
 };
 
-void GenerateCPPInitializeInheritence(const ::Uml::Uml::Namespace &ns, ostream & output)
+void GenerateCPPInitializeInheritence(const ::Uml::Namespace &ns, ostream & output)
 {
 	output << "\t\tvoid InitInheritence()" << endl << "\t\t{" << endl;
 
-	set< ::Uml::Uml::Class> classes = ns.classes();;
-	set< ::Uml::Uml::Class>::iterator c;
+	set< ::Uml::Class> classes = ns.classes();;
+	set< ::Uml::Class>::iterator c;
 	for(c = classes.begin(); c != classes.end(); c++ ) 
 	{
-		::Uml::Uml::Class cl = *c;
-		set< ::Uml::Uml::Class> st = cl.subTypes();
-		for( set< ::Uml::Uml::Class>::iterator i = st.begin(); i != st.end(); i++)
+		::Uml::Class cl = *c;
+		set< ::Uml::Class> st = cl.subTypes();
+		for( set< ::Uml::Class>::iterator i = st.begin(); i != st.end(); i++)
 		{
-			if ((::Uml::Uml::Namespace)i->parent() == ns)
+			if ((::Uml::Namespace)i->parent() == ns)
 				output << "\t\t\t" << cl.name() << "::meta.subTypes() +=  " << UmlClassCPPName(*i) << "::meta;" << endl;
 		}
 	}	
 	output << "\t\t}" << endl;
 };
 
-void GenerateCPPInitializeCrossNSInheritence(const ::Uml::Uml::Namespace &ns, ostream & output)
+void GenerateCPPInitializeCrossNSInheritence(const ::Uml::Namespace &ns, ostream & output)
 {
 	output << "\t\tvoid InitCrossNSInheritence()" << endl << "\t\t{" << endl;
 
-	set< ::Uml::Uml::Class> classes = ns.classes();;
-	set< ::Uml::Uml::Class>::iterator c;
+	set< ::Uml::Class> classes = ns.classes();;
+	set< ::Uml::Class>::iterator c;
 	for(c = classes.begin(); c != classes.end(); c++ ) 
 	{
-		::Uml::Uml::Class cl = *c;
-		set< ::Uml::Uml::Class> st = cl.subTypes();
-		for( set< ::Uml::Uml::Class>::iterator i = st.begin(); i != st.end(); i++)
+		::Uml::Class cl = *c;
+		set< ::Uml::Class> st = cl.subTypes();
+		for( set< ::Uml::Class>::iterator i = st.begin(); i != st.end(); i++)
 		{
-			if ((::Uml::Uml::Namespace)i->parent() != ns)
+			if ((::Uml::Namespace)i->parent() != ns)
 				output << "\t\t\t" << cl.name() << "::meta.subTypes() +=  " << UmlClassCPPName(*i) << "::meta;" << endl;
 		}
 	}	
 	output << "\t\t}" << endl;
 };
 
-void GenerateCPPInitializeCrossNSCompositions(const ::Uml::Uml::Namespace &ns, const UmlCompositionInitFuncInfo &comp_inits, ostream & output)
+void GenerateCPPInitializeCrossNSCompositions(const ::Uml::Namespace &ns, const UmlCompositionInitFuncInfo &comp_inits, ostream & output)
 {
 	output << "\t\tvoid InitCrossNSCompositions()" << endl << "\t\t{" << endl;
 
@@ -584,7 +584,7 @@ void GenerateCPPInitializeCrossNSCompositions(const ::Uml::Uml::Namespace &ns, c
 	output << "\t\t}" << endl;
 };
 
-void GenerateCPPStaticClass(const ::Uml::Uml::Diagram &diagram, ostream & output)
+void GenerateCPPStaticClass(const ::Uml::Diagram &diagram, ostream & output)
 {
 	output << "\tstatic struct _regClass" << endl;
 	output << "\t{" << endl;
@@ -600,7 +600,7 @@ void GenerateCPPStaticClass(const ::Uml::Uml::Diagram &diagram, ostream & output
 	output <<"\t} __regUnUsed;" << endl << endl;
 
 };
-void GenerateCPPInitialize(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagram & cross_dgr, ostream & output, const string& macro, const string& hname, int ass_inits, const UmlCompositionInitFuncInfo &comp_inits, bool isCrossDgr)
+void GenerateCPPInitialize(const ::Uml::Namespace &ns, const ::Uml::Diagram & cross_dgr, ostream & output, const string& macro, const string& hname, int ass_inits, const UmlCompositionInitFuncInfo &comp_inits, bool isCrossDgr)
 {
 	output << "\t\t" << macro << " void InitializeNS()" << endl << "\t\t{" << endl; //begin of InitializeNS()
 /*
@@ -618,9 +618,9 @@ void GenerateCPPInitialize(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Di
 
 	output << "\t\tASSERT( umldiagram == Udm::null );" << endl;
 
-	output << "\t\tUdmStatic::StaticDataNetwork * meta_dn = new UdmStatic::StaticDataNetwork(::Uml::Uml::Diagram);" << endl;
-	output << "\t\tmeta_dn->CreateNew(\"" << hname << ".mem\", \"\", ::Uml::Uml::Diagram::meta, Udm::CHANGES_LOST_DEFAULT);"<< endl;
-	output << "\t\tumldiagram = ::Uml::Uml::Diagram::Cast(meta_dn->GetRootObject());" << endl;
+	output << "\t\tUdmStatic::StaticDataNetwork * meta_dn = new UdmStatic::StaticDataNetwork(::Uml::Diagram);" << endl;
+	output << "\t\tmeta_dn->CreateNew(\"" << hname << ".mem\", \"\", ::Uml::Diagram::meta, Udm::CHANGES_LOST_DEFAULT);"<< endl;
+	output << "\t\tumldiagram = ::Uml::Diagram::Cast(meta_dn->GetRootObject());" << endl;
 	output << "\t\tumldiagram.name() =\"" << hname << "\";" << endl;
 //	output << "\t\tumldiagram.version() =\"" << diagram.version() << "\";" << endl;
 */
@@ -652,26 +652,26 @@ void GenerateCPPInitialize(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Di
 };
 
 /*
-	Function building the alternate InitializeNS(const ::Uml::Uml::Namespace &ns) function
+	Function building the alternate InitializeNS(const ::Uml::Namespace &ns) function
 */
 
-void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & output, const string & macro)
+void GenerateCPPInitializeNamespace(const ::Uml::Namespace & ns, ostream & output, const string & macro)
 {
-	set< ::Uml::Uml::Class> classes = ns.classes();
-	set< ::Uml::Uml::Class>::iterator c;
+	set< ::Uml::Class> classes = ns.classes();
+	set< ::Uml::Class>::iterator c;
 	
-	output << "\t\t" << macro << " void InitializeNS(const ::Uml::Uml::Namespace & ns)" << endl << "\t\t{" << endl;
+	output << "\t\t" << macro << " void InitializeNS(const ::Uml::Namespace & ns)" << endl << "\t\t{" << endl;
 
 	for (c = classes.begin(); c != classes.end(); c++)
 	{
-		::Uml::Uml::Class cl = *c;
+		::Uml::Class cl = *c;
     output << "\t\t\t::Uml::SetClass(" << cl.name() <<"::meta, ns, \"" << cl.name() << "\");" <<endl;
 
 		//attributes
-		set< ::Uml::Uml::Attribute> cl_atts = cl.attributes();
-		for (set< ::Uml::Uml::Attribute>::iterator cla_i = cl_atts.begin(); cla_i != cl_atts.end(); cla_i++)
+		set< ::Uml::Attribute> cl_atts = cl.attributes();
+		for (set< ::Uml::Attribute>::iterator cla_i = cl_atts.begin(); cla_i != cl_atts.end(); cla_i++)
 		{
-			::Uml::Uml::Attribute a = *cla_i;
+			::Uml::Attribute a = *cla_i;
       output << "\t\t\t::Uml::SetAttribute(" << cl.name() <<"::meta_" << a.name() << "," << cl.name() << "::meta, \"" << a.name() << "\");" <<endl;
 
 		};
@@ -681,15 +681,15 @@ void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & 
 	for (c = classes.begin(); c != classes.end(); c++)
 	{
 	
-		::Uml::Uml::Class cl = *c;
+		::Uml::Class cl = *c;
 
 		//composition parent roles
-		set< ::Uml::Uml::CompositionChildRole> ccrs = cl.childRoles();
-		for (set< ::Uml::Uml::CompositionChildRole>::iterator ccrs_i = ccrs.begin(); ccrs_i != ccrs.end(); ccrs_i ++)
+		set< ::Uml::CompositionChildRole> ccrs = cl.childRoles();
+		for (set< ::Uml::CompositionChildRole>::iterator ccrs_i = ccrs.begin(); ccrs_i != ccrs.end(); ccrs_i ++)
 		{
-			::Uml::Uml::CompositionChildRole ccr = *ccrs_i;
+			::Uml::CompositionChildRole ccr = *ccrs_i;
 			string rolename = ::Uml::MakeRoleName(::Uml::theOther(ccr));
-			::Uml::Uml::Class theot = (::Uml::Uml::Class)::Uml::theOther(ccr).target();
+			::Uml::Class theot = (::Uml::Class)::Uml::theOther(ccr).target();
       output << "\t\t\t::Uml::SetParentRole(" << cl.name() <<"::meta_" << rolename << "," << cl.name() << "::meta," << UmlClassCPPName(theot) << "::meta, \"" << ccr.name() << "\", \"" << ::Uml::theOther(ccr).name() << "\");" <<endl;
 
 		};
@@ -699,15 +699,15 @@ void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & 
 	output << "\t\t\t" << "// composition parentroles " << endl;
 	for (c = classes.begin(); c != classes.end(); c++)
 	{
-		::Uml::Uml::Class cl = *c;
+		::Uml::Class cl = *c;
 
 		//composition child roles
-		set< ::Uml::Uml::CompositionParentRole> cprs = cl.parentRoles();
-		for (set< ::Uml::Uml::CompositionParentRole>::iterator cprs_i = cprs.begin(); cprs_i != cprs.end(); cprs_i ++)
+		set< ::Uml::CompositionParentRole> cprs = cl.parentRoles();
+		for (set< ::Uml::CompositionParentRole>::iterator cprs_i = cprs.begin(); cprs_i != cprs.end(); cprs_i ++)
 		{
-			::Uml::Uml::CompositionParentRole cpr = *cprs_i;
+			::Uml::CompositionParentRole cpr = *cprs_i;
 			string rolename = ::Uml::MakeRoleName(::Uml::theOther(cpr));
-			::Uml::Uml::Class theot = (::Uml::Uml::Class)::Uml::theOther(cpr).target();
+			::Uml::Class theot = (::Uml::Class)::Uml::theOther(cpr).target();
       output << "\t\t\t::Uml::SetChildRole(" << cl.name() <<"::meta_" << rolename << "," << cl.name() << "::meta," << UmlClassCPPName(theot) << "::meta, \"" << cpr.name() << "\", \"" << ::Uml::theOther(cpr).name() << "\");" <<endl;
 
 		};
@@ -716,20 +716,20 @@ void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & 
 	output << "\t\t\t" << "// Association roles " << endl;
 	for (c = classes.begin(); c != classes.end(); c++)
 	{
-		::Uml::Uml::Class cl = *c;
+		::Uml::Class cl = *c;
 
 		//association roles
-		set< ::Uml::Uml::AssociationRole> ars = cl.associationRoles();
-		for (set< ::Uml::Uml::AssociationRole>::iterator ars_i = ars.begin(); ars_i != ars.end(); ars_i ++)
+		set< ::Uml::AssociationRole> ars = cl.associationRoles();
+		for (set< ::Uml::AssociationRole>::iterator ars_i = ars.begin(); ars_i != ars.end(); ars_i ++)
 		{
-			::Uml::Uml::AssociationRole ar = *ars_i;
+			::Uml::AssociationRole ar = *ars_i;
 			string rolename = ::Uml::MakeRoleName(::Uml::theOther(ar));
-			::Uml::Uml::Class theot = (::Uml::Uml::Class)::Uml::theOther(ar).target();
+			::Uml::Class theot = (::Uml::Class)::Uml::theOther(ar).target();
 
       output << "\t\t\t::Uml::SetAssocRole(" << cl.name() <<"::meta_" << rolename << "," << cl.name() << "::meta," << UmlClassCPPName(theot) << "::meta, \"" << ar.name() << "\");" <<endl;
 
-			::Uml::Uml::Association as = ar.parent();
-			::Uml::Uml::Class aclass = as.assocClass();
+			::Uml::Association as = ar.parent();
+			::Uml::Class aclass = as.assocClass();
 			if (aclass)
 			{
 				string revrolename = ::Uml::MakeRoleName(ar) + "_rev";
@@ -740,16 +740,16 @@ void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & 
 	}
 	for (c = classes.begin(); c != classes.end(); c++)
 	{
-		::Uml::Uml::Class cl = *c;
+		::Uml::Class cl = *c;
 
-		::Uml::Uml::Association as = cl.association();
+		::Uml::Association as = cl.association();
 		if (as)
 		{
-			set< ::Uml::Uml::AssociationRole> ars = as.roles();
-			for (set< ::Uml::Uml::AssociationRole>::iterator ars_i = ars.begin();ars_i != ars.end(); ars_i++)
+			set< ::Uml::AssociationRole> ars = as.roles();
+			for (set< ::Uml::AssociationRole>::iterator ars_i = ars.begin();ars_i != ars.end(); ars_i++)
 			{
-				::Uml::Uml::AssociationRole ar = *ars_i;
-				output << "\t\t\t" << cl.name() << "::meta_" << ::Uml::MakeRoleName(ar) << "_end_ = " << UmlClassCPPName((::Uml::Uml::Class)::Uml::theOther(ar).target()) << "::meta_" <<::Uml::MakeRoleName(ar) << ";" << endl;
+				::Uml::AssociationRole ar = *ars_i;
+				output << "\t\t\t" << cl.name() << "::meta_" << ::Uml::MakeRoleName(ar) << "_end_ = " << UmlClassCPPName((::Uml::Class)::Uml::theOther(ar).target()) << "::meta_" <<::Uml::MakeRoleName(ar) << ";" << endl;
 
 			};
 		};
@@ -757,10 +757,10 @@ void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & 
 	};
 	output << endl;
 	
-	output << "\t\t\t" << endl << "\t\t}" << endl; //end of InitializeNS(const ::Uml::Uml::Diagram & dgr);
+	output << "\t\t\t" << endl << "\t\t}" << endl; //end of InitializeNS(const ::Uml::Diagram & dgr);
 };
 
-void GenerateCPPPreamble(const ::Uml::Uml::Diagram &diagram, const ::Uml::Uml::Diagram &cross_dgr, bool isCrossDgr, const string &h_fname, const string &fname, ostream &output)
+void GenerateCPPPreamble(const ::Uml::Diagram &diagram, const ::Uml::Diagram &cross_dgr, bool isCrossDgr, const string &h_fname, const string &fname, ostream &output)
 {
 	output << "// cpp(meta datanetwork format) source file " << fname << ".cpp generated from diagram " << (string)diagram.name() << endl;
 	output << "// generated on " << GetTime().c_str() << endl << endl;
@@ -775,9 +775,9 @@ void GenerateCPPPreamble(const ::Uml::Uml::Diagram &diagram, const ::Uml::Uml::D
 	}
 }
 
-void GenerateCPPNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagram &cross_dgr, bool isCrossDgr, const string &fname, ostream &output, const string &macro, int source_unit)
+void GenerateCPPNamespace(const ::Uml::Namespace &ns, const ::Uml::Diagram &cross_dgr, bool isCrossDgr, const string &fname, ostream &output, const string &macro, int source_unit)
 {
-	::Uml::Uml::Diagram diagram = ns.parent();
+	::Uml::Diagram diagram = ns.parent();
 	string hname = NameToFilename(diagram.name());
 	string ns_fname = fname + "_" + NameToFilename(ns.name());
 
@@ -789,7 +789,7 @@ void GenerateCPPNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Dia
 
 	if (!single_cpp_namespace)
 		output << "\tnamespace " << ns.name() << " {" << endl << endl;
-	output << "\t\t::Uml::Uml::Namespace meta;" << endl;
+	output << "\t\t::Uml::Namespace meta;" << endl;
 
 	GenerateCPPDeclareMetaClasses(ns, output);
 	GenerateCPPDeclareAttributes(ns, output);
@@ -811,7 +811,7 @@ void GenerateCPPNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Dia
 	//generate Initialize() function
 	GenerateCPPInitialize(ns, cross_dgr, output, macro, hname, ass_inits, comps_inits, isCrossDgr);
 			
-	//generate Initialize(const ::Uml::Uml::Namespace &ns); function
+	//generate Initialize(const ::Uml::Namespace &ns); function
 	GenerateCPPInitializeNamespace(ns, output,macro);
 
 	if (!single_cpp_namespace)
@@ -822,7 +822,7 @@ void GenerateCPPNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Dia
 }
 
 
-void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Uml::Uml::Diagram cross_dgr, 
+void GenerateCPPDiagramInitialize(const ::Uml::Diagram &diagram, const ::Uml::Diagram cross_dgr, 
                                   ostream & output, const map<string, string> &ns_map, 
                                   const string & macro,
                                   bool integrate_xsd)
@@ -841,17 +841,17 @@ void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Um
 	output << "\t\tASSERT( umldiagram == Udm::null );" << endl;
 
 	output << "\t\tUdmStatic::StaticDataNetwork * meta_dn = new UdmStatic::StaticDataNetwork(::Uml::diagram);" << endl;
-	output << "\t\tmeta_dn->CreateNew(\"" << diagram.name() << ".mem\", \"\", ::Uml::Uml::Diagram::meta, Udm::CHANGES_LOST_DEFAULT);"<< endl;
-	output << "\t\tumldiagram = ::Uml::Uml::Diagram::Cast(meta_dn->GetRootObject());" << endl;
+	output << "\t\tmeta_dn->CreateNew(\"" << diagram.name() << ".mem\", \"\", ::Uml::Diagram::meta, Udm::CHANGES_LOST_DEFAULT);"<< endl;
+	output << "\t\tumldiagram = ::Uml::Diagram::Cast(meta_dn->GetRootObject());" << endl;
 	output << "\t\tumldiagram.name() =\"" << diagram.name() << "\";" << endl;
 	output << "\t\tumldiagram.version() =\"" << diagram.version() << "\";" << endl;
 
-	const set< ::Uml::Uml::Namespace>& nses = diagram.namespaces();
-	for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+	const set< ::Uml::Namespace>& nses = diagram.namespaces();
+	for (set< ::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
-		::Uml::Uml::Namespace ns = *nses_i;
+		::Uml::Namespace ns = *nses_i;
 		output << "\t\t" << endl;
-		output << "\t\t" << ns.name() << "::meta = ::Uml::Uml::Namespace::Create(umldiagram);" << endl;
+		output << "\t\t" << ns.name() << "::meta = ::Uml::Namespace::Create(umldiagram);" << endl;
 		output << "\t\t" << ns.name() << "::meta.name() = \"" << ns.name() <<"\";" << endl;
 		output << "\t\t" << ns.name() << "::InitializeNS();" << endl;
 	}
@@ -860,9 +860,9 @@ void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Um
 	if (integrate_xsd)
 	{
   
-		for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
+		for (set< ::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
 		{
-			const ::Uml::Uml::Namespace& ns = *nses_i;
+			const ::Uml::Namespace& ns = *nses_i;
 			const std::string& nsn = ns.name();
 			output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << ns.name() << ".xsd\"," << ns.name() <<"_xsd::getString());"<< endl;
 		}
@@ -879,9 +879,9 @@ void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Um
 	}
 
 	//call cross namespace inheritence and compositions initializers
-	for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+	for (set< ::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
-		::Uml::Uml::Namespace ns = *nses_i;
+		::Uml::Namespace ns = *nses_i;
 		output << "\t\t" << ns.name() << "::InitCrossNSInheritence();" << endl;
 		output << "\t\t" << ns.name() << "::InitCrossNSCompositions();" << endl;
 	}
@@ -890,11 +890,11 @@ void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Um
 	output << "\t};"<<endl;
 
 
-	output << "\t" << macro << " void Initialize(const ::Uml::Uml::Diagram &dgr)" << endl << "\t{" << endl; //begin of Initialize()
+	output << "\t" << macro << " void Initialize(const ::Uml::Diagram &dgr)" << endl << "\t{" << endl; //begin of Initialize()
 	output << "\t\t" << "umldiagram = dgr;" << endl;
-	for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+	for (set< ::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
-		::Uml::Uml::Namespace ns = *nses_i;
+		::Uml::Namespace ns = *nses_i;
 		output << "\t\t" << "::Uml::SetNamespace(" << ns.name() << "::meta, dgr, \"" << ns.name() << "\");" << endl;
 		output << "\t\t" << ns.name() << "::InitializeNS(" << ns.name() << "::meta);" << endl;
 	}
@@ -902,9 +902,9 @@ void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Um
 	if (integrate_xsd)
 	{
   
-		for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
+		for (set< ::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
 		{
-			const ::Uml::Uml::Namespace& ns = *nses_i;
+			const ::Uml::Namespace& ns = *nses_i;
 			const std::string& nsn = ns.name();
 			std::string infname(nsn + std::string(".xsd"));
 
@@ -931,9 +931,9 @@ void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Um
 
 
 };
-void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram, string fname, 
+void GenerateNewCPP(const ::Uml::Diagram &diagram, string fname, 
                     const map<string, string> &ns_map, 
-                    const ::Uml::Uml::Diagram& cross_dgr, 
+                    const ::Uml::Diagram& cross_dgr, 
                     const string& macro,
                     bool integrate_xsd,
 		    int source_unit) 
@@ -950,10 +950,10 @@ void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram, string fname,
 		if (integrate_xsd)
 		{
 			output << "#include \"UdmDom.h\"" << endl; 
-			set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
-			for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+			set< ::Uml::Namespace> nses = diagram.namespaces();
+			for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 			{
-				::Uml::Uml::Namespace ns = *nses_i;	
+				::Uml::Namespace ns = *nses_i;	
 				output << "#include \"" << ns.name() << "_xsd.h\"" << endl << endl; 
 			}
 		}
@@ -962,11 +962,11 @@ void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram, string fname,
 			output << "#include \"UdmDom.h\"" << endl << endl; 
 
 		output << "namespace " << hname << " {" << endl << endl;
-//	::Uml::Uml::Diagram diagram;
-		output << "\t::Uml::Uml::Diagram umldiagram;" << endl << endl;
+//	::Uml::Diagram diagram;
+		output << "\t::Uml::Diagram umldiagram;" << endl << endl;
 
-		set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
-		for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+		set< ::Uml::Namespace> nses = diagram.namespaces();
+		for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 		{
 			if (source_unit == CPP_SOURCE_UNIT_NAMESPACE)
 			{

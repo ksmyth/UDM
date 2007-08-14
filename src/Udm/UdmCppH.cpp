@@ -171,7 +171,7 @@ CHANGELOG:
 
 using namespace Uml;
 	
-void CheckClass(const ::Uml::Uml::Class & cl)
+void CheckClass(const ::Uml::Class & cl)
 {
 	set<string> unique_names;
 	//reserved names
@@ -185,11 +185,11 @@ void CheckClass(const ::Uml::Uml::Class & cl)
 	unsigned int i;
 
 	//attributes
-	set< ::Uml::Uml::Attribute> attrs = ::Uml::AncestorAttributes(cl);
-	set< ::Uml::Uml::Attribute>::iterator attrs_i = attrs.begin();
+	set< ::Uml::Attribute> attrs = ::Uml::AncestorAttributes(cl);
+	set< ::Uml::Attribute>::iterator attrs_i = attrs.begin();
 	while (attrs_i != attrs.end())
 	{
-		::Uml::Uml::Attribute att = *attrs_i++;
+		::Uml::Attribute att = *attrs_i++;
 	
 		string att_type = att.type();
 
@@ -211,12 +211,12 @@ err_att:
 
 
 	//associationroles
-	set< ::Uml::Uml::AssociationRole> assocs = cl.associationRoles();
-	set< ::Uml::Uml::AssociationRole>::iterator assocs_i = assocs.begin();
+	set< ::Uml::AssociationRole> assocs = cl.associationRoles();
+	set< ::Uml::AssociationRole>::iterator assocs_i = assocs.begin();
 	while (assocs_i != assocs.end())
 	{
 		
-		::Uml::Uml::AssociationRole ar = *assocs_i++;
+		::Uml::AssociationRole ar = *assocs_i++;
 		string aname(MakeRoleName(::Uml::theOther(ar)));
 		
 		i = unique_names.size();
@@ -237,17 +237,17 @@ err_ar:
 	
 	//compositionparentroles
 	//check meta_child declarations
-	set< ::Uml::Uml::CompositionParentRole> cprs = cl.parentRoles();
+	set< ::Uml::CompositionParentRole> cprs = cl.parentRoles();
 	
-	set< ::Uml::Uml::CompositionParentRole>::iterator cprs_i = cprs.begin();
-	set< ::Uml::Uml::Class> kinds;
+	set< ::Uml::CompositionParentRole>::iterator cprs_i = cprs.begin();
+	set< ::Uml::Class> kinds;
 
 	while (cprs_i != cprs.end())
 	{
-		::Uml::Uml::CompositionParentRole cpr = *cprs_i++;
+		::Uml::CompositionParentRole cpr = *cprs_i++;
 		string aname(::Uml::MakeRoleName(::Uml::theOther(cpr)));
 
-		::Uml::Uml::Class thischildkind = (::Uml::Uml::Class)::Uml::theOther(cpr).target();
+		::Uml::Class thischildkind = (::Uml::Class)::Uml::theOther(cpr).target();
 		kinds.insert(thischildkind);
 		string oname(thischildkind.name());
 
@@ -262,12 +262,12 @@ err_cpr:
 	}
 
 	//check _kind_children stuff
-	set< ::Uml::Uml::Class>::iterator kinds_i = kinds.begin();
+	set< ::Uml::Class>::iterator kinds_i = kinds.begin();
 	while (kinds_i != kinds.end())
 	{
 		i = unique_names.size();
 		string kindname = (*kinds_i).name();
-		string ns_name = ((::Uml::Uml::Namespace)kinds_i->parent()).name();
+		string ns_name = ((::Uml::Namespace)kinds_i->parent()).name();
 		kinds_i ++;
 
 		unique_names.insert(ns_name + "_" + kindname + "_kind_children");
@@ -279,11 +279,11 @@ err_kinds:
 
 	//check parent, meta_parent declarations 
 
-	set< ::Uml::Uml::CompositionChildRole> ccrs = cl.childRoles();
-	set< ::Uml::Uml::CompositionChildRole>::iterator ccrs_i = ccrs.begin();
+	set< ::Uml::CompositionChildRole> ccrs = cl.childRoles();
+	set< ::Uml::CompositionChildRole>::iterator ccrs_i = ccrs.begin();
 	while (cprs_i != cprs.end())
 	{
-		::Uml::Uml::CompositionChildRole ccr = *ccrs_i++;
+		::Uml::CompositionChildRole ccr = *ccrs_i++;
 		string aname(::Uml::MakeRoleName(::Uml::theOther(ccr)));
 
 		i = unique_names.size();
@@ -302,18 +302,18 @@ err_ccr:
 
 };
 
-void CheckDiagram(const ::Uml::Uml::Diagram & diagram)
+void CheckDiagram(const ::Uml::Diagram & diagram)
 {
 	//check the UML diagram against duplicate & reserved role, attribute & classnames
-	set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
+	set< ::Uml::Namespace> nses = diagram.namespaces();
 	set<string> unique_ns_names;
-	for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+	for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
-		::Uml::Uml::Namespace ns = *nses_i;
+		::Uml::Namespace ns = *nses_i;
 		string nsname = ns.name();
 
-		set< ::Uml::Uml::Class> cls = ns.classes();
-		set< ::Uml::Uml::Class>::iterator cls_i = cls.begin();
+		set< ::Uml::Class> cls = ns.classes();
+		set< ::Uml::Class>::iterator cls_i = cls.begin();
 
 		unsigned int i = unique_ns_names.size();
 		unique_ns_names.insert(nsname);
@@ -323,7 +323,7 @@ void CheckDiagram(const ::Uml::Uml::Diagram & diagram)
 		set<string> unique_names;
 		while (cls_i != cls.end())
 		{
-			::Uml::Uml::Class cl = *cls_i++;
+			::Uml::Class cl = *cls_i++;
 			unsigned int i = unique_names.size();
 			unique_names.insert(cl.name());
 			if (i == unique_names.size())

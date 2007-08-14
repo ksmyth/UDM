@@ -35,7 +35,7 @@ std::string NameToFilename(const std::string src)
 	return ret;
 }
 
-void GenerateDSD(const ::Uml::Uml::Namespace &ns,
+void GenerateDSD(const ::Uml::Namespace &ns,
 		 const string &fname,
 		 bool generate_dtd,
 		 bool uxsdi,

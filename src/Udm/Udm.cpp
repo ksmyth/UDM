@@ -80,7 +80,7 @@ CHANGELOG
 
 #include "Udm.h"
 
-bool single_cpp_namespace = false;
+bool single_cpp_namespace;
 
 int main(int argc, char **argv) {
 	try
@@ -107,6 +107,7 @@ int main(int argc, char **argv) {
       // flag to indicate java api generation
 		bool generate_java = false;
 		int source_unit = CPP_SOURCE_UNIT_DIAGRAM;
+		bool force_multiple_cpp_namespaces = false;
 
 
 		if (argc <= 1)
@@ -163,13 +164,11 @@ int main(int argc, char **argv) {
 					integrate_xsd = true;
 					continue;
 				}
-				else if (c == 'o')
+				else if (c == 'n')
 				{
-					single_cpp_namespace = true;
+					force_multiple_cpp_namespaces = true;
 					continue;
 				}
-
-
 				
 				char *optp;
 				if(strlen(argv[argn]) == 2) 
@@ -264,10 +263,11 @@ usage:
 
 
 			const Udm::DataNetwork& cross_meta_dn = pr.GetCrossMetaNetwork();
-			const ::Uml::Uml::Diagram &cross_meta = ::Uml::Uml::Diagram::Cast(cross_meta_dn.GetRootObject());
-			const ::Uml::Uml::Namespace cross_meta_ns = ::Uml::GetTheOnlyNamespace(cross_meta);
+			const ::Uml::Diagram &cross_meta = ::Uml::Diagram::Cast(cross_meta_dn.GetRootObject());
+			const ::Uml::Namespace cross_meta_ns = ::Uml::GetTheOnlyNamespace(cross_meta);
 
 			string cm_name = NameToFilename(cross_meta.name());
+			single_cpp_namespace = !force_multiple_cpp_namespaces;
 
 			GenerateDSD(cross_meta_ns, cm_name, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
 
@@ -299,13 +299,14 @@ usage:
 			while (pr_dns_i != pr_dns.end())
 			{
 				//these should be UML diagrams
-				::Uml::Uml::Diagram dgr = ::Uml::Uml::Diagram::Cast((*pr_dns_i)->GetRootObject());
+				::Uml::Diagram dgr = ::Uml::Diagram::Cast((*pr_dns_i)->GetRootObject());
 				string sname = dgr.name();
 					
-				set< ::Uml::Uml::Namespace> nses = dgr.namespaces();
-				for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+				set< ::Uml::Namespace> nses = dgr.namespaces();
+				single_cpp_namespace = nses.size() == 1 && !force_multiple_cpp_namespaces;
+				for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 				{
-					::Uml::Uml::Namespace ns = *nses_i;
+					::Uml::Namespace ns = *nses_i;
 					string nsname = NameToFilename(ns.name());
 					GenerateDSD(ns, nsname, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
 				}
@@ -406,7 +407,7 @@ usage:
 
 		UdmDom::DomDataNetwork  nw(Uml::diagram);
 		nw.OpenExisting(inputfile,"", Udm::CHANGES_LOST_DEFAULT);
-		::Uml::Uml::Diagram diagram = ::Uml::Uml::Diagram::Cast(nw.GetRootObject());
+		::Uml::Diagram diagram = ::Uml::Diagram::Cast(nw.GetRootObject());
 
 		//check the diagram for reserver and duplicate names
 		//which would generate invalid code
@@ -416,13 +417,13 @@ usage:
 			fname = NameToFilename(diagram.name());
 		}
 
-		set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
-		if (single_cpp_namespace && nses.size() > 1)
-			throw udm_exception("Don't use the -o switch when the diagram has more than one namespaces!");
+		set< ::Uml::Namespace> nses = diagram.namespaces();
 
-		for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+		single_cpp_namespace = nses.size() == 1 && !force_multiple_cpp_namespaces;
+
+		for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 		{
-			::Uml::Uml::Namespace ns = *nses_i;
+			::Uml::Namespace ns = *nses_i;
 			string nsname = ns.name();
 
 			set<string>::const_iterator itf = qualifiedAtrrsNS_set.find(nsname);
