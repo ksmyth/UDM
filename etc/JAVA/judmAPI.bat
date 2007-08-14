@@ -7,7 +7,7 @@ echo Generate domain-specific %1 source ...
 echo Done
 
 echo Generate the domain-specific %1 library ...
-%UDM_3RDPARTY_PATH%\ant-1.6.2\bin\ant -f %UDM_PATH%\etc\java\etc\build.xml -Dbasedir="%4" -Ddspackage=%1 -Dout.dir="%5" -quiet lib-zip
+%UDM_3RDPARTY_PATH%\ant-1.6.2\bin\ant -f %UDM_PATH%\etc\java\build.xml -Dbasedir="%4" -Ddspackage=%1 -Dout.dir="%5" -quiet lib-zip
 echo Done
 
 goto end

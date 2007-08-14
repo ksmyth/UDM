@@ -109,7 +109,7 @@
 		<property name="judm.dir" location="${udm.dir}\bin" />
 		
 		<!-- Directory of the eclipse-specific project files -->
-		<property name="etc.dir" location="${udm.dir}\etc\java\etc" />
+		<property name="etc.dir" location="${udm.dir}\etc\java" />
 		
 		<!-- Directory where the distribution goes -->
 		<property name="dist.dir" location="${dspackage}" />
@@ -155,12 +155,12 @@
 	<!-- Delete previous build -->
 	<target name="clean" description="Delete previous build and generated compressed libraries.">
 
-		<delete dir="${dist.dir}" />
+		<!--delete dir="${dist.dir}" />
 		<delete>
 			<fileset dir="">
 				<filename name="*.zip" />
 			</fileset>
-		</delete>
+		</delete-->
 		
   </target>
   
