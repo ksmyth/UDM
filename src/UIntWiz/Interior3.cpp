@@ -113,9 +113,12 @@ BOOL CInterior3::OnInitDialog()
 	}
 	::RegCloseKey(hn);
 
-
-	if(lRet != ERROR_SUCCESS) 
-	{
+	//Ananth
+	char l_strSingleVal[255];
+	if(GetEnvironmentVariable("GME_ROOT", l_strSingleVal,255)) {
+		strcpy(name, l_strSingleVal);
+		strcat(name, "\\Interfaces");
+	} else if(lRet != ERROR_SUCCESS) {
 		strcpy(name,  "c:\\Program Files\\GME\\Interfaces");
 	}
 	else 
