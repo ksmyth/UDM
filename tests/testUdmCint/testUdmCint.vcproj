@@ -42,7 +42,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=" UdmOcld.lib GOCL_vc7d.lib cppunitd.lib testrunnerd.lib UdmIntD.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib zlibd.lib libcint.lib"
+				AdditionalDependencies=" UdmOcld.lib GOCL_vc7d.lib cppunitd.lib testrunnerd.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib zlibd.lib libcint.lib"
 				OutputFile=".\Debug/testUdmCint.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -105,7 +105,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=" UdmOcl.lib GOCL_vc7.lib  cppunit.lib testrunner.lib UdmInt.lib Xalan-C_1.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib libcint.lib"
+				AdditionalDependencies=" UdmOcl.lib GOCL_vc7.lib  cppunit.lib testrunner.lib UdmPOI.lib Xalan-C_1.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib libcint.lib"
 				OutputFile=".\Release/testUdmCint.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
