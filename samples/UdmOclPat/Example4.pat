@@ -12,7 +12,7 @@ The root folder contains:
     print(o.name + " contains: ");
     o.compoundState->forAll(c | { 
       :>\n\t<: print(c.name); 
-      c.oclAsType(OrState).state->forAll(s | { 
+      c.oclAsType(OrState).simpleState->forAll(s | { 
       	:>\n\t\t<: print(s.name); 
       });
     } );

@@ -3,9 +3,9 @@
     print(indent);
     :><OrState name="<: print(self.name); :>">\n<:
     self.compoundState.sortedBy(k | { k.name; })->forAll(o | { o.oclAsType(OrState).printContents( indent + "    " ); } );
-    self.state.sortedBy(k | { k.name; })->forAll(s | { 
+    self.simpleState.sortedBy(k | { k.name; })->forAll(s | { 
 	print(indent + "    " );
-	:><State><:print(s.name);:></State>\n<:
+	:><SimpleState><:print(s.name);:></SimpleState>\n<:
     }); 
     print(indent);
     :></OrState>\n<:

@@ -10,8 +10,8 @@ switch(ex5);
     <OrState name="<: print(o.name); :>"> <:
     o.compoundState->forAll(c | { :>
       <OrState name="<: print(c.name); :>"> <:
-      c.oclAsType(OrState).state->forAll(s | { :>
-      	<State name="<: print(s.name); :>"></State><:
+      c.oclAsType(OrState).simpleState->forAll(s | { :>
+      	<SimpleState name="<: print(s.name); :>"></SimpleState><:
       }); :>
       </OrState> <:
     } );:>
