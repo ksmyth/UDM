@@ -153,6 +153,7 @@
 	<target name="copy-dlls" depends="init" description="Copy DLLs to build dir for testing">
 		<!-- Compile domain specific code for GeneTF -->
 		<antcall target="copy-dlls-win"/>
+		<antcall target="copy-dlls-linux"/>
 	</target>
 
 	<!-- Copy the Win DLLs in the directory of the distribution -->
@@ -171,6 +172,21 @@
 			<fileset dir="${udm.bin.dir}">
 				<include name="Udm.exe" />
 				<include name="UdmSwig.dll" />
+			</fileset>
+		</copy>
+		
+	</target>
+
+	<!-- Copy the Linux SOs in the directory of the distribution -->
+	<target name="copy-dlls-linux" unless="isWindows" description="Copy SOs to build dir for testing">
+
+		<mkdir dir="${judm.dir}" />
+		<mkdir dir="${judm.bin.dir}" />
+		
+		<copy todir="${judm.bin.dir}">
+			<!-- Copy UdmSwig DLL in the directory of the distribution -->
+			<fileset dir="${udm.dir}/lib">
+				<include name="libUdmSwig.so" />
 			</fileset>
 		</copy>
 		
@@ -258,7 +274,7 @@
 		<antcall target="ds-generate">
 			<param name="dspackage" value="GeneTRE" />
 			<param name="dspackagelower" value="genetre" />
-			<param name="udm_options" value=" -j -u GeneTRE=http://kutykuruty.khm.edu" />
+			<param name="udm_options" value=" -j" />
 		</antcall>
 		<!-- SBML2Ex -->
 		<antcall target="ds-generate">
@@ -463,10 +479,7 @@
 		<!-- Copy the domain specific source  -->
 		<mkdir dir="${build.dir}/${dspackage}/src/main/edu" />
 		<copy todir="${build.dir}/${dspackage}/src/main/edu">
-			<fileset dir="samples/${dspackage}/src/main/edu">
-				<include name="**/*.java" />
-				<include name="**/*.html" />
-			</fileset>
+			<fileset dir="samples/${dspackage}/src/main/edu"/>
 		</copy>
 		
 		<mkdir dir="${build.dir}/${dspackage}/src/test" />
@@ -488,7 +501,8 @@
 		<delete dir="${udm.dir}/samples/Java/${dspackage}" />
 		<mkdir dir="${udm.dir}/samples/Java/${dspackage}" />
 		<copy todir="${udm.dir}/samples/Java/${dspackage}">
-			<fileset dir="${build.dir}/${dspackage}"/>
+			<fileset dir="${build.dir}/${dspackage}">
+			</fileset>
 		</copy>
 		
 	</target>
@@ -608,21 +622,16 @@
 	<target name="ds-test" description="Run unit tests on ${dspackage}.">
 		<echo> Test ${dspackage}... </echo>
 		<fail unless="dspackage" message="Missing parameter: dspackage" />
-		<!-- Copy the necessary xml files -->
-		<copy todir="samples/">
-			<fileset dir="samples/${dspackage}/samples">
-				<include name="*.xml" />
-			</fileset>
-		</copy>
 		
 		<!-- Run junit tests -->
-		<junit fork="yes" >
+		<junit fork="yes" dir="${build.dir}/${dspackage}">
 			<!-- This is necessary for System.load("UdmSwig") to succeed -->
-			<jvmarg value="-Djava.library.path=${judm.dir}" />
-			<!-- We need to add the dir containing the DLLs that UdmCint depends on
+			<jvmarg value="-Djava.library.path=${judm.dir},${judm.dir}/bin" />
+			<jvmarg value="-Djava.util.logging.config.file=${udmswiglight.src.dir}/debug-logging.properties" />
+			<!-- We need to add the dir containing the DLLs that UdmSwig depends on
 				to the PATH rather than java.library.path. Unfortunately they won't be
 				loaded when they are not added. -->
-			<env key="PATH" path="${judm.dir}"/>
+			<env key="PATH" path="${judm.dir},${judm.dir}/bin"/>
 			<classpath>
 				<path refid="compile.classpath" />
 				<pathelement location="${build.dir}/${dspackage}/classes/main" />
@@ -636,13 +645,6 @@
 			</batchtest>
 		</junit>
 
-		<!-- Delete the intermediate xml files -->
-		<delete>
-			<fileset dir="samples/">
-				<include name="*.xml" />
-				<include name="*.txt" />
-			</fileset>
-		</delete>
 	</target>
 
 	<!-- Generate a domain specific package -->
