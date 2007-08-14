@@ -60,6 +60,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmCopy", "UdmCopy\UdmCopy.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GmeOclExprChecker", "UML GME\ExprChecker\GmeOclExprChecker.vcproj", "{C2E74DE0-8084-42E2-941D-F18816C98D88}"
 	ProjectSection(ProjectDependencies) = postProject
+		{207DA527-EC80-4A83-B5C2-B2A02281AFBA} = {207DA527-EC80-4A83-B5C2-B2A02281AFBA}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XmiToUdm", "XmiToUdm\XmiToUdm.vcproj", "{3321A2AD-4DCE-4767-BF7C-32C8B5FA9A97}"
