@@ -54,7 +54,8 @@
 				TypeLibraryName=".\Debug/Test_CrossLinks.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="&quot;$(TargetPath)&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -116,7 +117,8 @@
 				TypeLibraryName=".\Release/Test_CrossLinks.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="&quot;$(TargetPath)&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
