@@ -1,0 +1,459 @@
+<?xml version="1.0"?>
+<project name="ooad_app" basedir="." default="dist">
+	<description>Java Wrapper for UDM</description>
+
+	<condition property="isWindows">
+		<os name="Windows XP" />
+	</condition>
+
+	<!-- Get the environment variables of UDM from Windows -->
+	<target name="setenveclipse" if="isWindows">
+		<echo> "Windows platfrom" </echo>
+		<property environment="env" />
+		<property name="udm.dir" location="${env.UDM_PATH}" />
+		<property name="udm.etc.dir" location="${env.UDM_PATH}/etc" />
+		<property name="udm_3rdparty.dir" location="${env.UDM_3RDPARTY_BIN}" />
+		<property name="build.dir" location="build/build_win" />
+	</target>
+
+	<!-- Get the environment variables of UDM from UNIX systems -->
+	<target name="setenvlinux" unless="isWindows">
+		<echo> "Linux platfrom" </echo>
+		<property environment="env" />
+		<property name="udm.dir" location="/usr" />
+		<property name="udm.etc.dir" location="/usr/share/udm/etc" />
+		<property name="build.dir" location="build/build_linux" />
+	</target>
+
+	<!-- Initialize directories and properties of the build -->
+	<target name="init" depends="setenveclipse, setenvlinux" description="Initialize directories.">
+		<tstamp />
+
+		<!-- Directory of the compilation -->
+		<!--property name="build.dir" location="build" /-->
+		<property name="classes.dir" location="${build.dir}/classes" />
+		<property name="java.build.dir" location="${build.dir}/classes/main" />
+
+		<!-- Directory where the distribution goes -->
+		<property name="dist.dir" location="${build.dir}/dist" />
+		<property name="judm.dist.dir" location="${dist.dir}/judm" />
+
+		<!-- Domain independent build products -->
+		<property name="judm.dir" location="${build.dir}/judm" />
+
+		<!-- Helper classes -->
+		<property name="util.src.dir" location="src/util" />
+		<property name="util.classes.dir" location="${judm.dir}" />
+
+		<!-- Swig generated Java code -->
+		<property name="udmcint.src.dir" location="src/UdmCint" />
+		<property name="udmcint.classes.dir" location="${judm.dir}" />
+
+		<!-- Convenience wrapper for the Swig generated Java code -->
+		<property name="udmcintlight.src.dir" location="src/UdmCintLight" />
+		<property name="udmcintlight.classes.dir" location="${judm.dir}" />
+
+		<!-- GeneTRE domain-specific code -->
+		<property name="genetre.src.dir" location="samples/GeneTRE/src/main" />
+		<property name="genetre.classes.dir" location="${build.dir}/classes/GeneTRE" />
+
+		<!-- GeneTF domain-specific code -->
+		<property name="genetf.src.dir" location="samples/GeneTF/src/main" />
+		<property name="genetf.classes.dir" location="${build.dir}/classes/GeneTF" />
+
+		<!-- SBML2Ex domain-specific code -->
+		<property name="genetf.src.dir" location="samples/SBML2Ex/src/main" />
+		<property name="genetf.classes.dir" location="${build.dir}/classes/SBML2Ex" />
+
+		<!-- Directory of the batch files -->
+		<property name="batch.dir" location="etc" />
+
+		<!-- Classpath -->
+		<path id="compile.classpath">
+			<pathelement location="${util.classes.dir}" />
+			<pathelement location="${udmcint.classes.dir}" />
+			<pathelement location="${udmcintlight.classes.dir}" />
+			<pathelement location="${genetre.classes.dir}" />
+			<pathelement location="${genetf.classes.dir}" />
+			<fileset dir="lib/junit">
+				<include name="junit.jar" />
+			</fileset>
+		</path>
+	</target>
+
+	<!-- Clean all jUdm build products -->
+	<target name="clean" depends="init" description="Clean all build products.">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<!-- Copy the DLLs in the directory of the distribution -->
+	<target name="copy-dlls" depends="init" description="Copy DLLs to build dir for testing">
+		<mkdir dir="${judm.dir}" />
+		<copy todir="${judm.dir}">
+			<!-- Copy xerces in the directory of the distribution -->
+			<fileset dir="${udm_3rdparty.dir}">
+				<include name="xerces*.dll" />
+				<include name="xerces*.so" />
+				<exclude name="*D.dll" />
+			</fileset>
+			<!-- Copy Udm executable and UdmCint DLL in the directory of the distribution -->
+			<fileset dir="${udm.dir}/bin.net">
+				<include name="Udm.exe" />
+				<include name="UdmCint.dll" />
+				<include name="UdmCint.so" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Compile the source codes -->
+	<target name="compile" depends="init,copy-dlls" description="Compile the code.">
+		<!-- Create library for classes classes-->
+		<mkdir dir="${classes.dir}" />
+
+		<!-- Compile util classes-->
+		<mkdir dir="${util.classes.dir}" />
+		<javac srcdir="${util.src.dir}" destdir="${util.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
+		<copy todir="${classes.dir}">
+			<fileset dir="${util.classes.dir}" casesensitive="no"/>
+		</copy>
+
+		<!-- Compile SWIG generated UdmCint classes-->
+		<mkdir dir="${udmcint.classes.dir}" />
+		<javac srcdir="${udmcint.src.dir}" destdir="${udmcint.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
+		<copy todir="${classes.dir}">
+			<fileset dir="${udmcint.classes.dir}" casesensitive="no"/>
+		</copy>
+
+		<!-- Compile wrapper for the SWIG generated Java code classes (UdmCintLight)-->
+		<mkdir dir="${udmcintlight.classes.dir}" />
+		<javac srcdir="${udmcintlight.src.dir}" destdir="${udmcintlight.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
+		<copy todir="${udmcintlight.classes.dir}/edu/vanderbilt/isis/udm">
+			<fileset dir="${udm.etc.dir}" casesensitive="no">
+				<include name="Uml.xsd" />
+			</fileset>
+		</copy>
+		<copy todir="${classes.dir}">
+			<fileset dir="${udmcintlight.classes.dir}" casesensitive="no"/>
+		</copy>
+
+		<!-- Compile domain specific code for GeneTF -->
+		<antcall target="ds-compile">
+			<param name="dspackage" value="GeneTF" />
+			<param name="dspackagelower" value="genetf" />
+			<param name="udm_options" value=" -j " />
+		</antcall>
+
+		<!-- Compile domain specific code for GeneTRE-->
+		<antcall target="ds-compile">
+			<param name="dspackage" value="GeneTRE" />
+			<param name="dspackagelower" value="genetre" />
+			<param name="udm_options" value=" -j -u GeneTRE=http://kutykuruty.khm.edu" />
+		</antcall>
+
+		<!-- Compile domain specific code for SBML2Ex-->
+		<antcall target="ds-compile">
+			<param name="dspackage" value="SBML2Ex" />
+			<param name="dspackagelower" value="sbml2ex" />
+			<param name="udm_options" value=" -j -q jigcell -e -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon" />
+		</antcall>
+	</target>
+
+	<!-- Generate a domain specific package -->
+	<target name="ds-sample-generator" depends="init" description="Generate the domain specific package">
+		<fail unless="dspackage" message="Missing parameter: dspackage" />
+		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
+		<fail unless="udm_options" message="Missing parameter: udm_options" />
+		<!-- Delete intermediate files -->
+		<delete>
+			<fileset dir="samples/${dspackage}/meta">
+				<filename name="*.xml" />
+				<filename name="*.xsd" />
+			</fileset>
+		</delete>
+		<delete dir="samples/${dspackage}/src/main/edu" />
+		<!-- Generate UDM XML from the XME XML file -->
+		<exec dir="samples/${dspackage}/meta" executable="cmd">
+			<arg line="/c ${udm.etc.dir}/xme2udmxml ${dspackage}_uml.xme ${dspackage}.mga " />
+		</exec>
+		<!-- Generate UDM XML from the XME XML file -->
+		<exec dir="samples/${dspackage}/meta" executable="cmd">
+			<arg line="/c ${udm.dir}\bin.net\udm.exe ${dspackage}_udm.xml ${udm_options}" />
+		</exec>
+		<!-- Update source code -->
+		<copy todir="samples/${dspackage}/src/main">
+			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
+			<include name="**/*.java" />
+		</fileset>
+		</copy>
+		<!-- Delete intermediate files -->
+		<copy todir="samples/${dspackage}/src/main/edu/vanderbilt/isis/meta">
+			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
+				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
+			</fileset>
+		</copy>
+		<delete dir="samples/${dspackage}/meta/edu" />
+	</target>
+
+	<!-- Compile a domain specific package -->
+	<target name="ds-compile" depends="init" description="Compile a domain specific package">
+		<fail unless="dspackage" message="Missing parameter: dspackage" />
+		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
+		<fail unless="udm_options" message="Missing parameter: udm_options" />
+		<!-- Generate a domain specific package -->
+		<antcall target="ds-sample-generator">
+			<param name="dspackage" value="${dspackage}" />
+			<param name="dspackagelower" value="${dspackagelower}" />
+			<param name="udm_options" value="${udm_options}" />
+		</antcall>
+
+		<!-- Create the dirctories for the domain-specific package -->
+		<mkdir dir="${build.dir}/${dspackage}/classes/main" />
+		<mkdir dir="${build.dir}/${dspackage}/classes/test" />
+		<mkdir dir="${build.dir}/${dspackage}/meta" />
+		<mkdir dir="${build.dir}/${dspackage}/samples" />
+
+		<javac srcdir="samples/${dspackage}/src/main" destdir="${build.dir}/${dspackage}/classes/main" deprecation="false" debug="true" classpathref="compile.classpath" />
+		<!-- Copy the domain sopecific XSD and XSD next to the classes-->
+		<copy todir="${build.dir}/${dspackage}/classes/main">
+			<fileset dir="samples/${dspackage}/src/main">
+				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
+			</fileset>
+		</copy>
+
+		<!-- XSD validation may fail if the XSD file is not in the working directory -->
+		<copy todir="${build.dir}/${dspackage}">
+			<fileset dir="samples/${dspackage}" casesensitive="no">
+				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
+			</fileset>
+			<mapper type="flatten" />
+		</copy>
+
+		<!-- Compile the test classes -->
+		<javac srcdir="samples/${dspackage}/src/test" destdir="${build.dir}/${dspackage}/classes/test" deprecation="false" debug="true">
+			<classpath>
+				<path refid="compile.classpath" />
+				<pathelement location="${build.dir}/${dspackage}/classes/main" />
+			</classpath>
+		</javac>
+
+		<!-- Copy the sample XML files -->
+		<copy todir="${build.dir}/${dspackage}/samples">
+			<fileset dir="samples/${dspackage}/samples" />
+		</copy>
+		<copy todir="${build.dir}/${dspackage}/meta">
+			<fileset dir="samples/${dspackage}/meta" />
+		</copy>
+
+		<!-- Copy the Uml.xsd -->
+		<copy todir="${build.dir}/${dspackage}" file="${udm.etc.dir}/Uml.xsd" />
+
+		<!-- Copy every class in the build/classes directory -->
+		<copy todir="${classes.dir}">
+			<fileset dir="${build.dir}/${dspackage}/classes/test" casesensitive="no"/>
+			<fileset dir="${build.dir}/${dspackage}/classes/main" casesensitive="no"/>
+		</copy>
+	</target>
+
+	<!-- Create the distribution -->
+	<target name="dist" depends="compile" description="Create the distribution">
+		<!-- Create the jUdm distribution directory -->
+		<mkdir dir="${judm.dist.dir}" />
+		
+		<!-- Copy the binaries from the build to the distribution directory -->
+		<antcall target="copy-binaries-win"/>
+		<antcall target="copy-binaries-linux"/>
+		
+		<!-- Copy the jUnit to the distribution directory -->
+		<copy todir="${judm.dist.dir}" file="lib/junit/junit.jar" />
+		<!-- Copy the Uml.xsd to the distribution directory -->
+		<copy todir="${judm.dist.dir}" file="${udm.etc.dir}/Uml.xsd" />
+		
+		<!-- Create judm.jar in the distribution directory -->
+		<zip destfile="${judm.dist.dir}/judm.jar">
+			<fileset dir="${judm.dir}">
+				<exclude name="*.dll" />
+				<exclude name="*.exe" />
+			</fileset>
+		</zip>
+		
+		<!-- Create the GeneTF distribution -->
+		<antcall target="ds-dist-dir">
+			<param name="dspackage" value="GeneTF" />
+			<param name="dspackagelower" value="genetf" />
+		</antcall>
+		
+		<!-- Create the GeneTRE distribution -->
+		<antcall target="ds-dist-dir">
+			<param name="dspackage" value="GeneTRE" />
+			<param name="dspackagelower" value="genetre" />
+		</antcall>
+		
+		<!-- Create the SBML2Ex distribution -->
+		<antcall target="ds-dist-dir">
+			<param name="dspackage" value="SBML2Ex" />
+			<param name="dspackagelower" value="sbml2ex" />
+		</antcall>
+		
+		<!-- Generate Java UDM API documentation -->
+<!-- 
+		<mkdir dir="${judm.dist.dir}/apidoc" />
+		<javadoc defaultexcludes="yes" verbose="no" destdir="${judm.dist.dir}/apidoc" windowtitle="UDM API">
+			<fileset dir="${util.src.dir}" defaultexcludes="yes" />
+			<fileset dir="${udmcint.src.dir}" defaultexcludes="yes" />
+			<fileset dir="${udmcintlight.src.dir}" defaultexcludes="yes" />
+		</javadoc>
+--> 
+		
+		<!-- Zip the full distribution together -->
+		<zip destfile="${build.dir}/dist/judm.zip">
+			<fileset dir="${dist.dir}">
+				<include name="judm/**/*.*" />
+			</fileset>
+		</zip>
+		
+	</target>
+
+	<!-- Helper task for creating domain-specific dist dirs -->
+	<target name="ds-dist-dir" depends="init">
+		<!-- There is no easy way in Ant to convert a string to lowercase
+		     but a lowercase name is necessary to specify the package name in 
+		     the JAR manifest file below.
+		     So we use this extra argument that must be the domain-specific package
+		     name in lowercase. -->
+		<fail unless="dspackage" message="Missing parameter: dspackage" />
+		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
+		
+		<!-- Domain specific code -->
+		<mkdir dir="${dist.dir}/${dspackage}" />
+
+		<!-- Copy all the XML and XSD files -->
+		<copy todir="${dist.dir}/${dspackage}/samples">
+			<mapper type="flatten" />
+			<fileset dir="samples/${dspackage}/samples" casesensitive="no">
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+		<copy todir="${dist.dir}/${dspackage}/meta">
+			<mapper type="flatten" />
+			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
+				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
+			</fileset>
+		</copy>
+
+		<!-- Copy all the XME and JPG files -->
+		<copy todir="${dist.dir}/${dspackage}/meta">
+			<mapper type="flatten" />
+			<fileset dir="samples/${dspackage}/" casesensitive="no">
+				<include name="**/${dspackage}.xme" />
+				<include name="**/${dspackage}.jpg" />
+			</fileset>
+		</copy>
+
+		<!-- Create domain specific jar file -->
+		<zip destfile="${dist.dir}/${dspackage}/${dspackage}.jar">
+			<fileset dir="${build.dir}/${dspackage}/classes/main" />
+			<fileset dir="${build.dir}/${dspackage}/classes/test" />
+		</zip>
+		
+		<!-- Create domain specific test jar file -->
+		<jar destfile="${dist.dir}/${dspackage}/${dspackage}-test.jar">
+			<fileset dir="${build.dir}/${dspackage}/classes/test" />
+			<manifest>
+				<attribute name="Main-Class" value="edu.vanderbilt.isis.${dspackagelower}.test.AllTests" />
+				<attribute name="Class-Path" value="../judm/judm.jar ../judm/junit.jar ${dspackage}.jar" />
+			</manifest>
+		</jar>
+		
+		<!-- Copy the domain specific source  -->
+		<mkdir dir="${dist.dir}/${dspackage}/src" />
+		<copy todir="${dist.dir}/${dspackage}/src">
+			<fileset dir="samples/${dspackage}/src">
+				<include name="**/*.java" />
+				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
+			</fileset>
+		</copy>
+		<copy todir="${dist.dir}/${dspackage}/src/samples">
+			<mapper type="flatten" />
+			<fileset dir="samples/${dspackage}/samples" casesensitive="no">
+				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
+			</fileset>
+		</copy>
+		<copy todir="${dist.dir}/${dspackage}/src/meta">
+			<mapper type="flatten" />
+			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
+				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
+				<include name="**/*.xme" />
+				<include name="**/*.jpg" />
+			</fileset>
+		</copy>
+		
+		<!-- Generate JavaAPI documentation for the domain specific code  -->
+<!-- 
+		<mkdir dir="${dist.dir}/${dspackage}/apidoc" />
+		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/${dspackage}/apidoc" windowtitle="${dspackage} UDM API">
+			<fileset dir="${dist.dir}/${dspackage}/src" defaultexcludes="yes">
+			</fileset>
+		</javadoc>
+-->
+
+		<!-- Copy the appropriate batch file in the distribution  -->
+		<antcall target="set_up_batch_file_win"/>
+		<antcall target="set_up_batch_file_linux"/>
+
+		<!-- Create the domain specific distribution zip  -->
+		<zip destfile="${dist.dir}/${dspackage}.zip">
+			<fileset dir="${dist.dir}">
+				<include name="${dspackage}/**/*.*" />
+			</fileset>
+		</zip>
+		
+	</target>
+	
+	<!-- Copy the binaries (DLL, EXE) from the build to the distribution directory -->
+	<target name="copy-binaries-win" if="isWindows">
+		<copy todir="${judm.dist.dir}">
+			<fileset dir="${judm.dir}">
+				<include name="*.exe" />
+				<include name="*.dll" />
+				<exclude name="*D.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Copy the binaries (.SO) from the build to the distribution directory -->
+	<target name="copy-binaries-linux" unless="isWindows">
+		<copy todir="${judm.dist.dir}">
+			<fileset dir="${judm.dir}">
+				<include name="*.so" />
+			</fileset>
+			<fileset dir="${udm.dir}/bin">
+				<include name="Udm" />
+			</fileset>
+			<fileset dir="${udm.dir}/lib">
+				<include name="libUdmShared.so.222" />
+				<include name="libGOCLShared.so.100" />
+			</fileset>
+
+		</copy>
+	</target>
+
+	<!-- Set up batch file for running the tests in Windows -->	
+	<target name="set_up_batch_file_win" if="isWindows">
+		<copy todir="${dist.dir}/${dspackage}" file="${batch.dir}/runtests.cmd" />
+		<replace file="${dist.dir}/${dspackage}/runtests.cmd" token="@DSPACKAGE@" value="${dspackage}" />
+	</target>
+
+	<!-- Set up batch file for running the tests in UNIX systems -->	
+	<target name="set_up_batch_file_linux" unless="isWindows">
+		<copy todir="${dist.dir}/${dspackage}" file="${batch.dir}/runtests.sh" />
+		<replace file="${dist.dir}/${dspackage}/runtests.sh" token="@DSPACKAGE@" value="${dspackage}" />
+	</target>
+
+</project>
