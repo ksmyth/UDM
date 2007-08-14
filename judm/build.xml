@@ -15,17 +15,19 @@
 		<property name="udm.etc.dir" location="${env.UDM_PATH}/etc" />
 		<property name="udm_3rdparty.dir" location="${env.UDM_3RDPARTY_PATH}" />
 		<property name="build.dir" location="build/build_win" />
+		<property name="junit.dir" location="${udm_3rdparty.dir}/junit" />
 	</target>
 
 	<!-- Get the environment variables of UDM from UNIX systems -->
 	<target name="setenvlinux" unless="isWindows">
 		<echo> "Linux platform" </echo>
 		<property environment="env" />
-		<property name="udm.dir" location="/usr" />
-		<property name="udm.bin.dir" location="/usr" />
+		<property name="udm.dir" location=".." />
+		<property name="udm.bin.dir" location="../bin" />
 		<property name="udm.etc.dir" location="../etc/" />
 		<property name="udm_3rdparty.dir" location="/usr" />
 		<property name="build.dir" location="build/build_linux" />
+		<property name="junit.dir" location="${env.JUNIT_HOME}" />
 	</target>
 
 	<!-- Initialize directories and properties of the build -->
@@ -75,7 +77,7 @@
 		<path id="compile.classpath">
 			<pathelement location="${judm.classes.dir}" />
 			<pathelement location="${judmhelper.classes.dir}" />
-			<fileset dir="${udm_3rdparty.dir}/junit">
+			<fileset dir="${junit.dir}">
 				<include name="junit.jar" />
 			</fileset>
 		</path>
@@ -84,13 +86,73 @@
 	<!-- Clean all jUdm build products -->
 	<target name="clean" depends="init" description="Clean all build products.">
 		<delete dir="${build.dir}" />
+		<delete>
+			<fileset dir="${udm.bin.dir}">
+				<filename name="judm.jar" />
+			</fileset>
+		</delete>
+		<!-- GeneTF -->
+		<antcall target="ds-clean">
+			<param name="dspackage" value="GeneTF" />
+			<param name="dspackagelower" value="genetf" />
+		</antcall>
+		<!-- GeneTRE -->
+		<antcall target="ds-clean">
+			<param name="dspackage" value="GeneTRE" />
+			<param name="dspackagelower" value="genetre" />
+		</antcall>
+		<!-- SBML2Ex -->
+		<antcall target="ds-clean">
+			<param name="dspackage" value="SBML2Ex" />
+			<param name="dspackagelower" value="sbml2ex" />
+		</antcall>
+	</target>
+
+	<!-- Delete generated source files of a domain specific package -->
+	<target name="ds-clean" description="Delete generated source files of a domain specific package">
+		<fail unless="dspackage" message="Missing parameter: dspackage" />
+		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
+		<antcall target="ds-clean-win">
+			<param name="dspackage" value="${dspackage}" />
+			<param name="dspackagelower" value="${dspackagelower}" />
+		</antcall>
+		<antcall target="ds-clean-linux">
+			<param name="dspackage" value="${dspackage}" />
+			<param name="dspackagelower" value="${dspackagelower}" />
+		</antcall>
+	</target>
+
+	<!-- Delete generated source files of a domain specific package -->
+	<target name="ds-clean-win" if="isWindows" description="Delete generated source files of a domain specific package">
+		<fail unless="dspackage" message="Missing parameter: dspackage" />
+		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
+		<delete dir="samples/${dspackage}/src/main/edu" />
+		<delete dir="samples/${dspackage}/src/main/test" />
+		<delete>
+			<fileset dir="samples/${dspackage}/meta">
+				<filename name="*.xml" />
+				<filename name="*.xsd" />
+			</fileset>
+		</delete>
+	</target>
+
+	<!-- Delete generated source files of a domain specific package -->
+	<target name="ds-clean-linux" unless="isWindows" description="Delete generated source files of a domain specific package">
+		<fail unless="dspackage" message="Missing parameter: dspackage" />
+		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
+		<delete dir="samples/${dspackage}/src/main/edu" />
+		<delete dir="samples/${dspackage}/src/main/test" />
+		<delete>
+			<fileset dir="samples/${dspackage}/meta">
+				<filename name="*.xsd" />
+			</fileset>
+		</delete>
 	</target>
 
 	<!-- Copy the DLLs in the directory of the distribution -->
 	<target name="copy-dlls" depends="init" description="Copy DLLs to build dir for testing">
 		<!-- Compile domain specific code for GeneTF -->
 		<antcall target="copy-dlls-win"/>
-		<antcall target="copy-dlls-linux"/>
 	</target>
 
 	<!-- Copy the Win DLLs in the directory of the distribution -->
@@ -109,21 +171,6 @@
 			<fileset dir="${udm.bin.dir}">
 				<include name="Udm.exe" />
 				<include name="UdmSwig.dll" />
-			</fileset>
-		</copy>
-		
-	</target>
-
-	<!-- Copy the Linux SOs in the directory of the distribution -->
-	<target name="copy-dlls-linux" unless="isWindows" description="Copy SOs to build dir for testing">
-
-		<mkdir dir="${judm.dir}" />
-		<mkdir dir="${judm.bin.dir}" />
-		
-		<copy todir="${judm.bin.dir}">
-			<!-- Copy UdmSwig DLL in the directory of the distribution -->
-			<fileset dir="${udm.dir}/lib">
-				<include name="libUdmSwig.so" />
 			</fileset>
 		</copy>
 		
@@ -211,7 +258,7 @@
 		<antcall target="ds-generate">
 			<param name="dspackage" value="GeneTRE" />
 			<param name="dspackagelower" value="genetre" />
-			<param name="udm_options" value=" -j" />
+			<param name="udm_options" value=" -j -u GeneTRE=http://kutykuruty.khm.edu" />
 		</antcall>
 		<!-- SBML2Ex -->
 		<antcall target="ds-generate">
@@ -240,7 +287,24 @@
 	</target>
 
 	<!-- Generate a domain specific package -->
-	<target name="ds-generate" if="isWindows" description="Generate the domain specific package">
+	<target name="ds-generate" description="Generate the domain specific package">
+		<fail unless="dspackage" message="Missing parameter: dspackage" />
+		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
+		<fail unless="udm_options" message="Missing parameter: udm_options" />
+		<antcall target="ds-generate-win">
+			<param name="dspackage" value="${dspackage}" />
+			<param name="dspackagelower" value="${dspackagelower}" />
+			<param name="udm_options" value="${udm_options}" />
+		</antcall>
+		<antcall target="ds-generate-linux">
+			<param name="dspackage" value="${dspackage}" />
+			<param name="dspackagelower" value="${dspackagelower}" />
+			<param name="udm_options" value="${udm_options}" />
+		</antcall>
+	</target>
+
+	<!-- Generate a domain specific package -->
+	<target name="ds-generate-win" if="isWindows" description="Generate the domain specific package">
 		<fail unless="dspackage" message="Missing parameter: dspackage" />
 		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
 		<fail unless="udm_options" message="Missing parameter: udm_options" />
@@ -264,6 +328,35 @@
 		<echo> Run ${udm.dir}\bin\udm.exe ${dspackage}_udm.xml ${udm_options} </echo>
 		<exec dir="samples/${dspackage}/meta" executable="cmd">
 			<arg line="/c ${udm.dir}\bin\udm.exe ${dspackage}_udm.xml ${udm_options}" />
+		</exec>
+		
+		<!-- Update source code -->
+		<copy todir="samples/${dspackage}/src/main">
+			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
+				<include name="**/*.java" />
+				<include name="**/*.html" />
+		</fileset>
+		</copy>
+
+		<!-- Delete intermediate files -->
+		<delete dir="samples/${dspackage}/meta/edu" />
+		<delete dir="samples/${dspackage}/meta/test" />
+		
+	</target>
+
+	<!-- Generate a domain specific package -->
+	<target name="ds-generate-linux" unless="isWindows" description="Generate the domain specific package">
+		<fail unless="dspackage" message="Missing parameter: dspackage" />
+		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
+		<fail unless="udm_options" message="Missing parameter: udm_options" />
+
+		<delete dir="samples/${dspackage}/src/main/edu" />
+		<delete dir="samples/${dspackage}/src/main/test" />
+
+		<!-- Generate UDM XML from the XME XML file -->
+		<echo> Run ${udm.bin.dir}/Udm ${dspackage}_udm.xml ${udm_options} </echo>
+		<exec dir="samples/${dspackage}/meta" executable="${udm.bin.dir}/Udm">
+			<arg line="${dspackage}_udm.xml ${udm_options}" />
 		</exec>
 		
 		<!-- Update source code -->
@@ -310,13 +403,13 @@
 	<target name="judm-build" description="Update the jUdm build">
 		
 		<!-- Copy the jUnit to the build directory -->
-		<copy todir="${judm.dir}" file="${udm_3rdparty.dir}/junit/junit.jar" />
+		<copy todir="${judm.dir}" file="${junit.dir}/junit.jar" />
 
 		<!-- Copy the Uml.xsd to the build directory -->
 		<copy todir="${judm.meta.dir}" file="${udm.etc.dir}/Uml.xsd" />
 
 		<!-- Create judm.jar in the build directory -->
-		<jar destfile="${judm.dir}/judm.jar" manifest="etc/Manifest.mf">
+		<jar destfile="${judm.dir}/judm.jar" manifest="etc/MANIFEST.MF">
 			<fileset dir="${judm.classes.dir}"/>
 		</jar>
 		
@@ -354,7 +447,7 @@
 		</copy>
 
 		<!-- Create domain specific jar file -->
-		<jar destfile="${build.dir}/${dspackage}/${dspackage}.jar" manifest="samples/${dspackage}/etc/Manifest.mf">
+		<jar destfile="${build.dir}/${dspackage}/${dspackage}.jar" manifest="samples/${dspackage}/ETC/MANIFEST.MF">
 			<fileset dir="${build.dir}/${dspackage}/classes/main" />
 		</jar>
 		
@@ -370,7 +463,10 @@
 		<!-- Copy the domain specific source  -->
 		<mkdir dir="${build.dir}/${dspackage}/src/main/edu" />
 		<copy todir="${build.dir}/${dspackage}/src/main/edu">
-			<fileset dir="samples/${dspackage}/src/main/edu"/>
+			<fileset dir="samples/${dspackage}/src/main/edu">
+				<include name="**/*.java" />
+				<include name="**/*.html" />
+			</fileset>
 		</copy>
 		
 		<mkdir dir="${build.dir}/${dspackage}/src/test" />
@@ -392,11 +488,7 @@
 		<delete dir="${udm.dir}/samples/Java/${dspackage}" />
 		<mkdir dir="${udm.dir}/samples/Java/${dspackage}" />
 		<copy todir="${udm.dir}/samples/Java/${dspackage}">
-			<fileset dir="${build.dir}/${dspackage}">
-				<include name="**/*.jar" />
-				<include name="**/*.cmd" />
-				<include name="**/*.sh" />
-			</fileset>
+			<fileset dir="${build.dir}/${dspackage}"/>
 		</copy>
 		
 	</target>
@@ -538,7 +630,7 @@
 			</classpath>
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${build.reports.tests.dir}/xml">
-				<fileset dir="${build.dir}/dist/${dspackage}/src/test">
+				<fileset dir="${build.dir}/${dspackage}/src/test">
 					<include name="**/*Test.java" />
 				</fileset>
 			</batchtest>
