@@ -44,10 +44,13 @@ namespace DTDGen
 	void GenerateXMLSchemaAttributes(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi = false);
 
 	//generates XSD elements
-	void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi = false, bool xsd_el_ta = false, set<string> *ns_ignore_set = NULL);	
+	void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, const set<string> &ns_ignore_set, bool uxsdi = false, bool xsd_el_ta = false);
 
 	//generates complete XML Schema 
-	void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi = false, bool xsd_el_ta = false, map<string, string> *ns_map = NULL, set<string> *ns_ignore_set = NULL, bool qualified_attrs_ns = false);
+	void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, const map<string, string> &ns_map, const set<string> &ns_ignore_set, bool uxsdi = false, bool xsd_el_ta = false, bool qualified_attrs_ns = false);
+	void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output);
+
+
 };
 
 #endif

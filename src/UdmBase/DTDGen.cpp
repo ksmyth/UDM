@@ -57,6 +57,7 @@ Changelog:
 #include "DTDGen.h"
 
 #include <time.h>
+#include <fstream>
 
 namespace DTDGen
 {
@@ -666,18 +667,17 @@ namespace DTDGen
 
 	// --------------------------- XML Schema generation
 
-	string NamespaceToURI(const ::Uml::Uml::Namespace &ns, map<string, string> *ns_map)
+	string NamespaceToURI(const ::Uml::Uml::Namespace &ns, const map<string, string> &ns_map)
 	{
-		if (ns_map != NULL) {
-      const std::string& nsn = ns.name();
-			map<string, string>::iterator i = ns_map->find(nsn);
-			if (i != ns_map->end())
-      {
+		const std::string& nsn = ns.name();
+		if (!ns_map.empty())
+		{
+			map<string, string>::const_iterator i = ns_map.find(nsn);
+			if (i != ns_map.end())
 				return i->second;
-      }
 		}
 		string uri("http://www.isis.vanderbilt.edu/2004/schemas/");
-		uri += ns.name();
+		uri += nsn;
 		return uri;
 	}
 
@@ -948,7 +948,7 @@ namespace DTDGen
 		}
 };
 
-void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi, bool xsd_el_ta, set<string> *ns_ignore_set)	
+void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, const set<string> &ns_ignore_set, bool uxsdi, bool xsd_el_ta)	
 {
 	string name = c.name();
 	bool has_text_attr = Uml::HasTextAttributes(c);
@@ -1010,10 +1010,9 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 			::Uml::Uml::Namespace i_ns = cwcps_i->first.parent();
 
 			bool ignore = false;
-			if (ns_ignore_set != 0)
 			{
-				set<string>::const_iterator sit = ns_ignore_set->find(i_ns.name());
-				if (sit != ns_ignore_set->end())
+				set<string>::const_iterator sit = ns_ignore_set.find(i_ns.name());
+				if (sit != ns_ignore_set.end())
 				{
 					if (!any_is_there)
 					{
@@ -1061,9 +1060,10 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 	output << "\t</xsd:complexType>" << endl << endl;
 }
 
-void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi, bool xsd_el_ta, 
-                       map<string, string> *ns_map, 
-                       set<string> *ns_ignore_set,  
+void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output,
+		       const map<string, string> &ns_map,
+                       const set<string> &ns_ignore_set,  
+		       bool uxsdi, bool xsd_el_ta, 
                        bool qualified_attrs_ns)
 {
 
@@ -1112,7 +1112,7 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 		{
 			if(uxsdi || !(bool)i->isAbstract() )
 			{
-				GenerateXMLSchemaElement(*i,  output, uxsdi, xsd_el_ta, ns_ignore_set);
+				GenerateXMLSchemaElement(*i,  output, ns_ignore_set, uxsdi, xsd_el_ta);
 				// XSD elements can't be of abstract types,
 				// don't make them globals
 				if (!uxsdi || !(bool)i->isAbstract()) {
@@ -1142,6 +1142,13 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 		output << endl << "</xsd:schema>" << endl;
 }
 
+
+void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output)
+{
+	map<string, string> empty_ns_map;
+	set<string> empty_ns_ignore_set;
+	GenerateXMLSchema(ns, output, empty_ns_map, empty_ns_ignore_set);
+}
 
 
 };
