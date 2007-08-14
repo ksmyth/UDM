@@ -1,3 +1,4 @@
+
 /*
 Copyright (c) Vanderbilt University, 2000-2001
 ALL RIGHTS RESERVED
@@ -33,18 +34,10 @@ this software.
 
 
 */
-#ifdef __MAKECINT__
-	#define ADD_CINT_STRING
-#else
-	#ifndef UDM_DLL	
-		#define UDM_DLL
-	#endif
-	#ifdef CS_IN_UDMCINT
-		#define ADD_CINT_STRING
-	#endif
-#endif
-
+#ifndef UDMCINTSWIG_H
+#define UDMCINTSWIG_H
 #include <vector>
+#include "cint_string.h"
 
 using namespace std;
 
@@ -71,14 +64,10 @@ struct UdmLong {
 };
 
 
-
 class UdmPseudoObject;
 
-#ifdef __MAKECINT__
-class UdmPseudoObjectS
-#else
-class UDM_DLL UdmPseudoObjectS
-#endif
+class  UdmPseudoObjectS
+
 {
 	UdmPseudoObject * impl;
 	int length;
@@ -103,42 +92,9 @@ public:
 
 
 
-#ifdef ADD_CINT_STRING
-class cint_string
-{
-	char * impl;
-	int length;
-	
-public:
-	cint_string();										//for creating a NULL string
-	cint_string(int length);							//for creating an empty string, length chars long
 
-	cint_string(const char * frm);						//for creating a cint_string containing frm
-	cint_string(const cint_string& frm);						
-	cint_string& operator=(const cint_string& frm);		
-	cint_string& operator+=(const cint_string& what);	//requested by Feng
-	cint_string& operator+=(const char what);	//requested by vijan
-	cint_string& operator+=(const int what);	//requested by vijan
+struct  AssociationInfo
 
-	bool operator ==(const cint_string& what);			//also requested by Feng
-
-	bool CopyFrom(const char *);
-	bool operator !() const;
-	operator bool() const;
-
-	
-	~cint_string();
-	int comp(const char * compare_to) const;
-	bool overflow;
-	char * buffer() const;
-};
-#endif
-
-#ifdef __MAKECINT__
-struct AssociationInfo
-#else
-struct UDM_DLL AssociationInfo
-#endif
 {
 
 	cint_string assoc_class;//can be NULL
@@ -149,11 +105,7 @@ struct UDM_DLL AssociationInfo
 	AssociationInfo(cint_string src, cint_string dst, cint_string assoc);
 };
 
-#ifdef __MAKECINT__
-struct CompositionInfo
-#else
-struct UDM_DLL CompositionInfo
-#endif
+struct  CompositionInfo
 {
 	cint_string parentRole;
 	cint_string childRole;
@@ -168,11 +120,8 @@ static const int TARGETFROMPEER = 0;
 static const int TARGETFROMCLASS = 1;
 static const int CLASSFROMTARGET = 2;
 
-#ifdef __MAKECINT__
-class UdmPseudoObject
-#else
-class UDM_DLL UdmPseudoObject
-#endif
+class  UdmPseudoObject
+
 {
 	
 	unsigned long ob_id;
@@ -266,13 +215,11 @@ public:
 	bool DeleteObject();
 };
 
-#ifdef __MAKECINT__
-#else
 static const int UPDN_CHANGES_PERSIST_ALWAYS = 0;
 static const int UPDN_CHANGES_PERSIST_DEFAULT = 1;
 static const int UPDN_CHANGES_LOST_DEFAULT = 2;
 
-class UDM_DLL UdmPseudoDataNetwork
+class  UdmPseudoDataNetwork
 {
 
 	cint_string meta_name;
@@ -303,23 +250,23 @@ public:
 // used to set the static API member variables to the already initialized meta objects 
 
 
-bool UDM_DLL UPO_LoadDiagram(const char *  xml_meta_file, UdmPseudoObject & diagram);
-bool UDM_DLL UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_string, UdmPseudoObject & diagram);
-bool UDM_DLL UPO_UnLoadDiagram(const char * xml_meta_file);
-bool UDM_DLL UPO_SetDiagram(UdmPseudoObject &diagram_what, const char * name);
-bool UDM_DLL UPO_SetNamespace(UdmPseudoObject &ns_what, UdmPseudoObject &parent_dgr, const char * name);
-bool UDM_DLL UPO_SetClass(UdmPseudoObject &class_what, UdmPseudoObject &parent_ns, const char *target_name);
-bool UDM_DLL UPO_SetAttribute(UdmPseudoObject &attr_what, UdmPseudoObject &class_what_class,  const char * target_name);
-bool UDM_DLL UPO_SetChildRole(UdmPseudoObject &ccr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char *  orole_name);
-bool UDM_DLL UPO_SetParentRole(UdmPseudoObject &cpr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char * orole_name);
-bool UDM_DLL UPO_SetAssocRole(UdmPseudoObject &ar_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char *target_name);
-bool UDM_DLL StoreXsd(const cint_string& key, const cint_string& xsd_str);
-bool UDM_DLL RemoveXsd(const cint_string& key);
-bool UDM_DLL ClearXsdStorage();
-bool UDM_DLL AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, const cint_string& namespaceUML);
-bool UDM_DLL ClearURIToUMLNamespaceMappings();
+bool  UPO_LoadDiagram(const char *  xml_meta_file, UdmPseudoObject & diagram);
+bool  UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_string, UdmPseudoObject & diagram);
+bool  UPO_UnLoadDiagram(const char * xml_meta_file);
+bool  UPO_SetDiagram(UdmPseudoObject &diagram_what, const char * name);
+bool  UPO_SetNamespace(UdmPseudoObject &ns_what, UdmPseudoObject &parent_dgr, const char * name);
+bool  UPO_SetClass(UdmPseudoObject &class_what, UdmPseudoObject &parent_ns, const char *target_name);
+bool  UPO_SetAttribute(UdmPseudoObject &attr_what, UdmPseudoObject &class_what_class,  const char * target_name);
+bool  UPO_SetChildRole(UdmPseudoObject &ccr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char *  orole_name);
+bool  UPO_SetParentRole(UdmPseudoObject &cpr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char * orole_name);
+bool  UPO_SetAssocRole(UdmPseudoObject &ar_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char *target_name);
+bool  StoreXsd(const cint_string& key, const cint_string& xsd_str);
+bool  RemoveXsd(const cint_string& key);
+bool  ClearXsdStorage();
+bool  AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, const cint_string& namespaceUML);
+bool  ClearURIToUMLNamespaceMappings();
 
+#endif//UDMCINTSWIG_H
 
-#endif
 
 

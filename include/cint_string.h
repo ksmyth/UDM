@@ -7,7 +7,7 @@
 			- += int, += char operators
 */
 
-class UDM_DLL cint_string
+class  cint_string
 {
 	char * impl;
 	int length;											// means capacity, i.e. the size of valid memory pointed by impl!
