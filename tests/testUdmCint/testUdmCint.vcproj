@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="testUdmCint"
 	ProjectGUID="{F2B871C3-36D2-4781-B82D-FC6C572A9290}"
+	RootNamespace="testUdmCint"
 	SccProjectName="SAK"
 	SccAuxPath="SAK"
 	SccLocalPath="SAK"
@@ -55,7 +56,8 @@
 				TypeLibraryName=".\Debug/testUdmCint.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="$(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -190,7 +192,7 @@
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTFxsd.h getGeneTFxsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe &quot;%UDM_PATH%&quot;\etc\Uml.xsd Umlxsd.h getUmlxsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe ..\..\etc\Uml.xsd Umlxsd.h getUmlxsd
 "
 					Outputs="GeneTF.cpp;GeneTF.h;GeneTF.xsd;GeneTFxsd.h"/>
 			</FileConfiguration>
