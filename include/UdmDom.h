@@ -34,16 +34,17 @@ CHANGELOG:
 #include <UdmBase.h>
 #endif
 
+#include <xercesc/util/PlatformUtils.hpp>
+
 //these predefinitions are needed for typedefs
 
 //GNU does not allow using namespace aliases in forward declarations
-namespace xercesc_2_5
-{
+XERCES_CPP_NAMESPACE_BEGIN
 	class DOM_Node;
 	class DOM_Element;
 	class DOMString;
-}
-using namespace xercesc_2_5;
+XERCES_CPP_NAMESPACE_END
+XERCES_CPP_NAMESPACE_USE
 
 typedef map<unsigned long, DOM_Element> IdToDomElementMap;
 typedef pair<const unsigned long, DOM_Element> IdToDomElementMapItem;
