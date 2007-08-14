@@ -24,7 +24,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\MoBIESTransition\udm_ns\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(UDM_PATH)\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;UDM_DYNAMIC_LINKING"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -75,6 +75,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(UDM_PATH)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -85,7 +86,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBase.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib zlib.lib $(NOINHERIT)"
+				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib zlib.lib $(NOINHERIT)"
 				OutputFile="$(OutDir)/test_ns.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\lib"
@@ -150,7 +151,7 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin\Udm.exe $(InputPath) -t -v
+					CommandLine="&quot;%UDM_PATH%\bin\UdmD.exe&quot; $(InputPath) -t -v
 "
 					Outputs="test_ns.cpp;test_ns.h"/>
 			</FileConfiguration>
@@ -158,7 +159,8 @@
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin\Udm.exe $(InputPath) -t -v"
+					CommandLine="&quot;%UDM_PATH%\bin\Udm.exe&quot; $(InputPath) -t -v
+"
 					Outputs="test_ns.cpp;test_ns.h"/>
 			</FileConfiguration>
 		</File>
@@ -178,7 +180,8 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="cd &quot;$(InputDir)&quot;
-&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;"
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
 					Outputs="$(InputDir)\$(InputName).mga;$(InputDir)\test_ns_udm.xml"/>
 			</FileConfiguration>
 		</File>
