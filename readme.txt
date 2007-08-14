@@ -65,6 +65,18 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+06/04/06	-	Release 2.18
+
+
+		- 	Added Udm::BaseVisitor class and Udm::Object::Accept(const BaseVisitor&) virtual functions
+		-	Removed the typedef Udm::Object Object type definition from generated code,
+			thus the generated namespace is not polluated.
+		-	Added a -x switch to Udm.exe. When using this switch a different .xsd file is generated,
+			which also reflects the inheritance relationships between the types and the abstractness 
+			pf the classes. However, he such generated XSD is not usable for validation, it's intended 
+			to use with other code generators which need an XSD file as input.
+
+
 05/31/04	-	Release 2.17
 
 		-	Various code generation bugfixes

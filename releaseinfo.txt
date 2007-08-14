@@ -1,17 +1,65 @@
-** UDM 2.11: Universal Data Model **
+** UDM 2.18: Universal Data Model **
 
 ** Software Requiems **
 
 1. Windows Operating system (preferably NT, 2000, XP)
 
-2. GME 3, R3.10.13 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 4, R4.5.18 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
-3. Visual Studio 6.0 SP5
+3. Visual Studio 6.0 SP6
 
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+
+06/04/06	-	Release 2.18
+
+
+		- 	Added Udm::BaseVisitor class and Udm::Object::Accept(const BaseVisitor&) virtual functions
+		-	Removed the typedef Udm::Object Object type definition from generated code,
+			thus the generated namespace is not polluated.
+		-	Added a -x switch to Udm.exe. When using this switch a different .xsd file is generated,
+			which also reflects the inheritance relationships between the types and the abstractness 
+			pf the classes. However, he such generated XSD is not usable for validation, it's intended 
+			to use with other code generators which need an XSD file as input.
+
+
+05/31/04	-	Release 2.17
+
+		-	Various code generation bugfixes
+		-	Changed the generated Initialize(const Uml::Diagram&) function to allow
+			intialization of the API from Diagrams that contain more than one role with the same 
+			target and name.
+
+
+
+05/21/04	-	Release 2.16
+
+		-	Recompiled with GME 4.5.18
+05/13/04	-	Release 2.15
+
+		- New UdmDom feature: 
+			
+			Udm DOM datanetwork can work on XML strings instead of XML files
+			by using CreateDataNetworkToString, OpenDataNetworkFromString DomDataNetwork 
+			member functions
+		
+		- New Udm.exe feature:
+
+			Dynamic META can be used with generated API, by calling an other initialize 
+			function, which, instead of creating the metaobjects, locates them in a previously
+			created or dynamically loaded Uml Diagram, and assigns the meta pointers in the API
+			
+		- Minor UdmStaticProject Bug 
+			
+			~UdmStaticProject did not delete a StaticDataNetwork created on heap by UdmStaticProject(),
+			this could cause in some rare cases problems when exiting from main().
+		
+		- connection supertype bugfix in UdmGme backend
+
+			The UdmGme backend did not allow the using of abstract or non-abstract connection superclasses.
+	
 
 04/28/04	-	Release 2.14
 

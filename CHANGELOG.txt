@@ -65,6 +65,91 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+06/04/06	-	Release 2.18
+
+
+		- 	Added Udm::BaseVisitor class and Udm::Object::Accept(const BaseVisitor&) virtual functions
+		-	Removed the typedef Udm::Object Object type definition from generated code,
+			thus the generated namespace is not polluated.
+		-	Added a -x switch to Udm.exe. When using this switch a different .xsd file is generated,
+			which also reflects the inheritance relationships between the types and the abstractness 
+			pf the classes. However, he such generated XSD is not usable for validation, it's intended 
+			to use with other code generators which need an XSD file as input.
+
+
+05/31/04	-	Release 2.17
+
+		-	Various code generation bugfixes
+		-	Changed the generated Initialize(const Uml::Diagram&) function to allow
+			intialization of the API from Diagrams that contain more than one role with the same 
+			target and name.
+
+
+
+05/21/04	-	Release 2.16
+
+		-	Recompiled with GME 4.5.18
+05/13/04	-	Release 2.15
+
+		- New UdmDom feature: 
+			
+			Udm DOM datanetwork can work on XML strings instead of XML files
+			by using CreateDataNetworkToString, OpenDataNetworkFromString DomDataNetwork 
+			member functions
+		
+		- New Udm.exe feature:
+
+			Dynamic META can be used with generated API, by calling an other initialize 
+			function, which, instead of creating the metaobjects, locates them in a previously
+			created or dynamically loaded Uml Diagram, and assigns the meta pointers in the API
+			
+		- Minor UdmStaticProject Bug 
+			
+			~UdmStaticProject did not delete a StaticDataNetwork created on heap by UdmStaticProject(),
+			this could cause in some rare cases problems when exiting from main().
+		
+		- connection supertype bugfix in UdmGme backend
+
+			The UdmGme backend did not allow the using of abstract or non-abstract connection superclasses.
+	
+
+04/28/04	-	Release 2.14
+
+		- MGA backend bugfixes: 
+			- Folder objects could not be deleted through UDM. 
+			- createChild bug scenario: 
+					- B is an abstract class
+					- B is contained in A with empty child role
+					- C is the only descendant of B
+					- crateChild() tries to create C in A	(exeception was thrown)
+		- cint_string enhacments:
+			- copy constrctor
+			- append operators for integer and character
+
+		- Udm::DataNetwork assignment operator bugfix: 
+			- The assignment operator did not remove existing objects from the detsination
+			datanetwork
+
+		- ordering of the sets returned by template classes in generated APIs:
+		ChildrenAttr, AssocAttr, AssocEndAttr, CrossAssocAttr, CrossAssocEndAttr, DerivedAttr, 
+		InstantiatedAttr
+			- API methods returning set<Type>-s of Udm objects will also have a sorted version,
+			with the '_sorted' ending. To these functions a comparer object can be passed, like
+			less<Type> or greater_equal<Type> which will sort the returned set<Type> accordingly.
+
+04/20/04	-	Release 2.13
+			
+			- Fixed StaticObject::setAssociation bug, which prevented adding/removing
+			"out of the box" links to instance objects
+			- Fixed detach() in each backend to also remove the placheholder object, if it exists
+			- Fixed UdmTOMI bug GetAssociationClassObjects, added boolean variable tryCrosslink
+
+04/14/04	-	Release 2.12
+
+			- Fixed ~StaticObject destructor bug.
+			- Fixed CreateLink(), DeleteLink() bug regarding temporary association 
+			between the objects of the same datanetwork
+			
 04/07/04	-	Release 2.11
 
 			- Added UdmTomi functions:
