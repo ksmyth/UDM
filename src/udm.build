@@ -100,10 +100,10 @@
   </setenv>
 
   <if test="${environment::variable-exists('INCLUDE')}">
-    <property name="Path.lib" value="${environment::get-variable('INCLUDE')}"/>
+    <property name="Path.include" value="${environment::get-variable('INCLUDE')}"/>
   </if>
   <ifnot test="${environment::variable-exists('INCLUDE')}">
-    <property name="Path.lib" value=""/>
+    <property name="Path.include" value=""/>
   </ifnot>
   <setenv>
     <variable name="INCLUDE">
