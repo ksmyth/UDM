@@ -12,6 +12,21 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+11/22/06	-	Release 3.1.1
+
+		-	GME 6.11.9 support
+		-	Nested UML namespaces
+		-	Helper classes used to access object attributes now have a same-class assignment operator
+		-	Added support to get/set the GME model annotations
+		-	UdmPseudoObject implements interface Comparable and overrides method hashCode()
+		-	Various bug fixes for object hierarchy copy
+		-	When generating the XSD schema, the list of global elements will include the classes which 
+			are contained only by abstract superclasses
+		-	Fix bugs that made attributes of instantiated/derived objects "desynched" from the archetype
+		-	Preserve synched/desynched status when copying objects
+		-	Added ObjectImpl::getAttrStatus() and ObjectImpl::getTempAttrStatus() to get the 
+			synched/desynched status of the value of attributes
+
 04/06/06		Release 3.0.1
 
 		-	GME 5.11.18 support
