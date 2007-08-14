@@ -105,7 +105,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=" UdmOcl.lib GOCL_vc7.lib  cppunit.lib testrunner.lib UdmPOI.lib Xalan-C_1.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib libcint.lib"
+				AdditionalDependencies="Uml.lib UdmOcl.lib GOCL_vc7.lib  cppunit.lib testrunner.lib UdmPOI.lib Xalan-C_1.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib "
 				OutputFile=".\Release/testUdmCint.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -186,18 +186,19 @@
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\UdmD.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
 &quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTF_xsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe ..\..\src\Uml\Uml.xsd Uml_xsd"
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe ..\..\src\Uml\Uml.xsd Uml_xsd
+"
 					Outputs="GeneTF.cpp;GeneTF.h;"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v -u GeneTF=http://kutykuruty.khm.edu
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTFxsd.h getGeneTFxsd
-&quot;%UDM_PATH%&quot;\etc\StrResGen.exe &quot;%UDM_PATH%&quot;\etc\Uml.xsd Umlxsd.h getUmlxsd
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe GeneTF.xsd GeneTF_xsd
+&quot;%UDM_PATH%&quot;\etc\StrResGen.exe ..\..\src\Uml\Uml.xsd Uml_xsd
 "
-					Outputs="GeneTF.cpp;GeneTF.h;GeneTF.xsd;GeneTFxsd.h"/>
+					Outputs="GeneTF.cpp;GeneTF.h;"/>
 			</FileConfiguration>
 		</File>
 		<File
