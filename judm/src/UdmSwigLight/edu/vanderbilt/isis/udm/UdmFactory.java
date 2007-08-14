@@ -9,8 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-import edu.vanderbilt.isis.udm.meta.Uml_xsd;
-
 
 /**
 * A base class for the domain specific factory classes. Includes methods for creation of
@@ -21,7 +19,7 @@ import edu.vanderbilt.isis.udm.meta.Uml_xsd;
 public abstract class UdmFactory {
     private static String JUDM_CINT_LIB_PATH = null;
     //private static final String udmPackagePath = "/edu/vanderbilt/isis/udm/";
-    private static final String umlXsdFile = "Uml.xsd";
+    //private static final String umlXsdFile = "Uml.xsd";
     private String xmlMetaFile;
     private String xsdMetaFile;
     private String metaName;
@@ -81,7 +79,7 @@ public abstract class UdmFactory {
             System.load(JUDM_CINT_LIB_PATH);
         }
         // store the Uml.xsd file
-        UdmHelper.StoreXsd(umlXsdFile, Uml_xsd.getString());
+        //UdmHelper.StoreXsd(umlXsdFile, Uml_xsd.getString());
         this.xmlMetaFile = xmlMetaFile;
         this.xsdMetaFile = xsdMetaFile;
         this.metaName = metaName;
