@@ -65,6 +65,30 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+05/13/04	-	Release 2.15
+
+		- New UdmDom feature: 
+			
+			Udm DOM datanetwork can work on XML strings instead of XML files
+			by using CreateDataNetworkToString, OpenDataNetworkFromString DomDataNetwork 
+			member functions
+		
+		- New Udm.exe feature:
+
+			Dynamic META can be used with generated API, by calling an other initialize 
+			function, which, instead of creating the metaobjects, locates them in a previously
+			created or dynamically loaded Uml Diagram, and assigns the meta pointers in the API
+			
+		- Minor UdmStaticProject Bug 
+			
+			~UdmStaticProject did not delete a StaticDataNetwork created on heap by UdmStaticProject(),
+			this could cause in some rare cases problems when exiting from main().
+		
+		- connection supertype bugfix in UdmGme backend
+
+			The UdmGme backend did not allow the using of abstract or non-abstract connection superclasses.
+	
+
 04/28/04	-	Release 2.14
 
 		- MGA backend bugfixes: 
