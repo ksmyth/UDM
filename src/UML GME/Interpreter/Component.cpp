@@ -1462,6 +1462,7 @@ void CConstraintBuilder::Initialize()
 {
 	CBuilderAtom::Initialize();
 	GetAttribute("ConstraintDescription", desc);
+	desc.Replace( "\"" , "\\\"" );
 	GetAttribute("ConstraintEqn", expr);
 	expr.Replace( "\n" , "\\n" );
 	expr.Replace( "\r" , "\\r" );
