@@ -492,16 +492,16 @@ namespace OCLUML
 
 		bool bIsQualified = strName.find( "::" ) != std::string::npos; // true if qualified type, false if local type
 
-		std::string strDgrName, strNsName, strClassName;
+		std::string strDgrName, strNsPath, strClassName;
 
 		if (bIsQualified)
 		{
 			unsigned int loc1 = strName.find("::");
-			unsigned int loc2 = strName.find("::", loc1 + 2);
-			if (loc2 != std::string::npos)
+			unsigned int loc2 = strName.rfind("::");
+			if (loc1 != loc2)
 			{
 				strDgrName = strName.substr(0, loc1);
-				strNsName = strName.substr(loc1 + 2, loc2 - loc1 - 2);
+				strNsPath = strName.substr(loc1 + 2, loc2 - loc1 - 2);
 				strClassName = strName.substr(loc2 + 2);
 			}
 			else
@@ -523,9 +523,9 @@ namespace OCLUML
 		MGACOLL_ITERATE( IMgaFCO, spFCOs ) {
 			if ( GME::GetObjectName( MGACOLL_ITER.p ) == strClassName ) {
 
-				std::string strIterNsName = GME::GetNamespaceName( MGACOLL_ITER.p );
+				std::string strIterNsPath = GME::GetNamespacePath( MGACOLL_ITER.p );
 				std::string strIterDgrName = GME::GetDiagramName( MGACOLL_ITER.p );
-				if ( (!bIsQualified) || ( strNsName == strIterNsName && strDgrName == strIterDgrName ) ) {
+				if ( (!bIsQualified) || ( strNsPath == strIterNsPath && strDgrName == strIterDgrName ) ) {
 					StringVector vecSuperTypes;
 					GME::FCOVector vecSuperFCOs;
 					GME::GetInheritances( MGACOLL_ITER, true, vecSuperFCOs );
