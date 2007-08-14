@@ -41,7 +41,10 @@ string UmlClassCPPName(const ::Uml::Uml::Class &cl)
 {
 	::Uml::Uml::Namespace cl_ns = (::Uml::Uml::Namespace)cl.parent();
 	::Uml::Uml::Diagram diagr = (::Uml::Uml::Diagram)cl_ns.parent();
-	return "::" + (string)diagr.name() + "::" + (string)cl_ns.name() + "::" + (string)cl.name();
+	if (single_cpp_namespace)
+		return "::" + (string)diagr.name() + "::" + (string)cl.name();
+	else
+		return "::" + (string)diagr.name() + "::" + (string)cl_ns.name() + "::" + (string)cl.name();
 }
 
 /*
@@ -360,8 +363,13 @@ void GenerateCPPInitClassesAttributes(const ::Uml::Uml::Namespace & ns, const ::
 				set< ::Uml::Uml::AssociationRole>::iterator asrs_i = asrs.begin();
 				while (asrs_i != asrs.end())
 				{
+					string cname = string("::") + string(cross_dgr.name());
+					if (!single_cpp_namespace)
+						cname += "::" + string(::Uml::GetTheOnlyNamespace(cross_dgr).name());
+					cname += "::" + string(((::Uml::Uml::Class)((::Uml::theOther(*asrs_i)).target())).name());
+
 					output << " \t\t\t" << cl.name() << "::meta_" << asrs_i->name() << "_end_ = " 
-						<< "::" << cross_dgr.name() << "::"  << ::Uml::GetTheOnlyNamespace(cross_dgr).name() << "::" << ((::Uml::Uml::Class)((::Uml::theOther(*asrs_i)).target())).name()<<"::meta_" << asrs_i->name() << ";" <<endl;
+						<< cname << "::meta_" << asrs_i->name() << ";" <<endl;
 					asrs_i++;
 				}
 			};
@@ -498,8 +506,13 @@ void GenerateCPPCrossObjectInits(const ::Uml::Uml::Namespace &ns, const ::Uml::U
 				set< ::Uml::Uml::AssociationRole>::iterator ar_i = ar.begin();
 				while (ar_i != ar.end())
 				{
+					string cname = string("::") + string(cross_dgr.name());
+					if (!single_cpp_namespace)
+						cname += "::" + string(::Uml::GetTheOnlyNamespace(cross_dgr).name());
+					cname += "::" + string(cross_cl.name());
+
 					output << "\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
-					" = " << "::" << cross_dgr.name()<< "::" << ::Uml::GetTheOnlyNamespace(cross_dgr).name() << "::"  << cross_cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name()<< ";" <<endl;
+					" = " << cname << "::meta_" << ::Uml::theOther((*ar_i)).name() << ";" << endl;
 
 					::Uml::Uml::AssociationRole zz	= ::Uml::theOther(*ar_i);
 					string aname(MakeRoleName(zz));
@@ -589,7 +602,7 @@ void GenerateCPPStaticClass(const ::Uml::Uml::Diagram &diagram, ostream & output
 };
 void GenerateCPPInitialize(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Diagram & cross_dgr, ostream & output, const string& macro, const string& hname, int ass_inits, const UmlCompositionInitFuncInfo &comp_inits, bool isCrossDgr)
 {
-	output << "\t\t" << macro << " void Initialize()" << endl << "\t\t{" << endl; //begin of Initialize()
+	output << "\t\t" << macro << " void InitializeNS()" << endl << "\t\t{" << endl; //begin of InitializeNS()
 /*
 	output << "\t\tstatic bool first = true;" << endl;
 	output << "\t\tif(!first) return;" << endl;
@@ -634,12 +647,12 @@ void GenerateCPPInitialize(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Di
 	output << "\t\t\tInitInheritence();" << endl;
 
 
-	output << "\t\t\t" << endl << "\t\t}" << endl;	//end of Initialize()
+	output << "\t\t\t" << endl << "\t\t}" << endl;	//end of InitializeNS()
 
 };
 
 /*
-	Function building the alternate Initialize(const ::Uml::Uml::Namespace &ns) function
+	Function building the alternate InitializeNS(const ::Uml::Uml::Namespace &ns) function
 */
 
 void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & output, const string & macro)
@@ -647,7 +660,7 @@ void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & 
 	set< ::Uml::Uml::Class> classes = ns.classes();
 	set< ::Uml::Uml::Class>::iterator c;
 	
-	output << "\t\t" << macro << " void Initialize(const ::Uml::Uml::Namespace & ns)" << endl << "\t\t{" << endl;
+	output << "\t\t" << macro << " void InitializeNS(const ::Uml::Uml::Namespace & ns)" << endl << "\t\t{" << endl;
 
 	for (c = classes.begin(); c != classes.end(); c++)
 	{
@@ -744,7 +757,7 @@ void GenerateCPPInitializeNamespace(const ::Uml::Uml::Namespace & ns, ostream & 
 	};
 	output << endl;
 	
-	output << "\t\t\t" << endl << "\t\t}" << endl; //end of Initialize(const ::Uml::Uml::Diagram & dgr);
+	output << "\t\t\t" << endl << "\t\t}" << endl; //end of InitializeNS(const ::Uml::Uml::Diagram & dgr);
 };
 
 void GenerateCPPPreamble(const ::Uml::Uml::Diagram &diagram, const ::Uml::Uml::Diagram &cross_dgr, bool isCrossDgr, const string &h_fname, const string &fname, ostream &output)
@@ -774,7 +787,8 @@ void GenerateCPPNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Dia
 		output << "namespace " << hname << " {" << endl << endl;
 	}
 
-	output << "\tnamespace " << ns.name() << " {" << endl << endl;
+	if (!single_cpp_namespace)
+		output << "\tnamespace " << ns.name() << " {" << endl << endl;
 	output << "\t\t::Uml::Uml::Namespace meta;" << endl;
 
 	GenerateCPPDeclareMetaClasses(ns, output);
@@ -800,7 +814,8 @@ void GenerateCPPNamespace(const ::Uml::Uml::Namespace &ns, const ::Uml::Uml::Dia
 	//generate Initialize(const ::Uml::Uml::Namespace &ns); function
 	GenerateCPPInitializeNamespace(ns, output,macro);
 
-	output << "\t}" << endl;	
+	if (!single_cpp_namespace)
+		output << "\t}" << endl;	
 
 	if (source_unit == CPP_SOURCE_UNIT_NAMESPACE)
 		output << "}" << endl <<"// END " << ns_fname << ".cpp" <<endl;
@@ -838,7 +853,7 @@ void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Um
 		output << "\t\t" << endl;
 		output << "\t\t" << ns.name() << "::meta = ::Uml::Uml::Namespace::Create(umldiagram);" << endl;
 		output << "\t\t" << ns.name() << "::meta.name() = \"" << ns.name() <<"\";" << endl;
-		output << "\t\t" << ns.name() << "::Initialize();" << endl;
+		output << "\t\t" << ns.name() << "::InitializeNS();" << endl;
 	}
 	output << endl;
 
@@ -881,7 +896,7 @@ void GenerateCPPDiagramInitialize(const ::Uml::Uml::Diagram &diagram, const ::Um
 	{
 		::Uml::Uml::Namespace ns = *nses_i;
 		output << "\t\t" << "::Uml::SetNamespace(" << ns.name() << "::meta, dgr, \"" << ns.name() << "\");" << endl;
-		output << "\t\t" << ns.name() << "::Initialize(" << ns.name() << "::meta);" << endl;
+		output << "\t\t" << ns.name() << "::InitializeNS(" << ns.name() << "::meta);" << endl;
 	}
 
 	if (integrate_xsd)
