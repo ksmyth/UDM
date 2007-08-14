@@ -312,7 +312,7 @@ class OCLParser
 					bFirstIdentifierUnused = false;
 					if ( iCurrent == INPUTEND )
 						return strConsumed;
-					for ( TokenSet::iterator i = setTokens.begin() ; i != setTokens.end() && bConsumeIt; i++ )
+					for ( TokenSet::const_iterator i = setTokens.begin() ; i != setTokens.end() && bConsumeIt; i++ )
 						switch ( *i ) {
 							case CLASS_MULTIPLICATIVE :	if ( set_el( iCurrent, MULTIPLICATIVE_OPERATORS_set ) ) bConsumeIt = false; break;
 							case CLASS_ADDITIVE :		  	if ( set_el( iCurrent, ADDITIVE_OPERATORS_set ) ) bConsumeIt = false; break;
