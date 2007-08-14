@@ -1167,27 +1167,30 @@ UDM_DLL set<Object> Object::GetAssociationClassObjects(Object dstObject, const A
 		
 		//getting placeholder objects for the source and destination
 		Object src_o = pr->GetPlaceHolder(*this, false);
-		Object dst_o;
-		if (dstObject) dst_o = pr->GetPlaceHolder(dstObject, false);
+		if (src_o && pr->HasCrossMeta())
+		{
 
-		//it's ok for dst_o to be NULL
-		//we have to translate ascType as well
-		string clsAssociation_name;
-		if (ascType.clsAssociation) {
-			clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
-			if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
-				clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
-		}
-		AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), clsAssociation_name) :  ascType.clsAssociation);
-		newAscType.strSrcRoleName = ascType.strSrcRoleName;
-		newAscType.strDstRoleName = ascType.strDstRoleName;
+			Object dst_o;
+			if (dstObject) dst_o = pr->GetPlaceHolder(dstObject, false);
+
+			//it's ok for dst_o to be NULL
+			//we have to translate ascType as well
+			string clsAssociation_name;
+			if (ascType.clsAssociation) {
+				clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
+				if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
+					clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
+			}
+			AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), clsAssociation_name) :  ascType.clsAssociation);
+			newAscType.strSrcRoleName = ascType.strSrcRoleName;
+			newAscType.strDstRoleName = ascType.strDstRoleName;
 
 
-		set<Object> ret = src_o.GetAssociationClassObjects(dst_o,newAscType);
-		for (set<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
-			objsRet.insert(pr->GetRealObject(*ret_i));
+			set<Object> ret = src_o.GetAssociationClassObjects(dst_o,newAscType);
+			for (set<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
+				objsRet.insert(pr->GetRealObject(*ret_i));
 		
-		
+		}		
 	}
 	
 
@@ -1201,40 +1204,50 @@ UDM_DLL pair<Object,Object> Object::GetPeersFromAssociationClassObject()
 	//objassocclass is this
 	pair<Udm::Object,Udm::Object> objsRet;
 
-	::Uml::Association Assoc =type().association();
-
-	if(Assoc) 
+	::Uml::Association Assoc =type();
+	set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
+	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
+				p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
-	
-		set< ::Uml::AssociationRole> peerRoles=Assoc.roles();
+		::Uml::Association Assoc =p_currClass->association();
 
-		#ifdef _DEBUG
-		assert(peerRoles.size()==2);
-		#endif
 
-		// Get first peer peer					
-		vector<ObjectImpl*> firstPeers =impl->getAssociation(*peerRoles.begin(),Udm::TARGETFROMCLASS);
+		if(Assoc) 
+		{
+		
+			set< ::Uml::AssociationRole> peerRoles=Assoc.roles();
 
-		#ifdef _DEBUG
-		assert(firstPeers.size()==1);
-		#endif
+			#ifdef _DEBUG
+			assert(peerRoles.size()==2);
+			#endif
 
-		Udm::Object objFirst=*firstPeers.begin();
+			// Get first peer peer					
+			vector<ObjectImpl*> firstPeers =impl->getAssociation(*peerRoles.begin(),Udm::TARGETFROMCLASS);
 
-		// Get first peer peer					
-		vector<ObjectImpl*> secondPeers =impl->getAssociation(*peerRoles.rbegin(),Udm::TARGETFROMCLASS);
+			#ifdef _DEBUG
+			assert(firstPeers.size()==1);
+			#endif
 
-		#ifdef _DEBUG
-		assert(secondPeers.size()==1);
-		#endif
+			Udm::Object objFirst=*firstPeers.begin();
 
-		Udm::Object objSecond=*secondPeers.begin();
+			// Get first peer peer					
+			vector<ObjectImpl*> secondPeers =impl->getAssociation(*peerRoles.rbegin(),Udm::TARGETFROMCLASS);
 
-		// Set up the pair and return
-		objsRet.first=objFirst;
-		objsRet.second=objSecond;
+			#ifdef _DEBUG
+			assert(secondPeers.size()==1);
+			#endif
+
+			Udm::Object objSecond=*secondPeers.begin();
+
+			// Set up the pair and return
+			objsRet.first=objFirst;
+			objsRet.second=objSecond;
+
+			//through the inheritence hierarchy, only one association class can exist
+			continue;
+		}
 	}
-	else
+	if ( !objsRet.first)
 	{
 		//try cross package
 		if (__impl()->__getdn()->GetProject())
