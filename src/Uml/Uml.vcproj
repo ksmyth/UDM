@@ -183,7 +183,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				Name="BootUdmCompile|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="%UDM_PATH%\bin\Udm.exe &quot;$(InputPath)&quot; -m -l UDM_DLL
+					CommandLine="%UDM_PATH%\bin.net\Udm.exe &quot;$(InputPath)&quot; -m -l UDM_DLL
 "
 					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
 			</FileConfiguration>
