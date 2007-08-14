@@ -653,7 +653,12 @@ namespace Uml
 
 				if(::Uml::IsDerivedFrom(r.type(), CompositionChildRole::meta)) { 
 					CompositionChildRole cr = CompositionChildRole::Cast(r);
-					anonbase = "prole"; auxname = (string)((Class)cr.target()).name() + ((int)cr.max() == 1 ? "_child" : "_children");	
+					anonbase = "prole";
+					if (IsCrossNSComposition(cr.parent()))
+						auxname = ((Class)cr.target()).getPath2("_", false);
+					else
+						auxname = (string)((Class)cr.target()).name();
+					auxname += ((int)cr.max() == 1 ? "_child" : "_children");	
 				}
 
 				if(!anonbase.length()) {
@@ -701,7 +706,11 @@ namespace Uml
 
 				if(::Uml::IsDerivedFrom(r.type(), CompositionChildRole::meta)) { 
 					CompositionChildRole cr = CompositionChildRole::Cast(r);
-					anonbase = "prole"; auxname = (string)((Class)cr.target()).name();	
+					anonbase = "prole";
+					if (IsCrossNSComposition(cr.parent()))
+						auxname = ((Class)cr.target()).getPath2("_", false);
+					else
+						auxname = (string)((Class)cr.target()).name();
 				}
 
 				if(!anonbase.length()) {
