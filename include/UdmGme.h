@@ -81,7 +81,7 @@ namespace UdmGme
 	struct assocmapitem;
 
 	//type of the map which holds the mapping of associations to GME Meta Objects
-	typedef map<::Uml::Uml::Association::uniqueId_type, assocmapitem> assocmap;
+	typedef map< ::Uml::Uml::Association::uniqueId_type, assocmapitem> assocmap;
 	
 
 	class GmeDataNetwork : public Udm::DataNetwork 
@@ -91,7 +91,7 @@ namespace UdmGme
 		
 		//map the Udm Composition Child Role to the corresponding set of MGA CompositionRole(MetaRole)s.
 		typedef set<string> string_set;			//the compiler doesn't like when templates are nested
-		map<::Uml::Uml::CompositionChildRole, string_set> meta_role_filter_cache;
+		map< ::Uml::Uml::CompositionChildRole, string_set> meta_role_filter_cache;
 	
 	
 		void amapInitialize(const ::Uml::Uml::Diagram &dgr, METALib::IMgaMetaProject *metaproj);

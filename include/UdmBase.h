@@ -2844,7 +2844,7 @@ namespace Udm
 		//general container class
 		Object container() const;
 
-		set<Object> getChildrenByChildRoleChain(const ::Uml::Uml::Class& meta, vector<::Uml::Uml::CompositionChildRole> chain) const;
+		set<Object> getChildrenByChildRoleChain(const ::Uml::Uml::Class& meta, vector< ::Uml::Uml::CompositionChildRole> chain) const;
 
 		//general accept function
 		virtual void Accept(const BaseVisitor&){};
@@ -3319,7 +3319,7 @@ public:
 		
 
 		//get all the metadiagrams
-		UDM_DLL vector<::Uml::Uml::Diagram> GetMetaDiagrams() const;
+		UDM_DLL vector< ::Uml::Uml::Diagram> GetMetaDiagrams() const;
 
 		/*
 			A Udm Project will have either a Cross Meta Specifier(if the project is the result of

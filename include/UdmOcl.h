@@ -119,18 +119,18 @@ namespace Ocl
 		// INSTANCE MEMBERS
 		private :
 			Udm::Object m_objObject;
-			set<::Uml::Uml::Constraint> m_setConstraints;
+			set< ::Uml::Uml::Constraint> m_setConstraints;
 
 		// CONSTRUCTION, DESTRUCTION, INITIALIZATION
 		public :
-			Evaluator( const Udm::Object& objObject, const set<::Uml::Uml::Constraint>& setConstraints = set<::Uml::Uml::Constraint>() );
+			Evaluator( const Udm::Object& objObject, const set< ::Uml::Uml::Constraint>& setConstraints = set< ::Uml::Uml::Constraint>() );
 			Evaluator( const Evaluator& evaluator );
 			Evaluator& operator=( const Evaluator& evaluator );
 
 		// GET'ERS, SET'ERS
 		public :
 			Udm::Object& object() const;
-			set<::Uml::Uml::Constraint>& constraints() const;
+			set< ::Uml::Uml::Constraint>& constraints() const;
 
 		// INSTANCE METHODS
 		public :
