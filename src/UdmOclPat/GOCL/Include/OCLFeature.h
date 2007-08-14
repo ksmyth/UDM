@@ -215,6 +215,11 @@ namespace OclMeta
 			public OclMeta::FeatureAppendix< OclImplementation::Method >
 	{
 		public :
+			Method( const std::string& strName, const std::string& strTypeName, const OclCommon::FormalParameterVector& vecParameters, TypeSeq& vecTypeReturn, OclImplementation::Method* pImplementation, bool bDynamic, bool bDependence = false )
+				: OclMeta::Feature( strName, OclSignature::Feature::FK_METHOD, vecTypeReturn, bDynamic, bDependence ), OclSignature::Method( strName, strTypeName, vecParameters ), OclMeta::FeatureAppendix<OclImplementation::Method>( pImplementation )
+			{
+			}
+
 			Method( const std::string& strName, const OclCommon::FormalParameterVector& vecParameters, TypeSeq& vecTypeReturn, OclImplementation::Method* pImplementation, bool bDynamic, bool bDependence = false )
 				: OclMeta::Feature( strName, OclSignature::Feature::FK_METHOD, vecTypeReturn, bDynamic, bDependence ), OclSignature::Method( strName, vecParameters ), OclMeta::FeatureAppendix<OclImplementation::Method>( pImplementation )
 			{
