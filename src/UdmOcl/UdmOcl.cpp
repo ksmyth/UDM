@@ -342,7 +342,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 				_itoa( ex.GetCode(), chBuffer, 10 );
 				strResult += " Code: " + std::string( chBuffer );
 			}
-			strResult += " Message: " + ex.GetErrorMessage() + LINE_END;
+			strResult += " Message: " + ex.GGetMessage() + LINE_END;
 		}
 		strResult += LARGE_DELIMITER;
 		return strResult;
