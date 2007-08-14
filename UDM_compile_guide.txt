@@ -1,0 +1,62 @@
+UDM_compile_guide.txt
+The requirements and a step-by-step guide to compile UDM source files
+--------------------------------------------------------------------------------------------
+
+Requirements:
+-------------------
+	Visual Studio 6.0 SP6
+	Visual SourceSafe 6.0
+	Java Runtime Environment 	
+	Cint C/C++ interpreter (http://root.cern.ch/root/Cint.html)
+
+Step-by-step guide:
+-------------------------
+	1.Download the UDM sources from the VSS project
+		$/MoBIESTransition/UDM
+	of  the Mobies VSS database:
+		\\Atlantis\Project\Mobies\VSS\srcsafe.ini
+	2. Get UDM 3rd party files from:
+		\\Atlantis\Project\Mobies\Udm\3rdparty_source.zip
+	and unzip it to your UDM root folder. (The UDM project folder in the source control system)
+	3. Cint C/C++ interpreter (http://root.cern.ch/root/Cint.html)
+	4. Include cint and sed (this is part of the 3rdparty_source.zip package) directories in your 
+	Executable Files settings in the Tools/Options menu.
+	5. Create an environment variable with name UDM_PATH, and set it to you UDM root folder.
+	6. Add %UDM_PATH%/bin to your PATH.
+	7. Java Runtime Environment > 1.4.2 must be installed. Add to the CLASSPATH the directory 
+				3RDPARTY\ANTLR\ANTLR-2.7.1\
+	8. Add the following to your Visual Studio Directories Settings, in the Tools/Options menu
+	(or insert these into the INCLUDE and LIB environment variables when using MSDEV.exe from the command line)		
+		Include files:
+			%UDM_PATH%\
+				3RDPARTY\STL
+				3RDPARTY\XERCES\XERCES-C_2_5_0-WINDOWS_NT-MSVC_60\INCLUDE
+				3RDPARTY\XERCES\XERCES-C_2_5_0-WINDOWS_NT-MSVC_60\INCLUDE\XERCESC
+				3RDPARTY\XALAN\XALAN-C_1_8_0-WINDOWS_2000-MSVC_60\INCLUDE
+				3RDPARTY\XALAN\XALAN-C_1_8_0-WINDOWS_2000-MSVC_60\INCLUDE\XALANC
+				3RDPARTY\ANTLR\ANTLR-2.7.1\LIB\CPP
+				3RDPARTY\OCL\INCLUDE
+				3RDPARTY\ZLIB
+				3RDPARTY\CINT (OR WHERE CINT INSTALLED)
+				3RDPARTY\ZLIB\CONTRIB\MINIZIP (FOR uintwiz)
+				3RDPARTY\cppunit-1.10.2\include (FOR TESTS ONLY!)
+                   IMPORTANT: Make sure that 3RDPARTY is the first include directory, i.e. it comes before the Microsoft Visual Studio includes. 
+
+		Library files:
+			%UDM_PATH%\
+				3RDPARTY\XERCES\XERCES-C_2_5_0-WINDOWS_NT-MSVC_60\LIB
+				3RDPARTY\XALAN\XALAN-C_1_8_0-WINDOWS_2000-MSVC_60\LIB
+				3RDPARTY\ZLIB
+				3RDPARTY\CINT (OR WHERE CINT INSTALLED)
+				3RDPARTY\ANTLR\ANTLR-2.7.1\LIB
+				3RDPARTY\OCL\LIB
+				3RDPARTY\cppunit-1.10.2\lib (FOR TESTS ONLY!) 
+
+		Executable files:
+			%UDM_PATH%\
+				3RDPARTY\INFO-ZIP (REQUIRED FOR COMPILING UINTWIZ)
+				3RDPARTY\cppunit-1.10.2\bin (FOR TESTS ONLY!)
+	
+	9. Open Udm.dsw in VS6, select UDMAll in the project browser and build configurations: 
+			'Win32 Debug' and 
+			'Win32 Release' 
