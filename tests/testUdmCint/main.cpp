@@ -256,7 +256,7 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
      
    }
   
-   //cout << string(res.buffer()) << endl;
+   cout << string(res.buffer()) << endl;
   
 
   RemoveXsd(xsdn);
