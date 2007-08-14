@@ -39,14 +39,14 @@ void CGenerator::Generate()
 	GenerateComponentConfig();
 	GenerateUdmConfig();
 	CopyUdmMetaFiles();
-	
+
 	GenerateUdmApp();
 
 	GenerateProjectFile();
 
-	std::string cmdline = "call %UDM_3RDPARTY_PATH%\\mpc\\mpc.exe -type vc71 ";
+	std::string cmdline = "call %UDM_3RDPARTY_PATH%\\mpc\\mpc.exe -features \"mfc=1\" -type vc71 ";
 	cmdline += m_strDestinationPath+_INTERPRETER_CODE_PATH+"Component.mpc";
-    
+
 	system(cmdline.c_str());
 }
 
@@ -54,14 +54,14 @@ BOOL CGenerator::UnzipSources()
 {
 	// Laoding resource containing the zip files (source files for code generation)
 	HRSRC hResInfo = ::FindResource(NULL, MAKEINTRESOURCE(IDR_SOURCES), "ARCHIVE");
-	if(!hResInfo) 
+	if(!hResInfo)
 	{
 		AfxMessageBox("Error finding resource (source files)");
 		return FALSE;
 	}
 	HGLOBAL hResource = ::LoadResource(NULL,hResInfo);
 	LPVOID lpRes;
-	if(!hResource || !(lpRes = ::LockResource(hResource))) 
+	if(!hResource || !(lpRes = ::LockResource(hResource)))
 	{
 		AfxMessageBox("Error loading resource (source files)");
 		return FALSE;
@@ -116,8 +116,8 @@ void CGenerator::FileFilter(CString strFileName,bool & bSkip,bool&bReadOnly, boo
 #define DIM(x) (sizeof(x)/sizeof((x)[0]))
 
 
-int CGenerator::UnZip(const char * szMemFileName, const char *szPath) 
-{ 
+int CGenerator::UnZip(const char * szMemFileName, const char *szPath)
+{
 	// Return value: -1 on error, 0 otherwise
 	int nRetVal;
 
@@ -135,146 +135,146 @@ int CGenerator::UnZip(const char * szMemFileName, const char *szPath)
 	// Handle of the memory zip file
 	unzFile zipFile = NULL;
 
-	try 
+	try
 	{
-		// Opening zip file				
+		// Opening zip file
 	    //zipFile = unzOpen(szMemFileName);
 		zipFile = unzOpen("c:\\udminterpreter.zip");
-		if(zipFile == NULL) 
+		if(zipFile == NULL)
 		{
 			throw "Cannot open input file. The application file must be corrupt.";
 		}
-		
+
 		// Setting or creating the destination directory (folder)
-		if(!::SetCurrentDirectory(szPath)) 
+		if(!::SetCurrentDirectory(szPath))
 		{
 			::CreateDirectory(szPath,NULL);
 		}
 
-		if(!::SetCurrentDirectory(szPath)) 
+		if(!::SetCurrentDirectory(szPath))
 		{
 			throw("Cannot access destination folder.");
 		}
 
-		if(unzGoToFirstFile(zipFile) != UNZ_OK) 
+		if(unzGoToFirstFile(zipFile) != UNZ_OK)
 		{
 			throw "Cannot locate first file. The application file must be corrupt.";
 		}
 
-		// Unzipping files		
+		// Unzipping files
 		int nStatus;
-		do 
+		do
 		{
 			nFileNum++;
 			unz_file_info ufiFileInfo;
 			nStatus = unzGetCurrentFileInfo(zipFile, &ufiFileInfo, szFileName, sizeof(szFileName), NULL, 0, NULL, 0);
-			if(nStatus != UNZ_OK) 
+			if(nStatus != UNZ_OK)
 			{
 				throw "Error accessing file info. The application file must be corrupt.";
 			}
 
 			nStatus = unzOpenCurrentFile(zipFile);
-			if(nStatus != UNZ_OK) 
+			if(nStatus != UNZ_OK)
 			{
 				throw "Error opening file in archive. The application file must be corrupt.";
 			}
 
 			// Replacing / to \ in the szFileName
 			char * szPos;
-			while(szPos = strchr(szFileName,'/')) 
+			while(szPos = strchr(szFileName,'/'))
 			{
 				*szPos = '\\';
 			}
 
 			// Chechking if it is a directory (folder)
 			bool bIsDir = false;
-			if(szFileName[strlen(szFileName)-1] == '\\') 
+			if(szFileName[strlen(szFileName)-1] == '\\')
 			{
 				szFileName[strlen(szFileName)-1] = '\0';
 				// It is a directory
 				bIsDir = true;
-				
+
 			}
 
 			bool bSkip = false;
 			bool bReadOnly=false;
 
-/****************************************************************/ 
+/****************************************************************/
 /* Filtering files	- set bSkip and bReadOnly					*/
 			FileFilter(szFileName,bSkip,bReadOnly,bIsDir);
 /****************************************************************/
-								
-			if(!bSkip) 
+
+			if(!bSkip)
 			{
 				/*** Checking existence and permissions ***/
 
 				// Checking permissions
 				struct stat statBuffer;
-				if(_access( szFileName, 2) == EACCES) 
+				if(_access( szFileName, 2) == EACCES)
 				{
 					throw "No permission to write to file";
 				}
 
-				if(!stat(szFileName, &statBuffer)) 
+				if(!stat(szFileName, &statBuffer))
 				{
-					if(bIsDir) 
+					if(bIsDir)
 					{
-						if(!(statBuffer.st_mode & _S_IFDIR)) 
+						if(!(statBuffer.st_mode & _S_IFDIR))
 						{
-							throw "Cannot extract a directory on a non-dir file"; 
+							throw "Cannot extract a directory on a non-dir file";
 						}
 						bSkip = true;
 					}
-					else 
+					else
 					{
-						if(!(statBuffer.st_mode & _S_IFREG))  
+						if(!(statBuffer.st_mode & _S_IFREG))
 						{
 							throw "File exists and not a regular file";
 						}
-						else 
+						else
 						{
-							if(unlink(szFileName)) 
+							if(unlink(szFileName))
 							{
 								throw "Cannot remove original file";
 							}
 						}
-					}	
+					}
 				}
 			}
 
-			if(bSkip) 
+			if(bSkip)
 			{
 				nSkips++;
 			}
 			else if(bIsDir) // It is a directory
-			{   
+			{
 				if(_mkdir(szFileName))
 				{
 					throw "Error creating directory";
 				}
 				nDirs++;
-			}	
+			}
 			else /*** Copying process ***/
 			{
 				// Open file system file
 				FILE *fNewFile = fopen(szFileName, "wb");
-				if(fNewFile == NULL) 
+				if(fNewFile == NULL)
 				{
 					throw "Cannot open output file in OS filesystem";
 				}
 
 				// Copying file from memory zip file to file system file
 				char szWriteBuffer[8192];
-				while((nStatus = unzReadCurrentFile(zipFile, szWriteBuffer, sizeof(szWriteBuffer))) > 0) 
+				while((nStatus = unzReadCurrentFile(zipFile, szWriteBuffer, sizeof(szWriteBuffer))) > 0)
 				{
-					if(fwrite(szWriteBuffer, nStatus, 1, fNewFile) != 1) 
+					if(fwrite(szWriteBuffer, nStatus, 1, fNewFile) != 1)
 					{
 						throw "Error writing to filesystem file";
 					}
-				} 
+				}
 
 				// Status check - Error reading archive
-				if(nStatus < 0) 
+				if(nStatus < 0)
 				{
 					throw "Error reading file in archive";
 				}
@@ -284,41 +284,41 @@ int CGenerator::UnZip(const char * szMemFileName, const char *szPath)
 				{
 					throw "Error closing filesystem file";
 				}
-				
+
 				nFiles++;
 				if(bReadOnly) chmod(szFileName,_S_IREAD);
 			}
 
 			// Close zip file in memory
 			nStatus = unzCloseCurrentFile(zipFile);
-			if(nStatus != UNZ_OK) 
+			if(nStatus != UNZ_OK)
 			{
 				throw "Error closing file in archive";
 			}
 			szFileName[0] = '\0';
 
 		} while((nStatus = unzGoToNextFile(zipFile)) == UNZ_OK); // Extract next zip file
-		
-				
-		if(nStatus != UNZ_END_OF_LIST_OF_FILE) 
+
+
+		if(nStatus != UNZ_END_OF_LIST_OF_FILE)
 		{
 			throw "Error reading file. The application file must be corrupt.";
 		}
 		nRetVal=0;
 	}
-	catch( char *szException) 
-	{		
+	catch( char *szException)
+	{
 		sprintf(szErrMessage, "Error: %s [at archive item %s (#%d)]\n", szException, szFileName, nFileNum);
 		AfxMessageBox(szErrMessage);
 		nRetVal= -1;
 	}
 
 	// Closing zip file in the memory
-	if( zipFile) 
+	if( zipFile)
 	{
 		unzClose(zipFile);
 	}
-	
+
 #ifdef _DEBUG
 	// Display statistics
 	sprintf(szErrMessage, "%d files and %d folders extracted, %d skipped.", nFiles, nDirs, nSkips);
@@ -339,7 +339,7 @@ BOOL CGenerator::GenerateComponentConfig()
 	CTime Time=CTime::GetCurrentTime();
 	CString strTime = Time.Format( "%A, %B %d, %Y %H:%M:%S" );
 
-	
+
 	CString strUUIDExploded = "0x"+m_ComponentData.m_strClassUUID;
 	strUUIDExploded.Insert(36,"-");
 	strUUIDExploded.Insert(34,"-");
@@ -352,19 +352,19 @@ BOOL CGenerator::GenerateComponentConfig()
 	CString strFileName=m_strDestinationPath+_INTERPRETER_CODE_PATH+"ComponentConfig.h";
 
 	FILE *fCompCfgFile = fopen(strFileName, "wt");
-	
+
 	if(fCompCfgFile==NULL) return FALSE;
 
 	// Printing header
-	fprintf(fCompCfgFile, 
+	fprintf(fCompCfgFile,
 				"// Component configuration file automatically generated as %s\n"
 				"// by UDM Interpreter Wizard on %s\n\n",
 				"ComponentConfig.h", strTime);
 
-	fprintf(fCompCfgFile, "#define RAWCOMPONENT\n\n"); 
+	fprintf(fCompCfgFile, "#define RAWCOMPONENT\n\n");
 
 	// UUIDs TypeLib,ProgID, ComponentName...
-	fprintf(fCompCfgFile, 
+	fprintf(fCompCfgFile,
 				"// COM UUID-s, names and ProgID\n\n"
 				"#define TYPELIB_UUID \"%s\"\n"
 				"#define TYPELIB_NAME \"%s\"\n"
@@ -375,11 +375,11 @@ BOOL CGenerator::GenerateComponentConfig()
 				"#define COMPONENT_NAME \"%s\"\n\n\n"
 				"#define TOOLTIP_TEXT \"%s\"\n\n\n"
 				"// This #define determines the interpreter type:\n",
-				 m_ComponentData.m_strTypeLibUUID, 
+				 m_ComponentData.m_strTypeLibUUID,
 				 m_ComponentData.m_strTypeLibName,
-				 m_ComponentData.m_strClassUUID, 
-				 m_ComponentData.m_strClassName, 
-				 m_ComponentData.m_strProgID, 
+				 m_ComponentData.m_strClassUUID,
+				 m_ComponentData.m_strClassName,
+				 m_ComponentData.m_strProgID,
 				 m_ComponentData.m_strComponentName,
 				 m_ComponentData.m_strToolTip);
 
@@ -387,13 +387,13 @@ BOOL CGenerator::GenerateComponentConfig()
 	fprintf(fCompCfgFile, "#define GME_INTERPRETER\n");
 
 	// Paradigm support
-	if(m_ComponentData.m_bParadigmIndependent) 
+	if(m_ComponentData.m_bParadigmIndependent)
 	{
 		fprintf(fCompCfgFile, "#define PARADIGM_INDEPENDENT\n");
 	}
 	else
 	{
-		fprintf(fCompCfgFile, 
+		fprintf(fCompCfgFile,
 				"// The name of the paradigm(s). The GME will use this component\n"
 				"// for this paradigm. Separate the names of paradigms by commas.\n"
 				"#define PARADIGMS \"%s\"\n",
@@ -403,12 +403,12 @@ BOOL CGenerator::GenerateComponentConfig()
 	// GME Interface path
 	m_ComponentData.m_strInterfacePath.Replace("\\\\","/");
 	m_ComponentData.m_strInterfacePath.Replace("\\","/");
-	fprintf(fCompCfgFile, 
+	fprintf(fCompCfgFile,
 	 "\n\n// This is the location of the GME interfaces file (Mga.idl, Meta.idl, etc)\n"
 	 "#define GME_INTERFACES_BASE %s\n\n\n", m_ComponentData.m_strInterfacePath);
 
 	// Icon on GME Toolbar
-	if(m_ComponentData.m_bIconInGME) 
+	if(m_ComponentData.m_bIconInGME)
 	{
 		fprintf(fCompCfgFile, "#define BON_ICON_SUPPORT\n\n");
 	}
@@ -420,7 +420,7 @@ BOOL CGenerator::GenerateComponentConfig()
 	// Fragment UUID - a la Arpad Bakay
 	fprintf(fCompCfgFile, "// Just to please the whims of those Microsoft jerks:\n");
 	int n = 1;
-	for(char *a = strtok((LPSTR)(LPCSTR)strUUIDExploded,","); a; a = strtok(NULL, ",")) 
+	for(char *a = strtok((LPSTR)(LPCSTR)strUUIDExploded,","); a; a = strtok(NULL, ","))
 	{
 		fprintf(fCompCfgFile, "#define COCLASS_UUID_EXPLODED%d %s\n", n++, a);
 	}
@@ -441,11 +441,11 @@ BOOL CGenerator::GenerateUdmConfig()
 	CString strFileName=m_strDestinationPath+_INTERPRETER_CODE_PATH+"UdmConfig.h";
 
 	FILE *fUdmCfgFile = fopen(strFileName, "wt");
-	
+
 	if(fUdmCfgFile==NULL) return FALSE;
 
 	// Printing header
-	fprintf(fUdmCfgFile, 
+	fprintf(fUdmCfgFile,
 				"// Component configuration file automatically generated as %s\n"
 				"// by UDM Interpreter Wizard on %s\n\n",
 				"UdmConfig.h", strTime);
@@ -470,7 +470,7 @@ BOOL CGenerator::GenerateUdmConfig()
 	{
 		fprintf(fUdmCfgFile,"//#define _USE_DOM\n");
 	}
-	
+
 	fprintf(fUdmCfgFile,"\n");
 	fprintf(fUdmCfgFile,"\n");
 
@@ -485,10 +485,10 @@ BOOL CGenerator::GenerateUdmConfig()
 	fprintf(fUdmCfgFile,"\n");
 	fprintf(fUdmCfgFile,"// Udm Libraries \n");
 
-	/* 
+	/*
 	Commented by Ananth:
 	fprintf(fUdmCfgFile,"#ifdef _DEBUG\n");
-	
+
 
 	if(m_UdmData.m_bIncludeUdm)
 	{
@@ -511,7 +511,7 @@ BOOL CGenerator::GenerateUdmConfig()
 
 		CString strLibPath=strUdmPath+"\\\\Lib\\\\Udm\\\\";
 		CString strXercesPath=strUdmPath+"\\\\Lib\\\\xerces\\\\";
-		
+
 		fprintf(fUdmCfgFile,"	#define UDM_BASE_PATH	\"%sUdmbase_D.lib\"\n",strLibPath);
 		fprintf(fUdmCfgFile,"	#define UDM_DOM_PATH	\"%sUdmDom_D.lib\"\n",strLibPath);
 		fprintf(fUdmCfgFile,"	#define UDM_XERCES_PATH	\"%sxerces-c_1D.lib\"\n",strXercesPath);
@@ -571,9 +571,9 @@ BOOL CGenerator::GenerateUdmConfig()
 	fprintf(fUdmCfgFile,"struct _config\n");
 	fprintf(fUdmCfgFile,"{\n");
 	fprintf(fUdmCfgFile,"	// Global settings\n");
-	
+
 	fprintf(fUdmCfgFile,"	std::string metaPath;\n");
-	
+
 	fprintf(fUdmCfgFile,"\n");
 	fprintf(fUdmCfgFile,"};\n");
 	fprintf(fUdmCfgFile,"extern _config config;\n");
@@ -625,7 +625,7 @@ bool CGenerator::GenerateProjectFile()
 {
 
 	CString strFileName=m_strDestinationPath+_INTERPRETER_CODE_PATH+"Component.mpc";
-	
+
 	CString strHeaderFileName=m_UdmData.m_strHeaderPath.Right(m_UdmData.m_strHeaderPath.GetLength()-m_UdmData.m_strHeaderPath.ReverseFind('\\')-1);
 	CString strCppFileName=m_UdmData.m_strCppPath.Right(m_UdmData.m_strCppPath.GetLength()-m_UdmData.m_strCppPath.ReverseFind('\\')-1);
 
@@ -678,7 +678,7 @@ bool CGenerator::GenerateProjectFile()
 	fprintf(fMpcFile,"    ComponentConfig.h\n");
 	fprintf(fMpcFile,"    RawComponent.h\n");
 	fprintf(fMpcFile,"    Resource.h\n");
-	if(m_UdmData.m_nMetaLoading==META_LOADING_CODE) fprintf(fMpcFile,"%s\n",strHeaderFileName);	
+	if(m_UdmData.m_nMetaLoading==META_LOADING_CODE) fprintf(fMpcFile,"%s\n",strHeaderFileName);
 	fprintf(fMpcFile,"    StdAfx.h\n");
 	fprintf(fMpcFile,"    UdmApp.h\n");
 	fprintf(fMpcFile,"    UdmConfig.h\n");
@@ -715,13 +715,13 @@ bool CGenerator::GenerateUdmApp()
 
 
 	// Printing header
-	fprintf(fUdmAppFile, 
+	fprintf(fUdmAppFile,
 				"// UdmApp.cpp: implementation of the CUdmApp class.\n"
 				"// This file was automatically generated as %s\n"
 				"// by UDM Interpreter Wizard on %s\n\n",
 				"UdmApp.cpp", strTime);
 
-	
+
 	fprintf(fUdmAppFile,"\n");
 	fprintf(fUdmAppFile,"\n");
 	fprintf(fUdmAppFile,"#include \"stdafx.h\"\n");
@@ -732,7 +732,7 @@ bool CGenerator::GenerateUdmApp()
 	{
 		fprintf(fUdmAppFile,"#include <afxdlgs.h> // For CFileDialog\n");
 	}
-	
+
 	fprintf(fUdmAppFile,"\n");
 	fprintf(fUdmAppFile,"/*********************************************************************************/\n");
 	fprintf(fUdmAppFile,"/* Initialization function. The framework calls it before preparing the backend. */\n");
@@ -744,7 +744,7 @@ bool CGenerator::GenerateUdmApp()
 
 	// To be strict: m_UdmData.m_nMetaLoading==META_LOADING_DYNAMIC && !m_UdmData.m_bUserSelect
 	// But now we can add default value to a user specified meta path
-	if(m_UdmData.m_nMetaLoading==META_LOADING_DYNAMIC) 
+	if(m_UdmData.m_nMetaLoading==META_LOADING_DYNAMIC)
 	{
 		fprintf(fUdmAppFile,"	std::string metaPath=\"%s\";\n\n",m_UdmData.m_strBackendPath);
 	}
@@ -765,7 +765,7 @@ bool CGenerator::GenerateUdmApp()
 			fprintf(fUdmAppFile,"		// If cancel pressed exit\n");
 			fprintf(fUdmAppFile,"		return -1;\n");
 			fprintf(fUdmAppFile,"	}\n");
-		}	
+		}
 		if(m_UdmData.m_nDataNetworkType==DATA_NETWORK_TYPE_STATIC)
 		{
 			fprintf(fUdmAppFile,"	static char szFilterMem[] = \"Static Memory Backend Files (*.mem)|*.mem|All Files (*.*)|*.*||\";\n");
@@ -781,7 +781,7 @@ bool CGenerator::GenerateUdmApp()
 			fprintf(fUdmAppFile,"		return -1;\n");
 			fprintf(fUdmAppFile,"	}\n");
 
-		}	
+		}
 	}
 	fprintf(fUdmAppFile,"\n");
 	fprintf(fUdmAppFile,"	// TODO: Your initialization code comes here...\n");
