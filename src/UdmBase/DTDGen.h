@@ -26,6 +26,8 @@ namespace DTDGen
 	//translates a cardinality specification vector to a DTD cardinality string
 	string card_to_dtdspec(const class_w_cp& cwcp);
 
+	void AddUMLNamespaceToURIMapping(const char *optp, map<string, string> &ns_map);
+
 	//generates DTD elements
 	void GenerateDTDElement(const ::Uml::Uml::Class &c,  ostream &output);
 
@@ -42,7 +44,7 @@ namespace DTDGen
 	void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi = false);	
 
 	//generates complete XML Schema 
-	void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi = false);
+	void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi = false, map<string, string> *ns_map = NULL);
 };
 
 #endif

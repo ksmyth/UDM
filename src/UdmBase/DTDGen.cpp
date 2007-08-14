@@ -650,6 +650,36 @@ namespace DTDGen
 
 	// --------------------------- XML Schema generation
 
+	string NamespaceToURI(const ::Uml::Uml::Namespace &ns, map<string, string> *ns_map)
+	{
+		if (ns_map != NULL) {
+			map<string, string>::iterator i = ns_map->find(ns.name());
+			if (i != ns_map->end())
+				return i->second;
+		}
+		string uri("http://www.isis.vanderbilt.edu/2004/schemas/");
+		uri += ns.name();
+		return uri;
+	}
+
+	void AddUMLNamespaceToURIMapping(const char *optp, map<string, string> &ns_map)
+	{
+		string opt(optp);
+		int loc = opt.find('=');
+		if (loc != string::npos) {
+			string uml_ns = opt.substr(0, loc);
+			string uri = opt.substr(loc + 1);
+
+			if (uml_ns.length() == 0 || uri.length() == 0)
+				throw udm_exception("UML namespace and the URI must not be empty in argument \"" + opt + "\" of \"-u\" switch");
+
+			map<string, string>::value_type item(uml_ns, uri);
+			ns_map.insert(item);
+		} else {
+			throw udm_exception("argument \"" + opt + "\" of \"-u\" switch must be in this form: uml_namespace=URI");
+		}
+	}
+
 	void GenerateXMLSchemaAttributes(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi)	
 {
 		string name = c.name();
@@ -984,7 +1014,7 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 	output << "\t</xsd:complexType>" << endl << endl;
 }
 
-void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi )	
+void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi, map<string, string> *ns_map )
 {
 
 
@@ -1004,10 +1034,10 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 			other_ns.insert(other_ns_base.begin(), other_ns_base.end());
 		}
 
-		output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://www.isis.vanderbilt.edu/2004/schemas/"<< ns.name() << "\" xmlns:" << ns.name() << "=\"http://www.isis.vanderbilt.edu/2004/schemas/" << ns.name() << "\"";
+		output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"" << NamespaceToURI(ns, ns_map) << "\" xmlns:" << ns.name() << "=\"" << NamespaceToURI(ns, ns_map) << "\"";
 
 		for (set<::Uml::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
-			output << " xmlns:" << other_ns_i->name() << "=\"http://www.isis.vanderbilt.edu/2004/schemas/" << other_ns_i->name() << "\"";
+			output << " xmlns:" << other_ns_i->name() << "=\"" << NamespaceToURI(*other_ns_i, ns_map) << "\"";
 		}
 
 		output << " elementFormDefault=\"qualified\">" << endl;
@@ -1015,7 +1045,7 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 		output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
 
 		for (set<::Uml::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
-			output << "<xsd:import namespace=\"http://www.isis.vanderbilt.edu/2004/schemas/" << other_ns_i->name() << "\" schemaLocation=\"" << other_ns_i->name() << ".xsd\"/>" << endl;
+			output << "<xsd:import namespace=\"" << NamespaceToURI(*other_ns_i, ns_map) << "\" schemaLocation=\"" << other_ns_i->name() << ".xsd\"/>" << endl;
 		}
 		output << endl;
 
