@@ -31,13 +31,13 @@ public abstract class UdmFactory {
 
     private static void findJUDM_PATH() {
         String judm_path = null;
-        String cint_lib = "UdmCint.dll";
+        String cint_lib = "UdmSwig.dll";
         try {
             String os_name = System.getProperty("os.name");
             String exec = "cmd /c set";
             if (os_name.indexOf("Windows") == -1) {
                 // linux specific
-                cint_lib = "libUdmCint.so";
+                cint_lib = "libUdmSwig.so";
                 exec = "/bin/bash -c set";
             }
 
@@ -70,13 +70,14 @@ public abstract class UdmFactory {
         String xmlMetaFile, String xsdMetaFile, String metaName, String packagePath)
         throws UdmException {
         try {
-            System.loadLibrary("UdmCint");
+            System.loadLibrary("UdmSwig");
+            System.out.println("library path: UdmSwig");
         } catch (UnsatisfiedLinkError linkEx) {
             if (JUDM_CINT_LIB_PATH == null) {
                 findJUDM_PATH();
             }
 
-            //System.out.println(JUDM_CINT_LIB_PATH);
+            System.out.println("judm path: " + JUDM_CINT_LIB_PATH);
             System.load(JUDM_CINT_LIB_PATH);
         }
         // store the Uml.xsd file
