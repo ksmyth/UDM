@@ -13,6 +13,9 @@
  */
 
 /*
+	-	05/20/06	-	endre
+		- add support for nested UML namespaces
+
 	-	03/20/06	-	endre
 
 		- set association and composition names even if they have not
@@ -350,6 +353,34 @@ CContainer::~CContainer()
 		delete compositeClasses.GetNext(pos);
 }
 
+void CContainer::TraverseModels(void *pointer)
+{
+	if (pointer == NULL) return;
+	CBuilderModelList *models = (CBuilderModelList *) pointer;
+	POSITION pos = models->GetHeadPosition();
+	while(pos)
+	{
+		CBuilderModel *model = models->GetNext(pos);
+		if(model->GetKindName() == "ClassDiagram")
+		{
+			CClassDiagramBuilder *sheet = dynamic_cast<CClassDiagramBuilder *>(model);
+			if(!sheet)
+			{
+				AfxMessageBox("Unexpected model kind found: " + sheet->GetName());
+				continue;
+			}
+			sheet->Build();
+			TraverseModels((void *) sheet->GetModels());
+		}
+		if(model->GetKindName() == "Namespace")
+		{
+			CNamespaceBuilder *ns = dynamic_cast<CNamespaceBuilder *>(model);
+			namespaces.AddTail(ns);
+			ns->Build();
+		}
+	}
+}
+
 void CContainer::AddCompositeClass(CCompositeClass *cls)
 {
 	compositeClasses.AddTail(cls);
@@ -530,6 +561,11 @@ CString CPackageBuilder::GetNameorAlias() const
 	else return GetName();
 };
 
+void CPackageBuilder::Build()
+{
+	CContainer::TraverseModels((void *) GetModels());
+};
+
 void CPackageBuilder::BuildUML()
 {
 	uml_dgr.name() = (LPCTSTR) GetNameorAlias();
@@ -540,42 +576,14 @@ void CPackageBuilder::BuildUML()
 		namespaces.GetNext(pos)->BuildUML();
 }
 
-void CPackageBuilder::Build()
-{
-	TraverseModels((void *) GetModels());
-}
-
-void CPackageBuilder::TraverseModels(void *pointer)
-{
-	if (pointer == NULL) return;
-	CBuilderModelList *models = (CBuilderModelList *) pointer;
-	POSITION pos = models->GetHeadPosition();
-	while(pos)
-	{
-		CBuilderModel *model = models->GetNext(pos);
-		if(model->GetKindName() == "ClassDiagram")
-		{
-			CClassDiagramBuilder *sheet = dynamic_cast<CClassDiagramBuilder *>(model);
-			if(!sheet)
-			{
-				AfxMessageBox("Unexpected model kind found: " + sheet->GetName());
-				continue;
-			}
-			sheet->Build();
-			TraverseModels((void *) sheet->GetModels());
-		}
-		if(model->GetKindName() == "Namespace")
-		{
-			CNamespaceBuilder *ns = dynamic_cast<CNamespaceBuilder *>(model);
-			namespaces.AddTail(ns);
-			ns->Build();
-		}
-	}
-}
-
 ///////////////////////////// CNamespace ////////////////////////////////////
 
 IMPLEMENT_CUSTOMMODEL(CNamespaceBuilder, CBuilderModel, "Namespace")
+
+void CNamespaceBuilder::Build()
+{
+	CContainer::TraverseModels((void *) GetModels());
+};
 
 CPackageBuilder * CNamespaceBuilder::GetPackage() const
 {
@@ -589,37 +597,29 @@ CPackageBuilder * CNamespaceBuilder::GetPackage() const
 
 };
 
+CNamespaceBuilder * CNamespaceBuilder::GetNamespace() const
+{
+	CNamespaceBuilder * ns;
+	const CBuilderModel *parent = GetParent();
+	while (parent && parent->GetKindName() != "Namespace")
+		parent = parent->GetParent();
+	ns = BUILDER_CAST(CNamespaceBuilder, parent);
+	return ns;
+};
+
 void CNamespaceBuilder::BuildUML()
 {
-	uml_ns = ::Uml::Namespace::Create(GetPackage()->GetUmlDiagram());
-	uml_ns.name() = (LPCTSTR) GetName();
-}
-
-void CNamespaceBuilder::Build()
-{
-	TraverseModels((void *) GetModels());
-}
-
-void CNamespaceBuilder::TraverseModels(void *pointer)
-{
-	if (pointer == NULL) return;
-	CBuilderModelList *models = (CBuilderModelList *) pointer;
-	POSITION pos = models->GetHeadPosition();
-	while(pos)
-	{
-		CBuilderModel *model = models->GetNext(pos);
-		if(model->GetKindName() == "ClassDiagram")
-		{
-			CClassDiagramBuilder *sheet = dynamic_cast<CClassDiagramBuilder *>(model);
-			if(!sheet)
-			{
-				AfxMessageBox("Unexpected model kind found: " + sheet->GetName());
-				continue;
-			}
-			sheet->Build();
-			TraverseModels((void *) sheet->GetModels());
-		}
+	const CBuilderModel *parent = GetParent();
+	if (parent->GetKindName() == "Namespace") {
+		uml_ns = ::Uml::Namespace::Create(BUILDER_CAST(CNamespaceBuilder, parent)->GetUmlNamespace());
+	} else if (parent->GetKindName() == "Package") {
+		uml_ns = ::Uml::Namespace::Create(BUILDER_CAST(CPackageBuilder, parent)->GetUmlDiagram());
 	}
+	uml_ns.name() = (LPCTSTR) GetName();
+
+	POSITION pos = namespaces.GetHeadPosition();
+	while(pos)
+		namespaces.GetNext(pos)->BuildUML();
 }
 
 ///////////////////////////// CClassDiagram /////////////////////////////////
@@ -745,12 +745,23 @@ void CCompositeClass::BuildCrossUML()
 	CNamespaceBuilder * cls_ns = cls->GetClassDiagram()->GetNamespace();
 
 	CString class_ph_name = GetName() + "_cross_ph_" + cls->GetPackage()->GetNameorAlias();
-	if(cls_ns)
-		class_ph_name += "_cross_ph_" + cls_ns->GetName();
-
 	CString from = cls->GetPackage()->GetNameorAlias();
+
 	if(cls_ns)
-		from += ":" + cls_ns->GetName();
+	{
+		// name of parent namespaces, from bottom to the top
+		vector<CString> ns_names;
+		while(cls_ns)
+		{
+			ns_names.push_back(cls_ns->GetName());
+			cls_ns = cls_ns->GetNamespace();
+		}
+		for(vector<CString>::reverse_iterator i = ns_names.rbegin(); i != ns_names.rend(); i++)
+		{
+			class_ph_name += "_cross_ph_" + *i;
+			from += ":" + *i;
+		}
+	}
 
 	cross_uml_cls = ::Uml::Class::Create(CComponent::theInstance->GetCrossUmlDiagram());
 	cross_uml_cls.name() = (LPCTSTR) class_ph_name;

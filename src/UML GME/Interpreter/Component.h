@@ -14,6 +14,9 @@
 /*
 CHANGELOG
 =========
+	-	05/20/06	-	endre
+		- add support for nested UML namespaces
+
 	-	12/31/05	-	endre
 
 		- use UdmDom data networks and UdmProjects to build the result of interpretation
@@ -116,6 +119,7 @@ CHANGELOG
 	{
 	public:
 		~CContainer();
+		void TraverseModels(void *pointer);
 		void AddCompositeClass(CCompositeClass *cls);
     	void AddComposition(CCompositionBuilder *comp);
     	void AddAssociation(CAssociationBase *ass);
@@ -124,7 +128,6 @@ CHANGELOG
     	void BuildCompositions();
     	void BuildAssociations();
 
-		void BuildUML();
 		void BuildUMLClasses();
 		void BuildUMLInheritance();
 		void BuildUMLAssociations();
@@ -146,10 +149,9 @@ CHANGELOG
     {
 		DECLARE_CUSTOMMODEL(CPackageBuilder, CBuilderModel)
     public:
+		void Build();
 		CString GetVersion() const;
 		CString GetNameorAlias() const;
-		void TraverseModels(void *pointer);
-		void Build();
 
 		void BuildUML();
 		::Uml::Diagram GetUmlDiagram() { return uml_dgr; }
@@ -164,9 +166,9 @@ CHANGELOG
 	{
 		DECLARE_CUSTOMMODEL(CNamespaceBuilder, CBuilderModel)
 	public:
-		CPackageBuilder* GetPackage() const;
-		void TraverseModels(void *pointer);
 		void Build();
+		CPackageBuilder* GetPackage() const;
+		CNamespaceBuilder * GetNamespace() const;
 
 		void BuildUML();
 		::Uml::Namespace GetUmlNamespace() { return uml_ns; }
