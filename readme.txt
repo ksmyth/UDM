@@ -67,7 +67,8 @@ Changelog
 -----------------
 09/28/04	-	Release 2.20
 
-		-	Require GME4 R4.8.25.		
+		-	Require GME4 R4.8.25.	
+		-	UDM Interpreter Wizard is provided	
 		-	CppUnit testprojects are provided.
 		-	UdmTomi::DeleteObject() bugfix, the object on which DeleteObject is called not it is a null UDM object.
 		-	UdmDom bugfix regarding the ordering of the subelements in the saved XML file, in certain situations the ordering of
