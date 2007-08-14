@@ -83,7 +83,7 @@ public:
 			TYPENAME multimap<T, Z>::iterator inserted_at = insert(item);
 			return pair<TYPENAME multimap<T, Z>::iterator,bool> (inserted_at, true);
 		}
-		return pair<TYPENAME multimap<T, Z>::iterator,bool>(end(), false);
+		return pair<TYPENAME multimap<T, Z>::iterator,bool>(this->end(), false);
 	}
 };
 
