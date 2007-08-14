@@ -14,11 +14,6 @@
 
 #include "Uml.h"
 
-UDM_USE_DOM
-#ifdef _WIN32
-UDM_USE_MGA
-#endif
-
 #include "UmlExt.h"
 
 /* Paradigm-independent Udm Backend Dump class							*/

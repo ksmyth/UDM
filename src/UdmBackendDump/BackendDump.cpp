@@ -27,7 +27,20 @@ void CBackendDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 	// Getting Attributes from meta
 	::Uml::Class cls= ob.type();
 	long ObjectID=ob.uniqueId();
-	*dump<<"Object '"<< ExtractName(ob)<<"["<<ObjectID<<"]"<<"("<<nDepthLevel<<")"<< "' of type '"<<string(cls.name())<<"' attributes:"<<endl;
+	*dump<<"Object '"<< ExtractName(ob)<<"["<<ObjectID<<"]"<<"("<<nDepthLevel<<")"<< "' of type '"<<string(cls.name())<<"'" << endl;
+
+	Udm::Object archetype = ob.archetype();
+	if (archetype) {
+		*dump << "\t";
+		if (ob.hasRealArchetype())
+			*dump << "explicit ";
+		if (ob.isInstance())
+			*dump << "instance of '" << ExtractName(archetype) << "[" << archetype.uniqueId() << "]'" << endl;
+		else if (ob.isSubtype())
+			*dump << "subtype of '" << ExtractName(archetype) << "[" << archetype.uniqueId() << "]'" << endl;
+	}
+
+	*dump<<"attributes:"<<endl;
 	
 
 	set< ::Uml::Attribute> attrs=cls.attributes();	
@@ -361,10 +374,10 @@ void CBackendDump::ExtractLinks(Udm::Object ob)
 
 		if(os.size()>0)
 		{
-			*dump<<endl<<"Links from object '"<<ExtractName(ob)<<"' to"<<endl;
+			*dump<<endl<<"Links from object '"<<ExtractName(ob)<<"["<<ob.uniqueId()<<"]' to"<<endl;
 			for(set<Udm::Object>::iterator asi=os.begin();asi!=os.end();asi++)
 			{
-				*dump<<"   '"<<ExtractName(*asi)<<"',"<<endl;
+				*dump<<"   '"<<ExtractName(*asi)<<"["<<asi->uniqueId()<<"]',"<<endl;
 				*dump<<"   "<<" with source role '"<<string(ri->name())<<"',"<<endl; 
 				*dump<<"   "<<" and with destination role '" <<string(Uml::theOther(*ri).name())<<"'"<<endl;
 			}
