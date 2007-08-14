@@ -148,7 +148,7 @@ namespace GME
 
 	std::string GetNamespaceName( CComPtr<IMgaFCO> spFCO );
 	std::string GetDiagramName( CComPtr<IMgaFCO> spFCO );
-	std::string GetQualifiedName( CComPtr<IMgaFCO> spFCO );
+	std::string GetQualifiedName( CComPtr<IMgaFCO> spFCO, bool isAssocRole = false );
 
 /*
 	bool IsInLibrary( CComPtr<IMgaObject> spObject );

@@ -98,13 +98,13 @@ namespace OCLUML
 				MGACOLL_ITERATE( IMgaFCO, spFCOs ) {
 					std::string strKind = GME::GetObjectName( MGACOLL_ITER.p );
 					std::string strRole = GME::LowerFirst( strKind );
-					std::string strRole_Q = GME::GetQualifiedName( MGACOLL_ITER.p );
+					std::string strRole_Q = GME::GetQualifiedName( MGACOLL_ITER.p, true );
 					std::string strSig = signature.GetName();
 					bool bIsQualified = strSig.find( "::" ) != std::string::npos;	// true if qualified type, false if local type
 
 					if ( ( bIsQualified && ( strRole_Q == strSig ) ) || ( (!bIsQualified) && ( strRole == strSig ) ) ) {
 						TypeSeq vecType( 1, "ocl::Set" );
-						vecType.push_back( strRole_Q );
+						vecType.push_back( GME::GetQualifiedName( MGACOLL_ITER.p ) );
 						vecFeatures.push_back( new OclMeta::Association( strRole, "", vecType, NULL, true ) );
 					}
 				} MGACOLL_ITERATE_END;
@@ -519,7 +519,7 @@ namespace OCLUML
 		CComPtr<IMgaFCOs> spFCOs;
 		COMTHROW( m_spProject->AllFCOs( spFilter, &spFCOs ) );
 		MGACOLL_ITERATE( IMgaFCO, spFCOs ) {
-			if ( GME::LowerFirst( GME::GetObjectName( MGACOLL_ITER.p ) ) == strClassName ) {
+			if ( GME::GetObjectName( MGACOLL_ITER.p ) == strClassName ) {
 
 				std::string strIterNsName = GME::GetNamespaceName( MGACOLL_ITER.p );
 				std::string strIterDgrName = GME::GetDiagramName( MGACOLL_ITER.p );
