@@ -24,6 +24,8 @@ enum CPPSourceUnit {
 	CPP_SOURCE_UNIT_CLASS,		// one .h and one .cpp file per namespace, one .h file per class
 };
 
+extern bool single_cpp_namespace;
+
 //cross-link-approved
 void GenerateHExport(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname, const string& macro);
 void GenerateH(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname, bool visitor_sup = false, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro = "", const int source_unit = CPP_SOURCE_UNIT_DIAGRAM);
