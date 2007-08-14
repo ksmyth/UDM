@@ -38,7 +38,7 @@ function setCurState(state)
 	curState = state;
 	d1.innerText = state;
 <:
-	o.oclAsType(OrState).state->forAll( s | {
+	o.oclAsType(OrState).simpleState->forAll( s | {
 	:>\tif( curState == "<: print(s.name); :>" ) {\n<:
 		s.transition[srcTransition]->forAll(tr | {
 			:>\t\tfrmTriggers.<: print(tr.Trigger); :>.disabled = false;\n<:
@@ -52,7 +52,7 @@ function setCurState(state)
 function activateTrigger(trigger)
 {
 <:
-	o.oclAsType(OrState).state->forAll( s | {
+	o.oclAsType(OrState).simpleState->forAll( s | {
 	:>\tif( curState == "<: print(s.name); :>" ) {\n<:
 		s.transition[srcTransition]->forAll(tr | {
 			:>\t\tif(trigger == "<: print(tr.Trigger); :>") setCurState("<: print(tr.dstTransition.name); :>");\n<:

@@ -32,7 +32,7 @@
 				<attribute kind="Marked" status="meta">
 					<value>false</value>
 				</attribute>
-				<atom id="id-0066-00000001" kind="State" role="State" relid="0x5">
+				<atom id="id-0066-00000001" kind="SimpleState" role="SimpleState" relid="0x5">
 					<name>S4</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -50,7 +50,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-00000002" kind="State" role="State" relid="0x4">
+				<atom id="id-0066-00000002" kind="SimpleState" role="SimpleState" relid="0x4">
 					<name>S3</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -68,7 +68,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-00000003" kind="State" role="State" relid="0x3">
+				<atom id="id-0066-00000003" kind="SimpleState" role="SimpleState" relid="0x3">
 					<name>S2</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -86,7 +86,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-00000004" kind="State" role="State" relid="0x2">
+				<atom id="id-0066-00000004" kind="SimpleState" role="SimpleState" relid="0x2">
 					<name>S1</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -225,7 +225,7 @@
 				<attribute kind="Marked" status="meta">
 					<value>false</value>
 				</attribute>
-				<atom id="id-0066-00000006" kind="State" role="State" relid="0x10">
+				<atom id="id-0066-00000006" kind="SimpleState" role="SimpleState" relid="0x10">
 					<name>S6</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -243,7 +243,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-00000007" kind="State" role="State" relid="0xf">
+				<atom id="id-0066-00000007" kind="SimpleState" role="SimpleState" relid="0xf">
 					<name>S5</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -261,7 +261,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-00000008" kind="State" role="State" relid="0xe">
+				<atom id="id-0066-00000008" kind="SimpleState" role="SimpleState" relid="0xe">
 					<name>S4</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -279,7 +279,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-00000009" kind="State" role="State" relid="0xd">
+				<atom id="id-0066-00000009" kind="SimpleState" role="SimpleState" relid="0xd">
 					<name>S3</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -297,7 +297,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-0000000a" kind="State" role="State" relid="0xc">
+				<atom id="id-0066-0000000a" kind="SimpleState" role="SimpleState" relid="0xc">
 					<name>S2</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -315,7 +315,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-0000000b" kind="State" role="State" relid="0xb">
+				<atom id="id-0066-0000000b" kind="SimpleState" role="SimpleState" relid="0xb">
 					<name>S1</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -522,7 +522,7 @@
 				<attribute kind="Marked" status="meta">
 					<value>false</value>
 				</attribute>
-				<atom id="id-0066-0000000d" kind="State" role="State" relid="0xd">
+				<atom id="id-0066-0000000d" kind="SimpleState" role="SimpleState" relid="0xd">
 					<name>S2</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -540,7 +540,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-0000000e" kind="State" role="State" relid="0xc">
+				<atom id="id-0066-0000000e" kind="SimpleState" role="SimpleState" relid="0xc">
 					<name>S1</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -669,7 +669,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-00000011" kind="State" role="State" relid="0x2">
+				<atom id="id-0066-00000011" kind="SimpleState" role="SimpleState" relid="0x2">
 					<name>S1</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -687,7 +687,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-00000012" kind="State" role="State" relid="0x3">
+				<atom id="id-0066-00000012" kind="SimpleState" role="SimpleState" relid="0x3">
 					<name>S2</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -705,7 +705,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-00000013" kind="State" role="State" relid="0x4">
+				<atom id="id-0066-00000013" kind="SimpleState" role="SimpleState" relid="0x4">
 					<name>S3</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -723,7 +723,7 @@
 						<value>false</value>
 					</attribute>
 				</atom>
-				<atom id="id-0066-00000014" kind="State" role="State" relid="0x5">
+				<atom id="id-0066-00000014" kind="SimpleState" role="SimpleState" relid="0x5">
 					<name>S4</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
