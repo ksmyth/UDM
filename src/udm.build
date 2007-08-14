@@ -57,6 +57,13 @@
    )}"
   />
 
+  <if test="${environment::variable-exists('CLASSPATH')}">
+    <property name="Path.javaclass" value="environment::get-variable('CLASSPATH')}"/>
+  </if>
+  <ifnot test="${environment::variable-exists('CLASSPATH')}">
+    <property name="Path.javaclass" value=""/>
+  </ifnot>
+
 
   <!-- ENVIRONMENT VARIABLES -->
   <!-- THESE WERE DERIVED FROM vcvars32.bat -->
@@ -82,7 +89,7 @@
         <pathelement dir="${Path.udm}\dir"/>
 
         <pathelement dir="${Dir.devenv}"/>
-	<pathelement dir="${Dir.msvc}\BIN"/>
+        <pathelement dir="${Dir.msvc}\BIN"/>
         <pathelement dir="${Dir.vcinstall}\Common7\Tools"/>
         <pathelement dir="${Dir.vcinstall}\Common7\Tools\bin\prerelease"/>
         <pathelement dir="${Dir.vcinstall}\Common7\Tools\bin"/>
@@ -106,16 +113,16 @@
         <pathelement dir="${Path.jdk}\include\win32"/>
         <pathelement dir="${Path.jdk}\include"/>
 
-	<pathelement dir="${Dir.msvc}\ATLMFC\INCLUDE"/>
-	<pathelement dir="${Dir.msvc}\INCLUDE"/>
-	<pathelement dir="${Dir.msvc}\PlatformSDK\include\prerelease"/>
-	<pathelement dir="${Dir.msvc}\PlatformSDK\include"/>
-	<pathelement dir="${Dir.frameworksdk}\include"/>
+        <pathelement dir="${Dir.msvc}\ATLMFC\INCLUDE"/>
+        <pathelement dir="${Dir.msvc}\INCLUDE"/>
+        <pathelement dir="${Dir.msvc}\PlatformSDK\include\prerelease"/>
+        <pathelement dir="${Dir.msvc}\PlatformSDK\include"/>
+        <pathelement dir="${Dir.frameworksdk}\include"/>
 
-	<pathelement dir="${Path.udm}\UdmOclPat\GOCL\Include"/>
-	<pathelement dir="${Path.udm}\UML GME\Interpreter"/>
+        <pathelement dir="${Path.udm}\UdmOclPat\GOCL\Include"/>
+        <pathelement dir="${Path.udm}\UML GME\Interpreter"/>
 
-	<pathelement path="${environment::get-variable('INCLUDE')}"/>
+        <pathelement path="${environment::get-variable('INCLUDE')}"/>
       </path>
     </variable>
   </setenv>
@@ -130,13 +137,13 @@
         <pathelement dir="${Path.cppunit}\lib"/>
         <pathelement dir="${Path.jdk}\lib"/>
 
-	<pathelement dir="${Dir.msvc}\ATLMFC\LIB"/>
-	<pathelement dir="${Dir.msvc}\LIB"/>
-	<pathelement dir="${Dir.msvc}\PlatformSDK\lib\prerelease"/>
-	<pathelement dir="${Dir.msvc}\PlatformSDK\lib"/>
-	<pathelement dir="${Dir.frameworksdk}\lib"/>
+        <pathelement dir="${Dir.msvc}\ATLMFC\LIB"/>
+        <pathelement dir="${Dir.msvc}\LIB"/>
+        <pathelement dir="${Dir.msvc}\PlatformSDK\lib\prerelease"/>
+        <pathelement dir="${Dir.msvc}\PlatformSDK\lib"/>
+        <pathelement dir="${Dir.frameworksdk}\lib"/>
 
-	<pathelement path="${environment::get-variable('LIB')}"/>
+        <pathelement path="${environment::get-variable('LIB')}"/>
       </path>
     </variable>
   </setenv>
@@ -145,7 +152,7 @@
     <variable name="CLASSPATH">
       <path>
         <pathelement dir="${Path.udm_3rdparty}\antlr-2.7.1"/>
-	<pathelement path="${environment::get-variable('CLASSPATH')}"/>
+        <pathelement path="${Path.javaclass}"/>
       </path>
     </variable>
   </setenv>
