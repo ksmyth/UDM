@@ -9,6 +9,9 @@ using namespace Uml;
 using namespace Udm;
 
 /*
+06/07/06	-	endre
+			-		When copying to the same data network, also copy archetypes that are not out-of-the-box.
+
 11/22/04	-	endre
 
 			-	Extended ExtractName with the name of the "name attribute", by default : 'name'
@@ -179,7 +182,7 @@ namespace UdmUtil
 				}
 				else
 				{
-					if (same_dest_dn)
+					if (same_dest_dn && !src_child_archetype.IsNodeOfTree(srcDerived))
 					{
 						
 						//automatic mapping is done for all derived children
@@ -289,6 +292,9 @@ namespace UdmUtil
 							//(it's there because the parent has an archetype)
 							if (!p_srcChild->hasRealArchetype()) continue;
 
+							//if same datanetwork, check if srcChild archetype is out-of-the-box or not
+							bool outOfBox_srcChildArc = dest_same_dn && !srcChildArc.IsNodeOfTree(p_srcRoot->clone());
+
 							//if it has, check whether it was already copied
 							copy_assoc_map::iterator cam_i = cam.find(srcChildArc);
 							if (cam_i != cam.end()) 
@@ -300,7 +306,7 @@ namespace UdmUtil
 							}
 							else
 							{
-								if (dest_same_dn)
+								if (outOfBox_srcChildArc)
 								{
 									//when working on the same datanetwork,
 									//if the archetype is found out-of-the-box, then it must be the same for both the copied and the copy object
@@ -329,7 +335,7 @@ namespace UdmUtil
 								//(recursively)
 								//we don't require this condition if we are copying within the same datanetwork
 								//because reqCreateMappingforDerivedObject function will automatically insert these objects in cam
-								if (!dest_same_dn && !reqIsObjectCopied(srcChild,cam))
+								if (!outOfBox_srcChildArc && !reqIsObjectCopied(srcChild,cam))
 								{
 									finished = false;
 									continue;
@@ -448,7 +454,6 @@ namespace UdmUtil
 			set< ::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
 			for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 			{
-				::Uml::AssociationRole o_role = ::Uml::theOther(*p_currAssocRole);
 
 				::Uml::Class assocClass=::Uml::Association(p_currAssocRole->parent()).assocClass();
 
@@ -457,7 +462,8 @@ namespace UdmUtil
 				//if simpleLinks is ffalse, only assoc. class based associations are copied
 				if (simpleLinks && assocClass) continue;	
 				if (!simpleLinks &&  !assocClass) continue;	
-				vector<ObjectImpl*>srcPeers=p_srcRoot->getAssociation(theOther(*p_currAssocRole),assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
+				::Uml::AssociationRole o_role = ::Uml::theOther(*p_currAssocRole);
+				vector<ObjectImpl*>srcPeers=p_srcRoot->getAssociation(o_role,assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
 				
 				//if (srcPeers.size()) 
 				//	cout <<"\t now copying links via role: " << (string)(p_currAssocRole->name()) << "<->" << (string)(o_role.name()) << endl;
@@ -524,7 +530,7 @@ namespace UdmUtil
 				{
 			
 				//	cout << "\t\t seting associations, vector contains: " << dstPeers.size() << endl;
-					p_dstRoot->setAssociation(theOther(*p_currAssocRole),dstPeers, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER, direct);
+					p_dstRoot->setAssociation(o_role,dstPeers, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER, direct);
 				}
 				
 				// Releasing dstPeers cloned 
