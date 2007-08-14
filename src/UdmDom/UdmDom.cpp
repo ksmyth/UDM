@@ -1324,20 +1324,8 @@ namespace UdmDom
 								const DOMString &myid) 
 		{
 
-
-
-#ifndef DEBUG
-char buf1[100]; strcpy(buf1, StrX(tname).localForm());
-#endif
-#ifndef DEBUG
-char buf2[100]; strcpy(buf2, StrX(oname).localForm());
-#endif
 			DOMString origattr = dom_element.getAttribute(tname);
-#ifndef DEBUG
-char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
-#endif
 
-//cout << "Attr remove" << buf1 << buf2 << buf3 << endl;
 			dom_element.removeAttribute(tname);
 			{
 				const XMLCh *i = origattr.rawBuffer();
@@ -2537,12 +2525,6 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 			
 			DOMString origattr = dom_element.getAttribute(tname);
 
-
-#ifdef DEBUG
-char buf[100]; strcpy(buf, StrX(origattr).localForm());
-#endif
-
-		
 
 			for(vector<ObjectImpl* >::const_iterator i = nvect.begin(); i != nvect.end(); i++) 
 			{
