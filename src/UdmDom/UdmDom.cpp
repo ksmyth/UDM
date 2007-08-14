@@ -466,39 +466,6 @@ namespace UdmDom
 
 
 
-/*
-	void setTextValue(DOM_Element parent_element, const DOMString &value, const DOMString &name, const DOMString &ns_name, int no = 1)
-	{
-		DOM_Element parent = getElementNamed(parent_element, name, ns_name, true, no);
-		DOM_Text tn;
-		if (!parent.hasChildNodes())
-		{
-			tn = parent.getOwnerDocument().createTextNode(value);
-			parent.appendChild(tn);
-		}
-		else
-		{
-			DOM_Node ttn = parent.getFirstChild();
-			if ( (ttn == (DOM_NullPtr *)NULL) || (ttn.getNodeType() != DOM_Node::TEXT_NODE))
-			 throw udm_exception("UdmDom::setTextValue:Existing node is not a child node!");
-			tn = (DOM_Text&)ttn;
-		};
-		tn.setNodeValue(value);
-	};
-
-	void setTextValues(DOM_Element parent_element, const vector<string> &values, const DOMString &name, const DOMString &ns_name)
-	{
-		int i = 0;
-		for(vector<string>::const_iterator v_i = values.begin(); v_i != values.end(); v_i++)
-		{
-			i++;
-			const DOMString value = v_i->c_str();
-			setTextValue(parent_element, value, name, ns_name, i);
-		};
-	};
-
-
-*/
 	void setTextValue(DOM_Element parent_element, const DOMString &value, const DOMString &name, const DOMString &ns_name, int no = 1)
 	{
 		
@@ -509,11 +476,11 @@ namespace UdmDom
 
 	void setTextValues(DOM_Element parent_element, const vector<string> &values, const DOMString &name, const DOMString &ns_name)
 	{
-    string str;
+		string str;
 		for(vector<string>::const_iterator v_i = values.begin(); v_i != values.end(); ++v_i)
-      str += *v_i;
+			str += *v_i;
 
-    setTextValue(parent_element, DOMString (str.c_str()), name, ns_name);
+		setTextValue(parent_element, DOMString (str.c_str()), name, ns_name);
 	}
 
 
@@ -545,35 +512,6 @@ namespace UdmDom
     return a;
 	}
 
-/*
-	DOMString getTextValue(DOM_Element parent_element, const DOMString &name, const DOMString& ns_name, int no = 1)
-	{
-		DOMString a;
-		DOM_Element parent = getElementNamed(parent_element, name, ns_name, false, no);
-		if (parent == (DOM_NullPtr *) NULL) return a;
-		if (!parent.hasChildNodes()) return a;
-
-		DOM_Node ttn = parent.getFirstChild();
-		if ( (ttn == (DOM_NullPtr *)NULL) || (ttn.getNodeType() != DOM_Node::TEXT_NODE))
-			throw udm_exception("UdmDom::setTextValue:Existing node is not a child node!");
-		
-		DOM_Text tn = (DOM_Text&)ttn;
-		return tn.getNodeValue();
-	};
-
-
-	void getTextValues(DOM_Element parent_element, vector<string> &values, const DOMString &name, const DOMString &ns_name)
-	{
-		DOMString a;
-		int i =0;
-		do
-		{
-			i++;
-			a = getTextValue(parent_element, name, ns_name, i);
-			if (a != (const DOM_NullPtr *)NULL ) values.push_back(StrX(a).localForm());
-		} while (a != (const DOM_NullPtr *)NULL);
-	};
-*/
 
 // --------------------------- DomObject
 
