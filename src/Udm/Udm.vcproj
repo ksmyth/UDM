@@ -204,6 +204,9 @@
 				RelativePath=".\UdmMetaCpp.cpp">
 			</File>
 			<File
+				RelativePath=".\UdmCorbaCppH.cpp">
+			</File>
+			<File
 				RelativePath=".\UdmUtil.cpp">
 			</File>
 		</Filter>

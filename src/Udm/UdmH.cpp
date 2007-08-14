@@ -425,6 +425,15 @@ void GenerateHPreamble(const ::Uml::Diagram &diagram, const string &fname, ostre
 	output << "#include \"UdmBase.h\""	<< endl;
 	output << "#endif"	<< endl << endl;
 
+	output << "#ifdef min" << endl;
+	output << "#undef min" << endl;
+	output << "#endif" << endl << endl;
+
+	output << "#ifdef max" << endl;
+	output << "#undef max" << endl;
+	output << "#endif" << endl;
+
+
 	if (macro.size())
 		output << "#include \""<< fname << "_export.h\"" <<endl;
 }

@@ -215,7 +215,7 @@ void GenerateMetaCPPInitMetaObjects(const set< ::Uml::Class> &classes, const str
 				while (asrs_i != asrs.end())
 				{
 					output << " \t\t\t" << cl.name() << "::meta_" << asrs_i->name() << "_end_ = " 
-						<< cross_dgr.name() << "::" << ((::Uml::Class)((::Uml::theOther(*asrs_i)).target())).name()<<"::meta_" << asrs_i->name() << ";" <<endl;
+						<< UmlClassCPPName((::Uml::Class)((::Uml::theOther(*asrs_i)).target())) << "::meta_" << asrs_i->name() << ";" <<endl;
 					asrs_i++;
 				}
 			};
@@ -240,7 +240,7 @@ void GenerateMetaCPPInitAssociations(const set< ::Uml::Association> & asss, cons
 			output << "\t\t\t\t::Uml::InitAssociation(ass , " << meta_name << ", \"" << a->name() << "\");" << endl;
 			if(aclass) 
 			{
-				output << "\t\t\t\t::Uml::InitAssociationClass(ass, " << aclass.name() << "::meta);" << endl;
+				output << "\t\t\t\t::Uml::InitAssociationClass(ass, " << UmlClassCPPName(aclass) << "::meta);" << endl;
 			}
 
 			set< ::Uml::AssociationRole> roles = a->roles();
@@ -249,18 +249,18 @@ void GenerateMetaCPPInitAssociations(const set< ::Uml::Association> & asss, cons
 					::Uml::AssociationRole zz	= Uml::theOther(*i);
 					string aname(::Uml::MakeRoleName(zz));
 					::Uml::Class cl = i->target();
-					output << "\t\t\t\t::Uml::InitAssociationRole(" << cl.name() << "::meta_" << aname 
+					output << "\t\t\t\t::Uml::InitAssociationRole(" << UmlClassCPPName(cl) << "::meta_" << aname 
 						<< ", ass, \"" << aname << "\", " <<
 						(zz.isNavigable() ? "true, " : "false, ") <<
 						(zz.isPrimary() ? "true, " : "false, ") <<
-						zz.min() << ", " << zz.max() << ", " << ((::Uml::Class)zz.target()).name() << "::meta);" << endl;
+						zz.min() << ", " << zz.max() << ", " << UmlClassCPPName((::Uml::Class)zz.target()) << "::meta);" << endl;
 					::Uml::Class aclass = a->assocClass();
 					if(aclass) 
 					{
 						::Uml::Class cl2 = zz.target();
-						output << "\t\t\t\t" << aclass.name() << "::meta_" << aname << "_end_ = " <<
-											cl2.name() << "::meta_" << ::Uml::MakeRoleName(*i) << "_rev = " << 
-											cl.name() << "::meta_" << aname << ";" << endl;
+						output << "\t\t\t\t" << UmlClassCPPName(aclass) << "::meta_" << aname << "_end_ = " <<
+											UmlClassCPPName(cl2) << "::meta_" << ::Uml::MakeRoleName(*i) << "_rev = " << 
+											UmlClassCPPName(cl) << "::meta_" << aname << ";" << endl;
 					}
 			}		
 			output << "\t\t\t}" << endl;
@@ -289,14 +289,14 @@ void GenerateMetaCPPInitCompositions(const set< ::Uml::Composition> & comps, con
 		::Uml::CompositionChildRole zzc = c->childRole();
 		string aname(::Uml::MakeRoleName(zzp));
 		
-		output << "\t\t\t\t::Uml::InitCompositionParentRole(" << ((::Uml::Class)zzc.target()).name() << "::meta_" << aname << 
+		output << "\t\t\t\t::Uml::InitCompositionParentRole(" << UmlClassCPPName((::Uml::Class)zzc.target()) << "::meta_" << aname << 
 		", comp, \""<< aname << "\", " << (zzp.isNavigable() ? "true, " : "false, ") <<
-		((::Uml::Class)zzp.target()).name() << "::meta);" << endl;
+		UmlClassCPPName((::Uml::Class)zzp.target()) << "::meta);" << endl;
 						
 		string cname(::Uml::MakeRoleName(zzc));
-		output << "\t\t\t\t::Uml::InitCompositionChildRole(" << ((::Uml::Class)zzp.target()).name() << "::meta_" << cname << 
+		output << "\t\t\t\t::Uml::InitCompositionChildRole(" << UmlClassCPPName((::Uml::Class)zzp.target()) << "::meta_" << cname << 
 			", comp, \""<< ::Uml::MakeShortRoleName(zzc) << "\", " << (zzc.isNavigable() ? "true, " : "false, ") <<
-			zzc.min() << ", " << zzc.max() << ", " << ((::Uml::Class)zzc.target()).name() << "::meta);" << endl;
+			zzc.min() << ", " << zzc.max() << ", " << UmlClassCPPName((::Uml::Class)zzc.target()) << "::meta);" << endl;
 	
 		output << "\t\t\t}" << endl;
 	}
@@ -324,8 +324,8 @@ void GenerateMetaCPPInitCrossAssociations(const set< ::Uml::Class> & classes, co
 				set< ::Uml::AssociationRole>::iterator ar_i = ar.begin();
 				while (ar_i != ar.end())
 				{
-					output << "\t\t"  <<cl.name() << "::meta_"<<Uml::theOther((*ar_i)).name() << 
-						" = " << cross_dgr.name()<< "::" << cross_cl.name() << "::meta_"<<Uml::theOther((*ar_i)).name()<< ";" <<endl;
+					output << "\t\t"  << UmlClassCPPName(cl) << "::meta_"<<Uml::theOther((*ar_i)).name() << 
+						" = " << UmlClassCPPName(cross_cl) << "::meta_"<<Uml::theOther((*ar_i)).name()<< ";" <<endl;
 					::Uml::AssociationRole zz	= Uml::theOther(*ar_i);
 					string aname(::Uml::MakeRoleName(zz));
 					::Uml::Association ass = ar_i->parent();
@@ -338,8 +338,8 @@ void GenerateMetaCPPInitCrossAssociations(const set< ::Uml::Class> & classes, co
 						//					cl2.from() << "::" << cl2.name() << "::meta_" << ::Uml::MakeRoleName(*ar_i) << "_rev = " << 
 						//					cl.name() << "::meta_" << aname << ";" << endl;
 
-						output << "\t\t" << cross_cl.name() << "::meta_"<<Uml::theOther((*ar_i)).name() << 
-						"_rev = " << cross_dgr.name()<< "::" << cl2.name() << "::meta_"<<ar_i->name()<< ";" <<endl;
+						output << "\t\t" << UmlClassCPPName(cross_cl) << "::meta_"<<Uml::theOther((*ar_i)).name() << 
+						"_rev = " << UmlClassCPPName(cl2) << "::meta_"<<ar_i->name()<< ";" <<endl;
 
 					}
 					ar_i++;
@@ -361,7 +361,7 @@ void GenerateMetaCPPInitInheritance(const set< ::Uml::Class> &classes, ostream &
 		set< ::Uml::Class> st = cl.subTypes();
 		for( set< ::Uml::Class>::iterator i = st.begin(); i != st.end(); i++) 
 		{
-			output << "\t\t\t::Uml::AddInheritance(" << cl.name() << "::meta, " << (*i).name() << "::meta);" << endl;
+			output << "\t\t\t::Uml::AddInheritance(" << cl.name() << "::meta, " << UmlClassCPPName(*i) << "::meta);" << endl;
 		}
 	}			
 };
@@ -484,11 +484,7 @@ void GenerateCPP(const ::Uml::Diagram &diagram,
 				 const string& macro,
 				 bool integrate_xsd) 
 {
-		string hname = diagram.name();
-		string::iterator i;
-		for(i = hname.begin(); i != hname.end(); i++) {
-			if(!isalnum(*i)) *i = '_';
-		}
+		string hname = NameToFilename(diagram.name());
 
 		output << "// cpp source file " << fname << ".cpp generated from diagram " << (string)diagram.name() << endl;
 		output << "// generated on " << GetTime().c_str() << endl << endl;

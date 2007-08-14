@@ -48,7 +48,7 @@ void GenerateCPP(	const ::Uml::Diagram &diagram,
 					const ::Uml::Diagram& cross_dgr = NULL, 
 					const string& macro = "",
 					bool integrate_xsd = false);
-//void GenerateCORBACPP(const ::Uml::Diagram &diagram, ostream &output, string fname, const ::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
+void GenerateCORBACPP(const ::Uml::Diagram &diagram, ostream &output, string fname, const ::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
 
 // not cross-link approved
 void GenerateCSInit(const ::Uml::Diagram &diagram, ostream &output, string fname);

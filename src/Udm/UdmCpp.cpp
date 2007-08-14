@@ -328,7 +328,7 @@ void GenerateCPPInitClassesAttributes(const set< ::Uml::Class> & classes, const 
 				while (asrs_i != asrs.end())
 				{
 					output << " \t\t\t" << cl.name() << "::meta_" << asrs_i->name() << "_end_ = " 
-					       << "::" << cross_dgr.name() << "::" << ((::Uml::Class)((::Uml::theOther(*asrs_i)).target())).name() << "::meta_" << asrs_i->name() << ";" <<endl;
+					       << UmlClassCPPName((::Uml::Class)((::Uml::theOther(*asrs_i)).target())) << "::meta_" << asrs_i->name() << ";" <<endl;
 					asrs_i++;
 				}
 			};
@@ -465,7 +465,7 @@ void GenerateCPPCrossObjectInits(const set< ::Uml::Class> &classes, const ::Uml:
 				while (ar_i != ar.end())
 				{
 					output << "\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
-					  " = " << "::" << cross_dgr.name() << "::" << cross_cl.name() << "::meta_" << ::Uml::theOther((*ar_i)).name() << ";" << endl;
+					  " = " << UmlClassCPPName(cross_cl) << "::meta_" << ::Uml::theOther((*ar_i)).name() << ";" << endl;
 
 					::Uml::AssociationRole zz	= ::Uml::theOther(*ar_i);
 					string aname(MakeRoleName(zz));
@@ -478,7 +478,7 @@ void GenerateCPPCrossObjectInits(const set< ::Uml::Class> &classes, const ::Uml:
 						::Uml::Class cl2 = zz.target();
 						
 						output << "\t\t\t" << cl.name() << "::meta_"<<::Uml::theOther((*ar_i)).name() << 
-						  "_rev = " << "::" << cross_dgr.name() << "::" << cl2.name() << "::meta_"<<ar_i->name()<< ";" <<endl;
+						  "_rev = " << UmlClassCPPName(cl2) << "::meta_"<<ar_i->name()<< ";" <<endl;
 
 					}
 					ar_i++;
@@ -860,15 +860,7 @@ void GenerateCPPDiagramInitialize(const ::Uml::Diagram &diagram, const ::Uml::Di
 	if (integrate_xsd)
 		CPPSetXsdStorage(diagram, output);
 
-	if (!ns_map.empty())
-	{
-		output << "\n\t\t// URI namespace mapping for dom backend, udm was invoked with switch -u" << "\n";
-		map<string, string>::const_iterator it =  ns_map.begin();
-		for(;it != ns_map.end(); ++it)
-		{
-			output << "\t\t" << "UdmDom::AddURIToUMLNamespaceMapping(\""<< it->second<<"\",\""<<it->first<<"\");" << std::endl;
-		}
-	}
+	CPPSetURIMapping(diagram, ns_map, output);
 
 	//call cross namespace inheritence and compositions initializers
 	for (set< ::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
@@ -894,15 +886,7 @@ void GenerateCPPDiagramInitialize(const ::Uml::Diagram &diagram, const ::Uml::Di
 		output << "\t\t" << ns.name() << "::InitializeNS(" << ns.name() << "::meta);" << endl;
 	}
 
-	if (!ns_map.empty())
-	{
-		output << "\n\t\t// URI namespace mapping for dom backend, udm was invoked with switch -u" << "\n";
-		map<string, string>::const_iterator it =  ns_map.begin();
-		for(;it != ns_map.end(); ++it)
-		{
-			output << "\t\t" << "UdmDom::AddURIToUMLNamespaceMapping(\""<< it->second<<"\",\""<<it->first<<"\");" << std::endl;
-		}
-	}
+	CPPSetURIMapping(diagram, ns_map, output);
 	output << "\t};"<<endl;
 
 

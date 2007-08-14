@@ -303,24 +303,22 @@ usage:
 
 			GenerateHH(cross_meta, cm_name, visitor_sup, NULL, macro, source_unit);
 
-			GenerateNewCPP(cross_meta, cm_name, ns_map, cross_meta, "", integrate_xsd, source_unit);
-
 			ofstream ff;
-			/*
-			ff.open( (cm_name+".cpp").c_str());
-			if(!ff.good()) throw udm_exception("Error opening for write " + cm_name + ".h");
+
+			if (new_meta && !corba_meta)
+				GenerateNewCPP(cross_meta, cm_name, ns_map, cross_meta, "", integrate_xsd, source_unit);
 			else
 			{
-// 				if(new_meta && !corba_meta) GenerateNewCPP(cross_meta, ff, cm_name, cross_meta);
-// 				else if (corba_meta) GenerateCORBACPP(cross_meta,  ff, cm_name, cross_meta, macro);
-// 				else GenerateCPP(cross_meta, ff, cm_name, cross_meta, macro);
+				ff.open( (cm_name+ ".cpp").c_str());
+				if(!ff.good()) throw udm_exception("Error opening for write " + cm_name + ".cpp");
+				else 
+				{
+					if (corba_meta) GenerateCORBACPP(cross_meta,  ff, cm_name, cross_meta, macro);
+					else GenerateCPP(cross_meta,  ff, cm_name, cross_meta, macro, integrate_xsd);
+				}
+				ff.close();
+				ff.clear();
 			}
-			ff.close();
-			ff.clear();
-			*/
-
-
-
 
 
 			cout << " Cross meta: " << cross_meta.name() << endl;
@@ -348,14 +346,12 @@ usage:
 					GenerateNewCPP(dgr, sname, ns_map, cross_meta, macro, integrate_xsd, source_unit);
 				else
 				{
-					ff.open( (sname+".cpp").c_str());
-					if(!ff.good()) throw udm_exception("Error opening for write " + sname + ".h");
+					ff.open( (sname + ".cpp").c_str() );
+					if(!ff.good()) throw udm_exception("Error opening for write " + sname + ".cpp");
 					else 
 					{
-					//GenerateNewCPP(dgr, ff, sname, cross_meta);
-					//	else if (corba_meta) GenerateCORBACPP(dgr,  ff, sname, cross_meta, macro);
-					//	else GenerateCPP(dgr,  ff, sname, cross_meta, macro);
-						GenerateCPP(dgr,  ff, sname, cross_meta, macro, integrate_xsd);
+						if (corba_meta) GenerateCORBACPP(dgr,  ff, sname, cross_meta, macro);
+						else GenerateCPP(dgr,  ff, sname, cross_meta, macro, integrate_xsd);
 					}
 					ff.close();
 					ff.clear();
@@ -497,9 +493,8 @@ usage:
 			if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".cpp");
 			else 
 			{
-			//	if (corba_meta) GenerateCORBACPP(diagram,  ff, fname);
-			//	else GenerateCPP(diagram,  ff, fname, NULL, macro);
-				GenerateCPP(diagram,  ff, fname, NULL, macro, integrate_xsd);
+				if (corba_meta) GenerateCORBACPP(diagram,  ff, fname);
+				else GenerateCPP(diagram,  ff, fname, NULL, macro, integrate_xsd);
 			}
 			ff.close();
 		}
