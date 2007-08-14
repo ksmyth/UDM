@@ -3093,6 +3093,7 @@ public:
 
 		//semantics - as defined for Udm::Datanetworks
 		Udm::BackendSemantics sem;
+		Udm::BackendSemantics cross_meta_dn_sem;
 		
 		//the name of the project file
 		string zipfile;
@@ -3146,6 +3147,9 @@ public:
 
 		//create new Udm project
 		virtual void UDM_DLL CreateNew(const string & project_file, vector<DataNetworkSpecifier>, const Udm::UdmDiagram& cross_diag , enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
+
+		//create new meta Udm project
+		virtual void UDM_DLL CreateNewMeta(const string & project_name, const string & project_file, vector<DataNetworkSpecifier>, enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
 
 		// Returns true if project is open.
 		bool IsOpen() { return Project;}
