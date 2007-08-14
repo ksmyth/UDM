@@ -334,6 +334,22 @@ namespace GME {
 			GetAssociationEnds( vecInheritances[ i ].p, "", strKind2, vecFCOs );
 	}
 
+	GOCL_STL_NS()string GetNamespace( CComPtr<IMgaFCO> spFCO )
+	{
+		CComPtr<IMgaModel> spModel;
+		COMTHROW( spFCO->get_ParentModel( &spModel ) );
+		ASSERT( spModel.p != NULL );
+
+		GOCL_STL_NS()string strKind = GetObjectKind( ( CComPtr<IMgaObject> ) spModel );
+		GOCL_STL_NS()string strName = GetObjectName( ( CComPtr<IMgaObject> ) spModel );
+
+		if ( strKind == "ClassDiagram" )
+			return GetNamespace( ( CComPtr<IMgaFCO> ) spModel );
+
+		ASSERT( strKind == "Package" || strKind == "Namespace" );
+		return GetObjectName( ( CComPtr<IMgaObject> ) spModel );
+	}
+
 	/*
 
 	bool IsInLibrary( CComPtr<IMgaObject> spObject )
