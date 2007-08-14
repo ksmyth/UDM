@@ -157,11 +157,20 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 {	
 	try
 	{
-		isUMT = false;
+		CBuilderFolder *root = builder.GetRootFolder();
+		IMgaProject *proj = builder.GetProject();
+		CComPtr<IMgaMetaProject> mproj;
+		COMVERIFY( proj->get_RootMeta(&mproj));
+		CBstr pn;
+		COMVERIFY( mproj->get_Name(pn) );
+		CString paradigmName = pn;
+		if(paradigmName  == "UMLModelTransformer")	isUMT = true;
+		else isUMT = false;
+		
 		theInstance = this;		// cannot use this in Initialize() functions!!!
 		
 		//open Udm Project dialog
-		CBuilderFolder *root = builder.GetRootFolder();
+//		CBuilderFolder *root = builder.GetRootFolder();
 		name = root->GetName();
 
 		//getting the packages
@@ -197,7 +206,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 			
 			CString filepath;
 
-			if (param & GME_SILENT_MODE)
+			if (param & GME_SILENT_MODE & (!isUMT) )
 				filepath = name + "_udm.xml";
 			else
 				filepath = GetFilePath(builder, focus, "xml", "XML files (*.xml)|*.xml");
@@ -226,7 +235,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		
 		CString filepath;
 		
-		if (param & GME_SILENT_MODE)
+		if (param & GME_SILENT_MODE & (!isUMT) )
 			filepath = name + "_udm.udm";
 		else
 			filepath = GetFilePath(builder, focus,"udm","Udm Project Files (*.udm)|*.udm");
@@ -1951,8 +1960,9 @@ std::strstream& CConstraintDefinitionBuilder::operator >>(std::strstream& out)
 // Writing back information to config
 /////////////////////////////////////////////////////////////////////////////////////
 CString CComponent::GetFilePath(CBuilder &builder, CBuilderObject *focus, char *FILE_EXT, char *UDM_FILTER)
-{	CBuilderFolder *root = builder.GetRootFolder();
-	IMgaProject *proj = builder.GetProject();
+{	
+	CBuilderFolder *root = builder.GetRootFolder();
+/*	IMgaProject *proj = builder.GetProject();
 	CComPtr<IMgaMetaProject> mproj;
 	COMVERIFY( proj->get_RootMeta(&mproj));
 	CBstr pn;
@@ -1960,6 +1970,9 @@ CString CComponent::GetFilePath(CBuilder &builder, CBuilderObject *focus, char *
 	CString paradigmName = pn;
 	if(paradigmName  == "UMLModelTransformer")
 	{	isUMT = true;
+*/
+	if(isUMT)
+	{
 		CBuilderFolder *root = builder.GetRootFolder();
 		const CBuilderFolderList *subfolders = root->GetSubFolders();
 		CBuilderModel *theCfg;
