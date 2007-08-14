@@ -1056,6 +1056,11 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		return bResult;
 	}
 
+ 	UDM_DLL void UnInitialize()
+	{
+		globalFacadeMap.clear();
+	}
+
 	UDM_DLL bool ProcessPat( const ::Uml::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression)
 	{
 		std::string strContext = (string)objContext.type().name();
