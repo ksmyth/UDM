@@ -62,7 +62,7 @@ this software.
 //mkdir, unlink
 #include <direct.h>
 //findfirstfile
-#include <Olectl.h>
+#include <Windows.h>
 
 #else	//WIN32
 
