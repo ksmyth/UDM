@@ -5,10 +5,10 @@
 	Name="Udm"
 	ProjectGUID="{2B0484D0-D5BB-4238-BBC3-A37A20CDC493}"
 	RootNamespace="Udm"
-	SccProjectName=""
+	SccProjectName="&quot;$/MoBIESTransition/udm_ns/src/Udm&quot;, OBCBAAAA"
 	SccAuxPath=""
-	SccLocalPath=""
-	SccProvider="">
+	SccLocalPath=".."
+	SccProvider="MSSCCI:Microsoft Visual SourceSafe">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
