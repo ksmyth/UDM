@@ -16,17 +16,6 @@
    value="${environment::get-variable('GME_ROOT')}"
   />
 
-  <!--
-    FOR SOME REASON, WHEN EXECUTED UNDER CYGWIN, NAnt PERVERTS
-    THE VALUE OF THE 'PATH' VARIABLE, CONVERTING THE CHARACTER
-    SEQUENCE 'C:' TO 'C;d:'.  THEREFORE, A DIFFERENT VARIABLE
-    'WINPATH' IS SET UP AND COPIED INTO 'PATH' FOR NAnt.
-  -->
-  <if test="${environment::variable-exists('WINPATH')}">
-    <setenv name="PATH" value="${environment::get-variable('WINPATH')}"/>
-  </if>
-
-
 <!--
 
   COMMENTED OUT, REPLACED BY ENVIRONMENT CONFIG IN session.pl
