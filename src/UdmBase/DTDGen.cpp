@@ -118,12 +118,12 @@ namespace DTDGen
 		return ret;
 	};	
 
-	cwcp_order get_cwcp_order(const ::Uml::Uml::Class & parent, bool uxsdi, bool has_text_attr)
+	cwcp_order get_cwcp_order(const ::Uml::Class & parent, bool uxsdi, bool has_text_attr)
 	{
 		cwcp_order ret;
 
 
-		set< ::Uml::Uml::CompositionChildRole> ccr_set;
+		set< ::Uml::CompositionChildRole> ccr_set;
 		
 		if (uxsdi)
 			ccr_set = Uml::CompositionPeerChildRoles(parent);
@@ -133,21 +133,21 @@ namespace DTDGen
 
 		//stage 1: create the map of classes with all their childroles
 		typedef vector<card_prod> cp_vector_type;
-		map<const ::Uml::Uml::Class, cp_vector_type> class_cps;
+		map<const ::Uml::Class, cp_vector_type> class_cps;
 
-		set< ::Uml::Uml::CompositionChildRole>::iterator ccr_set_i = ccr_set.begin();
+		set< ::Uml::CompositionChildRole>::iterator ccr_set_i = ccr_set.begin();
 		while (ccr_set_i != ccr_set.end())
 		{
-			::Uml::Uml::Class target = ccr_set_i->target();
+			::Uml::Class target = ccr_set_i->target();
 
-			set< ::Uml::Uml::Class> target_descs;
+			set< ::Uml::Class> target_descs;
 
 			if (uxsdi)
 				target_descs.insert(target);
 			else
 				target_descs = Uml::DescendantClasses(target);
 			
-			set< ::Uml::Uml::Class>::iterator td_i = target_descs.begin();
+			set< ::Uml::Class>::iterator td_i = target_descs.begin();
 
 			while (td_i != target_descs.end())
 			{			
@@ -193,7 +193,7 @@ namespace DTDGen
 		//stage 2: create the product of the cardinalities as a sequence sorted by typename
 		map<const string, class_w_cp> cwcp_seq_map;
 
-		map<const ::Uml::Uml::Class, cp_vector_type>::iterator cc_i = class_cps.begin();
+		map<const ::Uml::Class, cp_vector_type>::iterator cc_i = class_cps.begin();
 		while (cc_i != class_cps.end())
 		{
 			cwcp_seq_map[(cc_i->first).name()] = class_w_cp(cc_i->first, sum_cardinalities(cc_i->second));
@@ -324,7 +324,7 @@ namespace DTDGen
 
 	// --------------------------- DTD generation
 
-	void GenerateDTDElement(const ::Uml::Uml::Class &c,  ostream &output)	
+	void GenerateDTDElement(const ::Uml::Class &c,  ostream &output)	
 	{
 		string name = c.name();
 		set<string> text_atts;		//text attributes
@@ -369,8 +369,8 @@ namespace DTDGen
 			if (empty) output << " (" ;
 			else output << ',';
 
-			set< ::Uml::Uml::Attribute> atts = Uml::TextAttributes(c);
-			set< ::Uml::Uml::Attribute>::iterator atts_i = atts.begin();
+			set< ::Uml::Attribute> atts = Uml::TextAttributes(c);
+			set< ::Uml::Attribute>::iterator atts_i = atts.begin();
 
 			bool  first = true;
 			while (atts_i != atts.end())
@@ -398,7 +398,7 @@ namespace DTDGen
 	
 	};
 
-	void GenerateDTDAttlist(const ::Uml::Uml::Class &c,  ostream &output)	
+	void GenerateDTDAttlist(const ::Uml::Class &c,  ostream &output)	
 	{
 			string name = c.name();
 			
@@ -406,12 +406,12 @@ namespace DTDGen
 			
 			output << "<!ATTLIST " << name << endl;
 
-			set< ::Uml::Uml::AssociationRole> associations = Uml::AncestorAssociationTargetRoles(c);
-			set< ::Uml::Uml::Class> ccl = ::Uml::AncestorClasses(c);
-			::Uml::Uml::Association ass;
-			for(set< ::Uml::Uml::Class>::iterator iii = ccl.begin(); iii != ccl.end(); iii++) {
+			set< ::Uml::AssociationRole> associations = Uml::AncestorAssociationTargetRoles(c);
+			set< ::Uml::Class> ccl = ::Uml::AncestorClasses(c);
+			::Uml::Association ass;
+			for(set< ::Uml::Class>::iterator iii = ccl.begin(); iii != ccl.end(); iii++) {
 
-				if(::Uml::Uml::Association(iii->association())) {
+				if(::Uml::Association(iii->association())) {
 					if(ass) {
 						throw udm_exception("Class " + name + "has multiple associations"); 
 					}
@@ -426,8 +426,8 @@ namespace DTDGen
 				output << "\t_id\tID\t#IMPLIED" << endl;
 			//}
 
-				set< ::Uml::Uml::Class> cls = Uml::AncestorContainerClasses(c);
-				set< ::Uml::Uml::Class>::iterator cl = cls.begin();
+				set< ::Uml::Class> cls = Uml::AncestorContainerClasses(c);
+				set< ::Uml::Class>::iterator cl = cls.begin();
 
 			
 			while( cl != cls.end() )
@@ -442,15 +442,15 @@ namespace DTDGen
 						//get all my childRoles
 						
 
-					set< ::Uml::Uml::Class> anc_s = Uml::AncestorClasses(c);
-						set< ::Uml::Uml::CompositionChildRole> ccr_s;
-						set< ::Uml::Uml::Class>::iterator cl_i = anc_s.begin();
+					set< ::Uml::Class> anc_s = Uml::AncestorClasses(c);
+						set< ::Uml::CompositionChildRole> ccr_s;
+						set< ::Uml::Class>::iterator cl_i = anc_s.begin();
 
 						while (cl_i != anc_s.end())
 						{
-							set< ::Uml::Uml::CompositionChildRole> this_ccr_s = (*cl_i).childRoles();
+							set< ::Uml::CompositionChildRole> this_ccr_s = (*cl_i).childRoles();
 							
-							set< ::Uml::Uml::CompositionChildRole>::iterator this_ccr_i = this_ccr_s.begin();
+							set< ::Uml::CompositionChildRole>::iterator this_ccr_i = this_ccr_s.begin();
 							
 							while(this_ccr_i != this_ccr_s.end())
 							{
@@ -462,7 +462,7 @@ namespace DTDGen
 						output << "\t__child_as\t(";
 						
 
-						set< ::Uml::Uml::CompositionChildRole>::iterator ccr_i = ccr_s.begin();
+						set< ::Uml::CompositionChildRole>::iterator ccr_i = ccr_s.begin();
 						while (ccr_i != ccr_s.end())
 						{
 							//compname = GetANameFor(Uml::Composition(role.parent())).c_str();
@@ -472,7 +472,7 @@ namespace DTDGen
 								output << (string)(*ccr_i).name();
 							else
 							{
-								::Uml::Uml::Class target = ccr_i->target();
+								::Uml::Class target = ccr_i->target();
 								output << (string)(target.name());
 							}
 
@@ -489,9 +489,9 @@ namespace DTDGen
 				++cl;
 			}
 
-			set< ::Uml::Uml::Attribute> attributes = Uml::AncestorAttributes(c);
+			set< ::Uml::Attribute> attributes = Uml::AncestorAttributes(c);
 			
-			set< ::Uml::Uml::Attribute>::iterator i = attributes.begin();
+			set< ::Uml::Attribute>::iterator i = attributes.begin();
 			while( i != attributes.end() )
 			{
 				name = i->name();
@@ -583,7 +583,7 @@ namespace DTDGen
 				++i;
 			}
 
-			set< ::Uml::Uml::AssociationRole>::iterator j = associations.begin();
+			set< ::Uml::AssociationRole>::iterator j = associations.begin();
 			while( j != associations.end() )
 			{
 				name = Uml::MakeRoleName(*j);
@@ -608,8 +608,8 @@ namespace DTDGen
 			}
 
 			if(ass) {
-				set< ::Uml::Uml::AssociationRole> rs(ass.roles());
-				set< ::Uml::Uml::AssociationRole>::iterator j = rs.begin();
+				set< ::Uml::AssociationRole> rs(ass.roles());
+				set< ::Uml::AssociationRole>::iterator j = rs.begin();
 				while( j != rs.end() ) {
 					name = Uml::MakeRoleName(*j);
 					/*{ output << topr; topr.erase(); }*/
@@ -629,15 +629,15 @@ namespace DTDGen
 		output << ">" << endl << endl;
 	}
 
-	void GenerateDTD(const ::Uml::Uml::Namespace &ns,  ostream &output)	
+	void GenerateDTD(const ::Uml::Namespace &ns,  ostream &output)	
 	{
-		::Uml::Uml::Diagram dgr = ns.parent();
+		::Uml::Diagram dgr = ns.parent();
 			output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
 			output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
 			output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
 
-			set< ::Uml::Uml::Class> classes = ns.classes();
-			set< ::Uml::Uml::Class>::iterator i = classes.begin();
+			set< ::Uml::Class> classes = ns.classes();
+			set< ::Uml::Class>::iterator i = classes.begin();
 			set<string> text_att_names;
 			while( i != classes.end() )
 			{
@@ -647,8 +647,8 @@ namespace DTDGen
 					GenerateDTDAttlist(*i,  output);
 		
 					//text-only elements also should be declared
-					set< ::Uml::Uml::Attribute> text_atts = Uml::TextAttributes(*i);
-					set< ::Uml::Uml::Attribute>::iterator text_atts_i = text_atts.begin();
+					set< ::Uml::Attribute> text_atts = Uml::TextAttributes(*i);
+					set< ::Uml::Attribute>::iterator text_atts_i = text_atts.begin();
 
 					while (text_atts_i != text_atts.end())
 					{
@@ -667,7 +667,7 @@ namespace DTDGen
 
 	// --------------------------- XML Schema generation
 
-	string NamespaceToURI(const ::Uml::Uml::Namespace &ns, const map<string, string> &ns_map)
+	string NamespaceToURI(const ::Uml::Namespace &ns, const map<string, string> &ns_map)
 	{
 		const std::string& nsn = ns.name();
 		if (!ns_map.empty())
@@ -715,20 +715,20 @@ namespace DTDGen
 		}
 	}
 
-	void GenerateXMLSchemaAttributes(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi)	
+	void GenerateXMLSchemaAttributes(const ::Uml::Class &c,  ostream &output, bool uxsdi)	
 {
 		string name = c.name();
-		set< ::Uml::Uml::AssociationRole> associations;
+		set< ::Uml::AssociationRole> associations;
 		if (uxsdi)
 			associations = Uml::AssociationTargetRoles(c);
 		else
 			associations = Uml::AncestorAssociationTargetRoles(c);
 
-		set< ::Uml::Uml::Class> ccl = ::Uml::AncestorClasses(c);
-		::Uml::Uml::Association ass;
-		for(set< ::Uml::Uml::Class>::iterator iii = ccl.begin(); iii != ccl.end(); iii++) {
+		set< ::Uml::Class> ccl = ::Uml::AncestorClasses(c);
+		::Uml::Association ass;
+		for(set< ::Uml::Class>::iterator iii = ccl.begin(); iii != ccl.end(); iii++) {
 
-			if(::Uml::Uml::Association(iii->association())) {
+			if(::Uml::Association(iii->association())) {
 				if(ass) {
 					throw udm_exception("Class " + name + "has multiple associations"); 
 				}
@@ -739,13 +739,13 @@ namespace DTDGen
 		// we always need the _id, because every object may be derived/instance objects
 		//output << "  <xsd:attribute name=\"_id\" type=\"xsd:ID\"/>" << endl;
 
-		set< ::Uml::Uml::Class> cls;
+		set< ::Uml::Class> cls;
 		if (uxsdi)
 			cls = ::Uml::ContainerClasses(c);
 		else
 			cls = ::Uml::AncestorContainerClasses(c);
 
-		set< ::Uml::Uml::Class>::iterator cl = cls.begin();
+		set< ::Uml::Class>::iterator cl = cls.begin();
 		while( cl != cls.end() )
 		{
 			if(!::Uml::matchChildToParent(c,*cl)) 
@@ -755,17 +755,17 @@ namespace DTDGen
 					//endre, 04/22/02
 					
 					//get all my childRoles
-					set< ::Uml::Uml::Class> anc_s = ::Uml::AncestorClasses(c);
-					set< ::Uml::Uml::CompositionChildRole> ccr_s;
-					set< ::Uml::Uml::Class>::iterator cl_i = anc_s.begin();
+					set< ::Uml::Class> anc_s = ::Uml::AncestorClasses(c);
+					set< ::Uml::CompositionChildRole> ccr_s;
+					set< ::Uml::Class>::iterator cl_i = anc_s.begin();
 
 					while (cl_i != anc_s.end())
 					{
-						set< ::Uml::Uml::CompositionChildRole> this_ccr_s = (*cl_i).childRoles();
-						set< ::Uml::Uml::CompositionChildRole>::iterator this_ccr_i = this_ccr_s.begin();
+						set< ::Uml::CompositionChildRole> this_ccr_s = (*cl_i).childRoles();
+						set< ::Uml::CompositionChildRole>::iterator this_ccr_i = this_ccr_s.begin();
 						while(this_ccr_i != this_ccr_s.end())
 						{
-							if (!(((::Uml::Uml::Class)this_ccr_i->target()).isAbstract()))
+							if (!(((::Uml::Class)this_ccr_i->target()).isAbstract()))
 								ccr_s.insert(*this_ccr_i);
 							++this_ccr_i;
 							
@@ -777,7 +777,7 @@ namespace DTDGen
 						      "\t\t\t<xsd:simpleType>" << endl <<
 							  "\t\t\t\t<xsd:restriction base=\"xsd:string\">" << endl;
 
-					set< ::Uml::Uml::CompositionChildRole>::iterator ccr_i = ccr_s.begin();
+					set< ::Uml::CompositionChildRole>::iterator ccr_i = ccr_s.begin();
 					while (ccr_i != ccr_s.end())
 					{
 						//compname = GetANameFor(Uml::Composition(role.parent())).c_str();
@@ -786,7 +786,7 @@ namespace DTDGen
 								(string)(*ccr_i).name() << "\"/>" << endl;
 						else
 						{
-							::Uml::Uml::Class target = ccr_i->target();
+							::Uml::Class target = ccr_i->target();
 							output << "\t\t\t\t\t<xsd:enumeration value=\"" <<
 								(string)(target.name()) << "\"/>" << endl;
 						}
@@ -800,13 +800,13 @@ namespace DTDGen
 			++cl;
 		}
 
-		set< ::Uml::Uml::Attribute> attributes ;
+		set< ::Uml::Attribute> attributes ;
 		if (uxsdi)
 			attributes = c.attributes();
 		else
 			attributes = ::Uml::AncestorAttributes(c);
 
-		set< ::Uml::Uml::Attribute>::iterator i = attributes.begin();
+		set< ::Uml::Attribute>::iterator i = attributes.begin();
 		while( i != attributes.end() )
 		{
 			name = i->name();
@@ -899,7 +899,7 @@ namespace DTDGen
 			++i;
 		}
 		
-		set< ::Uml::Uml::AssociationRole>::iterator j = associations.begin();
+		set< ::Uml::AssociationRole>::iterator j = associations.begin();
 		while( j != associations.end() )
 		{
 			name = ::Uml::MakeRoleName(*j);
@@ -923,8 +923,8 @@ namespace DTDGen
 		}
 
 		if(ass) {
-			set< ::Uml::Uml::AssociationRole> rs(ass.roles());
-			set< ::Uml::Uml::AssociationRole>::iterator j = rs.begin();
+			set< ::Uml::AssociationRole> rs(ass.roles());
+			set< ::Uml::AssociationRole>::iterator j = rs.begin();
 			while( j != rs.end() ) {
 				name = ::Uml::MakeRoleName(*j);
 				output << "\t\t<xsd:attribute name=\"" << name.c_str() <<
@@ -933,7 +933,7 @@ namespace DTDGen
 			}
 		}
 
-		set< ::Uml::Uml::Class> bases = c.baseTypes();
+		set< ::Uml::Class> bases = c.baseTypes();
 		
 		if (!uxsdi ||  (bases.size()==0) )
 		{
@@ -948,11 +948,11 @@ namespace DTDGen
 		}
 };
 
-void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, const set<string> &ns_ignore_set, bool uxsdi, bool xsd_el_ta)	
+void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set<string> &ns_ignore_set, bool uxsdi, bool xsd_el_ta)	
 {
 	string name = c.name();
 	bool has_text_attr = Uml::HasTextAttributes(c);
-	::Uml::Uml::Namespace ns = c.parent();
+	::Uml::Namespace ns = c.parent();
 
 	//we need a different content model generation if the class also has text attributes
 	cwcp_order  cwcps = get_cwcp_order(c, uxsdi, has_text_attr || xsd_el_ta);
@@ -971,11 +971,11 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, cons
 
 	output << ">" << endl;
 	
-	::Uml::Uml::Class only_base;
+	::Uml::Class only_base;
 
 	if (uxsdi)
 	{
-		set< ::Uml::Uml::Class> bases= c.baseTypes();
+		set< ::Uml::Class> bases= c.baseTypes();
 	
 		if (bases.size() >1)
 			throw udm_exception("Multiple inheritence is not supported by XSD generator. Use DTD instead!");
@@ -989,7 +989,7 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, cons
 		/*<xs:complexContent>
 		<xs:extension base="Person">*/
 		output << "\t\t<xsd:complexContent>" << endl;
-		::Uml::Uml::Namespace only_base_ns = only_base.parent();
+		::Uml::Namespace only_base_ns = only_base.parent();
 		output << "\t\t\t<xsd:extension base=\"" << only_base_ns.name() << ":" << only_base.name() <<"Type\">" << endl;
 	}
 	
@@ -1007,7 +1007,7 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, cons
 		while (cwcps_i != cwcps.end())
 		{
 			string i_name = cwcps_i->first.name();
-			::Uml::Uml::Namespace i_ns = cwcps_i->first.parent();
+			::Uml::Namespace i_ns = cwcps_i->first.parent();
 
 			bool ignore = false;
 			{
@@ -1060,7 +1060,7 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, cons
 	output << "\t</xsd:complexType>" << endl << endl;
 }
 
-void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output,
+void GenerateXMLSchema(const ::Uml::Namespace &ns,  ostream &output,
 		       const map<string, string> &ns_map,
                        const set<string> &ns_ignore_set,  
 		       bool uxsdi, bool xsd_el_ta, 
@@ -1068,26 +1068,26 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output,
 {
 
 
-	::Uml::Uml::Diagram dgr = ns.parent();
+	::Uml::Diagram dgr = ns.parent();
 
 		output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
 		output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
 
 
-		set< ::Uml::Uml::Namespace> other_ns;
+		set< ::Uml::Namespace> other_ns;
 
-		set< ::Uml::Uml::Namespace> other_ns_comp = Uml::CompositionPeerChildNamespaces(ns);
+		set< ::Uml::Namespace> other_ns_comp = Uml::CompositionPeerChildNamespaces(ns);
 		other_ns.insert(other_ns_comp.begin(), other_ns_comp.end());
 
 		if (uxsdi) {
-			set< ::Uml::Uml::Namespace> other_ns_base = Uml::BaseTypesNamespaces(ns);
+			set< ::Uml::Namespace> other_ns_base = Uml::BaseTypesNamespaces(ns);
 			other_ns.insert(other_ns_base.begin(), other_ns_base.end());
 		}
 
 		output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"" << NamespaceToURI(ns, ns_map) << "\"" <<endl;
     output << " xmlns:" << ns.name() << "=\"" << NamespaceToURI(ns, ns_map) << "\"" << endl;
 
-		for (set< ::Uml::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
+		for (set< ::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
 			output << " xmlns:" << other_ns_i->name() << "=\"" << NamespaceToURI(*other_ns_i, ns_map) << "\"" << endl;
 		}
 
@@ -1100,14 +1100,14 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output,
 
 		output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
 
-		for (set< ::Uml::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
+		for (set< ::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
 			output << "<xsd:import namespace=\"" << NamespaceToURI(*other_ns_i, ns_map) << "\" schemaLocation=\"" << other_ns_i->name() << ".xsd\"/>" << endl;
 		}
 		output << endl;
 
-		vector< ::Uml::Uml::Class> globalElements;
-		set< ::Uml::Uml::Class> classes = ns.classes();
-		set< ::Uml::Uml::Class>::iterator i = classes.begin();
+		vector< ::Uml::Class> globalElements;
+		set< ::Uml::Class> classes = ns.classes();
+		set< ::Uml::Class>::iterator i = classes.begin();
 		while( i != classes.end() )
 		{
 			if(uxsdi || !(bool)i->isAbstract() )
@@ -1116,8 +1116,8 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output,
 				// XSD elements can't be of abstract types,
 				// don't make them globals
 				if (!uxsdi || !(bool)i->isAbstract()) {
-					set< ::Uml::Uml::Class> p_c = Uml::AncestorContainerClasses(*i);		//all possible containers
-					set< ::Uml::Uml::Namespace> o_ns = Uml::OtherCompositionPeerParentRolesNamespaces(*i);
+					set< ::Uml::Class> p_c = Uml::AncestorContainerClasses(*i);		//all possible containers
+					set< ::Uml::Namespace> o_ns = Uml::OtherCompositionPeerParentRolesNamespaces(*i);
 					// namespaces, other than this one, containing the parent ends of compositions having this class as child
 
 			
@@ -1132,7 +1132,7 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output,
 			++i;
 		}
 
-		vector< ::Uml::Uml::Class>::iterator j = globalElements.begin();
+		vector< ::Uml::Class>::iterator j = globalElements.begin();
 		while (j != globalElements.end()) {
 				output << " <xsd:element name=\"" << j->name() <<
 					"\" type=\"" << j->name() << "Type\"/>" << endl;
@@ -1143,7 +1143,7 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output,
 }
 
 
-void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output)
+void GenerateXMLSchema(const ::Uml::Namespace &ns,  ostream &output)
 {
 	map<string, string> empty_ns_map;
 	set<string> empty_ns_ignore_set;

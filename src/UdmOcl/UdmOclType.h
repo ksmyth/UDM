@@ -26,10 +26,7 @@
 
 namespace Uml
 {
-	namespace Uml
-	{
-		class Diagram;
-	};
+	class Diagram;
 };
 
 namespace UmlOcl
@@ -49,10 +46,10 @@ namespace UmlOcl
 		: public OclBasic::TypeFactory
 	{
 		 public :
-		 	const ::Uml::Uml::Diagram& m_diagram;
+		 	const ::Uml::Diagram& m_diagram;
 
 		 public :
-		 					TypeFactory( const ::Uml::Uml::Diagram& diagram );
+		 					TypeFactory( const ::Uml::Diagram& diagram );
 
 			virtual  void 	GetTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes );
 		private :

@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 
 		// Loading the meta 
 		Udm::SmartDataNetwork  ddnMeta(::Uml::diagram);	
-		::Uml::Uml::Diagram theUmlDiagram;
+		::Uml::Diagram theUmlDiagram;
 
 		try {
 
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
 			ddnMeta.OpenExisting(argv[3],"uml.dtd", Udm::CHANGES_LOST_DEFAULT);
 
 			// Casting the DataNetwork to diagram
-			theUmlDiagram = ::Uml::Uml::Diagram::Cast(ddnMeta.GetRootObject());
+			theUmlDiagram = ::Uml::Diagram::Cast(ddnMeta.GetRootObject());
 			
 			// Creating the UDM diagram
 			Udm::UdmDiagram udmDataDiagram;
@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
 
 			fromDN.OpenExisting(argv[1],"", Udm::CHANGES_LOST_DEFAULT);
 			
-			const ::Uml::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(fromDN.GetRootObject().type());
+			const ::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(fromDN.GetRootObject().type());
 			toDN.CreateNew(argv[2], metaloc, safe_type, Udm::CHANGES_PERSIST_DEFAULT);
 			UdmUtil::copy_assoc_map dummy;
 			UdmUtil::CopyObjectHierarchy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN, dummy);

@@ -46,18 +46,18 @@ namespace UdmGme
 
 
 	void com_exception(HRESULT a, IUnknown *b, REFIID c);
-	string getnameforassoc(const ::Uml::Uml::Association &ass, bool generate_name);
+	string getnameforassoc(const ::Uml::Association &ass, bool generate_name);
 
 	//class GmeObject
 
 	class GmeObject : public ObjectImpl 
 	{
 		friend void GmeDataNetwork::CreateNew(const string &systemname, 
-			const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+			const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem);
 		IMgaFCOPtr self;
 		IMgaFolderPtr folderself;
-		::Uml::Uml::Class m_type;
+		::Uml::Class m_type;
 		uniqueId_type __uniqueId;
 		bool __uniqueId_set;
 		const DataNetwork * mydn;
@@ -65,9 +65,9 @@ namespace UdmGme
 		void RemoveHelperConnections();
 
 	public:
-		GmeObject(const ::Uml::Uml::Class &meta, IMgaFCO *obj, const DataNetwork * dn);
+		GmeObject(const ::Uml::Class &meta, IMgaFCO *obj, const DataNetwork * dn);
 		GmeObject( IMgaFCO *obj, const DataNetwork * dn);
-		GmeObject(const ::Uml::Uml::Class &meta, IMgaFolder *obj, const DataNetwork * dn);	
+		GmeObject(const ::Uml::Class &meta, IMgaFolder *obj, const DataNetwork * dn);	
 		GmeObject( IMgaFolder *obj, const DataNetwork * dn);
 
 	// --- reference counting
@@ -79,10 +79,10 @@ namespace UdmGme
 	// --- lookup
 
 		//Uml::Class findClass(const set<Uml::Class> &classes);
-		::Uml::Uml::Class findClass();
+		::Uml::Class findClass();
 		IMgaMetaFCOPtr MetaFCO() const;
 		IMgaMetaBasePtr Meta() const;
-		virtual const ::Uml::Uml::Class &type() const;
+		virtual const ::Uml::Class &type() const;
 
 	// --- order
 
@@ -91,14 +91,14 @@ namespace UdmGme
 		
 	// --- attributes, single values
 
-		virtual string getStringAttr(const ::Uml::Uml::Attribute &meta) const;
-		virtual void setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct = true);
-		virtual bool getBooleanAttr(const ::Uml::Uml::Attribute &meta) const;
-		virtual void setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a, const bool direct = true);
-		virtual __int64 getIntegerAttr(const ::Uml::Uml::Attribute &meta) const;
-		virtual void setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a, const bool direct = true);
-		virtual double getRealAttr(const ::Uml::Uml::Attribute &meta) const;
-		virtual void setRealAttr(const ::Uml::Uml::Attribute &meta, double a, const bool direct = true);
+		virtual string getStringAttr(const ::Uml::Attribute &meta) const;
+		virtual void setStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct = true);
+		virtual bool getBooleanAttr(const ::Uml::Attribute &meta) const;
+		virtual void setBooleanAttr(const ::Uml::Attribute &meta, bool a, const bool direct = true);
+		virtual __int64 getIntegerAttr(const ::Uml::Attribute &meta) const;
+		virtual void setIntegerAttr(const ::Uml::Attribute &meta, __int64 a, const bool direct = true);
+		virtual double getRealAttr(const ::Uml::Attribute &meta) const;
+		virtual void setRealAttr(const ::Uml::Attribute &meta, double a, const bool direct = true);
 	
 	
 	// array attribute setters/getters are wrapped in ObjectImpl 
@@ -107,24 +107,24 @@ namespace UdmGme
 
 
 
-		static IMgaMetaRolePtr GetMetaRoleForChildRole(::Uml::Uml::CompositionChildRole meta, IMgaMetaModelPtr mmodel);
+		static IMgaMetaRolePtr GetMetaRoleForChildRole(::Uml::CompositionChildRole meta, IMgaMetaModelPtr mmodel);
 //		static IMgaMetaRolePtr GetMetaRoleForKind(Uml::Class kind, IMgaMetaModelPtr mmodel);		
-		static IMgaMetaRolePtr GetMetaRole(::Uml::Uml::Class kind, ::Uml::Uml::CompositionChildRole meta, IMgaMetaModelPtr mmodel);
+		static IMgaMetaRolePtr GetMetaRole(::Uml::Class kind, ::Uml::CompositionChildRole meta, IMgaMetaModelPtr mmodel);
 
 	// --- containment
 
-		virtual ObjectImpl *getParent(const ::Uml::Uml::CompositionParentRole &role) const;		
-		virtual void setParent(ObjectImpl *a, const ::Uml::Uml::CompositionParentRole &role, const bool direct = true);
+		virtual ObjectImpl *getParent(const ::Uml::CompositionParentRole &role) const;		
+		virtual void setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct = true);
 		virtual void detach();
 
 
 // if meta is given, return only those which have that role
 // if meta is not given, return all children, which are compatible with kind
-		virtual vector<ObjectImpl*> getChildren(const ::Uml::Uml::CompositionChildRole &role, const ::Uml::Uml::Class &kind) const;
-		virtual void setChildren(const ::Uml::Uml::CompositionChildRole &role, const vector<ObjectImpl*> &a, const bool direct = true); 
+		virtual vector<ObjectImpl*> getChildren(const ::Uml::CompositionChildRole &role, const ::Uml::Class &kind) const;
+		virtual void setChildren(const ::Uml::CompositionChildRole &role, const vector<ObjectImpl*> &a, const bool direct = true); 
 		virtual ObjectImpl *createChild(
-			const ::Uml::Uml::CompositionChildRole &role,	
-			const ::Uml::Uml::Class &kind, 
+			const ::Uml::CompositionChildRole &role,	
+			const ::Uml::Class &kind, 
 			const Udm::ObjectImpl* archetype = NULL, 
 			const bool subtype = false,
 			const bool real_archetype = true,
@@ -142,8 +142,8 @@ namespace UdmGme
 //				check if any of the joints match
 // only one valid can exist
 
-		virtual vector<ObjectImpl*> getAssociation(const ::Uml::Uml::AssociationRole &meta, int mode) const ;
-		virtual void setAssociation(const ::Uml::Uml::AssociationRole &meta, const vector<ObjectImpl*> &nvect, int mode, const bool direct = true);
+		virtual vector<ObjectImpl*> getAssociation(const ::Uml::AssociationRole &meta, int mode) const ;
+		virtual void setAssociation(const ::Uml::AssociationRole &meta, const vector<ObjectImpl*> &nvect, int mode, const bool direct = true);
 	// ---- archetype/derived/instances
 
 		virtual vector<ObjectImpl*> getDerived() const;

@@ -36,7 +36,6 @@
 
 #include "Uml.h"
 #include "UmlExt.h"
-using namespace Uml;
 
 namespace UmlOcl
 {
@@ -79,10 +78,10 @@ char *_strlwr( char *string )
 		: public OclImplementation::Association
 	{
 		private :
-			const ::Uml::Uml::Class m_class;
+			const ::Uml::Class m_class;
 
 		public :
-			TDataNetworkDerived_Classes( const ::Uml::Uml::Class& inClass )
+			TDataNetworkDerived_Classes( const ::Uml::Class& inClass )
 				: m_class( inClass )
 			{
 			}
@@ -111,10 +110,10 @@ char *_strlwr( char *string )
 		: public OclImplementation::AssociationFactory
 	{
 		private :
-			const ::Uml::Uml::Diagram m_diagram;
+			const ::Uml::Diagram m_diagram;
 
 		 public :
-			 TDataNetwork_AssociationFactory( const ::Uml::Uml::Diagram& diagram )
+			 TDataNetwork_AssociationFactory( const ::Uml::Diagram& diagram )
 		 		: m_diagram( diagram )
 		 	{
 		 	}
@@ -124,15 +123,15 @@ char *_strlwr( char *string )
 				if ( ! signature.GetAcceptableTypeName().empty() )
 					return;
 
-				GOCL_STL_NS()vector< ::Uml::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
+				GOCL_STL_NS()vector< ::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
 				for( int j = 0; j < vecNamespaces.size(); j++)
 				{
 
-					GOCL_STL_NS()vector< ::Uml::Uml::Class> vecClasses = vecNamespaces[j].classes();
+					GOCL_STL_NS()vector< ::Uml::Class> vecClasses = vecNamespaces[j].classes();
 					for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
 					{
 						GOCL_STL_NS()string strClass = vecClasses[ i ].name();
-						GOCL_STL_NS()string strNs = ((::Uml::Uml::Namespace)vecClasses[ i ].parent()).name();
+						GOCL_STL_NS()string strNs = ((::Uml::Namespace)vecClasses[ i ].parent()).name();
 						GOCL_STL_NS()string strRole = LowerFirst( strClass );
 						GOCL_STL_NS()string strRole_Ns = LowerFirst( strNs ) +"::" + strClass ;
 						GOCL_STL_NS()string strSig = signature.GetName();
@@ -164,11 +163,11 @@ char *_strlwr( char *string )
 		: public OclImplementation::Association
 	{
 		private :
-			::Uml::Uml::CompositionParentRole m_parentRole;
-			const ::Uml::Uml::Class m_class;
+			::Uml::CompositionParentRole m_parentRole;
+			const ::Uml::Class m_class;
 
 		public :
-			TObjectDerived_Parent( const ::Uml::Uml::CompositionParentRole& parentRole, const ::Uml::Uml::Class& inClass )
+			TObjectDerived_Parent( const ::Uml::CompositionParentRole& parentRole, const ::Uml::Class& inClass )
 				: m_class( inClass ), m_parentRole( parentRole )
 			{
 			}
@@ -194,11 +193,11 @@ char *_strlwr( char *string )
 	{
 		private :
 			Udm::Object::CompositionInfo m_info;
-			const ::Uml::Uml::Class m_class;
+			const ::Uml::Class m_class;
 			bool m_bCompound;
 
 		public :
-			TObjectDerived_Children( const Udm::Object::CompositionInfo& info, const ::Uml::Uml::Class& inClass, bool bCompound )
+			TObjectDerived_Children( const Udm::Object::CompositionInfo& info, const ::Uml::Class& inClass, bool bCompound )
 				: m_class( inClass ), m_info( info ), m_bCompound( bCompound )
 			{
 			}
@@ -228,12 +227,12 @@ char *_strlwr( char *string )
 		: public OclImplementation::Association
 	{
 		private :
-			const ::Uml::Uml::AssociationRole m_assocRole;
-			const ::Uml::Uml::Class m_class;
+			const ::Uml::AssociationRole m_assocRole;
+			const ::Uml::Class m_class;
 			bool m_bCompound;
 
 		public :
-			TObjectDerived_Peers( const ::Uml::Uml::AssociationRole& inAssocRole, const ::Uml::Uml::Class& inClass, bool bCompound )
+			TObjectDerived_Peers( const ::Uml::AssociationRole& inAssocRole, const ::Uml::Class& inClass, bool bCompound )
 				: m_class( inClass  ), m_assocRole( inAssocRole ), m_bCompound( bCompound )
 			{
 			}
@@ -265,11 +264,11 @@ char *_strlwr( char *string )
 		: public OclImplementation::Association
 	{
 		private :
-			::Uml::Uml::AssociationRole m_assocRole;
+			::Uml::AssociationRole m_assocRole;
 			bool m_bCompound;
 
 		public :
-			TObjectDerived_AssocClasses( const ::Uml::Uml::AssociationRole& assocRole, bool bCompound )
+			TObjectDerived_AssocClasses( const ::Uml::AssociationRole& assocRole, bool bCompound )
 				: m_assocRole( assocRole ), m_bCompound( bCompound )
 			{
 			}
@@ -294,10 +293,10 @@ char *_strlwr( char *string )
 		: public OclImplementation::Association
 	{
 		private :
-			::Uml::Uml::AssociationRole m_assocRole;
+			::Uml::AssociationRole m_assocRole;
 
 		public :
-			TObjectDerived_Targets( const ::Uml::Uml::AssociationRole& assocRole )
+			TObjectDerived_Targets( const ::Uml::AssociationRole& assocRole )
 				: m_assocRole( assocRole )
 			{
 			}
@@ -316,10 +315,10 @@ char *_strlwr( char *string )
 		: public OclImplementation::AssociationFactory
 	{
 		private :
-		 	const ::Uml::Uml::Class m_class;
+		 	const ::Uml::Class m_class;
 
 		 public :
-		 	TObjectDerived_AssociationFactory( const ::Uml::Uml::Class& inclass )
+		 	TObjectDerived_AssociationFactory( const ::Uml::Class& inclass )
 		 		: m_class( inclass )
 		 	{
 		 	}
@@ -340,22 +339,22 @@ char *_strlwr( char *string )
 					return;
 
 				GOCL_STL_NS()string strName = signature.GetName();
-				set< ::Uml::Uml::Class> setAncestors = ::Uml::AncestorClasses( m_class );
+				set< ::Uml::Class> setAncestors = ::Uml::AncestorClasses( m_class );
 				bool bClassAccessFound = false;
-				for ( set< ::Uml::Uml::Class>::iterator itClass =  setAncestors.begin() ; itClass != setAncestors.end() ; itClass++ ) {
-					set< ::Uml::Uml::CompositionChildRole> setChildRoles = (*itClass).childRoles();
-					for ( set< ::Uml::Uml::CompositionChildRole>::iterator itChild = setChildRoles.begin() ; itChild != setChildRoles.end() ; itChild++ ) {
-						::Uml::Uml::CompositionParentRole parentRole = ( (::Uml::Uml::Composition)(*itChild).parent() ).parentRole();
+				for ( set< ::Uml::Class>::iterator itClass =  setAncestors.begin() ; itClass != setAncestors.end() ; itClass++ ) {
+					set< ::Uml::CompositionChildRole> setChildRoles = (*itClass).childRoles();
+					for ( set< ::Uml::CompositionChildRole>::iterator itChild = setChildRoles.begin() ; itChild != setChildRoles.end() ; itChild++ ) {
+						::Uml::CompositionParentRole parentRole = ( (::Uml::Composition)(*itChild).parent() ).parentRole();
 			 			GOCL_STL_NS()string strRole = parentRole.name();
-			 			::Uml::Uml::Class parent = parentRole.target();
+			 			::Uml::Class parent = parentRole.target();
 			 			GOCL_STL_NS()string strClass = parent.name();
-						GOCL_STL_NS()string strNs = ((::Uml::Uml::Namespace)parent.parent()).name();
+						GOCL_STL_NS()string strNs = ((::Uml::Namespace)parent.parent()).name();
 			 			TypeSeq vecType( 1, strNs + "::" + strClass );
 			 			if ( ! strRole.empty() && strRole == strName )
 			 				vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, new TObjectDerived_Parent( parentRole, parent ), true ) );
 			 			else if ( strName == LowerFirst( strClass ) && ! bClassAccessFound && *itClass == m_class ) {
 		 					bClassAccessFound = true;
-							vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, new TObjectDerived_Parent( ::Uml::Uml::CompositionParentRole( NULL ), parent ), true ) );
+							vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, new TObjectDerived_Parent( ::Uml::CompositionParentRole( NULL ), parent ), true ) );
 		 				}
 			 		}
 			 	}
@@ -367,14 +366,14 @@ char *_strlwr( char *string )
 					return;
 
 				GOCL_STL_NS()string strName = signature.GetName();
-				set< ::Uml::Uml::CompositionParentRole> setParentRoles = m_class.parentRoles();
-				for ( set< ::Uml::Uml::CompositionParentRole>::iterator itParent = setParentRoles.begin() ; itParent != setParentRoles.end() ; itParent++ ) {
-					::Uml::Uml::Composition composition = (*itParent).parent();
-					::Uml::Uml::CompositionChildRole childRole = composition.childRole();
+				set< ::Uml::CompositionParentRole> setParentRoles = m_class.parentRoles();
+				for ( set< ::Uml::CompositionParentRole>::iterator itParent = setParentRoles.begin() ; itParent != setParentRoles.end() ; itParent++ ) {
+					::Uml::Composition composition = (*itParent).parent();
+					::Uml::CompositionChildRole childRole = composition.childRole();
 		 			GOCL_STL_NS()string strRole = childRole.name();
-		 			::Uml::Uml::Class child = childRole.target();
+		 			::Uml::Class child = childRole.target();
 		 			GOCL_STL_NS()string strClass = child.name();
-					GOCL_STL_NS()string strNs = ((::Uml::Uml::Namespace)child.parent()).name();
+					GOCL_STL_NS()string strNs = ((::Uml::Namespace)child.parent()).name();
 
 					if ( ! strRole.empty() && strRole == strName || strName == LowerFirst( strClass ) ) {
 		 				TypeSeq vecType;
@@ -397,22 +396,22 @@ char *_strlwr( char *string )
 					return;
 
 				GOCL_STL_NS()string strName = signature.GetName();
-				set< ::Uml::Uml::AssociationRole> setFromRoles = m_class.associationRoles();
-				for ( set< ::Uml::Uml::AssociationRole>::iterator itFrom = setFromRoles.begin() ; itFrom != setFromRoles.end() ; itFrom++ ) {
-					::Uml::Uml::Association association = (*itFrom).parent();
-					set< ::Uml::Uml::AssociationRole> setToRoles = association.roles();
-					for ( set< ::Uml::Uml::AssociationRole>::iterator itTo = setToRoles.begin() ; itTo != setToRoles.end() ; itTo++ ) {
+				set< ::Uml::AssociationRole> setFromRoles = m_class.associationRoles();
+				for ( set< ::Uml::AssociationRole>::iterator itFrom = setFromRoles.begin() ; itFrom != setFromRoles.end() ; itFrom++ ) {
+					::Uml::Association association = (*itFrom).parent();
+					set< ::Uml::AssociationRole> setToRoles = association.roles();
+					for ( set< ::Uml::AssociationRole>::iterator itTo = setToRoles.begin() ; itTo != setToRoles.end() ; itTo++ ) {
 						if ( *itTo != *itFrom ) {
 							GOCL_STL_NS()string strRole = (*itTo).name();
-							::Uml::Uml::Class peer = (*itTo).target();
+							::Uml::Class peer = (*itTo).target();
 							GOCL_STL_NS()string strClass = peer.name();
-							GOCL_STL_NS()string strNs = ((::Uml::Uml::Namespace)peer.parent()).name();
+							GOCL_STL_NS()string strNs = ((::Uml::Namespace)peer.parent()).name();
 							if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == LowerFirst( strClass ) ) {
 								TypeSeq vecType;
 		 						if ( (*itTo).max() > 1 ||  (*itTo).max() == -1 )
 		 							vecType.push_back( "ocl::Set" );
 		 						vecType.push_back( strNs + "::" + strClass );
-		 						TObjectDerived_Peers* pAssociation = new TObjectDerived_Peers( *itTo,  ( strRole.empty() && strName == LowerFirst( strClass ) ) ? m_class : ::Uml::Uml::Class( NULL ), vecType.size() > 1 );
+		 						TObjectDerived_Peers* pAssociation = new TObjectDerived_Peers( *itTo,  ( strRole.empty() && strName == LowerFirst( strClass ) ) ? m_class : ::Uml::Class( NULL ), vecType.size() > 1 );
 		 						vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, pAssociation , true ) );
 		 					}
 		 				}
@@ -425,19 +424,19 @@ char *_strlwr( char *string )
 				GOCL_STL_NS()string strName = signature.GetName();
 				GOCL_STL_NS()string strAcceptable = signature.GetAcceptableTypeName();
 
-				set< ::Uml::Uml::AssociationRole> setFromRoles = m_class.associationRoles();
-				for ( set< ::Uml::Uml::AssociationRole>::iterator itFrom = setFromRoles.begin() ; itFrom != setFromRoles.end() ; itFrom++ ) {
-					::Uml::Uml::Association association = (*itFrom).parent();
-					::Uml::Uml::Class assocClass = association.assocClass();
+				set< ::Uml::AssociationRole> setFromRoles = m_class.associationRoles();
+				for ( set< ::Uml::AssociationRole>::iterator itFrom = setFromRoles.begin() ; itFrom != setFromRoles.end() ; itFrom++ ) {
+					::Uml::Association association = (*itFrom).parent();
+					::Uml::Class assocClass = association.assocClass();
 					if ( assocClass ) {
 						GOCL_STL_NS()string strClass = assocClass.name();
-						GOCL_STL_NS()string strNs = ((::Uml::Uml::Namespace)assocClass.parent()).name();
+						GOCL_STL_NS()string strNs = ((::Uml::Namespace)assocClass.parent()).name();
 						GOCL_STL_NS()string strRole = (*itFrom).name();
 						GOCL_STL_NS()string strClassRole = LowerFirst( strClass );
 						if ( strAcceptable.empty() && strClassRole == strName || ! strAcceptable.empty() && ! strRole.empty() && strRole == strName && strAcceptable == strClassRole ) {
-							set< ::Uml::Uml::AssociationRole> setToRoles = association.roles();
+							set< ::Uml::AssociationRole> setToRoles = association.roles();
 							TypeSeq vecType;
-							set< ::Uml::Uml::AssociationRole>::iterator itTo;
+							set< ::Uml::AssociationRole>::iterator itTo;
 							for (  itTo = setToRoles.begin() ; itTo != setToRoles.end() ; itTo++ ) {
 								if ( *itTo != *itFrom ) {
 									long lMax = (*itTo).max();
@@ -460,13 +459,13 @@ char *_strlwr( char *string )
 					return;
 
 		 		GOCL_STL_NS()string strName = signature.GetName();
-				::Uml::Uml::Association association = m_class.association();
+				::Uml::Association association = m_class.association();
 		 		if ( association ) {
-					set< ::Uml::Uml::AssociationRole> setRoles = association.roles();
-					for ( set< ::Uml::Uml::AssociationRole>::iterator it = setRoles.begin() ; it != setRoles.end() ; it++ ) {
-			 			::Uml::Uml::Class target = (*it).target();
+					set< ::Uml::AssociationRole> setRoles = association.roles();
+					for ( set< ::Uml::AssociationRole>::iterator it = setRoles.begin() ; it != setRoles.end() ; it++ ) {
+			 			::Uml::Class target = (*it).target();
 			 			GOCL_STL_NS()string strClass = target.name();
-						GOCL_STL_NS()string strNs = ((::Uml::Uml::Namespace)target.parent()).name();
+						GOCL_STL_NS()string strNs = ((::Uml::Namespace)target.parent()).name();
 			 			GOCL_STL_NS()string strRole = (*it).name();
 			 			if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == LowerFirst( strClass ) ) {
 			 				TypeSeq vecType( 1, strNs + "::" + strClass );
@@ -482,10 +481,10 @@ char *_strlwr( char *string )
 	{
 		private :
 			int 						m_iCompound;
-			const ::Uml::Uml::Attribute m_attribute;
+			const ::Uml::Attribute m_attribute;
 
 		public :
-			TObjectDerived_Attribute( const ::Uml::Uml::Attribute& attribute, int iCompound )
+			TObjectDerived_Attribute( const ::Uml::Attribute& attribute, int iCompound )
 				: m_attribute( attribute ), m_iCompound( iCompound )
 			{
 			}
@@ -559,10 +558,10 @@ char *_strlwr( char *string )
 		: public OclImplementation::AttributeFactory
 	{
 		private :
-		 	const ::Uml::Uml::Class m_class;
+		 	const ::Uml::Class m_class;
 
 		 public :
-		 	TObjectDerived_AttributeFactory( const ::Uml::Uml::Class&  classin )
+		 	TObjectDerived_AttributeFactory( const ::Uml::Class&  classin )
 		 		: m_class( classin )
 		 	{
 		 	}
@@ -572,8 +571,8 @@ char *_strlwr( char *string )
 			{
 				GOCL_STL_NS()string strName = signature.GetName();
 
-				set< ::Uml::Uml::Attribute> setAttribs = m_class.attributes();
-				for ( set< ::Uml::Uml::Attribute>::iterator it = setAttribs.begin() ; it != setAttribs.end() ; it++ ) {
+				set< ::Uml::Attribute> setAttribs = m_class.attributes();
+				for ( set< ::Uml::Attribute>::iterator it = setAttribs.begin() ; it != setAttribs.end() ; it++ ) {
 					if ( strName == (GOCL_STL_NS()string) (*it).name() ) {
 						TypeSeq vecType;
 			 			int iCompound = ( (*it).max() > 1 || (*it).max() == -1 ) ? 1 : 0;
@@ -629,7 +628,7 @@ char *_strlwr( char *string )
 //
 //##############################################################################################################################################
 
-	TypeFactory::TypeFactory( const ::Uml::Uml::Diagram& diagram )
+	TypeFactory::TypeFactory( const ::Uml::Diagram& diagram )
 		: m_diagram( diagram )
 	{
 	}
@@ -671,26 +670,26 @@ char *_strlwr( char *string )
 			strRealName = strName.substr( 6 );
 */
 
-		GOCL_STL_NS()vector< ::Uml::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
+		GOCL_STL_NS()vector< ::Uml::Namespace> vecNamespaces = m_diagram.namespaces();
 		for ( int j = 0; j < vecNamespaces.size(); j++)
 		{
 			//if type is qualified, we search it only in the corresponding namespace
 			//if type is not qualified, we search it in all namespaces 
 			if ( (!bHasNamespace) || ( strNsName == (GOCL_STL_NS()string) vecNamespaces[ j ].name() ) )
 			{
-				GOCL_STL_NS()vector< ::Uml::Uml::Class> vecClasses = vecNamespaces[j].classes();
+				GOCL_STL_NS()vector< ::Uml::Class> vecClasses = vecNamespaces[j].classes();
 				for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
 				{
 					if ( strClassName == (GOCL_STL_NS()string) vecClasses[ i ].name() ) 
 					{
 						StringVector vecSuperTypes;
-						set< ::Uml::Uml::Class> setBases = vecClasses[ i ].baseTypes();
-						for ( set< ::Uml::Uml::Class>::iterator it = setBases.begin(); it != setBases.end() ; it++ )
-							vecSuperTypes.push_back( (GOCL_STL_NS()string)((::Uml::Uml::Namespace)it->parent()).name() + "::" + (GOCL_STL_NS()string) (*it).name() );
+						set< ::Uml::Class> setBases = vecClasses[ i ].baseTypes();
+						for ( set< ::Uml::Class>::iterator it = setBases.begin(); it != setBases.end() ; it++ )
+							vecSuperTypes.push_back( (GOCL_STL_NS()string)((::Uml::Namespace)it->parent()).name() + "::" + (GOCL_STL_NS()string) (*it).name() );
 						if ( setBases.empty() )
 							vecSuperTypes.push_back( "udm::Object" );
-						::Uml::Uml::Class theClass = vecClasses[ i ];
-						vecTypes.push_back( new OclMeta::Type( (GOCL_STL_NS()string)((::Uml::Uml::Namespace)theClass.parent()).name() + "::" + strClassName, vecSuperTypes, new TObjectDerived_AttributeFactory( theClass ), new TObjectDerived_AssociationFactory( theClass ), new TObjectDerived_MethodFactory(), true ) );
+						::Uml::Class theClass = vecClasses[ i ];
+						vecTypes.push_back( new OclMeta::Type( (GOCL_STL_NS()string)((::Uml::Namespace)theClass.parent()).name() + "::" + strClassName, vecSuperTypes, new TObjectDerived_AttributeFactory( theClass ), new TObjectDerived_AssociationFactory( theClass ), new TObjectDerived_MethodFactory(), true ) );
 					}
 				}
 			}

@@ -214,7 +214,7 @@ namespace UdmGme
 	struct assocmapitem
 	{
 		
-		::Uml::Uml::AssociationRole primary;
+		::Uml::AssociationRole primary;
 		IMgaMetaFCOPtr  metaobj;
 		//if metaobj is null, there may be, depending on the name of the class to be created,
 		//multiple metaobjs,
@@ -264,9 +264,9 @@ namespace UdmGme
 		throw udm_exception(s);
 	}
 
-	string getnameforassoc(const ::Uml::Uml::Association &ass, bool generate_name) 
+	string getnameforassoc(const ::Uml::Association &ass, bool generate_name) 
 	{
-		::Uml::Uml::Class acl = ass.assocClass();
+		::Uml::Class acl = ass.assocClass();
 		string ret;
 		if(acl) ret = acl.name();
 		else 
@@ -274,12 +274,12 @@ namespace UdmGme
 			ret = ass.name();
 			if(generate_name && ret.empty()) 
 			{
-				set< ::Uml::Uml::AssociationRole> roles = ass.roles();
-				set< ::Uml::Uml::AssociationRole>::iterator j = roles.begin(); 
+				set< ::Uml::AssociationRole> roles = ass.roles();
+				set< ::Uml::AssociationRole>::iterator j = roles.begin(); 
 				ret = "noname_";
-				ret += (string)((::Uml::Uml::Class)j->target()).name();
+				ret += (string)((::Uml::Class)j->target()).name();
 				ret += "_to_";
-				ret += (string)((::Uml::Uml::Class)(++j)->target()).name();
+				ret += (string)((::Uml::Class)(++j)->target()).name();
 			}
 		}
 		return ret;
@@ -425,11 +425,11 @@ namespace UdmGme
 	}
 	
 	
-	void GmeObject::setAssociation(const ::Uml::Uml::AssociationRole &meta, const vector<ObjectImpl*> &nvect, int mode, const bool direct)	
+	void GmeObject::setAssociation(const ::Uml::AssociationRole &meta, const vector<ObjectImpl*> &nvect, int mode, const bool direct)	
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
 
-		::Uml::Uml::Association assoc = meta.parent();
+		::Uml::Association assoc = meta.parent();
 string rname = meta.name();
 
 //		cout << "MGA BACKEND DEBUG: Self in setAssociation() is:" << (char *) self->GetName() << endl;
@@ -838,11 +838,11 @@ bbreak:			;
 	};
 
 	//GmeObject member functions
-	vector<ObjectImpl*> GmeObject::getAssociation(const ::Uml::Uml::AssociationRole &meta, int mode) const 
+	vector<ObjectImpl*> GmeObject::getAssociation(const ::Uml::AssociationRole &meta, int mode) const 
 	{
 		vector<ObjectImpl*> ret;
 
-		::Uml::Uml::Association assoc = meta.parent();
+		::Uml::Association assoc = meta.parent();
 		
 			string rname = meta.name();
 
@@ -1028,8 +1028,8 @@ bbreak:			;
 
 
 	ObjectImpl * GmeObject::createChild(
-		const ::Uml::Uml::CompositionChildRole &role,	
-		const ::Uml::Uml::Class &kind, 
+		const ::Uml::CompositionChildRole &role,	
+		const ::Uml::Class &kind, 
 		const Udm::ObjectImpl* archetype, 
 		const bool subtype,
 		const bool real_archetype,
@@ -1045,7 +1045,7 @@ bbreak:			;
 		{
 			if(role) 
 			{
-				::Uml::Uml::Composition comp = Uml::matchChildToParent(kind ? kind : role.target(), m_type);
+				::Uml::Composition comp = Uml::matchChildToParent(kind ? kind : role.target(), m_type);
 				if(!comp || comp != role.parent()) 
 				{
 					throw udm_exception("Ambigious role specification for folder parents");
@@ -1061,7 +1061,7 @@ bbreak:			;
 				if(mfco) CASSERT("Multiple child kinds match");
 				IMgaFolderPtr nf;
 				COMTHROW(folderself->CreateFolder(mf, &nf));
-				string ns_name = ::Uml::Uml::Namespace(m_type.parent()).name();
+				string ns_name = ::Uml::Namespace(m_type.parent()).name();
 				COMTHROW(nf->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 				GmeObject * retval = new GmeObject( nf, mydn);
 				retval->setDefaultAttributes(false);
@@ -1073,7 +1073,7 @@ bbreak:			;
 				if (!archetype)
 				{
 					COMTHROW(folderself->CreateRootObject(mfco, &nfco));
-					string ns_name = ::Uml::Uml::Namespace(m_type.parent()).name();
+					string ns_name = ::Uml::Namespace(m_type.parent()).name();
 					COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 					GmeObject * retval =   new GmeObject( nfco, mydn);
 					retval->setDefaultAttributes(false);
@@ -1083,7 +1083,7 @@ bbreak:			;
 				{
 					COMTHROW(folderself->DeriveRootObject(((GmeObject *)archetype)->self, subtype ? VARIANT_FALSE : VARIANT_TRUE, &nfco));
 					
-					string ns_name = ::Uml::Uml::Namespace(m_type.parent()).name();
+					string ns_name = ::Uml::Namespace(m_type.parent()).name();
 					COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 				
 					GmeObject * retval =   new GmeObject( nfco, mydn);
@@ -1105,7 +1105,7 @@ bbreak:			;
 			if(kind) 
 			{
 				/*
-				if (((::Uml::Uml::Class)role.target()) != kind)
+				if (((::Uml::Class)role.target()) != kind)
 				{
 					if (!Uml::IsDerivedFrom(kind, role.target()))
 						throw udm_exception("GmeObject::CreateChild(): Role-Kindname mismatch");
@@ -1113,7 +1113,7 @@ bbreak:			;
 				}
 				else rr = GetMetaRoleForChildRole(role, pmeta);
 				*/
-				if (((::Uml::Uml::Class)role.target()) != kind)
+				if (((::Uml::Class)role.target()) != kind)
 				{
 					if (!Uml::IsDerivedFrom(kind, role.target()))
 						throw udm_exception("GmeObject::CreateChild(): Role-Kindname mismatch");
@@ -1147,7 +1147,7 @@ bbreak:			;
 		{
 			COMTHROW(m->CreateChildObject(rr, &nfco));
 			
-			string ns_name = ::Uml::Uml::Namespace(m_type.parent()).name();
+			string ns_name = ::Uml::Namespace(m_type.parent()).name();
 			COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 				
 			GmeObject * retval =  new GmeObject( nfco, mydn);
@@ -1158,7 +1158,7 @@ bbreak:			;
 		{
 			
 			COMTHROW(m->DeriveChildObject( ((GmeObject *)archetype)->self,  rr, subtype ? VARIANT_FALSE : VARIANT_TRUE, &nfco));
-			string ns_name = ::Uml::Uml::Namespace(m_type.parent()).name();
+			string ns_name = ::Uml::Namespace(m_type.parent()).name();
 			COMTHROW(nfco->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 				
 			GmeObject * retval =  new GmeObject( nfco, mydn);
@@ -1172,7 +1172,7 @@ bbreak:			;
 
 
 
-	void GmeObject::setChildren(const ::Uml::Uml::CompositionChildRole &role, const vector<ObjectImpl*> &a, const bool direct) 
+	void GmeObject::setChildren(const ::Uml::CompositionChildRole &role, const vector<ObjectImpl*> &a, const bool direct) 
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
 
@@ -1225,7 +1225,7 @@ bbreak:			;
 	};
 
 
-	vector<ObjectImpl*> GmeObject::getChildren(const ::Uml::Uml::CompositionChildRole &role, const ::Uml::Uml::Class &kind) const 
+	vector<ObjectImpl*> GmeObject::getChildren(const ::Uml::CompositionChildRole &role, const ::Uml::Class &kind) const 
 	{
 		vector<ObjectImpl*> ret;
 		IMgaFCOsPtr chds;
@@ -1234,7 +1234,7 @@ bbreak:			;
 		{
 			if(role) 
 			{
-				::Uml::Uml::Composition comp = Uml::matchChildToParent(kind ? kind : role.target(), m_type);
+				::Uml::Composition comp = Uml::matchChildToParent(kind ? kind : role.target(), m_type);
 				if(!comp || comp != role.parent()) 
 				{
 					throw udm_exception("Ambigious role specification for folder parents");
@@ -1342,9 +1342,9 @@ bbreak:			;
 		//we have to check if this object has an rp_helper helper connection
 		if (self)
 		{//folders won;t have connections
-			set< ::Uml::Uml::AssociationRole> all_roles;
-			set< ::Uml::Uml::AssociationRole> ars = Uml::AncestorAssociationTargetRoles(m_type);//.associationRoles();
-			set< ::Uml::Uml::AssociationRole>::iterator ars_i;
+			set< ::Uml::AssociationRole> all_roles;
+			set< ::Uml::AssociationRole> ars = Uml::AncestorAssociationTargetRoles(m_type);//.associationRoles();
+			set< ::Uml::AssociationRole>::iterator ars_i;
 			for (ars_i = ars.begin(); ars_i != ars.end(); ars_i++)
 			{
 				if (ars_i->isNavigable()) all_roles.insert(*ars_i);
@@ -1377,7 +1377,7 @@ bbreak:			;
 		};
 
 	};
-	void GmeObject::setParent(ObjectImpl *a, const ::Uml::Uml::CompositionParentRole &role, const bool direct) 
+	void GmeObject::setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct) 
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
 
@@ -1452,7 +1452,7 @@ bbreak:			;
 	};
 
 
-	ObjectImpl *GmeObject::getParent(const ::Uml::Uml::CompositionParentRole &role) const 
+	ObjectImpl *GmeObject::getParent(const ::Uml::CompositionParentRole &role) const 
 	{
 		IMgaMetaRolePtr rr;
 
@@ -1463,7 +1463,7 @@ bbreak:			;
 
 			IMgaMetaRolePtr real_role;			
 			COMTHROW (self->get_MetaRole(&real_role));
-			::Uml::Uml::CompositionChildRole ccr = Uml::theOther(role);
+			::Uml::CompositionChildRole ccr = Uml::theOther(role);
 			
 			//in most cases, the role name matches
 			if (real_role->Name != SmartBSTR(((string)ccr.name()).c_str()))
@@ -1473,12 +1473,12 @@ bbreak:			;
 				//of the CompositionChildRole
 
 				bool found = false;
-				set< ::Uml::Uml::Class> descendants = Uml::DescendantClasses(ccr.target());
-				set< ::Uml::Uml::Class>::iterator d_i = descendants.begin();
+				set< ::Uml::Class> descendants = Uml::DescendantClasses(ccr.target());
+				set< ::Uml::Class>::iterator d_i = descendants.begin();
 
 				while (!found && d_i != descendants.end())
 				{
-					::Uml::Uml::Class descendant = *d_i++;
+					::Uml::Class descendant = *d_i++;
 					found = (real_role->Name == SmartBSTR( ((string)descendant.name()).c_str() ));
 				}
 
@@ -1487,7 +1487,7 @@ bbreak:			;
 				//kind + role 
 				while (!found && d_i != descendants.end())
 				{
-					::Uml::Uml::Class descendant = *d_i++;
+					::Uml::Class descendant = *d_i++;
 					found = (real_role->Name == SmartBSTR( ((string)descendant.name() + (string)ccr.name()).c_str()  ));
 				}
 
@@ -1512,7 +1512,7 @@ bbreak:			;
 		return &Udm::_null;
 	}
 
-	IMgaMetaRolePtr GmeObject::GetMetaRole(::Uml::Uml::Class kind, ::Uml::Uml::CompositionChildRole ccr, IMgaMetaModelPtr mmodel)
+	IMgaMetaRolePtr GmeObject::GetMetaRole(::Uml::Class kind, ::Uml::CompositionChildRole ccr, IMgaMetaModelPtr mmodel)
 	{
 		IMgaMetaRolePtr rr;
 		if(mmodel == NULL) 
@@ -1526,7 +1526,7 @@ bbreak:			;
 			//string shr = Uml::MakeShortRoleName(ccr);
 			//string kn = kind.name();
 
-			if ( ((string)ccr.name()).compare(((::Uml::Uml::Class)ccr.target()).name()) == 0)
+			if ( ((string)ccr.name()).compare(((::Uml::Class)ccr.target()).name()) == 0)
 			{
 				//the rolename might be created with ccr.target().name()
 				//by the CPP code generator. Hence, the MGA rolename may be
@@ -1581,21 +1581,21 @@ bbreak:			;
 
 	};
 
-	IMgaMetaRolePtr GmeObject::GetMetaRoleForChildRole(::Uml::Uml::CompositionChildRole meta, IMgaMetaModelPtr mmodel) 
+	IMgaMetaRolePtr GmeObject::GetMetaRoleForChildRole(::Uml::CompositionChildRole meta, IMgaMetaModelPtr mmodel) 
 	{ 
 		IMgaMetaRolePtr rr;
 		if(mmodel == NULL) 
 			throw udm_exception("Metamodel not found");
 		string mn = Uml::MakeShortRoleName(meta);
 		if(mn.empty()) 
-			mn = NAMEGET(::Uml::Uml::Class(meta.target()));
+			mn = NAMEGET(::Uml::Class(meta.target()));
 		rr = mmodel->RoleByName[SmartBSTR(mn.c_str())];
 		if(rr == NULL) 
 			throw udm_exception("Role not found in model: " + mn);
 		return rr;
 	};		
 /*
-	IMgaMetaRolePtr GmeObject::GetMetaRoleForKind(::Uml::Uml::Class kind, IMgaMetaModelPtr mmodel)
+	IMgaMetaRolePtr GmeObject::GetMetaRoleForKind(::Uml::Class kind, IMgaMetaModelPtr mmodel)
 	{
 		IMgaMetaRolePtr rr;
 		if(mmodel == NULL) 
@@ -1608,7 +1608,7 @@ bbreak:			;
 		return rr;
 	};
 */
-	string GmeObject::getStringAttr(const ::Uml::Uml::Attribute &meta) const
+	string GmeObject::getStringAttr(const ::Uml::Attribute &meta) const
 	{
 		SmartBSTR val;
 		string ret;
@@ -1709,7 +1709,7 @@ bbreak:			;
 		return ret;
 	};
 
-	void GmeObject::setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct)
+	void GmeObject::setStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct)
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
 
@@ -1765,34 +1765,34 @@ bbreak:			;
 		else testself->StrAttrByName[SmartBSTR(NAMEGET(meta))] = SmartBSTR(a.c_str());
 	};
 
-	bool GmeObject::getBooleanAttr(const ::Uml::Uml::Attribute &meta) const	
+	bool GmeObject::getBooleanAttr(const ::Uml::Attribute &meta) const	
 	{
 		return testself->BoolAttrByName[SmartBSTR(NAMEGET(meta))] == VARIANT_TRUE;
 	}
 
-	void GmeObject::setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a, const bool direct)
+	void GmeObject::setBooleanAttr(const ::Uml::Attribute &meta, bool a, const bool direct)
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
 		testself->BoolAttrByName[SmartBSTR(NAMEGET(meta))] = a ? VARIANT_TRUE : VARIANT_FALSE;
 	}
 
-	__int64 GmeObject::getIntegerAttr(const ::Uml::Uml::Attribute &meta) const
+	__int64 GmeObject::getIntegerAttr(const ::Uml::Attribute &meta) const
 	{
 		return __int64(testself->IntAttrByName[SmartBSTR(NAMEGET(meta))]);
 	}
 
-	void GmeObject::setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a, const bool direct)
+	void GmeObject::setIntegerAttr(const ::Uml::Attribute &meta, __int64 a, const bool direct)
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
 		testself->IntAttrByName[SmartBSTR(NAMEGET(meta))] = (long)a;
 	}
 
-	double GmeObject::getRealAttr(const ::Uml::Uml::Attribute &meta) const
+	double GmeObject::getRealAttr(const ::Uml::Attribute &meta) const
 	{
 		return testself->FloatAttrByName[SmartBSTR(NAMEGET(meta))];
 	}
 
-	void GmeObject::setRealAttr(const ::Uml::Uml::Attribute &meta, double a, const bool direct)
+	void GmeObject::setRealAttr(const ::Uml::Attribute &meta, double a, const bool direct)
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
 		testself->FloatAttrByName[SmartBSTR(NAMEGET(meta))] = a;
@@ -1827,7 +1827,7 @@ bbreak:			;
 		return id;
 	};
 
-	const ::Uml::Uml::Class & GmeObject::type() const 
+	const ::Uml::Class & GmeObject::type() const 
 	{ 
 		return m_type;
 	};
@@ -1845,11 +1845,11 @@ bbreak:			;
 		return testself->Meta;
 	};
 
-	//::Uml::Uml::Class GmeObject::findClass(const set< ::Uml::Uml::Class> &classes) 
+	//::Uml::Class GmeObject::findClass(const set< ::Uml::Class> &classes) 
 
 
 	
-	::Uml::Uml::Class GmeObject::findClass() 
+	::Uml::Class GmeObject::findClass() 
 	{
 		SmartBSTR name = Meta()->Name;
 		SmartBSTR ns_name = Meta()->RegistryValue[NS_REGNODE_NAME];
@@ -1865,7 +1865,7 @@ bbreak:			;
 		}
 
 
-		map<string, const ::Uml::Uml::Class>::iterator j = ((GmeDataNetwork*)mydn)->meta_class_cache.find(key);
+		map<string, const ::Uml::Class>::iterator j = ((GmeDataNetwork*)mydn)->meta_class_cache.find(key);
 
 		if (j == ((GmeDataNetwork*)mydn)->meta_class_cache.end())
 			throw udm_exception("Cannot find Udm metaobject for GME kind: " + name);
@@ -1875,7 +1875,7 @@ bbreak:			;
 	};
 
 
-	inline GmeObject::GmeObject(const ::Uml::Uml::Class &meta, IMgaFCO *obj, const DataNetwork * dn) :  m_type(meta), self(obj) 
+	inline GmeObject::GmeObject(const ::Uml::Class &meta, IMgaFCO *obj, const DataNetwork * dn) :  m_type(meta), self(obj) 
 	{ 
 		__uniqueId_set=false;
 		mydn = dn;
@@ -1883,14 +1883,14 @@ bbreak:			;
 
 	inline GmeObject::GmeObject(IMgaFCO *obj, const DataNetwork * dn) : self(obj) 
 	{
-		//set< ::Uml::Uml::Class> classes = diagram.classes();
+		//set< ::Uml::Class> classes = diagram.classes();
 		__uniqueId_set=false;
 		mydn = dn;
 		m_type = findClass();
 		if (!mydn) throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
 	};
 
-	inline GmeObject::GmeObject(const ::Uml::Uml::Class &meta, IMgaFolder *obj, const DataNetwork * dn) :  m_type(meta), folderself(obj) 
+	inline GmeObject::GmeObject(const ::Uml::Class &meta, IMgaFolder *obj, const DataNetwork * dn) :  m_type(meta), folderself(obj) 
 	{
 		__uniqueId_set=false;
 		mydn = dn;
@@ -1899,7 +1899,7 @@ bbreak:			;
 
 	inline GmeObject::GmeObject( IMgaFolder *obj, const DataNetwork * dn) : folderself(obj) 
 	{
-		//set< ::Uml::Uml::Class> classes = diagram.classes();
+		//set< ::Uml::Class> classes = diagram.classes();
 		__uniqueId_set=false;
 		mydn = dn;
 		m_type = findClass();
@@ -2047,15 +2047,15 @@ bbreak:			;
 		hasOpened=false;
 
 		//create a cache for meta-classes 
-		set< ::Uml::Uml::Namespace> meta_namespaces = dia.dgr->namespaces();
-		for (set< ::Uml::Uml::Namespace>::iterator mni = meta_namespaces.begin(); mni != meta_namespaces.end(); mni++)
+		set< ::Uml::Namespace> meta_namespaces = dia.dgr->namespaces();
+		for (set< ::Uml::Namespace>::iterator mni = meta_namespaces.begin(); mni != meta_namespaces.end(); mni++)
 		{
-			set< ::Uml::Uml::Class> meta_classes = mni->classes();
-			for (set< ::Uml::Uml::Class>::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
+			set< ::Uml::Class> meta_classes = mni->classes();
+			for (set< ::Uml::Class>::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
 			{
 				string key =(string)mni->name() + ':' + (string)mci->name();//namespace:class
-				pair<string const, const ::Uml::Uml::Class> mcc_item(key, *mci);
-				pair<map<string, const ::Uml::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
+				pair<string const, const ::Uml::Class> mcc_item(key, *mci);
+				pair<map<string, const ::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
 				if (!ins_res.second)
 					throw udm_exception("Insert failed when creating meta classes by name map!");
 
@@ -2136,24 +2136,24 @@ bbreak:			;
 // primary points to the set or reference object, to the source of the connection, or to the baseclass
 // herename should be the name towards the primary
 
-	void GmeDataNetwork::amapInitialize(const ::Uml::Uml::Diagram &dgr, IMgaMetaProject *metaproj) 
+	void GmeDataNetwork::amapInitialize(const ::Uml::Diagram &dgr, IMgaMetaProject *metaproj) 
 	{
-		set< ::Uml::Uml::Namespace> nses = dgr.namespaces();
-		for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+		set< ::Uml::Namespace> nses = dgr.namespaces();
+		for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 		{
-			set< ::Uml::Uml::Association> assocs = nses_i->associations();
-			for(set< ::Uml::Uml::Association>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+			set< ::Uml::Association> assocs = nses_i->associations();
+			for(set< ::Uml::Association>::iterator i = assocs.begin(); i != assocs.end(); i++) 
 		{
 			//for each association in the meta 
-			::Uml::Uml::Association assoc = *i;
-			set< ::Uml::Uml::AssociationRole> roles = assoc.roles();
+			::Uml::Association assoc = *i;
+			set< ::Uml::AssociationRole> roles = assoc.roles();
 			assocmapitem nn;
 			objtype_enum expect = OBJTYPE_NULL;
 			bool reservednamesinUML = false;
 			string searchname = assoc.name();
 
-			::Uml::Uml::Class aclass = assoc.assocClass();
-			for(set< ::Uml::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
+			::Uml::Class aclass = assoc.assocClass();
+			for(set< ::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
 			{
 				//for each (two) role of the association
 				if(j->isNavigable()) 
@@ -2171,7 +2171,7 @@ bbreak:			;
 					//check if the rolename is reference or set-member relationship
 					if(!aclass && (rolename == "ref" || rolename == "members")) 
 					{
-						nn.metaobj = MetaObjLookup(metaproj, ((::Uml::Uml::Class)Uml::theOther(*j).target()).name());
+						nn.metaobj = MetaObjLookup(metaproj, ((::Uml::Class)Uml::theOther(*j).target()).name());
 						nn.primary = Uml::theOther(*j);
 						expect = rolename == "ref" ? OBJTYPE_REFERENCE : OBJTYPE_SET;
 						break;
@@ -2179,7 +2179,7 @@ bbreak:			;
 					//check if it is a connection and the rolenames directly identify the source and the destination
 					if(rolename == "dst" && (!Uml::theOther(*j).isNavigable() || (string)Uml::theOther(*j).name() == "src")) 
 					{
-						set< ::Uml::Uml::Class> deriveds = Uml::DescendantClasses(aclass);
+						set< ::Uml::Class> deriveds = Uml::DescendantClasses(aclass);
 						nn.primary = Uml::theOther(*j);
 						expect = OBJTYPE_CONNECTION;
 						
@@ -2191,7 +2191,7 @@ bbreak:			;
 						else
 						{
 							nn.metaobj = NULL;
-							set< ::Uml::Uml::Class> descs = Uml::DescendantClasses(aclass);
+							set< ::Uml::Class> descs = Uml::DescendantClasses(aclass);
 							if (descs.size())
 							{
 
@@ -2199,7 +2199,7 @@ bbreak:			;
 								//which can be mapped to an MGA connection object.
 								//this means that they are not abstract
 								int real_size = 0;
-								for (set< ::Uml::Uml::Class>::iterator desc_i = descs.begin();desc_i != descs.end();desc_i++)
+								for (set< ::Uml::Class>::iterator desc_i = descs.begin();desc_i != descs.end();desc_i++)
 								{	
 									IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_i->name());
 									if (p) real_size++;
@@ -2211,7 +2211,7 @@ bbreak:			;
 								int j = 0;
 
 								//copy the MgaMetaFCOPtrs to the allocated array in the nn structure
-								for (set< ::Uml::Uml::Class>::iterator desc_ii = descs.begin();desc_ii != descs.end();desc_ii++)
+								for (set< ::Uml::Class>::iterator desc_ii = descs.begin();desc_ii != descs.end();desc_ii++)
 								{	
 									IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_ii->name());
 									if (p)
@@ -2244,17 +2244,17 @@ bbreak:			;
 					if(searchname.empty()) 
 					{  // the assoc name is empty, it must be a reference or set
 						//or reference parent helper
-						set< ::Uml::Uml::AssociationRole>::iterator j;
+						set< ::Uml::AssociationRole>::iterator j;
 						for(j = roles.begin(); j != roles.end(); j++) 
 						{
 							if(!Uml::theOther(*j).isNavigable()) continue;
-							string lookupstr = ((::Uml::Uml::Class)j->target()).name();
+							string lookupstr = ((::Uml::Class)j->target()).name();
 							string lookupstr1 = j->name();
 
 							bool isnavi1 = j->isNavigable();
 							bool isnavi2 = Uml::theOther(*j).isNavigable();
 
-							IMgaMetaFCOPtr bt = MetaObjLookup(metaproj, ((::Uml::Uml::Class)j->target()).name());
+							IMgaMetaFCOPtr bt = MetaObjLookup(metaproj, ((::Uml::Class)j->target()).name());
 							if(bt) 
 							{   // not abstract, etc;
 								SmartBSTR herename, therename, sRefParent, dRefParent;
@@ -2302,12 +2302,12 @@ bbreak:			;
 					{
 						// the assoc name is not empty; 
 						// if it matches any of the end class names, it is a reference or a set
-						for(set< ::Uml::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
+						for(set< ::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
 						{
-							if(searchname == NAMEGET((::Uml::Uml::Class)j->target()) && Uml::theOther(*j).isNavigable()) 
+							if(searchname == NAMEGET((::Uml::Class)j->target()) && Uml::theOther(*j).isNavigable()) 
 							{
 								nn.primary = *j;
-								nn.metaobj = MetaObjLookup(metaproj, ((::Uml::Uml::Class)j->target()).name());
+								nn.metaobj = MetaObjLookup(metaproj, ((::Uml::Class)j->target()).name());
 								expect = nn.metaobj->GetObjType();
 								break;
 							}
@@ -2329,7 +2329,7 @@ bbreak:			;
 					{
 						//probably aclass is an abstract  supertype
 						//we have to list all the subtypes and put in the metaobjs
-						set< ::Uml::Uml::Class> descs = Uml::DescendantClasses(aclass);
+						set< ::Uml::Class> descs = Uml::DescendantClasses(aclass);
 						if (descs.size())
 						{
 
@@ -2337,7 +2337,7 @@ bbreak:			;
 							//which can be mapped to an MGA connection object.
 							//this means that they are not abstract
 							int real_size = 0;
-							for (set< ::Uml::Uml::Class>::iterator desc_i = descs.begin();desc_i != descs.end();desc_i++)
+							for (set< ::Uml::Class>::iterator desc_i = descs.begin();desc_i != descs.end();desc_i++)
 							{	
 								IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_i->name());
 								if (p) real_size++;
@@ -2349,7 +2349,7 @@ bbreak:			;
 							int j = 0;
 
 							//copy the MgaMetaFCOPtrs to the allocated array in the nn structure
-							for (set< ::Uml::Uml::Class>::iterator desc_ii = descs.begin();desc_ii != descs.end();desc_ii++)
+							for (set< ::Uml::Class>::iterator desc_ii = descs.begin();desc_ii != descs.end();desc_ii++)
 							{	
 								IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_ii->name());
 								if (p)
@@ -2391,7 +2391,7 @@ bbreak:			;
 							herename = nn.metaobj->RegistryValue["sName"];
 							therename = nn.metaobj->RegistryValue["dName"];
 							{
-								for(set< ::Uml::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
+								for(set< ::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
 								{
 									if(therename == SmartBSTR(Uml::MakeRoleName(Uml::theOther(*j)).c_str()) && 	(!j->isNavigable() || herename == SmartBSTR(Uml::MakeRoleName(*j).c_str())) ) 
 									{
@@ -2427,7 +2427,7 @@ bbreak:			;
 						herename = p->RegistryValue["sName"];
 						therename = p->RegistryValue["dName"];
 						{
-							for(set< ::Uml::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
+							for(set< ::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
 							{
 								if(therename == SmartBSTR(Uml::MakeRoleName(Uml::theOther(*j)).c_str()) && 	(!j->isNavigable() || herename == SmartBSTR(Uml::MakeRoleName(*j).c_str())) ) 
 								{
@@ -2559,7 +2559,7 @@ bbreak:			;
 	}
 
 	UDM_DLL void GmeDataNetwork::CreateNew(const string &systemname, 
-									const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+									const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem) 
 	{
 		hasOpened=false;
@@ -2583,7 +2583,7 @@ bbreak:			;
 				CASSERT("Cannot create this object as root");
 			}
 			
-			string ns_name = ::Uml::Uml::Namespace(rootclass.parent()).name();
+			string ns_name = ::Uml::Namespace(rootclass.parent()).name();
 			COMTHROW(project->RootFolder->put_RegistryValue(SmartBSTR(NS_REGNODE_NAME), SmartBSTR(ns_name.c_str())));
 			rootobject = bb;
 		}
@@ -2706,26 +2706,26 @@ bbreak:			;
 		}
 	}
 
-	set<string> GmeDataNetwork::GetMetaRoleFilter(::Uml::Uml::CompositionChildRole role)
+	set<string> GmeDataNetwork::GetMetaRoleFilter(::Uml::CompositionChildRole role)
 	{
 		//search the cache 
-		map< ::Uml::Uml::CompositionChildRole, string_set>::iterator cache_i = meta_role_filter_cache.find(role);
+		map< ::Uml::CompositionChildRole, string_set>::iterator cache_i = meta_role_filter_cache.find(role);
 		
 		//return if found
 		if (cache_i != meta_role_filter_cache.end()) return cache_i->second;
 
 		//create the valid MGA CompositionRoles for this role
 		string_set MetaRoleFilter;
-		set< ::Uml::Uml::Class> des = Uml::DescendantClasses(role.target());
-		for (set< ::Uml::Uml::Class>::iterator des_i = des.begin(); des_i != des.end(); des_i++)
+		set< ::Uml::Class> des = Uml::DescendantClasses(role.target());
+		for (set< ::Uml::Class>::iterator des_i = des.begin(); des_i != des.end(); des_i++)
 		{
 			MetaRoleFilter.insert((string)(*des_i).name());
 			MetaRoleFilter.insert((string)(*des_i).name() + (string)role.name());
 		}
 
 		//insert the newly created set<string> in a cache
-		pair< ::Uml::Uml::CompositionChildRole const, string_set> cache_item(role, MetaRoleFilter);
-		pair<map< ::Uml::Uml::CompositionChildRole, string_set>::iterator, bool> ins_res;
+		pair< ::Uml::CompositionChildRole const, string_set> cache_item(role, MetaRoleFilter);
+		pair<map< ::Uml::CompositionChildRole, string_set>::iterator, bool> ins_res;
 		ins_res = meta_role_filter_cache.insert(cache_item);
 		if (!ins_res.second)
 			throw udm_exception("MetaRoleFilter cache insert operation failed!");

@@ -541,7 +541,7 @@ namespace UdmDom
 		DOM_Element dom_element;
 		
 		
-		DomObject(const ::Uml::Uml::Class &meta, const DOM_Element &n, const DataNetwork * dn = NULL) :
+		DomObject(const ::Uml::Class &meta, const DOM_Element &n, const DataNetwork * dn = NULL) :
 		dom_element(n), m_type(meta)
 		{
 		
@@ -550,7 +550,7 @@ namespace UdmDom
 		}
 
 		
-		DomObject(/*const ::Uml::Uml::Diagram &diagram,*/ DOM_Element &element,  const DataNetwork * dn = NULL) : dom_element(element)
+		DomObject(/*const ::Uml::Diagram &diagram,*/ DOM_Element &element,  const DataNetwork * dn = NULL) : dom_element(element)
 		{
 			mydn = dn;
 			if (!mydn) throw udm_exception("DomObject without a data network ?");
@@ -605,7 +605,7 @@ namespace UdmDom
 
 	// --- lookup
 
-		::Uml::Uml::Class findClass(DOM_Element &element) const
+		::Uml::Class findClass(DOM_Element &element) const
 		{
 			//This could be faster also, diagram are relatively small
 			//so I don't waste my time here
@@ -614,7 +614,7 @@ namespace UdmDom
 			string key = ns_name + ":";			//namespace:class
 			key += cl_name.localForm();
 
-			map<string, ::Uml::Uml::Class>::iterator mcc_i = ((DomDataNetwork *)mydn)->meta_class_cache.find(key);
+			map<string, ::Uml::Class>::iterator mcc_i = ((DomDataNetwork *)mydn)->meta_class_cache.find(key);
 
 			if (mcc_i != ((DomDataNetwork *)mydn)->meta_class_cache.end())
 				return mcc_i->second;
@@ -718,11 +718,11 @@ namespace UdmDom
 
 	// --- type
 
-		::Uml::Uml::Class m_type;
+		::Uml::Class m_type;
 
-		//const ::Uml::Uml::Class &m_type;
+		//const ::Uml::Class &m_type;
 
-		const ::Uml::Uml::Class &type() const { return m_type; }
+		const ::Uml::Class &type() const { return m_type; }
 
 	// --- order
 
@@ -806,7 +806,7 @@ namespace UdmDom
 		Text attributes are supposed to generate multiple elements containing a single XML text node
 	*/
 
-		void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct)
+		void setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct)
 		{
 			//for String attibutes we have the same behaviour
 			if ((string)meta.type() !=  "Text") return ObjectImpl::setStringAttrArr(meta, a, direct);
@@ -818,7 +818,7 @@ namespace UdmDom
 			{
 				if(direct)
 				{
-					DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+					DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
 					setTextValues(dom_element,a,  DOMString(name.c_str()), ns_name);
 					//desynch the attribute
 					desynch_attribute(name);
@@ -828,14 +828,14 @@ namespace UdmDom
 					//check if desynched
 					if (!is_attribute_desynched(name))
 					{
-						DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+						DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
 						setTextValues(dom_element,a,  DOMString(name.c_str()), ns_name);		
 					}
 				}
 			}
 			else
 			{
-				DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+				DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
 				setTextValues(dom_element,a,  DOMString(name.c_str()), ns_name);
 				//go through all derived and instances
 				vector<ObjectImpl*>::iterator i;
@@ -857,25 +857,25 @@ namespace UdmDom
 			}
 		
 		};
-		vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const
+		vector<string> getStringAttrArr(const ::Uml::Attribute &meta) const
 		{
 			//for String attibutes we have the same behaviour
 			if ((string)meta.type() !=  "Text") return ObjectImpl::getStringAttrArr(meta);
 			vector<string> ret;
-			DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+			DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
 			getTextValues(dom_element, ret, DOMString(((string)meta.name()).c_str()), ns_name);
 
 			return ret;
 		};
 		
-		string getStringAttr(const ::Uml::Uml::Attribute &meta) const
+		string getStringAttr(const ::Uml::Attribute &meta) const
 		{
 			DOMString a;
 
 			// TODO: avoid the name conversion
 			if ((string)(meta.type()) == "Text")
 			{
-				DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+				DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
 
 				a = getTextValue(dom_element, DOMString(((string)meta.name()).c_str()), ns_name);
 			}	
@@ -893,7 +893,7 @@ namespace UdmDom
 		}
 
 
-		void setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct = true)
+		void setStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct = true)
 		{
 			// TODO: avoid the name conversion
 
@@ -907,7 +907,7 @@ namespace UdmDom
 					//set the attribute
 					if ((string)(meta.type()) == "Text")
 					{
-						DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+						DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
 						setTextValue(dom_element,DOMString(a.c_str()),  DOMString(name.c_str()), ns_name);
 					}
 					else
@@ -924,7 +924,7 @@ namespace UdmDom
 						//if not, set the attribute
 						if ((string)(meta.type()) == "Text")
 						{
-							DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+							DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
 							setTextValue(dom_element,DOMString(a.c_str()),DOMString(name.c_str()), ns_name);
 						}
 						else
@@ -937,7 +937,7 @@ namespace UdmDom
 			{
 				if ((string)(meta.type()) == "Text")
 				{
-					DOMString ns_name =   ((string)((::Uml::Uml::Namespace)m_type.parent()).name()).c_str();
+					DOMString ns_name =   ((string)((::Uml::Namespace)m_type.parent()).name()).c_str();
 					setTextValue(dom_element,DOMString(a.c_str()),DOMString(name.c_str()), ns_name);
 				}
 				else		
@@ -964,7 +964,7 @@ namespace UdmDom
 
 		}
 
-		bool getBooleanAttr(const ::Uml::Uml::Attribute &meta) const
+		bool getBooleanAttr(const ::Uml::Attribute &meta) const
 		{
 			// TODO: avoid the name conversion
 			string name = meta.name();
@@ -976,7 +976,7 @@ namespace UdmDom
 			return a.charAt(0) == XMLCh('t');	 // true
 		}
 
-		void setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a, const bool direct = true)
+		void setBooleanAttr(const ::Uml::Attribute &meta, bool a, const bool direct = true)
 		{
 			string name = meta.name();
 
@@ -1040,7 +1040,7 @@ namespace UdmDom
 			
 		}
 
-		__int64 getIntegerAttr(const ::Uml::Uml::Attribute &meta) const
+		__int64 getIntegerAttr(const ::Uml::Attribute &meta) const
 		{
 			// TODO: avoid the name conversion
 			string name = meta.name();
@@ -1076,7 +1076,7 @@ namespace UdmDom
 			//TODO: error checking??
 		}
 
-		void setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a, const bool direct = true)
+		void setIntegerAttr(const ::Uml::Attribute &meta, __int64 a, const bool direct = true)
 		{
 			// TODO: avoid the name conversion
 			string name = meta.name();
@@ -1151,7 +1151,7 @@ namespace UdmDom
 
 		}
 
-		double getRealAttr(const ::Uml::Uml::Attribute &meta) const
+		double getRealAttr(const ::Uml::Attribute &meta) const
 		{
 			// TODO: avoid the name conversion
 			string name = meta.name();
@@ -1185,7 +1185,7 @@ namespace UdmDom
 			return d;
 		}
 
-		void setRealAttr(const ::Uml::Uml::Attribute &meta, double a, const bool direct = true)
+		void setRealAttr(const ::Uml::Attribute &meta, double a, const bool direct = true)
 		{
 			
 
@@ -1254,16 +1254,16 @@ namespace UdmDom
 	
 
 
-		string GetANameFor(const ::Uml::Uml::Composition &comp) const {
+		string GetANameFor(const ::Uml::Composition &comp) const {
 
-			::Uml::Uml::CompositionChildRole chr = comp.childRole();
+			::Uml::CompositionChildRole chr = comp.childRole();
 			string ret = chr.name();
-			if(ret.empty()) ret = string(::Uml::Uml::Class(chr.target()).name());
+			if(ret.empty()) ret = string(::Uml::Class(chr.target()).name());
 			return ret;
 		}
 
 	// --- containment
-		ObjectImpl *getParent(const ::Uml::Uml::CompositionParentRole &role) const 
+		ObjectImpl *getParent(const ::Uml::CompositionParentRole &role) const 
 		{
 // TODO: check role if not NULLROLE
 
@@ -1277,7 +1277,7 @@ namespace UdmDom
 			
 			
 			if(role) {
-				::Uml::Uml::Composition comp = Uml::matchChildToParent(m_type, role.target()); 
+				::Uml::Composition comp = Uml::matchChildToParent(m_type, role.target()); 
 				
 
 				//this will return the null object when there are multiple 
@@ -1291,7 +1291,7 @@ namespace UdmDom
 				//and role.target() as parent,
 				//might happen that my parent is not the requested one
 				
-				set< ::Uml::Uml::Class> cl_s = Uml::DescendantClasses(role.target());
+				set< ::Uml::Class> cl_s = Uml::DescendantClasses(role.target());
 
 				if (cl_s.find(do_parent->m_type)  != cl_s.end())
 					return do_parent;
@@ -1376,24 +1376,24 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 			
 			if(myid != 0) 
 			{
-				set< ::Uml::Uml::AssociationRole> rs = Uml::AncestorAssociationTargetRoles(m_type);
-				for(set< ::Uml::Uml::AssociationRole>::iterator role = rs.begin(); role != rs.end(); role++) 
+				set< ::Uml::AssociationRole> rs = Uml::AncestorAssociationTargetRoles(m_type);
+				for(set< ::Uml::AssociationRole>::iterator role = rs.begin(); role != rs.end(); role++) 
 				{
 					DOMString tname = Uml::MakeRoleName(*role).c_str();
 					DOMString oname = Uml::MakeRoleName(Uml::theOther(*role)).c_str();
 
-					::Uml::Uml::Association aa = role->parent();
-					if(::Uml::Uml::Class(aa.assocClass())) 
+					::Uml::Association aa = role->parent();
+					if(::Uml::Class(aa.assocClass())) 
 					{
 						oname += "_end_";
 					}
 					removeAssociation(tname, oname, myid);		
 				}
-				::Uml::Uml::Association assoc = m_type.association();
+				::Uml::Association assoc = m_type.association();
 				if(assoc) 
 				{
-					set< ::Uml::Uml::AssociationRole> rs = assoc.roles();
-					for(set< ::Uml::Uml::AssociationRole>::iterator role = rs.begin(); role != rs.end(); role++) 
+					set< ::Uml::AssociationRole> rs = assoc.roles();
+					for(set< ::Uml::AssociationRole>::iterator role = rs.begin(); role != rs.end(); role++) 
 					{
 						DOMString tname = Uml::MakeRoleName(*role).c_str();
 						DOMString oname = Uml::MakeRoleName(Uml::theOther(*role)).c_str();
@@ -1443,7 +1443,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 // role must be specified unless a is null, or child role in the new parent is unambigious
 // if a was already the parent, existing other childroles are not deleted
 // XML: if multiple roles are enabled, object will keep its existing role(s) as well if not moved to a new parent
-		void setParent(ObjectImpl *a, const ::Uml::Uml::CompositionParentRole &role, const bool direct = true) 
+		void setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct = true) 
 		{
 
 			TRY_XML_EXCEPTION 
@@ -1540,7 +1540,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 
 				currentparent:  DOM_Node,   the current parent of this->dom_element
 				aa:				DomObject , the new parent
-				m_type:			::Uml::Uml::Class, the type of this
+				m_type:			::Uml::Class, the type of this
 			   */
 			   
 				if(currentparent != aa.dom_element) 
@@ -1578,9 +1578,9 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 			   else if(DomDataNetwork::MultiRolesEnabled()) 
 				   chas = dom_element.getAttribute(DOMString("__child_as"));
 				
-			   ::Uml::Uml::CompositionChildRole c_role;
+			   ::Uml::CompositionChildRole c_role;
 
-			   ::Uml::Uml::Composition comp = Uml::matchChildToParent(m_type, aa.m_type);
+			   ::Uml::Composition comp = Uml::matchChildToParent(m_type, aa.m_type);
 				if(!role) 
 				{
 					if(!comp) throw udm_exception("Childrole has to be specified");
@@ -1591,11 +1591,11 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				{  // either 0 or different kinds
 					comp = role.parent();
 					// if different, or comp is 0 because of 0 roles, one of the followings will catch it:
-					if(!Uml::IsDerivedFrom(m_type,::Uml::Uml::CompositionChildRole(comp.childRole()).target())) 
+					if(!Uml::IsDerivedFrom(m_type,::Uml::CompositionChildRole(comp.childRole()).target())) 
 					{
 						throw udm_exception("Invalid parentrole specified");
 					}
-					if(!Uml::IsDerivedFrom(aa.m_type, ::Uml::Uml::CompositionParentRole(comp.parentRole()).target())) 
+					if(!Uml::IsDerivedFrom(aa.m_type, ::Uml::CompositionParentRole(comp.parentRole()).target())) 
 					{
 						throw udm_exception("Invalid parent specified");
 					}
@@ -1691,7 +1691,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 							return;
 						}
 //#ifdef RECORD_ROLES
-						::Uml::Uml::Composition comp = Uml::matchChildToParent(m_type, aa.m_type);
+						::Uml::Composition comp = Uml::matchChildToParent(m_type, aa.m_type);
 						if(!comp) 
 						{
 							comp = role.parent();
@@ -1744,13 +1744,13 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				setParent(NULL, NULL);
 		}
 
-		vector<ObjectImpl*> getChildren(const ::Uml::Uml::CompositionChildRole &role, const ::Uml::Uml::Class &kind) const {
+		vector<ObjectImpl*> getChildren(const ::Uml::CompositionChildRole &role, const ::Uml::Class &kind) const {
 			vector<ObjectImpl*> ret;
 			DOMString compname;
-			::Uml::Uml::Class target;
+			::Uml::Class target;
 
 				
-			//::Uml::Uml::Diagram diagram = m_type.parent();
+			//::Uml::Diagram diagram = m_type.parent();
 
 			//checking if role is valid for this object
 			// getting the name for __child_as attribute, when composition is ambigous 
@@ -1759,7 +1759,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				target = role.target();
 
 				if(!Uml::IsDerivedFrom(m_type, Uml::theOther(role).target())) throw udm_exception("Invalid role specified");
-				compname = GetANameFor(::Uml::Uml::Composition(role.parent())).c_str();
+				compname = GetANameFor(::Uml::Composition(role.parent())).c_str();
 			}
 
 			
@@ -1768,12 +1768,12 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				if( n.getNodeType() == DOM_Node::ELEMENT_NODE )
 				{
 					DOM_Element e = static_cast<DOM_Element&>(n);
-					::Uml::Uml::Class m = findClass( e);
+					::Uml::Class m = findClass( e);
 
 					if(role &&  Uml::IsDerivedFrom(m, target) ) 
 					{
 						//both , role was provided AND element e of type m is derived from childrole's target
-						::Uml::Uml::Composition comp = Uml::matchChildToParent(m, m_type);
+						::Uml::Composition comp = Uml::matchChildToParent(m, m_type);
 						
 						//this returns NULL if composition was ambigous
 						
@@ -1834,7 +1834,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 			return ret;
 		};
 
-		void setChildren(const ::Uml::Uml::CompositionChildRole &role, const vector<ObjectImpl*> &a, const bool direct = true) 
+		void setChildren(const ::Uml::CompositionChildRole &role, const vector<ObjectImpl*> &a, const bool direct = true) 
 		{
 			
 			Udm::Object this_o = clone();
@@ -1901,7 +1901,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 			
 					DOM_Element nn = static_cast<DOM_Element&>(n);
 
-					//const ::Uml::Uml::Diagram & diag = m_type.parent();
+					//const ::Uml::Diagram & diag = m_type.parent();
 					
 					DomObject * existing_child = new DomObject(/*diag,*/ nn, mydn);
 					if (!(role && !Uml::IsDerivedFrom(existing_child->m_type, role.target())))
@@ -1932,7 +1932,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				
 				
 //#ifdef RECORD_ROLES
-				::Uml::Uml::Composition comp = Uml::matchChildToParent(de.m_type, m_type);
+				::Uml::Composition comp = Uml::matchChildToParent(de.m_type, m_type);
 				if(!role) 
 				{
 					if(!comp) throw udm_exception("Childrole has to be specified");
@@ -1944,10 +1944,10 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				
 					comp = role.parent();
 					// if different, or comp is 0 because of 0 roles, one of the followings will catch it:
-					if(!Uml::IsDerivedFrom(m_type, ::Uml::Uml::CompositionParentRole(comp.parentRole()).target())) {
+					if(!Uml::IsDerivedFrom(m_type, ::Uml::CompositionParentRole(comp.parentRole()).target())) {
 						throw udm_exception("Invalid childrole specified");
 					}
-					if(!Uml::IsDerivedFrom(de.m_type,::Uml::Uml::CompositionChildRole(comp.childRole()).target())) {
+					if(!Uml::IsDerivedFrom(de.m_type,::Uml::CompositionChildRole(comp.childRole()).target())) {
 						throw udm_exception("Invalid child specified");
 					}
 					// only gets here if comp was 0 beacause of multiple valid roles
@@ -2086,8 +2086,8 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 
 
 		ObjectImpl *createChild(
-			const ::Uml::Uml::CompositionChildRole &childrole,	
-			const ::Uml::Uml::Class &meta, 
+			const ::Uml::CompositionChildRole &childrole,	
+			const ::Uml::Class &meta, 
 			const Udm::ObjectImpl* archetype = NULL, 
 			const bool subtype = false,
 			const bool real_archetype = true,
@@ -2102,9 +2102,9 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				}
 
 				string casestr = (string)meta.name() + "-s in " + (string)m_type.name() + "-s";
-				::Uml::Uml::CompositionChildRole role = childrole;
+				::Uml::CompositionChildRole role = childrole;
 			    if(!role) {
-					::Uml::Uml::Composition comp = Uml::matchChildToParent(meta, m_type);
+					::Uml::Composition comp = Uml::matchChildToParent(meta, m_type);
 					if(!comp) throw  udm_exception("Role must be specified for " + casestr);
 					role = comp.childRole();
 				}
@@ -2114,9 +2114,9 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 				if(!Uml::IsDerivedFrom(meta, role.target())) {
 					throw udm_exception("Invalid child specified: " + casestr);
 				}
-				DOMString nodename = DOMString((string(::Uml::Uml::Namespace(meta.parent()).name()) + ':' +  string(meta.name())).c_str());
-				//DOMString ns_uri = DOMString((string(UDM_DOM_URI_PREFIX) + '/' +  string(::Uml::Uml::Namespace(meta.parent()).name())).c_str());
-        DOMString ns_uri(getNSURI(string(::Uml::Uml::Namespace(meta.parent()).name())).c_str());
+				DOMString nodename = DOMString((string(::Uml::Namespace(meta.parent()).name()) + ':' +  string(meta.name())).c_str());
+				//DOMString ns_uri = DOMString((string(UDM_DOM_URI_PREFIX) + '/' +  string(::Uml::Namespace(meta.parent()).name())).c_str());
+        DOMString ns_uri(getNSURI(string(::Uml::Namespace(meta.parent()).name())).c_str());
 				DomObject *dep = 
 					new DomObject(meta, dom_element.getOwnerDocument().createElementNS(ns_uri, nodename), mydn);
 				//dep does not have at this moment an archetype!!!
@@ -2185,16 +2185,16 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 
 
 
-					set< ::Uml::Uml::Class> ancestorClasses=Uml::AncestorClasses(archetype->type());
+					set< ::Uml::Class> ancestorClasses=Uml::AncestorClasses(archetype->type());
 
-					for(set< ::Uml::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); 
+					for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); 
 					p_currClass!=ancestorClasses.end(); p_currClass++)
 					{
-						set< ::Uml::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
-						for(set< ::Uml::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
+						set< ::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
+						for(set< ::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
 							p_currRole!=compParentRoles.end(); p_currRole++)
 							{
-								::Uml::Uml::Class childClass=Uml::theOther(*p_currRole).target();
+								::Uml::Class childClass=Uml::theOther(*p_currRole).target();
 								vector<ObjectImpl*>children= archetype->getChildren(Uml::theOther(*p_currRole),childClass);
 								for(vector<ObjectImpl*>::iterator p_currImpl=children.begin();
 									p_currImpl!=children.end();p_currImpl++)
@@ -2271,7 +2271,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 	// --- associations
 
 	public:
-		vector<ObjectImpl*> getAssociation(const ::Uml::Uml::AssociationRole &meta, int mode = Udm::TARGETFROMPEER) const 
+		vector<ObjectImpl*> getAssociation(const ::Uml::AssociationRole &meta, int mode = Udm::TARGETFROMPEER) const 
 		{
 			vector<ObjectImpl*> ret;
 
@@ -2280,7 +2280,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 			string name = Uml::MakeRoleName(meta);
 			DOMString followattr;
 
-			if((::Uml::Uml::Class)((::Uml::Uml::Association)meta.parent()).assocClass()) {
+			if((::Uml::Class)((::Uml::Association)meta.parent()).assocClass()) {
 				if(mode == Udm::TARGETFROMPEER) {
 					followattr = (name + "_end_").c_str();
 				}
@@ -2455,7 +2455,7 @@ char buf3[100]; strcpy(buf3, StrX(origattr).localForm());
 //          C.bs_end_ = bs = 'bs' in A and  'bs_end_' in C
 //		    C.as_end_ = as = 'as' in B and  'as_end_' in C
 
-		void setAssociation(const ::Uml::Uml::AssociationRole &role, const vector<ObjectImpl*> &nvect, int mode = Udm::TARGETFROMPEER, const bool direct = true)	
+		void setAssociation(const ::Uml::AssociationRole &role, const vector<ObjectImpl*> &nvect, int mode = Udm::TARGETFROMPEER, const bool direct = true)	
 		{
 			
 
@@ -2967,17 +2967,17 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		/*if(!LoadLibrary("..\\lib\\xerces-c_1_2")) MessageBox(NULL, "Baj van", "Load lib", 0); */
 
 		//create a cache for meta-classes 
-		set< ::Uml::Uml::Namespace> meta_namespaces= metaroot.dgr->namespaces();
+		set< ::Uml::Namespace> meta_namespaces= metaroot.dgr->namespaces();
 		
-		for (set< ::Uml::Uml::Namespace>::iterator mni = meta_namespaces.begin(); mni != meta_namespaces.end(); mni++)
+		for (set< ::Uml::Namespace>::iterator mni = meta_namespaces.begin(); mni != meta_namespaces.end(); mni++)
 		{
-			set< ::Uml::Uml::Class> meta_classes = mni->classes();
-			for (set< ::Uml::Uml::Class>::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
+			set< ::Uml::Class> meta_classes = mni->classes();
+			for (set< ::Uml::Class>::iterator mci = meta_classes.begin(); mci != meta_classes.end(); mci++)
 			{
 				//namespace + ":" + classname
 				string key = (string)(mni->name()) + ":" + (string)(mci->name());
-				pair<string, ::Uml::Uml::Class> mcc_item(key, *mci);
-				pair<map<string,  ::Uml::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
+				pair<string, ::Uml::Class> mcc_item(key, *mci);
+				pair<map<string,  ::Uml::Class>::iterator, bool> ins_res = meta_class_cache.insert(mcc_item);
 				if (!ins_res.second)
 					throw udm_exception("Insert failed when creating meta classes by name map!");
 
@@ -3386,7 +3386,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		MobiesErrorHandler errhand;
 		parser.setErrorHandler(&errhand);
 	
-		::Uml::Uml::Diagram dgr = GetRootMeta();
+		::Uml::Diagram dgr = GetRootMeta();
 		try
 		{
 			const InputSource * is = new MemBufInputSource( (const unsigned char *)str.c_str(), str.size(), "MBIS");
@@ -3502,7 +3502,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 		MobiesErrorHandler errhand;
 		parser.setErrorHandler(&errhand);
 
-		::Uml::Uml::Diagram dgr = GetRootMeta();
+		::Uml::Diagram dgr = GetRootMeta();
 		try
 		{
 			parser.parse(savesystemname.c_str());
@@ -3580,7 +3580,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 	}
 
-	UDM_DLL void DomDataNetwork::CreateNewToString(const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+	UDM_DLL void DomDataNetwork::CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem )
 	{
 		CreateNew("",metalocator, rootclass,sem);
@@ -3596,7 +3596,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 //================================================
 	UDM_DLL void DomDataNetwork::CreateNew(const string &systemname, 
-									const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+									const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem) 
 	{
 
@@ -3703,7 +3703,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			}
 
 
-			string root_ns_name = ::Uml::Uml::Namespace(rootclass.parent()).name();
+			string root_ns_name = ::Uml::Namespace(rootclass.parent()).name();
 			string root_qualified_name = root_ns_name + ":" + rootname;
 
       string root_ns_uri = getNSURI(root_ns_name);
@@ -3738,7 +3738,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 				// set XML Schema
 				DOM_Element de = static_cast<DomObject *>(GetRootObject().__impl())->dom_element;
 				
-				set< ::Uml::Uml::Namespace> nses = metaroot.dgr->namespaces();
+				set< ::Uml::Namespace> nses = metaroot.dgr->namespaces();
 				de.setAttributeNS(DOMString("http://www.w3.org/2000/xmlns/"),
 						  DOMString("xmlns:xsi"), DOMString("http://www.w3.org/2001/XMLSchema-instance"));
 
@@ -3752,7 +3752,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 				}
 				else
 				{
-					set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin();
+					set< ::Uml::Namespace>::iterator nses_i = nses.begin();
 					string schemalocations;
 
 					while (nses_i != nses.end())

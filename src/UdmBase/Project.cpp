@@ -410,9 +410,9 @@ namespace Udm
 		return ret;
 	};
 
-	UDM_DLL vector< ::Uml::Uml::Diagram> UdmProject::GetMetaDiagrams() const
+	UDM_DLL vector< ::Uml::Diagram> UdmProject::GetMetaDiagrams() const
 	{
-		vector< ::Uml::Uml::Diagram> ret;
+		vector< ::Uml::Diagram> ret;
 		for (map<string, DataNetwork*>::const_iterator i = datanetworks.begin(); i != datanetworks.end(); i++)
 			ret.push_back(i->second->GetRootMeta());
 
@@ -576,10 +576,10 @@ namespace Udm
 			Udm::SmartDataNetwork * dn = new SmartDataNetwork(LocateDiagram(i->metalocator()), this);
 			//generate the corresponding DTD( this needs the diagram to be initialized)
 			
-			set< ::Uml::Uml::Namespace> nses = LocateDiagram(i->metalocator()).dgr->namespaces();
-			for(set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+			set< ::Uml::Namespace> nses = LocateDiagram(i->metalocator()).dgr->namespaces();
+			for(set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 			{
-				::Uml::Uml::Namespace ns = *nses_i;
+				::Uml::Namespace ns = *nses_i;
 				ff.open(string(temp_path + PATHDELIM + (string)ns.name() + ".xsd").c_str());
 				if(!ff.good()) throw udm_exception("Error opening for write DTD file");
 				//else DTDGen::GenerateDTD(*(Udm::MetaDepository::LocateDiagram(i->metalocator).dgr), ff);
@@ -658,8 +658,8 @@ namespace Udm
 		if(!o) return o;
 
 		//The classname in cross diagram is: classname + "_cross_ph_" + diagramname
-		string cross_cl_name = string(o.type().name()) + string(Udm::cross_delimiter) + string(::Uml::Uml::Namespace(o.type().parent()).name());
-		::Uml::Uml::Class ph_class = Uml::classByName(::Uml::GetTheOnlyNamespace(*(cross_meta->dgr)), cross_cl_name);
+		string cross_cl_name = string(o.type().name()) + string(Udm::cross_delimiter) + string(::Uml::Namespace(o.type().parent()).name());
+		::Uml::Class ph_class = Uml::classByName(::Uml::GetTheOnlyNamespace(*(cross_meta->dgr)), cross_cl_name);
 
 		set<Udm::Object> ph_children = root_object.GetChildObjects(ph_class);
 		set<Udm::Object>::iterator ph_c_i = ph_children.begin();
@@ -725,7 +725,7 @@ namespace Udm
 
 	};
 
-	void UDM_DLL UdmProject::setSimpleAssociation(Udm::Object& peer, set<Udm::Object>& peers,const ::Uml::Uml::AssociationRole& meta)
+	void UDM_DLL UdmProject::setSimpleAssociation(Udm::Object& peer, set<Udm::Object>& peers,const ::Uml::AssociationRole& meta)
 	{
 		//obtain a proxy for this side
 		Udm::Object peer_ph = GetPlaceHolder(peer);
@@ -748,7 +748,7 @@ namespace Udm
 		peer_ph.setAssociation(meta, peers_ph);	
 	};
 
-	UDM_DLL set<Udm::Object> UdmProject::getSimpleAssociation(Udm::Object& peer,const ::Uml::Uml::AssociationRole& meta)
+	UDM_DLL set<Udm::Object> UdmProject::getSimpleAssociation(Udm::Object& peer,const ::Uml::AssociationRole& meta)
 	{
 		//obtain a proxy for this side (probably it exists
 		Udm::Object peer_ph = GetPlaceHolder(peer, false);
@@ -772,7 +772,7 @@ namespace Udm
 		return ret;
 	};
 
-	void UDM_DLL UdmProject::setLinks(Udm::Object& peer, set<Udm::Object>& links, const ::Uml::Uml::AssociationRole& meta)
+	void UDM_DLL UdmProject::setLinks(Udm::Object& peer, set<Udm::Object>& links, const ::Uml::AssociationRole& meta)
 	{
 		//forward the call with CLASSFROMTARGET
 		//obtain a proxy for this side (probably it exists
@@ -803,7 +803,7 @@ namespace Udm
 	
 	};
 
-	void UDM_DLL UdmProject::setEnd(Udm::Object& link, Udm::Object& peer, const ::Uml::Uml::AssociationRole& meta)
+	void UDM_DLL UdmProject::setEnd(Udm::Object& link, Udm::Object& peer, const ::Uml::AssociationRole& meta)
 	{
 		//forward the call with TARGETFROMCLASS
 		Udm::Object link_ph = GetPlaceHolder(link);
@@ -827,7 +827,7 @@ namespace Udm
 	};
 
 
-	UDM_DLL set<Udm::Object> UdmProject::getLinks(Udm::Object& peer, const ::Uml::Uml::AssociationRole &meta)
+	UDM_DLL set<Udm::Object> UdmProject::getLinks(Udm::Object& peer, const ::Uml::AssociationRole &meta)
 	{
 		//forward the call with CLASSFROMTARGET
 		
@@ -853,7 +853,7 @@ namespace Udm
 		return ret;
 	};
 
-	UDM_DLL Udm::Object UdmProject::getEnd(Udm::Object& link, const ::Uml::Uml::AssociationRole &meta)
+	UDM_DLL Udm::Object UdmProject::getEnd(Udm::Object& link, const ::Uml::AssociationRole &meta)
 	{
 		//forward the call with TARGETFROMCLASS
 		//obtain a proxy for this side (probably it exists
@@ -877,7 +877,7 @@ namespace Udm
 	};
 		
 
-	UDM_DLL Udm::Object UdmProject::getPeer(Udm::Object& peer, const ::Uml::Uml::AssociationRole &meta)
+	UDM_DLL Udm::Object UdmProject::getPeer(Udm::Object& peer, const ::Uml::AssociationRole &meta)
 	{
 		//forward the call with TARGETFROMPEER
 
@@ -1038,7 +1038,7 @@ namespace Udm
 		//creating a non-persistent cross-link data network 
 		cross_meta = const_cast<Udm::UdmDiagram*>(&cross_diag);
 		cross_links = new UdmStatic::StaticDataNetwork(cross_diag);
-		const ::Uml::Uml::Class& root_cls = Uml::SafeTypeContainer::GetSafeType(::Uml::classByName(::Uml::GetTheOnlyNamespace(*cross_diag.dgr), "_gen_cont"));
+		const ::Uml::Class& root_cls = Uml::SafeTypeContainer::GetSafeType(::Uml::classByName(::Uml::GetTheOnlyNamespace(*cross_diag.dgr), "_gen_cont"));
 		cross_links->CreateNew(" ", " ", root_cls, CHANGES_LOST_DEFAULT);
 	
 
@@ -1115,7 +1115,7 @@ namespace Udm
 		throw(_e);
 	};
 
-	UDM_DLL DataNetworkSpecifier::DataNetworkSpecifier( string fn,  string ml, ::Uml::Uml::Class& rc)
+	UDM_DLL DataNetworkSpecifier::DataNetworkSpecifier( string fn,  string ml, ::Uml::Class& rc)
 			: _filename(fn), _metalocator(ml), _rootclass(rc)
 	{
 	};
@@ -1136,7 +1136,7 @@ namespace Udm
 	{
 		return _metalocator;
 	};
-	UDM_DLL const ::Uml::Uml::Class& DataNetworkSpecifier::rootclass()
+	UDM_DLL const ::Uml::Class& DataNetworkSpecifier::rootclass()
 	{
 		return _rootclass;
 	};
