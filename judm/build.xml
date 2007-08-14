@@ -87,7 +87,6 @@
 
 	<!-- Clean all jUdm build products -->
 	<target name="clean" depends="init" description="Clean all build products.">
-		<!--delete dir="${build_main.dir}" /-->
 		<delete dir="${build.dir}" />
 	</target>
 
@@ -121,7 +120,6 @@
 		<copy todir="${judm.dir}">
 			<!-- Copy UdmSwig DLL in the directory of the distribution -->
 			<fileset dir="${udm.dir}/lib">
-				<!--include name="libUdmSwig.so" /-->
 				<include name="libUdmSwig.so" />
 			</fileset>
 		</copy>
@@ -191,7 +189,6 @@
 		<copy todir="${build.dir}/${dspackage}/classes/main">
 			<fileset dir="samples/${dspackage}/src/main">
 				<include name="**/*.xml" />
-				<!--include name="**/*.xsd" /-->
 			</fileset>
 		</copy>
 
@@ -219,9 +216,6 @@
 		<copy todir="${build.dir}/${dspackage}/meta">
 			<fileset dir="samples/${dspackage}/meta" />
 		</copy>
-
-		<!-- Copy the Uml.xsd -->
-		<!--copy todir="${build.dir}/${dspackage}" file="${udm.etc.dir}/Uml.xsd" /-->
 
 		<!-- Copy every class in the build/classes directory -->
 		<copy todir="${classes.dir}">
@@ -262,11 +256,6 @@
 		<!-- Compile wrapper for the SWIG generated Java code classes (UdmCintLight)-->
 		<mkdir dir="${udmswiglight.classes.dir}" />
 		<javac srcdir="${udmswiglight.src.dir}" destdir="${udmswiglight.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
-		<!--copy todir="${udmswiglight.classes.dir}/edu/vanderbilt/isis/udm">
-			<fileset dir="${udm.etc.dir}" casesensitive="no">
-				<include name="Uml.xsd" />
-			</fileset>
-		</copy-->
 		<copy todir="${classes.dir}">
 			<fileset dir="${udmswiglight.classes.dir}" casesensitive="no"/>
 		</copy>
@@ -299,11 +288,11 @@
 		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
 		<fail unless="udm_options" message="Missing parameter: udm_options" />
 		<!-- Generate a domain specific package -->
-		<!--antcall target="ds-source-generator">
+		<antcall target="ds-source-generator">
 			<param name="dspackage" value="${dspackage}" />
 			<param name="dspackagelower" value="${dspackagelower}" />
 			<param name="udm_options" value="${udm_options}" />
-		</antcall-->
+		</antcall>
 
 		<!-- Create the dirctories for the domain-specific package -->
 		<mkdir dir="${build.dir}/${dspackage}/classes/main" />
@@ -312,13 +301,6 @@
 		<mkdir dir="${build.dir}/${dspackage}/samples" />
 
 		<javac srcdir="samples/${dspackage}/src/main" destdir="${build.dir}/${dspackage}/classes/main" deprecation="false" debug="true" classpathref="compile.classpath" />
-		<!-- Copy the domain sopecific XSD and XSD next to the classes-->
-		<!--copy todir="${build.dir}/${dspackage}/classes/main">
-			<fileset dir="samples/${dspackage}/src/main">
-				<include name="**/*.xml" />
-				<include name="**/*.xsd" />
-			</fileset>
-		</copy-->
 
 		<!-- XSD validation may fail if the XSD file is not in the working directory -->
 		<copy todir="${build.dir}/${dspackage}">
@@ -345,9 +327,6 @@
 			<fileset dir="samples/${dspackage}/meta" />
 		</copy>
 
-		<!-- Copy the Uml.xsd -->
-		<!--copy todir="${build.dir}/${dspackage}" file="${udm.etc.dir}/Uml.xsd" /-->
-
 		<!-- Copy every class in the build/classes directory -->
 		<copy todir="${classes.dir}">
 			<fileset dir="${build.dir}/${dspackage}/classes/test" casesensitive="no"/>
@@ -360,25 +339,26 @@
 		<fail unless="dspackage" message="Missing parameter: dspackage" />
 		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
 		<fail unless="udm_options" message="Missing parameter: udm_options" />
-		<!-- Delete intermediate files -->
+
+		<!-- Delete old generated files -->
 		<delete>
 			<fileset dir="samples/${dspackage}/meta">
 				<filename name="*.xml" />
 				<filename name="*.xsd" />
-				<!--exclude name="Uml.xsd" /-->
 			</fileset>
 		</delete>
 		<delete dir="samples/${dspackage}/src/main/edu" />
-		<!-- Copy Uml.xsd next to the meta files -->
-		<!--copy todir="samples/${dspackage}/meta" file="${udm.etc.dir}/Uml.xsd" /-->
+
 		<!-- Generate UDM XML from the XME XML file -->
 		<exec dir="samples/${dspackage}/meta" executable="cmd">
 			<arg line="/c ${udm.etc.dir}/xme2udmxml ${dspackage}_uml.xme ${dspackage}.mga " />
 		</exec>
+		
 		<!-- Generate UDM XML from the XME XML file -->
 		<exec dir="samples/${dspackage}/meta" executable="cmd">
 			<arg line="/c ${udm.dir}\bin.net\udm.exe ${dspackage}_udm.xml ${udm_options}" />
 		</exec>
+		
 		<!-- Update source code -->
 		<copy todir="samples/${dspackage}/src/main">
 			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
@@ -386,13 +366,8 @@
 				<include name="**/*.html" />
 		</fileset>
 		</copy>
+
 		<!-- Delete intermediate files -->
-		<!--copy todir="samples/${dspackage}/src/main/edu/vanderbilt/isis/meta">
-			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
-				<include name="**/*.xml" />
-				<include name="**/*.xsd" />
-			</fileset>
-		</copy-->
 		<delete dir="samples/${dspackage}/meta/edu" />
 		<delete dir="samples/${dspackage}/meta/test" />
 	</target>
@@ -419,22 +394,13 @@
 		</copy>
 		
 		<!-- Create judm.jar in the distribution directory -->
-		<jar destfile="${judm.dist.dir}/judm.jar">
+		<jar destfile="${judm.dist.dir}/judm.jar" manifest="etc/Manifest.mf">
 			<fileset dir="${judm.dir}">
 				<exclude name="*.dll" />
 				<exclude name="*.exe" />
 				<exclude name="*.so*" />
 				<exclude name="*.a" />
 			</fileset>
-			<manifest>
-				<!--attribute name="Name" value="edu/vanderbilt/isis/udm" /-->
-				<attribute name="Specification-Title" value="jUdm Core Classes" />
-				<attribute name="Specification-Version" value="1.0" />
-				<attribute name="Specification-Vendor" value="Vanderbilt University, ISIS" />
-				<attribute name="Implementation-Title" value="edu.vanderbilt.isis.udm" />
-				<attribute name="Implementation-Version" value="1.0,0" />
-				<attribute name="Implementation-Vendor" value="Vanderbilt University, ISIS" />
-			</manifest>
 		</jar>
 		
 		<!-- Create the GeneTF distribution -->
@@ -486,21 +452,13 @@
 		</copy>
 		
 		<!-- Create judm.jar in the distribution directory -->
-		<jar destfile="${judm.dist.dir}/judm.jar">
+		<jar destfile="${judm.dist.dir}/judm.jar" manifest="etc/Manifest.mf">
 			<fileset dir="${judm.dir}">
 				<exclude name="*.dll" />
 				<exclude name="*.exe" />
 				<exclude name="*.so*" />
 				<exclude name="*.a" />
 			</fileset>
-			<manifest>
-				<attribute name="Specification-Title" value="jUdm Core Classes" />
-				<attribute name="Specification-Version" value="1.0" />
-				<attribute name="Specification-Vendor" value="Vanderbilt University, ISIS" />
-				<attribute name="Implementation-Title" value="edu.vanderbilt.isis.udm" />
-				<attribute name="Implementation-Version" value="1.0,0" />
-				<attribute name="Implementation-Vendor" value="Vanderbilt University, ISIS" />
-			</manifest>
 		</jar>
 		
 		<!-- Create the GeneTF distribution -->
@@ -523,11 +481,11 @@
 		
 		<!-- Generate Java UDM API documentation --> 
 		<mkdir dir="${judm.dist.dir}/apidoc" />
-		<!--javadoc defaultexcludes="yes" verbose="no" destdir="${judm.dist.dir}/apidoc" windowtitle="UDM API">
+		<javadoc defaultexcludes="yes" verbose="no" destdir="${judm.dist.dir}/apidoc" windowtitle="UDM API">
 			<fileset dir="${util.src.dir}" defaultexcludes="yes" />
 			<fileset dir="${udmswig.src.dir}" defaultexcludes="yes" />
 			<fileset dir="${udmswiglight.src.dir}" defaultexcludes="yes" />
-		</javadoc--> 
+		</javadoc> 
 		
 		<!-- Zip the full distribution together -->
 		<zip destfile="${build.dir}/dist/judm.zip">
@@ -576,17 +534,8 @@
 		</copy>
 
 		<!-- Create domain specific jar file -->
-		<jar destfile="${dist.dir}/${dspackage}/${dspackage}.jar">
+		<jar destfile="${dist.dir}/${dspackage}/${dspackage}.jar" manifest="samples/${dspackage}/etc/Manifest.mf">
 			<fileset dir="${build.dir}/${dspackage}/classes/main" />
-			<!--fileset dir="${build.dir}/${dspackage}/classes/test" /-->
-			<manifest>
-				<attribute name="Specification-Title" value="${dspackage} Core Classes" />
-				<attribute name="Specification-Version" value="1.0" />
-				<attribute name="Specification-Vendor" value="BioSpice" />
-				<attribute name="Implementation-Title" value="edu.vanderbilt.isis.${dspackagelower}" />
-				<attribute name="Implementation-Version" value="1.0,0" />
-				<attribute name="Implementation-Vendor" value="Vanderbilt University, ISIS" />
-			</manifest>
 		</jar>
 		
 		<!-- Create domain specific test jar file -->
@@ -611,10 +560,10 @@
 		
 		<!-- Generate JavaAPI documentation for the domain specific code  -->
 		<mkdir dir="${dist.dir}/${dspackage}/apidoc" />
-		<!--javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/${dspackage}/apidoc" windowtitle="${dspackage} UDM API">
+		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/${dspackage}/apidoc" windowtitle="${dspackage} UDM API">
 			<fileset dir="${dist.dir}/${dspackage}/src" defaultexcludes="yes">
 			</fileset>
-		</javadoc-->
+		</javadoc>
 
 		<!-- Copy the appropriate batch file in the distribution  -->
 		<antcall target="set_up_batch_file_win"/>
@@ -721,6 +670,46 @@
 				</fileset>
 			</batchtest>
 		</junit>
+	</target>
+
+	<!-- Generate a domain specific package -->
+	<target name="ns_test" depends="init" if="isWindows" description="Generate the domain specific package">
+		<property name="dspackage" value="NS_TEST" />
+		<property name="dspackagelower" value="ns_test" />
+		<property name="udm_options" value=" -j" />
+
+		<!-- Delete old generated files -->
+		<delete>
+			<fileset dir="samples/${dspackage}/meta">
+				<filename name="*.xml" />
+				<filename name="*.xsd" />
+			</fileset>
+		</delete>
+		
+		<!-- Delete source files -->
+		<delete dir="samples/${dspackage}/src/main/edu" />
+
+		<!-- Generate UDM XML from the XME XML file -->
+		<!--exec dir="samples/${dspackage}/meta" executable="cmd">
+			<arg line="/c ${udm.etc.dir}/xme2udmxml ${dspackage}_uml.xme ${dspackage}.mga " />
+		</exec-->
+		
+		<!-- Generate UDM XML from the XME XML file -->
+		<exec dir="samples/${dspackage}/meta" executable="cmd">
+			<arg line="/c ${udm.dir}\bin.net\udm.exe ${dspackage}_udm.xml ${udm_options}" />
+		</exec>
+		
+		<!-- Update source code -->
+		<copy todir="samples/${dspackage}/src/main">
+			<fileset dir="samples/${dspackage}/meta" casesensitive="no">
+				<include name="**/*.java" />
+				<include name="**/*.html" />
+		</fileset>
+		</copy>
+
+		<!-- Delete intermediate files -->
+		<delete dir="samples/${dspackage}/meta/edu" />
+		<delete dir="samples/${dspackage}/meta/test" />
 	</target>
 	
 </project>

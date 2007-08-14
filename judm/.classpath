@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="samples/NS_TEST"/>
 	<classpathentry kind="src" path="src/UdmSwigLight"/>
+	<classpathentry kind="src" path="samples/NS_TEST/src/main"/>
 	<classpathentry kind="src" path="src/UdmSwig"/>
 	<classpathentry kind="src" path="samples/SBML2Ex/src/main"/>
 	<classpathentry kind="src" path="samples/SBML2Ex/src/test"/>
@@ -9,7 +9,6 @@
 	<classpathentry kind="src" path="samples/GeneTF/src/test"/>
 	<classpathentry kind="src" path="samples/GeneTRE/src/main"/>
 	<classpathentry kind="src" path="samples/GeneTRE/src/test"/>
-	<classpathentry kind="src" path="src/util"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/ant-1.6.2/lib/ant.jar"/>
 	<classpathentry kind="lib" path="lib/ant-1.6.2/lib/ant-antlr.jar"/>
