@@ -80,6 +80,7 @@ CHANGELOG
 
 #include "Udm.h"
 
+bool single_cpp_namespace = false;
 
 int main(int argc, char **argv) {
 	try
@@ -160,6 +161,11 @@ int main(int argc, char **argv) {
 				else if (c == 'g')
 				{
 					integrate_xsd = true;
+					continue;
+				}
+				else if (c == 'o')
+				{
+					single_cpp_namespace = true;
 					continue;
 				}
 
@@ -411,6 +417,9 @@ usage:
 		}
 
 		set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
+		if (single_cpp_namespace && nses.size() > 1)
+			throw udm_exception("Don't use the -o switch when the diagram has more than one namespaces!");
+
 		for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 		{
 			::Uml::Uml::Namespace ns = *nses_i;
