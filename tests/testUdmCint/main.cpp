@@ -497,8 +497,7 @@ void UdmTests::Test::test()
  
 // testWrite(result);
 // testRead(result);
- //testReadSBML2Ex("versionCheck.xml");
- testReadSBML2Ex("Lac_v1.2.2.xml");
+ testReadSBML2Ex("versionCheck.xml");
 
 }
 /*
