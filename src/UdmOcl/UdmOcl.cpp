@@ -21,6 +21,14 @@
 
 //###############################################################################################################################################
 
+#ifndef _WIN32
+#include <stdio.h>
+char *_itoa( int value, char *string, int radix )
+{
+	sprintf(string, "%d", value);
+};
+#endif
+
 #include "UdmOcl.h"
 #include "UmlExt.h" 
 
@@ -170,9 +178,9 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 			EEvaluationResult CheckAll( Udm::Object objObject, const set<ConstraintEx*>& vecConstraints, const SEvaluationOptions& options );
 			EEvaluationResult CheckAll( Udm::Object inObject, const set<ConstraintEx*>& vecConstraints, const SEvaluationOptions& options, int iDepth );
 
-		friend ConstraintEx;
-		friend ConstraintDefEx;
-		friend ConstraintDefinitionFactory;
+		friend class ConstraintEx;
+		friend class ConstraintDefEx;
+		friend class ConstraintDefinitionFactory;
 	};
 
 //###############################################################################################################################################
@@ -260,7 +268,12 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 				for ( int i = 0 ; i < vecDefs.size() ; i++ ) {
 					if ( vecDefs[ i ]->IsValid() && m_pFacade->m_pTreeManager->GetTypeManager()->IsTypeA( signature.GetTypeName(), vecDefs[ i ]->GetContextType() ) >= 0 )
 						if ( vecDefs[ i ]->GetName() == signature.GetName() && ! vecDefs[ i ]->IsMethod() )
-							vecFeatures.push_back( new OclMeta::Attribute( signature.GetName(), CreateReturnType( vecDefs[ i ]->GetReturnType() ), new ConstraintAttribute( vecDefs[ i ] ), true, true ) );
+						{
+							const std::string name = signature.GetName();
+							const  OclCommon::FormalParameterVector fpv  = CreateFormalParameters( vecDefs[ i ]->GetFormalParameters() );
+							TypeSeq ts = CreateReturnType( vecDefs[ i ]->GetReturnType() );
+							vecFeatures.push_back( new OclMeta::Method(name , fpv , ts , new ConstraintMethod( vecDefs[ i ] ), true, true ) );
+						}
 				}
 			}
 
@@ -650,8 +663,8 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 		ConstraintDefVector vecSucceeded;
 
 		// Check All
-
-		for ( int i = 0 ; i < m_vecConstraintDefs.size() ; i ++ ) {
+		int i;
+		for ( i = 0 ; i < m_vecConstraintDefs.size() ; i ++ ) {
 			OclTree::TypeContextStack context;
 			context.AddVariable( "dn", TypeSeq( 1, "udm::DataNetwork" ) );
 			if ( m_vecConstraintDefs[ i ]->Check( context ) != Constraint::CS_CHECK_SUCCEEDED ) {
@@ -878,7 +891,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 	EEvaluationResult Facade::CheckAll( Udm::Object objObject, const set<ConstraintEx*>& setConstraints, const SEvaluationOptions& options )
 	{
-		set<ConstraintEx*>& setConstraintsClass = GetAll( objObject.type() );
+		set<ConstraintEx*> setConstraintsClass = GetAll( objObject.type() );
 		EEvaluationResult eResult = CER_TRUE;
 		GOCL_STL_NS()string strErrAll( "" );
 
@@ -1041,7 +1054,7 @@ void inReplace( GOCL_STL_NS()string& str, const GOCL_STL_NS()string& str1, const
 
 	UDM_DLL bool ProcessPat( const ::Uml::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression)
 	{
-		std::string& strContext = (string)objContext.type().name();
+		std::string strContext = (string)objContext.type().name();
 		SErrorNotification en = SErrorNotification();
 		Initialize( metaDiagram, en );
 		Constraint::setPatProcessFlag(true);
