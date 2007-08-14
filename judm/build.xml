@@ -711,12 +711,12 @@
 		<!-- Run junit tests -->
 		<junit fork="yes" dir="${build.dir}/${dspackage}">
 			<!-- This is necessary for System.load("UdmSwig") to succeed -->
-			<jvmarg value="-Djava.library.path=${judm.dir},${judm.dir}/bin" />
+			<jvmarg value="-Djava.library.path=${judm.dir}${path.separator}${judm.dir}/bin" />
 			<jvmarg value="-Djava.util.logging.config.file=${udmswiglight.src.dir}/debug-logging.properties" />
 			<!-- We need to add the dir containing the DLLs that UdmSwig depends on
 				to the PATH rather than java.library.path. Unfortunately they won't be
 				loaded when they are not added. -->
-			<env key="PATH" path="${judm.dir},${judm.dir}/bin"/>
+			<env key="PATH" path="${judm.dir}${path.separator}${judm.dir}/bin"/>
 			<classpath>
 				<path refid="compile.classpath" />
 				<pathelement location="${build.dir}/${dspackage}/classes/main" />
