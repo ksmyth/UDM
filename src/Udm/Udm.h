@@ -24,6 +24,13 @@ enum CPPSourceUnit {
 	CPP_SOURCE_UNIT_CLASS,		// one .h and one .cpp file per namespace, one .h file per class
 };
 
+void GenerateCPPDeclareMetaClasses(const set< ::Uml::Class> & classes, ostream & output);
+void GenerateCPPDeclareAttributes(const set< ::Uml::Class> & classes, ostream & output);
+void GenerateCPPDeclareAssociationRoles(const set< ::Uml::Class> &classes, const ::Uml::Diagram &cross_dgr, ostream & output, bool isCrossDgr);
+void GenerateCPPDeclareCompositionRoles(const set< ::Uml::Class> &classes, ostream& output);
+void GenerateCPPDeclareConstraints(const set< ::Uml::Class> &classes, ostream & output);
+void GenerateCPPStaticClass(const ::Uml::Diagram &diagram, ostream & output);
+
 //cross-link-approved
 void GenerateHExport(const ::Uml::Diagram &diagram,  ostream &output, string fname, const string& macro);
 void GenerateH(const ::Uml::Diagram &diagram,  ostream &output, string fname, bool visitor_sup = false, const ::Uml::Diagram& cross_dgr = NULL, const string& macro = "", const int source_unit = CPP_SOURCE_UNIT_DIAGRAM);
@@ -34,7 +41,7 @@ void GenerateNewCPP(const ::Uml::Diagram &diagram,
                     const ::Uml::Diagram& cross_dgr = NULL, 
                     const string& macro = "",
                     bool integrate_xsd = false,
-					int source_unit = CPP_SOURCE_UNIT_DIAGRAM);
+		    int source_unit = CPP_SOURCE_UNIT_DIAGRAM);
 
 void GenerateCPP(	const ::Uml::Diagram &diagram, 
 					ostream &output, string fname, 
@@ -64,8 +71,19 @@ void GenerateDSD(const ::Uml::Namespace &ns,
 		 const map<string, string> &ns_map,
 		 const set<string> &ns_ignore_set,
 		 bool qualifiedAtrrsNS);
+void GenerateDSD(const ::Uml::Diagram &dgr,
+		 const string &fname,
+		 bool generate_dtd,
+		 bool uxsdi,
+		 bool xsd_el_ta,
+		 const map<string, string> &ns_map,
+		 const set<string> &ns_ignore_set,
+		 bool qualifiedAtrrsNS);
 bool SingleCPPNamespace(const ::Uml::Diagram &diagram);
 bool SingleCPPNamespace(const ::Uml::Namespace &ns);
 bool SingleCPPNamespace(const ::Uml::Class &cl);
+::Uml::Class GetCrossClass(const ::Uml::Diagram &cross_dgr, const ::Uml::Class &cl);
+void CPPSetXsdStorage(const ::Uml::Diagram &diagram, ostream &output);
+void CPPIncludeXsdHeaders(const ::Uml::Diagram &diagram, ostream &output);
 
 #endif //MOBIES_UDM_H

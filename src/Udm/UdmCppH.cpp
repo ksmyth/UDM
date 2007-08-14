@@ -266,15 +266,23 @@ err_cpr:
 	while (kinds_i != kinds.end())
 	{
 		i = unique_names.size();
-		string kindname = (*kinds_i).name();
-		string ns_name = ((::Uml::Namespace)kinds_i->parent()).name();
+
+		string kind_children_name;
+		if (SingleCPPNamespace(*kinds_i))
+			kind_children_name = kinds_i->name();
+		else {
+			::Uml::Namespace ns = kinds_i->parent_ns();
+			if (ns != ::Uml::Namespace(NULL))
+				kind_children_name = string(ns.name()) + "_";
+			kind_children_name += kinds_i->name();
+		}
 		kinds_i ++;
 
-		unique_names.insert(ns_name + "_" + kindname + "_kind_children");
+		unique_names.insert(kind_children_name + "_kind_children");
 		if (i == unique_names.size()) goto err_kinds;
 		continue;
 err_kinds:
-		throw udm_exception("Reserved or duplicate children kind name: " + kindname);
+		throw udm_exception("Reserved or duplicate children kind name: " + kind_children_name);
 	}
 
 	//check parent, meta_parent declarations 
@@ -305,6 +313,20 @@ err_ccr:
 void CheckDiagram(const ::Uml::Diagram & diagram)
 {
 	//check the UML diagram against duplicate & reserved role, attribute & classnames
+	set<string> unique_names;
+	set< ::Uml::Class> cls = diagram.classes();
+	set< ::Uml::Class>::iterator cls_i = cls.begin();
+	while (cls_i != cls.end())
+	{
+		::Uml::Class cl = *cls_i++;
+		unsigned int i = unique_names.size();
+		unique_names.insert(cl.name());
+		if (i == unique_names.size())
+			throw udm_exception(string("Duplicate class name found: ") + (string)cl.name());
+
+		CheckClass(cl);
+	}
+
 	set< ::Uml::Namespace> nses = diagram.namespaces();
 	set<string> unique_ns_names;
 	for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)

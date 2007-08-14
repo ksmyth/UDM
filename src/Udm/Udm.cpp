@@ -71,7 +71,10 @@ CHANGELOG
 #include <UdmXmi.h>
 #include <fstream>
 
+#if 0
 #include "./JavaAPIGen/JavaAPIGen.h"
+#endif
+
 #ifdef WIN32
 #include <contrib\minizip\unzip.h>
 #else
@@ -97,12 +100,12 @@ int main(int argc, char **argv) {
 		bool generate_dtd = false;
 		bool uxsdi = false;				//use XSD inheritence features when generating XSD
 		bool xsd_el_ta = false;				//generate XSD elements like they would have text attributes
-    bool integrate_xsd = false; //integrate xsd into the generated API;
+		bool integrate_xsd = false; //integrate xsd into the generated API;
 		map<string, string> ns_map;
-    set<string> ns_ignore_set;
-    set<string> qualifiedAtrrsNS_set;
+		set<string> ns_ignore_set;
+		set<string> qualifiedAtrrsNS_set;
 
-      // flag to indicate java api generation
+		// flag to indicate java api generation
 		bool generate_java = false;
 		int source_unit = CPP_SOURCE_UNIT_DIAGRAM;
 
@@ -145,7 +148,7 @@ int main(int argc, char **argv) {
 					uxsdi = true;
 					continue;
 				}
-            // if parameter is 'j', call java API generation
+				// if parameter is 'j', call java API generation
 				else if (c == 'j')
 				{
 					generate_java = true;
@@ -180,14 +183,53 @@ int main(int argc, char **argv) {
 							macro = optp;
 							break;
 					case 'u':
-							DTDGen::AddUMLNamespaceToURIMapping(optp, ns_map);
+							DTDGen::AddUMLContainerNameToURIMapping(optp, ns_map);
 							break;
+						/*
+							switch(*optp)
+							{
+								case 'd':
+									DTDGen::AddUMLContainerNameToURIMapping(string("__dgr_" + string(++optp)).c_str(), ns_map);
+									break;
+								case 'n':
+									DTDGen::AddUMLContainerNameToURIMapping(++optp, ns_map);
+									break;
+								default:
+									goto usage;
+							}
+							*/
 					case 'i':
-							DTDGen::AddUMLNamespaceToIgnoreList(optp, ns_ignore_set);
+							DTDGen::AddUMLContainerNameToIgnoreList(optp, ns_ignore_set);
 							break;
+						/*
+							switch(*optp)
+							{
+								case 'd':
+									DTDGen::AddUMLContainerNameToIgnoreList(string("__dgr_" + string(++optp)).c_str(), ns_ignore_set);
+									break;
+								case 'n':
+									DTDGen::AddUMLContainerNameToIgnoreList(++optp, ns_ignore_set);
+									break;
+								default:
+									goto usage;
+							}
+							*/
 					case 'q':
-							DTDGen::AddUMLNamespaceToQualifiedAttrsNSList(optp, qualifiedAtrrsNS_set);
+							DTDGen::AddUMLContainerNameToQualifiedAttrsNSList(optp, qualifiedAtrrsNS_set);
 							break;
+						/*
+							switch(*optp)
+							{
+								case 'd':
+									DTDGen::AddUMLContainerNameToQualifiedAttrsNSList(string("__dgr_" + string(++optp)).c_str(), qualifiedAtrrsNS_set);
+									break;
+								case 'n':
+									DTDGen::AddUMLContainerNameToQualifiedAttrsNSList(++optp, qualifiedAtrrsNS_set);
+									break;
+								default:
+									goto usage;
+							}
+							*/
 					case 'w':
 							switch(*optp)
 							{
@@ -292,6 +334,7 @@ usage:
 				//these should be UML diagrams
 				::Uml::Diagram dgr = ::Uml::Diagram::Cast((*pr_dns_i)->GetRootObject());
 				string sname = dgr.name();
+				GenerateDSD(dgr, NameToFilename(sname), generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
 					
 				set< ::Uml::Namespace> nses = dgr.namespaces();
 				for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
@@ -407,6 +450,12 @@ usage:
 			fname = NameToFilename(diagram.name());
 		}
 
+		{
+			set<string>::const_iterator itf = qualifiedAtrrsNS_set.find("__dgr_" + string(diagram.name()));
+			bool qualifiedAtrrsNS = (itf != qualifiedAtrrsNS_set.end());
+			GenerateDSD(diagram, fname, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, qualifiedAtrrsNS);
+		}
+
 		set< ::Uml::Namespace> nses = diagram.namespaces();
 		for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 		{
@@ -419,6 +468,7 @@ usage:
 			GenerateDSD(ns, nsname, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, qualifiedAtrrsNS);
 		}
 
+#if 0
 		// call java API generation
 		if (generate_java) 
 		{
@@ -426,6 +476,7 @@ usage:
 			gen.generate();
 			return 0;
 		}
+#endif
 
 		ofstream ff;
 

@@ -33,25 +33,13 @@ CHANGELOG:
 typedef vector< ::Uml::Class> UmlClasses;
 
 
-
-/*
-	Declarations in the namespace
-	Defined in UdmCpp.cpp
-*/
-void GenerateCPPDeclareMetaClasses(const ::Uml::Namespace& ns, ostream & output);
-void GenerateCPPDeclareAttributes(const ::Uml::Namespace & ns, ostream & output);
-void GenerateCPPDeclareAssociationRoles(const ::Uml::Namespace &ns, const ::Uml::Diagram &cross_dgr, ostream & output, bool isCrossDgr);
-void GenerateCPPDeclareCompositionRoles(const ::Uml::Namespace &ns, ostream& output);
-void GenerateCPPDeclareConstraints(const ::Uml::Namespace &ns, ostream & output);
-void GenerateCPPStaticClass(const ::Uml::Diagram &diagram, ostream & output);
 /*
 	Functions used to generate Initialize()
 	They are defined here.
 */
-void GenerateMetaCPPCreates(const ::Uml::Namespace &ns, ostream &output)
+void GenerateMetaCPPCreates(const set< ::Uml::Class> &classes, ostream &output)
 {
-	set< ::Uml::Class> classes = ns.classes();
-	set< ::Uml::Class>::iterator c;
+	set< ::Uml::Class>::const_iterator c;
 	//	A::meta = Uml::CreateClass();
 	for(c = classes.begin(); c != classes.end(); c++ )
 	{
@@ -128,10 +116,9 @@ void GenerateMetaCPPCreates(const ::Uml::Namespace &ns, ostream &output)
 
 
 
-void GenerateMetaCPPInitMetaObjects(const ::Uml::Namespace &ns, const ::Uml::Diagram& cross_dgr, ostream & output, bool isCrossDgr)
+void GenerateMetaCPPInitMetaObjects(const set< ::Uml::Class> &classes, const string &meta_name, const ::Uml::Diagram& cross_dgr, ostream & output, bool isCrossDgr)
 {
-	set< ::Uml::Class> classes = ns.classes();
-	set< ::Uml::Class>::iterator c;
+	set< ::Uml::Class>::const_iterator c;
 
 	//Initialization of classes
 //	Uml::InitClass(A::meta, diagram, "A", false);
@@ -144,7 +131,7 @@ void GenerateMetaCPPInitMetaObjects(const ::Uml::Namespace &ns, const ::Uml::Dia
 		string from;
 		if(((string)cl.from()).length()) from = string(", \"")+(string)cl.from()+"\"";
 
-		output << "\t\t\t::Uml::InitClass(" << cl.name() << "::meta, meta, \"" <<
+		output << "\t\t\t::Uml::InitClass(" << cl.name() << "::meta, " << meta_name << ", \"" <<
 			cl.name() << "\", " << (cl.isAbstract() ? "true" : "false")<< ster << from  <<");" << endl;
 
 	}
@@ -216,7 +203,7 @@ void GenerateMetaCPPInitMetaObjects(const ::Uml::Namespace &ns, const ::Uml::Dia
 			if (cross_dgr)
 			{
 				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
-				cross_cl = ::Uml::classByName(::Uml::GetTheOnlyNamespace(cross_dgr), (string(cl.name()) + string(Udm::cross_delimiter) + string(ns.name())) );
+				cross_cl = GetCrossClass(cross_dgr, cl);
 			}
 			if (cross_cl)
 				ass = cross_cl.association();
@@ -236,11 +223,11 @@ void GenerateMetaCPPInitMetaObjects(const ::Uml::Namespace &ns, const ::Uml::Dia
 	}
 	output << "\t\t" << endl;
 };
-void GenerateMetaCPPInitAssociations(const ::Uml::Namespace & ns, ostream & output)
+
+void GenerateMetaCPPInitAssociations(const set< ::Uml::Association> & asss, const string &meta_name, ostream & output)
 {
 	//initialization of associations
 	{
-		const set< ::Uml::Association> &asss = ns.associations();
 		set< ::Uml::Association>::const_iterator a;
 		for(a = asss.begin(); a != asss.end(); a++ )	
 		{
@@ -250,7 +237,7 @@ void GenerateMetaCPPInitAssociations(const ::Uml::Namespace & ns, ostream & outp
 			output << "\t\t\t\t::Uml::Association ass = ::Uml::CreateAssociation();" << endl;
 
 			::Uml::Class aclass = a->assocClass();
-			output << "\t\t\t\t::Uml::InitAssociation(ass , meta, \"" << a->name() << "\");" << endl;
+			output << "\t\t\t\t::Uml::InitAssociation(ass , " << meta_name << ", \"" << a->name() << "\");" << endl;
 			if(aclass) 
 			{
 				output << "\t\t\t\t::Uml::InitAssociationClass(ass, " << aclass.name() << "::meta);" << endl;
@@ -280,10 +267,10 @@ void GenerateMetaCPPInitAssociations(const ::Uml::Namespace & ns, ostream & outp
 		}
 	}
 };
-void GenerateMetaCPPInitCompositions(const ::Uml::Namespace & ns, ostream & output)
+
+void GenerateMetaCPPInitCompositions(const set< ::Uml::Composition> & comps, const string &meta_name, ostream & output)
 {
 	//initialization of compositions
-	const set< ::Uml::Composition> &comps = ns.compositions();
 	set< ::Uml::Composition>::const_iterator c;
 	for(c = comps.begin(); c != comps.end(); c++ )	
 	{
@@ -292,7 +279,7 @@ void GenerateMetaCPPInitCompositions(const ::Uml::Namespace & ns, ostream & outp
 		output << "\t\t\t\t::Uml::Composition comp = ::Uml::CreateComposition();" << endl;
 
 		
-		output << "\t\t\t\t::Uml::InitComposition(comp , meta, \"" <<  c->name() << "\");" <<  endl;
+		output << "\t\t\t\t::Uml::InitComposition(comp , " << meta_name << ", \"" <<  c->name() << "\");" <<  endl;
 		output << "\t\t\t" << endl;
 
 		::Uml::CompositionParentRole x1 = (*c).parentRole();
@@ -315,10 +302,9 @@ void GenerateMetaCPPInitCompositions(const ::Uml::Namespace & ns, ostream & outp
 	}
 };
 
-void GenerateMetaCPPInitCrossAssociations(const ::Uml::Namespace & ns, const ::Uml::Diagram & cross_dgr, ostream & output, bool isCrossDgr)
+void GenerateMetaCPPInitCrossAssociations(const set< ::Uml::Class> & classes, const ::Uml::Diagram & cross_dgr, ostream & output, bool isCrossDgr)
 {
-	set< ::Uml::Class> classes = ns.classes();
-	set< ::Uml::Class>::iterator c;
+	set< ::Uml::Class>::const_iterator c;
 	//cross-association role equiv. generation
 	if (isCrossDgr)
 	{
@@ -330,7 +316,7 @@ void GenerateMetaCPPInitCrossAssociations(const ::Uml::Namespace & ns, const ::U
 			if (cross_dgr)
 			{
 				//--//cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
-				cross_cl = ::Uml::classByName(::Uml::GetTheOnlyNamespace(cross_dgr), (string(cl.name()) + string(Udm::cross_delimiter) + string(ns.name())) );
+				cross_cl = GetCrossClass(cross_dgr, cl);
 			}
 			if (cross_cl)
 			{
@@ -362,12 +348,12 @@ void GenerateMetaCPPInitCrossAssociations(const ::Uml::Namespace & ns, const ::U
 		}
 	}
 };
-void GenerateMetaCPPInitInheritance(const ::Uml::Namespace &ns, ostream & output)
+
+void GenerateMetaCPPInitInheritance(const set< ::Uml::Class> &classes, ostream & output)
 {
 	//Uml::AddInheritance(A::meta, C::meta);
 	
-	set< ::Uml::Class> classes = ns.classes();
-	set< ::Uml::Class>::iterator c;
+	set< ::Uml::Class>::const_iterator c;
 	
 	for(c = classes.begin(); c != classes.end(); c++ ) 
 	{
@@ -379,6 +365,7 @@ void GenerateMetaCPPInitInheritance(const ::Uml::Namespace &ns, ostream & output
 		}
 	}			
 };
+
 void GenerateMetaCPPInitialize(const ::Uml::Namespace & ns, const ::Uml::Diagram & cross_dgr, ostream & output, const string& macro, const string& hname, bool isCrossDgr)
 {
 		//Generate the InitializeNS() function
@@ -399,7 +386,7 @@ void GenerateMetaCPPInitialize(const ::Uml::Namespace & ns, const ::Uml::Diagram
 
 	//Creating part
 	output << "\t\tumldiagram = Uml::CreateDiagram();" << endl << endl;*/
-	GenerateMetaCPPCreates(ns, output);
+	GenerateMetaCPPCreates(ns.classes(), output);
 
 	//Initialization part
 
@@ -407,20 +394,44 @@ void GenerateMetaCPPInitialize(const ::Uml::Namespace & ns, const ::Uml::Diagram
 	//output << "\t\tUml::InitNamespace(meta, \"" << hname << "\", \"" << diagram.version() << "\");" << endl << endl;
 
 	//here: build the meta objects
-	GenerateMetaCPPInitMetaObjects(ns, cross_dgr, output, isCrossDgr);
+	GenerateMetaCPPInitMetaObjects(ns.classes(), "meta", cross_dgr, output, isCrossDgr);
 	
 
 	//build the association and composition relationships
-	GenerateMetaCPPInitAssociations(ns, output);
-	GenerateMetaCPPInitCompositions(ns, output);
+	GenerateMetaCPPInitAssociations(ns.associations(), "meta", output);
+	GenerateMetaCPPInitCompositions(ns.compositions(), "meta", output);
 
 	//build the cross association objects
-	GenerateMetaCPPInitCrossAssociations(ns, cross_dgr, output, isCrossDgr);
+	GenerateMetaCPPInitCrossAssociations(ns.classes(), cross_dgr, output, isCrossDgr);
 
 	//build the inheritence relationship
-	GenerateMetaCPPInitInheritance(ns, output);
+	GenerateMetaCPPInitInheritance(ns.classes(), output);
 	
 	output << "\t\t\t" << endl << "\t\t}" << endl;
+};
+
+void GenerateMetaCPPInitialize(const ::Uml::Diagram & dgr, const ::Uml::Diagram & cross_dgr, ostream & output, const string& macro, const string& hname, bool isCrossDgr)
+{
+		//Generate the InitializeDgr() function
+
+	output << "\t" << macro << " void InitializeDgr()" << endl << "\t{" << endl;
+	GenerateMetaCPPCreates(dgr.classes(), output);
+
+	//here: build the meta objects
+	GenerateMetaCPPInitMetaObjects(dgr.classes(), "umldiagram", cross_dgr, output, isCrossDgr);
+	
+
+	//build the association and composition relationships
+	GenerateMetaCPPInitAssociations(dgr.associations(), "umldiagram", output);
+	GenerateMetaCPPInitCompositions(dgr.compositions(), "umldiagram", output);
+
+	//build the cross association objects
+	GenerateMetaCPPInitCrossAssociations(dgr.classes(), cross_dgr, output, isCrossDgr);
+
+	//build the inheritence relationship
+	GenerateMetaCPPInitInheritance(dgr.classes(), output);
+	
+	output << "\t\t" << endl << "\t}" << endl;
 };
 
 void GenerateMetaCPPDiagramInitialize(const ::Uml::Diagram &dgr, 
@@ -457,20 +468,16 @@ void GenerateMetaCPPDiagramInitialize(const ::Uml::Diagram &dgr,
 		output << "\t\t::Uml::InitNamespace("<< ns.name() << "::meta, umldiagram,\"" << ns.name() <<  "\");" <<endl;
 	}
 
+	output << endl;
+	output << "\t\tInitializeDgr();" << endl << endl;
+
 	if (integrate_xsd)
-	{
-	  
-   		for (set< ::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
-  		{
-		const ::Uml::Namespace& ns = *nses_i;
-		const std::string& nsn = ns.name();
-		output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << ns.name() << ".xsd\"," << ns.name() <<"_xsd::getString());"<< endl;
-		}
-	}
+		CPPSetXsdStorage(dgr, output);
 
 	output << "\t\t::Uml::InitDiagram(umldiagram, \"" << dgr.name() << "\", \"" << dgr.version() << "\");" <<endl;
 	output << "\t}" << endl;
 };
+
 void GenerateCPP(const ::Uml::Diagram &diagram,
 				 ostream &output, string fname, 
 				 const ::Uml::Diagram& cross_dgr, 
@@ -490,15 +497,7 @@ void GenerateCPP(const ::Uml::Diagram &diagram,
 //		output << "#include \"UdmStatic.h\"" << endl << endl; 
 
 		if (integrate_xsd)
-  		{
-			output << "#include \"UdmDom.h\"" << endl; 
-   			set< ::Uml::Namespace> nses = diagram.namespaces();
-  			for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
-	  		{
-		  		::Uml::Namespace ns = *nses_i;	
-			output << "#include \"" << ns.name() << "_xsd.h\"" << endl << endl; 
-			}
-		}
+			CPPIncludeXsdHeaders(diagram, output);
 
 
 		bool isCrossDgr = (cross_dgr && (diagram != cross_dgr));
@@ -510,6 +509,17 @@ void GenerateCPP(const ::Uml::Diagram &diagram,
 
 		output << "namespace " << fname << " {" << endl << endl;
 		output << "\t::Uml::Diagram umldiagram;" << endl << endl;
+
+		//declarations inside the diagram
+		GenerateCPPDeclareMetaClasses(diagram.classes(), output);
+		GenerateCPPDeclareAttributes(diagram.classes(), output);
+		GenerateCPPDeclareAssociationRoles(diagram.classes(), cross_dgr, output, isCrossDgr);
+		GenerateCPPDeclareCompositionRoles(diagram.classes(), output);
+		GenerateCPPDeclareConstraints(diagram.classes(), output);
+	
+		//initialize function for diagram
+		GenerateMetaCPPInitialize(diagram, cross_dgr, output, macro, hname, isCrossDgr);
+
 
 		bool single_cpp_namespace = SingleCPPNamespace(diagram);
 		set< ::Uml::Namespace> nses = diagram.namespaces();
@@ -524,11 +534,11 @@ void GenerateCPP(const ::Uml::Diagram &diagram,
 			output << "\t\t::Uml::Namespace meta;" << endl<< endl;
 
 			//declarations inside the namespace
-			GenerateCPPDeclareMetaClasses(ns, output);
-			GenerateCPPDeclareAttributes(ns, output);
-			GenerateCPPDeclareAssociationRoles(ns, cross_dgr, output, isCrossDgr);
-			GenerateCPPDeclareCompositionRoles(ns, output);
-			GenerateCPPDeclareConstraints(ns, output);
+			GenerateCPPDeclareMetaClasses(ns.classes(), output);
+			GenerateCPPDeclareAttributes(ns.classes(), output);
+			GenerateCPPDeclareAssociationRoles(ns.classes(), cross_dgr, output, isCrossDgr);
+			GenerateCPPDeclareCompositionRoles(ns.classes(), output);
+			GenerateCPPDeclareConstraints(ns.classes(), output);
 	
 			//initialize function
 			GenerateMetaCPPInitialize(ns, cross_dgr, output, macro, hname, isCrossDgr);
