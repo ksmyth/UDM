@@ -15,6 +15,7 @@
 #include "Uml.h"
 
 #include "UmlExt.h"
+#include "UdmUtil.h"
 
 /* Paradigm-independent Udm Backend Dump class							*/
 /* Send any compliments to Tihamer Levendovszky tihamer@valon.aut.bm.hu */
@@ -34,16 +35,14 @@ void Dump(Udm::SmartDataNetwork *sdnBackend);
 
 // Paradigm-independent dump functions
 void ExtractAttributes(Udm::Object ob, int nDepthLevel=0);
-string ExtractName(Udm::Object ob);
-void DumpClasses(::Uml::Diagram dgr);
-void DumpCompositions(::Uml::Diagram dgr);
-void DumpCompositions(const set< ::Uml::Composition> &metacomps);
-void DumpAssociations(::Uml::Diagram dgr);
-void DumpAssociations(const set< ::Uml::Association> &metaas);
-
 void ExtractLinks(Udm::Object ob);
 void VisitObjects(Udm::Object ob, int nDepthLevel=0);
 void VisitLinks(Udm::Object ob);
+
+void DumpAssociations(const ::Uml::Diagram &dgr);
+void DumpClasses(const ::Uml::Diagram &dgr);
+void DumpCompositions(const ::Uml::Diagram &dgr);
+void DumpNamespaces(const ::Uml::Diagram &dgr);
 
 
 };

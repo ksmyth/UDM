@@ -27,7 +27,7 @@ void CBackendDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 	// Getting Attributes from meta
 	::Uml::Class cls= ob.type();
 	long ObjectID=ob.uniqueId();
-	*dump<<"Object '"<< ExtractName(ob)<<"["<<ObjectID<<"]"<<"("<<nDepthLevel<<")"<< "' of type '"<<string(cls.name())<<"'" << endl;
+	*dump<<"Object '"<< UdmUtil::ExtractName(ob, "name")<<"["<<ObjectID<<"]"<<"("<<nDepthLevel<<")"<< "' of type '"<<cls.getPath2("::", false)<<"'" << endl;
 
 	Udm::Object archetype = ob.archetype();
 	if (archetype) {
@@ -35,9 +35,9 @@ void CBackendDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 		if (ob.hasRealArchetype())
 			*dump << "explicit ";
 		if (ob.isInstance())
-			*dump << "instance of '" << ExtractName(archetype) << "[" << archetype.uniqueId() << "]'" << endl;
+			*dump << "instance of '" << UdmUtil::ExtractName(archetype) << "[" << archetype.uniqueId() << "]'" << endl;
 		else if (ob.isSubtype())
-			*dump << "subtype of '" << ExtractName(archetype) << "[" << archetype.uniqueId() << "]'" << endl;
+			*dump << "subtype of '" << UdmUtil::ExtractName(archetype) << "[" << archetype.uniqueId() << "]'" << endl;
 	}
 
 	*dump<<"attributes:"<<endl;
@@ -89,76 +89,40 @@ void CBackendDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 }
 
 
-string CBackendDump::ExtractName(Udm::Object ob)
-{
-	::Uml::Class cls= ob.type();				
-	set< ::Uml::Attribute> attrs=cls.attributes();		
-	
-	// Adding parent attributes
-	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
-	attrs.insert(aattrs.begin(),aattrs.end());
 
-	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
+void CBackendDump::DumpNamespaces(const ::Uml::Diagram &dgr)
+{
+	*dump<<endl<<endl<<"Meta Namespaces"<<endl;
+	*dump<<"____________"<<endl;
+
+	::Uml::DiagramNamespaces metanses(dgr);
+	for(::Uml::DiagramNamespaces::iterator i = metanses.begin(); i != metanses.end(); i++) 
 	{
-		if(string(ai->type())=="String")
-		{
-			string str=ai->name();
-			if(str=="name")
-			{
-				
-				string value=ob.getStringAttr(*ai);
-				if(value.empty())value="<empty string>";
-				return value;
-			}			
-		}				
+		*dump<<" "<< i->getPath2("::", false) << endl;
 	}
-	
-	return string("<no name specified>");
 }
 
-
-
-
-void CBackendDump::DumpClasses(::Uml::Diagram dgr)
+void CBackendDump::DumpClasses(const ::Uml::Diagram &dgr)
 {
-	
 	*dump<<endl<<endl<<"Meta Classes"<<endl;
 	*dump<<"____________"<<endl;
 
-	set< ::Uml::Class>metaclasses= dgr.classes();
-
-	for(set< ::Uml::Class>::iterator ii = metaclasses.begin();ii != metaclasses.end(); ii++) 
+	::Uml::DiagramClasses metaclasses(dgr);
+	for(::Uml::DiagramClasses::iterator ii = metaclasses.begin(); ii != metaclasses.end(); ii++) 
 	{
-		
-		*dump<<" "<< string(ii->name()) << endl;
+		*dump<<" "<< ii->getPath2("::", false) << endl;
 	}
-
-	set< ::Uml::Namespace> metanses = dgr.namespaces();
-
-	for(set< ::Uml::Namespace>::iterator i = metanses.begin();i != metanses.end(); i++) 
-	{
-	
-		set< ::Uml::Class>metaclasses= i->classes();
-	
-
-		for(set< ::Uml::Class>::iterator ii = metaclasses.begin();ii != metaclasses.end(); ii++) 
-		{
-		
-			*dump<<" "<< string(i->name())<< "::" << string(ii->name()) << endl;
-		}
-	}
-	
 }
 
-void CBackendDump::DumpCompositions(const set< ::Uml::Composition> &metacomps)
+void CBackendDump::DumpCompositions(const ::Uml::Diagram &dgr)
 {
 	*dump<<endl<<endl<<"Meta Compositions"<<endl;
 	*dump<<"_________________"<<endl;
-	for(set< ::Uml::Composition>::const_iterator iii = metacomps.begin();iii != metacomps.end(); iii++) 
+
+	::Uml::DiagramCompositions metacomps(dgr);
+	for(::Uml::DiagramCompositions::iterator iii = metacomps.begin(); iii != metacomps.end(); iii++) 
 	{
-		string name=string(iii->name()).c_str();
-		if(name=="")name="<no name specified>";
-		*dump<<endl<<"  "<<name<<endl;
+		*dump<<endl<<"  "<< iii->getPath2("::", false) <<endl;
 		*dump<<"    "<<"ParentRole"<<endl;
 			
 
@@ -220,26 +184,15 @@ void CBackendDump::DumpCompositions(const set< ::Uml::Composition> &metacomps)
 	}
 }
 
-void CBackendDump::DumpCompositions(::Uml::Diagram  dgr)
-{
-	DumpCompositions(dgr.compositions());
-
-	set< ::Uml::Namespace> nses = dgr.namespaces();
-	for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
-	{
-		DumpCompositions(nses_i->compositions());
-	}
-}
-
-void CBackendDump::DumpAssociations(const set< ::Uml::Association> &metaas)
+void CBackendDump::DumpAssociations(const ::Uml::Diagram &dgr)
 {
 	*dump<<endl<<endl<<"Meta Associations"<<endl;
 	*dump<<"_________________"<<endl;
-	for(set< ::Uml::Association>::const_iterator i = metaas.begin();i != metaas.end(); i++) 
+
+	::Uml::DiagramAssociations metaas(dgr);
+	for(::Uml::DiagramAssociations::iterator i = metaas.begin();i != metaas.end(); i++) 
 	{
-		string name=i->name();
-		if(name=="")name="<no name specified>";
-		*dump<<endl<<"  "<<name<<endl;
+		*dump<<endl<<"  "<< i->getPath2("::", false) <<endl;
 
 		set< ::Uml::AssociationRole> metaroles=i->roles();
 		for(set< ::Uml::AssociationRole>::iterator ir=metaroles.begin();ir!=metaroles.end();ir++)
@@ -297,18 +250,6 @@ void CBackendDump::DumpAssociations(const set< ::Uml::Association> &metaas)
 	}
 }
 
-void CBackendDump::DumpAssociations(::Uml::Diagram dgr)
-{
-
-	DumpAssociations(dgr.associations());
-
-	set< ::Uml::Namespace> nses = dgr.namespaces();
-	for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
-	{
-		DumpAssociations(nses_i->associations());
-	}
-}
-
 void CBackendDump::Dump(Udm::SmartDataNetwork *sdnBackend)
 {
 	try 
@@ -319,6 +260,9 @@ void CBackendDump::Dump(Udm::SmartDataNetwork *sdnBackend)
 		*dump<<"________________"<<endl;
 
 		::Uml::Diagram dgr=sdnBackend->GetRootMeta();
+		
+		// Namespaces
+		DumpNamespaces(dgr);
 		
 		// Classes
 		DumpClasses(dgr);
@@ -374,10 +318,10 @@ void CBackendDump::ExtractLinks(Udm::Object ob)
 
 		if(os.size()>0)
 		{
-			*dump<<endl<<"Links from object '"<<ExtractName(ob)<<"["<<ob.uniqueId()<<"]' to"<<endl;
+			*dump<<endl<<"Links from object '"<<UdmUtil::ExtractName(ob, "name")<<"["<<ob.uniqueId()<<"]' to"<<endl;
 			for(set<Udm::Object>::iterator asi=os.begin();asi!=os.end();asi++)
 			{
-				*dump<<"   '"<<ExtractName(*asi)<<"["<<asi->uniqueId()<<"]',"<<endl;
+				*dump<<"   '"<<UdmUtil::ExtractName(*asi, "name")<<"["<<asi->uniqueId()<<"]',"<<endl;
 				*dump<<"   "<<" with source role '"<<string(ri->name())<<"',"<<endl; 
 				*dump<<"   "<<" and with destination role '" <<string(Uml::theOther(*ri).name())<<"'"<<endl;
 			}
