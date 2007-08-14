@@ -721,7 +721,7 @@ bool CGenerator::GenerateProjectFile()
 	End comment by Ananth
 	*/
 	//Added by Ananth
-	fprintf(fDspFile,"# ADD LINK32 xerces-c_2D.lib ZlibD.lib UdmBase_D.lib UdmDom_D.lib UdmUtil_D.lib UdmGme_D.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept /libpath:\"%s\\lib\" /libpath:\"%s\\3rdParty\\zlib\" /libpath:\"%s\\3rdparty\xerces\xerces-c_2_5_0-windows_nt-msvc_60\lib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
+	fprintf(fDspFile,"# ADD LINK32 xerces-c_2D.lib ZlibD.lib UdmBase_D.lib UdmDom_D.lib UdmUtil_D.lib UdmGme_D.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept /libpath:\"%s\\lib\" /libpath:\"%s\\3rdParty\\zlib\" /libpath:\"%s\\3rdparty\\xerces\\xerces-c_2_5_0-windows_nt-msvc_60\\lib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
 	fprintf(fDspFile,"# SUBTRACT LINK32 /pdb:none\n");
 	//End add by Ananth
 	fprintf(fDspFile,"# Begin Custom Build - Performing registration\n");
@@ -783,8 +783,8 @@ bool CGenerator::GenerateProjectFile()
 	fprintf(fDspFile,"# ADD LINK32 /nologo /subsystem:windows /dll /machine:I386\n");
 	*/
 	//Added by Ananth
-	fprintf(fDspFile,"# ADD BASE LINK32 xerces-c_2.lib Zlib.lib /nologo /subsystem:windows /dll /machine:I386 /out:\"Release/Component.dll\" /libpath:\"%s\\3rdParty\\zlib\" /libpath:\"%s\\3rdparty\xerces\xerces-c_2_5_0-windows_nt-msvc_60\lib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
-	fprintf(fDspFile,"# ADD LINK32 xerces-c_2.lib Zlib.lib UdmBase.lib UdmDom.lib UdmUtil.lib UdmGme.lib /nologo /subsystem:windows /dll /machine:I386 /libpath:\"%s\\lib\" /libpath:\"%s\\3rdParty\\zlib\" /libpath:\"%s\\3rdparty\xerces\xerces-c_2_5_0-windows_nt-msvc_60\lib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
+	fprintf(fDspFile,"# ADD BASE LINK32 xerces-c_2.lib Zlib.lib /nologo /subsystem:windows /dll /machine:I386 /out:\"Release/Component.dll\" /libpath:\"%s\\3rdParty\\zlib\" /libpath:\"%s\\3rdparty\\xerces\\xerces-c_2_5_0-windows_nt-msvc_60\\lib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
+	fprintf(fDspFile,"# ADD LINK32 xerces-c_2.lib Zlib.lib UdmBase.lib UdmDom.lib UdmUtil.lib UdmGme.lib /nologo /subsystem:windows /dll /machine:I386 /libpath:\"%s\\lib\" /libpath:\"%s\\3rdParty\\zlib\" /libpath:\"%s\\3rdparty\\xerces\\xerces-c_2_5_0-windows_nt-msvc_60\\lib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
 	//end
 	fprintf(fDspFile,"# Begin Custom Build - Performing registration\n");
 	fprintf(fDspFile,"OutDir=.\\ReleaseMinSize\n");
@@ -835,7 +835,7 @@ bool CGenerator::GenerateProjectFile()
 	fprintf(fDspFile,"# ADD BSC32 /nologo\n");
 	fprintf(fDspFile,"LINK32=link.exe\n");
 	fprintf(fDspFile,"# ADD BASE LINK32 /nologo /subsystem:windows /dll /machine:I386\n");
-	fprintf(fDspFile,"# ADD LINK32 xerces-c_2.lib zlib.lib UdmBase.lib UdmGme.lib UdmUtil.lib UdmDom.lib /nologo /subsystem:windows /dll /machine:I386 /libpath:\"%s\\Lib,%s\\3rdparty\xerces\xerces-c_2_5_0-windows_nt-msvc_60\lib,%s\\3rdparty\\zlib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
+	fprintf(fDspFile,"# ADD LINK32 xerces-c_2.lib zlib.lib UdmBase.lib UdmGme.lib UdmUtil.lib UdmDom.lib /nologo /subsystem:windows /dll /machine:I386 /libpath:\"%s\\Lib,%s\\3rdparty\\xerces\\xerces-c_2_5_0-windows_nt-msvc_60\\lib,%s\\3rdparty\\zlib\"\n",m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath,m_UdmData.m_strUdmPath);
 	/*Commented by Ananth
 	fprintf(fDspFile,"# ADD LINK32 /nologo /subsystem:windows /dll /machine:I386 /libpath:\"..\\Udm\\Lib\\Udm ..\\Udm\\Lib\\xerces\"\n");
 	*/
