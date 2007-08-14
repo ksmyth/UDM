@@ -13,7 +13,7 @@ class ClassGen
     ClassGen(const ::Uml::Class &cl
       , const string & pckg_name
       , const string & diag_name
-      , const string & ns_name);
+      , const string & ns_path);
 
     //! Destructor.
     ~ClassGen( void );
@@ -66,11 +66,11 @@ class ClassGen
   //! Tha name of the class.
   const string m_cl_name;
 
-  //! The name of the namespace of the class (lower case).
-  const string m_ns_name;
+  //! The path of the namespace of the class (lower case), delim="::".
+  const string m_ns_path;
 
-  //! The name of the namespace of the class (unchanged).
-  const string m_ns_name_orig;
+  //! The path of the namespace of the class (unchanged), delim="::".
+  const string m_ns_path_orig;
 
   // The name of the base class of this class.
   string m_base_name;

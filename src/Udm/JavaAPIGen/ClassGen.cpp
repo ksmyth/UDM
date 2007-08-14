@@ -12,11 +12,11 @@
 ClassGen::ClassGen( const ::Uml::Class &cl
       , const string & pckg_name
       , const string & diag_name
-      , const string & ns_name )
+      , const string & ns_path )
 :   m_cl( cl ), m_package_name(  pckg_name  ), m_diag_name(  diag_name  )
   , m_output(), m_cl_name ( cl.name() )
-  , m_ns_name( Utils::toLower( ns_name ) )
-  , m_ns_name_orig( ns_name )
+  , m_ns_path( Utils::toLower( ns_path ) )
+  , m_ns_path_orig( ns_path )
   , m_base_name( "UdmPseudoObject" )
 {
 }
@@ -114,7 +114,7 @@ void ClassGen::constructor( )
   if ( !m_cl.isAbstract() )
   {
     m_output << "\tpublic static final String META_TYPE = \"" << m_cl_name << "\";" << endl;
-    m_output << "\tpublic static final String META_TYPE_NS = \"" << m_ns_name_orig << "\";" << endl;
+    m_output << "\tpublic static final String META_TYPE_NS = \"" << m_ns_path_orig << "\";" << endl;
     m_output << "\tprivate static UdmPseudoObject metaClass;" << endl;
     m_output << endl;
   }
@@ -142,7 +142,7 @@ void ClassGen::findBaseClass( )
 
   if ( bases.size() )
   {
-    string pck = Utils::getPackageSignature( *bases.begin(), m_ns_name, m_package_name );
+    string pck = Utils::getPackageSignature( *bases.begin(), m_ns_path, m_package_name );
     m_base_name = pck + (string)bases.begin()->name();
   }
 }
@@ -193,8 +193,8 @@ void ClassGen::construction( )
     if ( comp )
     {
       // without childroles
-      m_output << "\tpublic static " << Utils::getPackageSignature(ret_type, m_ns_name,  m_package_name ) << ret_type_name;
-      m_output<< " create("<< Utils::getPackageSignature(*c_i, m_ns_name,  m_package_name ) << c_i_name << " parent) \n\t\tthrows UdmException " << endl;
+      m_output << "\tpublic static " << Utils::getPackageSignature(ret_type, m_ns_path,  m_package_name ) << ret_type_name;
+      m_output<< " create("<< Utils::getPackageSignature(*c_i, m_ns_path,  m_package_name ) << c_i_name << " parent) \n\t\tthrows UdmException " << endl;
       m_output << "\t{" << endl;
       m_output << "\t\tDiagram metaDiagram = parent.getDiagram();" << endl;
       m_output << "\t\treturn new " << m_cl_name << "(parent.createObject(META_TYPE, META_TYPE_NS), metaDiagram);" << endl;
@@ -213,8 +213,8 @@ void ClassGen::construction( )
         if ( !comp )
         {
           //will reach here only if more than one composition is possible
-          m_output << "\tpublic static " << Utils::getPackageSignature(ret_type, m_ns_name,  m_package_name ) << ret_type_name;
-          m_output << " create" << (string)(ccrs_i->name()) << "(" << Utils::getPackageSignature(*c_i, m_ns_name,  m_package_name ) << c_i_name << " parent)\n\t\tthrows UdmException " << endl;
+          m_output << "\tpublic static " << Utils::getPackageSignature(ret_type, m_ns_path,  m_package_name ) << ret_type_name;
+          m_output << " create" << (string)(ccrs_i->name()) << "(" << Utils::getPackageSignature(*c_i, m_ns_path,  m_package_name ) << c_i_name << " parent)\n\t\tthrows UdmException " << endl;
           m_output << "\t{" << endl;
           m_output << "\t\tDiagram metaDiagram = parent.getDiagram();" << endl;
           m_output << "\t\treturn new " << m_cl_name << "(parent.createObject(META_TYPE, META_TYPE_NS, \"" << (string)(ccrs_i->name()) << "\"), metaDiagram);" << endl;
@@ -245,7 +245,7 @@ void ClassGen::accessChildren( )
 
       ::Uml::Composition comp = Uml::matchChildToParent( *c_d_i, m_cl );
       string c_i_name = c_d_i->name();
-      string pkg_name = Utils::getPackageSignature( *c_d_i, m_ns_name, m_package_name );
+      string pkg_name = Utils::getPackageSignature( *c_d_i, m_ns_path, m_package_name );
 
       // without child role
       if ( comp )
@@ -338,7 +338,7 @@ void ClassGen::accessChildren( )
           ::Uml::Class parent = Uml::theOther(*ccrs_i).target();
           ::Uml::Class child = ccrs_i->target();
           string child_name = child.name( );
-          pkg_name = Utils::getPackageSignature( child, m_ns_name, m_package_name );
+          pkg_name = Utils::getPackageSignature( child, m_ns_path, m_package_name );
           ::Uml::Composition comp = Uml::matchChildToParent( child, parent );
 
           if ( !comp )
@@ -519,7 +519,7 @@ void ClassGen::associations( )
       string tname = target_cl.name();
       string ar_name = a_r_i->name();
 
-      string pkg_name = Utils::getPackageSignature(target_cl, m_ns_name, m_package_name);
+      string pkg_name = Utils::getPackageSignature(target_cl, m_ns_path, m_package_name);
 
       m_output << "\t/*" << endl;
       m_output << "\t * Asoociation with role name <code>" << ar_name << "</code>." << endl;
@@ -586,7 +586,7 @@ void ClassGen::associations( )
       m_output << endl;
 
       // the canonical form of the to_class
-      string pckg_signature = Utils::getPackageSignature(to_class, m_ns_name, m_package_name);
+      string pckg_signature = Utils::getPackageSignature(to_class, m_ns_path, m_package_name);
 
       if ( (ar_i->max() == 0) || (ar_i->max() == 1) )
       {
