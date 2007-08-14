@@ -66,7 +66,7 @@ namespace OCLUML
 								OclCommon::Convert( vecParamsIn[ j ].GetTypeName(), vecType );
 								vecParams.push_back( OclCommon::FormalParameter( vecParamsIn[ j ].GetName(), vecType[ 0 ], true ) );
 							}
-							vecFeatures.push_back( new OclMeta::Method( signature.GetName(), vecParams, CreateReturnType( vecDefs[ i ]->GetReturnType() ), NULL, true ) );
+							vecFeatures.push_back( new OclMeta::Method( signature.GetName(), vecDefs[ i ]->GetContextType(), vecParams, CreateReturnType( vecDefs[ i ]->GetReturnType() ), NULL, true ) );
 						}
 					}
 				}
