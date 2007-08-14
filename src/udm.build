@@ -15,6 +15,8 @@
   </ifnot>
 
   <property name="Path.udm" value="${project::get-base-directory()}"/>
+  <setenv name="UDM_PATH" value="${Path.udm}\.."/>
+
   <property name="Path.jdk" value="${environment::get-variable('JDK_PATH')}"/>
 
   <if test="${environment::variable-exists('VSVERSION')}">
@@ -24,7 +26,7 @@
     <property name="Version.VS" value="7.1"/>"/>
   </ifnot>
 
-  <if test="${ Version.VS == '7.1'}">
+  <if test="${ Version.VS == '7.1' }">
     <property name="Version.VS.verbose" value="7.1"/>
     <property name="File.solution" value="Udm.sln"/>
   </if>
@@ -273,9 +275,7 @@
             udm_swig"
    description="main compile of udm"
   >
-  <solution configuration="${Configuration}" includevsfolders="true" solutionfile="${File.solution}" verbose="true"/>
+    <solution configuration="${Configuration}" includevsfolders="true" solutionfile="${File.solution}" verbose="true"/>
   </target>
 
 </project>
-
-
