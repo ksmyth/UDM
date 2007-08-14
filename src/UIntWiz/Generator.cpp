@@ -44,7 +44,7 @@ void CGenerator::Generate()
 
 	GenerateProjectFile();
 
-	std::string cmdline = "call %UDM_3RDPARTY_PATH%\\mpc\\mpc.exe -features \"mfc=1\" -type vc71 ";
+	std::string cmdline = "call %UDM_3RDPARTY_PATH%\\mpc\\mpc.exe -features \"mfc=1\" -type vc71 -ti vc7dll ";
 	cmdline += m_strDestinationPath+_INTERPRETER_CODE_PATH+"Component.mpc";
 
 	system(cmdline.c_str());
@@ -405,7 +405,7 @@ BOOL CGenerator::GenerateComponentConfig()
 	m_ComponentData.m_strInterfacePath.Replace("\\","/");
 	fprintf(fCompCfgFile,
 	 "\n\n// This is the location of the GME interfaces file (Mga.idl, Meta.idl, etc)\n"
-	 "#define GME_INTERFACES_BASE %s\n\n\n", m_ComponentData.m_strInterfacePath);
+	 "#define GME_BASE %s\n\n\n", m_ComponentData.m_strInterfacePath);
 
 	// Icon on GME Toolbar
 	if(m_ComponentData.m_bIconInGME)
@@ -658,9 +658,12 @@ bool CGenerator::GenerateProjectFile()
 	fprintf(fMpcFile,"  $(GME_ROOT)/SDK/BON \\\n");
 	fprintf(fMpcFile,"  $(UDM_PATH)/include\n");
 	fprintf(fMpcFile,"  libpaths += $(UDM_PATH)/lib\n");
-	fprintf(fMpcFile,"  libs += xerces-c_2 zlib UdmBase UdmGme UdmUtil UdmDom\n");
+	fprintf(fMpcFile,"  libs += xerces-c_2 zlib UdmBase UdmGme UdmUtil UdmDom Uml UdmDll\n");
 	fprintf(fMpcFile,"  specific (vc6) {\n");
 	fprintf(fMpcFile,"  includes += $(UDM_3RDPARTY_PATH)/3rdparty/stl \n");
+	fprintf(fMpcFile,"  }\n\n");
+	fprintf(fMpcFile,"  specific (vc6,vc7,vc71,vc8,nmake) {\n");
+	fprintf(fMpcFile,"  link_options += /DEF:Component.def \n");
 	fprintf(fMpcFile,"  }\n\n");
 	fprintf(fMpcFile,"  Source_Files {\n");
 	fprintf(fMpcFile,"    StdAfx.cpp\n");
@@ -727,6 +730,7 @@ bool CGenerator::GenerateUdmApp()
 	fprintf(fUdmAppFile,"#include \"stdafx.h\"\n");
 	fprintf(fUdmAppFile,"#include \"UdmApp.h\"\n");
 	fprintf(fUdmAppFile,"#include \"UdmConfig.h\"\n");
+	fprintf(fUdmAppFile,"#include \"Uml.h\"\n");
 
 	if(m_UdmData.m_bUserSelect)
 	{

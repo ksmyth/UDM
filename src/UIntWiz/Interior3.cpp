@@ -119,13 +119,12 @@ BOOL CInterior3::OnInitDialog()
 	char l_strSingleVal[255];
 	if(GetEnvironmentVariable("GME_ROOT", l_strSingleVal,255)) {
 		strcpy(name, l_strSingleVal);
-		strcat(name, "\\Interfaces");
 	} else if(lRet != ERROR_SUCCESS) {
-		strcpy(name,  "c:\\Program Files\\GME\\Interfaces");
+		strcpy(name,  "c:\\Program Files\\GME");
 	}
 	else 
 	{
-		strncat(name, "\\GME\\Interfaces", sizeof(name)-1 - namelen);
+		strncat(name, "\\GME", sizeof(name)-1 - namelen);
 	}
 
 	m_strInterfacePath = name;
