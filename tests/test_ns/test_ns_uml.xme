@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{A04CE2D2-4F2D-4951-B294-670624D3F12E}" cdate="Tue Mar 22 18:22:37 2005" mdate="Tue Mar 22 18:22:37 2005" version="" metaguid="{F9663D62-3422-4A2B-A613-2E8453675A03}" metaversion="" metaname="UML">
+<project guid="{4376C356-9121-4305-87BD-19E8C194DAC5}" cdate="Tue Mar 22 18:22:37 2005" mdate="Tue Mar 22 18:22:37 2005" version="" metaguid="{F9663D62-3422-4A2B-A613-2E8453675A03}" metaversion="" metaname="UML">
 	<name>test_ns_uml</name>
 	<comment></comment>
 	<author></author>
@@ -92,7 +92,7 @@
 					<value></value>
 				</attribute>
 				<atom id="id-0066-00000003" kind="Class" role="Class" relid="0x2">
-					<name>A1</name>
+					<name>B1</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
 						<regnode name="Constraints" isopaque="yes">

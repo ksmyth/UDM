@@ -37,7 +37,7 @@ void main()
   try
   {
     std::string fn ="test.xml";
-    writeTest(fn);
+    //writeTest(fn);
     readTest(fn);
   }
   catch(udm_exception& e)

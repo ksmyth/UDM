@@ -145,8 +145,9 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v"
-					Outputs="test_ns.cpp;test_ns.h;"/>
+					CommandLine="&quot;%UDM_PATH%&quot;\bin.net\Udm.exe $(InputPath) -t -v
+"
+					Outputs="test_ns.cpp;test_ns.h"/>
 			</FileConfiguration>
 		</File>
 		<File
