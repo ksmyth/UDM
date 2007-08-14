@@ -298,11 +298,10 @@ usage:
 
 			const Udm::DataNetwork& cross_meta_dn = pr.GetCrossMetaNetwork();
 			const ::Uml::Diagram &cross_meta = ::Uml::Diagram::Cast(cross_meta_dn.GetRootObject());
-			const ::Uml::Namespace cross_meta_ns = ::Uml::GetTheOnlyNamespace(cross_meta);
 
 			string cm_name = NameToFilename(cross_meta.name());
 
-			GenerateDSD(cross_meta_ns, cm_name, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
+			GenerateDSD(cross_meta, cm_name, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
 
 			GenerateHH(cross_meta, cm_name, visitor_sup, NULL, macro, source_unit);
 

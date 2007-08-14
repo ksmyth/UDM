@@ -75,10 +75,9 @@ void GenerateCPPDeclareAttributes(const set< ::Uml::Class> & classes, ostream & 
 	}
 };
 
-void DeclareAssociationRoles(const ::Uml::Class &cl, ostream &output)
+void DeclareAssociationRoles(const ::Uml::Class &cl, const set< ::Uml::AssociationRole> &assocs, ostream &output)
 {
-	set< ::Uml::AssociationRole> assocs = cl.associationRoles();
-	for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+	for( set< ::Uml::AssociationRole>::const_iterator i = assocs.begin(); i != assocs.end(); i++) 
 	{
 		::Uml::Association pp = (*i).parent();
 		::Uml::Class aclass = pp.assocClass();
@@ -90,9 +89,8 @@ void DeclareAssociationRoles(const ::Uml::Class &cl, ostream &output)
 	}
 }
 
-void DeclareAssociationRolesFromAssoc(const ::Uml::Class &cl, ostream &output)
+void DeclareAssociationRolesFromAssoc(const ::Uml::Class &cl, const ::Uml::Association &assoc, ostream &output)
 {
-	::Uml::Association assoc = cl.association();
 	if(assoc)
 	{
 		set< ::Uml::AssociationRole> assocs = assoc.roles();
@@ -114,7 +112,7 @@ void GenerateCPPDeclareAssociationRoles(const set< ::Uml::Class> &classes, const
 	{
 		::Uml::Class cl = *c;
 
-		DeclareAssociationRoles(cl, output);
+		DeclareAssociationRoles(cl, cl.associationRoles(), output);
 
 		/*
 			Here is printed the decalaration of the cross-association roles
@@ -125,17 +123,17 @@ void GenerateCPPDeclareAssociationRoles(const set< ::Uml::Class> &classes, const
 			//--//::Uml::Class cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
 			::Uml::Class cross_cl = GetCrossClass(cross_dgr, cl);
 			if(cross_cl)
-				DeclareAssociationRoles(cross_cl, output);
+				DeclareAssociationRoles(cl, cross_cl.associationRoles(), output);
 		};
 
-		DeclareAssociationRolesFromAssoc(cl, output);
+		DeclareAssociationRolesFromAssoc(cl, cl.association(), output);
 		if (isCrossDgr)
 		//if (cross_dgr &&(cross_dgr != dgr) )
 		{
 			//--//::Uml::Class cross_cl = ::Uml::ClassByName(cross_dgr, cl.name());
 			::Uml::Class cross_cl = GetCrossClass(cross_dgr, cl);
 			if(cross_cl)
-				DeclareAssociationRolesFromAssoc(cross_cl, output);
+				DeclareAssociationRolesFromAssoc(cl, cross_cl.association(), output);
 		};
 	};//end for cycle for declaration for associationRoles
 };
