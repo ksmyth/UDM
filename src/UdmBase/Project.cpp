@@ -11,6 +11,9 @@ arising out of or in connection with the use or performance of
 this software.
 */
 /*
+03/26/06	-	endre
+		-	make DeCompress() work with filenames longer than 50 characters
+
 12/31/05	-	endre
 		-	added CreateNewMeta() to UdmProject to create a new meta specifier UDM project
 
@@ -171,13 +174,20 @@ namespace Udm
 		while(unz_res == UNZ_OK)
 		{
 			unz_file_info ufi;
-			char filename[50]; 
-			memset(filename, 0, 50);
-			unzGetCurrentFileInfo(zf, &ufi, filename, 50, NULL,0,NULL,0);
-			char * buff = new char[ufi.uncompressed_size];
+			if (unzGetCurrentFileInfo(zf, &ufi, NULL, 0, NULL, 0, NULL, 0) != UNZ_OK)
+				throw udm_exception("Unknown UNZ error occured!");
+
+			char * filename = new char[ufi.size_filename + 1];
+			if (unzGetCurrentFileInfo(zf, NULL, filename, ufi.size_filename + 1, NULL,0,NULL,0) != UNZ_OK)
+				throw udm_exception("Unknown UNZ error occured!");
+
+			string tempfilename = temp_path + PATHDELIM + filename;
+			delete [] filename;
+
 			if (unzOpenCurrentFile(zf) != UNZ_OK)
 				throw udm_exception("Unknown UNZ error occured!");
 			
+			char * buff = new char[ufi.uncompressed_size];
 			if ((unsigned long)unzReadCurrentFile(zf, buff, ufi.uncompressed_size) != ufi.uncompressed_size)
 				throw udm_exception("Unknown UNZ error occured!");
 
@@ -185,7 +195,6 @@ namespace Udm
 				throw udm_exception("Unknown UNZ error occured!");
 			
 
-			string tempfilename = temp_path + PATHDELIM + filename;
 			FILE * file = fopen(tempfilename.c_str(), "wb");
 			if (!file)
 				throw udm_exception(string("Temporary file could not be opened! (") + tempfilename + string(")"));
