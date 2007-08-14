@@ -105,15 +105,6 @@ bool SingleCPPNamespace(const ::Uml::Class &cl)
 	return (::Uml::Namespace)cl.parent_ns() == ::Uml::Namespace(NULL);
 }
 
-::Uml::Class GetCrossClass(const ::Uml::Diagram &cross_dgr, const ::Uml::Class &cl)
-{
-	::Uml::Namespace ns = cl.parent_ns();
-	string cross_cl_name = string(cl.name()) + string(Udm::cross_delimiter);
-	if (ns)
-		cross_cl_name += (string)ns.name();
-	return ::Uml::classByName(cross_dgr, cross_cl_name);
-}
-
 void CPPSetURIMapping(const ::Uml::Diagram &diagram, 
                       const map<string, string>& ns_map,
                       ostream &output)
