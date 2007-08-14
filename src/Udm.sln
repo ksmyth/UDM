@@ -12,7 +12,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Udm", "Udm.vcproj", "{2B048
 		{5097453D-0CF4-4DE8-9C2D-8D4B2078AD1D} = {5097453D-0CF4-4DE8-9C2D-8D4B2078AD1D}
 		{51AA434D-E6EE-494B-9DA6-85B511B019FC} = {51AA434D-E6EE-494B-9DA6-85B511B019FC}
 		{9A094C52-E029-4333-AC60-580B9B928E4E} = {9A094C52-E029-4333-AC60-580B9B928E4E}
-		{7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E} = {7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E}
 		{5106C980-BC3D-48C5-A033-0D58C20F9980} = {5106C980-BC3D-48C5-A033-0D58C20F9980}
 		{69CD1785-0B3B-467C-87F6-71F679E5577A} = {69CD1785-0B3B-467C-87F6-71F679E5577A}
 		{CA16ED97-F738-4FAF-985C-FAE05AED8D07} = {CA16ED97-F738-4FAF-985C-FAE05AED8D07}
@@ -79,10 +78,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmBackendDump", "UdmBacken
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmPat", "UdmPat\UdmPat.vcproj", "{7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmViz", "UdmViz\UdmViz.vcproj", "{48FFD6BF-0BB7-4BAA-9943-F3B6DEA30C9C}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -100,7 +95,34 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmCint", "UdmCint\UdmCint.
 		{BDBC842F-099C-4263-AB8B-46511D82C56C} = {BDBC842F-099C-4263-AB8B-46511D82C56C}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GOCL", "UdmOclPat\GOCL\src\GOCL.vcproj", "{EE407066-7819-4AE2-B0F5-E64FC5E54415}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 4
+		SccProjectUniqueName0 = UdmOcl\\UdmOcl.vcproj
+		SccProjectName0 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl\u0022,\u0020INZAAAAA
+		SccLocalPath0 = UdmOcl
+		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectUniqueName1 = UML\u0020GME\\ExprChecker\\GmeOclExprChecker.vcproj
+		SccProjectName1 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/ExprChecker\u0022,\u0020WOZAAAAA
+		SccLocalPath1 = UML\u0020GME\\ExprChecker
+		SccProvider1 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectUniqueName2 = UdmOclPat\\UDMOclPat.vcproj
+		SccProjectName2 = \u0022$/MoBIESTransition/udm_ns/src/UdmOclPat\u0022,\u0020QNZAAAAA
+		SccLocalPath2 = UdmOclPat
+		SccProvider2 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectUniqueName3 = UdmCint\\UdmCint.vcproj
+		SccProjectName3 = \u0022$/MoBIESTransition/udm_ns/src/UdmCint\u0022,\u0020RNABAAAA
+		SccLocalPath3 = UdmCint
+		SccProvider3 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
@@ -191,12 +213,6 @@ Global
 		{69CD1785-0B3B-467C-87F6-71F679E5577A}.Release.Build.0 = Release|Win32
 		{69CD1785-0B3B-467C-87F6-71F679E5577A}.Release MinDependency.ActiveCfg = Release|Win32
 		{69CD1785-0B3B-467C-87F6-71F679E5577A}.Release MinDependency.Build.0 = Release|Win32
-		{7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E}.Debug.ActiveCfg = Debug|Win32
-		{7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E}.Debug.Build.0 = Debug|Win32
-		{7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E}.Release.ActiveCfg = Release|Win32
-		{7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E}.Release.Build.0 = Release|Win32
-		{7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E}.Release MinDependency.ActiveCfg = Release|Win32
-		{7AD5CE69-2D30-4CA8-8868-ECF53E0B2C8E}.Release MinDependency.Build.0 = Release|Win32
 		{48FFD6BF-0BB7-4BAA-9943-F3B6DEA30C9C}.Debug.ActiveCfg = Debug|Win32
 		{48FFD6BF-0BB7-4BAA-9943-F3B6DEA30C9C}.Debug.Build.0 = Debug|Win32
 		{48FFD6BF-0BB7-4BAA-9943-F3B6DEA30C9C}.Release.ActiveCfg = Release|Win32
@@ -221,34 +237,17 @@ Global
 		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release.Build.0 = Release|Win32
 		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release MinDependency.ActiveCfg = Release|Win32
 		{51AA434D-E6EE-494B-9DA6-85B511B019FC}.Release MinDependency.Build.0 = Release|Win32
+		{EE407066-7819-4AE2-B0F5-E64FC5E54415}.Debug.ActiveCfg = Debug|Win32
+		{EE407066-7819-4AE2-B0F5-E64FC5E54415}.Debug.Build.0 = Debug|Win32
+		{EE407066-7819-4AE2-B0F5-E64FC5E54415}.Release.ActiveCfg = Release|Win32
+		{EE407066-7819-4AE2-B0F5-E64FC5E54415}.Release.Build.0 = Release|Win32
+		{EE407066-7819-4AE2-B0F5-E64FC5E54415}.Release MinDependency.ActiveCfg = Release|Win32
+		{EE407066-7819-4AE2-B0F5-E64FC5E54415}.Release MinDependency.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
-	EndGlobalSection
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 4
-		SccProjectUniqueName0 = UdmOcl\\UdmOcl.vcproj
-		SccProjectName0 = \u0022$/MoBIESTransition/udm_ns/src/UdmOcl\u0022,\u0020INZAAAAA
-		SccLocalPath0 = UdmOcl
-		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
-		CanCheckoutShared = false
-		SccProjectUniqueName1 = UML\u0020GME\\ExprChecker\\GmeOclExprChecker.vcproj
-		SccProjectName1 = \u0022$/MoBIESTransition/udm_ns/src/UML\u0020GME/ExprChecker\u0022,\u0020WOZAAAAA
-		SccLocalPath1 = UML\u0020GME\\ExprChecker
-		SccProvider1 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
-		CanCheckoutShared = false
-		SccProjectUniqueName2 = UdmOclPat\\UDMOclPat.vcproj
-		SccProjectName2 = \u0022$/MoBIESTransition/udm_ns/src/UdmOclPat\u0022,\u0020QNZAAAAA
-		SccLocalPath2 = UdmOclPat
-		SccProvider2 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
-		CanCheckoutShared = false
-		SccProjectUniqueName3 = UdmCint\\UdmCint.vcproj
-		SccProjectName3 = \u0022$/MoBIESTransition/udm_ns/src/UdmCint\u0022,\u0020RNABAAAA
-		SccLocalPath3 = UdmCint
-		SccProvider3 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
-		CanCheckoutShared = false
 	EndGlobalSection
 EndGlobal
