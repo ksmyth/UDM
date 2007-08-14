@@ -132,7 +132,7 @@
 				RelativePath=".\SBML2.cpp">
 			</File>
 			<File
-				RelativePath=".\Test .cpp">
+				RelativePath=".\Test.cpp">
 			</File>
 		</Filter>
 		<Filter
