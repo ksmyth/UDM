@@ -63,7 +63,7 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
 
   cint_string xsdn(xsd_name);
   cint_string xsd(getGeneTFxsd().c_str());
-
+/*
   if(!StoreXsd(xsdn,xsd))
    {
      cint_string str;
@@ -73,7 +73,7 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
      exit(1);
      
    }
-
+*/
 /*
   std::string xml;
   std::ifstream inx("test2.xml");
@@ -428,8 +428,11 @@ void UdmTests::Test::testWrite(std::string& result)
   result = string(buffer.buffer());
   std::ofstream out("lofax.xml");
   out << result << std::endl;
+
   
   UPO_UnLoadDiagram(diagram_file);
+  RemoveXsd(xsdn);
+  RemoveXsd("Uml.xsd");
 
 }
 
