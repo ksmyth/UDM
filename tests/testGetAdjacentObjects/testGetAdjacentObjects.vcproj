@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="testGetAdjacentObjects"
 	ProjectGUID="{9FBA3BBE-2FAD-4E8A-B766-7067EC217617}"
+	RootNamespace="testGetAdjacentObjects"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -33,7 +34,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="cppunitd.lib testrunnerd.lib udmdlld.lib"
-				OutputFile="$(OutDir)/testGetAdjacentObjects.exe"
+				OutputFile="../../bin/testGetAdjacentObjectsD.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(UDM_PATH)\lib"
 				GenerateDebugInformation="TRUE"
@@ -44,7 +45,7 @@
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&quot;$(TargetPath)&quot;"/>
+				CommandLine="$(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -82,7 +83,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="cppunit.lib testrunner.lib udmdll.lib"
-				OutputFile="$(OutDir)/testGetAdjacentObjects.exe"
+				OutputFile="../../bin/testGetAdjacentObjects.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(UDM_PATH)\lib"
 				GenerateDebugInformation="TRUE"
@@ -94,7 +95,7 @@
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&quot;$(TargetPath)&quot;"/>
+				CommandLine="$(TargetPath)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -187,7 +188,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating UDM API files..."
-						CommandLine="%UDM_PATH%\bin\udmd.exe $(InputPath)
+						CommandLine="%UDM_PATH%\bin\udmD.exe $(InputPath)
 "
 						Outputs="PackageA.cpp;PackageA.h;PackageB.cpp;PackageB.h;testAssociationScenartios.cpp;testAssociationScenartios.h"/>
 				</FileConfiguration>

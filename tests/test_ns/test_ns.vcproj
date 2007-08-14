@@ -38,7 +38,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies=" UdmDllD.lib xerces-c_2D.lib  "
-				OutputFile="$(OutDir)/test_ns.exe"
+				OutputFile="../../bin/test_nsD.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\lib"
 				GenerateDebugInformation="TRUE"
@@ -87,7 +87,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib zlib.lib $(NOINHERIT)"
-				OutputFile="$(OutDir)/test_ns.exe"
+				OutputFile="../../bin/test_ns.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\lib"
 				GenerateDebugInformation="TRUE"
