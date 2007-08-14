@@ -156,6 +156,7 @@ namespace Ocl
 
 
 	UDM_DLL bool Initialize( const ::Uml::Uml::Diagram& objDiagram, const SErrorNotification& sErrorNotification = SErrorNotification() );
+  UDM_DLL void UnInitialize();
 	UDM_DLL bool ProcessPat( const ::Uml::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression);
 
 }; // namespace Ocl
