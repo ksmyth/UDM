@@ -265,19 +265,10 @@ err_cpr:
 	set< ::Uml::Class>::iterator kinds_i = kinds.begin();
 	while (kinds_i != kinds.end())
 	{
+		::Uml::Class childkind = *kinds_i++;
+		string kind_children_name = childkind.getPath2("_", false);
+
 		i = unique_names.size();
-
-		string kind_children_name;
-		if (SingleCPPNamespace(*kinds_i))
-			kind_children_name = kinds_i->name();
-		else {
-			::Uml::Namespace ns = kinds_i->parent_ns();
-			if (ns != ::Uml::Namespace(NULL))
-				kind_children_name = string(ns.name()) + "_";
-			kind_children_name += kinds_i->name();
-		}
-		kinds_i ++;
-
 		unique_names.insert(kind_children_name + "_kind_children");
 		if (i == unique_names.size()) goto err_kinds;
 		continue;
@@ -313,6 +304,8 @@ err_ccr:
 void CheckDiagram(const ::Uml::Diagram & diagram)
 {
 	//check the UML diagram against duplicate & reserved role, attribute & classnames
+
+	//classes of diagram
 	set<string> unique_names;
 	set< ::Uml::Class> cls = diagram.classes();
 	set< ::Uml::Class>::iterator cls_i = cls.begin();
@@ -327,20 +320,43 @@ void CheckDiagram(const ::Uml::Diagram & diagram)
 		CheckClass(cl);
 	}
 
-	set< ::Uml::Namespace> nses = diagram.namespaces();
+	//namespaces of diagram
 	set<string> unique_ns_names;
-	for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+	set< ::Uml::Namespace> nses = diagram.namespaces();
+	for (set< ::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
 		::Uml::Namespace ns = *nses_i;
-		string nsname = ns.name();
+		unsigned int i = unique_ns_names.size();
+		unique_ns_names.insert(ns.name());
+		if (i == unique_ns_names.size())
+			throw udm_exception(string("Duplicate namespace name found: ") + (string)ns.name());
+	}
 
+
+	::Uml::DiagramNamespaces all_nses(diagram);
+	for (::Uml::DiagramNamespaces::iterator all_nses_i = all_nses.begin(); all_nses_i != all_nses.end(); all_nses_i++)
+	{
+		::Uml::Namespace ns = *all_nses_i;
+
+		//namespaces of namespace
+		set< ::Uml::Namespace> nses = ns.namespaces();
+		set< ::Uml::Namespace>::const_iterator nses_i = nses.begin();
+
+		set<string> unique_ns_names;
+		while (nses_i != nses.end())
+		{
+			::Uml::Namespace ns_ns = *nses_i++;
+
+			unsigned int i = unique_ns_names.size();
+			unique_ns_names.insert(ns_ns.name());
+			if (i == unique_ns_names.size())
+				throw udm_exception(string("Duplicate namespace name found: ") + ns_ns.getPath2("/"));
+		}
+
+
+		//classes of namespace
 		set< ::Uml::Class> cls = ns.classes();
 		set< ::Uml::Class>::iterator cls_i = cls.begin();
-
-		unsigned int i = unique_ns_names.size();
-		unique_ns_names.insert(nsname);
-		if (i == unique_ns_names.size())
-			throw udm_exception(string("Duplicate namespace name found: ") + (string)nses_i->name());
 
 		set<string> unique_names;
 		while (cls_i != cls.end())
@@ -349,7 +365,7 @@ void CheckDiagram(const ::Uml::Diagram & diagram)
 			unsigned int i = unique_names.size();
 			unique_names.insert(cl.name());
 			if (i == unique_names.size())
-				throw udm_exception(string("Duplicate class name found: ") + (string)cl.name());
+				throw udm_exception(string("Duplicate class name found: ") + cl.getPath2("/"));
 
 			CheckClass(cl);
 		}

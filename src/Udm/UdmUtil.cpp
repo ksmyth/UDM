@@ -14,6 +14,7 @@ this software.
 #include "Udm.h"
 #include "UdmBase/DTDGen.h"
 #include "File2Code/File2Code.h"
+#include "UdmUtil.h"
 
 #include <time.h>
 #include <fstream>
@@ -37,7 +38,6 @@ std::string NameToFilename(const std::string src)
 }
 
 void GenerateDSD(const ::Uml::Namespace &ns,
-		 const string &fname,
 		 bool generate_dtd,
 		 bool uxsdi,
 		 bool xsd_el_ta,
@@ -47,7 +47,7 @@ void GenerateDSD(const ::Uml::Namespace &ns,
 {
 	if (!ns) return;
 	ofstream ff;
-	string nsfname = (string)((::Uml::Diagram)ns.parent()).name() + "_" + (string)ns.name();
+	string nsfname = NameToFilename(ns.getPath2("_"));
 
 	if (generate_dtd)
 	{
@@ -115,9 +115,9 @@ void CPPSetURIMapping(const ::Uml::Diagram &diagram,
 		map<string, string>::const_iterator it =  ns_map.begin();
 		for(;it != ns_map.end(); ++it)
 		{
-      const std::string& ns=it->first;
-      const std::string& uri=it->second;
-      std::string xsdname = (string)diagram.name() + "_" + ns + ".xsd";
+			const std::string& ns=it->first;
+			const std::string& uri=it->second;
+			std::string xsdname = (string)diagram.name() + "_" + UdmUtil::replace_delimiter(ns, "::", "_") + ".xsd";
 
 			output << "\t\t" << "UdmDom::AddURIToUMLNamespaceMapping(\""<< uri<<"\",\""<<ns<<"\",\""<<xsdname<<"\" );" << std::endl;
 		}
@@ -126,11 +126,11 @@ void CPPSetURIMapping(const ::Uml::Diagram &diagram,
 
 void CPPSetXsdStorage(const ::Uml::Diagram &diagram, ostream &output)
 {
-	set< ::Uml::Namespace> nses = diagram.namespaces();
-	for (set< ::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
+	::Uml::DiagramNamespaces nses(diagram);
+	for (::Uml::DiagramNamespaces::iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
 	{
 		const ::Uml::Namespace& ns = *nses_i;
-		const std::string& nsn = (string)diagram.name() + "_" + (string)ns.name();
+		const std::string& nsn = NameToFilename(ns.getPath2("_"));
 		std::string infname(nsn + std::string(".xsd"));
 
 		File2Code f2c(".//", nsn + std::string("_xsd"), infname, File2Code::CPP);
@@ -148,11 +148,21 @@ void CPPIncludeXsdHeaders(const ::Uml::Diagram &diagram, ostream & output)
 {
 	output << "#include \"UdmDom.h\"" << endl; 
 	output << "#include \"" << diagram.name() << "_xsd.h\"" << endl;
-	set< ::Uml::Namespace> nses = diagram.namespaces();
-	for (set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+	::Uml::DiagramNamespaces nses(diagram);
+	for (::Uml::DiagramNamespaces::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 	{
 		::Uml::Namespace ns = *nses_i;	
-		output << "#include \"" << diagram.name() << "_" << ns.name() << "_xsd.h\"" << endl << endl; 
+		output << "#include \"" << NameToFilename(ns.getPath2("_")) << "_xsd.h\"" << endl << endl; 
 	}
 	output << endl;
+}
+
+ostream & IndentedOutput(int level, const string &s, ostream & output)
+{
+	for (int i = 0; i < level; i++)
+		output << "\t";
+
+	output << s;
+
+	return output;
 }
