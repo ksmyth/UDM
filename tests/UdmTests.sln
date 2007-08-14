@@ -1,6 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LampTest", "test_simpleudmops\LampTest.vcproj", "{27FCE79E-2428-4119-8F0D-900558BC3801}"
 	ProjectSection(ProjectDependencies) = postProject
+		{7B2D07A4-E108-45B1-860B-43084AAB9192} = {7B2D07A4-E108-45B1-860B-43084AAB9192}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestSignalFlow", "test_assocInheritanceMGA\TestSignalFlow.vcproj", "{F1D0F554-AD3A-43F0-877F-393A77AAB03E}"
@@ -30,6 +31,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmTestsAll", "UdmTestsAll.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_childrenorder", "test_childrenorder\test_childrenorder.vcproj", "{F2D81531-97C6-466B-BDAB-9C7145D294BE}"
 	ProjectSection(ProjectDependencies) = postProject
+		{7B2D07A4-E108-45B1-860B-43084AAB9192} = {7B2D07A4-E108-45B1-860B-43084AAB9192}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_cintstring", "test_cintstring\test_cintstring.vcproj", "{A4C931BF-B728-4F3B-9674-95244B9DB99F}"
@@ -38,14 +40,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_cintstring", "test_cin
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_cintudmpseudo", "test_cintudmpseudo\test_cintudmpseudo.vcproj", "{CA96A88B-ED48-463D-B81E-1864EA833717}"
 	ProjectSection(ProjectDependencies) = postProject
+		{7B2D07A4-E108-45B1-860B-43084AAB9192} = {7B2D07A4-E108-45B1-860B-43084AAB9192}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_domstringdn", "test_domstringdn\test_domstringdn.vcproj", "{1533DB21-5AC6-4E55-AA9B-8E8A9C0E9358}"
 	ProjectSection(ProjectDependencies) = postProject
+		{7B2D07A4-E108-45B1-860B-43084AAB9192} = {7B2D07A4-E108-45B1-860B-43084AAB9192}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_generic", "test_generic\test_generic.vcproj", "{C690D037-F67B-4104-A3B8-888F1F71B7A2}"
 	ProjectSection(ProjectDependencies) = postProject
+		{7B2D07A4-E108-45B1-860B-43084AAB9192} = {7B2D07A4-E108-45B1-860B-43084AAB9192}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_ns", "test_ns\test_ns.vcproj", "{546D0AC9-934F-472D-B443-27FCF4AF2471}"
@@ -76,6 +81,8 @@ Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{27FCE79E-2428-4119-8F0D-900558BC3801}.Debug.ActiveCfg = Debug|Win32
