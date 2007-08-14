@@ -41,15 +41,12 @@ int main(int argc, char **argv) {
 
 			ifstream infile;
 			infile.open(argv[3]);
-			std::string s("{:>");
+			std::string s("");
 			std::string line;
 			while(!infile.eof()) {
 				getline(infile, line);
 				s = s + line + "\n";
 			}
-			s = s + "<:}";
-
-			//cout << s << endl;
 
 			UdmPat::ProcessPat(nw.GetRootMeta(), nw.GetRootObject(), GOCL_STL_NS()string( s ));
 		}
