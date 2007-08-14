@@ -30,7 +30,7 @@ class Utils
     static void  XML2Java( const string & xml_name, const string & input_xml, const string & dest_dir );
 
     //! The current date.
-    static string Utils::getTime();
+    static string getTime();
 
     //! The possible root objects of the given namespace.
     static vector< ::Uml::Class> getPossibleRootClasses( const set< ::Uml::Class> & classes );
