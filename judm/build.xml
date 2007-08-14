@@ -3,7 +3,10 @@
 	<description>Java Wrapper for UDM</description>
 
 	<condition property="isWindows">
+	  <or>
 		<os name="Windows XP" />
+		<os name="Windows 2000" />
+      </or>
 	</condition>
 
 	<!-- Get the environment variables of UDM from Windows -->
