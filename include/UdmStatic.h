@@ -1,0 +1,359 @@
+/*
+Copyright (c) Vanderbilt University, 2000-2001
+ALL RIGHTS RESERVED
+Vanderbilt University disclaims all warranties with regard to this
+software, including all implied warranties of merchantability
+and fitness.  In no event shall Vanderbilt University be liable for
+any special, indirect or consequential damages or any damages
+whatsoever resulting from loss of use, data or profits, whether
+in an action of contract, negligence or other tortious action,
+arising out of or in connection with the use or performance of
+this software.
+*/
+
+/*
+CHANGELOG
+	
+  23/11/04	-	endre
+
+			-		fixed bug which appeared under .net.
+					(id_map was delete before some StaticObjects)
+
+  05/31/04	-	endre
+			-		porting issues to Linux/GCC
+  04/13/04	-	endre
+
+			-		added boolean var m_type_is_safetype to StaticObject to indicate if the m_type of 
+					StaticObject is obtained through SafeTypeContainer.
+
+  04/07/04	-	endre
+  
+		Exported CreateObject to DLL.	
+  03/24/04	-	endre
+
+		Changet the signature of StaticObject::createChild, as required by Udm::ObjectImpl
+
+  06/19/02	-	endre
+		
+		  Array attribute setters/getters override declaration
+
+  03/19/02	-	endre
+		
+		  Added class StaticDataNetwork. See comments in .cpp
+		  also moved to $/include/udm
+
+
+  */
+
+#ifndef MOBIES_UDMSTATIC_H
+#define MOBIES_UDMSTATIC_H
+
+#ifndef MOBIES_UDMBASE_H
+#include "UdmBase.h"
+#endif
+
+
+#include <stdio.h> //file operations
+
+/*
+	this class is needed to prevent inserting exactly the same element-pair in a multimap
+	( I wish STL had some solution for this issue )
+*/
+
+template <class T, class Z>
+class udm_multimap : public multimap<T, Z>
+{
+	//no private members, others than those in multimap
+public:
+
+	udm_multimap<T,Z>() : multimap<T,Z>(){};
+	pair<typename multimap<T, Z>::iterator, bool> safe_insert(typename multimap<T,Z>::value_type& item)
+	{
+		pair<TYPENAME multimap<T, Z>::iterator, TYPENAME multimap<T, Z>::iterator> it_pair = equal_range(item.first);
+		TYPENAME multimap<T, Z>::iterator i = it_pair.first;
+		bool found = false;
+		while (i != it_pair.second && !found)
+		{
+			if (i->second == item.second)found = true;
+			i++;
+		}
+		
+		if (!found)
+		{
+			TYPENAME multimap<T, Z>::iterator inserted_at = insert(item);
+			return pair<TYPENAME multimap<T, Z>::iterator,bool> (inserted_at, true);
+		}
+		return pair<TYPENAME multimap<T, Z>::iterator,bool>(end(), false);
+	}
+};
+
+namespace UdmStatic
+{
+	typedef Udm::Object Object;
+	typedef Udm::ObjectImpl ObjectImpl;
+	typedef ObjectImpl::uniqueId_type  uniqueId_type;
+
+	class StaticObject;
+
+
+
+
+	uniqueId_type GetIdForObject(StaticObject* p);
+	StaticObject* GetObjectForId(uniqueId_type l);
+	void InsertObject(StaticObject* so);
+	
+
+	//-------------------------StaticDataNetwork
+
+	class StaticDataNetwork : public Udm::DataNetwork 
+	{
+		string systemname;
+		Udm::BackendSemantics sem;
+		
+		//pointer to the datanetwork which can ObjectByID() metaobjects;
+		//this is not always trivial, see comment in constructor
+		Udm::DataNetwork * meta_dn;		
+	public:
+	
+		static bool SafeObjectById;
+		UDM_DLL StaticDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* project = NULL);
+		~StaticDataNetwork();
+		Object ObjectById(Object::uniqueId_type id);
+
+		
+		void CreateNew(const string &systemname, 
+								const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+								enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+		
+		
+
+		void OpenExisting(const string &systemname, 
+								const string &metalocator = "", 
+								enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+
+		
+		void SaveAs(string systemname);
+		
+		void CloseWithUpdate()				{SaveAs(systemname);};
+		void CloseAs(string systemname)		{SaveAs(systemname);};		
+		void CommitEditSequence()			{SaveAs(systemname);};
+		
+		//do nothing here
+
+		void AbortEditSequence()			{};
+		void CloseNoUpdate()				{};
+		
+		bool isOpen()							
+		{
+			return rootobject;
+		};
+
+		static Udm::DataNetwork *factory(const Udm::UdmDiagram &meta, Udm::UdmProject* project = NULL) {
+			return new StaticDataNetwork(meta, project);}
+		//Static Data Network is _not_ a type safe data network
+		// because m_type in StaticObject is an UML::Class reference!
+		bool IsTypeSafe() { return false;};
+		unsigned long DeSerialize(FILE *f, map<unsigned long, const StaticObject*>& tr_map, Object& root_o);
+		Udm::DataNetwork * GetMetaDn(){ return meta_dn;};
+
+	};
+
+	
+	//------------------------StaticObject
+
+	class id_map_t;
+
+	class StaticObject : public ObjectImpl
+	{
+		friend class id_map_t;					//id_map_t needs to alter the id_map_so_set_deleted flag
+	private:
+		StaticDataNetwork * mydn;
+
+		bool deleted;							//this becomes true when the object is deleted
+												//(detach-ed from the object tree)
+												//but it still exists, because of reffering Object-s
+
+		//archetype/derived/instances support
+		set<StaticObject*> st_and_i;			// in this will be stored all derived and instantiated objects
+		StaticObject* archetype;				// in this will be stored the archetype
+		bool subtype;							// this tells whether is subtype or instance
+												// if subtype, this variable is true
+												// if instance, it's false
+
+
+		bool real_archetype;					// true when *this is a real archetype(set by the user)
+												// false when *this	is not a real archetype. Is a child
+												// of an object which has a real  archetype, and thus all 
+												// it's children are archetyped recursively.
+
+
+		//we should store the attributes desynched from archetype
+
+		
+		bool id_map_so_set_deleted;				// by default is false,
+												// but will be set to true when ~id_map is invoked.
+		
+	public:
+
+		StaticObject(const ::Uml::Uml::Class &meta, 
+					int ref, 
+					StaticObject * archetype = NULL, 
+					const bool subtype = false,
+					const bool real_archetype = true);
+		void Destroy(bool root);		//destroy the object network
+										// this deletes all the objects explicitly,
+										// to be used only when the data network is going away ..
+
+
+		
+		static udm_exception e;
+		virtual ~StaticObject();
+
+
+
+	// --- reference counting
+		int refCount;
+	//desynched attributes
+		set<uniqueId_type> desynched;
+
+		ObjectImpl *clone();
+		void release();
+		Udm::DataNetwork *__getdn();
+		const ::Uml::Uml::Class &m_type;
+		bool m_type_is_safetype;
+	
+		const ::Uml::Uml::Class &type() const;
+		//void dumpref() {cout << refCount << endl;};
+		//for debugging only!
+		int ref(){  return refCount;};
+	
+	// --- order
+	
+		uniqueId_type uniqueId() const;
+
+	// --- attributes (single-value /no-array/ type)
+		typedef map<uniqueId_type, string> stringAttrs_type;
+		stringAttrs_type stringAttrs;
+
+		typedef map<uniqueId_type, bool> booleanAttrs_type;
+		booleanAttrs_type booleanAttrs;
+
+	//	typedef map<uniqueId_type, long> integerAttrs_type;
+	//	integerAttrs_type integerAttrs;
+
+		typedef map<uniqueId_type, __int64> longintAttrs_type;
+		longintAttrs_type longintAttrs;
+
+		typedef map<uniqueId_type, double> realAttrs_type;
+		realAttrs_type realAttrs;
+	
+	// --- attributes (multiple value /array/ type)
+		typedef vector<string> string_array;
+		typedef map<uniqueId_type, string_array> stringAttrArrs_type;
+		stringAttrArrs_type stringAttrArrs;
+		
+		typedef vector<bool> bool_array;
+		typedef map<uniqueId_type, bool_array> booleanAttrArrs_type;
+		booleanAttrArrs_type booleanAttrArrs;
+
+		//typedef vector<long> long_array;
+		//typedef map<uniqueId_type, long_array> integerAttrArrs_type;
+		//integerAttrArrs_type integerAttrArrs;
+
+		typedef vector<__int64> longint_array;
+		typedef map<uniqueId_type, longint_array> longintAttrArrs_type;
+		longintAttrArrs_type longintAttrArrs;
+
+
+		typedef vector<double> double_array;
+		typedef map<uniqueId_type, double_array> realAttrArrs_type;
+		realAttrArrs_type realAttrArrs;
+		
+
+
+	// --- attribute setters/getters  for single value (no-array) type attributes
+		string getStringAttr(const ::Uml::Uml::Attribute &meta) const;
+		void setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct = true);
+		
+		bool getBooleanAttr(const ::Uml::Uml::Attribute &meta) const;
+		void setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a, const bool direct = true);
+		
+		__int64 getIntegerAttr(const ::Uml::Uml::Attribute &meta) const;
+		void setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a, const bool direct = true);
+		
+		double getRealAttr(const ::Uml::Uml::Attribute &meta) const;
+		void setRealAttr(const ::Uml::Uml::Attribute &meta, double a, const bool direct = true);
+	
+	//	--- attribute setters/getters for multiple value (array) type attributes
+
+		vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct = true);
+
+		vector<bool> getBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		void setBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true);
+
+		vector<__int64> getIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		void setIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true);
+
+		vector<double> getRealAttrArr(const ::Uml::Uml::Attribute &meta) const;
+		void setRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
+
+
+
+	// --- containment, maintance(create, delete)
+		StaticObject *m_parent;	// not reference counted
+
+		typedef multimap<uniqueId_type, StaticObject*> children_type;
+		children_type m_children;	// reference counted
+
+		ObjectImpl *getParent(const ::Uml::Uml::CompositionParentRole &role) const;
+		void setParent(ObjectImpl *a, const ::Uml::Uml::CompositionParentRole &role, const bool direct = true);
+		void detach();
+		vector<ObjectImpl*> getChildren(const ::Uml::Uml::CompositionChildRole &meta, const ::Uml::Uml::Class &cls) const;
+		void setChildren(const ::Uml::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct = true);
+		ObjectImpl *createChild(const ::Uml::Uml::CompositionChildRole &childrole, const ::Uml::Uml::Class &meta, const Udm::ObjectImpl* archetype = NULL, const bool subtype = false, const bool real_archetype = true, const bool need_safetype = false);
+
+	// --- associations
+		typedef udm_multimap<uniqueId_type, StaticObject*> assoc_type;
+		assoc_type associations;	// not reference counted, bidirectional
+		
+
+		vector<ObjectImpl*> getAssociation(const ::Uml::Uml::AssociationRole &meta, int mode = Udm::TARGETFROMPEER) const;
+		void setAssociation(
+			const Uml::Uml::AssociationRole &meta, 
+			const vector<ObjectImpl*> &nvect, 
+			int mode = Udm::TARGETFROMPEER,
+			const bool direct = true);
+	// --- persistency
+		unsigned long Serialize(FILE * f);											// return the length of the object
+		void ValidatePointers(map<unsigned long, const StaticObject *>& tr_map);	// changing the associations and the children to the new pointers
+
+	// --- acrhetype/derived/instances
+		vector<ObjectImpl*> getDerived() const;
+		vector<ObjectImpl*> getInstances() const;
+		ObjectImpl* getArchetype() const;
+		bool hasRealArchetype() const;
+		bool isSubtype() const ;
+		bool isInstance() const ;
+	
+
+		
+		StaticObject * FindCorrespondingObjectInStOrITree( StaticObject * where);
+		StaticObject * FindCorrespondingObjectInStOrI( StaticObject * where);
+		
+	
+
+
+	};
+
+
+
+	UDM_DLL Object CreateObject(const ::Uml::Uml::Class &meta);
+	void CreateComposition(const Object &parent, const ::Uml::Uml::CompositionChildRole &childRole,
+		const Object &child, const ::Uml::Uml::CompositionParentRole &parentRole);
+	void CreateAssociation(const Object &src, const ::Uml::Uml::AssociationRole &dstRole,
+		const Object &dst, const ::Uml::Uml::AssociationRole &srcRole);
+}
+
+
+#endif//MOBIES_UDMSTATIC_H
