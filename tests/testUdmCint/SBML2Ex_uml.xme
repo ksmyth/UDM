@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{84E1A2D5-5D5A-46F2-99D7-6CA8BE9A6224}" cdate="Wed Jun 15 14:59:36 2005" mdate="Wed Jun 15 14:59:36 2005" version="" metaguid="{59EBDD54-0EA9-4CDF-96D2-11DF2C3C0EF5}" metaversion="" metaname="UML">
+<project guid="{964AF35A-8C2A-4CC2-A6CE-85F1DDAFFF5B}" cdate="Sun Jul 10 14:48:59 2005" mdate="Sun Jul 10 14:48:59 2005" version="" metaguid="{FB4641D2-A80D-4BAC-B0AA-570519CD80D0}" metaversion="" metaname="UML">
 	<name>SBML2Ex</name>
 	<comment></comment>
 	<author></author>
@@ -1620,7 +1620,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>A Model that has a Species must also have at least one Compartment</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.species in
+							<value>let s = dn.sbml::species in
 let c = dn.compartment in 
   s-&gt;size &gt; 0
     implies
@@ -2138,16 +2138,14 @@ let c = dn.compartment in
 						<attribute kind="ConstraintEqn">
 							<value>self.id = &quot;substance&quot;
  implies
-let c = self.listOfUnits in
-  c-&gt;forAll( lu | 
-    let uns = lu.child in
-      uns-&gt;size = 1 and
-      uns-&gt;forAll( u |
+(let c = self.listOfUnits.unit in
+  c-&gt;size = 1 and
+  c-&gt;forAll( u | 
         ( u.kind = &quot;mole&quot; or u.kind = &quot;item&quot; )
            and
           u.exponent = 1
-       )
-   )</value>
+   )
+ )</value>
 						</attribute>
 					</atom>
 					<atom id="id-0066-0000002b" kind="Constraint" role="Constraint" relid="0xc">
@@ -2167,14 +2165,12 @@ let c = self.listOfUnits in
 						<attribute kind="ConstraintEqn">
 							<value>self.id = &quot;time&quot;
  implies
-let c = self.listOfUnits in
-  c-&gt;forAll( lu | 
-    let uns = lu.child in
-      uns-&gt;size = 1 and
-      uns-&gt;forAll( u |
+(let c = self.listOfUnits.unit in
+  c-&gt;size = 1 and
+  c-&gt;forAll( u | 
         ( u.kind = &quot;second&quot;  and   u.exponent = 1 ) 
-       )
-   )</value>
+   )
+ )</value>
 						</attribute>
 					</atom>
 					<atom id="id-0066-0000002c" kind="Constraint" role="Constraint" relid="0xd">
@@ -2194,17 +2190,14 @@ let c = self.listOfUnits in
 						<attribute kind="ConstraintEqn">
 							<value>self.id = &quot;volume&quot;
  implies
-let c = self.listOfUnits in
-  c-&gt;forAll( lu | 
-    let uns = lu.child in
-      uns-&gt;size = 1 and
-      uns-&gt;forAll( u |
+(let c = self.listOfUnits.unit in
+  c-&gt;size = 1 and
+  c-&gt;forAll( u | 
         ( u.kind = &quot;meter&quot;  and   u.exponent = 3 ) 
 	 or
         ( u.kind = &quot;litre&quot;  and   u.exponent = 1 ) 
-          
-       )
-   )</value>
+   )
+ )</value>
 						</attribute>
 					</atom>
 					<atom id="id-0066-0000002d" kind="Constraint" role="Constraint" relid="0xe">
@@ -2224,16 +2217,14 @@ let c = self.listOfUnits in
 						<attribute kind="ConstraintEqn">
 							<value>self.id = &quot;area&quot;
  implies
-let c = self.listOfUnits in
-  c-&gt;forAll( lu | 
-    let uns = lu.child in
-      uns-&gt;size = 1 and
-      uns-&gt;forAll( u |
+(let c = self.listOfUnits.unit in
+  c-&gt;size = 1 and
+  c-&gt;forAll( u | 
         u.kind = &quot;meter&quot;
            and
           u.exponent = 2
-       )
-   )</value>
+   )
+ )</value>
 						</attribute>
 					</atom>
 					<atom id="id-0066-0000002e" kind="Constraint" role="Constraint" relid="0xf">
@@ -2253,16 +2244,14 @@ let c = self.listOfUnits in
 						<attribute kind="ConstraintEqn">
 							<value>self.id = &quot;length&quot;
  implies
-let c = self.listOfUnits in
-  c-&gt;forAll( lu | 
-    let uns = lu.child in
-      uns-&gt;size = 1 and
-      uns-&gt;forAll( u |
+(let c = self.listOfUnits.unit in
+  c-&gt;size = 1 and
+  c-&gt;forAll( u | 
         u.kind = &quot;meter&quot;
            and
           u.exponent = 1
-       )
-   )</value>
+   )
+ )</value>
 						</attribute>
 					</atom>
 					<reference id="id-0067-0000003c" kind="ClassCopy" role="ClassCopy" relid="0x2" referred="id-0066-00000037">
