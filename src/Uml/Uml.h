@@ -7,6 +7,14 @@
 #include "UdmBase.h"
 #endif
 
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
+#endif
+
 #include "Uml_export.h"
 namespace Uml {
 	extern UDM_DLL Udm::UdmDiagram diagram;

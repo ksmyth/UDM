@@ -24,7 +24,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../include"
+				AdditionalIncludeDirectories="$(UDM_PATH)/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -65,7 +65,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../../include"
+				AdditionalIncludeDirectories="$(UDM_PATH)/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;UDM_DLL_EXPORT;UDM_DYNAMIC_LINKING"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -104,7 +104,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../../include"
+				AdditionalIncludeDirectories="$(UDM_PATH)/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;UDM_DLL_EXPORT;UDM_DYNAMIC_LINKING"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -153,7 +153,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../include"
+				AdditionalIncludeDirectories="$(UDM_PATH)/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -234,7 +234,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				Name="BootUdmCompile Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot; -g -m  -l UDM_DLL
+					CommandLine="%UDM_PATH%\bin\Udm.exe &quot;$(InputPath)&quot; -g -m  -l UDM_DLL
 "
 					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
 			</FileConfiguration>
@@ -242,7 +242,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				Name="BootUdmCompile Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="..\..\bin\UdmD.exe &quot;$(InputPath)&quot; -g -m  -l UDM_DLL
+					CommandLine="%UDM_PATH%\bin\UdmD.exe &quot;$(InputPath)&quot; -g -m  -l UDM_DLL
 "
 					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
 			</FileConfiguration>
@@ -268,7 +268,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="cd &quot;$(InputDir)&quot;
-&quot;xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
 "
 					Outputs="$(InputDir)$(InputName).mga;$(InputDir)Uml_udm.xml"/>
 			</FileConfiguration>
