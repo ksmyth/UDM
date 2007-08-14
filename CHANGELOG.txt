@@ -65,6 +65,10 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+06/16/05		Release 2.23
+
+		-	Upgraded to VC71
+
 11/12/04	-	Release 2.21
 
 		-	Require GME4 R4.11.10

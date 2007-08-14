@@ -7,11 +7,15 @@
 2. GME 4, R4.11.10 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
-3. Visual Studio 6.0 SP6
+3. Visual Studio 7.1
 
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+06/16/05		Release 2.23
+
+		-	Upgraded to VC71
+
 11/12/04	-	Release 2.21
 
 		-	Require GME4 R4.11.10
