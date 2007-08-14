@@ -92,6 +92,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 	{
 		protected :
 			Facade*		m_pFacade;
+			int		m_iLineOffset;	// line number of the source file where this constraint's expression starts
 
 		protected :
 			ConstraintBase( Facade* pFacade );
@@ -102,6 +103,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 			std::string				PrintCompilationErrors( bool bWithSelf = true ) const;
 			std::string 				PrintEvaluationViolations( bool bWithSelf = true ) const;
 			virtual std::string		Print( bool bOnlyIdentity = false ) const = 0;
+			void				SetLineOffset( int iLineOffset );
 	};
 
 //###############################################################################################################################################
@@ -321,7 +323,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 //###############################################################################################################################################
 
 	ConstraintBase::ConstraintBase( Facade* pFacade )
-		: m_pFacade( pFacade )
+		: m_pFacade( pFacade ), m_iLineOffset( 0 )
 	{
 	}
 
@@ -336,7 +338,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 				strResult += "Line: ? ";
 			else {
 				char chBuffer[ 300 ];
-				_itoa( ex.GetLine() - 2, chBuffer, 10 );
+				_itoa( ex.GetLine() - 2 + m_iLineOffset, chBuffer, 10 );
 				strResult += "Line: " + std::string( chBuffer );
 			}
 			if ( ex.GetCode() == -1 )
@@ -363,7 +365,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 				strResult += "Line: ? ";
 			else {
 				char chBuffer[ 300 ];
-				_itoa( vi.position.iLine - 2, chBuffer, 10 );
+				_itoa( vi.position.iLine - 2 + m_iLineOffset, chBuffer, 10 );
 				strResult += "Line: " + std::string( chBuffer );
 			}
 			strResult += " Message: " + vi.strMessage + "[ " + vi.strSignature + " ]" + LINE_END;
@@ -372,6 +374,11 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		}
 		strResult += LARGE_DELIMITER;
 		return strResult;
+	}
+
+	void ConstraintBase::SetLineOffset( int iLineOffset )
+	{
+		m_iLineOffset = iLineOffset;
 	}
 
 //###############################################################################################################################################
@@ -555,7 +562,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		if ( ! bOnlyIdentity ) {
 			strResult += SMALL_DELIMITER;
 			strResult += "==> Expression : " + LINE_END;
-			strResult += strType + "::" + strName + "context " + strType + "::" + strName + "( " + strParameterList + " ) : " + strReturnType + strStereotype + strName + " : " + LINE_END + LINE_END;
+			strResult += strType + "::" + strName + " context " + strType + "::" + strName + "( " + strParameterList + " ) : " + strReturnType + strStereotype + strName + " : " + LINE_END + LINE_END;
 			strResult += (std::string) m_objDefinition.expression() + LINE_END;
 		}
 		return strResult;
@@ -1112,9 +1119,18 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 			_exprStart = _end + 4;
 			_start = strExpression.find("<:$",_end);
 		}
+
+		int _lineOffset = 0;
+		_pos = 0;
+		while (_pos < _exprStart && (_pos = strExpression.find("\n", _pos)) != std::string::npos) {
+			_lineOffset++;
+			_pos++;
+		}
+
 		Initialize( metaDiagram, en );
 		Constraint::setPatProcessFlag(true);
-		ConstraintEx cons = ConstraintEx( globalFacadeMap[ metaDiagram ], strContext, "{:>"+strExpression.substr(_exprStart)+"<:}");
+		ConstraintEx cons = ConstraintEx( globalFacadeMap[ metaDiagram ], strContext, "{:>"+strExpression.substr(_exprStart)+"<:}" );
+		cons.SetLineOffset( _lineOffset );
 		SEvaluationOptions options = SEvaluationOptions();
 		cons.Compile(en);
 		EEvaluationResult eResult = cons.Evaluate( objContext, options );
