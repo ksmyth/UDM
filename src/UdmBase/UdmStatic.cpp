@@ -508,11 +508,11 @@ namespace UdmStatic
 				//set the attribute
 				stringAttrs[meta.uniqueId()] = a;
 				//desynch the attribute
-				desynched.insert(meta);
+				desynched.insert(meta.uniqueId());
 			}
 			else
 			{
-				if (desynched.find(meta) == desynched.end())
+				if (desynched.find(meta.uniqueId()) == desynched.end())
 					//set the attribute
 					stringAttrs[meta.uniqueId()] = a;
 			}
@@ -555,11 +555,11 @@ namespace UdmStatic
 				//set the attribute
 				booleanAttrs[meta.uniqueId()] = a;
 				//desynch the attribute
-				desynched.insert(meta);
+				desynched.insert(meta.uniqueId());
 			}
 			else
 			{
-				if (desynched.find(meta) == desynched.end())
+				if (desynched.find(meta.uniqueId()) == desynched.end())
 					//set the attribute
 					booleanAttrs[meta.uniqueId()] = a;
 			}
@@ -606,11 +606,11 @@ namespace UdmStatic
 				//set the attribute
 				longintAttrs[meta.uniqueId()] = a;
 				//desynch the attribute
-				desynched.insert(meta);
+				desynched.insert(meta.uniqueId());
 			}
 			else
 			{
-				if (desynched.find(meta) == desynched.end())
+				if (desynched.find(meta.uniqueId()) == desynched.end())
 					//set the attribute
 					longintAttrs[meta.uniqueId()] = a;
 			}
@@ -655,11 +655,11 @@ namespace UdmStatic
 				//set the attribute
 				realAttrs[meta.uniqueId()] = a;
 				//desynch the attribute
-				desynched.insert(meta);
+				desynched.insert(meta.uniqueId());
 			}
 			else
 			{
-				if (desynched.find(meta) == desynched.end())
+				if (desynched.find(meta.uniqueId()) == desynched.end())
 					//set the attribute
 					realAttrs[meta.uniqueId()] = a;
 			}
@@ -710,11 +710,11 @@ namespace UdmStatic
 				//set the attribute
 				stringAttrArrs[meta.uniqueId()] = a;
 				//desynch the attribute
-				desynched.insert(meta);
+				desynched.insert(meta.uniqueId());
 			}
 			else
 			{
-				if (desynched.find(meta) == desynched.end())
+				if (desynched.find(meta.uniqueId()) == desynched.end())
 					//set the attribute
 					stringAttrArrs[meta.uniqueId()] = a;
 			}
@@ -769,11 +769,11 @@ namespace UdmStatic
 				//set the attribute
 				booleanAttrArrs[meta.uniqueId()] = a;
 				//desynch the attribute
-				desynched.insert(meta);
+				desynched.insert(meta.uniqueId());
 			}
 			else
 			{
-				if (desynched.find(meta) == desynched.end())
+				if (desynched.find(meta.uniqueId()) == desynched.end())
 					//set the attribute
 					booleanAttrArrs[meta.uniqueId()] = a;
 			}
@@ -842,11 +842,11 @@ namespace UdmStatic
 				*/
 				longintAttrArrs[meta.uniqueId()] = a;
 				//desynch the attribute
-				desynched.insert(meta);
+				desynched.insert(meta.uniqueId());
 			}
 			else
 			{
-				if (desynched.find(meta) == desynched.end())
+				if (desynched.find(meta.uniqueId()) == desynched.end())
 				{
 					/*vector<__int64> b;
 					vector<long>::const_iterator a_i = a.begin();
@@ -911,11 +911,11 @@ namespace UdmStatic
 				//set the attribute
 				realAttrArrs[meta.uniqueId()] = a;
 				//desynch the attribute
-				desynched.insert(meta);
+				desynched.insert(meta.uniqueId());
 			}
 			else
 			{
-				if (desynched.find(meta) == desynched.end())
+				if (desynched.find(meta.uniqueId()) == desynched.end())
 					//set the attribute
 					realAttrArrs[meta.uniqueId()] = a;
 			}
@@ -938,6 +938,21 @@ namespace UdmStatic
 		}
 		
 		//realAttrArrs[meta.uniqueId()] = a;
+	};
+
+	long StaticObject::getAttrStatus(const ::Uml::Attribute &meta) const
+	{
+		long status = Udm::ATTSTATUS_HERE;
+
+		if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
+		{
+			// for now just set a value telling that the attribute value
+			// is not changed here
+			if (desynched.find(meta.uniqueId()) == desynched.end())
+				status = Udm::ATTSTATUS_IN_ARCHETYPE1;
+		}
+
+		return status;
 	};
 
 
@@ -3028,7 +3043,7 @@ namespace UdmStatic
 				
 				/* read it's desynched attribute */
 				static bool desynched_val;
-				if (!fread(&subtype_val, sizeof(bool), 1, f))
+				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
 				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*sa_i).second);
@@ -3087,7 +3102,7 @@ namespace UdmStatic
 
 				/* read it's desynched attribute */
 				static bool desynched_val;
-				if (!fread(&subtype_val, sizeof(bool), 1, f))
+				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
 				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ba_i).second);
@@ -3142,7 +3157,7 @@ namespace UdmStatic
 
 				/* read it's desynched attribute */
 				static bool desynched_val;
-				if (!fread(&subtype_val, sizeof(bool), 1, f))
+				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
 				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ia_i).second);
@@ -3199,7 +3214,7 @@ namespace UdmStatic
 
 				/* read it's desynched attribute */
 				static bool desynched_val;
-				if (!fread(&subtype_val, sizeof(bool), 1, f))
+				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
 				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ra_i).second);
@@ -3281,7 +3296,7 @@ namespace UdmStatic
 
 				/* read it's desynched attribute */
 				static bool desynched_val;
-				if (!fread(&subtype_val, sizeof(bool), 1, f))
+				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
 				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*sa_arr_i).second);
@@ -3358,7 +3373,7 @@ namespace UdmStatic
 
 				/* read it's desynched attribute */
 				static bool desynched_val;
-				if (!fread(&subtype_val, sizeof(bool), 1, f))
+				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
 				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ba_arr_i).second);
@@ -3435,7 +3450,7 @@ namespace UdmStatic
 
 				/* read it's desynched attribute */
 				static bool desynched_val;
-				if (!fread(&subtype_val, sizeof(bool), 1, f))
+				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
 				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ia_arr_i).second);
@@ -3512,7 +3527,7 @@ namespace UdmStatic
 
 				/* read it's desynched attribute */
 				static bool desynched_val;
-				if (!fread(&subtype_val, sizeof(bool), 1, f))
+				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
 				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ra_arr_i).second);
@@ -3725,7 +3740,7 @@ namespace UdmStatic
 			/*
 				add here code that saves whether it's a desynched attribute
 			*/
-			bool is_dsync = (desynched.find(sa) != desynched.end());
+			bool is_dsync = (desynched.find(sa.uniqueId()) != desynched.end());
 			fwrite(&is_dsync, sizeof(bool), 1, f);
 			length += sizeof(bool);
 
@@ -3761,7 +3776,7 @@ namespace UdmStatic
 			/*
 				add here code that saves whether it's a desynched attribute
 			*/
-			bool is_dsync = (desynched.find(ba) != desynched.end());
+			bool is_dsync = (desynched.find(ba.uniqueId()) != desynched.end());
 			fwrite(&is_dsync, sizeof(bool), 1, f);
 			length += sizeof(bool);
 
@@ -3799,7 +3814,7 @@ namespace UdmStatic
 			/*
 				add here code that saves whether it's a desynched attribute
 			*/
-			bool is_dsync = (desynched.find(ia) != desynched.end());
+			bool is_dsync = (desynched.find(ia.uniqueId()) != desynched.end());
 			fwrite(&is_dsync, sizeof(bool), 1, f);
 			length += sizeof(bool);
 
@@ -3838,7 +3853,7 @@ namespace UdmStatic
 			/*
 				add here code that saves whether it's a desynched attribute
 			*/
-			bool is_dsync = (desynched.find(ra) != desynched.end());
+			bool is_dsync = (desynched.find(ra.uniqueId()) != desynched.end());
 			fwrite(&is_dsync, sizeof(bool), 1, f);
 			length += sizeof(bool);
 
@@ -3891,7 +3906,7 @@ namespace UdmStatic
 			/*
 				add here code that saves whether it's a desynched attribute
 			*/
-			bool is_dsync = (desynched.find(sa_arr) != desynched.end());
+			bool is_dsync = (desynched.find(sa_arr.uniqueId()) != desynched.end());
 			fwrite(&is_dsync, sizeof(bool), 1, f);
 			length += sizeof(bool);
 
@@ -3951,7 +3966,7 @@ namespace UdmStatic
 			/*
 				add here code that saves whether it's a desynched attribute
 			*/
-			bool is_dsync = (desynched.find(ba) != desynched.end());
+			bool is_dsync = (desynched.find(ba.uniqueId()) != desynched.end());
 			fwrite(&is_dsync, sizeof(bool), 1, f);
 			length += sizeof(bool);
 
@@ -4011,7 +4026,7 @@ namespace UdmStatic
 			/*
 				add here code that saves whether it's a desynched attribute
 			*/
-			bool is_dsync = (desynched.find(ia) != desynched.end());
+			bool is_dsync = (desynched.find(ia.uniqueId()) != desynched.end());
 			fwrite(&is_dsync, sizeof(bool), 1, f);
 			length += sizeof(bool);
 
@@ -4071,7 +4086,7 @@ namespace UdmStatic
 			/*
 				add here code that saves whether it's a desynched attribute
 			*/
-			bool is_dsync = (desynched.find(ra) != desynched.end());
+			bool is_dsync = (desynched.find(ra.uniqueId()) != desynched.end());
 			fwrite(&is_dsync, sizeof(bool), 1, f);
 			length += sizeof(bool);
 

@@ -687,7 +687,7 @@ namespace Udm
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 			{
-				string desynch_sig = sig + "_is_desycnhed";
+				string desynch_sig = sig + "_is_desynched";
 				if (direct)
 				{
 					//set the attribute
@@ -760,7 +760,7 @@ namespace Udm
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 			{
-				string desynch_sig = sig + "_is_desycnhed";
+				string desynch_sig = sig + "_is_desynched";
 				if (direct)
 				{
 					//set the attribute
@@ -841,7 +841,7 @@ namespace Udm
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 			{
-				string desynch_sig = sig + "_is_desycnhed";
+				string desynch_sig = sig + "_is_desynched";
 				if (direct)
 				{
 					//set the attribute
@@ -920,7 +920,7 @@ namespace Udm
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 			{
-				string desynch_sig = sig + "_is_desycnhed";
+				string desynch_sig = sig + "_is_desynched";
 				if (direct)
 				{
 					//set the attribute
@@ -1001,7 +1001,7 @@ namespace Udm
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 			{
-				string desynch_sig = sig + "_is_desycnhed";
+				string desynch_sig = sig + "_is_desynched";
 				if (direct)
 				{
 					//set the attribute
@@ -1081,7 +1081,7 @@ namespace Udm
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 			{
-				string desynch_sig = sig + "_is_desycnhed";
+				string desynch_sig = sig + "_is_desynched";
 				if (direct)
 				{
 					//set the attribute
@@ -1160,7 +1160,7 @@ namespace Udm
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 			{
-				string desynch_sig = sig + "_is_desycnhed";
+				string desynch_sig = sig + "_is_desynched";
 				if (direct)
 				{
 					//set the attribute
@@ -1240,7 +1240,7 @@ namespace Udm
 			ObjectImpl * archetype = getArchetype();
 			if (archetype && (archetype != (ObjectImpl*)&Udm::_null) )
 			{
-				string desynch_sig = sig + "_is_desycnhed";
+				string desynch_sig = sig + "_is_desynched";
 				if (direct)
 				{
 					//set the attribute
@@ -1301,6 +1301,70 @@ namespace Udm
 			else tempvarmap.insert(tmap::value_type(sig, a)); 
 			*/
 	}
+
+	UDM_DLL long ObjectImpl::getTempAttrStatus(const ::Uml::Attribute &meta) const
+	{
+		long status = Udm::ATTSTATUS_HERE;
+
+		tmap &tempvarmap = locatemap(false);
+
+		string sig;
+		string attrType = meta.type();
+		bool attrArray = ((meta.max() != 0) && (meta.max() != 1));
+
+		if ((string)meta.name() == "name")
+			sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@string";
+		else if (attrType == "String" || attrType == "Text")
+		{
+			if (attrArray)
+				sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@string_array";
+			else
+				string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@string";
+		}
+		else if (attrType=="Integer")
+		{
+			if (attrArray)
+				sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@long_array";
+			else
+				string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@long";
+		}
+		else if (attrType=="Real")
+		{
+			if (attrArray)
+				sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@double_array";
+			else
+				string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@double";
+		}
+		else if (attrType=="Boolean")
+		{
+			if (attrArray)
+				sig = string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@bool_array";
+			else
+				string(meta.name()) + "@" + string(::Uml::Class(meta.parent()).name()) + "@bool";
+		}
+		else
+		{
+			// Unknown attribute type
+			throw udm_exception(string("Unknown attribute type: ") + attrType);
+		}
+
+		string desynch_sig = sig + "_is_desynched";
+
+		ObjectImpl * archetype = getArchetype();
+		if (archetype && (archetype != (ObjectImpl*)&Udm::_null))
+		{
+			// for now just set a value telling that the attribute value
+			// is not changed here
+			tmap::iterator d = tempvarmap.find(desynch_sig);
+			if  (d == tempvarmap.end() || !(d->second.boolval))
+				status = Udm::ATTSTATUS_IN_ARCHETYPE1;
+
+			archetype->release();
+		}
+
+		return status;
+	};
+
 
 
 
@@ -1585,6 +1649,33 @@ namespace Udm
 
 		UDM_DLL void ObjectImpl::CopyAttributeFrom(const ::Uml::Attribute& which, const ObjectImpl*  from, bool direct)
 		{
+			if (direct) {
+				// If both source and destination have an archetype
+				// and the attribute value is inherited from archetype
+				// then a copy is not needed. We suppose that the
+				// destination has been newly created and all its
+				// attribute values are inherited from the archetype.
+
+				ObjectImpl * fromArchetype = from->getArchetype();
+				ObjectImpl * archetype = getArchetype();
+
+				bool copy_needed = true;
+
+				if ( archetype && (archetype != (ObjectImpl*)&Udm::_null) &&
+					fromArchetype && (fromArchetype != (ObjectImpl*)&Udm::_null) &&
+					from->getAttrStatus(which) != Udm::ATTSTATUS_HERE )
+					copy_needed = false;
+
+				if (archetype && (archetype != (ObjectImpl*)&Udm::_null))
+					archetype->release();
+
+				if (fromArchetype && (fromArchetype != (ObjectImpl*)&Udm::_null))
+					fromArchetype->release();
+
+				if (!copy_needed)
+					return;
+			}
+
 			string attrType=which.type();
 			bool attrArray = ((which.max() != 0) && (which.max() != 1));
 			bool np_attr = which.nonpersistent();
@@ -1668,14 +1759,14 @@ namespace Udm
 		UDM_DLL void ObjectImpl::CopyAttributeFromArchetype(const ::Uml::Attribute& which)
 		{
 			ObjectImpl * archetype = getArchetype();
-			CopyAttributeFrom(which, archetype);
+			CopyAttributeFrom(which, archetype, false);
 			archetype->release();
 		};
 
 		UDM_DLL void ObjectImpl::CopyAttributesFromArchetype()
 		{
 			ObjectImpl * archetype = getArchetype();
-			CopyAttributesFrom(archetype);
+			CopyAttributesFrom(archetype, false);
 			archetype->release();
 		};
 
