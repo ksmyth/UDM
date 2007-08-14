@@ -1,14 +1,36 @@
 <?xml version="1.0"?>
 <project name="udm" default="build" basedir=".">
+
   <description>udm build script</description>
 
 
   <!-- PROPERTIES -->
+  <property name="File.solution" value="Udm.sln"/>
+
   <ifnot test="${property::exists('Configuration')}">
     <property name="Configuration" value="Release"/>
   </ifnot>
 
-  <property name="Path.gme_root" value="${environment::get-variable('GME_ROOT')}"/>
+  <property
+   name="Path.gme_root"
+   value="${environment::get-variable('GME_ROOT')}"
+  />
+
+  <!--
+    FOR SOME REASON, WHEN EXECUTED UNDER CYGWIN, NAnt PERVERTS
+    THE VALUE OF THE 'PATH' VARIABLE, CONVERTING THE CHARACTER
+    SEQUENCE 'C:' TO 'C;d:'.  THEREFORE, A DIFFERENT VARIABLE
+    'WINPATH' IS SET UP AND COPIED INTO 'PATH' FOR NAnt.
+  -->
+  <if test="${environment::variable-exists('WINPATH')}">
+    <setenv name="PATH" value="${environment::get-variable('WINPATH')}"/>
+  </if>
+
+
+<!--
+
+  COMMENTED OUT, REPLACED BY ENVIRONMENT CONFIG IN session.pl
+
 
   <ifnot test="${property::exists('Path.udm_3rdparty')}">
     <property name="Path.udm_3rdparty" value="${environment::get-variable('UDM_3RDPARTY_PATH')}"/>
@@ -26,18 +48,6 @@
     <property name="Version.VS" value="7.1"/>"/>
   </ifnot>
 
-  <if test="${ Version.VS == '7.1' }">
-    <property name="Version.VS.verbose" value="7.1"/>
-    <property name="File.solution" value="Udm.sln"/>
-  </if>
-  <if test="${ Version.VS == '8' }">
-    <property name="Version.VS.verbose" value="8.0"/>
-    <property name="File.solution" value="UdmVS2005.sln"/>
-  </if>
-  <if test="${ Version.VS == '8E' }">
-    <property name="Version.VS.verbose" value="8.0"/>
-    <property name="File.solution" value="UdmVS2005.sln"/>
-  </if>
 
   <property name="Path.xerces"   value="${Path.udm_3rdparty}\xerces-c_2_5_0"/>
   <property name="Path.xalan"    value="${Path.udm_3rdparty}\xalan-c_1_8_0"/>
@@ -70,10 +80,10 @@
 
   <property name="Dir.framework" value="${framework::get-framework-directory(ID.framework)}"/>
 
-  <!-- WANT FRAMEWORK SDK DIR, BUT NAnt ONLY RETURNS SDK BIN DIRECTORY -->
+  <!- - WANT FRAMEWORK SDK DIR, BUT NAnt ONLY RETURNS SDK BIN DIRECTORY - ->
   <property name="Dir.frameworksdkbin" value="${framework::get-sdk-directory(ID.framework)}"/>
 
-  <!-- CHOP OFF '\bin' TO GET FRAMEWORK SDK DIR -->
+  <!- - CHOP OFF '\bin' TO GET FRAMEWORK SDK DIR - ->
   <property
    name="Dir.frameworksdk"
    value="${string::substring(
@@ -83,8 +93,8 @@
    )}"
   />
 
-  <!-- ENVIRONMENT VARIABLES -->
-  <!-- THESE WERE DERIVED FROM vcvars32.bat -->
+  <!- - ENVIRONMENT VARIABLES - ->
+  <!- - THESE WERE DERIVED FROM vcvars32.bat - ->
   <setenv name="VSINSTALLDIR"    value="${Dir.vsinstall}"/>
   <setenv name="VCINSTALLDIR"    value="${Dir.vcinstall}"/>
   <setenv name="FrameworkDir"    value="${Dir.framework}"/>
@@ -198,6 +208,10 @@
       </path>
     </variable>
   </setenv>
+
+  COMMENTED OUT, REPLACED BY ENVIRONMENT CONFIG IN session.pl
+
+-->
 
   <target name="init" description="initialization of build">
     <echo message="NAnt build for &quot;${Configuration}&quot; configuration"/>
