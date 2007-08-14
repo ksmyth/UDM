@@ -4,8 +4,10 @@
 	Version="7.10"
 	Name="UDMPat"
 	ProjectGUID="{EF8C7C28-568A-4335-9861-84ED3917E1A6}"
-	SccProjectName="&quot;$/MoBIESTransition/UDM&quot;, YOXAAAAA"
-	SccLocalPath=".">
+	SccProjectName="&quot;$/MoBIESTransition/udm_ns/src/UdmOclPat&quot;, QNZAAAAA"
+	SccAuxPath=""
+	SccLocalPath="."
+	SccProvider="MSSCCI:Microsoft Visual SourceSafe">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
