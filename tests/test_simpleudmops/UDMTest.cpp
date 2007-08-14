@@ -121,16 +121,16 @@ void CUDMTest::GetNetwork()
 	//rebuild the existing network
 	m_xmlfile.OpenExisting( "abc.xml", "LampDiagram.xsd");
 	m_root = LampDiagram::LampDiagram::RootFolder::Cast(m_xmlfile.GetRootObject());
-	set<LampDiagram::LampDiagram::Lamp> lamps = m_root.Lamp_kind_children();
+	set<LampDiagram::LampDiagram::Lamp> lamps = m_root.LampDiagram_Lamp_kind_children();
 	m_lamp = *(lamps.begin());
-	set<LampDiagram::LampDiagram::Bulb> bulbs = m_lamp.Bulb_kind_children();
+	set<LampDiagram::LampDiagram::Bulb> bulbs = m_lamp.LampDiagram_Bulb_kind_children();
 	m_bulb = *(bulbs.begin());
-	set<LampDiagram::LampDiagram::Plug> plugs = m_lamp.Plug_kind_children();
+	set<LampDiagram::LampDiagram::Plug> plugs = m_lamp.LampDiagram_Plug_kind_children();
 	m_plug = *(plugs.begin());
-	set<LampDiagram::LampDiagram::Switch> switches = m_lamp.Switch_kind_children();
+	set<LampDiagram::LampDiagram::Switch> switches = m_lamp.LampDiagram_Switch_kind_children();
 	m_switch = *(switches.begin());
-	set<LampDiagram::LampDiagram::ElectricTerminal> terms = m_plug.ElectricTerminal_kind_children();
+	set<LampDiagram::LampDiagram::ElectricTerminal> terms = m_plug.LampDiagram_ElectricTerminal_kind_children();
 	m_term1 = *(terms.begin());
-	terms = m_bulb.ElectricTerminal_kind_children();
+	terms = m_bulb.LampDiagram_ElectricTerminal_kind_children();
 	m_term2 = *(terms.begin());
 }
