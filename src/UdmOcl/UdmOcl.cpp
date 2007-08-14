@@ -285,10 +285,12 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 				for ( int i = 0 ; i < vecDefs.size() ; i++ ) {
 					if ( vecDefs[ i ]->IsValid() && m_pFacade->m_pTreeManager->GetTypeManager()->IsTypeA( signature.GetTypeName(), vecDefs[ i ]->GetContextType() ) >= 0 )
 						if ( vecDefs[ i ]->GetName() == signature.GetName() && vecDefs[ i ]->IsMethod() && vecDefs[ i ]->GetFormalParameters().size() == signature.GetParameterCount() )
+						{
 							const std::string name = signature.GetName();
 							const  OclCommon::FormalParameterVector fpv  = CreateFormalParameters( vecDefs[ i ]->GetFormalParameters() );
 							TypeSeq ts = CreateReturnType( vecDefs[ i ]->GetReturnType() );
 							vecFeatures.push_back( new OclMeta::Method(signature.GetName(), fpv , ts , new ConstraintMethod( vecDefs[ i ] ), true, true ) );
+						}
 				}
 			}
 
@@ -1076,8 +1078,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 
 	UDM_DLL bool ProcessPat( const ::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression)
 	{
-		//std::string strContext = (string)objContext.type().name();
-		std::string strContext = ::UdmOcl::GetQualifiedName(objContext.type());
+		std::string strContext = (string)objContext.type().name();
 		SErrorNotification en = SErrorNotification();
 		Constraint::setPatProcessFlag(true);
 		size_t _pos = 0;
@@ -1090,8 +1091,10 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 			_start = strExpression.find_first_not_of(strWhitespace, _pos);
 			_end = strExpression.find("::", _start);
 			if(_end < 0) throw(udm_exception("Error defining method"));
-			std::string strClassName = strExpression.substr(_start,
-_end - _start);
+			std::string strClassName = strExpression.substr(_start, _end - _start);
+
+			::Uml::Class cls = ::Uml::classByName(metaDiagram, strClassName);
+			if(!cls) throw(udm_exception("Error defining method: class '" + strClassName + "' doesn't exist"));
 
 			_start = _end + 2;
 			_end = strExpression.find('(', _start);
@@ -1114,7 +1117,7 @@ _end - _start);
 			if(_end < 0) throw(udm_exception("Error defining method"));
 			std::string strMethodExpression = strExpression.substr(_start, _end - _start);
 
-			::Uml::ConstraintDefinition cd = ::Uml::ConstraintDefinition::Create(::Uml::classByName(metaDiagram, strClassName));
+			::Uml::ConstraintDefinition cd = ::Uml::ConstraintDefinition::Create(cls);
 			cd.name() = strMethodName;
 			cd.expression() = strMethodExpression;
 			cd.parameterList() = strArgList;
