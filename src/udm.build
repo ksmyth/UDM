@@ -147,115 +147,64 @@
   </target>
 
   <target name="gocl_antlr" depends="init" description="GOCL ANTLR execution">
-    <exec 
-     program="antlr.exe"
-     basedir="UdmOclPat\GOCL\src\ANTLRBase"
-     workingdir="UdmOclPat\GOCL\src"
-     commandline="-CC -ft OCLTokens.h -fl OCLTokens.dlg -mrhoist off ocl.g"
-    />
-<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
-     ARGUMENT ELEMENTS.
+    <exec program="antlr.exe" basedir="UdmOclPat\GOCL\src\ANTLRBase" workingdir="UdmOclPat\GOCL\src">
       <arg line="-CC"/>
       <arg line="-ft OCLTokens.h"/>
       <arg line="-fl OCLTokens.dlg"/>
       <arg line="-mrhoist off"/>
-      <arg file="ocl.g"/>
+      <arg line="ocl.g"/>
     </exec>
--->
-    <exec
-     program="dlg.exe"
-     basedir="UdmOclPat\GOCL\src\ANTLRBase"
-     workingdir="UdmOclPat\GOCL\src"
-     commandline="-C2 -i -CC -cl OCLLexer OCLTokens.dlg"
-    />
-<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
-     ARGUMENT ELEMENTS.
+    <exec program="dlg.exe" basedir="UdmOclPat\GOCL\src\ANTLRBase" workingdir="UdmOclPat\GOCL\src">
       <arg line="-C2"/>
       <arg line="-i"/>
       <arg line="-CC"/>
       <arg line="-cl OCLLexer"/>
-      <arg file="OCLTokens.dlg"/>
+      <arg line="OCLTokens.dlg"/>
     </exec>
--->
   </target>
 
   <target name="zip_udmint" depends="init" description="ZIP compress UdmInterpreter file">
-    <exec
-     program="zip"
-     workingdir="UIntWiz\res"
-     commandline="-r UdmInterpreter.zip UdmInterpreter -x *.scc"
-    />
-<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
-     ARGUMENT ELEMENTS.
+    <exec program="zip" workingdir="UIntWiz\res">
       <arg line="-r"/>
-      <arg file="UdmInterpreter.zip"/>
-      <arg file="UdmInterpreter"/>
+      <arg line="UdmInterpreter.zip"/>
+      <arg line="UdmInterpreter"/>
       <arg line="-x *.scc"/>
     </exec>
--->
   </target>
 
   <target name="midl_gme_comp" depends="init" description="midl execution on GME BON ComponentLib.idl">
-    <exec
-     program="midl.exe"
-     workingdir="UML GME\Interpreter"
-     commandline="-I.\ /server none /client none &quot;${Path.gme_root}\sdk\BON\ComponentLib.idl&quot;"
-    />
-<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
-     ARGUMENT ELEMENTS.
+    <exec program="midl.exe" workingdir="UML GME\Interpreter">
       <arg line="-I.\"/>
       <arg line="/server none"/>
       <arg line="/client none"/>
-      <arg file="${Path.gme_root}\sdk\BON\ComponentLib.idl"/>
+      <arg line="&quot;${Path.gme_root}\sdk\BON\ComponentLib.idl&quot;"/>
     </exec>
--->
   </target>
 
   <target name="antlr_interp_card" depends="init" description="antlr execution for GME Interpreter cardinality.g">
-    <exec
-     program="java"
-     workingdir="UML GME\Interpreter"
-     commandline="antlr.Tool cardinality.g"
-    />
-<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
-     ARGUMENT ELEMENTS.
+    <exec program="java" workingdir="UML GME\Interpreter">
       <arg line="antlr.Tool"/>
-      <arg file="cardinality.g"/>
+      <arg line="cardinality.g"/>
     </exec>
--->
   </target>
 
   <target name="antlr_interp_attr" depends="init" description="antlr execution for GME Interpreter attribute.g">
-    <exec
-     program="java"
-     workingdir="UML GME\Interpreter"
-     commandline="antlr.Tool attribute.g"
-    />
-<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
-     ARGUMENT ELEMENTS.
+    <exec program="java" workingdir="UML GME\Interpreter">
       <arg line="antlr.Tool"/>
-      <arg file="attribute.g"/>
+      <arg line="attribute.g"/>
     </exec>
--->
   </target>
 
   <target name="udm_swig" depends="init" description="swig execution for java interface to udm">
-    <exec
-     program="swig.exe"
-     workingdir="UdmSwig"
-     commandline="-java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o UdmSwig_wrap.cpp UdmSwig.i"
-    />
-<!-- CURRENTLY, NANT IGNORES "workingdir" ATTRIBUTE WHEN WORKING WITH
-     ARGUMENT ELEMENTS.
+    <exec program="swig.exe" workingdir="UdmSwig">
       <arg line="-java"/>
       <arg line="-package edu.vanderbilt.isis.udm.swig"/>
       <arg line="-outdir ..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig"/>
       <arg line="-v"/>
       <arg line="-c++"/>
       <arg line="-o UdmSwig_wrap.cpp"/>
-      <arg file="UdmSwig.i"/>
+      <arg line="UdmSwig.i"/>
     </exec>
--->
   </target>
 
   <target
