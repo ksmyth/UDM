@@ -3681,13 +3681,13 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 
 			::Uml::Namespace rootclass_ns = rootclass.parent_ns();
-			string root_ns_name("");
-			if (rootclass_ns != ::Uml::Namespace(NULL))
-				root_ns_name = rootclass_ns.name();
-
 			string root_qualified_name;
-			if (root_ns_name.length())
-				root_qualified_name = root_ns_name + ":";
+			string root_uri = getNSURI("__dgr_" + string(metaroot.dgr->name()));
+			if (rootclass_ns != ::Uml::Namespace(NULL)) {
+				root_qualified_name = (string)rootclass_ns.name() + ":";
+				root_uri = getNSURI(rootclass_ns.name());
+			}
+
 			root_qualified_name += rootname;
 
 			//string root_uri = getNSURI(root_ns_name.length() ? root_ns_name : "__dgr_" + string(metaroot.dgr->name()));
@@ -3697,8 +3697,7 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 
 
 			doc = impl.createDocument(
-					//root_uri.c_str(),                    // root element namespace URI.
-					"",                    // root element namespace URI.
+					root_uri.c_str(),                    // root element namespace URI.
 					root_qualified_name.c_str(),            // root element name
 					dtd);  // document type object (DTD).
 		
@@ -3747,9 +3746,9 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 					//string ns_uri = string(UDM_DOM_URI_PREFIX) + ns_name;
 						
 					if (schemalocations.size()) schemalocations += ' ';
-					schemalocations += (string)metaroot.dgr->name() + '_';
 					schemalocations += ns_uri;
 					schemalocations += ' ';
+					schemalocations += (string)metaroot.dgr->name() + '_';
 					schemalocations += ns_name;
 					schemalocations += ".xsd";
 
