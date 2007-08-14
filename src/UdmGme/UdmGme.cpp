@@ -13,6 +13,9 @@ this software.
 /*
 CHANGELOG
 
+  03/22/06	-	endre
+			-	change amapInitialize to use all subtypes of an association class, even if the meta contains an object named like the assoc class
+
   11/29/05	-	endre
 
 			-	add support for references that are an abstract UML class
@@ -657,8 +660,7 @@ namespace UdmGme
 		//cout << "MGA BACKEND DEBUG: size of kvect  is: " << kvect.size() << endl;
 		//cout << "MGA BACKEND DEBUG: size of pvect  is: " << pvect.size() << endl;
 
-		vector<ObjectImpl*>::iterator i;
-		for(i = kvect.begin(); i != kvect.end(); ) 
+		for(vector<ObjectImpl*>::iterator i = kvect.begin(); i != kvect.end(); ) 
 		{
 			//cout <<"MGA BACKEND DEBUG: Object present in original kvect: " <<  (char *)(static_cast<GmeObject *>(*i)->self->GetName()) << ", id:" << (char*)(static_cast<GmeObject *>(*i)->self->GetID()) <<  endl;
 			for(vector<ObjectImpl*>::iterator j = pvect.begin(); j != pvect.end(); j++) 
@@ -1414,8 +1416,7 @@ bbreak:			;
 // keep children with other roles
 			if(rr != NULL && rr != MGACOLL_ITER->MetaRole) continue;
 // keep children if they are about to be moved here
-			vector<ObjectImpl *>::iterator i;
-			for(i = aa.begin(); i != aa.end(); i++) 
+			for(vector<ObjectImpl *>::iterator i = aa.begin(); i != aa.end(); i++) 
 			{
 				if(*i && MGACOLL_ITER == static_cast<GmeObject *const>(*i)->self) 
 				{
@@ -2302,9 +2303,8 @@ bbreak:			;
 			default:
 				CloseNoUpdate();
 		}
-		delete &priv;
-		gdnmap::iterator ff;
-		for(ff = GDNMap.begin(); ff != GDNMap.end(); ff++) {
+		delete &priv; 
+		for(gdnmap::iterator ff = GDNMap.begin(); ff != GDNMap.end(); ff++) {
 			if(*ff == this) break;
 		}
 		if(ff == GDNMap.end()) throw udm_exception("Corrupt GME DN map");
@@ -2593,8 +2593,7 @@ bbreak:			;
 					{
 						// the assoc name is not empty; 
 						// if it matches any of the end class names, it is a reference or a set
-						set< ::Uml::AssociationRole>::iterator j;
-						for(j = roles.begin(); j != roles.end(); j++) 
+						for(set< ::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
 						{
 							if(searchname == NAMEGET((::Uml::Class)j->target()) && Uml::theOther(*j).isNavigable()) 
 							{
@@ -2615,44 +2614,45 @@ bbreak:			;
 				else 
 				{
 					// the assoc has an aclass, it must be a connection
-					nn.metaobj = MetaObjLookup(metaproj, aclass.name());
 					expect = OBJTYPE_CONNECTION;
-					if (nn.metaobj == NULL)
+
+					// check if it has subtypes
+					set< ::Uml::Class> descs = Uml::DescendantClasses(aclass);
+					if (descs.size() <= 1)
 					{
-						//probably aclass is an abstract  supertype
+						nn.metaobj = MetaObjLookup(metaproj, aclass.name());
+					}
+					else
+					{
 						//we have to list all the subtypes and put in the metaobjs
-						set< ::Uml::Class> descs = Uml::DescendantClasses(aclass);
-						if (descs.size())
-						{
 
-							//first we compute the real size: the number of descendant association classes,
-							//which can be mapped to an MGA connection object.
-							//this means that they are not abstract
-							int real_size = 0;
-							for (set< ::Uml::Class>::iterator desc_i = descs.begin();desc_i != descs.end();desc_i++)
-							{	
-								IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_i->name());
-								if (p) real_size++;
+						//first we compute the real size: the number of descendant association classes,
+						//which can be mapped to an MGA connection object.
+						//this means that they are not abstract
+						int real_size = 0;
+						for (set< ::Uml::Class>::iterator desc_i = descs.begin();desc_i != descs.end();desc_i++)
+						{	
+							IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_i->name());
+							if (p) real_size++;
+						};
+
+						//fill in the nn structure
+						nn.metaobjs_count = real_size;
+						nn.metaobjs = new IMgaMetaFCOPtr[real_size];
+						int j = 0;
+
+						//copy the MgaMetaFCOPtrs to the allocated array in the nn structure
+						for (set< ::Uml::Class>::iterator desc_ii = descs.begin();desc_ii != descs.end();desc_ii++)
+						{	
+							IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_ii->name());
+							if (p)
+							{
+								nn.metaobjs[j] = p;
+								j++;
 							};
-
-							//fill in the nn structure
-							nn.metaobjs_count = real_size;
-							nn.metaobjs = new IMgaMetaFCOPtr[real_size];
-							int j = 0;
-
-							//copy the MgaMetaFCOPtrs to the allocated array in the nn structure
-							for (set< ::Uml::Class>::iterator desc_ii = descs.begin();desc_ii != descs.end();desc_ii++)
-							{	
-								IMgaMetaFCOPtr p = MetaObjLookup(metaproj, desc_ii->name());
-								if (p)
-								{
-									nn.metaobjs[j] = p;
-									j++;
-								};
-							};
+						};
 							
-						};//if (descs.size())
-					};
+					} //if (descs.size() <= 1)
 				} //if (nn.metaobj == NULL)
 			}//if (nn.metaobj == NULL)
 			if(nn.metaobj == NULL && !nn.metaobjs_count) 
