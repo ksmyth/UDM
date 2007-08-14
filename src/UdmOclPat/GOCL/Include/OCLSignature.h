@@ -208,6 +208,7 @@ namespace OclSignature
 							Method( const std::string& strName, const std::string& strTypeName, const StringVector& vecTypes );
 		protected :
 							Method( const std::string& strName, const OclCommon::FormalParameterVector& vecParameters );
+							Method( const std::string& strName, const std::string& strTypeName, const OclCommon::FormalParameterVector& vecParameters );
 		public :
 			virtual 			~Method();
 
