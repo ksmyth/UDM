@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{964AF35A-8C2A-4CC2-A6CE-85F1DDAFFF5B}" cdate="Sun Jul 10 14:48:59 2005" mdate="Sun Jul 10 14:48:59 2005" version="" metaguid="{FB4641D2-A80D-4BAC-B0AA-570519CD80D0}" metaversion="" metaname="UML">
+<project guid="{0C6279B3-CB82-4A54-9AE4-1F5119EA2C9B}" cdate="Mon Sep 26 19:00:26 2005" mdate="Mon Sep 26 19:00:26 2005" version="" metaguid="{FB4641D2-A80D-4BAC-B0AA-570519CD80D0}" metaversion="" metaname="UML">
 	<name>SBML2Ex</name>
 	<comment></comment>
 	<author></author>
@@ -1197,7 +1197,7 @@ value: Text[0..1]</value>
 							<value>The variable referencedor parameter element. by a rule must be an existing species, compartment, </value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.sbml::species
+							<value>let s = dn.SBML2Ex::sbml::species
 in
 let c = dn.compartment
 in
@@ -1620,7 +1620,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>A Model that has a Species must also have at least one Compartment</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.sbml::species in
+							<value>let s = dn.SBML2Ex::sbml::species in
 let c = dn.compartment in 
   s-&gt;size &gt; 0
     implies
@@ -3039,7 +3039,7 @@ in
 							<value>A species reference in a reaction needs to be to a defined species. The reference can be from reactants, products, or modifiers</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.sbml::species
+							<value>let s = dn.SBML2Ex::sbml::species
 in
 if (s.isUndefined()) then
  true
