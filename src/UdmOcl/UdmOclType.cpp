@@ -126,7 +126,13 @@ char *_strlwr( char *string )
 						GOCL_STL_NS()string strClass = vecClasses[ i ].name();
 						GOCL_STL_NS()string strNs = ((::Uml::Uml::Namespace)vecClasses[ i ].parent()).name();
 						GOCL_STL_NS()string strRole = LowerFirst( strClass );
-						if ( strRole == signature.GetName() ) {
+						GOCL_STL_NS()string strRole_Ns = LowerFirst( strNs ) +"::" + strClass ;
+						GOCL_STL_NS()string strSig = signature.GetName();
+						bool bHasNamespace = strSig.find( "::" ) != GOCL_STL_NS()string::npos; // true if qualified type, false if local type
+						
+
+						if ((bHasNamespace && ( strRole_Ns == signature.GetName())) || ( (!bHasNamespace) && (strRole == signature.GetName()) ) )
+						{
 							TypeSeq vecType( 1, "ocl::Set" );
 							vecType.push_back( strNs + "::" + strClass );
 							vecFeatures.push_back( new OclMeta::Association( strRole, "", vecType, new TDataNetworkDerived_Classes( vecClasses[ i ] ), true ) );
