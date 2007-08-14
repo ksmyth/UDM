@@ -55,6 +55,15 @@ extern TokenSet First_right_brace;
 extern TokenSet First_expressionListOrRange;
 extern TokenSet First_qualifiers;
 
+//<udmoclpat changes
+extern TokenSet First_fileNode;
+extern TokenSet First_handleNode;
+extern TokenSet First_printNode;
+extern TokenSet First_textNode;
+extern TokenSet First_enumeratedExpression;
+extern TokenSet First_extendedExpression;
+//udmoclpat changes>
+
 extern TokenSet Last_contextDeclarationHelper;
 extern TokenSet Last_literal;
 extern TokenSet Last_primaryExpression;
