@@ -28,6 +28,8 @@ namespace DTDGen
 
 	void AddUMLNamespaceToURIMapping(const char *optp, map<string, string> &ns_map);
 
+  void AddUMLNamespaceToIgnoreList(const char *optp, set<string> &ns_ignore_set);
+
 	//generates DTD elements
 	void GenerateDTDElement(const ::Uml::Uml::Class &c,  ostream &output);
 
@@ -41,10 +43,10 @@ namespace DTDGen
 	void GenerateXMLSchemaAttributes(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi = false);
 
 	//generates XSD elements
-	void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi = false, bool xsd_el_ta = false);	
+	void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi = false, bool xsd_el_ta = false, set<string> *ns_ignore_set = NULL);	
 
 	//generates complete XML Schema 
-	void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi = false, bool xsd_el_ta = false, map<string, string> *ns_map = NULL);
+	void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi = false, bool xsd_el_ta = false, map<string, string> *ns_map = NULL, set<string> *ns_ignore_set = NULL);
 };
 
 #endif

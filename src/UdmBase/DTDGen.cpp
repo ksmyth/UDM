@@ -665,6 +665,14 @@ namespace DTDGen
 		return uri;
 	}
 
+	void AddUMLNamespaceToIgnoreList(const char *optp, set<string> &ns_ignore_set)
+	{
+		string opt(optp);
+  	if (opt.empty())
+				throw udm_exception("UML namespace must not be empty in argument \"" + opt + "\" of \"-i\" switch");
+    ns_ignore_set.insert(optp);
+	}
+
 	void AddUMLNamespaceToURIMapping(const char *optp, map<string, string> &ns_map)
 	{
 		string opt(optp);
@@ -916,7 +924,7 @@ namespace DTDGen
 		}
 };
 
-void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi, bool xsd_el_ta)	
+void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool uxsdi, bool xsd_el_ta, set<string> *ns_ignore_set)	
 {
 	string name = c.name();
 	bool has_text_attr = Uml::HasTextAttributes(c);
@@ -982,23 +990,43 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 				output << "\t\t<xsd:sequence>" << endl;
 		}
 
+    bool any_is_there = false;
 		cwcp_order::iterator cwcps_i = cwcps.begin();
 		while (cwcps_i != cwcps.end())
 		{
 			string i_name = cwcps_i->first.name();
 			::Uml::Uml::Namespace i_ns = cwcps_i->first.parent();
-			output << "\t\t\t<xsd:element";
-			if (ns == i_ns)
-				output << " name=\"" << i_name << "\" type=\"" <<	i_name << "Type\"";
-			else
-				output << " ref=\"" << i_ns.name() << ":" << i_name << "\"";
-			if (cwcps_i->second.first != 1)
-				output << " minOccurs=\"" << cwcps_i->second.first << "\"";
-			if (cwcps_i->second.second == -1)
-				output << " maxOccurs=\"unbounded\"";
-			else if	(cwcps_i->second.second != 1)
-				output << " maxOccurs=\"" << cwcps_i->second.second << "\"";
-			output << "/>" << endl;
+
+      bool ignore = false;
+      if (ns_ignore_set!=0)
+      {
+        set<string>::const_iterator sit = ns_ignore_set->find(i_ns.name());
+        if (sit != ns_ignore_set->end())
+        {
+          if (!any_is_there)
+          {
+            output << "\t\t\t<xsd:any  processContents=\"skip\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>"<< endl;
+            any_is_there = true;
+          }
+          ignore = true;
+        }
+      }
+      
+      if (!ignore)
+      {
+			  output << "\t\t\t<xsd:element";
+			  if (ns == i_ns)
+				  output << " name=\"" << i_name << "\" type=\"" <<	i_name << "Type\"";
+			  else
+				  output << " ref=\"" << i_ns.name() << ":" << i_name << "\"";
+			  if (cwcps_i->second.first != 1)
+				  output << " minOccurs=\"" << cwcps_i->second.first << "\"";
+			  if (cwcps_i->second.second == -1)
+				  output << " maxOccurs=\"unbounded\"";
+			  else if	(cwcps_i->second.second != 1)
+				  output << " maxOccurs=\"" << cwcps_i->second.second << "\"";
+			  output << "/>" << endl;
+      }
 			cwcps_i++;
 		}
 
@@ -1021,7 +1049,7 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 	output << "\t</xsd:complexType>" << endl << endl;
 }
 
-void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi, bool xsd_el_ta, map<string, string> *ns_map )
+void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool uxsdi, bool xsd_el_ta, map<string, string> *ns_map, set<string> *ns_ignore_set  )
 {
 
 
@@ -1063,7 +1091,7 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 		{
 			if(uxsdi || !(bool)i->isAbstract() )
 			{
-				GenerateXMLSchemaElement(*i,  output, uxsdi, xsd_el_ta);
+				GenerateXMLSchemaElement(*i,  output, uxsdi, xsd_el_ta, ns_ignore_set);
 				// XSD elements can't be of abstract types,
 				// don't make them globals
 				if (!uxsdi || !(bool)i->isAbstract()) {
