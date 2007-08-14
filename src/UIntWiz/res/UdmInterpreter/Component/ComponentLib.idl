@@ -2,7 +2,7 @@
 // This file will be processed by the MIDL compiler to produce the
 // type library (ComponentLib.tlb).
 
-#include <ComponentConfig.h>
+#include "ComponentConfig.h"
 
 #define MAKE_STR(PAR) #PAR
 #define PATH3(X,Y) MAKE_STR(X##Y)
