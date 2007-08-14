@@ -4,7 +4,7 @@
 
 1. Windows Operating system (preferably NT, 2000, XP)
 
-2. GME 4, R4.11.10 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 4, R5.09.21 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 7.1
@@ -12,6 +12,21 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+
+11/07/05		Release 3.00
+
+		
+		-	Enhanced GME reference port issues - the helper connections can be accessed even if the GME datanetwork was not created with UDM.
+		-	Enhancing the functionality of GetAdjacentObjects() family of functions to return multiset-s, with eventually multiple copies of the same instance. The original functions 
+			were replaced by GetAdjacentUniqueObjects().
+		-	Compiled Linux_build.txt to describe how to build the package on Linux platforms;
+		-	Removed all cint related stuff
+		-	UdmPOI library introduced for UdmPseudoObject Interface.
+		- 	Java codegenerator, java support w/ SWIG; Renamed udmCint to UdmSwig
+		-	Added Namespace support 
+
+
+
 06/16/05		Release 2.23
 
 		-	Upgraded to VC71
