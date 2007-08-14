@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <algorithm>
 
-#include ".\file2code.h"
+#include "File2Code.h"
 
 File2Code::File2Code(const std::string& name, // the name of the generated source file
                     const std::string& infname, // the input xsd file

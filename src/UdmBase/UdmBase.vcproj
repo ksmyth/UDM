@@ -270,25 +270,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\Uml.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"/>
-				</FileConfiguration>
+				RelativePath="..\Udm\Uml.cpp">
 			</File>
 			<File
 				RelativePath="UmlExt.cpp">
@@ -332,9 +314,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\UdmStatic.h">
-			</File>
-			<File
-				RelativePath="..\..\include\Uml.h">
 			</File>
 			<File
 				RelativePath="..\..\include\UmlExt.h">

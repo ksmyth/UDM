@@ -1,4 +1,4 @@
-#include ".\javaapigen.h"
+#include "JavaAPIGen.h"
 
 void GenerateJava(const ::Uml::Uml::Diagram &diagram
 , const map<string, string> & ns_map
