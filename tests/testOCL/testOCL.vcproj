@@ -159,7 +159,7 @@
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%\bin\UdmD.exe&quot; $(InputPath) -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g
 "
-					Outputs="SBML2.cpp;SBML2.h"/>
+					Outputs="SBML2.cpp;SBML2.h;SBML2.dtd;SBML2.xsd;SBML2_xsd.h;SBML2_math.dtd;SBML2_math.xsd;SBML2_math_xsd.h;SBML2_sbml.dtd;SBML2_sbml.xsd;SBML2_sbml_xsd.h"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
@@ -167,7 +167,7 @@
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%\bin\Udm.exe&quot; $(InputPath) -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g
 "
-					Outputs="SBML2.cpp;SBML2.h"/>
+					Outputs="SBML2.cpp;SBML2.h;SBML2.dtd;SBML2.xsd;SBML2_xsd.h;SBML2_math.dtd;SBML2_math.xsd;SBML2_math_xsd.h;SBML2_sbml.dtd;SBML2_sbml.xsd;SBML2_sbml_xsd.h"/>
 			</FileConfiguration>
 		</File>
 		<File

@@ -25,7 +25,7 @@ using namespace ::Udm;
 //==================================
 void UdmTests::Test::readSBML(const std::string& fname)
 {
- 	std::string   sbml_xsdName("sbml.xsd"); 
+ 	std::string   sbml_xsdName("SBML2_sbml.xsd"); 
 //  std::string sxsd(sbml_xsd::getString());
 /*
   UdmDom::str_xsd_storage::StoreXsd(sbml_xsdName , sxsd);
@@ -52,7 +52,7 @@ void UdmTests::Test::readSBML(const std::string& fname)
 //==================================
 void UdmTests::Test::readTest()
 {
- 	std::string   sbml_xsdName("sbml.xsd"); 
+ 	std::string   sbml_xsdName("SBML2_sbml.xsd"); 
 //  std::string sxsd(sbml_xsd::getString());
 
 //  UdmDom::str_xsd_storage::StoreXsd(sbml_xsdName , sxsd);
@@ -84,7 +84,7 @@ void UdmTests::Test::selfTest()
 
   UdmDom::DomDataNetwork  out(::SBML2::diagram);
 	
- 	std::string   sbml_xsdName("sbml.xsd"); 
+ 	std::string   sbml_xsdName("SBML2_sbml.xsd"); 
 //  std::string sxsd(sbml_xsd::getString());
 
 //  UdmDom::str_xsd_storage::StoreXsd(sbml_xsdName , sxsd);
@@ -231,7 +231,7 @@ void UdmTests::Test::read(const std::string& fname,
    outt << xml;
    outt.close();
 
- 	std::string   sbml_xsdName("sbml.xsd");
+ 	std::string   sbml_xsdName("SBML2_sbml.xsd");
 
   //UdmDom::str_xsd_storage::StoreXsd(sbml_xsdName , sbml_xsd::getString());
   //UdmDom::str_xsd_storage::StoreXsd("math.xsd" , math_xsd::getString());

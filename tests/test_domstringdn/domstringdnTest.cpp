@@ -21,7 +21,7 @@ void UdmTests::domstringdnTest::test()
 	string xml_xsd;
 xml_xsd += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 xml_xsd += "<?udm interface=\"LampDiagram\" version=\"1.00\"?>";
-xml_xsd += "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"http://www.isis.vanderbilt.edu/2004/schemas/LampDiagram\" xmlns:LampDiagram=\"http://www.isis.vanderbilt.edu/2004/schemas/LampDiagram\" elementFormDefault=\"qualified\" >";
+xml_xsd += "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" elementFormDefault=\"qualified\" >";
 xml_xsd += "<!-- generated on Sat Apr 30 13:47:03 2005 -->";
 xml_xsd += "	<xsd:complexType name=\"BulbType\">";
 xml_xsd += "		<xsd:sequence>";
@@ -197,23 +197,23 @@ xml_xsd += "</xsd:schema>";
 
 
 	
-string xml_str = "<LampDiagram:RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:LampDiagram=\"http://www.isis.vanderbilt.edu/2004/schemas/LampDiagram\" xsi:schemaLocation=\"http://www.isis.vanderbilt.edu/2004/schemas/LampDiagram LampDiagram.xsd\"><LampDiagram:Lamp name=\"Host Lamp \" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Sequence tester lamp\"><LampDiagram:Bulb name=\"Bulb 1\" Voltage=\"10.000000\" Wattage=\"100.000000\"/><LampDiagram:Bulb name=\"Bulb 2\" Voltage=\"20.000000\" Wattage=\"200.000000\"/><LampDiagram:Bulb name=\"Bulb 3\" Voltage=\"30.000000\" Wattage=\"300.000000\"/><LampDiagram:Plug/></LampDiagram:Lamp></LampDiagram:RootFolder>";
+string xml_str = "<RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"LampDiagram.xsd\"><Lamp name=\"Host Lamp \" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Sequence tester lamp\"><Bulb name=\"Bulb 1\" Voltage=\"10.000000\" Wattage=\"100.000000\"/><Bulb name=\"Bulb 2\" Voltage=\"20.000000\" Wattage=\"200.000000\"/><Bulb name=\"Bulb 3\" Voltage=\"30.000000\" Wattage=\"300.000000\"/><Plug/></Lamp></RootFolder>";
 string xml_verify_str = 
 
-"<LampDiagram:RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:LampDiagram=\"http://www.isis.vanderbilt.edu/2004/schemas/LampDiagram\" xsi:schemaLocation=\"http://www.isis.vanderbilt.edu/2004/schemas/LampDiagram LampDiagram.xsd\">\n\
-	<LampDiagram:Lamp name=\" name changed!\" sample=\"3.14159\" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Sequence tester lamp\">\n\
-		<LampDiagram:Bulb name=\"Bulb 1\" Voltage=\"10.000000\" Wattage=\"100.000000\"/>\n\
-		<LampDiagram:Bulb name=\"Bulb 2\" Voltage=\"20.000000\" Wattage=\"200.000000\"/>\n\
-		<LampDiagram:Bulb name=\"Bulb 3\" Voltage=\"30.000000\" Wattage=\"300.000000\"/>\n\
-		<LampDiagram:Plug/>\n\
-	</LampDiagram:Lamp>\n\
-</LampDiagram:RootFolder>\n\n";
+"<RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"LampDiagram.xsd\">\n\
+	<Lamp name=\" name changed!\" sample=\"3.14159\" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Sequence tester lamp\">\n\
+		<Bulb name=\"Bulb 1\" Voltage=\"10.000000\" Wattage=\"100.000000\"/>\n\
+		<Bulb name=\"Bulb 2\" Voltage=\"20.000000\" Wattage=\"200.000000\"/>\n\
+		<Bulb name=\"Bulb 3\" Voltage=\"30.000000\" Wattage=\"300.000000\"/>\n\
+		<Plug/>\n\
+	</Lamp>\n\
+</RootFolder>\n\n";
 
 	string xml_verify_str1 = 
 
-"<LampDiagram:RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:LampDiagram=\"http://www.isis.vanderbilt.edu/2004/schemas/LampDiagram\" xsi:schemaLocation=\"http://www.isis.vanderbilt.edu/2004/schemas/LampDiagram LampDiagram.xsd\">\n\
-	<LampDiagram:Lamp name=\"cool!\" sample=\"3.141590\" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Default Lamp Name\"/>\n\
-</LampDiagram:RootFolder>\n\n";
+"<RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"LampDiagram.xsd\">\n\
+	<Lamp name=\"cool!\" sample=\"3.141590\" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Default Lamp Name\"/>\n\
+</RootFolder>\n\n";
 
 
 	UdmDom::str_xsd_storage::StoreXsd("LampDiagram.xsd", xml_xsd);
