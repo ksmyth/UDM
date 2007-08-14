@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{EB43BA8C-EE54-459A-8537-B9FCDFE9CEC8}" cdate="Sat May 21 21:24:45 2005" mdate="Sat May 21 21:24:45 2005" version="" metaguid="{C4B2BB6A-FD30-4753-BD63-30D1C98C6ED1}" metaversion="" metaname="UML">
+<project guid="{86551642-A6E7-4678-81BA-36AFC25C3DAA}" cdate="Tue Jun 07 23:30:49 2005" mdate="Tue Jun 07 23:30:49 2005" version="" metaguid="{47244497-D6CF-4817-9A02-CD8549EE76D1}" metaversion="" metaname="UML">
 	<name>Uml</name>
 	<comment></comment>
 	<author></author>
@@ -12,18 +12,18 @@
 			<attribute kind="version">
 				<value>2.04</value>
 			</attribute>
-			<model id="id-0065-00000003" kind="Namespace" role="Namespace" relid="0x2" childrelidcntr="0x1">
+			<model id="id-0065-00000002" kind="Namespace" role="Namespace" relid="0x2" childrelidcntr="0x1">
 				<name>Uml</name>
-				<regnode name="PartRegs">
+				<regnode name="PartRegs" isopaque="yes">
 					<value></value>
-					<regnode name="UML">
+					<regnode name="UML" isopaque="yes">
 						<value></value>
 						<regnode name="Position" isopaque="yes">
 							<value>371,63</value>
 						</regnode>
 					</regnode>
 				</regnode>
-				<model id="id-0065-00000002" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x27">
+				<model id="id-0065-00000003" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x27">
 					<name>Uml</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -34,9 +34,6 @@
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace" status="meta">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000001" kind="Class" role="Class" relid="0x20">
 						<name>ConstraintDefinition</name>
 						<regnode name="PartRegs" isopaque="yes">
