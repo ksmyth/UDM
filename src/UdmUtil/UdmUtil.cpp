@@ -686,4 +686,22 @@ namespace UdmUtil
 		return ret;
 	}
 
+	UDM_DLL string replace_delimiter(const string &s, const string &old_d, const string &new_d)
+	{
+		if (s.length() == 0 || old_d.length() == 0)
+			return s;
+
+		string r;
+		string::size_type pi = 0;
+		string::size_type i = s.find(old_d);
+		while (i != string::npos) {
+			r += s.substr(pi, i - pi);
+			r += new_d;
+			pi = i + old_d.length();
+			i = s.find(old_d, pi);
+		}
+		r += s.substr(pi);
+		return r;
+	}
+
 };

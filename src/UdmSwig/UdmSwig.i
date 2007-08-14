@@ -130,6 +130,7 @@ struct AssociationInfo
 {
 
 	cint_string assoc_class;//can be NULL
+	cint_string assoc_class_ns;	//path(delim = "::")
 	cint_string SrcRolename;
 	cint_string DstRolename;
 	AssociationInfo(const char *src, const char *dst, const char *assoc);
@@ -177,8 +178,8 @@ public:
 	bool getParent(const char * prole, UdmPseudoObject &value) const;
 	bool setParent(UdmPseudoObject &parent, const char * prole);
 	bool detach();
-	bool getChildrenCount(const char * crole, const char * kind, const char * kind_ns,UdmLong& count) const; // HN1
-	bool getChildren(const char * crole, const char * kind, const char * kind_ns,UdmPseudoObjectS &value) const;
+	bool getChildrenCount(const char * crole, const char * kind, const char * kind_ns_path, UdmLong& count) const; // HN1
+	bool getChildren(const char * crole, const char * kind, const char * kind_ns_path, UdmPseudoObjectS &value) const;
 	bool setChildren(const char * crole, const UdmPseudoObjectS &value);
 
 
@@ -218,17 +219,17 @@ public:
 	//TOMI
 	bool GetAdjacentObjectsCount(UdmLong &count); // HN3
 	bool GetAdjacentObjects(UdmPseudoObjectS &value);
-	bool GetAdjacentObjectsCount(const char * dst_type, const char * dst_type_ns,UdmLong& count); // HN4
-	bool GetAdjacentObjects(const char * dst_type, const char * dst_type_ns,UdmPseudoObjectS &value);
-	bool GetAdjacentObjectsCount(const char * dst_type, const char * dst_type_ns,const AssociationInfo & ass, UdmLong& count); // HN5
-	bool GetAdjacentObjects(const char * dst_type, const char * dst_type_ns,const AssociationInfo & ass, UdmPseudoObjectS & value);
+	bool GetAdjacentObjectsCount(const char * dst_type, const char * dst_type_ns_path, UdmLong& count); // HN4
+	bool GetAdjacentObjects(const char * dst_type, const char * dst_type_ns_path, UdmPseudoObjectS &value);
+	bool GetAdjacentObjectsCount(const char * dst_type, const char * dst_type_ns_path, const AssociationInfo & ass, UdmLong& count); // HN5
+	bool GetAdjacentObjects(const char * dst_type, const char * dst_type_ns_path, const AssociationInfo & ass, UdmPseudoObjectS & value);
 
 	bool GetParent(UdmPseudoObject &value);
 
-	bool GetChildObjectsCount(const char * type, const char * type_ns,UdmLong& count); // HN6
-	bool GetChildObjects(const char * type, const char * type_ns,UdmPseudoObjectS &value);
-	bool GetChildObjectsCount(const CompositionInfo &ci, const cint_string & type, const cint_string& type_ns,UdmLong& count); // HN7
-	bool GetChildObjects(const CompositionInfo &ci, const cint_string& type, const cint_string& type_ns,UdmPseudoObjectS &value);
+	bool GetChildObjectsCount(const char * type, const char * type_ns_path, UdmLong& count); // HN6
+	bool GetChildObjects(const char * type, const char * type_ns_path, UdmPseudoObjectS &value);
+	bool GetChildObjectsCount(const CompositionInfo &ci, const cint_string & type, const cint_string& type_ns_path, UdmLong& count); // HN7
+	bool GetChildObjects(const CompositionInfo &ci, const cint_string& type, const cint_string& type_ns_path, UdmPseudoObjectS &value);
 	
 	bool GetAssociationClassObjectsCount(const UdmPseudoObject &dstObject, const AssociationInfo & ai, UdmLong& count); // HN8
 	bool GetAssociationClassObjects(const UdmPseudoObject &dstObject, const AssociationInfo & ai, UdmPseudoObjectS &value);
@@ -236,7 +237,7 @@ public:
 	bool GetPeersFromAssociationClassObject(UdmPseudoObjectS &value);
 
 
-	bool CreateObject(const char * type, const char * type_ns,UdmPseudoObject &value, const char* compositionChildRole = 0, const bool subtype = false );
+	bool CreateObject(const char * type, const char * type_ns_path, UdmPseudoObject &value, const char* compositionChildRole = 0, const bool subtype = false );
 	bool CreateLink(UdmPseudoObject &dst, const AssociationInfo& ass_type);
 
 	bool DeleteObject();
@@ -280,8 +281,9 @@ bool UPO_LoadDiagram(const char *  xml_meta_file, UdmPseudoObject & diagram);
 bool UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_string, UdmPseudoObject & diagram);
 bool UPO_UnLoadDiagram(const char * xml_meta_file);
 bool UPO_SetDiagram(UdmPseudoObject &diagram_what, const char * name);
-bool UPO_SetNamespace(UdmPseudoObject &ns_what, UdmPseudoObject &parent_dgr, const char * name);
-bool UPO_SetClass(UdmPseudoObject &class_what, UdmPseudoObject &parent_ns, const char *target_name);
+bool UPO_SetNamespace(UdmPseudoObject &ns_what, UdmPseudoObject &parent, const char * target_name);
+bool UPO_SetNamespaceByPath(UdmPseudoObject &ns_what, UdmPseudoObject &diagram, const char * path);
+bool UPO_SetClass(UdmPseudoObject &class_what, UdmPseudoObject &parent_ns, const char * target_name);
 bool UPO_SetAttribute(UdmPseudoObject &attr_what, UdmPseudoObject &class_what_class,  const char * target_name);
 bool UPO_SetChildRole(UdmPseudoObject &ccr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char *  orole_name);
 bool UPO_SetParentRole(UdmPseudoObject &cpr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char * orole_name);
