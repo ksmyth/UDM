@@ -1197,7 +1197,7 @@ value: Text[0..1]</value>
 							<value>A RuleVariable&apos;s variable must be the id of a Compartment, Species, or Parameter (L2v1 Section 4.8.3 and 4.8.4).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.SBML2Ex::sbml::species
+							<value>let s = dn.sBML2Ex::sbml::species
 in
 let c = dn.compartment
 in
@@ -1231,7 +1231,7 @@ else
 							<value>The variable referenced by a rule must not be referenced as the variable for any other rule.</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let rv = dn.RateRule
+							<value>let rv = dn.rateRule
 in
 rv-&gt;isUnique(rvv | rvv.id)</value>
 						</attribute>
@@ -1620,8 +1620,8 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>A Model that has a Species must also have at least one Compartment (L2v1 Section 4.5).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.SBML2Ex::sbml::species in
-let c = dn.SBML2Ex::sbml::compartment in 
+							<value>let s = dn.sBML2Ex::sbml::species in
+let c = dn.sBML2Ex::sbml::compartment in 
   s-&gt;size &gt; 0
     implies
   c-&gt;size &gt; 0</value>
@@ -2922,7 +2922,7 @@ name:String [0..1]</value>
 							<value>The ci elements in any of the trigger elements in an event element may only refer to global identifiers associated with element types allowed to vary.</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>(dn.SBML2Ex::sbml::species -&gt; select( class | class.id = self.id  )) -&gt; size = 1</value>
+							<value>(dn.sBML2Ex::sbml::species -&gt; select( class | class.id = self.id  )) -&gt; size = 1</value>
 						</attribute>
 					</atom>
 					<atom id="id-0066-00000044" kind="Constraint" role="Constraint" relid="0x75">
@@ -3023,7 +3023,7 @@ in
 							</regnode>
 						</regnode>
 						<attribute kind="DefinitionEqn">
-							<value>dn.SBML2Ex::sbml.listOfSpecies.species</value>
+							<value>dn.sBML2Ex::sbml.listOfSpecies.species</value>
 						</attribute>
 						<attribute kind="DefinitionParamList" status="meta">
 							<value></value>
@@ -3050,7 +3050,7 @@ in
 							<value>A SpeciesReference must refer to a Species (L2v1 Section 4.9.5). The reference can be from reactants, products, or modifiers</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let s = dn.SBML2Ex::sbml::species
+							<value>let s = dn.sBML2Ex::sbml::species
 in
 if (s.isUndefined()) then
  true
@@ -3679,7 +3679,7 @@ self.listOfProducts.speciesReference-&gt;size &gt; 0
 							<value>A SpeciesReference may not refer to a Species with constant=&apos;true&apos; and boundaryCondition=&apos;false&apos; (L2v1 Section 4.6.5).</value>
 						</attribute>
 						<attribute kind="ConstraintEqn">
-							<value>let sp_v = dn.SBML2Ex::sbml::species in
+							<value>let sp_v = dn.sBML2Ex::sbml::species in
 let sp = sp_v -&gt; select ( sp | sp.id = self.species ) in
 
 sp -&gt; forAll ( s | if ( not s.constant.isUndefined() ) then ( ( s.constant ) implies ( s.boundaryCondition ) )
