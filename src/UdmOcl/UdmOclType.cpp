@@ -19,11 +19,30 @@
 	this software.
 */
 
-#include "UDMOCLType.h"
+#include "UdmOclType.h"
 #include "OclObjectExBasic.h"
-#include "UDMOCLObject.h"
+#include "UdmOclObject.h"
 #include "Uml.h"
 #include "UmlExt.h"
+
+
+#ifndef _WIN32
+
+char *_strlwr( char *string )
+{
+	if (string)
+	{
+		for (int i = 0; i< strlen(string); i++)
+			*(string + i) = tolower(*(string+i));
+	};
+	return string;
+};
+
+
+
+
+#endif
+
 
 using namespace Uml;
 
@@ -397,7 +416,8 @@ namespace UmlOcl
 						if ( strAcceptable.empty() && strClassRole == strName || ! strAcceptable.empty() && ! strRole.empty() && strRole == strName && strAcceptable == strClassRole ) {
 							set<::Uml::Uml::AssociationRole> setToRoles = association.roles();
 							TypeSeq vecType;
-							for ( set<::Uml::Uml::AssociationRole>::iterator itTo = setToRoles.begin() ; itTo != setToRoles.end() ; itTo++ ) {
+							set<::Uml::Uml::AssociationRole>::iterator itTo;
+							for (  itTo = setToRoles.begin() ; itTo != setToRoles.end() ; itTo++ ) {
 								if ( *itTo != *itFrom ) {
 									long lMax = (*itTo).max();
 			 						if ( lMax > 1 || lMax == -1 ) {

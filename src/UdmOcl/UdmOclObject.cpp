@@ -19,9 +19,17 @@
 	this software.
 */
 
-#include "UDMOCLObject.h"
+#include "UdmOclObject.h"
 #include "UdmBase.h"
 #include "Uml.h"
+
+#ifndef _WIN32
+char *_ltoa( long value, char *string, int radix )
+{
+	sprintf(string, "%ld", value);
+};
+#endif
+
 
 namespace UmlOcl
 {
