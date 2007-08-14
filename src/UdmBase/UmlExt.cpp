@@ -505,7 +505,7 @@ namespace Uml
 	{
 		set<Namespace> ret;
 		Namespace ns = c.parent();
-		set<CompositionParentRole> comps_c = CompositionPeerParentRoles(c);
+		set<CompositionParentRole> comps_c = AncestorCompositionPeerParentRoles(c);
 		for (set<CompositionParentRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++) {
 			Class theother = j->target();
 			Namespace theother_ns = (Namespace)theother.parent();
@@ -605,6 +605,25 @@ namespace Uml
 
 		return false;
 	}
+
+	UDM_DLL set<Namespace> BaseTypesNamespaces(const Namespace &ns)
+	{
+		set<Namespace> ret;
+
+		set<Class> classes = ns.classes();
+		for (set<Class>::iterator i = classes.begin(); i != classes.end(); i++) {
+			set<Class> bases = i->baseTypes();
+			for (set<Class>::iterator j = bases.begin(); j != bases.end(); j++) {
+				Class theother = *j;
+				Namespace theother_ns = (Namespace)theother.parent();
+				if (ns != theother_ns)
+					ret.insert(theother_ns);
+			}
+		}
+
+		return ret;
+	}
+
 
 // --------------------------- Construction
 
