@@ -24,23 +24,16 @@
     <property name="Version.VS" value="7.1"/>"/>
   </ifnot>
 
-  <if test="${Version.VS} = '7.1'">
+  <if test="${ Version.VS == '7.1'}">
     <property name="Version.VS.verbose" value="7.1"/>
-  </if>
-  <if test="${Version.VS} = '8'">
-    <property name="Version.VS.verbose" value="8.0"/>
-  </if>
-  <if test="${Version.VS} = '8E'">
-    <property name="Version.VS.verbose" value="8.0"/>
-  </if>
-
-  <if test="${Version.VS} = '7.1'">
     <property name="File.solution" value="Udm.sln"/>
   </if>
-  <if test="${Version.VS} = '8'">
+  <if test="${ Version.VS == '8' }">
+    <property name="Version.VS.verbose" value="8.0"/>
     <property name="File.solution" value="UdmVS2005.sln"/>
   </if>
-  <if test="${Version.VS} = '8E'">
+  <if test="${ Version.VS == '8E' }">
+    <property name="Version.VS.verbose" value="8.0"/>
     <property name="File.solution" value="UdmVS2005.sln"/>
   </if>
 
