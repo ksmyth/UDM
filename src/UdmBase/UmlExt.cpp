@@ -74,6 +74,13 @@ namespace Uml
 	}
 
 	// find an assoc.Class by name
+
+	UDM_DLL Class assocClassByName(const Diagram &d, const string &name)
+	{
+		Namespace ns = GetTheOnlyNamespace(d);
+		return assocClassByName(ns, name);
+	}
+
 	UDM_DLL Class assocClassByName(const Namespace &d, const string &name)
 	{
 		set<Class> ts = d.classes();
@@ -99,6 +106,12 @@ namespace Uml
 	}
 
 // find an association by name
+	UDM_DLL Association associationByName(const Diagram &d, const string &name) 
+	{
+		Namespace ns = GetTheOnlyNamespace(d);
+		return associationByName(ns, name);
+	}
+
 	UDM_DLL Association associationByName(const Namespace &d, const string &name) 
 	{
 			set<Association> ts = d.associations();
@@ -110,6 +123,12 @@ namespace Uml
 			return NULL;
 	}
 
+
+	
+	UDM_DLL Composition compositionByName(const Diagram &d, const string &name) 
+	{
+		return compositionByName(GetTheOnlyNamespace(d), name);
+	}
 
 	UDM_DLL Composition compositionByName(const Namespace &d, const string &name) 
 	{
@@ -359,6 +378,10 @@ namespace Uml
 		return roles;
 	}
 
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Diagram & cross_dgr)
+	{
+		return AncestorCrossAssociationTargetRoles(c, GetTheOnlyNamespace(cross_dgr));
+	}
 	// All the other ends of associations this class can have (including those defined in ancestors)
 	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Namespace & cross_dgr)
 	{
@@ -382,6 +405,10 @@ namespace Uml
 		return ret;
 	}
 
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Diagram & cross_dgr)
+	{
+		return AncestorCrossAssociationRoles(c, GetTheOnlyNamespace(cross_dgr));
+	}
 
 	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Namespace & cross_dgr)
 	{
@@ -847,15 +874,8 @@ namespace Uml
 
 	UDM_DLL Class classByName(const Diagram &d, const string &name )
 	{
-		set<Namespace> ns_es = d.namespaces();
-		if (ns_es.size() > 1) throw udm_exception("classByName(Diagram, class_name) - more than one namespace found in diagram!");
-		//get the only namespace
-		if (ns_es.size())
-		{
-			Namespace ns = d.begin();
+			Namespace ns = GetTheOnlyNamespace(d);
 			return classByName(ns, name);
-		}
-		return Class();
 	};
 
 	
