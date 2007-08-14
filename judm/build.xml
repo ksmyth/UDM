@@ -50,12 +50,12 @@
 		<property name="util.classes.dir" location="${judm.dir}" />
 
 		<!-- Swig generated Java code -->
-		<property name="udmcint.src.dir" location="src/UdmCint" />
-		<property name="udmcint.classes.dir" location="${judm.dir}" />
+		<property name="udmswig.src.dir" location="src/UdmSwig" />
+		<property name="udmswig.classes.dir" location="${judm.dir}" />
 
 		<!-- Convenience wrapper for the Swig generated Java code -->
-		<property name="udmcintlight.src.dir" location="src/UdmCintLight" />
-		<property name="udmcintlight.classes.dir" location="${judm.dir}" />
+		<property name="udmswiglight.src.dir" location="src/UdmSwigLight" />
+		<property name="udmswiglight.classes.dir" location="${judm.dir}" />
 
 		<!-- GeneTRE domain-specific code -->
 		<property name="genetre.src.dir" location="samples/GeneTRE/src/main" />
@@ -75,8 +75,8 @@
 		<!-- Classpath -->
 		<path id="compile.classpath">
 			<pathelement location="${util.classes.dir}" />
-			<pathelement location="${udmcint.classes.dir}" />
-			<pathelement location="${udmcintlight.classes.dir}" />
+			<pathelement location="${udmswig.classes.dir}" />
+			<pathelement location="${udmswiglight.classes.dir}" />
 			<pathelement location="${genetre.classes.dir}" />
 			<pathelement location="${genetf.classes.dir}" />
 			<fileset dir="lib/junit">
@@ -110,7 +110,7 @@
 			<!-- Copy Udm executable and UdmCint DLL in the directory of the distribution -->
 			<fileset dir="${udm.dir}/bin.net">
 				<include name="Udm.exe" />
-				<include name="UdmCint.dll" />
+				<include name="UdmSwig.dll" />
 			</fileset>
 		</copy>
 	</target>
@@ -119,13 +119,10 @@
 	<target name="copy-dlls-linux" depends="init" unless="isWindows" description="Copy SOs to build dir for testing">
 		<mkdir dir="${judm.dir}" />
 		<copy todir="${judm.dir}">
-			<!-- Copy xerces in the directory of the distribution -->
-			<fileset dir="${udm_3rdparty.dir}">
-				<include name="xerces*.so" />
-			</fileset>
-			<!-- Copy Udm executable and UdmCint DLL in the directory of the distribution -->
+			<!-- Copy UdmSwig DLL in the directory of the distribution -->
 			<fileset dir="${udm.dir}/lib">
-				<include name="libUdm*" />
+				<!--include name="libUdmSwig.so" /-->
+				<include name="libUdmSwig.so" />
 			</fileset>
 		</copy>
 	</target>
@@ -143,22 +140,22 @@
 		</copy>
 		
 		<!-- Compile SWIG generated UdmCint classes-->
-		<mkdir dir="${udmcint.classes.dir}" />
-		<javac srcdir="${udmcint.src.dir}" destdir="${udmcint.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
+		<mkdir dir="${udmswig.classes.dir}" />
+		<javac srcdir="${udmswig.src.dir}" destdir="${udmswig.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
 		<copy todir="${classes.dir}">
-			<fileset dir="${udmcint.classes.dir}" casesensitive="no"/>
+			<fileset dir="${udmswig.classes.dir}" casesensitive="no"/>
 		</copy>
 
 		<!-- Compile wrapper for the SWIG generated Java code classes (UdmCintLight)-->
-		<mkdir dir="${udmcintlight.classes.dir}" />
-		<javac srcdir="${udmcintlight.src.dir}" destdir="${udmcintlight.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
-		<copy todir="${udmcintlight.classes.dir}/edu/vanderbilt/isis/udm">
+		<mkdir dir="${udmswiglight.classes.dir}" />
+		<javac srcdir="${udmswiglight.src.dir}" destdir="${udmswiglight.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
+		<copy todir="${udmswiglight.classes.dir}/edu/vanderbilt/isis/udm">
 			<fileset dir="${udm.etc.dir}" casesensitive="no">
 				<include name="Uml.xsd" />
 			</fileset>
 		</copy>
 		<copy todir="${classes.dir}">
-			<fileset dir="${udmcintlight.classes.dir}" casesensitive="no"/>
+			<fileset dir="${udmswiglight.classes.dir}" casesensitive="no"/>
 		</copy>
 
 		<!-- Compile domain specific code for GeneTF -->
@@ -247,31 +244,31 @@
 		
 		<!-- The generated UdmPseudoObject.java class must be modified by hand -->
 		<!-- Replace every occurence of SWIGTYPE_p_vectorTUdmLong_t by VectorOfLongs -->
-		<replace file="${udmcint.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTUdmLong_t" value="VectorOfLongs" />
+		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTUdmLong_t" value="VectorOfLongs" />
 		<!-- Replace every occurence of SWIGTYPE_p_vectorTdouble_t by VectorOfDoubles -->
-		<replace file="${udmcint.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTdouble_t" value="VectorOfDoubles" />
+		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTdouble_t" value="VectorOfDoubles" />
 		<!-- Replace every occurence of SWIGTYPE_p_vectorTcint_string_t by VectorOfStrings -->
-		<replace file="${udmcint.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTcint_string_t" value="VectorOfStrings" />
+		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTcint_string_t" value="VectorOfStrings" />
 		<!-- Replace every occurence of SWIGTYPE_p_vectorTbool_t by VectorOfBools -->
-		<replace file="${udmcint.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTbool_t" value="VectorOfBools" />
+		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTbool_t" value="VectorOfBools" />
 
 		<!-- Compile SWIG generated UdmCint classes-->
-		<mkdir dir="${udmcint.classes.dir}" />
-		<javac srcdir="${udmcint.src.dir}" destdir="${udmcint.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
+		<mkdir dir="${udmswig.classes.dir}" />
+		<javac srcdir="${udmswig.src.dir}" destdir="${udmswig.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
 		<copy todir="${classes.dir}">
-			<fileset dir="${udmcint.classes.dir}" casesensitive="no"/>
+			<fileset dir="${udmswig.classes.dir}" casesensitive="no"/>
 		</copy>
 
 		<!-- Compile wrapper for the SWIG generated Java code classes (UdmCintLight)-->
-		<mkdir dir="${udmcintlight.classes.dir}" />
-		<javac srcdir="${udmcintlight.src.dir}" destdir="${udmcintlight.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
-		<!--copy todir="${udmcintlight.classes.dir}/edu/vanderbilt/isis/udm">
+		<mkdir dir="${udmswiglight.classes.dir}" />
+		<javac srcdir="${udmswiglight.src.dir}" destdir="${udmswiglight.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
+		<!--copy todir="${udmswiglight.classes.dir}/edu/vanderbilt/isis/udm">
 			<fileset dir="${udm.etc.dir}" casesensitive="no">
 				<include name="Uml.xsd" />
 			</fileset>
 		</copy-->
 		<copy todir="${classes.dir}">
-			<fileset dir="${udmcintlight.classes.dir}" casesensitive="no"/>
+			<fileset dir="${udmswiglight.classes.dir}" casesensitive="no"/>
 		</copy>
 
 		<!-- Compile domain specific code for GeneTF -->
@@ -426,7 +423,8 @@
 			<fileset dir="${judm.dir}">
 				<exclude name="*.dll" />
 				<exclude name="*.exe" />
-				<exclude name="*.so" />
+				<exclude name="*.so*" />
+				<exclude name="*.a" />
 			</fileset>
 			<manifest>
 				<!--attribute name="Name" value="edu/vanderbilt/isis/udm" /-->
@@ -492,7 +490,8 @@
 			<fileset dir="${judm.dir}">
 				<exclude name="*.dll" />
 				<exclude name="*.exe" />
-				<exclude name="*.so" />
+				<exclude name="*.so*" />
+				<exclude name="*.a" />
 			</fileset>
 			<manifest>
 				<attribute name="Specification-Title" value="jUdm Core Classes" />
@@ -524,11 +523,11 @@
 		
 		<!-- Generate Java UDM API documentation --> 
 		<mkdir dir="${judm.dist.dir}/apidoc" />
-		<javadoc defaultexcludes="yes" verbose="no" destdir="${judm.dist.dir}/apidoc" windowtitle="UDM API">
+		<!--javadoc defaultexcludes="yes" verbose="no" destdir="${judm.dist.dir}/apidoc" windowtitle="UDM API">
 			<fileset dir="${util.src.dir}" defaultexcludes="yes" />
-			<fileset dir="${udmcint.src.dir}" defaultexcludes="yes" />
-			<fileset dir="${udmcintlight.src.dir}" defaultexcludes="yes" />
-		</javadoc> 
+			<fileset dir="${udmswig.src.dir}" defaultexcludes="yes" />
+			<fileset dir="${udmswiglight.src.dir}" defaultexcludes="yes" />
+		</javadoc--> 
 		
 		<!-- Zip the full distribution together -->
 		<zip destfile="${build.dir}/dist/judm.zip">
@@ -612,10 +611,10 @@
 		
 		<!-- Generate JavaAPI documentation for the domain specific code  -->
 		<mkdir dir="${dist.dir}/${dspackage}/apidoc" />
-		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/${dspackage}/apidoc" windowtitle="${dspackage} UDM API">
+		<!--javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/${dspackage}/apidoc" windowtitle="${dspackage} UDM API">
 			<fileset dir="${dist.dir}/${dspackage}/src" defaultexcludes="yes">
 			</fileset>
-		</javadoc>
+		</javadoc-->
 
 		<!-- Copy the appropriate batch file in the distribution  -->
 		<antcall target="set_up_batch_file_win"/>
@@ -650,10 +649,10 @@
 			<fileset dir="${udm.dir}/bin">
 				<include name="Udm" />
 			</fileset>
-			<fileset dir="${udm.dir}/lib">
+			<!--fileset dir="${udm.dir}/lib">
 				<include name="libUdmShared.so" />
 				<include name="libGOCLShared.so" />
-			</fileset>
+			</fileset-->
 
 		</copy>
 	</target>
