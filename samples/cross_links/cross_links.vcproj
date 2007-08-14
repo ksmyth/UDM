@@ -23,7 +23,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\include"
+				AdditionalIncludeDirectories="$(UDM_PATH)\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -40,10 +40,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib zlibD.lib"
-				OutputFile="..\..\bin\cross_linksD.exe"
+				OutputFile="$(UDM_PATH)\bin\cross_linksD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib,$(UDM_3RDPARTY_PATH)\xerces-c2_5_0\lib,$(UDM_3RDPARTY_PATH)\zlib"
+				AdditionalLibraryDirectories="$(UDM_PATH)\lib,$(UDM_3RDPARTY_PATH)\xerces-c2_5_0\lib,$(UDM_3RDPARTY_PATH)\zlib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/cross_linksD.pdb"
 				SubSystem="1"
@@ -86,7 +86,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\include"
+				AdditionalIncludeDirectories="$(UDM_PATH)\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -103,10 +103,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
-				OutputFile="..\..\bin\cross_links.exe"
+				OutputFile="$(UDM_PATH)\bin\cross_links.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib,$(UDM_3RDPARTY_PATH)\xerces-c2_5_0\lib,$(UDM_3RDPARTY_PATH)\zlib"
+				AdditionalLibraryDirectories="$(UDM_PATH)\lib,$(UDM_3RDPARTY_PATH)\xerces-c2_5_0\lib,$(UDM_3RDPARTY_PATH)\zlib"
 				ProgramDatabaseFile=".\Release/cross_links.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
