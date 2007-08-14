@@ -254,6 +254,20 @@ namespace Udm
 	static const int TARGETFROMCLASS = 1;
 	static const int CLASSFROMTARGET = 2;
 
+	// From MGA
+	typedef enum attstatus_enum {
+        ATTSTATUS_HERE          = 0,
+        ATTSTATUS_METADEFAULT   = -1,
+        ATTSTATUS_UNDEFINED     = -2,
+//AND:
+        ATTSTATUS_IN_ARCHETYPE1 = 1,
+        ATTSTATUS_IN_ARCHETYPE2 = 2,
+        ATTSTATUS_IN_ARCHETYPE3 = 3,
+        ATTSTATUS_IN_ARCHETYPE4 = 4,
+// etc.
+	} attstatus_enum;
+
+
 	class DataNetwork;
 	class UdmProject;
 	class StaticUdmProject;
@@ -314,6 +328,8 @@ namespace Udm
 		virtual vector<double> getRealAttrArr(const ::Uml::Attribute &meta) const;
 		virtual void setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
 
+
+		virtual long getAttrStatus(const ::Uml::Attribute &meta) const = 0;
 
 
 
@@ -422,6 +438,8 @@ namespace Udm
 		void setTempRealAttr(const ::Uml::Attribute &meta, const double &a, const bool direct = true);
 		bool getTempBooleanAttr(const ::Uml::Attribute &meta) const;
 		void setTempBooleanAttr(const ::Uml::Attribute &meta, const bool &a, const bool direct = true);
+
+		long getTempAttrStatus(const ::Uml::Attribute &meta) const;
 
 		//multiple value attributes
 
@@ -557,6 +575,7 @@ namespace Udm
 		virtual vector<double> getRealAttrArr(const ::Uml::Attribute &meta) const {throw e;};
 		virtual void setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct = true) {throw e;};
 
+		virtual long getAttrStatus(const ::Uml::Attribute &meta) const {throw e;};
 
 
 
@@ -2390,6 +2409,8 @@ namespace Udm
 		vector<double> getRealAttrArr(const ::Uml::Attribute &meta) const { return impl->getRealAttrArr(meta); }
 		void setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a) { impl->setRealAttrArr(meta, a); }
 
+
+		long getAttrStatus(const ::Uml::Attribute &meta) const { return impl->getAttrStatus(meta); }
 
 
 	// --- associations
