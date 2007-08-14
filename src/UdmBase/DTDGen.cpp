@@ -2,6 +2,9 @@
 
 /*
 Changelog:
+  07/03/06 - endre
+	- classes contained by an abstract superclass are XSD global elements too
+
   04/22/05 - kalmar
     -added AddUMLNamespaceToIgnoreList - all the contained elements in a namespaces enlisted 
       here will be ignored during parsing, see udm.exe -i switch
@@ -1218,10 +1221,16 @@ static void GenerateXMLSchemaForClasses(const ::Uml::Diagram &dgr,
 			if (!uxsdi || !(bool)i->isAbstract()) {
 				set< ::Uml::Class> p_c = Uml::AncestorContainerClasses(*i);		//all possible containers
 				
-			//the condition: It's not contained or it's only container is itself or it's the child end of a composition with the parent end in other namespace
-			if ( (p_c.size() == 0) || ( (p_c.size() == 1) && ( *(p_c.begin()) == *i )) || IsCrossNSCompositionChildEnd(*i))
-			//if  (Uml::AncestorContainerClasses(*i).size() < 1 ) //it's not self contained
-				globalElements.push_back(*i);
+				//the condition: It's not contained
+				//				 or it's only container is itself or an abstract superclass
+				//				 or it's the child end of a composition with the parent end in other namespace
+				::Uml::Class anc;
+				if ((p_c.size() == 0) ||
+						(p_c.size() == 1 &&
+						(anc = *(p_c.begin())) &&
+						(anc == *i || (::Uml::IsDerivedFrom(*i, anc) && anc.isAbstract()))) ||
+					IsCrossNSCompositionChildEnd(*i))
+					globalElements.push_back(*i);
 			}
 
 		}
