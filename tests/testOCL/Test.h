@@ -17,6 +17,7 @@ namespace UdmTests
 		CPPUNIT_TEST_SUITE_END();
 
     protected:
+      void readSBML(const std::string& fname);
       void readTest();
       void selfTest();
       void evaluate(const ::Uml::Uml::Diagram& metaDiagram,
