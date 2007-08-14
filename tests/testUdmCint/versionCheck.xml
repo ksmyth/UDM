@@ -5,7 +5,7 @@
 
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sbml.org/sbml/level2
-                            file:///home/jwebb/lib/xml/sbml/sbml-l2v1.xsd"
+                            SBML2Ex_sbml.xsd"
 
       version="2" level="2">
 <model id="versionCheck" name="versionCheck">

@@ -9,15 +9,16 @@
 #include <fstream>
 
 
-#include "math_xsd.h"
-#include "sbml_xsd.h"
-#include "dbi_xsd.h"
-#include "unigene_xsd.h"
-#include "xhtml_xsd.h" 
-#include "flux_xsd.h"
-#include "jigcell_xsd.h"
-#include "jd_xsd.h"
-#include "bc_xsd.h"
+#include "SBML2Ex_xsd.h"
+#include "SBML2Ex_math_xsd.h"
+#include "SBML2Ex_sbml_xsd.h"
+#include "SBML2Ex_dbi_xsd.h"
+#include "SBML2Ex_unigene_xsd.h"
+#include "SBML2Ex_xhtml_xsd.h" 
+#include "SBML2Ex_flux_xsd.h"
+#include "SBML2Ex_jigcell_xsd.h"
+#include "SBML2Ex_jd_xsd.h"
+#include "SBML2Ex_bc_xsd.h"
 
 void StoreXSD(const std::string& nn, const std::string& xsd)
 {
@@ -100,15 +101,16 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
   UdmBool b(false);
   UdmPseudoDataNetwork dn(metaname, b);
 
-  StoreXSD("sbml.xsd", sbml_xsd::getString().c_str());
-  StoreXSD("math.xsd", math_xsd::getString().c_str());
-  StoreXSD("dbi.xsd", dbi_xsd::getString().c_str());
-  StoreXSD("unigene.xsd", unigene_xsd::getString().c_str());
-  StoreXSD("xhtml.xsd" , xhtml_xsd::getString().c_str());
-  StoreXSD("flux.xsd", flux_xsd::getString().c_str());
-  StoreXSD("jigcell.xsd", jigcell_xsd::getString().c_str());
-  StoreXSD("jd.xsd", jd_xsd::getString().c_str());
-  StoreXSD("bc.xsd", bc_xsd::getString().c_str());
+  StoreXSD("SBML2Ex_sbml.xsd", SBML2Ex_sbml_xsd::getString().c_str());
+  StoreXSD("SBML2Ex_math.xsd", SBML2Ex_math_xsd::getString().c_str());
+  StoreXSD("SBML2Ex_dbi.xsd", SBML2Ex_dbi_xsd::getString().c_str());
+  StoreXSD("SBML2Ex_unigene.xsd", SBML2Ex_unigene_xsd::getString().c_str());
+  StoreXSD("SBML2Ex_xhtml.xsd" , SBML2Ex_xhtml_xsd::getString().c_str());
+  StoreXSD("SBML2Ex_flux.xsd", SBML2Ex_flux_xsd::getString().c_str());
+  StoreXSD("SBML2Ex_jigcell.xsd", SBML2Ex_jigcell_xsd::getString().c_str());
+  StoreXSD("SBML2Ex_jd.xsd", SBML2Ex_jd_xsd::getString().c_str());
+  StoreXSD("SBML2Ex_bc.xsd", SBML2Ex_bc_xsd::getString().c_str());
+  StoreXSD("SBML2Ex.xsd", SBML2Ex_xsd::getString().c_str());
 
   AddURI("http://www.sbml.org/2001/ns/biocharon","bc");
   AddURI("http://www.dbi.tju.edu/xmlns/dbi","dbi");
@@ -122,7 +124,7 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
  string xml;
  std::ifstream inxml(fname.c_str());
  readFromFile(inxml, xml);
- if(!dn.OpenExistingFromString(xml.c_str(),"sbml.xsd"))
+ if(!dn.OpenExistingFromString(xml.c_str(),"SBML2Ex_sbml.xsd"))
    {
      cint_string str;
      diagram.GetLastError(str);

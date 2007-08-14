@@ -188,20 +188,22 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%\bin\UdmD.exe&quot; $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; GeneTF_GeneTF.xsd GeneTF_GeneTF_xsd
 &quot;%UDM_PATH%\etc\StrResGenD.exe&quot; GeneTF.xsd GeneTF_xsd
 
 "
-					Outputs="GeneTF.cpp;GeneTF.h;"/>
+					Outputs="GeneTF.cpp;GeneTF.h;GeneTF.xsd;GeneTF.dtd;GeneTF_GeneTF.xsd;GeneTF_GeneTF.dtd;GeneTF_xsd.h;GeneTF_GeneTF_xsd.h"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%\bin\Udm.exe&quot; $(InputPath) -t -v -uGeneTF=http://kutykuruty.khm.edu
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; GeneTF_GeneTF.xsd GeneTF_GeneTF_xsd
 &quot;%UDM_PATH%\etc\StrResGen.exe&quot; GeneTF.xsd GeneTF_xsd
 
 "
-					Outputs="GeneTF.cpp;GeneTF.h;"/>
+					Outputs="GeneTF.cpp;GeneTF.h;GeneTF.xsd;GeneTF.dtd;GeneTF_GeneTF.xsd;GeneTF_GeneTF.dtd;GeneTF_xsd.h;GeneTF_GeneTF_xsd.h"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -232,34 +234,36 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%\bin\UdmD.exe&quot; &quot;$(InputPath)&quot; -g -v -e -q jigcell -i xhtml -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon -u flux=http://arep.med.harvard.edu/fluxns
-&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; math.xsd math_xsd
-&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; sbml.xsd sbml_xsd
-&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; dbi.xsd dbi_xsd
-&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; unigene.xsd unigene_xsd
-&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; xhtml.xsd xhtml_xsd
-&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; flux.xsd flux_xsd
-&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; jigcell.xsd jigcell_xsd
-&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; jd.xsd jd_xsd
-&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; bc.xsd bc_xsd
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; SBML2Ex_math.xsd SBML2Ex_math_xsd
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; SBML2Ex_sbml.xsd SBML2Ex_sbml_xsd
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; SBML2Ex_dbi.xsd SBML2Ex_dbi_xsd
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; SBML2Ex_unigene.xsd SBML2Ex_unigene_xsd
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; SBML2Ex_xhtml.xsd SBML2Ex_xhtml_xsd
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; SBML2Ex_flux.xsd SBML2Ex_flux_xsd
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; SBML2Ex_jigcell.xsd SBML2Ex_jigcell_xsd
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; SBML2Ex_jd.xsd SBML2Ex_jd_xsd
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; SBML2Ex_bc.xsd SBML2Ex_bc_xsd
+&quot;%UDM_PATH%\etc\StrResGenD.exe&quot; SBML2Ex.xsd SBML2Ex_xsd
 "
-					Outputs="SBML2Ex.cpp;SBML2Ex.h;sbml.xsd"/>
+					Outputs="SBML2Ex.cpp;SBML2Ex.h;SBML2Ex_math.xsd;SBML2Ex_math_xsd.h;SBML2Ex_sbml.xsd;SBML2Ex_sbml_xsd.h;SBML2Ex_dbi.xsd;SBML2Ex_dbi_xsd.h;SBML2Ex_unigene.xsd;SBML2Ex_unigene_xsd.h;SBML2Ex_xhtml.xsd;SBML2Ex_xhtml_xsd.h;SBML2Ex_flux.xsd;SBML2Ex_flux_xsd.h;SBML2Ex_jigcell.xsd;SBML2Ex_jigcell_xsd.h;SBML2Ex_jd.xsd;SBML2Ex_jd_xsd.h;SBML2Ex_bc.xsd;SBML2Ex_bc_xsd.h;SBML2Ex.xsd;SBML2Ex_xsd.h"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;%UDM_PATH%\bin\Udm.exe&quot; &quot;$(InputPath)&quot; -g -v -e -q jigcell -i xhtml -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -u dbi=http://www.dbi.tju.edu/xmlns/dbi -u unigene=http://www.dbi.tju.edu/xmlns/unigene -u xhtml=http://www.w3.org/1999/xhtml -u jigcell=http://mpf.biol.vt.edu/ns -u bc=http://www.sbml.org/2001/ns/biocharon -u flux=http://arep.med.harvard.edu/fluxns
-&quot;%UDM_PATH%\etc\StrResGen.exe&quot; math.xsd math_xsd
-&quot;%UDM_PATH%\etc\StrResGen.exe&quot; sbml.xsd sbml_xsd
-&quot;%UDM_PATH%\etc\StrResGen.exe&quot; dbi.xsd dbi_xsd
-&quot;%UDM_PATH%\etc\StrResGen.exe&quot; unigene.xsd unigene_xsd
-&quot;%UDM_PATH%\etc\StrResGen.exe&quot; xhtml.xsd xhtml_xsd
-&quot;%UDM_PATH%\etc\StrResGen.exe&quot; flux.xsd flux_xsd
-&quot;%UDM_PATH%\etc\StrResGen.exe&quot; jigcell.xsd jigcell_xsd
-&quot;%UDM_PATH%\etc\StrResGen.exe&quot; jd.xsd jd_xsd
-&quot;%UDM_PATH%\etc\StrResGen.exe&quot; bc.xsd bc_xsd
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; SBML2Ex_math.xsd SBML2Ex_math_xsd
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; SBML2Ex_sbml.xsd SBML2Ex_sbml_xsd
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; SBML2Ex_dbi.xsd SBML2Ex_dbi_xsd
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; SBML2Ex_unigene.xsd SBML2Ex_unigene_xsd
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; SBML2Ex_xhtml.xsd SBML2Ex_xhtml_xsd
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; SBML2Ex_flux.xsd SBML2Ex_flux_xsd
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; SBML2Ex_jigcell.xsd SBML2Ex_jigcell_xsd
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; SBML2Ex_jd.xsd SBML2Ex_jd_xsd
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; SBML2Ex_bc.xsd SBML2Ex_bc_xsd
+&quot;%UDM_PATH%\etc\StrResGen.exe&quot; SBML2Ex.xsd SBML2Ex_xsd
 "
-					Outputs="SBML2Ex.cpp;SBML2Ex.h;sbml.xsd"/>
+					Outputs="SBML2Ex.cpp;SBML2Ex.h;SBML2Ex_math.xsd;SBML2Ex_math_xsd.h;SBML2Ex_sbml.xsd;SBML2Ex_sbml_xsd.h;SBML2Ex_dbi.xsd;SBML2Ex_dbi_xsd.h;SBML2Ex_unigene.xsd;SBML2Ex_unigene_xsd.h;SBML2Ex_xhtml.xsd;SBML2Ex_xhtml_xsd.h;SBML2Ex_flux.xsd;SBML2Ex_flux_xsd.h;SBML2Ex_jigcell.xsd;SBML2Ex_jigcell_xsd.h;SBML2Ex_jd.xsd;SBML2Ex_jd_xsd.h;SBML2Ex_bc.xsd;SBML2Ex_bc_xsd.h;SBML2Ex.xsd;SBML2Ex_xsd.h"/>
 			</FileConfiguration>
 		</File>
 		<File
