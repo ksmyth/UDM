@@ -502,7 +502,7 @@ void GenerateHClassBasic(const ::Uml::Class & cl, const InheritenceSolver& is, o
 
 void GenerateHClassAssocEnds(const ::Uml::Class &cl, const ::Uml::Class& cross_cl, ostream & output, bool isCrossDgr)
 {
-	::Uml::Diagram dgr = (::Uml::Diagram)cl.parent();
+	::Uml::Diagram dgr = ::Uml::GetDiagram(cl);
 
 	::Uml::Association assoc = cl.association();
 	string s = assoc.meta.name();
@@ -643,7 +643,7 @@ void GenerateHClassChildren(const ::Uml::Class &cl, ostream & output)
 	}
 
 	::Uml::Namespace ns = cl.parent_ns();
-	::Uml::Diagram dgr = cl.parent();
+	::Uml::Diagram dgr = ::Uml::GetDiagram(cl);
 	set< ::Uml::Class> allclasses = ns ? ns.classes() : dgr.classes();
 
 	for(set< ::Uml::Class>::iterator j = allclasses.begin(); j != allclasses.end(); j++) 
@@ -677,7 +677,7 @@ void GenerateHClassChildren(const ::Uml::Class &cl, ostream & output)
 
 void GenerateHClassAssociations(const ::Uml::Class& cl, const ::Uml::Class& cross_cl, ostream & output, bool isCrossDgr)
 {
-	::Uml::Diagram dgr = (::Uml::Diagram)cl.parent();
+	::Uml::Diagram dgr = ::Uml::GetDiagram(cl);
 
 	set< ::Uml::AssociationRole> assocs = cl.associationRoles();
 	for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
@@ -923,7 +923,7 @@ void GenerateHClass(const ::Uml::Class &cl, const ::Uml::Class &cross_cl, bool i
 {
 	if (source_unit == CPP_SOURCE_UNIT_CLASS) {
 		::Uml::Namespace ns = cl.parent_ns();
-		::Uml::Diagram diagram = cl.parent();
+		::Uml::Diagram diagram = ::Uml::GetDiagram(cl);
 		string cl_fname = NameToFilename(fname + "_" + (ns ? (string)ns.name() : "") + "_" + (string)cl.name());
 		bool single_cpp_namespace = SingleCPPNamespace(cl);
 

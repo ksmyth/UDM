@@ -39,7 +39,7 @@ typedef pair<set<int>, set<int> > UmlCompositionInitFuncInfo;
 string UmlClassCPPName(const ::Uml::Class &cl)
 {
 	::Uml::Namespace cl_ns = (::Uml::Namespace)cl.parent_ns();
-	::Uml::Diagram diagr = (::Uml::Diagram)cl.parent();
+	::Uml::Diagram diagr = ::Uml::GetDiagram(cl);
 	if (SingleCPPNamespace(diagr) || cl_ns == ::Uml::Namespace(NULL))
 		return "::" + (string)diagr.name() + "::" + (string)cl.name();
 	else
