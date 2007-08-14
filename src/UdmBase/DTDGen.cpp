@@ -57,6 +57,7 @@ Changelog:
 #include <UdmBase.h>
 #include <Uml.h>
 #include <UmlExt.h>
+#include <UdmUtil.h>
 #include "DTDGen.h"
 
 #include <time.h>
@@ -536,47 +537,8 @@ namespace DTDGen
 					if ((i->max()==1)||(i->max() == 0) )
 						output << "\t\"" << (string)i->defvalue()[0] << "\"" << endl;
 					else
-					{
 						//the attribute is array type
-
-						vector<string> defvalstrarr = i->defvalue();
-						vector<string>::const_iterator dv_i = defvalstrarr.begin();//((vector<string>)i->defvalue()).begin();
-
-						output << "\t\"";
-						while (dv_i != defvalstrarr.end())
-						{
-							
-							const string a_item = *dv_i++;
-							string::const_iterator a_item_ci = a_item.begin();
-							while (a_item_ci != a_item.end())
-							{
-
-								switch (*a_item_ci)
-								{
-								case ';':
-									output << "\\";			//escape the semicolon(;)
-									output << *a_item_ci;	//write the character
-									break;
-								case '\\':
-									output << "\\";			//escape the escape(\)
-															//I think the grammar does not allow this
-															//for the time being.
-									output	 << *a_item_ci;	//write the character
-									break;
-								case '"':
-									break;				//just ignore the ending and beginning "-s
-								default:
-									output << *a_item_ci;	//write the character
-
-								}
-						
-								a_item_ci++;
-							};  
-							output << ";";
-							
-						}
-						output << "\"" << endl;
-					}
+						output << "\t\"" << UdmUtil::vector_to_string(i->defvalue(), ';', true, true) << "\"" << endl;
 				}
 				else 
 				{
@@ -862,46 +824,8 @@ namespace DTDGen
 					if ((i->max()==1)||(i->max() == 0) )
 						output << " default=\"" << (string)i->defvalue()[0] << "\"";
 					else
-					{
 						//the attribute is array type
-
-						vector<string> defvalstrarr = i->defvalue();
-						vector<string>::const_iterator dv_i = defvalstrarr.begin();//((vector<string>)i->defvalue()).begin();
-
-						output << " default=\"";
-						while (dv_i != defvalstrarr.end())
-						{
-							const string a_item = *dv_i++;
-							string::const_iterator a_item_ci = a_item.begin();
-							while (a_item_ci != a_item.end())
-							{
-
-								switch (*a_item_ci)
-								{
-								case ';':
-									output << "\\";			//escape the semicolon(;)
-									output << *a_item_ci;	//write the character
-									break;
-								case '\\':
-									output << "\\";			//escape the escape(\)
-															//I think the grammar does not allow this
-															//for the time being.
-									output	 << *a_item_ci;	//write the character
-									break;
-								case '"':
-									break;				//just ignore the ending and beginning quotes
-								default:
-									output << *a_item_ci;	//write the character
-
-								}
-						
-								a_item_ci++;
-							};  
-							output << ";";
-
-						}
-						output << "\"";
-					}
+						output << " default=\"" << UdmUtil::vector_to_string(i->defvalue(), ';', true, true) << "\"";
 				}
 				else 
 				{
