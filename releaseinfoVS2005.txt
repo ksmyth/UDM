@@ -15,9 +15,10 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
-03/24/06		Release 3.0.1
+03/30/06		Release 3.0.1
 
-		-	Upgraded to GME 5.11.18
+		-	GME 5.11.18 support
+		-	Upgraded to Visual studio 8
 
 
 11/07/05		Release 3.00
