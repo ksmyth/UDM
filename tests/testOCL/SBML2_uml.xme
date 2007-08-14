@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{16618DDB-4B18-41A4-96A4-FAB813D71FF5}" cdate="Mon May 23 07:58:20 2005" mdate="Mon May 23 07:58:20 2005" version="" metaguid="{13840105-0648-4F64-8381-11AFEE9359A4}" metaversion="" metaname="UML">
+<project guid="{16618DDB-4B18-41A4-96A4-FAB813D71FF5}" cdate="Wed Jun 15 16:11:00 2005" mdate="Wed Jun 15 16:11:00 2005" version="" metaguid="{59EBDD54-0EA9-4CDF-96D2-11DF2C3C0EF5}" metaversion="" metaname="UML">
 	<name>SBML2_uml</name>
 	<comment></comment>
 	<author></author>
@@ -12,9 +12,9 @@
 			<attribute kind="version" status="meta">
 				<value>1.00</value>
 			</attribute>
-			<model id="id-0065-0000000c" kind="Namespace" role="Namespace" relid="0x10" childrelidcntr="0x9">
+			<model id="id-0065-00000002" kind="Namespace" role="Namespace" relid="0x10" childrelidcntr="0x9">
 				<name>sbml</name>
-				<model id="id-0065-00000002" kind="ClassDiagram" role="ClassDiagram" relid="0x7" childrelidcntr="0x18">
+				<model id="id-0065-00000003" kind="ClassDiagram" role="ClassDiagram" relid="0x7" childrelidcntr="0x18">
 					<name>rules</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -25,9 +25,6 @@
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000001" kind="Class" role="Class" relid="0x1">
 						<name>algebraicRule</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -74,7 +71,8 @@
 						</regnode>
 						<attribute kind="Attributes">
 							<value>
-</value>
+
+                     </value>
 						</attribute>
 						<attribute kind="IsAbstract">
 							<value>false</value>
@@ -102,7 +100,8 @@
 						</regnode>
 						<attribute kind="Attributes">
 							<value>
-</value>
+
+                     </value>
 						</attribute>
 						<attribute kind="IsAbstract">
 							<value>false</value>
@@ -222,7 +221,7 @@ in
 rv-&gt;isUnique(rvv | rvv.id)</value>
 						</attribute>
 					</atom>
-					<reference id="id-0067-0000000d" kind="ClassCopy" role="ClassCopy" relid="0x4" referred="id-0066-00000025">
+					<reference id="id-0067-0000000c" kind="ClassCopy" role="ClassCopy" relid="0x4" referred="id-0066-00000025">
 						<name>rule</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -243,7 +242,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-0000000e" kind="ClassCopy" role="ClassCopy" relid="0x17" referred="id-0066-0000003c">
+					<reference id="id-0067-0000000d" kind="ClassCopy" role="ClassCopy" relid="0x17" referred="id-0066-0000003c">
 						<name>math</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -261,7 +260,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 					<connection id="id-0068-00000001" kind="Base" role="Base" relid="0x6">
 						<name></name>
 						<connpoint role="dst" target="id-0066-00000004"/>
-						<connpoint role="src" target="id-0067-0000000d"/>
+						<connpoint role="src" target="id-0067-0000000c"/>
 					</connection>
 					<connection id="id-0068-00000002" kind="Sub" role="Sub" relid="0xc">
 						<name>Sub</name>
@@ -322,11 +321,11 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 						<attribute kind="ParentRole" status="meta">
 							<value></value>
 						</attribute>
-						<connpoint role="dst" target="id-0067-0000000d"/>
-						<connpoint role="src" target="id-0067-0000000e"/>
+						<connpoint role="dst" target="id-0067-0000000c"/>
+						<connpoint role="src" target="id-0067-0000000d"/>
 					</connection>
 				</model>
-				<model id="id-0065-00000003" kind="ClassDiagram" role="ClassDiagram" relid="0x5" childrelidcntr="0x51">
+				<model id="id-0065-00000004" kind="ClassDiagram" role="ClassDiagram" relid="0x5" childrelidcntr="0x51">
 					<name>model</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -337,9 +336,6 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000009" kind="Class" role="Class" relid="0x1c">
 						<name>listOfReactions</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -594,7 +590,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
       isUnique( r | r.id )</value>
 						</attribute>
 					</atom>
-					<reference id="id-0067-0000000f" kind="ClassCopy" role="ClassCopy" relid="0x2" referred="id-0066-00000019">
+					<reference id="id-0067-0000000e" kind="ClassCopy" role="ClassCopy" relid="0x2" referred="id-0066-00000019">
 						<name>model</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -615,7 +611,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-00000010" kind="ClassCopy" role="ClassCopy" relid="0x6" referred="id-0066-0000001b">
+					<reference id="id-0067-0000000f" kind="ClassCopy" role="ClassCopy" relid="0x6" referred="id-0066-0000001b">
 						<name>compartment</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -636,7 +632,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-00000011" kind="ClassCopy" role="ClassCopy" relid="0x8" referred="id-0066-00000016">
+					<reference id="id-0067-00000010" kind="ClassCopy" role="ClassCopy" relid="0x8" referred="id-0066-00000016">
 						<name>reaction</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -657,7 +653,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-00000012" kind="ClassCopy" role="ClassCopy" relid="0xc" referred="id-0066-00000017">
+					<reference id="id-0067-00000011" kind="ClassCopy" role="ClassCopy" relid="0xc" referred="id-0066-00000017">
 						<name>event</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -678,7 +674,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-00000013" kind="ClassCopy" role="ClassCopy" relid="0x10" referred="id-0066-00000025">
+					<reference id="id-0067-00000012" kind="ClassCopy" role="ClassCopy" relid="0x10" referred="id-0066-00000025">
 						<name>rule</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -699,7 +695,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-00000014" kind="ClassCopy" role="ClassCopy" relid="0x12" referred="id-0066-0000001a">
+					<reference id="id-0067-00000013" kind="ClassCopy" role="ClassCopy" relid="0x12" referred="id-0066-0000001a">
 						<name>species</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -720,7 +716,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-00000015" kind="ClassCopy" role="ClassCopy" relid="0x14" referred="id-0066-00000015">
+					<reference id="id-0067-00000014" kind="ClassCopy" role="ClassCopy" relid="0x14" referred="id-0066-00000015">
 						<name>parameter</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -741,7 +737,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-00000016" kind="ClassCopy" role="ClassCopy" relid="0x16" referred="id-0066-0000001c">
+					<reference id="id-0067-00000015" kind="ClassCopy" role="ClassCopy" relid="0x16" referred="id-0066-0000001c">
 						<name>UnitDefinition</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -762,7 +758,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-00000017" kind="ClassCopy" role="ClassCopy" relid="0x18" referred="id-0066-00000018">
+					<reference id="id-0067-00000016" kind="ClassCopy" role="ClassCopy" relid="0x18" referred="id-0066-00000018">
 						<name>functionDefinition</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -798,7 +794,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="src" target="id-0066-00000009"/>
-						<connpoint role="dst" target="id-0067-0000000f"/>
+						<connpoint role="dst" target="id-0067-0000000e"/>
 					</connection>
 					<connection id="id-0068-0000000a" kind="Composition" role="Composition" relid="0x20">
 						<name>Composition</name>
@@ -812,7 +808,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="src" target="id-0066-0000000a"/>
-						<connpoint role="dst" target="id-0067-0000000f"/>
+						<connpoint role="dst" target="id-0067-0000000e"/>
 					</connection>
 					<connection id="id-0068-0000000b" kind="Composition" role="Composition" relid="0x23">
 						<name>Composition</name>
@@ -826,7 +822,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="src" target="id-0066-0000000b"/>
-						<connpoint role="dst" target="id-0067-0000000f"/>
+						<connpoint role="dst" target="id-0067-0000000e"/>
 					</connection>
 					<connection id="id-0068-0000000c" kind="Composition" role="Composition" relid="0x24">
 						<name>Composition</name>
@@ -840,7 +836,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-0000000b"/>
-						<connpoint role="src" target="id-0067-00000013"/>
+						<connpoint role="src" target="id-0067-00000012"/>
 					</connection>
 					<connection id="id-0068-0000000d" kind="Composition" role="Composition" relid="0x27">
 						<name>Composition</name>
@@ -854,7 +850,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="src" target="id-0066-0000000c"/>
-						<connpoint role="dst" target="id-0067-0000000f"/>
+						<connpoint role="dst" target="id-0067-0000000e"/>
 					</connection>
 					<connection id="id-0068-0000000e" kind="Composition" role="Composition" relid="0x29">
 						<name>Composition</name>
@@ -868,7 +864,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-0000000d"/>
-						<connpoint role="src" target="id-0067-00000015"/>
+						<connpoint role="src" target="id-0067-00000014"/>
 					</connection>
 					<connection id="id-0068-0000000f" kind="Composition" role="Composition" relid="0x2a">
 						<name>Composition</name>
@@ -882,7 +878,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="src" target="id-0066-0000000d"/>
-						<connpoint role="dst" target="id-0067-0000000f"/>
+						<connpoint role="dst" target="id-0067-0000000e"/>
 					</connection>
 					<connection id="id-0068-00000010" kind="Composition" role="Composition" relid="0x2d">
 						<name>Composition</name>
@@ -896,7 +892,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-0000000e"/>
-						<connpoint role="src" target="id-0067-00000010"/>
+						<connpoint role="src" target="id-0067-0000000f"/>
 					</connection>
 					<connection id="id-0068-00000011" kind="Composition" role="Composition" relid="0x2e">
 						<name>Composition</name>
@@ -910,7 +906,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="src" target="id-0066-0000000e"/>
-						<connpoint role="dst" target="id-0067-0000000f"/>
+						<connpoint role="dst" target="id-0067-0000000e"/>
 					</connection>
 					<connection id="id-0068-00000012" kind="Composition" role="Composition" relid="0x2f">
 						<name>Composition</name>
@@ -924,7 +920,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="src" target="id-0066-0000000f"/>
-						<connpoint role="dst" target="id-0067-0000000f"/>
+						<connpoint role="dst" target="id-0067-0000000e"/>
 					</connection>
 					<connection id="id-0068-00000013" kind="Composition" role="Composition" relid="0x30">
 						<name>Composition</name>
@@ -938,7 +934,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-0000000f"/>
-						<connpoint role="src" target="id-0067-00000017"/>
+						<connpoint role="src" target="id-0067-00000016"/>
 					</connection>
 					<connection id="id-0068-00000014" kind="Composition" role="Composition" relid="0x32">
 						<name>Composition</name>
@@ -952,7 +948,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-00000010"/>
-						<connpoint role="src" target="id-0067-00000016"/>
+						<connpoint role="src" target="id-0067-00000015"/>
 					</connection>
 					<connection id="id-0068-00000015" kind="Composition" role="Composition" relid="0x33">
 						<name>Composition</name>
@@ -969,7 +965,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="src" target="id-0066-00000010"/>
-						<connpoint role="dst" target="id-0067-0000000f"/>
+						<connpoint role="dst" target="id-0067-0000000e"/>
 					</connection>
 					<connection id="id-0068-00000016" kind="HasConstraint" role="HasConstraint" relid="0x37">
 						<name>HasConstraint</name>
@@ -996,7 +992,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-0000000c"/>
-						<connpoint role="src" target="id-0067-00000012"/>
+						<connpoint role="src" target="id-0067-00000011"/>
 					</connection>
 					<connection id="id-0068-00000019" kind="Composition" role="Composition" relid="0x4e">
 						<name>Composition</name>
@@ -1010,7 +1006,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-0000000a"/>
-						<connpoint role="src" target="id-0067-00000014"/>
+						<connpoint role="src" target="id-0067-00000013"/>
 					</connection>
 					<connection id="id-0068-0000001a" kind="Composition" role="Composition" relid="0x4f">
 						<name>Composition</name>
@@ -1024,10 +1020,10 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-00000009"/>
-						<connpoint role="src" target="id-0067-00000011"/>
+						<connpoint role="src" target="id-0067-00000010"/>
 					</connection>
 				</model>
-				<model id="id-0065-00000004" kind="ClassDiagram" role="ClassDiagram" relid="0x9" childrelidcntr="0x9">
+				<model id="id-0065-00000005" kind="ClassDiagram" role="ClassDiagram" relid="0x9" childrelidcntr="0x9">
 					<name>unitDefinition</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -1038,9 +1034,6 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000013" kind="Class" role="Class" relid="0x3">
 						<name>listOfUnits</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -1068,7 +1061,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 					</atom>
-					<reference id="id-0067-00000018" kind="ClassCopy" role="ClassCopy" relid="0x2" referred="id-0066-0000001c">
+					<reference id="id-0067-00000017" kind="ClassCopy" role="ClassCopy" relid="0x2" referred="id-0066-0000001c">
 						<name>unitDefinition</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -1089,7 +1082,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-00000019" kind="ClassCopy" role="ClassCopy" relid="0x8" referred="id-0066-0000002f">
+					<reference id="id-0067-00000018" kind="ClassCopy" role="ClassCopy" relid="0x8" referred="id-0066-0000002f">
 						<name>unit</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -1119,7 +1112,7 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="src" target="id-0066-00000013"/>
-						<connpoint role="dst" target="id-0067-00000018"/>
+						<connpoint role="dst" target="id-0067-00000017"/>
 					</connection>
 					<connection id="id-0068-0000001c" kind="Composition" role="Composition" relid="0x9">
 						<name>Composition</name>
@@ -1136,10 +1129,10 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-00000013"/>
-						<connpoint role="src" target="id-0067-00000019"/>
+						<connpoint role="src" target="id-0067-00000018"/>
 					</connection>
 				</model>
-				<model id="id-0065-00000005" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x8b">
+				<model id="id-0065-00000006" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x8b">
 					<name>SBMLTypes</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -1150,9 +1143,6 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000014" kind="Class" role="Class" relid="0x2">
 						<name>kineticLaw</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -2212,7 +2202,7 @@ endif</value>
 						<connpoint role="src" target="id-0066-00000033"/>
 					</connection>
 				</model>
-				<model id="id-0065-00000006" kind="ClassDiagram" role="ClassDiagram" relid="0x6" childrelidcntr="0x17">
+				<model id="id-0065-00000007" kind="ClassDiagram" role="ClassDiagram" relid="0x6" childrelidcntr="0x17">
 					<name>reaction</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -2223,9 +2213,6 @@ endif</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000034" kind="Class" role="Class" relid="0x2">
 						<name>listOfProducts</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -2525,7 +2512,7 @@ endif</value>
 						<connpoint role="src" target="id-0067-00000005"/>
 					</connection>
 				</model>
-				<model id="id-0065-00000007" kind="ClassDiagram" role="ClassDiagram" relid="0x4" childrelidcntr="0x13">
+				<model id="id-0065-00000008" kind="ClassDiagram" role="ClassDiagram" relid="0x4" childrelidcntr="0x13">
 					<name>kineticLaw</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -2536,9 +2523,6 @@ endif</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000037" kind="Constraint" role="Constraint" relid="0xa">
 						<name>parameter_uniqueId</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -2600,7 +2584,7 @@ endif</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-0000001a" kind="ClassCopy" role="ClassCopy" relid="0x12" referred="id-0066-0000003c">
+					<reference id="id-0067-00000019" kind="ClassCopy" role="ClassCopy" relid="0x12" referred="id-0066-0000003c">
 						<name>math</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -2649,10 +2633,10 @@ endif</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0067-00000006"/>
-						<connpoint role="src" target="id-0067-0000001a"/>
+						<connpoint role="src" target="id-0067-00000019"/>
 					</connection>
 				</model>
-				<model id="id-0065-00000008" kind="ClassDiagram" role="ClassDiagram" relid="0x2" childrelidcntr="0x10">
+				<model id="id-0065-00000009" kind="ClassDiagram" role="ClassDiagram" relid="0x2" childrelidcntr="0x10">
 					<name>event</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -2663,9 +2647,6 @@ endif</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000038" kind="Class" role="Class" relid="0x1">
 						<name>eventAssignment</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -2796,7 +2777,7 @@ math:Text</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-0000001b" kind="ClassCopy" role="ClassCopy" relid="0x9" referred="id-0066-0000003c">
+					<reference id="id-0067-0000001a" kind="ClassCopy" role="ClassCopy" relid="0x9" referred="id-0066-0000003c">
 						<name>math</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -2817,7 +2798,7 @@ math:Text</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-0000001c" kind="ClassCopy" role="ClassCopy" relid="0xe" referred="id-0066-0000003c">
+					<reference id="id-0067-0000001b" kind="ClassCopy" role="ClassCopy" relid="0xe" referred="id-0066-0000003c">
 						<name>math</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -2898,7 +2879,7 @@ math:Text</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-0000003a"/>
-						<connpoint role="src" target="id-0067-0000001b"/>
+						<connpoint role="src" target="id-0067-0000001a"/>
 					</connection>
 					<connection id="id-0068-00000048" kind="Composition" role="Composition" relid="0xf">
 						<name>Composition</name>
@@ -2915,7 +2896,7 @@ math:Text</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0066-0000003b"/>
-						<connpoint role="src" target="id-0067-0000001c"/>
+						<connpoint role="src" target="id-0067-0000001b"/>
 					</connection>
 					<connection id="id-0068-00000049" kind="Composition" role="Composition" relid="0x10">
 						<name>Composition</name>
@@ -2935,7 +2916,7 @@ math:Text</value>
 						<connpoint role="dst" target="id-0067-00000008"/>
 					</connection>
 				</model>
-				<model id="id-0065-00000009" kind="ClassDiagram" role="ClassDiagram" relid="0x8" childrelidcntr="0x5">
+				<model id="id-0065-0000000a" kind="ClassDiagram" role="ClassDiagram" relid="0x8" childrelidcntr="0x5">
 					<name>sbml</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -2946,9 +2927,6 @@ math:Text</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<reference id="id-0067-00000009" kind="ClassCopy" role="ClassCopy" relid="0x1" referred="id-0066-0000001d">
 						<name>sbml</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -3008,9 +2986,6 @@ math:Text</value>
 				</model>
 				<model id="id-0065-0000000b" kind="ClassDiagram" role="ClassDiagram" relid="0x3" childrelidcntr="0x3">
 					<name>functionDefinition</name>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<reference id="id-0067-0000000b" kind="ClassCopy" role="ClassCopy" relid="0x1" referred="id-0066-00000018">
 						<name>functionDefinition</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -3026,7 +3001,7 @@ math:Text</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<reference id="id-0067-0000000c" kind="ClassCopy" role="ClassCopy" relid="0x2" referred="id-0066-0000003c">
+					<reference id="id-0067-0000001c" kind="ClassCopy" role="ClassCopy" relid="0x2" referred="id-0066-0000003c">
 						<name>math</name>
 						<regnode name="PartRegs" isopaque="yes">
 							<value></value>
@@ -3041,7 +3016,7 @@ math:Text</value>
 							<value>false</value>
 						</attribute>
 					</reference>
-					<connection id="id-0068-00000059" kind="Composition" role="Composition" relid="0x3">
+					<connection id="id-0068-0000004b" kind="Composition" role="Composition" relid="0x3">
 						<name>Composition</name>
 						<regnode name="autorouterPref" isopaque="yes">
 							<value>Ns</value>
@@ -3056,13 +3031,13 @@ math:Text</value>
 							<value></value>
 						</attribute>
 						<connpoint role="dst" target="id-0067-0000000b"/>
-						<connpoint role="src" target="id-0067-0000000c"/>
+						<connpoint role="src" target="id-0067-0000001c"/>
 					</connection>
 				</model>
 			</model>
-			<model id="id-0065-0000000d" kind="Namespace" role="Namespace" relid="0x11" childrelidcntr="0x1">
+			<model id="id-0065-0000000c" kind="Namespace" role="Namespace" relid="0x11" childrelidcntr="0x1">
 				<name>math</name>
-				<model id="id-0065-0000000a" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x1b">
+				<model id="id-0065-0000000d" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x1b">
 					<name>math</name>
 					<regnode name="PartRegs" isopaque="yes">
 						<value></value>
@@ -3073,9 +3048,6 @@ math:Text</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-0000003c" kind="Class" role="Class" relid="0x1">
 						<name>math</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -3403,7 +3375,7 @@ value: String</value>
 							<value></value>
 						</attribute>
 					</atom>
-					<connection id="id-0068-0000004b" kind="Composition" role="Composition" relid="0x9">
+					<connection id="id-0068-0000004c" kind="Composition" role="Composition" relid="0x9">
 						<name>Composition</name>
 						<regnode name="autorouterPref" isopaque="yes">
 							<value>N</value>
@@ -3420,7 +3392,7 @@ value: String</value>
 						<connpoint role="dst" target="id-0066-0000003c"/>
 						<connpoint role="src" target="id-0066-0000003d"/>
 					</connection>
-					<connection id="id-0068-0000004c" kind="Composition" role="Composition" relid="0xa">
+					<connection id="id-0068-0000004d" kind="Composition" role="Composition" relid="0xa">
 						<name>Composition</name>
 						<attribute kind="Cardinality" status="meta">
 							<value>0..*</value>
@@ -3434,7 +3406,7 @@ value: String</value>
 						<connpoint role="dst" target="id-0066-0000003d"/>
 						<connpoint role="src" target="id-0066-0000003e"/>
 					</connection>
-					<connection id="id-0068-0000004d" kind="Composition" role="Composition" relid="0xb">
+					<connection id="id-0068-0000004e" kind="Composition" role="Composition" relid="0xb">
 						<name>Composition</name>
 						<regnode name="autorouterPref" isopaque="yes">
 							<value>w</value>
@@ -3451,7 +3423,7 @@ value: String</value>
 						<connpoint role="dst" target="id-0066-0000003d"/>
 						<connpoint role="src" target="id-0066-0000003f"/>
 					</connection>
-					<connection id="id-0068-0000004e" kind="Composition" role="Composition" relid="0xc">
+					<connection id="id-0068-0000004f" kind="Composition" role="Composition" relid="0xc">
 						<name>Composition</name>
 						<attribute kind="Cardinality" status="meta">
 							<value>0..*</value>
@@ -3465,7 +3437,7 @@ value: String</value>
 						<connpoint role="dst" target="id-0066-0000003d"/>
 						<connpoint role="src" target="id-0066-00000040"/>
 					</connection>
-					<connection id="id-0068-0000004f" kind="Composition" role="Composition" relid="0xd">
+					<connection id="id-0068-00000050" kind="Composition" role="Composition" relid="0xd">
 						<name>Composition</name>
 						<regnode name="autorouterPref" isopaque="yes">
 							<value>Ns</value>
@@ -3482,7 +3454,7 @@ value: String</value>
 						<connpoint role="dst" target="id-0066-0000003d"/>
 						<connpoint role="src" target="id-0066-00000041"/>
 					</connection>
-					<connection id="id-0068-00000050" kind="Composition" role="Composition" relid="0xe">
+					<connection id="id-0068-00000051" kind="Composition" role="Composition" relid="0xe">
 						<name>Composition</name>
 						<attribute kind="Cardinality" status="meta">
 							<value>0..*</value>
@@ -3496,7 +3468,7 @@ value: String</value>
 						<connpoint role="dst" target="id-0066-0000003d"/>
 						<connpoint role="src" target="id-0066-00000042"/>
 					</connection>
-					<connection id="id-0068-00000051" kind="Composition" role="Composition" relid="0xf">
+					<connection id="id-0068-00000052" kind="Composition" role="Composition" relid="0xf">
 						<name>Composition</name>
 						<regnode name="autorouterPref" isopaque="yes">
 							<value>Ns</value>
@@ -3513,7 +3485,7 @@ value: String</value>
 						<connpoint role="dst" target="id-0066-0000003d"/>
 						<connpoint role="src" target="id-0066-00000043"/>
 					</connection>
-					<connection id="id-0068-00000052" kind="Composition" role="Composition" relid="0x10">
+					<connection id="id-0068-00000053" kind="Composition" role="Composition" relid="0x10">
 						<name>Composition</name>
 						<attribute kind="Cardinality" status="meta">
 							<value>0..*</value>
@@ -3527,7 +3499,7 @@ value: String</value>
 						<connpoint role="src" target="id-0066-0000003d"/>
 						<connpoint role="dst" target="id-0066-0000003d"/>
 					</connection>
-					<connection id="id-0068-00000053" kind="Composition" role="Composition" relid="0x13">
+					<connection id="id-0068-00000054" kind="Composition" role="Composition" relid="0x13">
 						<name>Composition</name>
 						<regnode name="autorouterPref" isopaque="yes">
 							<value>s</value>
@@ -3544,7 +3516,7 @@ value: String</value>
 						<connpoint role="dst" target="id-0066-0000003c"/>
 						<connpoint role="src" target="id-0066-00000044"/>
 					</connection>
-					<connection id="id-0068-00000054" kind="Composition" role="Composition" relid="0x15">
+					<connection id="id-0068-00000055" kind="Composition" role="Composition" relid="0x15">
 						<name>Composition</name>
 						<regnode name="autorouterPref" isopaque="yes">
 							<value>Ns</value>
@@ -3561,7 +3533,7 @@ value: String</value>
 						<connpoint role="dst" target="id-0066-00000044"/>
 						<connpoint role="src" target="id-0066-00000045"/>
 					</connection>
-					<connection id="id-0068-00000055" kind="Composition" role="Composition" relid="0x16">
+					<connection id="id-0068-00000056" kind="Composition" role="Composition" relid="0x16">
 						<name>Composition</name>
 						<regnode name="autorouterPref" isopaque="yes">
 							<value>s</value>
@@ -3578,7 +3550,7 @@ value: String</value>
 						<connpoint role="src" target="id-0066-00000041"/>
 						<connpoint role="dst" target="id-0066-00000045"/>
 					</connection>
-					<connection id="id-0068-00000056" kind="Composition" role="Composition" relid="0x18">
+					<connection id="id-0068-00000057" kind="Composition" role="Composition" relid="0x18">
 						<name>Composition</name>
 						<regnode name="autorouterPref" isopaque="yes">
 							<value>N</value>
@@ -3595,7 +3567,7 @@ value: String</value>
 						<connpoint role="dst" target="id-0066-0000003d"/>
 						<connpoint role="src" target="id-0066-00000046"/>
 					</connection>
-					<connection id="id-0068-00000057" kind="Composition" role="Composition" relid="0x19">
+					<connection id="id-0068-00000058" kind="Composition" role="Composition" relid="0x19">
 						<name>Composition</name>
 						<regnode name="autorouterPref" isopaque="yes">
 							<value>Ns</value>
@@ -3612,7 +3584,7 @@ value: String</value>
 						<connpoint role="src" target="id-0066-0000003d"/>
 						<connpoint role="dst" target="id-0066-00000044"/>
 					</connection>
-					<connection id="id-0068-00000058" kind="Composition" role="Composition" relid="0x1b">
+					<connection id="id-0068-00000059" kind="Composition" role="Composition" relid="0x1b">
 						<name>Composition</name>
 						<attribute kind="Cardinality" status="meta">
 							<value>0..*</value>
