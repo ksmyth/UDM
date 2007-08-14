@@ -93,7 +93,11 @@ void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram,
                     const string& macro = "",
                     bool integrate_xsd = false);
 
-void GenerateCPP(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
+void GenerateCPP(const ::Uml::Uml::Diagram &diagram, 
+				 ostream &output, string fname, 
+				 const ::Uml::Uml::Diagram& cross_dgr = NULL, 
+				 const string& macro = "",
+				 bool integrate_xsd = false);
 //void GenerateCORBACPP(const ::Uml::Uml::Diagram &diagram, ostream &output, string fname, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro = "");
 // not cross-link approved
 
@@ -392,7 +396,7 @@ usage:
 					//GenerateNewCPP(dgr, ff, sname, cross_meta);
 					if(new_meta && !corba_meta) GenerateNewCPP(dgr, ff, sname, cross_meta, ns_map.empty() ? NULL : &ns_map, macro, integrate_xsd);
 				//	else if (corba_meta) GenerateCORBACPP(dgr,  ff, sname, cross_meta, macro);
-					else GenerateCPP(dgr,  ff, sname, cross_meta, macro);
+					else GenerateCPP(dgr,  ff, sname, cross_meta, macro, integrate_xsd);
 				}
 				ff.close();
 				ff.clear();
@@ -569,7 +573,7 @@ usage:
 			{
 				if(new_meta && !corba_meta) GenerateNewCPP(diagram, ff, fname, NULL, ns_map.empty() ? NULL : &ns_map, macro, integrate_xsd);
 			//	else if (corba_meta) GenerateCORBACPP(diagram,  ff, fname);
-				else GenerateCPP(diagram,  ff, fname, NULL, macro);
+				else GenerateCPP(diagram,  ff, fname, NULL, macro, integrate_xsd);
 			}
 		}
 		ff.close();
