@@ -20,27 +20,15 @@
 */
 
 #include "UdmOclType.h"
-#include "OclObjectExBasic.h"
+#include "OCLObjectExBasic.h"
 #include "UdmOclObject.h"
 #include "Uml.h"
 #include "UmlExt.h"
 
 
 #ifndef _WIN32
-
-char *_strlwr( char *string )
-{
-	if (string)
-	{
-		for (int i = 0; i< strlen(string); i++)
-			*(string + i) = tolower(*(string+i));
-	};
-	return string;
-};
-
-
-
-
+//will be defined in GOCL
+char *_strlwr( char *string );
 #endif
 
 
