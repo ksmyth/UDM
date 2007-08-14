@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{5DB8D43D-0701-49F9-A1AE-02CDC0BA619D}" cdate="Mon Feb 07 21:17:44 2005" mdate="Mon Feb 07 21:17:44 2005" version="" metaguid="{FEFF5A03-BF64-4567-A10E-EBFCBDD5C475}" metaversion="" metaname="MetaGME">
+<project guid="{05BA4CA0-943F-4252-8849-8DD6CA7387FC}" cdate="Mon May 02 02:06:53 2005" mdate="Mon May 02 02:06:53 2005" version="" metaguid="{FEFF5A03-BF64-4567-A10E-EBFCBDD5C475}" metaversion="" metaname="MetaGME">
 	<name>UML</name>
 	<comment>Descent into the maelstrom!</comment>
 	<author>Jonathan M. Sprinkle</author>
@@ -696,7 +696,7 @@
 					<value>1076</value>
 				</regnode>
 			</regnode>
-			<regnode name="namespace-82-FieldAttribute">
+			<regnode name="namespace-82-FieldAttribute" isopaque="yes">
 				<value></value>
 				<regnode name="MetaRef" isopaque="yes">
 					<value>1084</value>
@@ -1032,7 +1032,7 @@
 				</attribute>
 			</set>
 		</model>
-		<model id="id-0065-00000002" kind="ParadigmSheet" relid="0x1" childrelidcntr="0x84">
+		<model id="id-0065-00000002" kind="ParadigmSheet" relid="0x1" childrelidcntr="0x91">
 			<name>UML</name>
 			<atom id="id-0066-00000001" kind="FieldAttribute" role="FieldAttribute" relid="0x63">
 				<name>DefinitionParamList</name>
@@ -4136,6 +4136,231 @@ attribute , attribute</value>
 					<value></value>
 				</attribute>
 			</atom>
+			<atom id="id-0066-00000064" kind="Model" role="Model" relid="0x89">
+				<name>Namespace</name>
+				<regnode name="PartRegs">
+					<value></value>
+					<regnode name="Attributes">
+						<value></value>
+						<regnode name="Position" isopaque="yes">
+							<value>814,128</value>
+						</regnode>
+					</regnode>
+					<regnode name="ClassDiagram">
+						<value></value>
+						<regnode name="Position" isopaque="yes">
+							<value>814,128</value>
+						</regnode>
+					</regnode>
+					<regnode name="Constraints">
+						<value></value>
+						<regnode name="Position" isopaque="yes">
+							<value>897,118</value>
+						</regnode>
+					</regnode>
+					<regnode name="Visualization">
+						<value></value>
+						<regnode name="Position" isopaque="yes">
+							<value>814,128</value>
+						</regnode>
+					</regnode>
+				</regnode>
+				<attribute kind="Decorator" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="DisplayedName" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="GeneralPreferences" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="Icon" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="InRootFolder" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="InstanceIcon" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="IsAbstract" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="IsHotspotEnabled" status="meta">
+					<value>true</value>
+				</attribute>
+				<attribute kind="IsNameEnabled" status="meta">
+					<value>true</value>
+				</attribute>
+				<attribute kind="IsTypeInfoShown" status="meta">
+					<value>true</value>
+				</attribute>
+				<attribute kind="IsTypeShown" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="NamePosition" status="meta">
+					<value>4</value>
+				</attribute>
+				<attribute kind="NameWrapNum" status="meta">
+					<value>0</value>
+				</attribute>
+				<attribute kind="PortIcon" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="SubTypeIcon" status="meta">
+					<value></value>
+				</attribute>
+			</atom>
+			<atom id="id-0066-00000065" kind="Constraint" role="Constraint" relid="0x8c">
+				<name>UniqueNamespaceName</name>
+				<regnode name="PartRegs">
+					<value></value>
+					<regnode name="Constraints">
+						<value></value>
+						<regnode name="Position" isopaque="yes">
+							<value>1049,132</value>
+						</regnode>
+					</regnode>
+				</regnode>
+				<attribute kind="AddSetEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ChangeAttributeEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ChangePropertyEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ChangeRelationEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="CloseEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ConnectEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ConstraintDescription">
+					<value>A namespace must be unique.</value>
+				</attribute>
+				<attribute kind="ConstraintEqn">
+					<value>project.allInstancesOf( Namespace ) -&gt; select( pkg | pkg.name = self.name ) -&gt; size = 1</value>
+				</attribute>
+				<attribute kind="ConstraintParam" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="ConstraintPriority" status="meta">
+					<value>2</value>
+				</attribute>
+				<attribute kind="CreateEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="DeleteEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="Depth">
+					<value>0</value>
+				</attribute>
+				<attribute kind="DeriveEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="DisconnectEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="LostChildEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="MoveEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="NewChildEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ReferenceEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="RemoveSetEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="UnReferenceEvent" status="meta">
+					<value>false</value>
+				</attribute>
+			</atom>
+			<atom id="id-0066-00000066" kind="Constraint" role="Constraint" relid="0x90">
+				<name>ValidName</name>
+				<regnode name="PartRegs" isopaque="yes">
+					<value></value>
+					<regnode name="Constraints" isopaque="yes">
+						<value></value>
+						<regnode name="Position" isopaque="yes">
+							<value>1042,188</value>
+						</regnode>
+					</regnode>
+				</regnode>
+				<attribute kind="AddSetEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ChangeAttributeEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ChangePropertyEvent">
+					<value>true</value>
+				</attribute>
+				<attribute kind="ChangeRelationEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="CloseEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ConnectEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ConstraintDescription">
+					<value>Format of the name of the Namespace is invalid</value>
+				</attribute>
+				<attribute kind="ConstraintEqn">
+					<value>name.trim().match( &quot;^[_a-zA-Z][_a-zA-Z0-9]*$&quot; )</value>
+				</attribute>
+				<attribute kind="ConstraintParam" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="ConstraintPriority">
+					<value>1</value>
+				</attribute>
+				<attribute kind="CreateEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="DeleteEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="Depth">
+					<value>0</value>
+				</attribute>
+				<attribute kind="DeriveEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="DisconnectEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="LostChildEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="MoveEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="NewChildEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="ReferenceEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="RemoveSetEvent" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="UnReferenceEvent" status="meta">
+					<value>false</value>
+				</attribute>
+			</atom>
 			<reference id="id-0067-0000000d" kind="ConnectionProxy" role="ConnectionProxy" relid="0x73" referred="id-0066-0000004b">
 				<name>Association</name>
 				<regnode name="PartRegs" isopaque="yes">
@@ -4621,8 +4846,69 @@ attribute , attribute</value>
 				<connpoint role="dst" target="id-0066-00000032"/>
 				<connpoint role="src" target="id-0066-00000034"/>
 			</connection>
+			<connection id="id-0068-00000078" kind="Containment" role="Containment" relid="0x85">
+				<name>Containment</name>
+				<attribute kind="Cardinality" status="meta">
+					<value>0..*</value>
+				</attribute>
+				<attribute kind="IsPort" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="Rolename" status="meta">
+					<value></value>
+				</attribute>
+				<connpoint role="dst" target="id-0066-00000032"/>
+				<connpoint role="src" target="id-0066-00000032"/>
+			</connection>
+			<connection id="id-0068-0000007b" kind="Containment" role="Containment" relid="0x8a">
+				<name>Containment</name>
+				<regnode name="autorouterPref" isopaque="yes">
+					<value>W</value>
+				</regnode>
+				<attribute kind="Cardinality" status="meta">
+					<value>0..*</value>
+				</attribute>
+				<attribute kind="IsPort" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="Rolename" status="meta">
+					<value></value>
+				</attribute>
+				<connpoint role="dst" target="id-0066-00000002"/>
+				<connpoint role="src" target="id-0066-00000064"/>
+			</connection>
+			<connection id="id-0068-0000007d" kind="Containment" role="Containment" relid="0x8b">
+				<name>Containment</name>
+				<attribute kind="Cardinality" status="meta">
+					<value>0..*</value>
+				</attribute>
+				<attribute kind="IsPort" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="Rolename" status="meta">
+					<value></value>
+				</attribute>
+				<connpoint role="src" target="id-0066-00000032"/>
+				<connpoint role="dst" target="id-0066-00000064"/>
+			</connection>
+			<connection id="id-0068-00000081" kind="HasConstraint" role="HasConstraint" relid="0x8e">
+				<name>HasConstraint</name>
+				<regnode name="autorouterPref" isopaque="yes">
+					<value>e</value>
+				</regnode>
+				<connpoint role="dst" target="id-0066-00000064"/>
+				<connpoint role="src" target="id-0066-00000065"/>
+			</connection>
+			<connection id="id-0068-00000083" kind="HasConstraint" role="HasConstraint" relid="0x91">
+				<name>HasConstraint</name>
+				<regnode name="autorouterPref" isopaque="yes">
+					<value>e</value>
+				</regnode>
+				<connpoint role="dst" target="id-0066-00000064"/>
+				<connpoint role="src" target="id-0066-00000066"/>
+			</connection>
 		</model>
-		<model id="id-0065-00000003" kind="ParadigmSheet" relid="0x2" childrelidcntr="0xe">
+		<model id="id-0065-00000003" kind="ParadigmSheet" relid="0x2" childrelidcntr="0x10">
 			<name>AspectClassDiagram</name>
 			<reference id="id-0067-00000001" kind="FCOProxy" role="FCOProxy" relid="0x5" referred="id-0066-00000028">
 				<name>ClassBaseRef</name>
@@ -5032,6 +5318,81 @@ attribute , attribute</value>
 					<value></value>
 				</attribute>
 			</reference>
+			<reference id="id-0067-00000010" kind="ModelProxy" role="ModelProxy" relid="0xf" referred="id-0066-00000064">
+				<name>Namespace</name>
+				<regnode name="PartRegs">
+					<value></value>
+					<regnode name="Attributes">
+						<value></value>
+						<regnode name="Position" isopaque="yes">
+							<value>331,65</value>
+						</regnode>
+					</regnode>
+					<regnode name="ClassDiagram">
+						<value></value>
+						<regnode name="Position" isopaque="yes">
+							<value>596,20</value>
+						</regnode>
+					</regnode>
+					<regnode name="Constraints">
+						<value></value>
+						<regnode name="Position" isopaque="yes">
+							<value>331,65</value>
+						</regnode>
+					</regnode>
+					<regnode name="Visualization">
+						<value></value>
+						<regnode name="Position" isopaque="yes">
+							<value>603,244</value>
+						</regnode>
+					</regnode>
+				</regnode>
+				<attribute kind="Decorator" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="DisplayedName" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="GeneralPreferences" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="Icon" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="InRootFolder" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="InstanceIcon" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="IsAbstract" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="IsHotspotEnabled" status="meta">
+					<value>true</value>
+				</attribute>
+				<attribute kind="IsNameEnabled" status="meta">
+					<value>true</value>
+				</attribute>
+				<attribute kind="IsTypeInfoShown" status="meta">
+					<value>true</value>
+				</attribute>
+				<attribute kind="IsTypeShown" status="meta">
+					<value>false</value>
+				</attribute>
+				<attribute kind="NamePosition" status="meta">
+					<value>4</value>
+				</attribute>
+				<attribute kind="NameWrapNum" status="meta">
+					<value>0</value>
+				</attribute>
+				<attribute kind="PortIcon" status="meta">
+					<value></value>
+				</attribute>
+				<attribute kind="SubTypeIcon" status="meta">
+					<value></value>
+				</attribute>
+			</reference>
 			<connection id="id-0068-00000039" kind="HasAspect" role="HasAspect" relid="0x1">
 				<name>HasAspect</name>
 				<connpoint role="dst" target="id-0067-00000002"/>
@@ -5042,7 +5403,12 @@ attribute , attribute</value>
 				<connpoint role="dst" target="id-0067-00000004"/>
 				<connpoint role="src" target="id-0069-00000002"/>
 			</connection>
-			<set id="id-0069-00000002" kind="Aspect" role="Aspect" relid="0x0" members="id-0067-00000003 id-0067-0000000f id-0067-0000000e id-0067-00000001 id-0067-00000002">
+			<connection id="id-0068-0000007e" kind="HasAspect" role="HasAspect" relid="0x10">
+				<name>HasAspect</name>
+				<connpoint role="dst" target="id-0067-00000010"/>
+				<connpoint role="src" target="id-0069-00000002"/>
+			</connection>
+			<set id="id-0069-00000002" kind="Aspect" role="Aspect" relid="0x0" members="id-0067-0000000f id-0067-0000000e id-0067-00000001 id-0067-00000002 id-0067-00000010 id-0067-00000003">
 				<name>UML</name>
 				<regnode name="MetaRef" isopaque="yes">
 					<value></value>
