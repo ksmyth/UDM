@@ -88,7 +88,7 @@ namespace OCLUML
 					GME::GetAssociationEnds( MGACOLL_ITER, "src", "HasDefinition", vecFCOs );
 
 					for ( int i = 0 ; i < vecFCOs.size() ; i++ ) {
-						GOCL_STL_NS()string strType = GME::GetObjectName( vecFCOs[ i ].p );
+						std::string strType = GME::GetObjectName( vecFCOs[ i ].p );
 						if ( ! strType.empty() ) {
 							strType = GME::GetNamespace( vecFCOs[ i ].p ) + "::" + strType;
 							SpConstraintDef spConstraintDef( new ConstraintDef( strType, MGACOLL_ITER ) );
@@ -104,7 +104,7 @@ namespace OCLUML
 				} MGACOLL_ITERATE_END;
 			}
 
-			TypeSeq CreateReturnType( const GOCL_STL_NS()string& strType )
+			TypeSeq CreateReturnType( const std::string& strType )
 			{
 				TypeSeq vecType;
 				OclCommon::Convert( strType, vecType );
@@ -185,11 +185,11 @@ namespace OCLUML
 		GME::GetAssociationEnds( spConstraint, "src", "HasConstraint", vecFCOs );
 
 		for ( int i = 0 ; i < vecFCOs.size() ; i++ ) {
-			GOCL_STL_NS()string strType = GME::GetObjectName( vecFCOs[ i ].p );
+			std::string strType = GME::GetObjectName( vecFCOs[ i ].p );
 			if ( strType.empty() ) {
 				char chNum[ 100 ];
 				sprintf( chNum, "%d", i );
-				strType = "UntitledClass_" + GOCL_STL_NS()string( chNum );
+				strType = "UntitledClass_" + std::string( chNum );
 			} else {
 				strType = GME::GetNamespace( vecFCOs[ i ].p ) + "::" + strType;
 			}
@@ -219,11 +219,11 @@ namespace OCLUML
 		GME::GetAssociationEnds( spConstraintDef, "src", "HasDefinition", vecFCOs );
 
 		for ( int i = 0 ; i < vecFCOs.size() ; i++ ) {
-			GOCL_STL_NS()string strType = GME::GetObjectName( vecFCOs[ i ].p );
+			std::string strType = GME::GetObjectName( vecFCOs[ i ].p );
 			if ( strType.empty() ) {
 				char chNum[ 100 ];
 				sprintf( chNum, "%d", i );
-				strType = "UntitledClass_" + GOCL_STL_NS()string( chNum );
+				strType = "UntitledClass_" + std::string( chNum );
 			} else {
 				strType = GME::GetNamespace( vecFCOs[ i ].p ) + "::" + strType;
 			}

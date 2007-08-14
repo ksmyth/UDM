@@ -43,10 +43,10 @@ namespace OCLUML
 		 public :
 		 					TypeFactory( CComPtr<IMgaProject> spProject );
 
-			virtual  void 	GetTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes );
+			virtual  void 	GetTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes );
 		private :
-					void 	GetDynamicTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes );
-					void 	GetPredefinedTypes( const GOCL_STL_NS()string& strName, GOCL_STL_NS()vector<OclMeta::Type*>& vecTypes );
+					void 	GetDynamicTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes );
+					void 	GetPredefinedTypes( const std::string& strName, std::vector<OclMeta::Type*>& vecTypes );
 	};
 
 }; // namespace OCLUML
