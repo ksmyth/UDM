@@ -6,10 +6,11 @@
 #define GREATPATH "E:\MoBIESTransition\GReAT"
 #define UDMDLL "UdmDll_3_0_1.dll"
 #define UDMDLLD "UdmDll_3_0_1D.dll"
+#define UDMVER "3.0.2"
 
 [Setup]
 AppName=UDM
-AppVerName=UDM 3.0.2
+AppVerName=UDM {#UDMVER}
 AppPublisher=ISIS, Vanderbilt University
 AppPublisherURL=http://www.escherinstitute.org/Plone/tools/suites/mic/udm
 AppSupportURL=http://www.escherinstitute.org/Plone/tools/suites/mic/udm
@@ -76,7 +77,24 @@ Source: {#UDMPATH}\doc\UDMAPI.pdf; DestDir: {app}\doc; Flags: ignoreversion; Com
 Source: {#UDMPATH}\doc\UdmInterpreterWizard.pdf; DestDir: {app}\doc; Flags: ignoreversion; Components: Core
 Source: {#UDMPATH}\judm\build\build_win\judm\apidoc\*; DestDir: {app}\doc\apidoc; Excludes: *.scc; Flags: recursesubdirs createallsubdirs ignoreversion; Components: Java
 ;Udm etc folder
-
+Source: {#UDMPATH}\etc\MPCGen.exe; DestDir: {app}\etc; Components: C; Flags: ignoreversion
+Source: {#UDMPATH}\etc\StrResGen.exe; DestDir: {app}\etc; Components: C; Flags: ignoreversion
+Source: {#UDMPATH}\etc\CreateUdmXml.vbs; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\compileUdmAPI.bat; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\CreateMGA.vbs; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\Uml.xsd; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\UdmProject.xme; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\UdmProject.xml; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\UdmProject.xsd; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\Uml.xml; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\Xme2UdmXml.bat; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\UmlInUml.xme; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\UmlMeta.xme; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\JAVA\judmAPI.bat; DestDir: {app}\etc\Java; Components: Java; Flags: ignoreversion
+Source: {#UDMPATH}\etc\JAVA\.classpath; DestDir: {app}\etc\Java; Components: Java; Flags: ignoreversion
+Source: {#UDMPATH}\etc\JAVA\.project; DestDir: {app}\etc\Java; Components: Java; Flags: ignoreversion
+Source: {#UDMPATH}\etc\JAVA\build.xml; DestDir: {app}\etc\Java; Components: Java; Flags: ignoreversion
+Source: {#UDMPATH}\etc\JAVA\eclipseAPI.bat; DestDir: {app}\etc\Java; Components: Java; Flags: ignoreversion
 ;Udm include folder
 Source: {#UDMPATH}\include\UdmBase.h; DestDir: {app}\include; Flags: ignoreversion
 Source: {#UDMPATH}\include\Uml_export.h; DestDir: {app}\include; Flags: ignoreversion
@@ -118,6 +136,17 @@ Source: {#UDMPATH}\lib\UdmOclD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\lib\UdmBase.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\lib\UdmDllD.pdb; DestDir: {app}\lib; Flags: ignoreversion
 ;Udm Samples folder
+Source: ..\samples\LampDiagramGME.xme; DestDir: {app}\samples\C++; Components: C; Flags: ignoreversion
+Source: ..\samples\LampDiagramUML.xme; DestDir: {app}\samples\C++; Components: C; Flags: ignoreversion
+Source: ..\samples\CreateLampModel\CreateLampModel.rc; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
+Source: ..\samples\CreateLampModel\CreateLampModel.vcproj; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
+Source: ..\samples\CreateLampModel\CreateLampModel.cpp; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
+Source: ..\samples\cross_links\cross_links.cpp; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
+Source: ..\samples\cross_links\cross_links.vcproj; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
+Source: ..\samples\cross_links\CL.xme; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
+Source: ..\samples\Java\GeneTF\*; DestDir: {app}\samples\Java\GeneTF; Excludes: *.scc; Components: Java; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ..\samples\Java\GeneTRE\*; DestDir: {app}\samples\Java\GeneTRE; Excludes: *.scc; Components: Java; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ..\samples\Java\SBML2Ex\*; DestDir: {app}\samples\Java\SBML2Ex; Excludes: *.scc; Components: Java; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Dirs]
 Name: {app}\include; Components: C
