@@ -8,7 +8,7 @@ chdir > d
 set /p curr_dir=<"d"
 
 echo Generate domain-specific %1 jUdm source ...
-%UDM_PATH%\bin.net\udm.exe %2 -java %3
+%UDM_PATH%\bin\udm.exe %2 -java %3
 echo Done
 
 echo Generate the domain-specific %1 eclipse project ...
