@@ -1,0 +1,301 @@
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            
+//  File Name:	Setup.rul                                                   
+//                                                                            
+//  Description:	InstallShield script                                        
+//                                                                            
+//  Comments:	This script was generated based on the selections you made in
+//           	the Project Wizard.  Refer to the help topic entitled "Modify      
+//           	the script that the Project Wizard generates" for information
+//				on possible next steps.
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+// Include header files
+    
+#include "ifx.h"
+    
+////////////////////// string defines ////////////////////////////
+
+//////////////////// installation declarations ///////////////////
+
+#define	REGACCESS_USER		1
+#define	REGACCESS_SYSTEM	2
+
+#define PARADIGMCOST 30000
+#define GME_VERSION "5.11.18"
+
+
+prototype InitProgressBar(HWND, INT, INT, STRING, STRING, STRING);
+prototype SendMsgToProgressBar(HWND, STRING);
+prototype SendErrorMsg(HWND, STRING, INT);
+
+// ----- DLL function prototypes -----
+
+
+    // your DLL function prototypes
+
+
+// ---- script function prototypes -----
+
+
+    // your script function prototypes
+
+    // your global variables
+
+
+
+//////////////////////////////////////////////////////////////////////////////
+//                                                                           
+//  FUNCTION:   OnFirstUIBefore                                            
+//                                                                           
+//  EVENT:      FirstUIBefore event is sent when installation is run for the first
+//              time on given machine. In the handler installation usually displays
+//              UI allowing end user to specify installation parameters. After this
+//              function returns, FeatureTransferData is called to perform file
+//              transfer.
+//                                                                           
+///////////////////////////////////////////////////////////////////////////////
+function OnFirstUIBefore()
+    number  nResult,nSetupType;
+    string  szTitle, szMsg;
+    string  szLicenseFile, szQuestion;
+    string  szFile;
+    string  szTargetPath;
+    string  szDir;
+    string  szFeatures, szTargetdir;
+    number  nLevel;
+    LIST    listStartCopy;
+    LIST    list;
+    number  nvSize;
+    STRING svSetupType;  
+    string 	gmePath, gmeVer;      
+    OBJECT 	oGME;
+
+begin	
+    // TO DO: if you want to enable background, window title, and caption bar title                                                                     
+    // SetTitle( @PRODUCT_NAME, 24, WHITE );                                        
+    // SetTitle( @PRODUCT_NAME, 0, BACKGROUNDCAPTION ); 	                   
+    // Enable( FULLWINDOWMODE );						   
+    // Enable( BACKGROUND );							  
+    // SetColor(BACKGROUND,RGB (0, 128, 128));					   
+    
+    SHELL_OBJECT_FOLDER = @PRODUCT_NAME;
+    
+    nSetupType = TYPICAL;	
+    szDir = INSTALLDIR;
+
+Dlg_Start:
+    // beginning of dialogs label
+
+Dlg_SdWelcome:
+    szTitle = "";
+    szMsg   = "";
+    nResult = SdWelcome( szTitle, szMsg );
+    if (nResult = BACK) goto Dlg_Start;
+
+Dlg_SdLicense:
+    szLicenseFile = SUPPORTDIR ^ "license.txt";
+    szTitle    = "";
+    szMsg      = "";
+    szQuestion = "";
+    nResult    = SdLicense( szTitle, szMsg, szQuestion, szLicenseFile );
+    if (nResult = BACK) goto Dlg_SdWelcome;
+
+//Check GME version     
+nResult = GetEnvVar ( "GME_ROOT", gmePath );   
+if (nResult < 0) then
+	MessageBox ("Unable to locate GME 5.  Please install GME r"+GME_VERSION, SEVERE); 
+	abort;  
+endif;
+try
+	set oGME = CreateObject("GME.Application");
+	if(oGME.Version != GME_VERSION) then
+	  MessageBox ("The current GME version is "+oGME.Version+". Please update it with version "+GME_VERSION, WARNING);
+	  abort;
+	endif;
+ catch  
+	MessageBox("Can't find GME.Application object. Please check if you have a valid GMEr"+GME_VERSION+" installation. \n", WARNING);
+	abort;
+ endcatch;
+
+Dlg_SdShowInfoList:
+    szFile = SUPPORTDIR ^ "releaseinfoVS2005.txt";
+    list = ListCreate( STRINGLIST );
+    ListReadFromFile( list, szFile );
+    szTitle  = "Readme";
+    szMsg    = "Please read the software requirements and change log below";
+    nResult  = SdShowInfoList( szTitle, szMsg, list );	
+    ListDestroy( list );
+    if (nResult = BACK) goto Dlg_SdLicense;
+
+Dlg_SdAskDestPath:
+    szTitle = "";
+    szMsg   = "";
+    nResult = SdAskDestPath( szTitle, szMsg, szDir, 0 );
+    INSTALLDIR = szDir;
+    if (nResult = BACK) goto Dlg_SdShowInfoList;
+
+Dlg_SetupType:   
+    szTitle    = "";
+    szMsg      = "";
+    nResult = SdSetupTypeEx ( szTitle , szMsg , "" , svSetupType , 0 );
+    if (nResult = BACK) then
+        goto Dlg_SdAskDestPath;
+    else
+        nSetupType = nResult;
+        if (nSetupType != CUSTOM) then
+	       szTargetPath = INSTALLDIR;
+	       nvSize = 0;
+	       FeatureCompareSizeRequired(MEDIA,szTargetPath,nvSize);
+	       if (nvSize != 0) then      
+            	   MessageBox( szSdStr_NotEnoughSpace, WARNING );
+	           goto Dlg_SetupType;
+            endif;
+        endif;   
+    endif;
+
+Dlg_SdFeatureTree: 
+    if ((nResult = BACK) && (nSetupType != CUSTOM)) goto Dlg_SetupType;
+    szTitle    = "";
+    szMsg      = "";
+    szTargetdir = INSTALLDIR;
+    szFeatures = "";
+    nLevel = 2;
+    if (nSetupType = CUSTOM) then
+		    nResult = SdFeatureTree(szTitle, szMsg, szTargetdir, szFeatures, nLevel);
+		    if (nResult = BACK) goto Dlg_SetupType;  
+    endif;
+    
+/*
+
+Dlg_SdStartCopy:
+    szTitle = "";
+    szMsg   = "";
+    listStartCopy = ListCreate( STRINGLIST );
+    //The following is an example of how to add a string(szName) to a list(listStartCopy).
+    //eg. ListAddString(listStartCopy,szName,AFTER);
+    nResult = SdStartCopy( szTitle, szMsg, listStartCopy );	
+    ListDestroy(listStartCopy);
+    if (nResult = BACK) goto Dlg_SdFeatureTree;
+*/    
+
+    Enable(STATUSEX);
+
+    return 0;
+end;
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  FUNCTION:   OnMaintUIBefore
+//
+//  EVENT:      MaintUIBefore event is sent when end user runs installation that
+//              has already been installed on the machine. Usually this happens 
+//              through Add/Remove Programs applet. In the handler, installation 
+//              usually displays UI allowing end user to modify existing installation
+//              or uninstall application. After this function returns, 
+//              FeatureTransferData is called to perform file transfer.
+//
+///////////////////////////////////////////////////////////////////////////////
+function OnMaintUIBefore()
+    NUMBER nResult, nType;
+    STRING szTitle, szMsg, svDir, svResult, szCaption;
+begin
+    // TO DO: if you want to enable background, window title, and caption bar title   								
+    // SetTitle( @PRODUCT_NAME, 24, WHITE );					
+    // SetTitle( @PRODUCT_NAME, 0, BACKGROUNDCAPTION );  			
+    // SetColor(BACKGROUND,RGB (0, 128, 128));					
+    // Enable( FULLWINDOWMODE );						
+    // Enable( BACKGROUND );							
+	
+Dlg_Start:
+    Disable(BACKBUTTON);
+    nType = SdWelcomeMaint(szTitle, szMsg, MODIFY);
+    Enable(BACKBUTTON);
+
+    if (nType = REMOVEALL) then
+        svResult = SdLoadString(IFX_MAINTUI_MSG);
+        szCaption = SdLoadString(IFX_ONMAINTUI_CAPTION);
+        nResult = SprintfBox(MB_OKCANCEL,szCaption,"%s",svResult);
+        if (nResult = IDCANCEL) goto Dlg_Start;
+    endif;
+
+    nResult = NEXT;
+
+Dlg_SdFeatureTree:
+    if (nType = MODIFY) then
+        szTitle = "";
+        szMsg = "";
+        nResult = SdFeatureTree(szTitle, szMsg, INSTALLDIR, "", 2);
+        if (nResult = BACK) goto Dlg_Start;
+    endif;
+
+    switch(nType)
+        case REMOVEALL: FeatureRemoveAll();
+        case REPAIR:    FeatureReinstall();
+    endswitch;
+    
+    Enable(STATUSEX);
+end;                                       
+
+// Initial functions
+function InitProgressBar(hInstall, nSteps, nStepSize, szActionName, szDescription, szTemplate)
+	int hRec;
+	int nResult;
+	int nTotalCost;
+
+begin	
+	nTotalCost = nSteps * nStepSize;
+	hRec = MsiCreateRecord(3);
+    
+	MsiRecordSetString(hRec, 1, szActionName);	// action name
+	MsiRecordSetString(hRec, 2, szDescription);	//description
+	MsiRecordSetString(hRec, 3, szTemplate);	//template for ACTIONDATA
+	nResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_ACTIONSTART, hRec); 
+
+    MsiRecordSetInteger(hRec, 1, 0);			// reset PB, set the total ticks
+    MsiRecordSetInteger(hRec, 2, nTotalCost);	// est. total ticks
+    MsiRecordSetInteger(hRec, 3, 0);			// forward direction
+    nResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hRec);
+
+    MsiRecordSetInteger(hRec, 1, 1);			// progress setup info
+    MsiRecordSetInteger(hRec, 2, nStepSize);	// step size
+    MsiRecordSetInteger(hRec, 3, 1);    		// increment by the prev parameter
+    nResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hRec);
+
+	MsiCloseHandle(hRec);
+
+end;                   
+
+
+function SendMsgToProgressBar(hInstall, szMessage)
+	int hRec;
+	int hProgressRec;
+ 	int nResult;
+begin
+	hProgressRec = MsiCreateRecord(3);
+	hRec = MsiCreateRecord(1);
+ 	
+	MsiRecordSetInteger(hProgressRec, 1, 2);	// increment the PB
+    MsiRecordSetInteger(hProgressRec, 2, 1);	// ignored
+    MsiRecordSetInteger(hProgressRec, 3, 0);	// unused
+    
+   	MsiRecordSetString(hRec, 1, szMessage);		// set the progress bar message
+
+   	nResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_ACTIONDATA, hRec);
+  	nResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hProgressRec);
+end;
+
+
+function SendErrorMsg(hInstall, svErrorMessage, nFatal)
+	int hRec;
+begin
+	hRec = MsiCreateRecord(1);
+	MsiRecordSetString(hRec, 0, "Error occured: [1]");
+   	MsiRecordSetString(hRec, 1, svErrorMessage);
+	MsiProcessMessage(hInstall, INSTALLMESSAGE_ERROR, hRec);
+	if (nFatal == 1) then abort;
+	endif;
+end;                                         
