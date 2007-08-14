@@ -966,10 +966,10 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 		output << "\t<xsd:complexType name=\"" << name << "Type\" abstract=\"" << isabs  << "\"";
 	}
 
-  if (has_text_attr)
-    output << " mixed =\"true\"";
+	if (has_text_attr)
+		output << " mixed =\"true\"";
 
-  output << " >" << endl;
+	output << ">" << endl;
 	
 	::Uml::Uml::Class only_base;
 
@@ -997,65 +997,48 @@ void GenerateXMLSchemaElement(const ::Uml::Uml::Class &c,  ostream &output, bool
 	if (!cwcps.empty() || has_text_attr) 
 	{
 		/* if text attribute is present, no order of child nodes are enforced, the content model is (A?,B?,C?)* */
-		if (has_text_attr)
-		{
+		if (has_text_attr || xsd_el_ta)
 			output << "\t\t<xsd:sequence minOccurs=\"0\" maxOccurs=\"unbounded\">" << endl;
-      /*
-			set< ::Uml::Uml::Attribute> text_attrs = ::Uml::TextAttributes(c);
-			set< ::Uml::Uml::Attribute>::iterator text_attrs_i = text_attrs.begin();
-			while (text_attrs_i != text_attrs.end())
-			{
-				if (!((bool)text_attrs_i->nonpersistent()))
-					output << "\t\t\t<xsd:element name=\""<< (string)text_attrs_i->name() << "\" type=\"xsd:string\" minOccurs=\"0\"/>" << endl;				
-				text_attrs_i++;
-			};
-    */
-		}
 		else
-		{
-			if (xsd_el_ta)
-				output << "\t\t<xsd:sequence minOccurs=\"0\" maxOccurs=\"unbounded\">" << endl;
-			else
-				output << "\t\t<xsd:sequence>" << endl;
-		}
+			output << "\t\t<xsd:sequence>" << endl;
 
-    bool any_is_there = false;
+		bool any_is_there = false;
 		cwcp_order::iterator cwcps_i = cwcps.begin();
 		while (cwcps_i != cwcps.end())
 		{
 			string i_name = cwcps_i->first.name();
 			::Uml::Uml::Namespace i_ns = cwcps_i->first.parent();
 
-      bool ignore = false;
-      if (ns_ignore_set!=0)
-      {
-        set<string>::const_iterator sit = ns_ignore_set->find(i_ns.name());
-        if (sit != ns_ignore_set->end())
-        {
-          if (!any_is_there)
-          {
-            output << "\t\t\t<xsd:any  processContents=\"skip\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>"<< endl;
-            any_is_there = true;
-          }
-          ignore = true;
-        }
-      }
+			bool ignore = false;
+			if (ns_ignore_set != 0)
+			{
+				set<string>::const_iterator sit = ns_ignore_set->find(i_ns.name());
+				if (sit != ns_ignore_set->end())
+				{
+					if (!any_is_there)
+					{
+						output << "\t\t\t<xsd:any  processContents=\"skip\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>"<< endl;
+						any_is_there = true;
+					}
+					ignore = true;
+				}
+			}
       
-      if (!ignore)
-      {
-			  output << "\t\t\t<xsd:element";
-			  if (ns == i_ns)
-				  output << " name=\"" << i_name << "\" type=\"" <<	i_name << "Type\"";
-			  else
-				  output << " ref=\"" << i_ns.name() << ":" << i_name << "\"";
-			  if (cwcps_i->second.first != 1)
-				  output << " minOccurs=\"" << cwcps_i->second.first << "\"";
-			  if (cwcps_i->second.second == -1)
-				  output << " maxOccurs=\"unbounded\"";
-			  else if	(cwcps_i->second.second != 1)
-				  output << " maxOccurs=\"" << cwcps_i->second.second << "\"";
-			  output << "/>" << endl;
-      }
+			if (!ignore)
+			{
+				output << "\t\t\t<xsd:element";
+				if (ns == i_ns)
+					output << " name=\"" << i_name << "\" type=\"" <<	i_name << "Type\"";
+				else
+					output << " ref=\"" << i_ns.name() << ":" << i_name << "\"";
+				if (cwcps_i->second.first != 1)
+					output << " minOccurs=\"" << cwcps_i->second.first << "\"";
+				if (cwcps_i->second.second == -1)
+					output << " maxOccurs=\"unbounded\"";
+				else if	(cwcps_i->second.second != 1)
+					output << " maxOccurs=\"" << cwcps_i->second.second << "\"";
+				output << "/>" << endl;
+			}
 			cwcps_i++;
 		}
 
@@ -1110,10 +1093,10 @@ void GenerateXMLSchema(const ::Uml::Uml::Namespace &ns,  ostream &output, bool u
 
 		output << " elementFormDefault=\"qualified\" " << endl;
 
-    if (qualified_attrs_ns)
-      output << " attributeFormDefault=\"qualified\" " << endl;
+		if (qualified_attrs_ns)
+			output << " attributeFormDefault=\"qualified\" " << endl;
 
-    output << ">" << endl;
+		output << ">" << endl;
 
 		output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
 
