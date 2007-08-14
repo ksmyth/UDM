@@ -233,7 +233,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				Name="BootUdmCompile Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="%UDM_PATH%\bin.net\Udm.exe &quot;$(InputPath)&quot; -g -m -l UDM_DLL
+					CommandLine="%UDM_PATH%\bin\Udm.exe &quot;$(InputPath)&quot; -g -m -l UDM_DLL
 "
 					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
 			</FileConfiguration>
@@ -241,7 +241,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				Name="BootUdmCompile Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="%UDM_PATH%\bin.net\UdmD.exe &quot;$(InputPath)&quot; -g -m -l UDM_DLL
+					CommandLine="%UDM_PATH%\bin\UdmD.exe &quot;$(InputPath)&quot; -g -m -l UDM_DLL
 "
 					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
 			</FileConfiguration>
