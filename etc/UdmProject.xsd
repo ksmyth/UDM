@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?udm interface="UdmProject" version="1.00"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.isis.vanderbilt.edu/2004/schemas/UdmProject" xmlns:UdmProject="http://www.isis.vanderbilt.edu/2004/schemas/UdmProject" elementFormDefault="qualified"><!-- generated on Sun Jan 16 21:02:46 2005 -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"><!-- generated on Fri Sep 23 11:00:14 2005 -->
 
 	<xsd:complexType name="DatanetworkType">
 		<xsd:attribute name="__child_as">
