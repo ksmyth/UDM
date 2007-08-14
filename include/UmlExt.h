@@ -79,30 +79,32 @@ namespace Uml
 	UDM_DLL const CompositionChildRole theOther(const CompositionParentRole &role);
 	UDM_DLL const CompositionParentRole theOther(const CompositionChildRole &role);
 
-// find an assoc.Class by name
-	UDM_DLL Class assocClassByName(const Namespace &d, const string &name);
-
-// find a class by name
-	UDM_DLL Class classByName(const Diagram &d, const string &ns_name,const string &name );
-	//non-namespace versions
-	UDM_DLL Class classByName(const Diagram &d, const string &name );
+// find an assoc.Class by name in a Namespace
+	UDM_DLL Class assocClassByName(const Namespace &ns, const string &name);
+// find an assoc.Class by name in a Diagram
 	UDM_DLL Class assocClassByName(const Diagram &d, const string &name);
+
+// find a class by name in a Diagram and Namespace
+	UDM_DLL Class classByName(const Diagram &d, const string &ns_name, const string &name);
+// find a class by name in a Diagram
+	UDM_DLL Class classByName(const Diagram &d, const string &name);
+// find a class by name in a Namespace
+	UDM_DLL Class classByName(const Namespace &ns, const string &name);
+
+// find association by name in a Namespace
+	UDM_DLL Association associationByName(const Namespace &ns, const string &name);
+// find association by name in a Diagram
 	UDM_DLL Association associationByName(const Diagram &d, const string &name);
+
+// find composition by name in a Namespace
+	UDM_DLL Composition compositionByName(const Namespace &ns, const string &name);
+// find composition by name in a Diagram
 	UDM_DLL Composition compositionByName(const Diagram &d, const string &name);
-	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Diagram & cross_dgr);
-	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Diagram & cross_dgr);
 
-
-// find a namespace by name
-	UDM_DLL Namespace namespaceByName(const Diagram &d, const string &name);
-// find a class by name
-	UDM_DLL Class classByName(const Namespace &d, const string &name);
 // find a diagram by name
 	UDM_DLL Diagram diagramByName(const Diagram &d, const string &name);
-// find association by name
-	UDM_DLL Association associationByName(const Namespace &d, const string &name);
-//find composition by name
-	UDM_DLL Composition compositionByName(const Namespace &d, const string &name);
+// find a namespace by name
+	UDM_DLL Namespace namespaceByName(const Diagram &d, const string &name);
 // Get all the classes specified as ancestors, including self
 	UDM_DLL set<Class> AncestorClasses(const Class &c);
 // Get all the classes specified as descendants, including self
@@ -135,12 +137,14 @@ namespace Uml
 
 	// All the other ends of associations this class can have (including those defined in ancestors)
 	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Namespace & ns);
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationTargetRoles(const Class &c, const Diagram & cross_dgr);
 
 	// All local ends of associations this class can have (including those defined in ancestors)
 	UDM_DLL set<AssociationRole> AncestorAssociationRoles(const Class &c);
 
 	// All local ends of associations this class can have (including those defined in ancestors)
 	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Namespace& cross_ns);
+	UDM_DLL set<AssociationRole> AncestorCrossAssociationRoles(const Class &c, const Diagram & cross_dgr);
 
 	// returns all the Text Attributes for class C
 	UDM_DLL set<Attribute> TextAttributes(const Class &c);
@@ -153,15 +157,11 @@ namespace Uml
 	UDM_DLL set<CompositionParentRole> CompositionPeerParentRoles(const Class &c);
 // All the parent ends of compositions this class can participate in (including those defined for ancestors)
 	UDM_DLL set<CompositionParentRole> AncestorCompositionPeerParentRoles(const Class &c);
-// The namespaces of all the other ends of the compositions defined for this class as child; the set does not include the namespace of this class
-	UDM_DLL set<Namespace> OtherCompositionPeerParentRolesNamespaces(const Class &c);
 
 // All the child ends of compositions defined for this class as parent (ancestors are ignored)
 	UDM_DLL set<CompositionChildRole> CompositionPeerChildRoles(const Class &c);
 // All the child ends of compositions this class can participate in (including those defined for ancestors)
 	UDM_DLL set<CompositionChildRole> AncestorCompositionPeerChildRoles(const Class &c);
-// The namespaces of all the child ends of all compositions defined for all classes from this namespace that are parent
-	UDM_DLL set<Namespace> CompositionPeerChildNamespaces(const Namespace &ns);
 
 // Returns true if the parent and the child of this composition are in different namespaces
 	UDM_DLL bool IsCrossNSComposition(const Composition &c);
@@ -177,8 +177,6 @@ namespace Uml
 	UDM_DLL bool IsAssocClass(const Class &cl);
 	UDM_DLL bool IsAssocClass(const Association &ass);
 
-// The namespaces of all the base classes having derived classes in this namespace
-	UDM_DLL set<Namespace> BaseTypesNamespaces(const Namespace &ns);
 
 	UDM_DLL string MakeRoleName(const GenericRole &r);
 	UDM_DLL string MakeShortRoleName(const GenericRole &r);
@@ -338,12 +336,15 @@ UDM_DLL ConstraintDefinition CreateConstraintDefinition();
 UDM_DLL void InitDiagram(const Diagram &obj, const char *name, const char * version = "1.00");
 UDM_DLL void InitNamespace(const Namespace &obj, const Diagram &parent, const char *name);
 UDM_DLL void InitClass(const Class &obj, const Namespace &parent, const char *name, bool isAbstract, const char *stereo = NULL, const char * from = NULL);
+UDM_DLL void InitClass(const Class &obj, const Diagram &parent, const char *name, bool isAbstract, const char *stereo = NULL, const char * from = NULL);
 UDM_DLL void InitAttribute(const Attribute &obj, const Class &parent, const char *name, const char *type, bool np, bool reg, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval = vector<string>());
 UDM_DLL void InitAssociation(const Association &obj, const Namespace &parent, const char *name);
+UDM_DLL void InitAssociation(const Association &obj, const Diagram &parent, const char *name);
 UDM_DLL void InitAssociationClass(const Association &aobj, const Class &cobj);
 UDM_DLL void InitAssociationRole(const AssociationRole &obj, const Association &parent, 
 								 const char *name, bool navigable, bool primary, long min, long max, const Class &target);
 UDM_DLL void InitComposition(const Composition &obj, const Namespace &parent, const char *name);
+UDM_DLL void InitComposition(const Composition &obj, const Diagram &parent, const char *name);
 UDM_DLL void InitCompositionParentRole(const CompositionParentRole &obj, 
 									   const Composition &parent, const char *name, bool navigable, const Class &target);
 UDM_DLL void InitCompositionChildRole(const CompositionChildRole &obj,
@@ -383,7 +384,7 @@ void AddCORBAInheritance(const Class &baseType, const Class &subType);
 
 	UDM_DLL void SetNamespace(Namespace &what, const Diagram &what_dgr, const char *target_name);
 	UDM_DLL void SetClass(Class &what, const Namespace &what_ns, const char *target_name);
-	//UDM_DLL void SetClass(Class &what, Diagram &what_dgr, const char *target_name);
+	UDM_DLL void SetClass(Class &what, const Diagram &what_dgr, const char *target_name);
 	UDM_DLL void SetAttribute(Attribute &what, Class &what_class,  const char *target_name);
 
 	UDM_DLL void SetChildRole(CompositionChildRole &what, Class &what_target_class, Class &what_theo_target_class, const char *role_name, const char * orole_name);

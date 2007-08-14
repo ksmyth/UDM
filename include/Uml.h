@@ -1,19 +1,12 @@
 #ifndef MOBIES_UML_H
 #define MOBIES_UML_H
 // header file Uml.h generated from diagram Uml
-// generated on Tue Jul 19 15:10:54 2005
+// generated on Sun Aug 21 10:57:10 2005
 
 #ifndef MOBIES_UDMBASE_H
 #include "UdmBase.h"
 #endif
 
-#ifdef min
-#undef min
-#endif
-
-#ifdef max
-#undef max
-#endif
 #include "Uml_export.h"
 namespace Uml {
 	extern UDM_DLL Udm::UdmDiagram diagram;
@@ -34,13 +27,6 @@ namespace Uml {
 		class UDM_DLL Attribute;
 		class UDM_DLL ConstraintDefinition;
 
-		UDM_DLL extern ::Uml::Namespace meta;
-
-		UDM_DLL void InitializeNS();
-		UDM_DLL void InitializeNS(const ::Uml::Diagram &dgr);
-		UDM_DLL void InitializeNS(const ::Uml::Namespace &ns);
-		UDM_DLL void InitCrossNSInheritence();
-		UDM_DLL void InitCrossNSCompositions();
 
 		class UDM_DLL Diagram :  public Udm::Object {
 		public:
@@ -71,12 +57,33 @@ namespace Uml {
 			static ::Uml::Attribute meta_name;
 			Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
 
+			static ::Uml::CompositionChildRole meta_associations;
+			Udm::ChildrenAttr< ::Uml::Association> associations() const { return Udm::ChildrenAttr< ::Uml::Association>(impl, meta_associations); }
+			template <class Pred> Udm::ChildrenAttr< ::Uml::Association, Pred> associations_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Association, Pred>(impl, meta_associations); }
+
+			static ::Uml::CompositionChildRole meta_classes;
+			Udm::ChildrenAttr< ::Uml::Class> classes() const { return Udm::ChildrenAttr< ::Uml::Class>(impl, meta_classes); }
+			template <class Pred> Udm::ChildrenAttr< ::Uml::Class, Pred> classes_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Class, Pred>(impl, meta_classes); }
+
+			static ::Uml::CompositionChildRole meta_compositions;
+			Udm::ChildrenAttr< ::Uml::Composition> compositions() const { return Udm::ChildrenAttr< ::Uml::Composition>(impl, meta_compositions); }
+			template <class Pred> Udm::ChildrenAttr< ::Uml::Composition, Pred> compositions_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Composition, Pred>(impl, meta_compositions); }
+
 			static ::Uml::CompositionChildRole meta_namespaces;
 			Udm::ChildrenAttr< ::Uml::Namespace> namespaces() const { return Udm::ChildrenAttr< ::Uml::Namespace>(impl, meta_namespaces); }
 			template <class Pred> Udm::ChildrenAttr< ::Uml::Namespace, Pred> namespaces_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Namespace, Pred>(impl, meta_namespaces); }
 
+			Udm::ChildrenAttr< ::Uml::Association> Association_kind_children() const { return Udm::ChildrenAttr< ::Uml::Association>(impl, Udm::NULLCHILDROLE); }
+			template<class Pred> Udm::ChildrenAttr< ::Uml::Association, Pred> Association_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Association, Pred>(impl, Udm::NULLCHILDROLE); }
+
+			Udm::ChildrenAttr< ::Uml::Composition> Composition_kind_children() const { return Udm::ChildrenAttr< ::Uml::Composition>(impl, Udm::NULLCHILDROLE); }
+			template<class Pred> Udm::ChildrenAttr< ::Uml::Composition, Pred> Composition_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Composition, Pred>(impl, Udm::NULLCHILDROLE); }
+
 			Udm::ChildrenAttr< ::Uml::Namespace> Namespace_kind_children() const { return Udm::ChildrenAttr< ::Uml::Namespace>(impl, Udm::NULLCHILDROLE); }
 			template<class Pred> Udm::ChildrenAttr< ::Uml::Namespace, Pred> Namespace_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Namespace, Pred>(impl, Udm::NULLCHILDROLE); }
+
+			Udm::ChildrenAttr< ::Uml::Class> Class_kind_children() const { return Udm::ChildrenAttr< ::Uml::Class>(impl, Udm::NULLCHILDROLE); }
+			template<class Pred> Udm::ChildrenAttr< ::Uml::Class, Pred> Class_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::Class, Pred>(impl, Udm::NULLCHILDROLE); }
 
 			Udm::ParentAttr<Udm::Object> parent() const { return Udm::ParentAttr<Udm::Object>(impl, Udm::NULLPARENTROLE); }
 		};
@@ -130,8 +137,11 @@ namespace Uml {
 			Udm::ChildrenAttr< ::Uml::GenericRole> GenericRole_kind_children() const { return Udm::ChildrenAttr< ::Uml::GenericRole>(impl, Udm::NULLCHILDROLE); }
 			template<class Pred> Udm::ChildrenAttr< ::Uml::GenericRole, Pred> GenericRole_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::GenericRole, Pred>(impl, Udm::NULLCHILDROLE); }
 
+			static ::Uml::CompositionParentRole meta_parent_ns;
+			Udm::ParentAttr< ::Uml::Namespace> parent_ns() const { return Udm::ParentAttr< ::Uml::Namespace>(impl, meta_parent_ns); }
+
 			static ::Uml::CompositionParentRole meta_parent;
-			Udm::ParentAttr< ::Uml::Namespace> parent() const { return Udm::ParentAttr< ::Uml::Namespace>(impl, meta_parent); }
+			Udm::ParentAttr< ::Uml::Diagram> parent() const { return Udm::ParentAttr< ::Uml::Diagram>(impl, meta_parent); }
 
 		};
 
@@ -217,8 +227,11 @@ namespace Uml {
 			Udm::ChildrenAttr< ::Uml::GenericRole> GenericRole_kind_children() const { return Udm::ChildrenAttr< ::Uml::GenericRole>(impl, Udm::NULLCHILDROLE); }
 			template<class Pred> Udm::ChildrenAttr< ::Uml::GenericRole, Pred> GenericRole_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::GenericRole, Pred>(impl, Udm::NULLCHILDROLE); }
 
+			static ::Uml::CompositionParentRole meta_parent_ns;
+			Udm::ParentAttr< ::Uml::Namespace> parent_ns() const { return Udm::ParentAttr< ::Uml::Namespace>(impl, meta_parent_ns); }
+
 			static ::Uml::CompositionParentRole meta_parent;
-			Udm::ParentAttr< ::Uml::Namespace> parent() const { return Udm::ParentAttr< ::Uml::Namespace>(impl, meta_parent); }
+			Udm::ParentAttr< ::Uml::Diagram> parent() const { return Udm::ParentAttr< ::Uml::Diagram>(impl, meta_parent); }
 
 		};
 
@@ -360,8 +373,11 @@ namespace Uml {
 			Udm::ChildrenAttr< ::Uml::ConstraintDefinition> ConstraintDefinition_kind_children() const { return Udm::ChildrenAttr< ::Uml::ConstraintDefinition>(impl, Udm::NULLCHILDROLE); }
 			template<class Pred> Udm::ChildrenAttr< ::Uml::ConstraintDefinition, Pred> ConstraintDefinition_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< ::Uml::ConstraintDefinition, Pred>(impl, Udm::NULLCHILDROLE); }
 
+			static ::Uml::CompositionParentRole meta_parent_ns;
+			Udm::ParentAttr< ::Uml::Namespace> parent_ns() const { return Udm::ParentAttr< ::Uml::Namespace>(impl, meta_parent_ns); }
+
 			static ::Uml::CompositionParentRole meta_parent;
-			Udm::ParentAttr< ::Uml::Namespace> parent() const { return Udm::ParentAttr< ::Uml::Namespace>(impl, meta_parent); }
+			Udm::ParentAttr< ::Uml::Diagram> parent() const { return Udm::ParentAttr< ::Uml::Diagram>(impl, meta_parent); }
 
 		};
 

@@ -255,7 +255,7 @@ bool  UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_str
 bool  UPO_UnLoadDiagram(const char * xml_meta_file);
 bool  UPO_SetDiagram(UdmPseudoObject &diagram_what, const char * name);
 bool  UPO_SetNamespace(UdmPseudoObject &ns_what, UdmPseudoObject &parent_dgr, const char * name);
-bool  UPO_SetClass(UdmPseudoObject &class_what, UdmPseudoObject &parent_ns, const char *target_name);
+bool  UPO_SetClass(UdmPseudoObject &class_what, UdmPseudoObject &parent, const char *target_name);
 bool  UPO_SetAttribute(UdmPseudoObject &attr_what, UdmPseudoObject &class_what_class,  const char * target_name);
 bool  UPO_SetChildRole(UdmPseudoObject &ccr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char *  orole_name);
 bool  UPO_SetParentRole(UdmPseudoObject &cpr_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char * role_name, const char * orole_name);

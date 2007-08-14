@@ -748,6 +748,85 @@ namespace Udm
 
 	};
 
+#if __GNUC__ >= 4
+	// starting with gcc 4.0, a std::_Bit_reference can't be casted
+	// to bool&, so we need this template specialization
+
+	template <>
+	class ArrAttrItem <bool>
+	{
+		
+	protected:
+		
+		const ::Uml::Attribute & meta;			//attribute to be altered
+		vector<bool> array;		//vector with array elements
+		ObjectImpl * object;	//object this array attribute belongs to
+		unsigned int index;					//iterators can not be stored
+									//however, most of the code is not duplicated
+		virtual void set() = 0;
+	
+	public:
+		
+		ArrAttrItem(const vector<bool>& array_ref, const int  a_i,  ObjectImpl * oi, const ::Uml::Attribute & m):  meta(m), array(array_ref), index (a_i)
+		{
+			object = oi;
+			if (!object)
+				throw udm_exception("Object pointer is NULL");
+		};
+		operator bool() const 
+		{
+			if (array.size() > index) return array.at(index); 
+			else return bool();
+		};
+
+		bool operator*(){return (bool)*this;};
+		
+
+		virtual ArrAttrItem& operator =(const bool &a)
+		{
+			//pad with bool() if array is smaller than index
+			while (array.size() <=index)
+				array.push_back(bool());
+
+			std::_Bit_reference i = (std::_Bit_reference)array.at(index);
+			i = a;
+			set();
+			return *this;
+		};
+
+
+		virtual bool operator==(const ArrAttrItem<bool>& a)
+		{
+			if (array != a.array)
+				throw udm_exception("Comparision of two unrelated iterators!");
+			
+			return (index == a.index);
+		};
+
+		virtual bool operator!=(const ArrAttrItem<bool>& a)
+		{
+			
+			return !(*this == a);
+		};
+
+
+
+
+		//iterator-like mechanism, inline postfix routine
+		virtual ArrAttrItem& operator++(int){index++; return *this;};
+
+		
+		void CheckOrdering()
+		{
+			if (CheckAttributeOrdering(meta))
+					throw udm_exception("Items at a specified position in ordered attributes can not be set directly!");
+		}
+
+		virtual ~ArrAttrItem(){};
+
+	};
+#endif // __GNUC__ >= 4
+
 	/*
 		Array element template class which also implements the
 		+= operator for long, string, real types

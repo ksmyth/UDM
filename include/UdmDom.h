@@ -71,6 +71,8 @@ namespace UdmDom
 		bool str_based;
 		string str;
 
+		void AddToMetaClassesCache(const set< ::Uml::Class> &classes);
+
 	public:
 		static UDM_DLL string DTDPath;
 		//meta type-cache-by-name
@@ -207,7 +209,7 @@ namespace UdmDom
 			{\
 				sprintf(line_str, "%d", e.getSrcLine());\
 				what += line_str;\
-				delete line_str;\
+				delete [] line_str;\
 			}\
 			what += where;\
 			throw udm_exception(what);\
