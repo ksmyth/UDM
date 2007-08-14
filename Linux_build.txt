@@ -1,0 +1,51 @@
+Linux_build.txt
+Software requirements and instructions to compile UDM source files on
+Linux
+
+Requirements:
+-------------
+- GCC 3.x (or later)
+- Xerces-C++ 2.5.0
+- Xalan-C++ 1.8.0
+- SWIG 1.3.23 (or later)
+- minizip
+- cppunit
+- pccts
+- Java SDK 1.4.2 (or later)
+- ant
+- junit
+
+Build-environment preparation (Fedora Core 4):
+----------------------------------------------
+- install the following rpms from Fedora:
+  ant, ant-junit, junit, swig and xml-commons-apis
+- install the Java jdk rpm from Sun
+- install the following rpms from our repository: xerces-c,
+  xerces-c-devel, xalan-c, xalan-c-devel, minizip, minizip-devel,
+  minizip-libs, cppunit, cppunit-devel, pccts
+
+Build-environment preparation (Fedora Core 3):
+----------------------------------------------
+- install the pccts rpm from Fedora
+- install the following rpms from the jpackage repository:
+  java-sun-compat, ant, ant-junit, junit and xml-commons-apis
+- install the Java jdk rpm from Sun
+- install the following rpms from our repository: xerces-c,
+  xerces-c-devel, xalan-c, xalan-c-devel, minizip, minizip-devel,
+  minizip-libs, cppunit, cppunit-devel, swig1324
+
+Building:
+---------------------
+- build udm, judm and the tests on Windows;
+  run %UDM_PATH%\etc\ArchiveModelFiles.bat; it will create
+  %UDM_PATH%\model-files.zip, an archive with the model data files generated
+  on Windows
+- clean judm and use "Clean solution" to clean the tests and udm
+- copy or share the tree obtained above to your Linux installation
+- in the top directory run
+  make clean
+  make
+- to run the tests launch the following command in the top directory:
+  make check
+- to build a rpm launch the following command in the top directory:
+  make rpm
