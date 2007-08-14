@@ -143,6 +143,7 @@ CHANGELOG
     	DECLARE_CUSTOMMODEL(CPackageBuilder, CBuilderModel)
     public:
 		CString GetVersion() const;
+		CString GetNameorAlias() const;
     protected:
     public:
     };

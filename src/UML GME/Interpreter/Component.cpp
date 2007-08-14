@@ -177,7 +177,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 			//only one diagram
 			CPackageBuilder * package = packages->GetHead();
 
-			name = package->GetName();
+			name = package->GetNameorAlias();
 			
 			GatherPackageSheets(package,sheets);
 			POSITION pos = sheets.GetHeadPosition();
@@ -270,7 +270,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		while (mPos)
 		{
 			CPackageBuilder * package = packages->GetNext(mPos);
-			name = package->GetName();
+			name = package->GetNameorAlias();
 			
 			GatherPackageSheets(package,sheets);
 			POSITION pos = sheets.GetHeadPosition();
@@ -285,7 +285,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 			
 			std::strstream* package_xml = new std::strstream();
 			DumpIsolatedXML(*package_xml,package->GetVersion());
-			std::map<CString, std::strstream*>::value_type item(package->GetName() + CString(".xml"), package_xml);
+			std::map<CString, std::strstream*>::value_type item(package->GetNameorAlias() + CString(".xml"), package_xml);
 			package_xmls.insert(item);
 
 
@@ -612,7 +612,7 @@ void CComponent::DumpProjectXML(CBuilderFolder *root, std::strstream& xml, const
 	while(pos)
 	{
 		CPackageBuilder * package = folders->GetNext(pos);
-		xml << "\t<Datanetwork _id=\"" << (LPCTSTR)GetID() << "\" systemname=\"" << (LPCTSTR) (package->GetName() + CString(".xml")) << "\" __child_as=\"instances\" metaDgr=\"Uml\"/>" << std::endl;
+		xml << "\t<Datanetwork _id=\"" << (LPCTSTR)GetID() << "\" systemname=\"" << (LPCTSTR) (package->GetNameorAlias() + CString(".xml")) << "\" __child_as=\"instances\" metaDgr=\"Uml\"/>" << std::endl;
 	}
 
 	xml << "</Project>" << std::endl;
@@ -875,6 +875,14 @@ CString CPackageBuilder::GetVersion() const
 	CString ret;
 	GetAttribute("version", ret);
 	return ret;
+};
+
+CString CPackageBuilder::GetNameorAlias() const
+{
+	CString ret;
+	GetAttribute("alias", ret);
+	if (ret.GetLength()) return ret;
+	else return GetName();
 };
 
 ///////////////////////////// CClassDiagram /////////////////////////////////
@@ -1256,7 +1264,7 @@ bool CCompositeClass::DumpCrossXML(std::strstream &xml, CString& role_id)
 	PHname += "_from_";
 	//PHname += cls->GetFolder()->GetName();
 	//PHname += cls->GetParent()->GetParent()->GetName();
-	PHname += cls->GetPackage()->GetName();
+	PHname += cls->GetPackage()->GetNameorAlias();
 	CString cls_ns = cls->GetClassDiagram()->GetNamespace();
 
 	//CString class_ph_name = GetName() + CString("_cross_ph_") + cls->GetFolder()->GetName();
@@ -1341,7 +1349,7 @@ bool CCompositeClass::DumpCrossXML(std::strstream &xml, CString& role_id)
 
 	//xml << " from=\"" << (LPCTSTR)cls->GetFolder()->GetName() <<"\" >" << std::endl;
 	//xml << " from=\"" << (LPCTSTR)cls->GetParent()->GetParent()->GetName() <<"\" >" << std::endl;
-	xml << " from=\"" << (LPCTSTR)(cls->GetPackage()->GetName());
+	xml << " from=\"" << (LPCTSTR)(cls->GetPackage()->GetNameorAlias());
 	if (cls_ns.GetLength())
 		xml << ":" << (LPCTSTR)cls_ns;
 	xml << "\" >" << std::endl;
