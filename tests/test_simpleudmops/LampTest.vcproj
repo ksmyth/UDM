@@ -147,7 +147,7 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="LampDiagram.cpp">
+				RelativePath="..\..\samples\LampDiagram.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -211,7 +211,7 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="LampDiagram.h">
+				RelativePath="..\..\samples\LampDiagram.h">
 			</File>
 			<File
 				RelativePath="UDMTest.h">
@@ -221,12 +221,12 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 			<File
-				RelativePath="..\..\samples\LampDiagram.xml">
+				RelativePath="..\..\samples\LampDiagram_udm.xml">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot; -v
+						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; &quot;$(InputPath)&quot; -v
 "
 						Outputs="$(InputName).xsd;$(InputName).cpp;$(InputName).h"/>
 				</FileConfiguration>
@@ -234,7 +234,7 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="..\..\bin\Udm.exe &quot;$(InputPath)&quot; -v
+						CommandLine="&quot;$(UDM_PATH)\bin\UdmD.exe&quot; &quot;$(InputPath)&quot; -v
 "
 						Outputs="$(InputName).xsd;$(InputName).cpp;$(InputName).h"/>
 				</FileConfiguration>

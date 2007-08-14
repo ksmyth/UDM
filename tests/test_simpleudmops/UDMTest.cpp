@@ -33,23 +33,23 @@ void CUDMTest::tearDown()
 
 void CUDMTest::TestFileCreation()
 {
-	m_xmlfile.CreateNew( "abc.xml", "LampDiagram.xsd", LampDiagram::LampDiagram::RootFolder::meta);
+	m_xmlfile.CreateNew( "abc.xml", "LampDiagram.xsd", LampDiagram::RootFolder::meta);
 		
-	CPPUNIT_ASSERT((m_root = LampDiagram::LampDiagram::RootFolder::Cast(m_xmlfile.GetRootObject())));
+	CPPUNIT_ASSERT((m_root = LampDiagram::RootFolder::Cast(m_xmlfile.GetRootObject())));
 }
 
 void CUDMTest::TestObjectCreation()
 {
 	m_xmlfile.OpenExisting( "abc.xml", "LampDiagram.xsd");
-	m_root = LampDiagram::LampDiagram::RootFolder::Cast(m_xmlfile.GetRootObject());
+	m_root = LampDiagram::RootFolder::Cast(m_xmlfile.GetRootObject());
 
 	//test that each item is successfully created
-	CPPUNIT_ASSERT((m_lamp = LampDiagram::LampDiagram::Lamp::Create(m_root)));
-	CPPUNIT_ASSERT((m_bulb = LampDiagram::LampDiagram::Bulb::Create(m_lamp)));
-	CPPUNIT_ASSERT((m_switch = LampDiagram::LampDiagram::Switch::Create(m_lamp,LampDiagram::LampDiagram::Lamp::meta_MainSwitch)));
-	CPPUNIT_ASSERT((m_plug = LampDiagram::LampDiagram::Plug::Create(m_lamp)));
-	CPPUNIT_ASSERT((m_term1 = LampDiagram::LampDiagram::ElectricTerminal::Create(m_plug)));
-	CPPUNIT_ASSERT((m_term2 = LampDiagram::LampDiagram::ElectricTerminal::Create(m_bulb)));
+	CPPUNIT_ASSERT((m_lamp = LampDiagram::Lamp::Create(m_root)));
+	CPPUNIT_ASSERT((m_bulb = LampDiagram::Bulb::Create(m_lamp)));
+	CPPUNIT_ASSERT((m_switch = LampDiagram::Switch::Create(m_lamp,LampDiagram::Lamp::meta_MainSwitch)));
+	CPPUNIT_ASSERT((m_plug = LampDiagram::Plug::Create(m_lamp)));
+	CPPUNIT_ASSERT((m_term1 = LampDiagram::ElectricTerminal::Create(m_plug)));
+	CPPUNIT_ASSERT((m_term2 = LampDiagram::ElectricTerminal::Create(m_bulb)));
 }
 
 void CUDMTest::TestExistingNetwork()
@@ -86,8 +86,8 @@ void CUDMTest::TestConnection()
 	GetNetwork();
 
 	//create connections
-	CPPUNIT_ASSERT(m_wire = LampDiagram::LampDiagram::Wire::Create(m_lamp));
-	CPPUNIT_ASSERT(m_link = LampDiagram::LampDiagram::ControlLink::Create(m_lamp));
+	CPPUNIT_ASSERT(m_wire = LampDiagram::Wire::Create(m_lamp));
+	CPPUNIT_ASSERT(m_link = LampDiagram::ControlLink::Create(m_lamp));
 
 	//connect the connection ends
 	CPPUNIT_ASSERT(m_wire.End1_end() = m_term1);
@@ -96,10 +96,10 @@ void CUDMTest::TestConnection()
 	CPPUNIT_ASSERT(m_link.dst_end() = m_switch);
 
 	//check the connection ends
-	CPPUNIT_ASSERT( LampDiagram::LampDiagram::Bulb::Cast(m_link.src_end()) == m_bulb);
-	CPPUNIT_ASSERT( LampDiagram::LampDiagram::Switch::Cast(m_link.dst_end()) == m_switch );
-	CPPUNIT_ASSERT( LampDiagram::LampDiagram::ElectricTerminal::Cast(m_wire.End1_end()) == m_term1);
-	CPPUNIT_ASSERT( LampDiagram::LampDiagram::ElectricTerminal::Cast(m_wire.End2_end()) == m_term2);
+	CPPUNIT_ASSERT( LampDiagram::Bulb::Cast(m_link.src_end()) == m_bulb);
+	CPPUNIT_ASSERT( LampDiagram::Switch::Cast(m_link.dst_end()) == m_switch );
+	CPPUNIT_ASSERT( LampDiagram::ElectricTerminal::Cast(m_wire.End1_end()) == m_term1);
+	CPPUNIT_ASSERT( LampDiagram::ElectricTerminal::Cast(m_wire.End2_end()) == m_term2);
 }
 
 void CUDMTest::TestObjectDestruction()
@@ -108,10 +108,10 @@ void CUDMTest::TestObjectDestruction()
 
 	m_bulb.DeleteObject();
 	CPPUNIT_ASSERT( (Udm::Object::Cast(m_bulb.parent())==Udm::null));
-	//CPPUNIT_ASSERT( !(m_bulb) );//== LampDiagram::LampDiagram::Bulb(NULL));
+	//CPPUNIT_ASSERT( !(m_bulb) );//== LampDiagram::Bulb(NULL));
 	//CPPUNIT_ASSERT( !(m_term2)); //m_term2 was a child of m_bulb
 
-	m_term2 = LampDiagram::LampDiagram::ElectricTerminal::Create(Udm::null); //will throw udm_exception that cppunit expects
+	m_term2 = LampDiagram::ElectricTerminal::Create(Udm::null); //will throw udm_exception that cppunit expects
 
 }
 
@@ -120,17 +120,17 @@ void CUDMTest::GetNetwork()
 	//cppunit uses a separate instance of this class to run each test
 	//rebuild the existing network
 	m_xmlfile.OpenExisting( "abc.xml", "LampDiagram.xsd");
-	m_root = LampDiagram::LampDiagram::RootFolder::Cast(m_xmlfile.GetRootObject());
-	set<LampDiagram::LampDiagram::Lamp> lamps = m_root.LampDiagram_Lamp_kind_children();
+	m_root = LampDiagram::RootFolder::Cast(m_xmlfile.GetRootObject());
+	set<LampDiagram::Lamp> lamps = m_root.Lamp_kind_children();
 	m_lamp = *(lamps.begin());
-	set<LampDiagram::LampDiagram::Bulb> bulbs = m_lamp.LampDiagram_Bulb_kind_children();
+	set<LampDiagram::Bulb> bulbs = m_lamp.Bulb_kind_children();
 	m_bulb = *(bulbs.begin());
-	set<LampDiagram::LampDiagram::Plug> plugs = m_lamp.LampDiagram_Plug_kind_children();
+	set<LampDiagram::Plug> plugs = m_lamp.Plug_kind_children();
 	m_plug = *(plugs.begin());
-	set<LampDiagram::LampDiagram::Switch> switches = m_lamp.LampDiagram_Switch_kind_children();
+	set<LampDiagram::Switch> switches = m_lamp.Switch_kind_children();
 	m_switch = *(switches.begin());
-	set<LampDiagram::LampDiagram::ElectricTerminal> terms = m_plug.LampDiagram_ElectricTerminal_kind_children();
+	set<LampDiagram::ElectricTerminal> terms = m_plug.ElectricTerminal_kind_children();
 	m_term1 = *(terms.begin());
-	terms = m_bulb.LampDiagram_ElectricTerminal_kind_children();
+	terms = m_bulb.ElectricTerminal_kind_children();
 	m_term2 = *(terms.begin());
 }

@@ -50,15 +50,15 @@ private:
 	void GetNetwork();
 
 	Udm::SmartDataNetwork m_xmlfile;
-	LampDiagram::LampDiagram::RootFolder m_root;
-	LampDiagram::LampDiagram::Lamp m_lamp;
-	LampDiagram::LampDiagram::Bulb m_bulb;
-	LampDiagram::LampDiagram::Switch m_switch;
-	LampDiagram::LampDiagram::Plug m_plug;
-	LampDiagram::LampDiagram::ElectricTerminal m_term1;
-	LampDiagram::LampDiagram::ElectricTerminal m_term2;
-	LampDiagram::LampDiagram::Wire m_wire;
-	LampDiagram::LampDiagram::ControlLink m_link;
+	LampDiagram::RootFolder m_root;
+	LampDiagram::Lamp m_lamp;
+	LampDiagram::Bulb m_bulb;
+	LampDiagram::Switch m_switch;
+	LampDiagram::Plug m_plug;
+	LampDiagram::ElectricTerminal m_term1;
+	LampDiagram::ElectricTerminal m_term2;
+	LampDiagram::Wire m_wire;
+	LampDiagram::ControlLink m_link;
 
 	
 
