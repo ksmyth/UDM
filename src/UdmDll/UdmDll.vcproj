@@ -113,9 +113,9 @@
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib/UdmDllD.pdb"
+				ProgramDatabaseFile="..\..\bin/UdmDllD.pdb"
 				OptimizeReferences="1"
-				ImportLibrary=".\..\..\lib/UdmDllD.lib"
+				ImportLibrary="..\..\lib/UdmDllD.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
