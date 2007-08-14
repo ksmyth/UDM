@@ -57,18 +57,6 @@
 		<property name="udmswiglight.src.dir" location="src/UdmSwigLight" />
 		<property name="udmswiglight.classes.dir" location="${judm.dir}" />
 
-		<!-- GeneTRE domain-specific code -->
-		<property name="genetre.src.dir" location="samples/GeneTRE/src/main" />
-		<property name="genetre.classes.dir" location="${build.dir}/classes/GeneTRE" />
-
-		<!-- GeneTF domain-specific code -->
-		<property name="genetf.src.dir" location="samples/GeneTF/src/main" />
-		<property name="genetf.classes.dir" location="${build.dir}/classes/GeneTF" />
-
-		<!-- SBML2Ex domain-specific code -->
-		<property name="genetf.src.dir" location="samples/SBML2Ex/src/main" />
-		<property name="genetf.classes.dir" location="${build.dir}/classes/SBML2Ex" />
-
 		<!-- Directory of the batch files -->
 		<property name="batch.dir" location="etc" />
 
@@ -102,7 +90,7 @@
 		<mkdir dir="${judm.dir}" />
 		<copy todir="${judm.dir}">
 			<!-- Copy xerces in the directory of the distribution -->
-			<fileset dir="${udm_3rdparty.dir}/xerces-c_2_5_0/lib">
+			<fileset dir="${udm_3rdparty.dir}/xerces-c_2_5_0/bin">
 				<include name="xerces*.dll" />
 				<exclude name="*D.dll" />
 			</fileset>
@@ -252,18 +240,6 @@
 		<copy todir="${classes.dir}">
 			<fileset dir="${udmswig.classes.dir}" casesensitive="no"/>
 		</copy>
-
-		<!-- Delete UML XSD JAVA -->
-		<!--delete>
-			<fileset dir="${udmswiglight.src.dir}/edu/vanderbilt/isis/udm/meta">
-				<filename name="Uml_xsd.java" />
-			</fileset>
-		</delete-->
-
-		<!-- Generate UML XSD JAVA -->
-		<!--exec dir="${udmswiglight.src.dir}/edu/vanderbilt/isis/udm/meta" executable="cmd">
-			<arg line="/c ${udm.etc.dir}/StrResGen ${udm.etc.dir}/Uml.xsd Uml_xsd JAVA edu.vanderbilt.isis.udm.meta" />
-		</exec-->
 
 		<!-- Compile wrapper for the SWIG generated Java code classes (UdmCintLight)-->
 		<mkdir dir="${udmswiglight.classes.dir}" />
@@ -631,6 +607,7 @@
 	<target name="set_up_batch_file_win" if="isWindows">
 		<copy todir="${dist.dir}/${dspackage}" file="${batch.dir}/runtests.cmd" />
 		<replace file="${dist.dir}/${dspackage}/runtests.cmd" token="@DSPACKAGE@" value="${dspackage}" />
+		<replace file="${dist.dir}/${dspackage}/runtests.cmd" token="@DSPACKAGE_LOWER@" value="${dspackagelower}" />
 	</target>
 
 	<!-- Set up batch file for running the tests in UNIX systems -->	
