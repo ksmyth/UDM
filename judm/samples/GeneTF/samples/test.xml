@@ -1,4 +1,4 @@
-<GeneTF:Container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:GeneTF="http://www.isis.vanderbilt.edu/2004/schemas/GeneTF" xsi:schemaLocation="http://www.isis.vanderbilt.edu/2004/schemas/GeneTF GeneTF.xsd">
+<GeneTF:Container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:GeneTF="http://www.isis.vanderbilt.edu/2004/schemas/GeneTF" xsi:schemaLocation="http://www.isis.vanderbilt.edu/2004/schemas/GeneTF GeneTF_GeneTF.xsd">
 	<GeneTF:Gene tf="id4a" _id="id42" name="gene_1"/>
 	<GeneTF:Gene tf="id51" _id="id4f" name="gene_2"/>
 	<GeneTF:Gene tf="id54" _id="id52" name="gene_3"/>
