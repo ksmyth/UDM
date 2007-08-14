@@ -10,6 +10,29 @@
 #include "OCLObjectExBasic.h"
 #include "math.h"
 
+//--------------------------8><----------
+#ifndef _WIN32
+char *_strupr( char *string )
+{
+	if (string)
+	{
+		for (int i = 0; i< strlen(string); i++)
+			*(string + i) = toupper(*(string+i));
+	};
+	return string;
+};
+
+char *_strlwr( char *string )
+{
+	if (string)
+	{
+		for (int i = 0; i< strlen(string); i++)
+			*(string + i) = tolower(*(string+i));
+	};
+	return string;
+};
+//--------------------------8><----------
+
 namespace OclBasic
 {
 	typedef OclCommon::FormalParameterVector 	FPV;
