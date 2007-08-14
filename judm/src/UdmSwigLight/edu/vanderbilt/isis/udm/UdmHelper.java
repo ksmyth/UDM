@@ -159,10 +159,12 @@ public class UdmHelper {
      * @return True if the mapping sucesful; otherwise, false.
      */
     public static void AddURIToUMLNamespaceMapping(String namespaceURI,
-        String namespaceUML) throws UdmException {
+        String namespaceUML, 
+		String xsdName ) throws UdmException {
         cint_string ns_uri = new cint_string(namespaceURI);
         cint_string ns_uml = new cint_string(namespaceUML);
-        boolean success = UDMSwig.AddURIToUMLNamespaceMapping(ns_uri, ns_uml);
+		cint_string xn = new cint_string(xsdName);
+        boolean success = UDMSwig.AddURIToUMLNamespaceMapping(ns_uri, ns_uml, xn);
         checkError(success, "Error in UDM method AddURIToUMLNamespaceMapping");
     }
 
