@@ -140,8 +140,7 @@ namespace UdmDom
 		{
 			str_str_map::value_type item(key, xsd_str);
 			pair<str_str_map::const_iterator, bool> ins_res = static_xsd_container.insert(item);
-      const std::string& tmp = ins_res.first->second;
-      if (!ins_res.second && (xsd_str!=tmp)) // only if it differs from the stored one Kalmar
+      if (!ins_res.second && (xsd_str!=ins_res.first->second)) // only if it differs from the stored one Kalmar
 				throw udm_exception(string("An XSD by that name is already stored with a different content: ") + key);
 
 

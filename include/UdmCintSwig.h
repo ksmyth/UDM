@@ -308,6 +308,9 @@ bool UDM_DLL UPO_SetParentRole(UdmPseudoObject &cpr_what, UdmPseudoObject &what_
 bool UDM_DLL UPO_SetAssocRole(UdmPseudoObject &ar_what, UdmPseudoObject &what_target_class, UdmPseudoObject &what_theo_target_class, const char *target_name);
 bool UDM_DLL StoreXsd(const cint_string& key, const cint_string& xsd_str);
 bool UDM_DLL RemoveXsd(const cint_string& key);
+bool UDM_DLL AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, const cint_string& namespaceUML);
+bool UDM_DLL ClearURIToUMLNamespaceMappings();
+
 
 #endif
 
