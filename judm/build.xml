@@ -422,12 +422,21 @@
 		</copy>
 		
 		<!-- Create judm.jar in the distribution directory -->
-		<zip destfile="${judm.dist.dir}/judm.jar">
+		<jar destfile="${judm.dist.dir}/judm.jar">
 			<fileset dir="${judm.dir}">
 				<exclude name="*.dll" />
 				<exclude name="*.exe" />
 			</fileset>
-		</zip>
+			<manifest>
+				<!--attribute name="Name" value="edu/vanderbilt/isis/udm" /-->
+				<attribute name="Specification-Title" value="jUdm Core Classes" />
+				<attribute name="Specification-Version" value="1.0" />
+				<attribute name="Specification-Vendor" value="Vanderbilt University, ISIS" />
+				<attribute name="Implementation-Title" value="edu.vanderbilt.isis.udm" />
+				<attribute name="Implementation-Version" value="1.0,0" />
+				<attribute name="Implementation-Vendor" value="Vanderbilt University, ISIS" />
+			</manifest>
+		</jar>
 		
 		<!-- Create the GeneTF distribution -->
 		<antcall target="ds-dist-dir">
@@ -478,12 +487,18 @@
 		</copy>
 		
 		<!-- Create judm.jar in the distribution directory -->
-		<zip destfile="${judm.dist.dir}/judm.jar">
+		<jar destfile="${judm.dist.dir}/judm.jar">
 			<fileset dir="${judm.dir}">
 				<exclude name="*.dll" />
 				<exclude name="*.exe" />
 			</fileset>
-		</zip>
+				<attribute name="Specification-Title" value="jUdm Core Classes" />
+				<attribute name="Specification-Version" value="1.0" />
+				<attribute name="Specification-Vendor" value="Vanderbilt University, ISIS" />
+				<attribute name="Implementation-Title" value="edu.vanderbilt.isis.udm" />
+				<attribute name="Implementation-Version" value="1.0,0" />
+				<attribute name="Implementation-Vendor" value="Vanderbilt University, ISIS" />
+		</jar>
 		
 		<!-- Create the GeneTF distribution -->
 		<antcall target="ds-dist-dir">
@@ -558,10 +573,18 @@
 		</copy>
 
 		<!-- Create domain specific jar file -->
-		<zip destfile="${dist.dir}/${dspackage}/${dspackage}.jar">
+		<jar destfile="${dist.dir}/${dspackage}/${dspackage}.jar">
 			<fileset dir="${build.dir}/${dspackage}/classes/main" />
 			<!--fileset dir="${build.dir}/${dspackage}/classes/test" /-->
-		</zip>
+			<manifest>
+				<attribute name="Specification-Title" value="${dspackage} Core Classes" />
+				<attribute name="Specification-Version" value="1.0" />
+				<attribute name="Specification-Vendor" value="BioSpice" />
+				<attribute name="Implementation-Title" value="edu.vanderbilt.isis.${dspackagelower}" />
+				<attribute name="Implementation-Version" value="1.0,0" />
+				<attribute name="Implementation-Vendor" value="Vanderbilt University, ISIS" />
+			</manifest>
+		</jar>
 		
 		<!-- Create domain specific test jar file -->
 		<jar destfile="${dist.dir}/${dspackage}/${dspackage}-test.jar">
@@ -585,10 +608,10 @@
 		
 		<!-- Generate JavaAPI documentation for the domain specific code  -->
 		<mkdir dir="${dist.dir}/${dspackage}/apidoc" />
-		<!--javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/${dspackage}/apidoc" windowtitle="${dspackage} UDM API">
+		<javadoc defaultexcludes="yes" verbose="no" destdir="${dist.dir}/${dspackage}/apidoc" windowtitle="${dspackage} UDM API">
 			<fileset dir="${dist.dir}/${dspackage}/src" defaultexcludes="yes">
 			</fileset>
-		</javadoc-->
+		</javadoc>
 
 		<!-- Copy the appropriate batch file in the distribution  -->
 		<antcall target="set_up_batch_file_win"/>
