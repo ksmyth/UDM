@@ -12,7 +12,7 @@
 		<property environment="env" />
 		<property name="udm.dir" location="${env.UDM_PATH}" />
 		<property name="udm.etc.dir" location="${env.UDM_PATH}/etc" />
-		<property name="udm_3rdparty.dir" location="${env.UDM_3RDPARTY_BIN}" />
+		<property name="udm_3rdparty.dir" location="${env.UDM_3RDPARTY_PATH}" />
 		<property name="build.dir" location="build/build_win" />
 	</target>
 
@@ -102,12 +102,12 @@
 		<mkdir dir="${judm.dir}" />
 		<copy todir="${judm.dir}">
 			<!-- Copy xerces in the directory of the distribution -->
-			<fileset dir="${udm_3rdparty.dir}">
+			<fileset dir="${udm_3rdparty.dir}/xerces-c_2_5_0/lib">
 				<include name="xerces*.dll" />
 				<exclude name="*D.dll" />
 			</fileset>
 			<!-- Copy Udm executable and UdmCint DLL in the directory of the distribution -->
-			<fileset dir="${udm.dir}/bin.net">
+			<fileset dir="${udm.dir}/bin">
 				<include name="Udm.exe" />
 				<include name="UdmSwig.dll" />
 			</fileset>
@@ -368,7 +368,7 @@
 		
 		<!-- Generate UDM XML from the XME XML file -->
 		<exec dir="samples/${dspackage}/meta" executable="cmd">
-			<arg line="/c ${udm.dir}\bin.net\udm.exe ${dspackage}_udm.xml ${udm_options}" />
+			<arg line="/c ${udm.dir}\bin\udm.exe ${dspackage}_udm.xml ${udm_options}" />
 		</exec>
 		
 		<!-- Update source code -->
@@ -730,7 +730,7 @@
 		
 		<!-- Generate UDM XML from the XME XML file -->
 		<exec dir="samples/${dspackage}/meta" executable="cmd">
-			<arg line="/c ${udm.dir}\bin.net\udm.exe ${dspackage}_udm.xml ${udm_options}" />
+			<arg line="/c ${udm.dir}\bin\udm.exe ${dspackage}_udm.xml ${udm_options}" />
 		</exec>
 		
 		<!-- Update source code -->
