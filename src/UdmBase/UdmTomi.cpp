@@ -121,7 +121,6 @@ this software.
 #include "UmlExt.h"
 #include "UdmUtil.h"
 #include <cint_string.h>
-//using namespace Udm;	//for Udm::Object (used as Object)
 
 // -----
 // --- Tihamer's TOMI interface
