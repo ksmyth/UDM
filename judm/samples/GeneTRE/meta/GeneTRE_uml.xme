@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{E8381814-12AE-4C21-8E0D-628892E17C44}" cdate="Sun May 22 14:56:35 2005" mdate="Sun May 22 14:56:35 2005" version="" metaguid="{13840105-0648-4F64-8381-11AFEE9359A4}" metaversion="" metaname="UML">
+<project guid="{E8381814-12AE-4C21-8E0D-628892E17C44}" cdate="Wed Jun 15 16:20:42 2005" mdate="Wed Jun 15 16:20:42 2005" version="" metaguid="{59EBDD54-0EA9-4CDF-96D2-11DF2C3C0EF5}" metaversion="" metaname="UML">
 	<name>GeneTRE</name>
 	<comment></comment>
 	<author></author>
@@ -12,13 +12,10 @@
 			<attribute kind="version" status="meta">
 				<value>1.00</value>
 			</attribute>
-			<model id="id-0065-00000003" kind="Namespace" role="Namespace" relid="0x2" childrelidcntr="0x1">
+			<model id="id-0065-00000002" kind="Namespace" role="Namespace" relid="0x2" childrelidcntr="0x1">
 				<name>GeneTRE</name>
-				<model id="id-0065-00000002" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x18">
+				<model id="id-0065-00000003" kind="ClassDiagram" role="ClassDiagram" relid="0x1" childrelidcntr="0x18">
 					<name>Binding</name>
-					<attribute kind="namespace" status="meta">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000001" kind="Class" role="Class" relid="0x1">
 						<name>Container</name>
 						<regnode name="PartRegs" isopaque="yes">

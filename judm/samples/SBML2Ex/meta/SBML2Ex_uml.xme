@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{209C9753-9F0A-4FF3-B038-0B77FDAF84FB}" cdate="Mon May 23 16:11:36 2005" mdate="Mon May 23 16:11:36 2005" version="" metaguid="{9F597232-2E07-4BE4-B9D1-8D0342F8BBAB}" metaversion="" metaname="UML">
+<project guid="{84E1A2D5-5D5A-46F2-99D7-6CA8BE9A6224}" cdate="Wed Jun 15 14:59:36 2005" mdate="Wed Jun 15 14:59:36 2005" version="" metaguid="{59EBDD54-0EA9-4CDF-96D2-11DF2C3C0EF5}" metaversion="" metaname="UML">
 	<name>SBML2Ex</name>
 	<comment></comment>
 	<author></author>
@@ -25,9 +25,6 @@
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000001" kind="Class" role="Class" relid="0x1">
 						<name>math</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -1037,9 +1034,6 @@ value: Text[0..1]</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000016" kind="Class" role="Class" relid="0x1">
 						<name>algebraicRule</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -1086,7 +1080,8 @@ value: Text[0..1]</value>
 						</regnode>
 						<attribute kind="Attributes">
 							<value>
-</value>
+
+                     </value>
 						</attribute>
 						<attribute kind="IsAbstract">
 							<value>false</value>
@@ -1114,7 +1109,8 @@ value: Text[0..1]</value>
 						</regnode>
 						<attribute kind="Attributes">
 							<value>
-</value>
+
+                     </value>
 						</attribute>
 						<attribute kind="IsAbstract">
 							<value>false</value>
@@ -1355,9 +1351,6 @@ rv-&gt;isUnique(rvv | rvv.id)</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-0000001e" kind="Class" role="Class" relid="0x1c">
 						<name>listOfReactions</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -2101,9 +2094,6 @@ let c = dn.compartment in
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000029" kind="Class" role="Class" relid="0x3">
 						<name>listOfUnits</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -2388,9 +2378,6 @@ let c = self.listOfUnits in
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-0000002f" kind="Class" role="Class" relid="0x2">
 						<name>kineticLaw</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -2540,7 +2527,7 @@ reversible:Boolean=true [0..1]
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>306,280</value>
+									<value>314,289</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -2754,7 +2741,7 @@ version:String=&quot;1&quot;</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>415,776</value>
+									<value>520,779</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -2881,7 +2868,7 @@ version:String=&quot;1&quot;</value>
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>154,61</value>
+									<value>161,68</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -3470,7 +3457,7 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>16,14</value>
+									<value>9,13</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -3512,7 +3499,7 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							<regnode name="Constraints" isopaque="yes">
 								<value></value>
 								<regnode name="Position" isopaque="yes">
-									<value>278,14</value>
+									<value>285,13</value>
 								</regnode>
 							</regnode>
 							<regnode name="UML" isopaque="yes">
@@ -3771,6 +3758,14 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 						<connpoint role="dst" target="id-0066-00000036"/>
 						<connpoint role="src" target="id-0066-00000042"/>
 					</connection>
+					<connection id="id-0068-0000005a" kind="HasConstraint" role="HasConstraint" relid="0x78">
+						<name>HasConstraint</name>
+						<regnode name="autorouterPref" isopaque="yes">
+							<value>S</value>
+						</regnode>
+						<connpoint role="dst" target="id-0066-00000034"/>
+						<connpoint role="src" target="id-0066-00000044"/>
+					</connection>
 					<connection id="id-0068-0000005b" kind="HasConstraint" role="HasConstraint" relid="0x7a">
 						<name>HasConstraint</name>
 						<regnode name="autorouterPref" isopaque="yes">
@@ -3975,9 +3970,6 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000057" kind="Class" role="Class" relid="0x2">
 						<name>listOfProducts</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -4253,9 +4245,6 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-0000005a" kind="Constraint" role="Constraint" relid="0xa">
 						<name>parameter_uniqueId</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -4380,9 +4369,6 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-0000005b" kind="Class" role="Class" relid="0x1">
 						<name>eventAssignment</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -4701,9 +4687,6 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<reference id="id-0067-00000015" kind="ClassCopy" role="ClassCopy" relid="0x1" referred="id-0066-00000038">
 						<name>sbml</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -4772,9 +4755,6 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<reference id="id-0067-00000017" kind="ClassCopy" role="ClassCopy" relid="0x1" referred="id-0066-00000033">
 						<name>functionDefinition</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -4849,9 +4829,6 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-0000005f" kind="Class" role="Class" relid="0x1">
 						<name>dialect</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -4947,9 +4924,6 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000061" kind="Class" role="Class" relid="0x1">
 						<name>stoichiometryMath</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -5065,9 +5039,6 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000062" kind="Inheritance" role="Inheritance" relid="0x1">
 						<name>Inheritance</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -6628,9 +6599,6 @@ udv.listOfUnits.unit-&gt;exists(uv |  uv.kind = &quot;meter&quot; and uv.exponen
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000079" kind="Class" role="Class" relid="0x1">
 						<name>user_def</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -6735,9 +6703,6 @@ value: String[0..1]</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-0000007b" kind="Inheritance" role="Inheritance" relid="0x3">
 						<name>Inheritance</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -7003,9 +6968,6 @@ enzymecommission : String [0..1]</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000081" kind="Inheritance" role="Inheritance" relid="0x1">
 						<name>Inheritance</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -7500,9 +7462,6 @@ intermediate value. Makes a fake species and assigns it. Has two parameters: 1. 
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-0000008a" kind="Inheritance" role="Inheritance" relid="0x1">
 						<name>Inheritance</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -7776,9 +7735,6 @@ constmods :String[0..1]</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000091" kind="Class" role="Class" relid="0x1">
 						<name>acc</name>
 						<regnode name="PartRegs" isopaque="yes">
@@ -7975,9 +7931,6 @@ constmods :String[0..1]</value>
 							</regnode>
 						</regnode>
 					</regnode>
-					<attribute kind="namespace">
-						<value></value>
-					</attribute>
 					<atom id="id-0066-00000096" kind="Class" role="Class" relid="0x2">
 						<name>head</name>
 						<regnode name="PartRegs" isopaque="yes">
