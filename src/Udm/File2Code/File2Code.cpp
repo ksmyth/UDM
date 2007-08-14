@@ -3,6 +3,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <algorithm>
+#include <time.h>
 
 #include "File2Code.h"
 
@@ -55,13 +56,15 @@ void  File2Code::genCpp(std::ostream& out)
 //==================================
 void File2Code::genJavaHeader(std::ostream& out)
 {
-      out << "package " << m_packageName << ";" << std::endl;
-      out << "public class " << m_name << "{" << std::endl;
-      out << "\tprivate static String str = new String("");" << std::endl << std::endl;
-      out << "\tpublic static String getString()" << std::endl;
-      out << "\t{" << std::endl;
-      out << "\t\tif (str.length() == 0)" << std::endl;
-      out << "\t\t{" << std::endl;
+  if (!m_packageName.empty())
+    out << "package " << m_packageName << ";" << std::endl << std::endl;
+
+  out << "public class " << m_name << "{" << std::endl;
+  out << "\tprivate static String str = new String("");" << std::endl << std::endl;
+  out << "\tpublic static String getString()" << std::endl;
+  out << "\t{" << std::endl;
+  out << "\t\tif (str.length() == 0)" << std::endl;
+  out << "\t\t{" << std::endl;
 
 }
 //==================================

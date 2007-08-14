@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 {
  	if(argc < 3)
 	{
-		std::cerr << "Usage: " << argv[0] << " <text_filename> <namespace_name> <JAVA|CPP>" << std::endl;
+		std::cerr << "Usage: " << argv[0] << " <text_filename> <namespace_name> <JAVA|CPP> <package_name>" << std::endl;
 		return(-1);
 	}
 
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     std::string pn;
     std::string ext(".h");
     File2Code::GenModeType mode(File2Code::CPP);
-    if (argc == 4)
+    if (argc >= 4)
     {
       std::string ar(argv[3]);
       if (ar == "JAVA")

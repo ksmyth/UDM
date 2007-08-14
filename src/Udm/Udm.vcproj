@@ -211,9 +211,6 @@
 				RelativePath="..\include\ErrHand.h">
 			</File>
 			<File
-				RelativePath=".\resource1.h">
-			</File>
-			<File
 				RelativePath="..\include\UdmBase.h">
 			</File>
 		</Filter>
