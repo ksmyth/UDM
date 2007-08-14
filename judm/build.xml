@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="judm" basedir="." default="dist">
+<project name="judm" basedir="." default="dist-all">
 	<description>Java Wrapper for UDM</description>
 
 	<condition property="isWindows">
@@ -302,11 +302,11 @@
 		<fail unless="dspackagelower" message="Missing parameter: dspackagelower" />
 		<fail unless="udm_options" message="Missing parameter: udm_options" />
 		<!-- Generate a domain specific package -->
-		<antcall target="ds-source-generator">
+		<!--antcall target="ds-source-generator">
 			<param name="dspackage" value="${dspackage}" />
 			<param name="dspackagelower" value="${dspackagelower}" />
 			<param name="udm_options" value="${udm_options}" />
-		</antcall>
+		</antcall-->
 
 		<!-- Create the dirctories for the domain-specific package -->
 		<mkdir dir="${build.dir}/${dspackage}/classes/main" />
@@ -492,12 +492,14 @@
 				<exclude name="*.dll" />
 				<exclude name="*.exe" />
 			</fileset>
+			<manifest>
 				<attribute name="Specification-Title" value="jUdm Core Classes" />
 				<attribute name="Specification-Version" value="1.0" />
 				<attribute name="Specification-Vendor" value="Vanderbilt University, ISIS" />
 				<attribute name="Implementation-Title" value="edu.vanderbilt.isis.udm" />
 				<attribute name="Implementation-Version" value="1.0,0" />
 				<attribute name="Implementation-Vendor" value="Vanderbilt University, ISIS" />
+			</manifest>
 		</jar>
 		
 		<!-- Create the GeneTF distribution -->
