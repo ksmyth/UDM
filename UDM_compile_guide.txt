@@ -40,9 +40,7 @@ Step-by-step guide:
 		%PATH%
 	INCLUDE=
 		%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\include;
-		%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\include\xercesc;
 		%UDM_3RDPARTY_PATH%\Xalan-C_1_8_0\include;
-		%UDM_3RDPARTY_PATH%\Xalan-C_1_8_0\include\xalanc;
 		%UDM_3RDPARTY_PATH%\antlr-2.7.1\lib\cpp;
 		%UDM_3RDPARTY_PATH%\zlib;
 		%UDM_3RDPARTY_PATH%\zlib\contrib\minizip;
