@@ -116,6 +116,16 @@
 		<copy todir="${classes.dir}">
 			<fileset dir="${util.classes.dir}" casesensitive="no"/>
 		</copy>
+		
+		<!-- The generated UdmPseudoObject.java class must be modified by hand -->
+		<!-- Replace every occurence of SWIGTYPE_p_vectorTUdmLong_t by VectorOfLongs -->
+		<replace file="${udmcint.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTUdmLong_t" value="VectorOfLongs" />
+		<!-- Replace every occurence of SWIGTYPE_p_vectorTdouble_t by VectorOfDoubles -->
+		<replace file="${udmcint.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTdouble_t" value="VectorOfDoubles" />
+		<!-- Replace every occurence of SWIGTYPE_p_vectorTcint_string_t by VectorOfStrings -->
+		<replace file="${udmcint.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTcint_string_t" value="VectorOfStrings" />
+		<!-- Replace every occurence of SWIGTYPE_p_vectorTbool_t by VectorOfBools -->
+		<replace file="${udmcint.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTbool_t" value="VectorOfBools" />
 
 		<!-- Compile SWIG generated UdmCint classes-->
 		<mkdir dir="${udmcint.classes.dir}" />
