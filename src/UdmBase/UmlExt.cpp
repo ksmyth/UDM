@@ -854,5 +854,27 @@ namespace Uml
 		return Namespace();
 	};
 
+// find a diagram by name
+	UDM_DLL Diagram diagramByName(const Diagram &d, const string &name)
+	{
+		::Udm::DataNetwork *dn = d.__impl()->__getdn();
+		::Udm::UdmProject *pr = dn->GetProject();
+
+		if (pr)
+		{
+			vector<Udm::DataNetwork*> pr_dns = pr->GetDataNetworks();
+			vector<Udm::DataNetwork*>::iterator pr_dns_i = pr_dns.begin();
+			while (pr_dns_i != pr_dns.end())
+			{
+				//these should be UML diagrams
+				::Uml::Diagram dgr = ::Uml::Diagram::Cast((*pr_dns_i)->GetRootObject());
+				if ((string) dgr.name() == name)
+					return dgr;
+				pr_dns_i++;
+			}
+		}
+
+		return Diagram();
+	}
 
 }
