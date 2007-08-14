@@ -1171,15 +1171,22 @@ namespace UdmOcl {
 		return std::string( _strlwr( (char*)strValue.substr( 0, 1 ).c_str() ) ) + strValue.substr( 1 );
 	}
 
-	std::string GetQualifiedName(const ::Uml::Class &c)
+	std::string GetQualifiedName(const ::Uml::Class &c, bool isAssocRole)
 	{
 		std::string q_name;
 		::Uml::Diagram dgr = ::Uml::GetDiagram(c);
 		::Uml::Namespace ns = c.parent_ns();
-		q_name += (std::string) dgr.name() + "::";
+
+		if (isAssocRole)
+			q_name += LowerFirst( dgr.name() ) + "::";
+		else
+			q_name += (std::string) dgr.name() + "::";
+
 		if (ns)
 			q_name += (std::string) ns.name() + "::";
-		q_name += LowerFirst( c.name() );
+
+		q_name += c.name();
+
 		return q_name;
 	}
 

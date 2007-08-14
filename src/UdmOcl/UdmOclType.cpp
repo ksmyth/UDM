@@ -95,7 +95,7 @@ namespace UmlOcl
 				{
 					std::string strClass = vecClasses[ i ].name();
 					std::string strRole = ::UdmOcl::LowerFirst( strClass );
-					std::string strRole_Q = ::UdmOcl::GetQualifiedName( vecClasses[ i ] );
+					std::string strRole_Q = ::UdmOcl::GetQualifiedName( vecClasses[ i ], true );
 					std::string strSig = signature.GetName();
 					bool bIsQualified = strSig.find( "::" ) != std::string::npos; // true if qualified type, false if local type
 						
@@ -677,7 +677,7 @@ namespace UmlOcl
 	{
 		for ( int i = 0 ; i < vecClasses.size() ; i++ ) 
 		{
-			if ( strClassName == ::UdmOcl::LowerFirst( vecClasses[ i ].name() ) ) 
+			if ( strClassName == (std::string) vecClasses[ i ].name() ) 
 			{
 				StringVector vecSuperTypes;
 				set< ::Uml::Class> setBases = vecClasses[ i ].baseTypes();
