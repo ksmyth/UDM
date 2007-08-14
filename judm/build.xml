@@ -45,6 +45,10 @@
 		<!-- Domain independent build products -->
 		<property name="judm.dir" location="${build.dir}/judm" />
 
+		<!-- jUdmHelper build products -->
+		<property name="judmhelper.dir" location="${build.dir}/jUdmHelper" />
+		<property name="judmhelper.dist.dir" location="${dist.dir}/jUdmHelper" />
+
 		<!-- Helper classes -->
 		<property name="util.src.dir" location="src/util" />
 		<property name="util.classes.dir" location="${judm.dir}" />
@@ -57,6 +61,10 @@
 		<property name="udmswiglight.src.dir" location="src/UdmSwigLight" />
 		<property name="udmswiglight.classes.dir" location="${judm.dir}" />
 
+		<!-- jUdmHelper code -->
+		<property name="judmhelper.src.dir" location="src/jUdmHelper" />
+		<property name="judmhelper.classes.dir" location="${judmhelper.dir}/classes" />
+
 		<!-- Directory of the batch files -->
 		<property name="batch.dir" location="etc" />
 
@@ -65,6 +73,7 @@
 			<pathelement location="${util.classes.dir}" />
 			<pathelement location="${udmswig.classes.dir}" />
 			<pathelement location="${udmswiglight.classes.dir}" />
+			<pathelement location="${judmhelper.classes.dir}" />
 			<pathelement location="${genetre.classes.dir}" />
 			<pathelement location="${genetf.classes.dir}" />
 			<fileset dir="${udm_3rdparty.dir}/junit">
@@ -142,6 +151,14 @@
 		</copy>
 		<copy todir="${classes.dir}">
 			<fileset dir="${udmswiglight.classes.dir}" casesensitive="no"/>
+		</copy>
+
+		<!-- Compile jUdmHelper classes-->
+		<echo> "Compile jUdmHelper classes" </echo>
+		<mkdir dir="${judmhelper.classes.dir}" />
+		<javac srcdir="${judmhelper.src.dir}" destdir="${judmhelper.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
+		<copy todir="${classes.dir}">
+			<fileset dir="${judmhelper.classes.dir}" casesensitive="no"/>
 		</copy>
 
 		<!-- Compile domain specific code for GeneTF -->
@@ -246,6 +263,14 @@
 		<javac srcdir="${udmswiglight.src.dir}" destdir="${udmswiglight.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
 		<copy todir="${classes.dir}">
 			<fileset dir="${udmswiglight.classes.dir}" casesensitive="no"/>
+		</copy>
+
+		<!-- Compile jUdmHelper classes-->
+		<echo> "Compile jUdmHelper classes" </echo>
+		<mkdir dir="${judmhelper.classes.dir}" />
+		<javac srcdir="${judmhelper.src.dir}" destdir="${judmhelper.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" />
+		<copy todir="${classes.dir}">
+			<fileset dir="${judmhelper.classes.dir}" casesensitive="no"/>
 		</copy>
 
 		<!-- Compile domain specific code for GeneTF -->
@@ -396,6 +421,26 @@
 			</fileset>
 		</jar>
 		
+		<!-- Create the jUdmHelper distribution directory -->
+		<mkdir dir="${judmhelper.dist.dir}" />
+		
+		<!-- Create jUdmHelper in the distribution directory -->
+		<jar destfile="${judmhelper.dist.dir}/jUdmHelper.jar">
+			<fileset dir="${judmhelper.classes.dir}"/>
+			<manifest>
+				<attribute name="Main-Class" value="edu.vanderbilt.isis.judm.gen.Main" />
+				<attribute name="Class-Path" value="%UDM_PATH%\bin\jUdmHelper.jar" />
+			</manifest>
+		</jar>
+		
+		<!-- Copy the jUdmHelper batch to the distribution directory -->
+		<copy todir="${judmhelper.dist.dir}">
+			<mapper type="flatten" />
+			<fileset dir="${batch.dir}" casesensitive="no">
+				<include name="jUdmHelper.bat" />
+			</fileset>
+		</copy>
+
 		<!-- Create the GeneTF distribution -->
 		<antcall target="ds-dist-dir">
 			<param name="dspackage" value="GeneTF" />
@@ -458,6 +503,26 @@
 			</fileset>
 		</jar>
 		
+		<!-- Create the jUdmHelper distribution directory -->
+		<mkdir dir="${judmhelper.dist.dir}" />
+		
+		<!-- Create jUdmHelper in the distribution directory -->
+		<jar destfile="${judmhelper.dist.dir}/jUdmHelper.jar">
+			<fileset dir="${judmhelper.classes.dir}"/>
+			<manifest>
+				<attribute name="Main-Class" value="edu.vanderbilt.isis.judm.gen.Main" />
+				<attribute name="Class-Path" value="%UDM_PATH%\bin\jUdmHelper.jar" />
+			</manifest>
+		</jar>
+		
+		<!-- Copy the jUdmHelper batch to the distribution directory -->
+		<copy todir="${judmhelper.dist.dir}">
+			<mapper type="flatten" />
+			<fileset dir="${batch.dir}" casesensitive="no">
+				<include name="jUdmHelper.bat" />
+			</fileset>
+		</copy>
+
 		<!-- Create the GeneTF distribution -->
 		<antcall target="ds-dist-dir">
 			<param name="dspackage" value="GeneTF" />

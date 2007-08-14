@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/UdmSwigLight"/>
-	<classpathentry kind="src" path="samples/NS_TEST/src/main"/>
+	<classpathentry kind="src" path="src/jUdmHelper"/>
 	<classpathentry kind="src" path="src/UdmSwig"/>
 	<classpathentry kind="src" path="samples/SBML2Ex/src/main"/>
 	<classpathentry kind="src" path="samples/SBML2Ex/src/test"/>
