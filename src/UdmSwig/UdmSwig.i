@@ -6,7 +6,7 @@
  ***********************************************************************/
 
 /* Module declaration */
-%module UDMCint
+%module UDMSwig
 
 /* Function renamings */
 %rename(__assign__) UdmPseudoObjectS::operator=;
@@ -28,7 +28,7 @@
 
 /* Define and include block */
 %{
-#define CS_IN_UDMCINT
+
 #include "UdmCintSwig.h"
 %}
 

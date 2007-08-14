@@ -423,7 +423,11 @@ void GenerateMetaCPPInitialize(const ::Uml::Uml::Namespace & ns, const ::Uml::Um
 	output << "\t\t\t" << endl << "\t\t}" << endl;
 };
 
-void GenerateMetaCPPDiagramInitialize(const ::Uml::Uml::Diagram &dgr, const ::Uml::Uml::Diagram & cross_dgr, ostream & output, const string& macro)
+void GenerateMetaCPPDiagramInitialize(const ::Uml::Uml::Diagram &dgr, 
+									  const ::Uml::Uml::Diagram & cross_dgr, 
+									  ostream & output, 
+									  const string& macro,
+									  bool integrate_xsd)
 {
 	//Generate the Initialize() function
 
@@ -453,10 +457,26 @@ void GenerateMetaCPPDiagramInitialize(const ::Uml::Uml::Diagram &dgr, const ::Um
 		output << "\t\t::Uml::InitNamespace("<< ns.name() << "::meta, umldiagram,\"" << ns.name() <<  "\");" <<endl;
 	}
 
+	if (integrate_xsd)
+	{
+	  
+   		for (set< ::Uml::Uml::Namespace>::const_iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
+  		{
+		const ::Uml::Uml::Namespace& ns = *nses_i;
+		const std::string& nsn = ns.name();
+		output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << ns.name() << ".xsd\"," << ns.name() <<"_xsd::getString());"<< endl;
+		}
+	}
+
+
 	output << "\t\t::Uml::InitDiagram(umldiagram, \"" << dgr.name() << "\", \"" << dgr.version() << "\");" <<endl;
 	output << "\t}" << endl;
 };
-void GenerateCPP(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fname, const ::Uml::Uml::Diagram& cross_dgr = NULL, const string& macro="") 
+void GenerateCPP(const ::Uml::Uml::Diagram &diagram,  
+				 ostream &output, string fname, 
+				 const ::Uml::Uml::Diagram& cross_dgr = NULL, 
+				 const string& macro="",
+				 bool integrate_xsd = false) 
 {
 		string hname = diagram.name();
 		string::iterator i;
@@ -469,6 +489,17 @@ void GenerateCPP(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fn
 		output << "#include \""<< fname << ".h\"" <<endl;
 		output << "#include \"UmlExt.h\"" <<endl << endl; 
 //		output << "#include \"UdmStatic.h\"" << endl << endl; 
+
+  	if (integrate_xsd)
+  	{
+			output << "#include \"UdmDom.h\"" << endl; 
+   			set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
+  			for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+	  		{
+		  		::Uml::Uml::Namespace ns = *nses_i;	
+			output << "#include \"" << ns.name() << "_xsd.h\"" << endl << endl; 
+			}
+		}
 
 
 		bool isCrossDgr = (cross_dgr && (diagram != cross_dgr));
@@ -507,7 +538,7 @@ void GenerateCPP(const ::Uml::Uml::Diagram &diagram,  ostream &output, string fn
 
 		};
 
-		GenerateMetaCPPDiagramInitialize(diagram, cross_dgr, output, macro);
+		GenerateMetaCPPDiagramInitialize(diagram, cross_dgr, output, macro, integrate_xsd);
 
 		//Udm::UdmDiagram declaration
 		output << "\t" << macro << " Udm::UdmDiagram diagram = { &umldiagram, Initialize };" << endl;

@@ -866,16 +866,16 @@ void GenerateNewCPP(const ::Uml::Uml::Diagram &diagram,  ostream &output, string
 		output << "#include \""<< fname << ".h\"" <<endl;
 		output << "#include \"UmlExt.h\"" <<endl << endl; 
 		output << "#include \"UdmStatic.h\"" << endl<<endl; 
-    if (integrate_xsd)
-    {
-      output << "#include \"UdmDom.h\"" << endl; 
-   		set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
-  		for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
-	  	{
-		  	::Uml::Uml::Namespace ns = *nses_i;	
-        output << "#include \"" << ns.name() << "_xsd.h\"" << endl << endl; 
-      }
-    }
+		if (integrate_xsd)
+		{
+			output << "#include \"UdmDom.h\"" << endl; 
+   			set< ::Uml::Uml::Namespace> nses = diagram.namespaces();
+  			for (set< ::Uml::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
+	  		{
+		  		::Uml::Uml::Namespace ns = *nses_i;	
+			output << "#include \"" << ns.name() << "_xsd.h\"" << endl << endl; 
+			}
+		}
 
 
     if (ns_map != NULL) 

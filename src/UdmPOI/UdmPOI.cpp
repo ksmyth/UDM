@@ -261,7 +261,7 @@ unsigned long UdmPseudoObject::_dn_id() const
 
 
 // Himanshu: Adding a equals operator for UdmPseudoObject
-UDM_DLL bool UdmPseudoObject::operator ==(const UdmPseudoObject& to)
+ bool UdmPseudoObject::operator ==(const UdmPseudoObject& to)
 {
 	CINT_TRY(dn_id, ob_id);
 	CINT_TRY(to.dn_id, to.ob_id);
@@ -1518,7 +1518,7 @@ bool UPO_SetDiagram(UdmPseudoObject &diagram_what, const char* name)
 	};
 };
 
-bool UDM_DLL UPO_SetNamespace(UdmPseudoObject &ns_what, UdmPseudoObject &parent_dgr, const char * name)
+bool  UPO_SetNamespace(UdmPseudoObject &ns_what, UdmPseudoObject &parent_dgr, const char * name)
 {
 	CINT_TRY(parent_dgr._dn_id(), parent_dgr._ob_id());
 	::Uml::Uml::Diagram dgr = ::Uml::Uml::Diagram::Cast(upi_o);
@@ -1684,7 +1684,7 @@ map<string,const UPO_metainfo *> UPO_metainfo::upo_metamap;
 
 
 
-bool UDM_DLL UPO_LoadDiagram(const char * xml_meta_file, UdmPseudoObject & diagram)
+bool  UPO_LoadDiagram(const char * xml_meta_file, UdmPseudoObject & diagram)
 {
 	try
 	{
@@ -1727,7 +1727,7 @@ bool UDM_DLL UPO_LoadDiagram(const char * xml_meta_file, UdmPseudoObject & diagr
 }
 void replaceAll( string &s, const char *from, const char *to )
 {
-    unsigned pos = 0, len = strlen( from );
+	size_t pos = 0, len = strlen( from );
 
     while ((pos = s.find( from, pos )) != s.npos)
     {
@@ -1735,7 +1735,7 @@ void replaceAll( string &s, const char *from, const char *to )
     }
 }
 
-bool UDM_DLL UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_string, UdmPseudoObject & diagram)
+bool  UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_string, UdmPseudoObject & diagram)
 {
 	try
 	{
@@ -1782,7 +1782,7 @@ bool UDM_DLL UPO_LoadDiagramFromString(const char * xml_meta_file, const char * 
 };
 
 
-bool UDM_DLL UPO_UnLoadDiagram(const char * xml_meta_file)
+bool  UPO_UnLoadDiagram(const char * xml_meta_file)
 {
 	const UPO_metainfo * umi = UPO_metainfo::get_metainfo(xml_meta_file);
 
@@ -1795,7 +1795,7 @@ bool UDM_DLL UPO_UnLoadDiagram(const char * xml_meta_file)
 
 }
 //===========================
-bool UDM_DLL StoreXsd(const cint_string& key, const cint_string& xsd_str)
+bool  StoreXsd(const cint_string& key, const cint_string& xsd_str)
 {
   try
   {
@@ -1814,7 +1814,7 @@ bool UDM_DLL StoreXsd(const cint_string& key, const cint_string& xsd_str)
 }
 //===========================
 		
-bool UDM_DLL RemoveXsd(const cint_string& key)
+bool  RemoveXsd(const cint_string& key)
 {
   try
   {
@@ -1833,7 +1833,7 @@ bool UDM_DLL RemoveXsd(const cint_string& key)
 
   return true;
 }
-bool UDM_DLL ClearXsdStorage()
+bool  ClearXsdStorage()
 {
   try
   {
@@ -1853,7 +1853,7 @@ bool UDM_DLL ClearXsdStorage()
   return true;
 }
 //===========================
-bool UDM_DLL AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, const cint_string& namespaceUML)
+bool  AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, const cint_string& namespaceUML)
 {
   try
   {
@@ -1874,7 +1874,7 @@ bool UDM_DLL AddURIToUMLNamespaceMapping(const cint_string& namespaceURI, const 
 
 }
 //===========================
-bool UDM_DLL ClearURIToUMLNamespaceMappings()
+bool  ClearURIToUMLNamespaceMappings()
 {
 
   try

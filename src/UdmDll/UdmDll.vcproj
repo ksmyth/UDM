@@ -46,6 +46,7 @@
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\lib\"
 				ProgramDatabaseFile=".\..\..\lib/UdmDll.pdb"
+				OptimizeReferences="1"
 				ImportLibrary=".\..\..\lib/UdmDll.lib"
 				TargetMachine="1"/>
 			<Tool
@@ -105,7 +106,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UDMPOID.lib UdmOclD.lib UmlD.lib UdmDomD.lib UdmGmeD.lib UdmXMID.lib UdmUtilD.lib  Xalan-C_1d.lib xerces-c_2d.lib zlibD.lib GOCL_vc7D.lib"
+				AdditionalDependencies="UdmOclD.lib UdmPOID.lib UmlD.lib UdmDomD.lib UdmGmeD.lib UdmXMID.lib UdmUtilD.lib  Xalan-C_1d.lib xerces-c_2d.lib zlibD.lib GOCL_vc7D.lib"
 				ShowProgress="0"
 				OutputFile="..\..\bin.net\UdmDllD.dll"
 				LinkIncremental="1"

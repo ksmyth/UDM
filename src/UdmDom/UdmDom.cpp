@@ -3273,13 +3273,8 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 			}
 #endif
 
+      //search order: string resource, file, windows resource
 			string filename;
-			if (!is)
-			{
-				filename = DomDataNetwork::FindFile(sysid);
-				if(!filename.empty()) 
-					is = new LocalFileInputSource(DOMString(filename.c_str()).rawBuffer());	
-			}
 
 			if (!is)
 			{
@@ -3290,6 +3285,12 @@ char buf[100]; strcpy(buf, StrX(origattr).localForm());
 					const string & xsd_str = it_sxc->second;
 					is =  new MemBufInputSource((const unsigned char * )xsd_str.c_str(), xsd_str.size(), "MBIS");
 				}
+			}
+			if (!is)
+			{
+				filename = DomDataNetwork::FindFile(sysid);
+				if(!filename.empty()) 
+					is = new LocalFileInputSource(DOMString(filename.c_str()).rawBuffer());	
 			}
 
 			if (!is) 
