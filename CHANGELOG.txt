@@ -65,6 +65,12 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+18/06/04	-	Release 2.19
+
+
+		- 	-c switch bug fixed. Now, it works for .udm files containing cross links.
+		
+
 06/04/04	-	Release 2.18
 
 
