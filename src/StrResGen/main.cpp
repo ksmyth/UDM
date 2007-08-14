@@ -18,6 +18,7 @@ int main(int argc, char **argv)
 
     std::string infname(argv[1]);
     std::string outfname = std::string(argv[2]);
+    std::string pn;
     std::string ext(".h");
     File2Code::GenModeType mode(File2Code::CPP);
     if (argc == 4)
@@ -25,6 +26,12 @@ int main(int argc, char **argv)
       std::string ar(argv[3]);
       if (ar == "JAVA")
       {
+        if (argc != 5)
+        {
+          std::cerr << "Usage: " << argv[0] << " <text_filename> <namespace_name> <JAVA> <package_name>" << std::endl;
+          return(-1);
+        }
+        pn = argv[4];
         ext = ".java";
         mode = File2Code::JAVA;
       }
@@ -44,7 +51,7 @@ int main(int argc, char **argv)
       throw std::runtime_error(err);
     }
 
-    File2Code f2c(argv[2], infname, mode);
+    File2Code f2c(argv[2], infname, mode, pn);
     f2c.gen(out);
 
 	}
