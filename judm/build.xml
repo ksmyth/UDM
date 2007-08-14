@@ -619,7 +619,7 @@
 	</target>
 
 	<!-- Run unit test on the distribution packages -->
-	<target name="test" depends="dist-all" description="Run unit tests.">
+	<target name="jtest" depends="compile" description="Run unit tests.">
 		<!-- directory where junit reports go -->
 		<property name="build.reports.tests.dir" location="${build.dir}/report" />
 		<mkdir dir="${build.reports.tests.dir}/xml" />
