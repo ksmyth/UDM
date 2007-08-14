@@ -71,14 +71,36 @@ public class UdmHelper {
     }
 
     public static void UPO_SetClass(UdmPseudoObject classWhat,
-        UdmPseudoObject diagramWhatDgr, String targetName)
+        UdmPseudoObject parentWhat, String targetName)
         throws UdmException {
-        log.finer("UDMSwig.UPO_SetClass(class,diagram,\"" + targetName +
+        log.finer("UDMSwig.UPO_SetClass(class,parent,\"" + targetName +
             "\");");
 
         boolean success = UDMSwig.UPO_SetClass(classWhat.getInternal(),
-                diagramWhatDgr.getInternal(), targetName);
+                parentWhat.getInternal(), targetName);
         checkError(success, "Error in UDM method UPO_SetClass");
+    }
+
+    public static void UPO_SetNamespace(UdmPseudoObject namespaceWhat,
+        UdmPseudoObject parentWhat, String targetName)
+        throws UdmException {
+        log.finer("UDMSwig.UPO_SetNamespace(namespace,parent,\"" + targetName +
+            "\");");
+
+        boolean success = UDMSwig.UPO_SetNamespace(namespaceWhat.getInternal(),
+                parentWhat.getInternal(), targetName);
+        checkError(success, "Error in UDM method UPO_SetNamespace");
+    }
+
+    public static void UPO_SetNamespaceByPath(UdmPseudoObject namespaceWhat,
+        UdmPseudoObject diagram, String path)
+        throws UdmException {
+        log.finer("UDMSwig.UPO_SetNamespaceByPath(namespace,diagram,\"" + path +
+            "\");");
+
+        boolean success = UDMSwig.UPO_SetNamespaceByPath(namespaceWhat.getInternal(),
+                diagram.getInternal(), path);
+        checkError(success, "Error in UDM method UPO_SetNamespaceByPath");
     }
 
     public static void UPO_SetAttribute(UdmPseudoObject attrWhat,
@@ -171,24 +193,24 @@ public class UdmHelper {
     /**
      * @param diagram 
      * @param className
-     * @param nsName
-     * @return The instance of an obejct of type <code>className</code> in namespace <code>ns</code>.
+     * @param nsPath
+     * @return The instance of an obejct of type <code>className</code> in namespace <code>nsPath</code>.
      * @throws UdmException
      */
     public static UdmPseudoObject initClassByName(UdmPseudoObject diagram,
-        String className, String nsName) throws UdmException {
+        String className, String nsPath) throws UdmException {
         log.finer("UdmPseudoObject swigNewUPO = new UdmPseudoObject();");
 
         edu.vanderbilt.isis.udm.swig.UdmPseudoObject swigNewUPO = new edu.vanderbilt.isis.udm.swig.UdmPseudoObject();
-        log.finer("UDMSwig.UPO_SetClass(swigNewUPO,diagram,\"" + className +
+        log.finer("UDMSwig.UPO_SetClass(swigNewUPO,parent,\"" + className +
             "\");");
 
-        if (nsName != null && nsName.length() > 0) {
+        if (nsPath != null && nsPath.length() > 0) {
             edu.vanderbilt.isis.udm.swig.UdmPseudoObject nsUPO = new edu.vanderbilt.isis.udm.swig.UdmPseudoObject();
 
-            boolean success = UDMSwig.UPO_SetNamespace(nsUPO,
-                    diagram.getInternal(), nsName);
-            UdmHelper.checkError(success, "UDM method UPO_SetNamespace() failed");
+            boolean success = UDMSwig.UPO_SetNamespaceByPath(nsUPO,
+                    diagram.getInternal(), nsPath);
+            UdmHelper.checkError(success, "UDM method UPO_SetNamespaceByPath() failed");
 
              success = UDMSwig.UPO_SetClass(swigNewUPO, nsUPO, className);
              UdmHelper.checkError(success, "UDM method UPO_SetClass() failed");
@@ -201,8 +223,8 @@ public class UdmHelper {
     }
 
     public static UdmPseudoObject initClassByName(Diagram diagram,
-        String className, String nsName) throws UdmException {
-        return initClassByName(diagram.getDiagram(), className, nsName);
+        String className, String nsPath) throws UdmException {
+        return initClassByName(diagram.getDiagram(), className, nsPath);
     }
 
     public static String GetLastError() throws Exception {

@@ -15,7 +15,7 @@ import java.util.TreeMap;
 public class Diagram {
     private UdmPseudoObject diagram;
 
-    private Map metaClassesByName = new TreeMap();
+    private Map metaClassesByPath = new TreeMap();
     
     /*public Diagram(String xmlMetaFile) throws UdmException {
         diagram = UdmHelper.loadDiagram(xmlMetaFile);
@@ -29,12 +29,13 @@ public class Diagram {
         return diagram;
     }
     
-    public UdmPseudoObject getMetaClass(String metaName, String nsName) throws UdmException {
-        UdmPseudoObject metaClass = (UdmPseudoObject) metaClassesByName.get(metaName);
+    public UdmPseudoObject getMetaClass(String metaName, String nsPath) throws UdmException {
+        UdmPseudoObject metaClass = (UdmPseudoObject) metaClassesByPath.get(nsPath + "::" + metaName);
         if (metaClass == null) {
-            metaClass = UdmHelper.initClassByName(this, metaName, nsName);
-            UdmHelper.checkNotNull(metaClass, "Couldn't init meta-class for '" + metaName
+            metaClass = UdmHelper.initClassByName(this, metaName, nsPath);
+            UdmHelper.checkNotNull(metaClass, "Couldn't init meta-class for '" + nsPath + "::" + metaName
                     + "' by UPO_SetClass()");
+            metaClassesByPath.put(nsPath + "::" + metaName, metaClass);
         }
         return metaClass;
     }

@@ -83,12 +83,12 @@ public class UdmPseudoObject implements Comparable {
     /**
      * Overrides hashCode() to return Long(getObjectId()).hashCode().
      * Because the data network id is not used to construct the hash code,
-     * objects from different data networks will have the same hash code.
+     * objects from different data networks may have the same hash code.
      *
      * @see java.lang.Long#hashCode()
      */
     public int hashCode() {
-	return new Long(getObjectId()).hashCode();
+		return new Long(getObjectId()).hashCode();
     }
 
     protected void setDiagram(Diagram metaDiagram) {
@@ -102,14 +102,14 @@ public class UdmPseudoObject implements Comparable {
     /**
      * Must be called before actual creation of the object
      */
-    protected UdmPseudoObject initClassMetaInfo(Diagram diagram, String type, String ns)
+    protected UdmPseudoObject initClassMetaInfo(Diagram diagram, String type, String ns_path)
             throws UdmException {
         if (diagram == null) {
             throw new UdmException("Meta diagram not set");
         }
 //        UdmPseudoObject metaClass = UdmHelper.initClassByName(diagram, type);
-        UdmPseudoObject metaClass = metaDiagram.getMetaClass(type, ns);
-        UdmHelper.checkNotNull(metaClass, "Couldn't init meta-class for '" + type
+        UdmPseudoObject metaClass = metaDiagram.getMetaClass(type, ns_path);
+        UdmHelper.checkNotNull(metaClass, "Couldn't init meta-class for '" + ns_path + "::" + type
                 + "' by UPO_SetClass()");
         return metaClass;
     }
@@ -211,27 +211,27 @@ public class UdmPseudoObject implements Comparable {
         UdmHelper.checkError(success, "Call to UDM method UdmPseudoObject::detach() failed");
     }
 
-    public long getChildrenCount(String childRole, String kind, String kind_ns) throws UdmException {
+    public long getChildrenCount(String childRole, String kind, String kind_ns_path) throws UdmException {
         log.finer("UdmLong swigVal = new UdmLong(1);");
         UdmLong swigVal = new UdmLong(1);
         log.finer("UdmPseudoObject.getChildrenCount(\"" + childRole + "\",\"" + kind
-                + "\",\"" + kind_ns
+                + "\",\"" + kind_ns_path
                 + "\",swigVal);");
-        boolean success = swigUPO.getChildrenCount(childRole, kind, kind_ns, swigVal);
+        boolean success = swigUPO.getChildrenCount(childRole, kind, kind_ns_path, swigVal);
         UdmHelper.checkError(success,
                 "Call to UDM method UdmPseudoObject::getChildrenCount() failed");
         log.finer("swigVal.getLongVal();");
         return swigVal.getLongVal();
     }
 
-    public UdmPseudoObjectContainer getChildren(String childRole, String kind, String kind_ns) throws UdmException {
-        long childCount = getChildrenCount(childRole, kind, kind_ns);
+    public UdmPseudoObjectContainer getChildren(String childRole, String kind, String kind_ns_path) throws UdmException {
+        long childCount = getChildrenCount(childRole, kind, kind_ns_path);
         log.finer("UdmPseudoObjectS swigContainer = new UdmPseudoObjectS(" + childCount + ");");
         UdmPseudoObjectS swigContainer = new UdmPseudoObjectS((int) childCount);
         log.finer("UdmPseudoObject.getChildren(\"" + childRole + "\",\"" + kind
-                + "\",\"" + kind_ns
+                + "\",\"" + kind_ns_path
                 + "\",swigContainer);");
-        boolean success = swigUPO.getChildren(childRole, kind, kind_ns, swigContainer);
+        boolean success = swigUPO.getChildren(childRole, kind, kind_ns_path, swigContainer);
         UdmHelper.checkError(success, "Call to UDM method UdmPseudoObject::getChildren() failed");
         return new UdmPseudoObjectContainer(swigContainer);
     }
@@ -557,41 +557,41 @@ public class UdmPseudoObject implements Comparable {
         return new UdmPseudoObjectContainer(swigContainer);
     }
 
-    public long getAdjacentObjectsCount(String dstType, String dst_type_ns) throws UdmException {
+    public long getAdjacentObjectsCount(String dstType, String dst_type_ns_path) throws UdmException {
         log.finer("UdmLong swigVal = new UdmLong(1);");
         UdmLong swigVal = new UdmLong(1);
         log.finer("UdmPseudoObject.GetAdjacentObjectsCount(\"" + dstType
-                + "\",\"" + dst_type_ns
+                + "\",\"" + dst_type_ns_path
                 + "\",swigVal);");
-        boolean success = swigUPO.GetAdjacentObjectsCount(dstType, dst_type_ns, swigVal);
+        boolean success = swigUPO.GetAdjacentObjectsCount(dstType, dst_type_ns_path, swigVal);
         UdmHelper.checkError(success,
                 "Call to UDM method UdmPseudoObject::GetAdjacentObjectsCount() failed");
         log.finer("swigVal.getLongVal();");
         return swigVal.getLongVal();
     }
 
-    public UdmPseudoObjectContainer getAdjacentObjects(String dstType, String dst_type_ns) throws UdmException {
-        long adjacentObjectsCount = getAdjacentObjectsCount(dstType, dst_type_ns);
+    public UdmPseudoObjectContainer getAdjacentObjects(String dstType, String dst_type_ns_path) throws UdmException {
+        long adjacentObjectsCount = getAdjacentObjectsCount(dstType, dst_type_ns_path);
         log.finer("UdmPseudoObjectS swigContainer = new UdmPseudoObjectS(" + adjacentObjectsCount
                 + ");");
         UdmPseudoObjectS swigContainer = new UdmPseudoObjectS((int) adjacentObjectsCount);
         log.finer("UdmPseudoObject.GetAdjacentObjects(\"" + dstType
-                + "\",\"" + dst_type_ns
+                + "\",\"" + dst_type_ns_path
                 + "\",swigContainer);");
-        boolean success = swigUPO.GetAdjacentObjects(dstType, dst_type_ns, swigContainer);
+        boolean success = swigUPO.GetAdjacentObjects(dstType, dst_type_ns_path, swigContainer);
         UdmHelper.checkError(success,
                 "Call to UDM method UdmPseudoObject::GetAdjacentObjects() failed");
         return new UdmPseudoObjectContainer(swigContainer);
     }
 
-    public long getAdjacentObjectsCount(String dstType, String dst_type_ns, AssociationInfo associationInfo)
+    public long getAdjacentObjectsCount(String dstType, String dst_type_ns_path, AssociationInfo associationInfo)
             throws UdmException {
         log.finer("UdmLong swigVal = new UdmLong(1);");
         UdmLong swigVal = new UdmLong(1);
         log.finer("UdmPseudoObject.GetAdjacentObjectsCount(\"" + dstType
-                + "\",\"" + dst_type_ns
+                + "\",\"" + dst_type_ns_path
                 + "\",associationInfo,swigVal);");
-        boolean success = swigUPO.GetAdjacentObjectsCount(dstType, dst_type_ns, associationInfo.getInternal(),
+        boolean success = swigUPO.GetAdjacentObjectsCount(dstType, dst_type_ns_path, associationInfo.getInternal(),
                 swigVal);
         UdmHelper.checkError(success,
                 "Call to UDM method UdmPseudoObject::GetAdjacentObjectsCount() failed");
@@ -599,17 +599,17 @@ public class UdmPseudoObject implements Comparable {
         return swigVal.getLongVal();
     }
 
-    public UdmPseudoObjectContainer getAdjacentObjects(String dstType, String dst_type_ns,
+    public UdmPseudoObjectContainer getAdjacentObjects(String dstType, String dst_type_ns_path,
             AssociationInfo associationInfo) throws UdmException {
-        long adjacentObjectsCount = getAdjacentObjectsCount(dstType, dst_type_ns, associationInfo);
+        long adjacentObjectsCount = getAdjacentObjectsCount(dstType, dst_type_ns_path, associationInfo);
         log.finer("UdmPseudoObjectS swigContainer = new UdmPseudoObjectS(" + adjacentObjectsCount
                 + ");");
         UdmPseudoObjectS swigContainer = new UdmPseudoObjectS((int) adjacentObjectsCount);
         edu.vanderbilt.isis.udm.swig.AssociationInfo swigAI = associationInfo.getInternal();
         log.finer("UdmPseudoObject.GetAdjacentObjects(\"" + dstType
-                + "\",\"" + dst_type_ns
+                + "\",\"" + dst_type_ns_path
                 + "\",AssociationInfo,swigContainer);");
-        boolean success = swigUPO.GetAdjacentObjects(dstType, dst_type_ns, swigAI, swigContainer);
+        boolean success = swigUPO.GetAdjacentObjects(dstType, dst_type_ns_path, swigAI, swigContainer);
         UdmHelper.checkError(success,
                 "Call to UDM method UdmPseudoObject::GetAdjacentObjects() failed");
         return new UdmPseudoObjectContainer(swigContainer);
@@ -624,63 +624,63 @@ public class UdmPseudoObject implements Comparable {
         return new UdmPseudoObject(parent);
     }
 
-    public long getChildObjectsCount(String type, String type_ns) throws UdmException {
+    public long getChildObjectsCount(String type, String type_ns_path) throws UdmException {
         log.finer("UdmLong swigVal = new UdmLong(1);");
         UdmLong swigVal = new UdmLong(1);
         log.finer("UdmPseudoObject.GetChildObjectsCount(\"" + type
-                + "\",\"" + type_ns
+                + "\",\"" + type_ns_path
                 + "\",swigVal);");
-        boolean success = swigUPO.GetChildObjectsCount(type, type_ns, swigVal);
+        boolean success = swigUPO.GetChildObjectsCount(type, type_ns_path, swigVal);
         UdmHelper.checkError(success,
                 "Call to UDM method UdmPseudoObject::GetChildObjectsCount() failed");
         log.finer("swigVal.getLongVal();");
         return swigVal.getLongVal();
     }
 
-    public UdmPseudoObjectContainer getChildObjects(String type, String type_ns) throws UdmException {
-        long childObjectsCount = getChildObjectsCount(type, type_ns);
+    public UdmPseudoObjectContainer getChildObjects(String type, String type_ns_path) throws UdmException {
+        long childObjectsCount = getChildObjectsCount(type, type_ns_path);
         log.finer("UdmPseudoObjectS swigContainer = new UdmPseudoObjectS(" + childObjectsCount
                 + ");");
         UdmPseudoObjectS swigContainer = new UdmPseudoObjectS((int) childObjectsCount);
         log.finer("UdmPseudoObject.GetChildObjects(\"" + type
-                + "\",\"" + type_ns
+                + "\",\"" + type_ns_path
                 + "\",swigContainer);");
-        boolean success = swigUPO.GetChildObjects(type, type_ns, swigContainer);
+        boolean success = swigUPO.GetChildObjects(type, type_ns_path, swigContainer);
         UdmHelper.checkError(success,
                 "Call to UDM method UdmPseudoObject::GetChildObjects() failed");
         return new UdmPseudoObjectContainer(swigContainer);
     }
 
-    public long getChildObjectsCount(CompositionInfo compositionInfo, String type, String type_ns)
+    public long getChildObjectsCount(CompositionInfo compositionInfo, String type, String type_ns_path)
             throws UdmException {
         log.finer("UdmLong swigVal = new UdmLong(1);");
         UdmLong swigVal = new UdmLong(1);
         log.finer("cint_string cintStrType = new cint_string(\"" + type + "\");");
         cint_string cintStrType = new cint_string(type);
-        log.finer("cint_string cintStrTypeNamespace = new cint_string(\"" + type_ns + "\");");
-        cint_string cintStrTypeNS = new cint_string(type_ns);
-        log.finer("UdmPseudoObject.GetChildObjectsCount(compositionInfo,cintStrType,cintStrTypeNS,swigVal);");
+        log.finer("cint_string cintStrTypeNSPath = new cint_string(\"" + type_ns_path + "\");");
+        cint_string cintStrTypeNSPath = new cint_string(type_ns_path);
+        log.finer("UdmPseudoObject.GetChildObjectsCount(compositionInfo,cintStrType,cintStrTypeNSPath,swigVal);");
         boolean success = swigUPO.GetChildObjectsCount(compositionInfo.getInternal(), cintStrType,
-                cintStrTypeNS, swigVal);
+                cintStrTypeNSPath, swigVal);
         UdmHelper.checkError(success,
                 "Call to UDM method UdmPseudoObject::GetChildObjectsCount() failed");
         log.finer("swigVal.getLongVal();");
         return swigVal.getLongVal();
     }
 
-    public UdmPseudoObjectContainer getChildObjects(CompositionInfo compositionInfo, String type, String type_ns)
+    public UdmPseudoObjectContainer getChildObjects(CompositionInfo compositionInfo, String type, String type_ns_path)
             throws UdmException {
-        long childObjectsCount = getChildObjectsCount(compositionInfo, type, type_ns);
+        long childObjectsCount = getChildObjectsCount(compositionInfo, type, type_ns_path);
         log.finer("UdmPseudoObjectS swigContainer = new UdmPseudoObjectS(" + childObjectsCount
                 + ");");
         UdmPseudoObjectS swigContainer = new UdmPseudoObjectS((int) childObjectsCount);
         log.finer("cint_string swigType = new cint_string(\"" + type + "\");");
         cint_string swigType = new cint_string(type);
-        log.finer("cint_string cintStrTypeNamespace = new cint_string(\"" + type_ns + "\");");
-        cint_string swigTypeNS = new cint_string(type_ns);
+        log.finer("cint_string swigTypeNSPath = new cint_string(\"" + type_ns_path + "\");");
+        cint_string swigTypeNSPath = new cint_string(type_ns_path);
         edu.vanderbilt.isis.udm.swig.CompositionInfo swigCI = compositionInfo.getInternal();
-        log.finer("UdmPseudoObject.GetChildObjects(compositionInfo,type_ns,swigType,swigContainer);");
-        boolean success = swigUPO.GetChildObjects(swigCI, swigType, swigTypeNS, swigContainer);
+        log.finer("UdmPseudoObject.GetChildObjects(compositionInfo,type_ns_path,swigType,swigContainer);");
+        boolean success = swigUPO.GetChildObjects(swigCI, swigType, swigTypeNSPath, swigContainer);
         UdmHelper.checkError(success,
                 "Call to UDM method UdmPseudoObject::GetChildObjects() failed");
         return new UdmPseudoObjectContainer(swigContainer);
@@ -740,21 +740,21 @@ public class UdmPseudoObject implements Comparable {
         return new UdmPseudoObjectContainer(swigContainer);
     }
 
-    public UdmPseudoObject createObject(String type, String type_ns) throws UdmException {
+    public UdmPseudoObject createObject(String type, String type_ns_path) throws UdmException {
         log.finer("UdmPseudoObject swigNewUPO = new UdmPseudoObject();");
         edu.vanderbilt.isis.udm.swig.UdmPseudoObject swigNewUPO = new edu.vanderbilt.isis.udm.swig.UdmPseudoObject();
-        log.finer("UdmPseudoObject.CreateObject(\"" + type + "," + type_ns + "\",swigNewUPO);");
-        boolean success = swigUPO.CreateObject(type, type_ns, swigNewUPO);
+        log.finer("UdmPseudoObject.CreateObject(\"" + type + "," + type_ns_path + "\",swigNewUPO);");
+        boolean success = swigUPO.CreateObject(type, type_ns_path, swigNewUPO);
         UdmHelper.checkError(success, "Call to UDM method UdmPseudoObject::CreateObject() failed");
         return new UdmPseudoObject(swigNewUPO);
     }
 
-    public UdmPseudoObject createObject(String type, String type_ns, String childRole) throws UdmException {
+    public UdmPseudoObject createObject(String type, String type_ns_path, String childRole) throws UdmException {
         log.finer("UdmPseudoObject swigNewUPO = new UdmPseudoObject();");
         edu.vanderbilt.isis.udm.swig.UdmPseudoObject swigNewUPO = new edu.vanderbilt.isis.udm.swig.UdmPseudoObject();
-        log.finer("UdmPseudoObject.CreateObject(\"" + type + "," + type_ns  + "\",swigNewUPO,\"" + childRole
+        log.finer("UdmPseudoObject.CreateObject(\"" + type + "," + type_ns_path  + "\",swigNewUPO,\"" + childRole
                 + "\");");
-        boolean success = swigUPO.CreateObject(type, type_ns, swigNewUPO, childRole);
+        boolean success = swigUPO.CreateObject(type, type_ns_path, swigNewUPO, childRole);
         UdmHelper.checkError(success, "Call to UDM method UdmPseudoObject::CreateObject() failed");
         return new UdmPseudoObject(swigNewUPO);
     }

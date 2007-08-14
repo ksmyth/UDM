@@ -44,6 +44,22 @@ public class AssociationInfo {
         return swigAssociationClass.buffer();
     }
 
+    public void setAssociationClassNamespacePath(String namespacePath) {
+        cint_string swigNamespacePath = new cint_string(namespacePath);
+        log.finer("AssocationInfo.setAssoc_class_ns(new cint_string(\"" + namespacePath + "\"))");
+        swigAssoInfo.setAssoc_class_ns(swigNamespacePath);
+    }
+
+    public String getAssociationClassNamespacePath() {
+        log.finer("cint_string swigNamespacePath = AssociationInfo.getAssoc_class_ns();");
+        cint_string swigNamespacePath = swigAssoInfo.getAssoc_class_ns();
+        if (swigNamespacePath == null) {
+            return null;
+        }
+        log.finer("swigNamespacePath.buffer();");
+        return swigNamespacePath.buffer();
+    }
+
     public void setSrcRolename(String srcRolename) {
         cint_string swigSrcRolename = new cint_string(srcRolename);
         log.finer("AssocationInfo.setSrcRolename(new cint_string(\"" + srcRolename + "\"));");
