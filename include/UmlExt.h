@@ -90,8 +90,8 @@ namespace Uml
 // find an assoc.Class by name in a Diagram
 	UDM_DLL Class assocClassByName(const Diagram &d, const string &name);
 
-// find a class by name in a Diagram and Namespace
-	UDM_DLL Class classByName(const Diagram &d, const string &ns_name, const string &name);
+// find a class by name in a Diagram and Namespace given by path ns_path
+	UDM_DLL Class classByName(const Diagram &d, const string &ns_path, const string &name, const string &delim = "::");
 // find a class by name in a Diagram
 	UDM_DLL Class classByName(const Diagram &d, const string &name);
 // find a class by name in a Namespace
