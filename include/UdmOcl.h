@@ -122,18 +122,18 @@ namespace Ocl
 		// INSTANCE MEMBERS
 		private :
 			Udm::Object m_objObject;
-			set< ::Uml::Uml::Constraint> m_setConstraints;
+			set< ::Uml::Constraint> m_setConstraints;
 
 		// CONSTRUCTION, DESTRUCTION, INITIALIZATION
 		public :
-			Evaluator( const Udm::Object& objObject, const set< ::Uml::Uml::Constraint>& setConstraints = set< ::Uml::Uml::Constraint>() );
+			Evaluator( const Udm::Object& objObject, const set< ::Uml::Constraint>& setConstraints = set< ::Uml::Constraint>() );
 			Evaluator( const Evaluator& evaluator );
 			Evaluator& operator=( const Evaluator& evaluator );
 
 		// GET'ERS, SET'ERS
 		public :
 			Udm::Object& object() const;
-			set< ::Uml::Uml::Constraint>& constraints() const;
+			set< ::Uml::Constraint>& constraints() const;
 
 		// INSTANCE METHODS
 		public :
@@ -155,14 +155,14 @@ namespace Ocl
 
 
 
-	UDM_DLL bool Initialize( const ::Uml::Uml::Diagram& objDiagram, const SErrorNotification& sErrorNotification = SErrorNotification() );
+	UDM_DLL bool Initialize( const ::Uml::Diagram& objDiagram, const SErrorNotification& sErrorNotification = SErrorNotification() );
   UDM_DLL void UnInitialize();
-	UDM_DLL bool ProcessPat( const ::Uml::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression);
+	UDM_DLL bool ProcessPat( const ::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression);
 
 }; // namespace Ocl
 
 namespace UdmPat {
-	UDM_DLL bool ProcessPat( const ::Uml::Uml::Diagram& metaDiagram, const Udm::Object& dataNetwork , const std::string& strExpression);
+	UDM_DLL bool ProcessPat( const ::Uml::Diagram& metaDiagram, const Udm::Object& dataNetwork , const std::string& strExpression);
 }; //namespace Ocl
 
 #endif // UDMOCL_h

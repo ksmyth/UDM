@@ -81,7 +81,7 @@ namespace UdmGme
 	struct assocmapitem;
 
 	//type of the map which holds the mapping of associations to GME Meta Objects
-	typedef map< ::Uml::Uml::Association::uniqueId_type, assocmapitem> assocmap;
+	typedef map< ::Uml::Association::uniqueId_type, assocmapitem> assocmap;
 	
 
 	class GmeDataNetwork : public Udm::DataNetwork 
@@ -91,10 +91,10 @@ namespace UdmGme
 		
 		//map the Udm Composition Child Role to the corresponding set of MGA CompositionRole(MetaRole)s.
 		typedef set<string> string_set;			//the compiler doesn't like when templates are nested
-		map< ::Uml::Uml::CompositionChildRole, string_set> meta_role_filter_cache;
+		map< ::Uml::CompositionChildRole, string_set> meta_role_filter_cache;
 	
 	
-		void amapInitialize(const ::Uml::Uml::Diagram &dgr, METALib::IMgaMetaProject *metaproj);
+		void amapInitialize(const ::Uml::Diagram &dgr, METALib::IMgaMetaProject *metaproj);
 	
 	
 		
@@ -103,12 +103,12 @@ namespace UdmGme
 		struct privdata &priv;
 		void CountWriteOps();
 		//type cache by name 
-		map<string, const ::Uml::Uml::Class> meta_class_cache;
+		map<string, const ::Uml::Class> meta_class_cache;
 		
 		UDM_DLL GmeDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* project = NULL);
 		UDM_DLL ~GmeDataNetwork();
 		UDM_DLL void CreateNew(const string &systemname, 
-			const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+			const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 		
 		// For Udm-based Interpreters ///////////////////
@@ -128,7 +128,7 @@ namespace UdmGme
 		UDM_DLL void AbortEditSequence();
 		UDM_DLL Object ObjectById(Object::uniqueId_type id);
 
-		UDM_DLL set<string> GetMetaRoleFilter(::Uml::Uml::CompositionChildRole role);
+		UDM_DLL set<string> GetMetaRoleFilter(::Uml::CompositionChildRole role);
 
 		static Udm::DataNetwork *factory(const Udm::UdmDiagram &meta, Udm::UdmProject* project = NULL) {
 			return new GmeDataNetwork(meta, project);

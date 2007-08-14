@@ -122,7 +122,7 @@ namespace UdmStatic
 
 		
 		void CreateNew(const string &systemname, 
-								const string &metalocator, const ::Uml::Uml::Class &rootclass, 
+								const string &metalocator, const ::Uml::Class &rootclass, 
 								enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 		
 		
@@ -195,7 +195,7 @@ namespace UdmStatic
 		
 	public:
 
-		StaticObject(const ::Uml::Uml::Class &meta, 
+		StaticObject(const ::Uml::Class &meta, 
 					int ref, 
 					StaticObject * archetype = NULL, 
 					const bool subtype = false,
@@ -219,10 +219,10 @@ namespace UdmStatic
 		ObjectImpl *clone();
 		void release();
 		Udm::DataNetwork *__getdn();
-		const ::Uml::Uml::Class &m_type;
+		const ::Uml::Class &m_type;
 		bool m_type_is_safetype;
 	
-		const ::Uml::Uml::Class &type() const;
+		const ::Uml::Class &type() const;
 		//void dumpref() {cout << refCount << endl;};
 		//for debugging only!
 		int ref(){  return refCount;};
@@ -272,31 +272,31 @@ namespace UdmStatic
 
 
 	// --- attribute setters/getters  for single value (no-array) type attributes
-		string getStringAttr(const ::Uml::Uml::Attribute &meta) const;
-		void setStringAttr(const ::Uml::Uml::Attribute &meta, const string &a, const bool direct = true);
+		string getStringAttr(const ::Uml::Attribute &meta) const;
+		void setStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct = true);
 		
-		bool getBooleanAttr(const ::Uml::Uml::Attribute &meta) const;
-		void setBooleanAttr(const ::Uml::Uml::Attribute &meta, bool a, const bool direct = true);
+		bool getBooleanAttr(const ::Uml::Attribute &meta) const;
+		void setBooleanAttr(const ::Uml::Attribute &meta, bool a, const bool direct = true);
 		
-		__int64 getIntegerAttr(const ::Uml::Uml::Attribute &meta) const;
-		void setIntegerAttr(const ::Uml::Uml::Attribute &meta, __int64 a, const bool direct = true);
+		__int64 getIntegerAttr(const ::Uml::Attribute &meta) const;
+		void setIntegerAttr(const ::Uml::Attribute &meta, __int64 a, const bool direct = true);
 		
-		double getRealAttr(const ::Uml::Uml::Attribute &meta) const;
-		void setRealAttr(const ::Uml::Uml::Attribute &meta, double a, const bool direct = true);
+		double getRealAttr(const ::Uml::Attribute &meta) const;
+		void setRealAttr(const ::Uml::Attribute &meta, double a, const bool direct = true);
 	
 	//	--- attribute setters/getters for multiple value (array) type attributes
 
-		vector<string> getStringAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		void setStringAttrArr(const ::Uml::Uml::Attribute &meta, const vector<string> &a, const bool direct = true);
+		vector<string> getStringAttrArr(const ::Uml::Attribute &meta) const;
+		void setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct = true);
 
-		vector<bool> getBooleanAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		void setBooleanAttrArr(const ::Uml::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true);
+		vector<bool> getBooleanAttrArr(const ::Uml::Attribute &meta) const;
+		void setBooleanAttrArr(const ::Uml::Attribute &meta, const vector<bool> &a, const bool direct = true);
 
-		vector<__int64> getIntegerAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		void setIntegerAttrArr(const ::Uml::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true);
+		vector<__int64> getIntegerAttrArr(const ::Uml::Attribute &meta) const;
+		void setIntegerAttrArr(const ::Uml::Attribute &meta, const vector<__int64> &a, const bool direct = true);
 
-		vector<double> getRealAttrArr(const ::Uml::Uml::Attribute &meta) const;
-		void setRealAttrArr(const ::Uml::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
+		vector<double> getRealAttrArr(const ::Uml::Attribute &meta) const;
+		void setRealAttrArr(const ::Uml::Attribute &meta, const vector<double> &a, const bool direct = true);
 
 
 
@@ -306,21 +306,21 @@ namespace UdmStatic
 		typedef multimap<uniqueId_type, StaticObject*> children_type;
 		children_type m_children;	// reference counted
 
-		ObjectImpl *getParent(const ::Uml::Uml::CompositionParentRole &role) const;
-		void setParent(ObjectImpl *a, const ::Uml::Uml::CompositionParentRole &role, const bool direct = true);
+		ObjectImpl *getParent(const ::Uml::CompositionParentRole &role) const;
+		void setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct = true);
 		void detach();
-		vector<ObjectImpl*> getChildren(const ::Uml::Uml::CompositionChildRole &meta, const ::Uml::Uml::Class &cls) const;
-		void setChildren(const ::Uml::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct = true);
-		ObjectImpl *createChild(const ::Uml::Uml::CompositionChildRole &childrole, const ::Uml::Uml::Class &meta, const Udm::ObjectImpl* archetype = NULL, const bool subtype = false, const bool real_archetype = true, const bool need_safetype = false);
+		vector<ObjectImpl*> getChildren(const ::Uml::CompositionChildRole &meta, const ::Uml::Class &cls) const;
+		void setChildren(const ::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct = true);
+		ObjectImpl *createChild(const ::Uml::CompositionChildRole &childrole, const ::Uml::Class &meta, const Udm::ObjectImpl* archetype = NULL, const bool subtype = false, const bool real_archetype = true, const bool need_safetype = false);
 
 	// --- associations
 		typedef udm_multimap<uniqueId_type, StaticObject*> assoc_type;
 		assoc_type associations;	// not reference counted, bidirectional
 		
 
-		vector<ObjectImpl*> getAssociation(const ::Uml::Uml::AssociationRole &meta, int mode = Udm::TARGETFROMPEER) const;
+		vector<ObjectImpl*> getAssociation(const ::Uml::AssociationRole &meta, int mode = Udm::TARGETFROMPEER) const;
 		void setAssociation(
-			const Uml::Uml::AssociationRole &meta, 
+			const ::Uml::AssociationRole &meta, 
 			const vector<ObjectImpl*> &nvect, 
 			int mode = Udm::TARGETFROMPEER,
 			const bool direct = true);
@@ -348,11 +348,11 @@ namespace UdmStatic
 
 
 
-	UDM_DLL Object CreateObject(const ::Uml::Uml::Class &meta);
-	void CreateComposition(const Object &parent, const ::Uml::Uml::CompositionChildRole &childRole,
-		const Object &child, const ::Uml::Uml::CompositionParentRole &parentRole);
-	void CreateAssociation(const Object &src, const ::Uml::Uml::AssociationRole &dstRole,
-		const Object &dst, const ::Uml::Uml::AssociationRole &srcRole);
+	UDM_DLL Object CreateObject(const ::Uml::Class &meta);
+	void CreateComposition(const Object &parent, const ::Uml::CompositionChildRole &childRole,
+		const Object &child, const ::Uml::CompositionParentRole &parentRole);
+	void CreateAssociation(const Object &src, const ::Uml::AssociationRole &dstRole,
+		const Object &dst, const ::Uml::AssociationRole &srcRole);
 }
 
 
