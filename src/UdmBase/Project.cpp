@@ -184,7 +184,7 @@ namespace Udm
 				throw udm_exception(string("Temporary file could not be opened! (") + tempfilename + string(")"));
 
 			fwrite(buff, sizeof(char), ufi.uncompressed_size, file);
-			delete buff;
+			delete [] buff;
 			fclose(file);
 
 			
@@ -575,8 +575,14 @@ namespace Udm
 			//Udm::SmartDataNetwork * dn = new SmartDataNetwork(Udm::MetaDepository::LocateDiagram(i->metalocator), this);
 			Udm::SmartDataNetwork * dn = new SmartDataNetwork(LocateDiagram(i->metalocator()), this);
 			//generate the corresponding DTD( this needs the diagram to be initialized)
-			
-			set< ::Uml::Namespace> nses = LocateDiagram(i->metalocator()).dgr->namespaces();
+			::Uml::Diagram *dgr = LocateDiagram(i->metalocator()).dgr;
+			ff.open(string(temp_path + PATHDELIM + "__dgr_" + (string)dgr->name() + ".xsd").c_str());
+			if (!ff.good()) throw udm_exception("Error opening for write DTD file");
+			else DTDGen::GenerateXMLSchema(*dgr, ff);
+			ff.close();
+			ff.clear();
+
+			set< ::Uml::Namespace> nses = dgr->namespaces();
 			for(set< ::Uml::Namespace>::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 			{
 				::Uml::Namespace ns = *nses_i;
@@ -615,7 +621,7 @@ namespace Udm
 
 		cross_meta = const_cast<Udm::UdmDiagram*>(&cross_diag);
 
-		ff.open(string(temp_path + PATHDELIM + (string)(cross_diag.dgr->name()) + ".xsd").c_str());
+		ff.open(string(temp_path + PATHDELIM + (string)(::Uml::GetTheOnlyNamespace(*cross_diag.dgr).name()) + ".xsd").c_str());
 		if(!ff.good()) throw udm_exception("Error opening for write XSD file");
 		else DTDGen::GenerateXMLSchema(::Uml::GetTheOnlyNamespace(*cross_diag.dgr), ff);
 		ff.close();
@@ -658,7 +664,9 @@ namespace Udm
 		if(!o) return o;
 
 		//The classname in cross diagram is: classname + "_cross_ph_" + diagramname
-		string cross_cl_name = string(o.type().name()) + string(Udm::cross_delimiter) + string(::Uml::Namespace(o.type().parent()).name());
+		string cross_cl_name = string(o.type().name()) + string(Udm::cross_delimiter);
+		if ((::Uml::Namespace) o.type().parent_ns() != ::Uml::Namespace(NULL))
+			cross_cl_name += string(::Uml::Namespace(o.type().parent_ns()).name());
 		::Uml::Class ph_class = Uml::classByName(::Uml::GetTheOnlyNamespace(*(cross_meta->dgr)), cross_cl_name);
 
 		set<Udm::Object> ph_children = root_object.GetChildObjects(ph_class);

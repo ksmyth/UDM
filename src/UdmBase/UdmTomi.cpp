@@ -216,7 +216,9 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType)
 		{
 			if (pr->HasCrossMeta())
 			{
-				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter+(string)(::Uml::Diagram::Cast(clsDstType.parent()).name());
+				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter;
+				if ((::Uml::Namespace) clsDstType.parent_ns() != ::Uml::Namespace(NULL))
+					clsDst_cross_ph_name += (string)(((::Uml::Namespace) clsDstType.parent_ns()).name());
 				set<Object> ret = src_o.GetAdjacentObjects(Uml::classByName(::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)),clsDst_cross_ph_name));
 				for(set<Object>::iterator ret_i = ret.begin(); ret_i != ret.end(); ret_i++)
 					objAdjacentObs.insert(pr->GetRealObject(*ret_i));
@@ -297,10 +299,18 @@ UDM_DLL set<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstType, 
 		{
 			if (pr->HasCrossMeta())
 			{
-				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter+(string)(::Uml::Diagram::Cast(clsDstType.parent()).name());
+				string clsDst_cross_ph_name = (string)clsDstType.name()+ Udm::cross_delimiter;
+				if ((::Uml::Namespace) clsDstType.parent_ns() != ::Uml::Namespace(NULL))
+					clsDst_cross_ph_name += (string)(((::Uml::Namespace) clsDstType.parent_ns()).name());
 
 				//we have to translate ascType as well
-				AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), (string)ascType.clsAssociation.name()+ Udm::cross_delimiter+(string)(::Uml::Diagram::Cast(ascType.clsAssociation.parent()).name())) :  ascType.clsAssociation);
+				string clsAssociation_name;
+				if (ascType.clsAssociation) {
+					clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
+					if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
+						clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
+				}
+				AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), clsAssociation_name) :  ascType.clsAssociation);
 				newAscType.strSrcRoleName = ascType.strSrcRoleName;
 				newAscType.strDstRoleName = ascType.strDstRoleName;
 
@@ -1003,7 +1013,13 @@ UDM_DLL set<Object> Object::GetAssociationClassObjects(Object dstObject, const A
 
 		//it's ok for dst_o to be NULL
 		//we have to translate ascType as well
-		AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), (string)ascType.clsAssociation.name()+ Udm::cross_delimiter+(string)(::Uml::Diagram::Cast(ascType.clsAssociation.parent()).name())) :  ascType.clsAssociation);
+		string clsAssociation_name;
+		if (ascType.clsAssociation) {
+			clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
+			if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
+				clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
+		}
+		AssociationInfo newAscType(ascType.clsAssociation ?  ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), clsAssociation_name) :  ascType.clsAssociation);
 		newAscType.strSrcRoleName = ascType.strSrcRoleName;
 		newAscType.strDstRoleName = ascType.strDstRoleName;
 

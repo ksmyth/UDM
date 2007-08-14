@@ -8,7 +8,7 @@ Changelog:
 
    -added AddUMLNamespaceToQualifiedAttrsNSList - elementFormDefault=\"qualified\"
       all the contained attributes in a namespaces enlisted 
-          here will be ignored prefixed with the UML namespace, see udm.exe -q switch
+          here will be prefixed with the UML namespace, see udm.exe -q switch
           elementFormDefault="qualified" generated in the schema
 
    - Text attribute xml representation changed, it hides the attribute name in
@@ -629,15 +629,9 @@ namespace DTDGen
 		output << ">" << endl << endl;
 	}
 
-	void GenerateDTD(const ::Uml::Namespace &ns,  ostream &output)	
+	static void GenerateDTDForClasses(const set< ::Uml::Class> &classes, ostream &output)
 	{
-		::Uml::Diagram dgr = ns.parent();
-			output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
-			output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
-			output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
-
-			set< ::Uml::Class> classes = ns.classes();
-			set< ::Uml::Class>::iterator i = classes.begin();
+			set< ::Uml::Class>::const_iterator i = classes.begin();
 			set<string> text_att_names;
 			while( i != classes.end() )
 			{
@@ -665,39 +659,56 @@ namespace DTDGen
 
 	}
 
+	void GenerateDTD(const ::Uml::Namespace &ns,  ostream &output)	
+	{
+		::Uml::Diagram dgr = ns.parent();
+			output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+			output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
+			output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
+			GenerateDTDForClasses(ns.classes(), output);
+	}
+
+	void GenerateDTD(const ::Uml::Diagram &dgr,  ostream &output)	
+	{
+			output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+			output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
+			output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
+			GenerateDTDForClasses(dgr.classes(), output);
+	}
+
 	// --------------------------- XML Schema generation
 
-	string NamespaceToURI(const ::Uml::Namespace &ns, const map<string, string> &ns_map)
+	string UmlNameToURI(const string &nsn, const bool isDiagram, const map<string, string> &ns_map)
 	{
-		const std::string& nsn = ns.name();
+		string name = isDiagram ? "__dgr_" + nsn : nsn;
 		if (!ns_map.empty())
 		{
-			map<string, string>::const_iterator i = ns_map.find(nsn);
+			map<string, string>::const_iterator i = ns_map.find(name);
 			if (i != ns_map.end())
 				return i->second;
 		}
 		string uri("http://www.isis.vanderbilt.edu/2004/schemas/");
-		uri += nsn;
+		uri += name;
 		return uri;
 	}
 
-  void AddUMLNamespaceToQualifiedAttrsNSList(const char *optp, set<string> &qualifiedAtrrsNS_set)
+	void AddUMLContainerNameToQualifiedAttrsNSList(const char *optp, set<string> &qualifiedAtrrsNS_set)
  	{
 		string opt(optp);
-  	if (opt.empty())
-				throw udm_exception("UML namespace must not be empty in argument \"" + opt + "\" of \"-q\" switch");
-    qualifiedAtrrsNS_set.insert(optp);
+		if (opt.empty())
+			throw udm_exception("UML container name must not be empty in argument \"" + opt + "\" of \"-q\" switch");
+		qualifiedAtrrsNS_set.insert(optp);
 	}
 
-	void AddUMLNamespaceToIgnoreList(const char *optp, set<string> &ns_ignore_set)
+	void AddUMLContainerNameToIgnoreList(const char *optp, set<string> &ns_ignore_set)
 	{
 		string opt(optp);
-  	if (opt.empty())
-				throw udm_exception("UML namespace must not be empty in argument \"" + opt + "\" of \"-i\" switch");
-    ns_ignore_set.insert(optp);
+		if (opt.empty())
+			throw udm_exception("UML container name must not be empty in argument \"" + opt + "\" of \"-i\" switch");
+		ns_ignore_set.insert(optp);
 	}
 
-	void AddUMLNamespaceToURIMapping(const char *optp, map<string, string> &ns_map)
+	void AddUMLContainerNameToURIMapping(const char *optp, map<string, string> &ns_map)
 	{
 		string opt(optp);
 		int loc = opt.find('=');
@@ -706,12 +717,12 @@ namespace DTDGen
 			string uri = opt.substr(loc + 1);
 
 			if (uml_ns.length() == 0 || uri.length() == 0)
-				throw udm_exception("UML namespace and the URI must not be empty in argument \"" + opt + "\" of \"-u\" switch");
+				throw udm_exception("UML container name and the URI must not be empty in argument \"" + opt + "\" of \"-u\" switch");
 
 			map<string, string>::value_type item(uml_ns, uri);
 			ns_map.insert(item);
 		} else {
-			throw udm_exception("argument \"" + opt + "\" of \"-u\" switch must be in this form: uml_namespace=URI");
+			throw udm_exception("argument \"" + opt + "\" of \"-u\" switch must be in this form: uml_container_name=URI");
 		}
 	}
 
@@ -952,7 +963,6 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 {
 	string name = c.name();
 	bool has_text_attr = Uml::HasTextAttributes(c);
-	::Uml::Namespace ns = c.parent();
 
 	//we need a different content model generation if the class also has text attributes
 	cwcp_order  cwcps = get_cwcp_order(c, uxsdi, has_text_attr || xsd_el_ta);
@@ -989,11 +999,15 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 		/*<xs:complexContent>
 		<xs:extension base="Person">*/
 		output << "\t\t<xsd:complexContent>" << endl;
-		::Uml::Namespace only_base_ns = only_base.parent();
-		output << "\t\t\t<xsd:extension base=\"" << only_base_ns.name() << ":" << only_base.name() <<"Type\">" << endl;
+		output << "\t\t\t<xsd:extension base=\"";
+		::Uml::Namespace only_base_ns = only_base.parent_ns();
+		if (only_base_ns != ::Uml::Namespace(NULL))
+			output << only_base_ns.name() << ":";
+		output << only_base.name() <<"Type\">" << endl;
 	}
 	
 
+	::Uml::Namespace ns = c.parent_ns();
 	if (!cwcps.empty() || has_text_attr) 
 	{
 		/* if text attribute is present, no order of child nodes are enforced, the content model is (A?,B?,C?)* */
@@ -1007,12 +1021,14 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 		while (cwcps_i != cwcps.end())
 		{
 			string i_name = cwcps_i->first.name();
-			::Uml::Namespace i_ns = cwcps_i->first.parent();
+			::Uml::Namespace i_ns = cwcps_i->first.parent_ns();
+			::Uml::Diagram i_dgr = cwcps_i->first.parent();
 
 			bool ignore = false;
 			{
-				set<string>::const_iterator sit = ns_ignore_set.find(i_ns.name());
-				if (sit != ns_ignore_set.end())
+				set<string>::const_iterator sit_ns = i_ns != ::Uml::Namespace(NULL) ? ns_ignore_set.find(i_ns.name()) : ns_ignore_set.end();
+				set<string>::const_iterator sit_dgr = ns_ignore_set.find(string("__dgr_") + string(i_dgr.name()));
+				if (sit_ns != ns_ignore_set.end() || sit_dgr != ns_ignore_set.end())
 				{
 					if (!any_is_there)
 					{
@@ -1028,8 +1044,10 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 				output << "\t\t\t<xsd:element";
 				if (ns == i_ns)
 					output << " name=\"" << i_name << "\" type=\"" <<	i_name << "Type\"";
-				else
+				else if (i_ns != ::Uml::Namespace(NULL))
 					output << " ref=\"" << i_ns.name() << ":" << i_name << "\"";
+				else
+					output << " ref=\"" << i_name << "\"";
 				if (cwcps_i->second.first != 1)
 					output << " minOccurs=\"" << cwcps_i->second.first << "\"";
 				if (cwcps_i->second.second == -1)
@@ -1060,86 +1078,204 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 	output << "\t</xsd:complexType>" << endl << endl;
 }
 
+static pair<bool, set< ::Uml::Namespace> > XMLNamespacesToImport(const ::Uml::Namespace &ns, const bool uxsdi)
+{
+	pair<bool, set< ::Uml::Namespace> > ret;
+	ret.first = false;
+
+	set< ::Uml::Class> classes = ns.classes();
+	for (set< ::Uml::Class>::iterator i = classes.begin(); i != classes.end(); i++) {
+		set< ::Uml::CompositionChildRole> comps_c = ::Uml::CompositionPeerChildRoles(*i);
+		for (set< ::Uml::CompositionChildRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++) {
+			::Uml::Class theother = j->target();
+			set< ::Uml::Class> theother_descs = ::Uml::DescendantClasses(theother);
+			theother_descs.insert(theother);
+			for (set< ::Uml::Class>::iterator descs_i = theother_descs.begin(); descs_i != theother_descs.end(); descs_i++) {
+				::Uml::Namespace theother_ns = (::Uml::Namespace) descs_i->parent_ns();
+				if (theother_ns == ::Uml::Namespace(NULL))
+					ret.first = true;
+				else if (ns != theother_ns)
+					ret.second.insert(theother_ns);
+			}
+
+		}
+
+		if (uxsdi) {
+			set< ::Uml::Class> bases = i->baseTypes();
+			for (set< ::Uml::Class>::iterator j = bases.begin(); j != bases.end(); j++) {
+				::Uml::Class theother = *j;
+				::Uml::Namespace theother_ns = (::Uml::Namespace)theother.parent_ns();
+				if (theother_ns == ::Uml::Namespace(NULL))
+					ret.first = true;
+				else if (ns != theother_ns)
+					ret.second.insert(theother_ns);
+			}
+		}
+	}
+
+	return ret;
+}
+
+static set< ::Uml::Namespace> XMLNamespacesToImport(const ::Uml::Diagram &dgr, const bool uxsdi)
+{
+	set< ::Uml::Namespace> ret;
+
+	set< ::Uml::Class> classes = dgr.classes();
+	for (set< ::Uml::Class>::iterator i = classes.begin(); i != classes.end(); i++) {
+		set< ::Uml::CompositionChildRole> comps_c = ::Uml::CompositionPeerChildRoles(*i);
+		for (set< ::Uml::CompositionChildRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++) {
+			::Uml::Class theother = j->target();
+			set< ::Uml::Class> theother_descs = ::Uml::DescendantClasses(theother);
+			theother_descs.insert(theother);
+			for (set< ::Uml::Class>::iterator descs_i = theother_descs.begin(); descs_i != theother_descs.end(); descs_i++) {
+				::Uml::Namespace theother_ns = (::Uml::Namespace) descs_i->parent_ns();
+				if (theother_ns != ::Uml::Namespace(NULL))
+					ret.insert(theother_ns);
+			}
+
+		}
+
+		if (uxsdi) {
+			set< ::Uml::Class> bases = i->baseTypes();
+			for (set< ::Uml::Class>::iterator j = bases.begin(); j != bases.end(); j++) {
+				::Uml::Class theother = *j;
+				::Uml::Namespace theother_ns = (::Uml::Namespace)theother.parent_ns();
+				if (theother_ns != ::Uml::Namespace(NULL))
+					ret.insert(theother_ns);
+			}
+		}
+	}
+
+	return ret;
+}
+
+static bool IsCrossNSCompositionChildEnd(const ::Uml::Class &c)
+{
+	::Uml::Namespace ns = c.parent_ns();
+
+	set< ::Uml::CompositionParentRole> comps_c = ::Uml::AncestorCompositionPeerParentRoles(c);
+	for (set< ::Uml::CompositionParentRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++)
+	{
+		::Uml::Class theother = j->target();
+      
+		set< ::Uml::Class> desc = ::Uml::DescendantClasses(theother);
+		for (set< ::Uml::Class>::iterator jd = desc.begin(); jd != desc.end(); jd++)
+		{
+			::Uml::Class cc = *jd;
+
+			::Uml::Namespace theother_ns = (::Uml::Namespace) cc.parent_ns();
+			if (ns != theother_ns)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+static void GenerateXMLSchemaForClasses(const ::Uml::Diagram &dgr,
+			      ostream &output,
+			      const set< ::Uml::Class> &classes,
+			      const pair<bool, set< ::Uml::Namespace> > &xml_import_info,
+			      const map<string, string> &ns_map,
+			      const set<string> &ns_ignore_set,  
+			      bool uxsdi, bool xsd_el_ta, 
+			      bool qualified_attrs_ns)
+{
+
+	if (xml_import_info.first)
+		output << " xmlns=\"" << UmlNameToURI(dgr.name(), true, ns_map) << "\"" << endl;
+
+	for (set< ::Uml::Namespace>::const_iterator other_ns_i = xml_import_info.second.begin(); other_ns_i != xml_import_info.second.end(); other_ns_i++) {
+		output << " xmlns:" << other_ns_i->name() << "=\"" << UmlNameToURI(other_ns_i->name(), false, ns_map) << "\"" << endl;
+	}
+
+	output << " elementFormDefault=\"qualified\" " << endl;
+
+	if (qualified_attrs_ns)
+		output << " attributeFormDefault=\"qualified\" " << endl;
+
+	output << ">" << endl;
+
+	output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
+
+	if (xml_import_info.first)
+		output << "<xsd:include schemaLocation=\"" << dgr.name() << ".xsd\">" << endl;
+
+	for (set< ::Uml::Namespace>::const_iterator other_ns_i = xml_import_info.second.begin(); other_ns_i != xml_import_info.second.end(); other_ns_i++) {
+		output << "<xsd:import namespace=\"" << UmlNameToURI(other_ns_i->name(), false, ns_map) << "\" schemaLocation=\"" << dgr.name() << "_" << other_ns_i->name() << ".xsd\"/>" << endl;
+	}
+	output << endl;
+
+	vector< ::Uml::Class> globalElements;
+	set< ::Uml::Class>::const_iterator i = classes.begin();
+	while( i != classes.end() )
+	{
+		if(uxsdi || !(bool)i->isAbstract() )
+		{
+			GenerateXMLSchemaElement(*i,  output, ns_ignore_set, uxsdi, xsd_el_ta);
+			// XSD elements can't be of abstract types,
+			// don't make them globals
+			if (!uxsdi || !(bool)i->isAbstract()) {
+				set< ::Uml::Class> p_c = Uml::AncestorContainerClasses(*i);		//all possible containers
+				
+			//the condition: It's not contained or it's only container is itself or it's the child end of a composition with the parent end in other namespace
+			if ( (p_c.size() == 0) || ( (p_c.size() == 1) && ( *(p_c.begin()) == *i )) || IsCrossNSCompositionChildEnd(*i))
+			//if  (Uml::AncestorContainerClasses(*i).size() < 1 ) //it's not self contained
+				globalElements.push_back(*i);
+			}
+
+		}
+		++i;
+	}
+
+	vector< ::Uml::Class>::iterator j = globalElements.begin();
+	while (j != globalElements.end()) {
+		output << " <xsd:element name=\"" << j->name() <<
+			"\" type=\"" << j->name() << "Type\"/>" << endl;
+		j++;
+	}
+}
+
 void GenerateXMLSchema(const ::Uml::Namespace &ns,  ostream &output,
 		       const map<string, string> &ns_map,
                        const set<string> &ns_ignore_set,  
 		       bool uxsdi, bool xsd_el_ta, 
                        bool qualified_attrs_ns)
 {
-
-
 	::Uml::Diagram dgr = ns.parent();
 
-		output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
-		output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
+	output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+	output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
 
+	pair<bool, set< ::Uml::Namespace> > xml_import_info = XMLNamespacesToImport(ns, uxsdi);
 
-		set< ::Uml::Namespace> other_ns;
+	output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"" << UmlNameToURI(ns.name(), false, ns_map) << "\"" <<endl;
+	output << " xmlns:" << ns.name() << "=\"" << UmlNameToURI(ns.name(), false, ns_map) << "\"" << endl;
 
-		set< ::Uml::Namespace> other_ns_comp = Uml::CompositionPeerChildNamespaces(ns);
-		other_ns.insert(other_ns_comp.begin(), other_ns_comp.end());
+	GenerateXMLSchemaForClasses(dgr, output, ns.classes(), xml_import_info, ns_map, ns_ignore_set, uxsdi, xsd_el_ta, qualified_attrs_ns);
 
-		if (uxsdi) {
-			set< ::Uml::Namespace> other_ns_base = Uml::BaseTypesNamespaces(ns);
-			other_ns.insert(other_ns_base.begin(), other_ns_base.end());
-		}
+	output << endl << "</xsd:schema>" << endl;
+}
 
-		output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"" << NamespaceToURI(ns, ns_map) << "\"" <<endl;
-    output << " xmlns:" << ns.name() << "=\"" << NamespaceToURI(ns, ns_map) << "\"" << endl;
+void GenerateXMLSchema(const ::Uml::Diagram &dgr,  ostream &output,
+		       const map<string, string> &ns_map,
+                       const set<string> &ns_ignore_set,  
+		       bool uxsdi, bool xsd_el_ta, 
+                       bool qualified_attrs_ns)
+{
+	output << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+	output << "<?udm interface=\"" << dgr.name() << "\" version=\"" << dgr.version() << "\"?>" << endl;
 
-		for (set< ::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
-			output << " xmlns:" << other_ns_i->name() << "=\"" << NamespaceToURI(*other_ns_i, ns_map) << "\"" << endl;
-		}
+	pair<bool, set< ::Uml::Namespace> > xml_import_info;
+	xml_import_info.first = false;
+	xml_import_info.second = XMLNamespacesToImport(dgr, uxsdi);
 
-		output << " elementFormDefault=\"qualified\" " << endl;
+	output << "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"" <<endl;
+	//XXX2 output << " xmlns=\"" << UmlNameToURI(dgr.name(), true, ns_map) << "\"" << endl;
 
-		if (qualified_attrs_ns)
-			output << " attributeFormDefault=\"qualified\" " << endl;
+	GenerateXMLSchemaForClasses(dgr, output, dgr.classes(), xml_import_info, ns_map, ns_ignore_set, uxsdi, xsd_el_ta, qualified_attrs_ns);
 
-		output << ">" << endl;
-
-		output << "<!-- generated on " << GetTime().c_str() << " -->" << endl << endl;
-
-		for (set< ::Uml::Namespace>::iterator other_ns_i = other_ns.begin(); other_ns_i != other_ns.end(); other_ns_i++) {
-			output << "<xsd:import namespace=\"" << NamespaceToURI(*other_ns_i, ns_map) << "\" schemaLocation=\"" << other_ns_i->name() << ".xsd\"/>" << endl;
-		}
-		output << endl;
-
-		vector< ::Uml::Class> globalElements;
-		set< ::Uml::Class> classes = ns.classes();
-		set< ::Uml::Class>::iterator i = classes.begin();
-		while( i != classes.end() )
-		{
-			if(uxsdi || !(bool)i->isAbstract() )
-			{
-				GenerateXMLSchemaElement(*i,  output, ns_ignore_set, uxsdi, xsd_el_ta);
-				// XSD elements can't be of abstract types,
-				// don't make them globals
-				if (!uxsdi || !(bool)i->isAbstract()) {
-					set< ::Uml::Class> p_c = Uml::AncestorContainerClasses(*i);		//all possible containers
-					set< ::Uml::Namespace> o_ns = Uml::OtherCompositionPeerParentRolesNamespaces(*i);
-					// namespaces, other than this one, containing the parent ends of compositions having this class as child
-
-			
-				
-					//the condition: It's not contained or it's only container is itself
-					if ( (p_c.size() == 0) || ( (p_c.size() == 1) && ( *(p_c.begin()) == *i )) || (o_ns.size() > 0))
-					//if  (Uml::AncestorContainerClasses(*i).size() < 1 ) //it's not self contained
-						globalElements.push_back(*i);
-				}
-
-			}
-			++i;
-		}
-
-		vector< ::Uml::Class>::iterator j = globalElements.begin();
-		while (j != globalElements.end()) {
-				output << " <xsd:element name=\"" << j->name() <<
-					"\" type=\"" << j->name() << "Type\"/>" << endl;
-				j++;
-		}
-
-		output << endl << "</xsd:schema>" << endl;
+	output << endl << "</xsd:schema>" << endl;
 }
 
 
@@ -1148,6 +1284,13 @@ void GenerateXMLSchema(const ::Uml::Namespace &ns,  ostream &output)
 	map<string, string> empty_ns_map;
 	set<string> empty_ns_ignore_set;
 	GenerateXMLSchema(ns, output, empty_ns_map, empty_ns_ignore_set);
+}
+
+void GenerateXMLSchema(const ::Uml::Diagram &dgr,  ostream &output)
+{
+	map<string, string> empty_ns_map;
+	set<string> empty_ns_ignore_set;
+	GenerateXMLSchema(dgr, output, empty_ns_map, empty_ns_ignore_set);
 }
 
 

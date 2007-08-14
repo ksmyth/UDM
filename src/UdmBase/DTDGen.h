@@ -26,10 +26,10 @@ namespace DTDGen
 	//translates a cardinality specification vector to a DTD cardinality string
 	string card_to_dtdspec(const class_w_cp& cwcp);
 
-	void AddUMLNamespaceToURIMapping(const char *optp, map<string, string> &ns_map);
+	void AddUMLContainerNameToURIMapping(const char *optp, map<string, string> &ns_map);
 
-  void AddUMLNamespaceToIgnoreList(const char *optp, set<string> &ns_ignore_set);
-  void AddUMLNamespaceToQualifiedAttrsNSList(const char *optp, set<string> &qualifiedAtrrsNS_set);
+	void AddUMLContainerNameToIgnoreList(const char *optp, set<string> &ns_ignore_set);
+	void AddUMLContainerNameToQualifiedAttrsNSList(const char *optp, set<string> &qualifiedAtrrsNS_set);
 
 	//generates DTD elements
 	void GenerateDTDElement(const ::Uml::Class &c,  ostream &output);
@@ -39,6 +39,7 @@ namespace DTDGen
 
 	//generates complete DTD 
 	void GenerateDTD(const ::Uml::Namespace &ns,  ostream &output);
+	void GenerateDTD(const ::Uml::Diagram &dgr,  ostream &output);
 
 	//generate XSD attribute list
 	void GenerateXMLSchemaAttributes(const ::Uml::Class &c,  ostream &output, bool uxsdi = false);
@@ -49,6 +50,8 @@ namespace DTDGen
 	//generates complete XML Schema 
 	void GenerateXMLSchema(const ::Uml::Namespace &ns,  ostream &output, const map<string, string> &ns_map, const set<string> &ns_ignore_set, bool uxsdi = false, bool xsd_el_ta = false, bool qualified_attrs_ns = false);
 	void GenerateXMLSchema(const ::Uml::Namespace &ns,  ostream &output);
+	void GenerateXMLSchema(const ::Uml::Diagram &dgr,  ostream &output, const map<string, string> &ns_map, const set<string> &ns_ignore_set, bool uxsdi = false, bool xsd_el_ta = false, bool qualified_attrs_ns = false);
+	void GenerateXMLSchema(const ::Uml::Diagram &dgr,  ostream &output);
 
 
 };

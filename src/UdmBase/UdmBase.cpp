@@ -351,7 +351,7 @@ namespace Udm
 		}//eo while *scd_i != '\0'
 		if (array_val != scd_i)
 			ret.push_back(string(array_val));			//last string in array
-		delete sc_delimited_c_str;						//clean up the buffer 
+		delete [] sc_delimited_c_str;						//clean up the buffer 
 		return ret;										//return the vector
 	};
 
@@ -455,7 +455,7 @@ namespace Udm
 				throw udm_exception(string("Parsing of bool-array(last value) failed: ") + sc_delimited);
 		}
 
-		delete sc_delimited_c_str;						//clean up the buffer 
+		delete [] sc_delimited_c_str;						//clean up the buffer 
 		return ret;
 
 	};
@@ -516,7 +516,7 @@ namespace Udm
 		
 		if (array_val != scd_i) ret.push_back(_atoi64(array_val));		//last value in array is not ended with ';'!
 		
-		delete sc_delimited_c_str;						//clean up the buffer 
+		delete [] sc_delimited_c_str;						//clean up the buffer 
 		return ret;
 
 	};
@@ -546,7 +546,7 @@ namespace Udm
 			a_ci++;									//go on 
 		}
 		
-		delete lit_integer;
+		delete [] lit_integer;
 
 		setStringAttr(meta, encoded_attr, direct);
 
@@ -592,7 +592,7 @@ namespace Udm
 		if((array_val != scd_i) && sscanf(array_val, "%lf", &d) != 1) throw udm_exception("Attr is of non-float format");
 		ret.push_back(d);								//last value in array is not ended with ';' !
 					
-		delete sc_delimited_c_str;						//clean up the buffer 
+		delete [] sc_delimited_c_str;						//clean up the buffer 
 		return ret;
 
 	};
@@ -618,7 +618,7 @@ namespace Udm
 			a_ci++;									//go on 
 		}
 		
-		delete lit_double;
+		delete [] lit_double;
 		//set the attribute as a string attribute
 		setStringAttr(meta, encoded_attr, direct);
 	};
@@ -1681,9 +1681,13 @@ namespace Udm
 
 		UDM_DLL void MetaDepository::RemoveDiagram(const string& DgrName)
 		{
-			meta_dep->erase(DgrName);
-			if (meta_dep->size() == 0)
-				delete meta_dep;
+			if (meta_dep != NULL) {
+				meta_dep->erase(DgrName);
+				if (meta_dep->size() == 0) {
+					delete meta_dep;
+					meta_dep = NULL;
+				}
+			}
 
 		};
 }

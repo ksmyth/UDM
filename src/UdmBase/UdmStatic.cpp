@@ -3342,7 +3342,7 @@ namespace UdmStatic
 				for (ba_arr_item_count=0; ba_arr_item_count < ba_arr_item_no; ba_arr_item_count++)
 					ba_arr_value.push_back(*(bool_val + ba_arr_item_count));
 
-				delete bool_val;
+				delete [] bool_val;
 				
 				//add the attribute to the object
 			
@@ -3419,7 +3419,7 @@ namespace UdmStatic
 				for (ia_arr_item_count=0; ia_arr_item_count < ia_arr_item_no; ia_arr_item_count++)
 					ia_arr_value.push_back(*(long_val + ia_arr_item_count));
 
-				delete long_val;
+				delete [] long_val;
 				
 				//add the attribute to the object
 			
@@ -3496,7 +3496,7 @@ namespace UdmStatic
 				for (ra_arr_item_count=0; ra_arr_item_count < ra_arr_item_no; ra_arr_item_count++)
 					ra_arr_value.push_back(*(double_val + ra_arr_item_count));
 
-				delete double_val;
+				delete [] double_val;
 				
 				//add the attribute to the object
 			
@@ -3578,13 +3578,15 @@ namespace UdmStatic
 		//m_type
 		//write the name of my type to file
 		//namespacename:classname
-		string ns_name = ::Uml::Namespace(m_type.parent()).name();
+		string ns_name("");
+		if ((::Uml::Namespace) m_type.parent_ns() != ::Uml::Namespace(NULL))
+			ns_name = ((::Uml::Namespace) m_type.parent_ns()).name();
 		long type_str_length = ns_name.size() + 1 + ((string)m_type.name()).size();
 		char * m_type_name = new char[type_str_length + 1];
 		strcpy(m_type_name, (ns_name + ':' + (string)m_type.name()).c_str());
 		fwrite(m_type_name, type_str_length + 1, 1, f);
 		length += (type_str_length + 1);	
-		delete m_type_name;
+		delete [] m_type_name;
 
 
 		//here we should write two things:
@@ -3717,7 +3719,7 @@ namespace UdmStatic
 			char * sa_val = new char[sa_val_length + 1];
 			strcpy(sa_val, ((*sa_i).second).c_str());
 			fwrite(sa_val, sa_val_length + 1, 1, f);
-			delete sa_val;
+			delete [] sa_val;
 			length += sizeof(sa_val_length + 1);
 
 			/*
@@ -3881,7 +3883,7 @@ namespace UdmStatic
 				char * sa_val = new char[sa_val_length + 1];
 				strcpy(sa_val, (*sa_arr_value_i).c_str());
 				fwrite(sa_val, sa_val_length + 1, 1, f);
-				delete sa_val;
+				delete [] sa_val;
 				length += sizeof(sa_val_length + 1);
 				sa_arr_value_i++;
 			}
@@ -4453,7 +4455,18 @@ namespace Uml
 
 	void InitClass(const Class &obj, const Namespace &parent, const char *name, bool isAbstract, const char *stereo, const char * from)
 	{
-		UdmStatic::CreateComposition(parent, Namespace::meta_classes, obj, Class::meta_parent);
+		UdmStatic::CreateComposition(parent, Namespace::meta_classes, obj, Class::meta_parent_ns);
+		UdmStatic::CreateComposition(parent.parent(), Diagram::meta_classes, obj, Class::meta_parent);
+
+		obj.name() = name;
+		if(stereo) obj.stereotype() = stereo;
+		if (from) obj.from() = from;
+		obj.isAbstract() = isAbstract;
+	}
+
+	void InitClass(const Class &obj, const Diagram &parent, const char *name, bool isAbstract, const char *stereo, const char * from)
+	{
+		UdmStatic::CreateComposition(parent, Diagram::meta_classes, obj, Class::meta_parent);
 
 		obj.name() = name;
 		if(stereo) obj.stereotype() = stereo;
@@ -4490,7 +4503,15 @@ namespace Uml
 	
 	void InitAssociation(const Association &obj, const Namespace &parent, const char *name)
 	{
-		UdmStatic::CreateComposition(parent, Namespace::meta_associations, obj, Association::meta_parent);
+		UdmStatic::CreateComposition(parent, Namespace::meta_associations, obj, Association::meta_parent_ns);
+		UdmStatic::CreateComposition(parent.parent(), Diagram::meta_associations, obj, Association::meta_parent);
+
+		obj.name() = name;
+	}
+
+	void InitAssociation(const Association &obj, const Diagram &parent, const char *name)
+	{
+		UdmStatic::CreateComposition(parent, Diagram::meta_associations, obj, Association::meta_parent);
 
 		obj.name() = name;
 	}
@@ -4515,7 +4536,15 @@ namespace Uml
 
 	void InitComposition(const Composition &obj, const Namespace &parent, const char *name)
 	{
-		UdmStatic::CreateComposition(parent, Namespace::meta_compositions, obj, Composition::meta_parent);
+		UdmStatic::CreateComposition(parent, Namespace::meta_compositions, obj, Composition::meta_parent_ns);
+		UdmStatic::CreateComposition(parent.parent(), Diagram::meta_compositions, obj, Composition::meta_parent);
+
+		obj.name() = name;
+	}
+
+	void InitComposition(const Composition &obj, const Diagram &parent, const char *name)
+	{
+		UdmStatic::CreateComposition(parent, Diagram::meta_compositions, obj, Composition::meta_parent);
 
 		obj.name() = name;
 	}
@@ -4577,6 +4606,11 @@ namespace Uml
 	UDM_DLL void SetClass(Class &what, const Namespace &what_ns, const char *target_name)
 	{
 		what = classByName(what_ns, target_name);
+	};
+
+	UDM_DLL void SetClass(Class &what, const Diagram &what_dgr, const char *target_name)
+	{
+		what = classByName(what_dgr, target_name);
 	};
 
 	UDM_DLL void SetNamespace(Namespace &what, const Diagram &what_dgr, const char *target_name)
