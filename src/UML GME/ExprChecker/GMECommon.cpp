@@ -334,20 +334,47 @@ namespace GME {
 			GetAssociationEnds( vecInheritances[ i ].p, "", strKind2, vecFCOs );
 	}
 
-	std::string GetNamespace( CComPtr<IMgaFCO> spFCO )
+	std::string GetNamespaceName( CComPtr<IMgaFCO> spFCO )
 	{
 		CComPtr<IMgaModel> spModel;
 		COMTHROW( spFCO->get_ParentModel( &spModel ) );
-		ASSERT( spModel.p != NULL );
+
+		if ( spModel.p == NULL )
+			return "";
 
 		std::string strKind = GetObjectKind( ( CComPtr<IMgaObject> ) spModel );
-		std::string strName = GetObjectName( ( CComPtr<IMgaObject> ) spModel );
+
+		if ( strKind == "Namespace" )
+			return GetObjectName( ( CComPtr<IMgaObject> ) spModel );
 
 		if ( strKind == "ClassDiagram" )
-			return GetNamespace( ( CComPtr<IMgaFCO> ) spModel );
+			return GetNamespaceName( ( CComPtr<IMgaFCO> ) spModel );
 
-		ASSERT( strKind == "Package" || strKind == "Namespace" );
-		return GetObjectName( ( CComPtr<IMgaObject> ) spModel );
+		return "";
+	}
+
+	std::string GetDiagramName( CComPtr<IMgaFCO> spFCO )
+	{
+		CComPtr<IMgaModel> spModel;
+		COMTHROW( spFCO->get_ParentModel( &spModel ) );
+		ASSERT ( spModel.p != NULL );
+
+		std::string strKind = GetObjectKind( ( CComPtr<IMgaObject> ) spModel );
+
+		if ( strKind == "Package" )
+			return GetObjectName( ( CComPtr<IMgaObject> ) spModel );
+
+		return GetDiagramName( ( CComPtr<IMgaFCO> ) spModel );
+	}
+
+	std::string GetQualifiedName( CComPtr<IMgaFCO> spFCO )
+	{
+		std::string strName = GetDiagramName( spFCO.p ) + "::";
+		std::string strNs = GetNamespaceName( spFCO.p );
+		if ( !strNs.empty() )
+			strName += strNs + "::";
+		strName += LowerFirst( GetObjectName( spFCO.p ) );
+		return strName;
 	}
 
 	/*
