@@ -849,10 +849,13 @@ namespace Uml
 	{
 		set<Namespace> ns_es = d.namespaces();
 		if (ns_es.size() > 1) throw udm_exception("classByName(Diagram, class_name) - more than one namespace found in diagram!");
-
-		Namespace ns = namespaceByName(d, d.name());
-		if (ns) return classByName(ns, name);
-		else return Class();
+		//get the only namespace
+		if (ns_es.size())
+		{
+			Namespace ns = d.begin();
+			return classByName(ns, name);
+		}
+		return Class();
 	};
 
 	
