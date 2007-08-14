@@ -169,6 +169,11 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects()
 
 };
 
+UDM_DLL set<Object> Object::GetAdjacentUniqueObjects() {
+	std::multiset< Udm::Object> res= GetAdjacentObjects();
+	return std::set< Udm::Object>( res.begin(), res.end());
+}
+
 // UDM TOMI Paradigm Independent Interface
 // Retrieves the adjacent objects of an object. The adjacent objects 
 // are of the type of clsType or derived from it. The returned set can 
@@ -230,6 +235,11 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 	return objAdjacentObs;
 
 };
+
+UDM_DLL set<Object> Object::GetAdjacentUniqueObjects( const ::Uml::Class & clsDstType) {
+	std::multiset< Udm::Object> res= GetAdjacentObjects( clsDstType);
+	return std::set< Udm::Object>( res.begin(), res.end());
+}
 
 // UDM TOMI Paradigm Independent Interface
 // Retrieves the adjacent objects of an object via link instance of ascType. 
@@ -324,14 +334,16 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 				if ((::Uml::Namespace) clsDstType.parent_ns() != ::Uml::Namespace(NULL))
 					clsDst_cross_ph_name += (string)(((::Uml::Namespace) clsDstType.parent_ns()).name());
 
-				string cross_clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
-				if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
-				  cross_clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
-
-				::Uml::Class cross_cl = ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), cross_clsAssociation_name );
+				string cross_clsAssociation_name;
+				if (ascType.clsAssociation)
+				{
+					cross_clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
+					if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
+						cross_clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
+				}
 
 				//we have to translate ascType as well
-				AssociationInfo newAscType(ascType.clsAssociation ? cross_cl : ascType.clsAssociation);
+				AssociationInfo newAscType(ascType.clsAssociation ? ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), cross_clsAssociation_name ) : ascType.clsAssociation);
 
 				// don't proceed if no cross association was found
 				if ((ascType.clsAssociation != ::Uml::Class(NULL) && newAscType.clsAssociation != ::Uml::Class(NULL)) || ascType.clsAssociation == ::Uml::Class(NULL))
@@ -352,6 +364,11 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 	return objAdjacentObs;
 
 };
+
+UDM_DLL set<Object> Object::GetAdjacentUniqueObjects( const ::Uml::Class & clsDstType, const AssociationInfo& ascType) {
+	std::multiset< Udm::Object> res= GetAdjacentObjects( clsDstType, ascType);
+	return std::set< Udm::Object>( res.begin(), res.end());
+}
 
 // UDM TOMI Paradigm Independent Interface
 // Retrieves the adjacent objects, together with the association class,
@@ -429,14 +446,16 @@ UDM_DLL multiset< pair<Object, Object> > Object::GetAdjacentObjectsWithAssocClas
 				if ((::Uml::Namespace) clsDstType.parent_ns() != ::Uml::Namespace(NULL))
 					clsDst_cross_ph_name += (string)(((::Uml::Namespace) clsDstType.parent_ns()).name());
 
-				string cross_clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
-				if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
-				  cross_clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
-
-				::Uml::Class cross_cl = ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), cross_clsAssociation_name );
+				string cross_clsAssociation_name;
+				if (ascType.clsAssociation)
+				{
+					cross_clsAssociation_name = (string)ascType.clsAssociation.name()+ Udm::cross_delimiter;
+					if ((::Uml::Namespace) ascType.clsAssociation.parent_ns() != ::Uml::Namespace(NULL))
+						cross_clsAssociation_name += (string)(((::Uml::Namespace) ascType.clsAssociation.parent_ns()).name());
+				}
 
 				//we have to translate ascType as well
-				AssociationInfo newAscType(ascType.clsAssociation ? cross_cl : ascType.clsAssociation);
+				AssociationInfo newAscType(ascType.clsAssociation ? ::Uml::classByName( ::Uml::GetTheOnlyNamespace(*(pr->GetCrossMeta().dgr)), cross_clsAssociation_name ) : ascType.clsAssociation);
 
 				// don't proceed if no cross association was found
 				if ((ascType.clsAssociation != ::Uml::Class(NULL) && newAscType.clsAssociation != ::Uml::Class(NULL)) || ascType.clsAssociation == ::Uml::Class(NULL))
@@ -1093,21 +1112,29 @@ UDM_DLL set<Object> Object::GetAssociationClassObjects(Object dstObject, const A
 		for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();
 					p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
-						::Uml::Class assocClass=::Uml::Association(p_currAssocRole->parent()).assocClass();
+			::Uml::Class assocClass=::Uml::Association(p_currAssocRole->parent()).assocClass();
 
 			bool	isAssocClass=assocClass?true:false;
+
+			// We want to find assoc. class. If it does not exist...
+			if(!isAssocClass) continue;
 
 			// Checking the type given in ascType, ignoring if it was NULL
 			if(ascType.clsAssociation!=::Uml::Class(NULL) && !Uml::IsDerivedFrom(ascType.clsAssociation,assocClass) ) continue;
 	
 
-			// We want to find assoc. class. If it does not exist...
-			if(!isAssocClass) continue;
-
+			
 			string strSrcRole=p_currAssocRole->name();
 			string strDstRole=::Uml::theOther(*p_currAssocRole).name();
 
-			if((ascType.clsAssociation)&&(strSrcRole !=ascType.strSrcRoleName)) continue;
+			if (ascType.clsAssociation)
+			{
+				if ((ascType.strSrcRoleName != "") && (strSrcRole !=ascType.strSrcRoleName))continue;
+				if ((ascType.strDstRoleName != "") && (strDstRole !=ascType.strDstRoleName))continue;
+			}
+
+			//if((ascType.clsAssociation)&&(strSrcRole !=ascType.strSrcRoleName)) continue;
+
 
 			//impls are cloned in getAssociation() call!
 			vector<ObjectImpl*>dstPeers=impl->getAssociation(::Uml::theOther(*p_currAssocRole),Udm::CLASSFROMTARGET);
@@ -1124,8 +1151,8 @@ UDM_DLL set<Object> Object::GetAssociationClassObjects(Object dstObject, const A
 					if(objPair.first==dstObject ||objPair.second==dstObject)
 						objsRet.insert(objRet);
 				}
-            else
-                  objsRet.insert(objRet);
+				else
+					objsRet.insert(objRet);
  
 			}
 		}
@@ -1935,7 +1962,7 @@ UDM_DLL string Object::getPath( const std::string& strDelimiter , bool bReverseO
 				return UdmUtil::ExtractName(*this,att_name) + strDelimiter;
 			else
 			{
-				if (omit_lead_delim) 
+				if (omit_lead_delim)
 					return UdmUtil::ExtractName(*this, att_name);
 				else
 					return strDelimiter + UdmUtil::ExtractName(*this, att_name);
@@ -1951,9 +1978,9 @@ UDM_DLL string Object::getPath( const std::string& strDelimiter , bool bReverseO
 	else 
 	{
 		if (bReverseOrder)
-			return UdmUtil::ExtractName(*this,att_name) + strDelimiter + GetParent().getPath(strDelimiter, bReverseOrder, bNeedRootFolder);
+			return UdmUtil::ExtractName(*this,att_name) + strDelimiter + GetParent().getPath(strDelimiter, bReverseOrder, bNeedRootFolder, att_name, omit_lead_delim);
 		else
-			return GetParent().getPath(strDelimiter, bReverseOrder, bNeedRootFolder) + strDelimiter + UdmUtil::ExtractName(*this,att_name);
+			return GetParent().getPath(strDelimiter, bReverseOrder, bNeedRootFolder, att_name, omit_lead_delim) + strDelimiter + UdmUtil::ExtractName(*this,att_name);
 
 	}
 
