@@ -535,19 +535,19 @@ namespace Uml
 
 		set<CompositionParentRole> comps_c = AncestorCompositionPeerParentRoles(c);
 		for (set<CompositionParentRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++)
-    {
+		{
 			Class theother = j->target();
 
       
-      set<Class> desc = DescendantClasses(theother);
-   		for (set<Class>::iterator jd = desc.begin(); jd != desc.end(); jd++)
-      {
-  			Class cc = *jd;
+			set<Class> desc = DescendantClasses(theother);
+			for (set<Class>::iterator jd = desc.begin(); jd != desc.end(); jd++)
+			{
+				Class cc = *jd;
 
-			  Namespace theother_ns = (Namespace)cc.parent();
-			  if (ns != theother_ns)
-				  ret.insert(theother_ns);
-      }
+				Namespace theother_ns = (Namespace)cc.parent();
+				if (ns != theother_ns)
+					ret.insert(theother_ns);
+			}
 		}
 
 		return ret;
