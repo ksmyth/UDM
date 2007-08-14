@@ -100,7 +100,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmCint", "UdmCint\UdmCint.
 EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 6
 		SccProjectUniqueName0 = Udm.vcproj
 		SccProjectName0 = \u0022$/MoBIESTransition/UDM\u0022,\u0020YOXAAAAA
 		SccLocalPath0 = ..
@@ -126,6 +126,11 @@ Global
 		SccProjectName4 = \u0022$/MoBIESTransition/UDM\u0022,\u0020YOXAAAAA
 		SccLocalPath4 = UdmOclPat
 		SccProvider4 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = false
+		SccProjectUniqueName5 = UdmCint\\UdmCint.vcproj
+		SccProjectName5 = \u0022$/MoBIESTransition/udm_ns/src/UdmCint\u0022,\u0020RNABAAAA
+		SccLocalPath5 = UdmCint
+		SccProvider5 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
 		CanCheckoutShared = false
 	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
