@@ -216,7 +216,7 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="cd &quot;$(InputDir)quot;
+						CommandLine="cd &quot;$(InputDir)&quot;
 &quot;$(UDM_PATH)\bin\Udm.exe&quot; &quot;$(InputPath)&quot; -v
 "
 						Outputs="$(InputName).xsd;$(InputName).cpp;$(InputName).h"/>
