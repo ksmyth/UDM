@@ -249,7 +249,6 @@ err_ar:
 
 		::Uml::Class thischildkind = (::Uml::Class)::Uml::theOther(cpr).target();
 		kinds.insert(thischildkind);
-		string oname(thischildkind.name());
 
 		i = unique_names.size();
 		unique_names.insert(string("meta_") + aname);
@@ -266,7 +265,12 @@ err_cpr:
 	while (kinds_i != kinds.end())
 	{
 		::Uml::Class childkind = *kinds_i++;
-		string kind_children_name = childkind.getPath2("_", false);
+
+		string kind_children_name;
+		if (((Namespace)cl.parent_ns()) != ((Namespace)childkind.parent_ns()))
+			kind_children_name = childkind.getPath2("_", false);
+		else
+			kind_children_name = childkind.name();
 
 		i = unique_names.size();
 		unique_names.insert(kind_children_name + "_kind_children");
