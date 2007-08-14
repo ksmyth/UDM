@@ -78,7 +78,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="UdmUtil.lib UdmBase.lib UDMPOI.lib UdmOcl.lib Uml.lib UdmDom.lib UdmGme.lib UdmXMI.lib Xalan-C_1.lib xerces-c_2.lib zlib.lib GOCL.lib"
-				OutputFile="..\..\bin\UdmDll_3_1_1.dll"
+				OutputFile="..\..\bin\UdmDll_3_1_2.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_5_0\lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xalan-c_1_8_0\lib&quot;"
@@ -176,7 +176,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="UdmBaseD.lib UdmOclD.lib UdmPOID.lib UmlD.lib UdmDomD.lib UdmGmeD.lib UdmXMID.lib UdmUtilD.lib Xalan-C_1D.lib xerces-c_2D.lib zlibD.lib GOCLD.lib"
 				ShowProgress="0"
-				OutputFile="..\..\bin\UdmDll_3_1_1D.dll"
+				OutputFile="..\..\bin\UdmDll_3_1_2D.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_5_0\lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xalan-c_1_8_0\lib&quot;"
