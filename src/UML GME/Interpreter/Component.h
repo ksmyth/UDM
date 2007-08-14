@@ -248,7 +248,7 @@ CHANGELOG
     	CCompositeClass *GetComposite()		{ return composite; }
     	bool GetFlag()						{ return flag; }
     	void SetFlag(bool val)				{ flag = val; }
-		virtual dummy(){};
+		virtual int dummy(){return 0;};
 		virtual CPackageBuilder * GetPackage() = 0;
     
     };
