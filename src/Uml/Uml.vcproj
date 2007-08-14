@@ -80,8 +80,7 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="copy .\Uml.h ..\..\include"/>
+				Name="VCPostBuildEventTool"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -121,7 +120,8 @@
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy .\Uml.h ..\..\include"/>
+				CommandLine="copy .\Uml.h ..\..\include
+"/>
 			<Tool
 				Name="VCPreBuildEventTool"
 				CommandLine="if exist ..\..\etc\Uml_udm.xml attrib -r ..\..\etc\Uml_udm.xml
@@ -129,6 +129,7 @@ if exist *.cpp attrib -r *.cpp
 if exist *.h attrib -r *.h
 if exist *.xsd attrib -r *.xsd
 if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
+
 "/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
@@ -170,7 +171,8 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				Name="VCMIDLTool"/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy .\Uml.h ..\..\include"/>
+				CommandLine="copy .\Uml.h ..\..\include
+"/>
 			<Tool
 				Name="VCPreBuildEventTool"
 				CommandLine="if exist ..\..\etc\Uml_udm.xml attrib -r ..\..\etc\Uml_udm.xml
@@ -232,7 +234,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				Name="BootUdmCompile Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="%UDM_PATH%\bin.net\Udm.exe &quot;$(InputPath)&quot; -m -l UDM_DLL
+					CommandLine="%UDM_PATH%\bin.net\Udm.exe &quot;$(InputPath)&quot; -g -m -l UDM_DLL
 "
 					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
 			</FileConfiguration>
@@ -240,7 +242,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				Name="BootUdmCompile Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="%UDM_PATH%\bin.net\Udm.exe &quot;$(InputPath)&quot; -m -l UDM_DLL"
+					CommandLine="%UDM_PATH%\bin.net\UdmD.exe &quot;$(InputPath)&quot; -g -m -l UDM_DLL"
 					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
 			</FileConfiguration>
 		</File>
