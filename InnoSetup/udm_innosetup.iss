@@ -5,9 +5,21 @@
 #pragma option -v+
 #pragma verboselevel 9
 
-#define UDMPATH "C:\Projects\udm_ns2"
+#define UDMPATH GetEnv('UDM_PATH')
+#if UDMPATH == ""
+#define UDMPATH "C:\Projects\UDM\trunk"
+#endif
+
+#define UDM3rdPartyPATH GetEnv('UDM_3RDPARTY_PATH')
+#if UDM3rdPartyPATH == ""
 #define UDM3rdPartyPATH "C:\Projects\udm_ns_3rdparty"
-#define GREATPATH "C:\Projects\GReAT"
+#endif
+
+#define GREATPATH GetEnv('GREAT_PATH')
+#if GREATPATH == ""
+#define GREATPATH "C:\Projects\GReAT\trunk"
+#endif
+
 #define UDMDLL "UdmDll_3_1_2.dll"
 #define UDMDLLD "UdmDll_3_1_2D.dll"
 #define UDMVER "3.1.2"
