@@ -7,7 +7,7 @@
 
 #define UDMPATH GetEnv('UDM_PATH')
 #if UDMPATH == ""
-#define UDMPATH "C:\Projects\UDM\trunk"
+#define UDMPATH "C:\Projects\UDM"
 #endif
 
 #define UDM3rdPartyPATH GetEnv('UDM_3RDPARTY_PATH')
@@ -17,7 +17,7 @@
 
 #define GREATPATH GetEnv('GREAT_PATH')
 #if GREATPATH == ""
-#define GREATPATH "C:\Projects\GReAT\trunk"
+#define GREATPATH "C:\Projects\GReAT"
 #endif
 
 #define UDMDLL "UdmDll_3_1_2.dll"
