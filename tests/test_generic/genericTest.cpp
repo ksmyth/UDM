@@ -266,6 +266,11 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				Bulb bulb1	= Bulb::Create(doubleBulbLamp); 
 				bulb1.name() = "Bulb1";
 				bulb1.position() = "(100,150)";
+
+				// test that double precision is OK when converting to string inside DOM
+				bulb1.Voltage() = 219.987654321012345678;
+				CPPUNIT_ASSERT(bulb1.Voltage() == 219.987654321012345678);
+
 				ElectricTerminal b1t1 = ElectricTerminal::Create(bulb1);
 				b1t1.position() = "(220,100)";
 				ElectricTerminal b1t2 = ElectricTerminal::Create(bulb1);

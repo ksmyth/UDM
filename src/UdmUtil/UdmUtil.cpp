@@ -704,4 +704,29 @@ namespace UdmUtil
 		return r;
 	}
 
+	UDM_DLL string doubleToString(double val, int minimum_precision)
+	{
+		const int MAXIMAL_PRECISION = 19;
+		int precision = minimum_precision;	// precision to start width
+
+		char result[64];
+
+		int precision_is_good;
+
+		do {
+			ASSERT(precision <= MAXIMAL_PRECISION);
+
+			sprintf(result, "%.*f", precision, val);
+
+			double d;
+			if (sscanf(result, "%lf", &d) != 1) throw udm_exception("Internal error when converting from double to string");
+
+			precision_is_good = d == val;
+			precision++;
+			    
+		}
+		while (!precision_is_good);
+
+		return result;
+	}
 };

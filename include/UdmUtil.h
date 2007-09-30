@@ -52,6 +52,10 @@ namespace UdmUtil
 	UDM_DLL vector<string> string_to_vector(const string &src, const char separator);
 
 	UDM_DLL string replace_delimiter(const string &s, const string &old_d, const string &new_d);
+
+	// Converts a double value to a string, using the least necessary
+	// precision to represent the original double value.
+	UDM_DLL string doubleToString(double val, int minimum_precision = 2);
 };
 
 #endif //MOBIES_UDMUTIL_H

@@ -1214,9 +1214,7 @@ namespace UdmDom
 				if(direct)
 				{
 					//set the attribute
-					char astr[50];
-					sprintf(astr, "%lf", a);
-					dom_element.setAttribute(DOMString(name.c_str()), DOMString(astr));
+					dom_element.setAttribute(DOMString(name.c_str()), DOMString(UdmUtil::doubleToString(a).c_str()));
 
 					//desynch the attribute
 					desynch_attribute(name);
@@ -1227,9 +1225,7 @@ namespace UdmDom
 					if (!is_attribute_desynched(name))
 					{
 						//if not, set the attribute
-						char astr[50];
-						sprintf(astr, "%lf", a);
-						dom_element.setAttribute(DOMString(name.c_str()), DOMString(astr));
+						dom_element.setAttribute(DOMString(name.c_str()), DOMString(UdmUtil::doubleToString(a).c_str()));
 					}
 
 				}
@@ -1237,9 +1233,7 @@ namespace UdmDom
 			}
 			else
 			{
-				char astr[50];
-				sprintf(astr, "%lf", a);
-				dom_element.setAttribute(DOMString(name.c_str()), DOMString(astr));
+				dom_element.setAttribute(DOMString(name.c_str()), DOMString(UdmUtil::doubleToString(a).c_str()));
 			}
 				
 			//go through all derived and instances
@@ -1260,12 +1254,6 @@ namespace UdmDom
 				instance->release();
 			}
 
-			/*
-			char astr[50];
-			sprintf(astr, "%lf", a);
-			dom_element.setAttribute(DOMString(name.c_str()), DOMString(astr));
-			*/
-			
 		}
 
 		long getAttrStatus(const ::Uml::Attribute &meta) const

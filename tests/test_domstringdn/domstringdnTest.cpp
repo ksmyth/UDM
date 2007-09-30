@@ -212,7 +212,7 @@ string xml_verify_str =
 	string xml_verify_str1 = 
 
 "<RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"LampDiagram.xsd\">\n\
-	<Lamp name=\"cool!\" sample=\"3.141590\" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Default Lamp Name\"/>\n\
+	<Lamp name=\"cool!\" sample=\"3.14159\" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Default Lamp Name\"/>\n\
 </RootFolder>\n\n";
 
 

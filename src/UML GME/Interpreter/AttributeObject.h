@@ -11,6 +11,7 @@ CHANGELOG
 
 #ifdef UML2XML
 #include "Uml.h"
+#include "UdmUtil.h"
 #endif
 
 //Visibility specifiers
