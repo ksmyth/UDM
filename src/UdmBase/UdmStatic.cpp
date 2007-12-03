@@ -3742,7 +3742,7 @@ namespace UdmStatic
 			strcpy(sa_val, ((*sa_i).second).c_str());
 			fwrite(sa_val, sa_val_length + 1, 1, f);
 			delete [] sa_val;
-			length += sizeof(sa_val_length + 1);
+			length += sa_val_length + 1;
 
 			/*
 				add here code that saves whether it's a desynched attribute
