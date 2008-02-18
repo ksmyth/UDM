@@ -37,19 +37,13 @@ std::string NameToFilename(const std::string src)
 	return ret;
 }
 
-void GenerateDSD(const ::Uml::Namespace &ns,
-		 bool generate_dtd,
-		 bool uxsdi,
-		 bool xsd_el_ta,
-		 const map<string, string> &ns_map,
-		 const set<string> &ns_ignore_set,
-		 bool qualifiedAtrrsNS)
+void GenerateDSD(const ::Uml::Namespace &ns, const UdmOpts &opts, bool qualified_attrs_ns)
 {
 	if (!ns) return;
 	ofstream ff;
 	string nsfname = NameToFilename(ns.getPath2("_"));
 
-	if (generate_dtd)
+	if (opts.generate_dtd)
 	{
 		ff.open( (nsfname+".dtd").c_str() );
 		if(!ff.good()) throw udm_exception("Error opening for write " + nsfname + ".dtd");
@@ -60,22 +54,15 @@ void GenerateDSD(const ::Uml::Namespace &ns,
 
 	ff.open( (nsfname+".xsd").c_str() );
 	if(!ff.good()) throw udm_exception("Error opening for write " + nsfname + ".xsd");
-	else DTDGen::GenerateXMLSchema(ns, ff, ns_map, ns_ignore_set, uxsdi, xsd_el_ta, qualifiedAtrrsNS);
+	else DTDGen::GenerateXMLSchema(ns, ff, opts.ns_map, opts.ns_ignore, opts.uxsdi, opts.xsd_el_ta, qualified_attrs_ns);
 	ff.close();
 }
 
-void GenerateDSD(const ::Uml::Diagram &dgr,
-		 const string &fname,
-		 bool generate_dtd,
-		 bool uxsdi,
-		 bool xsd_el_ta,
-		 const map<string, string> &ns_map,
-		 const set<string> &ns_ignore_set,
-		 bool qualifiedAtrrsNS)
+void GenerateDSD(const ::Uml::Diagram &dgr, const string &fname, const UdmOpts &opts, bool qualified_attrs_ns)
 {
 	ofstream ff;
 
-	if (generate_dtd)
+	if (opts.generate_dtd)
 	{
 		ff.open( (fname + ".dtd").c_str() );
 		if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".dtd");
@@ -86,23 +73,8 @@ void GenerateDSD(const ::Uml::Diagram &dgr,
 
 	ff.open( (fname+".xsd").c_str() );
 	if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".xsd");
-	else DTDGen::GenerateXMLSchema(dgr, ff, ns_map, ns_ignore_set, uxsdi, xsd_el_ta, qualifiedAtrrsNS);
+	else DTDGen::GenerateXMLSchema(dgr, ff, opts.ns_map, opts.ns_ignore, opts.uxsdi, opts.xsd_el_ta, qualified_attrs_ns);
 	ff.close();
-}
-
-bool SingleCPPNamespace(const ::Uml::Diagram &diagram)
-{
-	return ((set < ::Uml::Namespace>) diagram.namespaces()).size() == 0;
-}
-
-bool SingleCPPNamespace(const ::Uml::Namespace &ns)
-{
-	return ns == ::Uml::Namespace(NULL);
-}
-
-bool SingleCPPNamespace(const ::Uml::Class &cl)
-{
-	return (::Uml::Namespace)cl.parent_ns() == ::Uml::Namespace(NULL);
 }
 
 void CPPSetURIMapping(const ::Uml::Diagram &diagram, 
@@ -157,12 +129,15 @@ void CPPIncludeXsdHeaders(const ::Uml::Diagram &diagram, ostream & output)
 	output << endl;
 }
 
-ostream & IndentedOutput(int level, const string &s, ostream & output)
+string UmlClassCPPName(const ::Uml::Class &cl)
 {
-	for (int i = 0; i < level; i++)
-		output << "\t";
+	return "::" + cl.getPath2("::");
+}
 
-	output << s;
-
-	return output;
+string UmlClassCPPName(const ::Uml::Class &cl, const ::Uml::Namespace &ns)
+{
+	if ((::Uml::Namespace) cl.parent_ns() == ns)
+		return cl.name();
+	else
+		return "::" + cl.getPath2("::");
 }

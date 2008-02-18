@@ -171,9 +171,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\UdmBase\UdmBase.cpp">
-			</File>
-			<File
 				RelativePath=".\UdmCpp.cpp">
 			</File>
 			<File
@@ -198,29 +195,23 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\UdmH.cpp">
-			</File>
-			<File
-				RelativePath=".\UdmMetaCpp.cpp">
-			</File>
-			<File
-				RelativePath=".\UdmCorbaCppH.cpp">
-			</File>
-			<File
 				RelativePath=".\UdmUtil.cpp">
+			</File>
+			<File
+				RelativePath=".\ClassGen.cpp">
+			</File>
+			<File
+				RelativePath=".\DiagramGen.cpp">
+			</File>
+			<File
+				RelativePath=".\NamespaceGen.cpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="..\include\ErrHand.h">
-			</File>
-			<File
 				RelativePath=".\Udm.h">
-			</File>
-			<File
-				RelativePath="..\include\UdmBase.h">
 			</File>
 		</Filter>
 	</Files>

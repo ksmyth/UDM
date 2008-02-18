@@ -11,15 +11,6 @@ arising out of or in connection with the use or performance of
 this software.
 */
 
-/*
-CHANGELOG:
-
-	12/20/04	-	endre
-
-		took the functions from UdmCppH.cpp
-		no other modifications on the functions have been made.
-*/
-
 #include "Uml.h"
 #include "UmlExt.h"
 #include <time.h>

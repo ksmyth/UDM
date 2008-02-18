@@ -11,59 +11,6 @@ arising out of or in connection with the use or performance of
 this software.
 */
 
-/*
-CHANGELOG
-
-  04/22/05 - kalmar
-   added -q switch - all the contained elements in a namespace enlisted 
-      here will be ignored during parsing, see udm.exe -i switch
-
-    added -i switch - all the contained elements in a namespace enlisted 
-      here will be ignored during parsing, see udm.exe -i switch
-
-	12/12/04	-	endre
-		-	small bugfix, for bug a which appeared only on Linux platforms. Filenames are case sensitive
-	01/10/04	-	endre
-
-		-	inputfile is checked by content and not by extension. .udm files containing XML format is OK and vice-versa.
-
-    06/17/04	-	kalmar
-
-        - separated GenerateCORBACPP method into UdmCorbaCppH.cpp
-        - in presence of cross links the -c switch generates regular code for cross link meta and corba compliant Initialize method for other metas
-
-	  06/16/04	-	endre
-	  
-			- Using the XSD/DTD generator from the UdmBase.
-			- -c switch works with UDM Projects as well.
-
-	  05/24/04	-	endre
-
-			- when using a macro definition, Udm.exe also generates an export file which make easier the DLL export/import
-			of the generated classes
-
-		01/26/04	-	endre
-			
-			  Mainly porting issues to g++ 2.96, specially the compress/decompress stuff.
-			  void type had to be add to all the functions declared with no return type
-
-		10/25/02	-	endre
-
-				removed support for temporary diagram. We use a new syntax
-				for specifying nonpersistent attributes.
-
-		07/31/02	- C# and Corba generators added
-
-	meaning of switches:
-
-				-s			 generate C# API, normal format
-				-s -m		 generate C# API, meta format
-
-				-c			 generate CORBA init .cpp file
-
-	09/23/02	-	print usage if there are no arguments
-*/
-
 
 #include "Uml.h"
 #include "UdmBase/DTDGen.h"
@@ -85,27 +32,22 @@ int main(int argc, char **argv) {
 	try
 	{
 
-		string macro;
+		UdmOpts opts;
+		opts.meta_init = UdmOpts::DYNAMIC_INIT;
+		opts.visitor_sup = false;
+		opts.cxx_source_unit = UdmOpts::UNIT_DIAGRAM;
+
+		opts.generate_dtd = false;
+		opts.uxsdi = false;
+		opts.xsd_el_ta = false;
+		opts.integrate_xsd = false;
+
+		opts.rec_tstamp = true;
+
 		string inputfile; 
 		//string tempdiagfile; 
 		string fname; 
-		bool new_meta = true;
-		bool c_sharp = false;
-		bool corba_meta = false;		// inserted by LA
-		bool visitor_sup = false;
-		bool dll_gen = false;			//Code which generates a calling convetion specifier (as a MACRO)
-										//to facilitate forexample DLL linkage
-		bool generate_dtd = false;
-		bool uxsdi = false;				//use XSD inheritence features when generating XSD
-		bool xsd_el_ta = false;				//generate XSD elements like they would have text attributes
-		bool integrate_xsd = false; //integrate xsd into the generated API;
-		map<string, string> ns_map;
-		set<string> ns_ignore_set;
-		set<string> qualifiedAtrrsNS_set;
 
-		// flag to indicate java api generation
-		bool generate_java = false;
-		int source_unit = CPP_SOURCE_UNIT_DIAGRAM;
 
 
 		if (argc <= 1)
@@ -118,48 +60,53 @@ int main(int argc, char **argv) {
 				char c = argv[argn][1];
 				if (c == 'm') 
 				{
-					new_meta = false;
-					continue;
-				}
-				else if (c == 's')
-				{
-					c_sharp = true;
+					opts.meta_init = UdmOpts::STATIC_INIT;
 					continue;
 				}
 				else if (c == 'c')		// inserted by LA
 				{
-					corba_meta = true;
-					continue;
-				}
-				else if (c == 'v')		
-				{
-					visitor_sup = true;
-					continue;
-				}
-				else if (c == 't')
-				{
-					generate_dtd = true;
-					continue;
-				}
-				else if (c == 'x')
-				{
-					uxsdi = true;
+					opts.meta_init = UdmOpts::CORBA_INIT;
 					continue;
 				}
 				// if parameter is 'j', call java API generation
 				else if (c == 'j')
 				{
-					generate_java = true;
+					opts.mode = UdmOpts::JAVA;
+					continue;
+				}
+				else if (c == 's')
+				{
+					opts.mode = UdmOpts::C_SHARP;
+					continue;
+				}
+				else if (c == 'v')		
+				{
+					opts.visitor_sup = true;
+					continue;
+				}
+				else if (c == 't')
+				{
+					opts.generate_dtd = true;
+					continue;
+				}
+				else if (c == 'x')
+				{
+					opts.uxsdi = true;
 					continue;
 				}
 				else if (c == 'e')
 				{
-					xsd_el_ta = true;
+					opts.xsd_el_ta = true;
 					continue;
 				}
 				else if (c == 'g')
 				{
-					integrate_xsd = true;
+					opts.integrate_xsd = true;
+					continue;
+				}
+				else if (c == 'T')
+				{
+					opts.rec_tstamp = false;
 					continue;
 				}
 				
@@ -178,51 +125,52 @@ int main(int argc, char **argv) {
 							UdmDom::DomDataNetwork::DTDPath = optp;
 							break;
 					case 'l': 
-							macro = optp;
+							opts.macro = optp;
+							opts.macro += " ";
 							break;
 					case 'u':
-							DTDGen::AddUMLContainerNameToURIMapping(optp, ns_map);
+							DTDGen::AddUMLContainerNameToURIMapping(optp, opts.ns_map);
 							break;
 						/*
 							switch(*optp)
 							{
 								case 'd':
-									DTDGen::AddUMLContainerNameToURIMapping(string("__dgr_" + string(++optp)).c_str(), ns_map);
+									DTDGen::AddUMLContainerNameToURIMapping(string("__dgr_" + string(++optp)).c_str(), opts.ns_map);
 									break;
 								case 'n':
-									DTDGen::AddUMLContainerNameToURIMapping(++optp, ns_map);
+									DTDGen::AddUMLContainerNameToURIMapping(++optp, opts.ns_map);
 									break;
 								default:
 									goto usage;
 							}
 							*/
 					case 'i':
-							DTDGen::AddUMLContainerNameToIgnoreList(optp, ns_ignore_set);
+							DTDGen::AddUMLContainerNameToIgnoreList(optp, opts.ns_ignore);
 							break;
 						/*
 							switch(*optp)
 							{
 								case 'd':
-									DTDGen::AddUMLContainerNameToIgnoreList(string("__dgr_" + string(++optp)).c_str(), ns_ignore_set);
+									DTDGen::AddUMLContainerNameToIgnoreList(string("__dgr_" + string(++optp)).c_str(), opts.ns_ignore);
 									break;
 								case 'n':
-									DTDGen::AddUMLContainerNameToIgnoreList(++optp, ns_ignore_set);
+									DTDGen::AddUMLContainerNameToIgnoreList(++optp, opts.ns_ignore);
 									break;
 								default:
 									goto usage;
 							}
 							*/
 					case 'q':
-							DTDGen::AddUMLContainerNameToQualifiedAttrsNSList(optp, qualifiedAtrrsNS_set);
+							DTDGen::AddUMLContainerNameToQualifiedAttrsNSList(optp, opts.ns_qualified_attrs);
 							break;
 						/*
 							switch(*optp)
 							{
 								case 'd':
-									DTDGen::AddUMLContainerNameToQualifiedAttrsNSList(string("__dgr_" + string(++optp)).c_str(), qualifiedAtrrsNS_set);
+									DTDGen::AddUMLContainerNameToQualifiedAttrsNSList(string("__dgr_" + string(++optp)).c_str(), opts.ns_qualified_attrs);
 									break;
 								case 'n':
-									DTDGen::AddUMLContainerNameToQualifiedAttrsNSList(++optp, qualifiedAtrrsNS_set);
+									DTDGen::AddUMLContainerNameToQualifiedAttrsNSList(++optp, opts.ns_qualified_attrs);
 									break;
 								default:
 									goto usage;
@@ -232,13 +180,13 @@ int main(int argc, char **argv) {
 							switch(*optp)
 							{
 								case 'c':
-									source_unit = CPP_SOURCE_UNIT_CLASS;
+									opts.cxx_source_unit = UdmOpts::UNIT_CLASS;
 									break;
 								case 'd':
-									source_unit = CPP_SOURCE_UNIT_DIAGRAM;
+									opts.cxx_source_unit = UdmOpts::UNIT_DIAGRAM;
 									break;
 								case 'n':
-									source_unit = CPP_SOURCE_UNIT_NAMESPACE;
+									opts.cxx_source_unit = UdmOpts::UNIT_NAMESPACE;
 									break;
 								default:
 									goto usage;
@@ -254,9 +202,6 @@ int main(int argc, char **argv) {
 			else if(fname.empty()) {
 				fname = argv[argn];
 			}
-			else if (argv[argn][0] == 'm'){
-				new_meta = false;
-			}
 			else
 			{
 usage:
@@ -264,7 +209,10 @@ usage:
 			}
 		}
 
-		if (uxsdi)
+		UdmOpts opts_nomacro = opts;
+		opts_nomacro.macro = "";
+
+		if (opts.uxsdi)
 		{
 			cout << " WARNING: If using the -x switch, the generated XSD file is not suitable for " << endl;
 			cout << " validation of UDM DOM datanetworks (XML Files), but instead it correctly reflects " << endl;
@@ -299,26 +247,10 @@ usage:
 
 			string cm_name = NameToFilename(cross_meta.name());
 
-			GenerateDSD(cross_meta, cm_name, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
+			GenerateDSD(cross_meta, cm_name, opts, false);
 
-			GenerateHH(cross_meta, cm_name, visitor_sup, NULL, macro, source_unit);
-
-			ofstream ff;
-
-			if (new_meta && !corba_meta)
-				GenerateNewCPP(cross_meta, cm_name, ns_map, cross_meta, "", integrate_xsd, source_unit);
-			else
-			{
-				ff.open( (cm_name+ ".cpp").c_str());
-				if(!ff.good()) throw udm_exception("Error opening for write " + cm_name + ".cpp");
-				else 
-				{
-					if (corba_meta) GenerateCORBACPP(cross_meta,  ff, cm_name, cross_meta, macro);
-					else GenerateCPP(cross_meta,  ff, cm_name, cross_meta, macro, integrate_xsd);
-				}
-				ff.close();
-				ff.clear();
-			}
+			UdmCPPGen::UdmGen gen(cross_meta, opts_nomacro);
+			gen.Generate(cross_meta, cm_name);
 
 
 			cout << " Cross meta: " << cross_meta.name() << endl;
@@ -329,31 +261,16 @@ usage:
 				//these should be UML diagrams
 				::Uml::Diagram dgr = ::Uml::Diagram::Cast((*pr_dns_i)->GetRootObject());
 				string sname = dgr.name();
-				GenerateDSD(dgr, NameToFilename(sname), generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
+				GenerateDSD(dgr, NameToFilename(sname), opts, false);
 
 				::Uml::DiagramNamespaces nses(dgr);
 				for (::Uml::DiagramNamespaces::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
 				{
-					GenerateDSD(*nses_i, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, false);
+					GenerateDSD(*nses_i, opts, false);
 				}
 
-				// "_export.h" already generated
-				GenerateHH(dgr, sname, visitor_sup, cross_meta, "", source_unit);
-
-				if(new_meta && !corba_meta)
-					GenerateNewCPP(dgr, sname, ns_map, cross_meta, macro, integrate_xsd, source_unit);
-				else
-				{
-					ff.open( (sname + ".cpp").c_str() );
-					if(!ff.good()) throw udm_exception("Error opening for write " + sname + ".cpp");
-					else 
-					{
-						if (corba_meta) GenerateCORBACPP(dgr,  ff, sname, cross_meta, macro);
-						else GenerateCPP(dgr,  ff, sname, cross_meta, macro, integrate_xsd);
-					}
-					ff.close();
-					ff.clear();
-				}
+				UdmCPPGen::UdmGen gen(dgr, opts);
+				gen.Generate(cross_meta, sname);
 
 				pr_dns_i++;
 
@@ -442,9 +359,9 @@ usage:
 		}
 
 		{
-			set<string>::const_iterator itf = qualifiedAtrrsNS_set.find("__dgr_" + string(diagram.name()));
-			bool qualifiedAtrrsNS = (itf != qualifiedAtrrsNS_set.end());
-			GenerateDSD(diagram, fname, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, qualifiedAtrrsNS);
+			set<string>::const_iterator itf = opts.ns_qualified_attrs.find("__dgr_" + string(diagram.name()));
+			bool qualifiedAtrrsNS = (itf != opts.ns_qualified_attrs.end());
+			GenerateDSD(diagram, fname, opts, qualifiedAtrrsNS);
 		}
 
 		::Uml::DiagramNamespaces nses(diagram);
@@ -453,23 +370,22 @@ usage:
 			::Uml::Namespace ns = *nses_i;
 			string nspath = ns.getPath2("::", false);
 
-			set<string>::const_iterator itf = qualifiedAtrrsNS_set.find(nspath);
-			bool qualifiedAtrrsNS = (itf != qualifiedAtrrsNS_set.end());
+			set<string>::const_iterator itf = opts.ns_qualified_attrs.find(nspath);
+			bool qualifiedAtrrsNS = (itf != opts.ns_qualified_attrs.end());
 
-			GenerateDSD(ns, generate_dtd, uxsdi, xsd_el_ta, ns_map, ns_ignore_set, qualifiedAtrrsNS);
+			GenerateDSD(ns, opts, qualifiedAtrrsNS);
 		}
 
 		// call java API generation
-		if (generate_java) 
+		if (opts.mode == UdmOpts::JAVA) 
 		{
-			JavaAPIGen gen(diagram, ns_map, inputfile);
+			JavaAPIGen gen(diagram, opts.ns_map, inputfile);
 			gen.generate();
 			return 0;
 		}
 
-		ofstream ff;
-
-		if (c_sharp) {
+		if (opts.mode == UdmOpts::C_SHARP) {
+			ofstream ff;
 			ff.open( (fname + ".cs").c_str());
 			if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".cpp");
 			else {
@@ -480,22 +396,8 @@ usage:
 			return 0;
 		}
 
-		GenerateHH(diagram, fname, visitor_sup, NULL, macro, source_unit);
-		
-		if(new_meta && !corba_meta)
-			GenerateNewCPP(diagram, fname, ns_map, NULL, macro, integrate_xsd, source_unit);
-		else
-		{
-			ff.open( (fname + ".cpp").c_str());
-
-			if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".cpp");
-			else 
-			{
-				if (corba_meta) GenerateCORBACPP(diagram,  ff, fname);
-				else GenerateCPP(diagram,  ff, fname, NULL, macro, integrate_xsd);
-			}
-			ff.close();
-		}
+		UdmCPPGen::UdmGen gen(diagram, opts);
+		gen.Generate(NULL, fname);
 	}
 	catch(const udm_exception &e)
 	{
