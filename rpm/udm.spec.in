@@ -15,6 +15,7 @@ BuildRequires: xerces-c-devel, xalan-c-devel, minizip-devel, pccts
 BuildRequires: swig >= 1.3.24, cppunit-devel
 BuildRequires: ant, ant-junit, ant-trax, junit, xml-commons-apis
 BuildRequires: java-devel
+BuildRequires: boost-devel
 Requires: xerces-c, xalan-c, minizip-libs
 %if "%{rhldisttag}" == "rh7"
 BuildRequires: gcc3-c++
