@@ -605,25 +605,33 @@ UDM_DLL ConstraintDefinition CreateConstraintDefinition();
 // ---------------------------- Static Meta Initialization
 
 UDM_DLL void InitDiagram(const Diagram &obj, const char *name, const char * version = "1.00");
+UDM_DLL void InitDiagramProps(const Diagram &obj, const char *name, const char * version = "1.00");
 UDM_DLL void InitNamespace(const Namespace &obj, const Diagram &parent, const char *name);
 UDM_DLL void InitNamespace(const Namespace &obj, const Namespace &parent, const char *name);
+UDM_DLL void InitNamespaceProps(const Namespace &obj, const char *name);
 UDM_DLL void InitClass(const Class &obj, const Namespace &parent, const char *name, bool isAbstract, const char *stereo = NULL, const char * from = NULL);
 UDM_DLL void InitClass(const Class &obj, const Diagram &parent, const char *name, bool isAbstract, const char *stereo = NULL, const char * from = NULL);
+UDM_DLL void InitClassProps(const Class &obj, const char *name, bool isAbstract, const char *stereo = NULL, const char * from = NULL);
 UDM_DLL void InitAttribute(const Attribute &obj, const Class &parent, const char *name, const char *type, bool np, bool reg, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval = vector<string>());
+UDM_DLL void InitAttributeProps(const Attribute &obj, const char *name, const char *type, bool np, bool reg, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval = vector<string>());
+
 UDM_DLL void InitAssociation(const Association &obj, const Namespace &parent, const char *name);
 UDM_DLL void InitAssociation(const Association &obj, const Diagram &parent, const char *name);
+UDM_DLL void InitAssociationProps(const Association &obj, const char *name);
 UDM_DLL void InitAssociationClass(const Association &aobj, const Class &cobj);
-UDM_DLL void InitAssociationRole(const AssociationRole &obj, const Association &parent, 
-								 const char *name, bool navigable, bool primary, long min, long max, const Class &target);
-UDM_DLL void InitComposition(const Composition &obj, const Namespace &parent, const char *name);
-UDM_DLL void InitComposition(const Composition &obj, const Diagram &parent, const char *name);
-UDM_DLL void InitCompositionParentRole(const CompositionParentRole &obj, 
-									   const Composition &parent, const char *name, bool navigable, const Class &target);
-UDM_DLL void InitCompositionChildRole(const CompositionChildRole &obj,
-									  const Composition &parent, const char *name, bool navigable, long min, long max, const Class &target);
-
+UDM_DLL void InitAssociationRole(const AssociationRole &obj, const Association &parent, const char *name, bool navigable, bool primary, long min, long max, const Class &target);
+UDM_DLL void InitAssociationRoleProps(const AssociationRole &obj, const char *name, bool navigable, bool primary, long min, long max);
+UDM_DLL void InitComposition(const Composition &obj, const Namespace &parent, const char *name, bool np = false);
+UDM_DLL void InitComposition(const Composition &obj, const Diagram &parent, const char *name, bool np = false);
+UDM_DLL void InitCompositionProps(const Composition &obj, const char *name, bool np = false);
+UDM_DLL void InitCompositionParentRole(const CompositionParentRole &obj, const Composition &parent, const char *name, bool navigable, const Class &target);
+UDM_DLL void InitCompositionParentRoleProps(const CompositionParentRole &obj, const char *name, bool navigable);
+UDM_DLL void InitCompositionChildRole(const CompositionChildRole &obj, const Composition &parent, const char *name, bool navigable, long min, long max, const Class &target);
+UDM_DLL void InitCompositionChildRoleProps(const CompositionChildRole &obj, const char *name, bool navigable, long min, long max);
 UDM_DLL void InitConstraint(const Constraint &obj, const Class &parent, const char * name, const char * description, const char * expression);
+UDM_DLL void InitConstraintProps(const Constraint &obj, const char * name, const char * description, const char * expression);
 UDM_DLL void InitConstraintDefinition(const ConstraintDefinition &obj, const Class &parent, const char * name, const char * stereotype, const char * parameterList, const char * expression, const char * returnType);
+UDM_DLL void InitConstraintDefinitionProps(const ConstraintDefinition &obj, const char * name, const char * stereotype, const char * parameterList, const char * expression, const char * returnType);
 UDM_DLL void AddInheritance(const Class &baseType, const Class &subType);
 
 	
@@ -665,6 +673,8 @@ void AddCORBAInheritance(const Class &baseType, const Class &subType);
 	UDM_DLL void SetClass(Class &what, const Namespace &what_ns, const char *target_name);
 	UDM_DLL void SetClass(Class &what, const Diagram &what_dgr, const char *target_name);
 	UDM_DLL void SetAttribute(Attribute &what, Class &what_class,  const char *target_name);
+	UDM_DLL void SetConstraint(Constraint &what, Class &what_class,  const char *target_name);
+	UDM_DLL void SetConstraintDefinition(ConstraintDefinition &what, Class &what_class,  const char *target_name);
 
 	UDM_DLL void SetChildRole(CompositionChildRole &what, Class &what_target_class, Class &what_theo_target_class, const char *role_name, const char * orole_name);
 	UDM_DLL void SetParentRole(CompositionParentRole &what, Class &what_target_class, Class &what_theo_target_class, const char *role_name, const char * orole_name);
