@@ -2018,6 +2018,14 @@ UDM_DLL string Object::getPath2( const std::string& strDelimiter , bool bNeedRoo
 
 };
 
+UDM_DLL int Object::depth_level() const
+{
+	if ((impl->__getdn() && *this == impl->__getdn()->GetRootObject()) || GetParent() == &Udm::_null)
+		return 0;
+
+	return 1 + GetParent().depth_level();
+};
+
 /*
 	recursively obtains objects of a certain type down in the hierarchi rooted at this.
 	The function uses a CompositionChildRole chain which was previously obtained by Uml::GetChildRoleChain() function.

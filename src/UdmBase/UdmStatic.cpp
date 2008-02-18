@@ -3742,7 +3742,7 @@ namespace UdmStatic
 			strcpy(sa_val, ((*sa_i).second).c_str());
 			fwrite(sa_val, sa_val_length + 1, 1, f);
 			delete [] sa_val;
-			length += sa_val_length + 1;
+			length += sizeof(sa_val_length + 1);
 
 			/*
 				add here code that saves whether it's a desynched attribute
@@ -4463,6 +4463,11 @@ namespace Uml
 
 	void InitDiagram(const Diagram &obj, const char *name, const char * version)
 	{
+		InitDiagramProps(obj, name, version);
+	}
+
+	void InitDiagramProps(const Diagram &obj, const char *name, const char * version)
+	{
 		obj.name() = name;
 		obj.version() = version;
 	}
@@ -4471,13 +4476,18 @@ namespace Uml
 	{
 		UdmStatic::CreateComposition(parent, Diagram::meta_namespaces, obj, Namespace::meta_parent);
 
-		obj.name() = name;
+		InitNamespaceProps(obj, name);
 	}
 
 	void InitNamespace(const Namespace &obj, const Namespace &parent, const char *name)
 	{
 		UdmStatic::CreateComposition(parent, Namespace::meta_namespaces, obj, Namespace::meta_parent_ns);
 
+		InitNamespaceProps(obj, name);
+	}
+
+	void InitNamespaceProps(const Namespace &obj, const char *name)
+	{
 		obj.name() = name;
 	}
 
@@ -4485,21 +4495,24 @@ namespace Uml
 	{
 		UdmStatic::CreateComposition(parent, Namespace::meta_classes, obj, Class::meta_parent_ns);
 
-		obj.name() = name;
-		if(stereo) obj.stereotype() = stereo;
-		if (from) obj.from() = from;
-		obj.isAbstract() = isAbstract;
+		InitClassProps(obj, name, isAbstract, stereo, from);
 	}
 
 	void InitClass(const Class &obj, const Diagram &parent, const char *name, bool isAbstract, const char *stereo, const char * from)
 	{
 		UdmStatic::CreateComposition(parent, Diagram::meta_classes, obj, Class::meta_parent);
 
+		InitClassProps(obj, name, isAbstract, stereo, from);
+	}
+
+	void InitClassProps(const Class &obj, const char *name, bool isAbstract, const char *stereo, const char * from)
+	{
 		obj.name() = name;
-		if(stereo) obj.stereotype() = stereo;
+		if (stereo) obj.stereotype() = stereo;
 		if (from) obj.from() = from;
 		obj.isAbstract() = isAbstract;
 	}
+
 /*
 	void InitAttribute(const Attribute &obj, const Class &parent, const char *name, const char *type, bool nonpersistent, int min, int max)
 	{
@@ -4517,6 +4530,11 @@ namespace Uml
 	{
 		UdmStatic::CreateComposition(parent, Class::meta_attributes, obj, Attribute::meta_parent);
 
+		InitAttributeProps(obj, name, type, np, reg_val, min, max, ordered, visibility, defval);
+	}
+
+	void InitAttributeProps(const Attribute &obj, const char *name, const char *type, bool np, bool reg_val, int min, int max, const bool ordered, const string& visibility, const vector<string> & defval)
+	{
 		obj.name() = name;
 		obj.type() = type;
 		obj.min() = min;
@@ -4532,13 +4550,17 @@ namespace Uml
 	{
 		UdmStatic::CreateComposition(parent, Namespace::meta_associations, obj, Association::meta_parent_ns);
 
-		obj.name() = name;
+		InitAssociationProps(obj, name);
 	}
 
 	void InitAssociation(const Association &obj, const Diagram &parent, const char *name)
 	{
 		UdmStatic::CreateComposition(parent, Diagram::meta_associations, obj, Association::meta_parent);
 
+		InitAssociationProps(obj, name);
+	}
+	void InitAssociationProps(const Association &obj, const char *name)
+	{
 		obj.name() = name;
 	}
 
@@ -4553,6 +4575,11 @@ namespace Uml
 		UdmStatic::CreateComposition(parent, Association::meta_roles, obj, AssociationRole::meta_parent);
 		UdmStatic::CreateAssociation(obj, AssociationRole::meta_target, target, Class::meta_associationRoles);
 
+		InitAssociationRoleProps(obj, name, isnavigable, isprimary, min, max);
+	}
+
+	void InitAssociationRoleProps(const AssociationRole &obj, const char *name, bool isnavigable, bool isprimary, long min, long max)
+	{
 		obj.name() = name;
 		obj.isNavigable() = isnavigable;
 		obj.isPrimary() = isprimary;
@@ -4560,36 +4587,50 @@ namespace Uml
 		obj.max() = max;
 	}
 
-	void InitComposition(const Composition &obj, const Namespace &parent, const char *name)
+	void InitComposition(const Composition &obj, const Namespace &parent, const char *name, bool np)
 	{
 		UdmStatic::CreateComposition(parent, Namespace::meta_compositions, obj, Composition::meta_parent_ns);
 
-		obj.name() = name;
+		InitCompositionProps(obj, name, np);
 	}
 
-	void InitComposition(const Composition &obj, const Diagram &parent, const char *name)
+	void InitComposition(const Composition &obj, const Diagram &parent, const char *name, bool np)
 	{
 		UdmStatic::CreateComposition(parent, Diagram::meta_compositions, obj, Composition::meta_parent);
 
-		obj.name() = name;
+		InitCompositionProps(obj, name, np);
 	}
 
-	void InitCompositionParentRole(const CompositionParentRole &obj, 
-		const Composition &parent, const char *name, bool isnavigable, const Class &target)
+	void InitCompositionProps(const Composition &obj, const char *name, bool np)
+	{
+		obj.name() = name;
+		obj.nonpersistent() = np;
+	}
+
+	void InitCompositionParentRole(const CompositionParentRole &obj, const Composition &parent, const char *name, bool isnavigable, const Class &target)
 	{
 		UdmStatic::CreateComposition(parent, Composition::meta_parentRole, obj, CompositionParentRole::meta_parent);
 		UdmStatic::CreateAssociation(obj, CompositionParentRole::meta_target, target, Class::meta_parentRoles);
 
+		InitCompositionParentRoleProps(obj, name, isnavigable);
+	}
+
+	void InitCompositionParentRoleProps(const CompositionParentRole &obj, const char *name, bool isnavigable)
+	{
 		obj.name() = name;
 		obj.isNavigable() = isnavigable;
 	}
 
-	void InitCompositionChildRole(const CompositionChildRole &obj,
-		const Composition &parent, const char *name, bool isnavigable, long min, long max, const Class &target)
+	void InitCompositionChildRole(const CompositionChildRole &obj, const Composition &parent, const char *name, bool isnavigable, long min, long max, const Class &target)
 	{
 		UdmStatic::CreateComposition(parent, Composition::meta_childRole, obj, CompositionChildRole::meta_parent);
 		UdmStatic::CreateAssociation(obj, CompositionChildRole::meta_target, target, Class::meta_childRoles);
 
+		InitCompositionChildRoleProps(obj, name, isnavigable, min, max);
+	}
+
+	void InitCompositionChildRoleProps(const CompositionChildRole &obj, const char *name, bool isnavigable, long min, long max)
+	{
 		obj.name() = name;
 		obj.isNavigable() = isnavigable;
 		obj.min() = min;
@@ -4600,23 +4641,32 @@ namespace Uml
 	{
 
 		UdmStatic::CreateComposition(parent, Class::meta_constraints, obj, Constraint::meta_parent); 
-		
+
+		InitConstraintProps(obj, name, description, expression);
+	}
+
+	void InitConstraintProps(const Constraint &obj, const char * name, const char * description, const char * expression)
+	{
 		obj.name() = name;
 		obj.expression() = expression;
 		obj.description() = description;
-	};
+	}
 
 	void InitConstraintDefinition(const ConstraintDefinition &obj, const Class &parent, const char * name, const char * stereotype, const char * parameterList, const char * expression, const char * returnType)
 	{
 		UdmStatic::CreateComposition(parent, Class::meta_definitions, obj, ConstraintDefinition::meta_parent);
 
+		InitConstraintDefinitionProps(obj, name, stereotype, parameterList, expression, returnType);
+	}
+
+	void InitConstraintDefinitionProps(const ConstraintDefinition &obj, const char * name, const char * stereotype, const char * parameterList, const char * expression, const char * returnType)
+	{
 		obj.name() = name;
 		obj.parameterList() = parameterList;
 		obj.stereotype() = stereotype;
 		obj.expression() = expression;
 		obj.returnType() = returnType;
-
-	};
+	}
 	
 	void AddInheritance(const Class &baseType, const Class &subType)
 	{
@@ -4666,6 +4716,44 @@ namespace Uml
 		if (!found)
 			throw udm_exception(string("No attribute named ") + string(target_name) + string(" found in class: ") + (string)what_class.name() );
 	};
+
+	UDM_DLL void SetConstraint(Constraint &what, Class &what_class,  const char *target_name)
+	{
+		set<Constraint> cnstrs = what_class.constraints();
+		bool found = false;
+		for(set<Constraint>::iterator i = cnstrs.begin(); i != cnstrs.end(); i++)
+		{
+			if (!strcmp(target_name, ((string)i->name()).c_str()))
+			{
+				if (found) 
+					throw udm_exception(string("Duplicate constraint name: ") + string(target_name) + string(" found in class: ") + (string)what_class.name() );
+				found = true;
+				what = *i;
+			};
+		};
+
+		if (!found)
+			throw udm_exception(string("No constraint named ") + string(target_name) + string(" found in class: ") + (string)what_class.name() );
+	}
+
+	UDM_DLL void SetConstraintDefinition(ConstraintDefinition &what, Class &what_class,  const char *target_name)
+	{
+		set<ConstraintDefinition> cdefs = what_class.definitions();
+		bool found = false;
+		for(set<ConstraintDefinition>::iterator i = cdefs.begin(); i != cdefs.end(); i++)
+		{
+			if (!strcmp(target_name, ((string)i->name()).c_str()))
+			{
+				if (found) 
+					throw udm_exception(string("Duplicate constraint definition name: ") + string(target_name) + string(" found in class: ") + (string)what_class.name() );
+				found = true;
+				what = *i;
+			};
+		};
+
+		if (!found)
+			throw udm_exception(string("No constraint definition named ") + string(target_name) + string(" found in class: ") + (string)what_class.name() );
+	}
 
 	
 

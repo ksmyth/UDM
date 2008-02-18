@@ -115,6 +115,91 @@
 			<Tool
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
+		<Configuration
+			Name="BootUdmCompile Release|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=""/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="move /y UdmProject.h ..\..\include
+move /y UdmProject.xsd ..\..\etc
+"/>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="if exist ..\..\etc\UdmProject_udm.xml attrib -r ..\..\etc\UdmProject_udm.xml
+if exist UdmProject.h attrib -r UdmProject.h
+if exist ..\..\include\UdmProject.h attrib -r ..\..\include\UdmProject.h
+if exist UdmProject.cpp attrib -r UdmProject.cpp
+if exist UdmProject.xsd attrib -r UdmProject.xsd
+if exist ..\..\etc\UdmProject.xsd attrib -r ..\..\etc\UdmProject.xsd
+"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="BootUdmCompile Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=""/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="move /y UdmProject.h ..\..\include
+move /y UdmProject.xsd ..\..\etc
+"/>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="if exist ..\..\etc\UdmProject_udm.xml attrib -r ..\..\etc\UdmProject_udm.xml
+if exist UdmProject.h attrib -r UdmProject.h
+if exist ..\..\include\UdmProject.h attrib -r ..\..\include\UdmProject.h
+if exist UdmProject.cpp attrib -r UdmProject.cpp
+if exist UdmProject.xsd attrib -r UdmProject.xsd
+if exist ..\..\etc\UdmProject.xsd attrib -r ..\..\etc\UdmProject.xsd
+"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -124,6 +209,18 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
 				RelativePath=".\cint_string.cpp">
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="DTDGen.cpp">
@@ -144,6 +241,18 @@
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -166,6 +275,18 @@
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="UdmBase.cpp">
@@ -186,6 +307,18 @@
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -208,6 +341,18 @@
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="UdmStatic.cpp">
@@ -228,6 +373,18 @@
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -250,6 +407,18 @@
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="UmlExt.cpp">
@@ -270,6 +439,18 @@
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
@@ -298,6 +479,46 @@
 				RelativePath="..\..\include\UmlExt.h">
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\etc\UdmProject.xme">
+			<FileConfiguration
+				Name="BootUdmCompile Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(InputDir)$(InputName).mga;$(InputDir)$(InputName)_udm.xml"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="BootUdmCompile Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(InputDir)$(InputName).mga;$(InputDir)$(InputName)_udm.xml"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\etc\UdmProject_udm.xml">
+			<FileConfiguration
+				Name="BootUdmCompile Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="%UDM_PATH%\bin\Udm.exe &quot;$(InputPath)&quot; -g -m
+"
+					Outputs="UdmProject.h; UdmProject.cpp; UdmProject.xsd; UdmProject_xsd.h"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="BootUdmCompile Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="%UDM_PATH%\bin\UdmD.exe &quot;$(InputPath)&quot; -g -m
+"
+					Outputs="UdmProject.h; UdmProject.cpp; UdmProject.xsd; UdmProject_xsd.h"/>
+			</FileConfiguration>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
