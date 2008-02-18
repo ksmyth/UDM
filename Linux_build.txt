@@ -14,9 +14,12 @@ Requirements:
 - gcc-java 4.x (or later) or Java SDK 1.4.2 (or later)
 - ant
 - junit
+- Boost
 
 Build-environment preparation (RHEL 4):
 ----------------------------------------------
+- install boost-devel:
+  up2date boost-devel
 - install the following rpms from our repository:
   xerces-c, xerces-c-devel, xalan-c, xalan-c-devel, minizip, minizip-devel,
   minizip-libs, pccts, swig1324, cppunit, cppunit-devel

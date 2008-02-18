@@ -63,6 +63,9 @@ MINIZIPINC=""
 XALANINC=""
 XERCESINC=""
 
+AC_CHECK_HEADER([boost/format.hpp], [],
+	[AC_MSG_ERROR([boost/format.hpp header is needed; please install Boost])])
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
