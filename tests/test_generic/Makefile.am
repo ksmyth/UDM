@@ -17,7 +17,7 @@ CLEANFILES		= $(BUILT_SOURCES) sources-stamp
 sources-stamp: ../../samples/LampDiagram_udm.xml ../../bin/Udm Makefile
 	@rm -f sources-temp
 	@touch sources-temp
-	../../bin/Udm $< -v -d ../../etc
+	../../bin/Udm $< -v -d ../../etc -T
 	@mv -f sources-temp $@
 
 $(BUILT_SOURCES): sources-stamp

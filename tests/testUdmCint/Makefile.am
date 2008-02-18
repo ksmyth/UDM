@@ -33,10 +33,10 @@ sources-stamp: GeneTF_udm.xml SBML2Ex_udm.xml ../../bin/Udm Makefile
 	@rm -f sources-temp
 	@touch sources-temp
 	../../bin/Udm GeneTF_udm.xml \
-		-d ../../etc -t -v -g \
+		-d ../../etc -t -v -g -T \
 		-u GeneTF=http://kutykuruty.khm.edu
 	../../bin/Udm SBML2Ex_udm.xml \
-		-d ../../etc -g -v -e -q jigcell -i xhtml \
+		-d ../../etc -g -v -e -T -q jigcell -i xhtml \
 		-u math=http://www.w3.org/1998/Math/MathML \
 		-u sbml=http://www.sbml.org/sbml/level2 \
 		-u dbi=http://www.dbi.tju.edu/xmlns/dbi \

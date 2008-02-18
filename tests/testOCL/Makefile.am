@@ -22,7 +22,7 @@ sources-stamp: SBML2_udm.xml ../../bin/Udm Makefile
 	@rm -f sources-temp
 	@touch sources-temp
 	../../bin/Udm $< \
-		-d ../../etc -t -v -g \
+		-d ../../etc -t -v -g -T \
 		-u math=http://www.w3.org/1998/Math/MathML \
 		-u sbml=http://www.sbml.org/sbml/level2
 	@mv -f sources-temp $@
