@@ -236,7 +236,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 					Name="VCCustomBuildTool"
 					CommandLine="%UDM_PATH%\bin\Udm.exe &quot;$(InputPath)&quot; -g -m  -l UDM_DLL
 "
-					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
+					Outputs="Uml.cpp; Uml.h; Uml_export.h; Uml.xsd; Uml_xsd.h"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="BootUdmCompile Debug|Win32">
@@ -244,7 +244,7 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 					Name="VCCustomBuildTool"
 					CommandLine="%UDM_PATH%\bin\UdmD.exe &quot;$(InputPath)&quot; -g -m  -l UDM_DLL
 "
-					Outputs="Uml.cpp;Uml.h; Uml.xsd;"/>
+					Outputs="Uml.cpp; Uml.h; Uml_export.h; Uml.xsd; Uml_xsd.h"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -276,8 +276,10 @@ if exist ..\..\include\Uml.h  attrib -r  ..\..\include\Uml.h
 				Name="BootUdmCompile Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine=""
-					Outputs=""/>
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(InputDir)$(InputName).mga;$(InputDir)Uml_udm.xml"/>
 			</FileConfiguration>
 		</File>
 	</Files>
