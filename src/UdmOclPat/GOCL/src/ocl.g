@@ -1928,11 +1928,18 @@ exception default : << PrintErrorToken( PAT_SWITCH, setFollow ); >>
 //	BASIC TOKENS
 #token 							"(~[<\r\n\\])+"		<< more(); >>
 #token							"<"		<< more(); >>
-#token							"\\"		<< replstr(""); more(); >>
-#token 							"\\r\\n"	<< replstr("\n"); more(); >>
+#token							"\\"		<< skip(); more(); >>
+
+// delete EOL and TAB when preceded by a backslash
+#token 							"\\\r\n"	<< replstr(""); newline(); more(); >>
+#token 							"\\\n"		<< replstr(""); newline(); more(); >>
+#token 							"\\\r"		<< replstr(""); newline(); more(); >>
+#token 							"\\\t"		<< replstr(""); more(); >>
+
+// generate EOL and TAB
 #token 							"\\n"		<< replstr("\n"); more(); >>
-#token 							"\\r"		<< replstr("\n"); more(); >>
 #token 							"\\t"		<< replstr("\t"); more(); >>
+
 #token 							"\r\n"		<< more(); newline(); >>
 #token 							"\n"		<< more(); newline(); >>
 #token 							"\r"		<< more(); newline(); >>

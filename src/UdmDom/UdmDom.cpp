@@ -127,6 +127,13 @@ XERCES_CPP_NAMESPACE_USE
 #ifdef _WIN32
 #include <io.h>
 #include <windows.h>
+#include <string.h>
+
+// these redefinitions are for linking with the single-threaded runtime libs
+#define strdup _strdup
+#define strnicmp _strnicmp
+#define access _access
+
 #else
 #include <unistd.h>
 #include <wchar.h>

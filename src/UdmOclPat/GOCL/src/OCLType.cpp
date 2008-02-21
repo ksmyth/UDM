@@ -172,7 +172,7 @@ namespace OclMeta
 		public:
 			TypeHierarchyAsc( TypeManager*& pTypeManager ) : m_pTypeManager( pTypeManager ) { }
 
-			bool operator()( first_argument_type a, second_argument_type b )
+			bool operator()( typename std::binary_function< TTypeableFeature, TTypeableFeature, bool >::first_argument_type a, typename std::binary_function< TTypeableFeature, TTypeableFeature, bool >::second_argument_type b )
 			{
 				std::string strAType = a->GetTypeName();
 				std::string strBType = b->GetTypeName();
