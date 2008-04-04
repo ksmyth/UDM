@@ -87,6 +87,7 @@ std::string GetTime();
 std::string UmlClassCPPName(const ::Uml::Class &cl);
 std::string UmlClassCPPName(const ::Uml::Class &cl, const ::Uml::Namespace &ns);
 std::string NameToFilename(const std::string src);
+std::string join(const std::string &sep, const vector<string> &v);
 //generate DTD (only if asked) and XSD
 void GenerateDSD(const ::Uml::Namespace &ns, const UdmOpts &opts, bool qualified_attrs_ns);
 void GenerateDSD(const ::Uml::Diagram &dgr, const string &fname, const UdmOpts &opts, bool qualified_attrs_ns);
@@ -169,12 +170,29 @@ protected:
 
 	// methods
 	vector<boost::format> meth_defs;
+	vector<boost::format> meth_speclzs;	// specializations
 
 	// meta static members
 	vector<boost::format> meta_decls;
 	vector<boost::format> meta_defs;
 
 	vector<boost::format> comments;
+
+	vector<boost::format> parents_tl;
+	vector<boost::format> parent_kinds_tl;
+
+	vector<boost::format> children_tl;
+	vector<boost::format> children_kinds_tl;
+
+	vector<boost::format> associations_tl;
+	vector<boost::format> associations_ac_tl;
+
+	vector<boost::format> cross_associations_tl;
+	vector<boost::format> cross_associations_ac_tl;
+
+	vector<boost::format> aclass_ends_tl;
+
+	vector<boost::format> cross_aclass_ends_tl;
 
 	// initialize meta members
 
@@ -198,6 +216,31 @@ protected:
 
 	UdmGen gen;
 	string idt;	// indentation to use
+
+	// store typedefs and typenames to create typelists
+	struct TLHelper {
+		// create types for roles:
+		// - CompositionParentRole: PR_<relation name>
+		// - CompositionChildRole:  CR_<relation name>
+		// - AssociationRole:       AR_<relation name>
+		// - AssociationRole from association class: ACE_<relation name>
+		vector<boost::format> roles2type;
+		// create types for these pairs:
+		// - for CompositionParentRole, CompositionChildRole and AssociationRole of classless association:
+		//   pair<ReturnedType, RoleType>
+		// - for AssociationRole of associations with an association class
+		//   pair< ReturnedType, pair<AssociationClas, RoleType> >
+		vector<boost::format> typedefs;
+		// name the types created above
+		vector<string> typenames_single;	// the target can be a single item
+		vector<string> typenames_multi;		// the target is a set of items
+	};
+
+	// typelists for ReturnedType
+	void BuildTL(const set< ::Uml::Class> &s, const string &tl_name, const string &description, vector<boost::format> &result);
+	// types and typelists for pair<ReturnedType, Role> or pair< ReturnedType, pair<AssociationClass, Role> >
+	// Role can be: CompositionParentRole, CompositionChildRole, AssociationRole
+	void BuildTL(const TLHelper &tlhlp, const string &tl_single_name, const string &tl_multi_name, const string &description, vector<boost::format> &result);
 
 public:
 	ClassGen(const ::Uml::Class &p_c, const UdmGen &p_gen) : c(p_c), gen(p_gen) {}

@@ -174,8 +174,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.BootUdmCompile Debug|Win32.ActiveCfg = Debug|Win32
-		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.BootUdmCompile Release|Win32.ActiveCfg = Release|Win32
+		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.BootUdmCompile Debug|Win32.ActiveCfg = BootUdmCompile Debug|Win32
+		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.BootUdmCompile Debug|Win32.Build.0 = BootUdmCompile Debug|Win32
+		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.BootUdmCompile Release|Win32.ActiveCfg = BootUdmCompile Release|Win32
+		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.BootUdmCompile Release|Win32.Build.0 = BootUdmCompile Release|Win32
 		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.Debug|Win32.ActiveCfg = Debug|Win32
 		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.Debug|Win32.Build.0 = Debug|Win32
 		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.Release MinDependency|Win32.ActiveCfg = Release|Win32

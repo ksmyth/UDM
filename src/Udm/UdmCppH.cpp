@@ -36,6 +36,21 @@ void CheckClass(const ::Uml::Class & cl)
 	unique_names.insert("instances");
 	unique_names.insert("desynched_atts");
 	unique_names.insert((string)cl.name());
+	// typelists
+	unique_names.insert("AssociationsSingle");
+	unique_names.insert("AssociationsMulti");
+	unique_names.insert("AssociationsWAClassSingle");
+	unique_names.insert("AssociationsWAClassMulti");
+	unique_names.insert("CrossAssociationsSingle");
+	unique_names.insert("CrossAssociationsMulti");
+	unique_names.insert("CrossAssociationsWAClassSingle");
+	unique_names.insert("CrossAssociationsWAClassMulti");
+	unique_names.insert("ChildrenSingle");
+	unique_names.insert("ChildrenMulti");
+	unique_names.insert("Parents");
+	unique_names.insert("AClassEnds");
+	unique_names.insert("CrossAClassEnds");
+
 	unsigned int i;
 
 	//attributes
@@ -81,6 +96,11 @@ err_att:
 		unique_names.insert(string("meta_") + aname);
 		if (i == unique_names.size()) goto err_ar;
 
+		// types generated for roles
+		i = unique_names.size();
+		unique_names.insert("AR_" + aname);
+		if (i == unique_names.size()) goto err_ar;
+
 		continue;
 err_ar:
 		throw udm_exception("Reserved or duplicate  association role name: " + aname);
@@ -108,6 +128,10 @@ err_ar:
 		unique_names.insert(string("meta_") + aname);
 		if (i == unique_names.size()) goto err_cpr;
 
+		// types generated for roles
+		i = unique_names.size();
+		unique_names.insert("CR_" + aname);
+		if (i == unique_names.size()) goto err_cpr;
 		
 		continue;
 err_cpr:
@@ -149,6 +173,11 @@ err_kinds:
 
 		i = unique_names.size();
 		unique_names.insert(string("meta_") + aname );
+		if (i == unique_names.size()) goto err_ccr;
+
+		// types generated for roles
+		i = unique_names.size();
+		unique_names.insert("PR_" + aname);
 		if (i == unique_names.size()) goto err_ccr;
 
 		continue;

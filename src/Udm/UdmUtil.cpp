@@ -141,3 +141,23 @@ string UmlClassCPPName(const ::Uml::Class &cl, const ::Uml::Namespace &ns)
 	else
 		return "::" + cl.getPath2("::");
 }
+
+string join(const string &sep, const vector<string> &v)
+{
+	string result;
+
+	vector<string>::const_iterator it_begin = v.begin();
+	vector<string>::const_iterator it_end = v.end();
+
+	if (it_begin != it_end) {
+		result += *it_begin;
+		it_begin++;
+	}
+
+	for (; it_begin != it_end; it_begin++) {
+		result += sep;
+		result += *it_begin;
+	}
+
+	return result;
+}

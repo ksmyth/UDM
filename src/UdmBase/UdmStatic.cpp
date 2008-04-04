@@ -3096,6 +3096,7 @@ namespace UdmStatic
 				static bool ba_val;
 				if(!fread(&ba_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
+				read += sizeof(bool);
 
 				// add the attribute to the object
 				//uniqueId_type ba_id = (*ba_i).second;
@@ -3153,6 +3154,7 @@ namespace UdmStatic
 				//read the attribute value
 				static __int64 ia_val;
 				fread(&ia_val, sizeof(__int64), 1, f);
+				read += sizeof(__int64);
 
 				// add the attribute to the object
 				//uniqueId_type ia_id = (*ia_i).second;
@@ -3209,6 +3211,7 @@ namespace UdmStatic
 				//read the attribute value
 				static double ra_val;
 				fread(&ra_val, sizeof(double), 1, f);
+				read += sizeof(double);
 
 				// add the attribute to the object
 				//uniqueId_type ra_id = (*ra_i).second;
@@ -3363,6 +3366,7 @@ namespace UdmStatic
 				//read in the array from file
 				if(!fread(bool_val, sizeof(bool), ba_arr_item_no, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
+				read += sizeof(bool) * ba_arr_item_no;
 	
 				//add to vector
 				for (ba_arr_item_count=0; ba_arr_item_count < ba_arr_item_no; ba_arr_item_count++)
@@ -3440,6 +3444,7 @@ namespace UdmStatic
 				//read in the array from file
 				if(!fread(long_val, sizeof(__int64), ia_arr_item_no, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
+				read += sizeof(__int64) * ia_arr_item_no;
 	
 				//add to vector
 				for (ia_arr_item_count=0; ia_arr_item_count < ia_arr_item_no; ia_arr_item_count++)
@@ -3517,6 +3522,7 @@ namespace UdmStatic
 				//read in the array from file
 				if(!fread(double_val, sizeof(double), ra_arr_item_no, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
+				read += sizeof(double) * ra_arr_item_no;
 	
 				//add to vector
 				for (ra_arr_item_count=0; ra_arr_item_count < ra_arr_item_no; ra_arr_item_count++)
@@ -3556,6 +3562,7 @@ namespace UdmStatic
 			static unsigned char end_of_obj;
 			if(!fread(&end_of_obj, sizeof(const unsigned char), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
+			read += sizeof(const unsigned char);
 			if (end_of_obj != 0xFF) throw udm_exception("MEM file corrupt!");
 		}
 		
@@ -3742,7 +3749,7 @@ namespace UdmStatic
 			strcpy(sa_val, ((*sa_i).second).c_str());
 			fwrite(sa_val, sa_val_length + 1, 1, f);
 			delete [] sa_val;
-			length += sizeof(sa_val_length + 1);
+			length += (sa_val_length + 1);
 
 			/*
 				add here code that saves whether it's a desynched attribute
@@ -3894,6 +3901,7 @@ namespace UdmStatic
 			//write the number of items in the array
 			unsigned long sa_arr_size = sa_arr_value.size();
 			fwrite(&sa_arr_size, sizeof(unsigned long), 1, f);
+			length += sizeof(unsigned long);
 
 			
 			vector<string>::const_iterator sa_arr_value_i = sa_arr_value.begin(); 
@@ -3906,7 +3914,7 @@ namespace UdmStatic
 				strcpy(sa_val, (*sa_arr_value_i).c_str());
 				fwrite(sa_val, sa_val_length + 1, 1, f);
 				delete [] sa_val;
-				length += sizeof(sa_val_length + 1);
+				length += (sa_val_length + 1);
 				sa_arr_value_i++;
 			}
 

@@ -313,6 +313,11 @@ boost::format UdmGen::HPreamble(const string &fname) const
 #    error \"Udm headers too old, minimum version required %4%.%5%\"\n\
 #endif\n\
 \n\
+#include <Uml.h>\n\
+\n\
+#include <boost/concept_check.hpp>\n\
+#include <loki/Typelist.h>\n\
+\n\
 #ifdef min\n\
 #undef min\n\
 #endif\n\
