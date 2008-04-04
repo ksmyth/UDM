@@ -63,8 +63,13 @@ MINIZIPINC=""
 XALANINC=""
 XERCESINC=""
 
+AC_CHECK_HEADER([boost/concept_check.hpp], [],
+	[AC_MSG_ERROR([boost/concept_check.hpp header is needed; please install Boost])])
 AC_CHECK_HEADER([boost/format.hpp], [],
 	[AC_MSG_ERROR([boost/format.hpp header is needed; please install Boost])])
+
+AC_CHECK_HEADER([loki/Typelist.h], [],
+	[AC_MSG_ERROR([loki/Typelist.h header is needed; please install Loki])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -135,6 +140,7 @@ AC_CONFIG_FILES([Makefile
 	tests/test_crosslinks/Makefile
 	tests/test_domstringdn/Makefile
 	tests/test_generic/Makefile
+	tests/test_generic2/Makefile
 	tests/testGetAdjacentObjects/Makefile
 	tests/test_ns/Makefile
 	tests/testOCL/Makefile

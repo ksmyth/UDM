@@ -46,6 +46,7 @@ Step-by-step guide:
 		%UDM_3RDPARTY_PATH%\zlib\contrib\minizip;
 		%UDM_3RDPARTY_PATH%\cppunit-1.10.2\include;
 		%UDM_3RDPARTY_PATH%\boost-1.34.1;
+		%UDM_3RDPARTY_PATH%\loki-0.1.6\include;
 		%JDK_PATH%\include\win32;
 		%JDK_PATH%\include;
 		%INCLUDE%
