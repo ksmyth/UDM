@@ -263,7 +263,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
-					Outputs="$(InputDir)\$(InputName).mga"
+					Outputs="$(InputDir)\$(InputName).mga;$(InputDir)\SBML2_udm.xml"
 				/>
 			</FileConfiguration>
 		</File>
