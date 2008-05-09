@@ -4017,19 +4017,16 @@ namespace UdmDom
 	};
 
 
-	struct Startup
+	static struct Startup
 	{
 		Startup()
 		{
-	        XMLPlatformUtils::Initialize();
+			XMLPlatformUtils::Initialize();
 		}
 
 		~Startup()
 		{
-			// disabled for now because it may be called too
-			// early during global destruction, while DOM
-			// elements still exist
-			//XMLPlatformUtils::Terminate();
+			XMLPlatformUtils::Terminate();
 		}
 	} __startup;
 
