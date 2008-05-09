@@ -292,6 +292,8 @@ class OCLParser
 				parser.m_bOnlyContext = bOnlyContext;
 				parser.constraint( &iParseSignal, pConstraint );
 
+				delete token;
+
 				ePool = parser.m_ExceptionPool;
 				return pConstraint;
 			}
