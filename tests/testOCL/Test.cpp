@@ -205,6 +205,8 @@ void UdmTests::Test::evaluate(const ::Uml::Diagram& metaDiagram,
 	catch (... )
 	{
 	}
+
+	Ocl::UnInitialize( metaDiagram );
 }
 
 

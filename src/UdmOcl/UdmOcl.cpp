@@ -1068,6 +1068,11 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		globalFacadeMap.clear();
 	}
 
+	UDM_DLL void UnInitialize( const ::Uml::Diagram &objDiagram )
+	{
+		globalFacadeMap.erase( objDiagram );
+	}
+
 	UDM_DLL bool ProcessPat( const ::Uml::Diagram& metaDiagram, const Udm::Object& objContext, const std::string& strExpression)
 	{
 		std::string strContext = (string)objContext.type().name();
@@ -1136,6 +1141,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		EEvaluationResult eResult = cons.Evaluate( objContext, options );
 		OclTree::PatHelper::clean();
 		Constraint::setPatProcessFlag(false);
+		UnInitialize( metaDiagram );
 
 		return true;
 	}

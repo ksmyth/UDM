@@ -1497,6 +1497,9 @@ bool UdmPseudoDataNetwork::OCL_Evaluate(cint_string& res)
   }
 
   res = cint_string(out.c_str()); 
+
+  Ocl::UnInitialize( metaDiagram );
+
   return true;
   CINT_DN_CATCH
 }
