@@ -495,11 +495,10 @@ ostream& operator<<(ostream& target, DOM_Node& toWrite)
 #else
 			char dummy;
 			bool res;
-			int a_length = nodeValue.length();
-			char * copy = new char[a_length + 1];
+			char * copy = new char[lent + 1];
 			const unsigned short * buf = nodeValue.rawBuffer();
 			int i;
-			for (i = 0; i < a_length; i++)
+			for (i = 0; i < lent; i++)
 			{
 				if (*(buf + i) > 127)
 				*(copy + i) = *(buf + i);
