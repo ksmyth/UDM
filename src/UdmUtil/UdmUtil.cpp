@@ -100,7 +100,8 @@ namespace UdmUtil
 
 	UDM_DLL int CopyObjectHierarchy(Udm::ObjectImpl* p_srcRoot, Udm::ObjectImpl* p_dstRoot, Udm::DataNetwork* p_dstBackend, copy_assoc_map &cam)
 	{
-		if (cam.size()) throw udm_exception("Association map copied objects should be empty!");
+		// Due to library copying, we have to accept partially filled map.
+		//if (cam.size()) throw udm_exception("Association map copied objects should be empty!");
 		
 		bool finished = true;
 		bool first = true;
@@ -242,6 +243,59 @@ namespace UdmUtil
 
 		
 
+		// copy first the private library copies (createLibRootChild must be used instead of createChild)
+		vector<ObjectImpl*> children = p_srcRoot->getChildren(NULL, NULL);
+		for(vector<ObjectImpl*>::const_iterator p_currImpl = children.begin(); p_currImpl != children.end(); p_currImpl++)
+		{
+			ObjectImpl* p_srcChild = *p_currImpl;			//source child
+
+			if (p_srcChild->getLibraryName().length() == 0) {
+				// not a library root, copy it below
+				p_srcChild->release();
+				continue;
+			}
+
+			Udm::Object srcChild = p_srcChild->clone();		//the cloned copy will be released in ~Object
+															//check whether the object was copied first
+			copy_assoc_map::iterator cam_i = cam.find(srcChild);
+			if (cam_i != cam.end()) 
+			{
+				// library root already copied, this means that the entire library is already copied
+				p_srcChild->release();
+				continue;
+			}
+
+			ObjectImpl* p_dstChild = &Udm::_null;			//the destination child(-to be-) variable
+					
+			//cout << " Now investigating libroot element: " << ExtractName(srcChild) << ", id: " << (long)srcChild.uniqueId() << endl;
+			//cout << ".";
+			if (p_dstBackend->IsTypeSafe())
+				p_dstChild = p_dstRoot->createLibRootChild(p_srcChild->type());
+			else
+			{
+				const ::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(p_srcChild->type());
+				p_dstChild = p_dstRoot->createLibRootChild(safe_type);
+			}
+
+			//cout << "Now inserting " << ExtractName(srcChild) << " in cam " << endl;
+			//cout << "!";
+			copy_assoc_map::value_type map_item(srcChild, p_dstChild->clone());
+			cam.insert(map_item);
+
+			p_dstChild->CopyAttributesFrom(p_srcChild);	
+
+			ret = reqCopyObjectHierarchy(p_srcChild, p_dstChild, p_dstBackend, finished, cam);
+
+			p_dstChild->setLibraryName(p_srcChild->getLibraryName());
+					
+			p_srcChild->release();		//this was obtained via getChildren()
+										//so it should be released.
+			p_dstChild->release();		//this was obtained from createLibRootChild and needs to be released.
+					
+			// If error go back
+			if (ret) return ret;
+		}
+
 		set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(srcClass);
 
 
@@ -261,6 +315,11 @@ namespace UdmUtil
 				{
 					ObjectImpl* p_srcChild=*p_currImpl;				//source child
 					ObjectImpl* p_dstChild = &Udm::_null;			//the destination child(-to be-) variable
+
+					if (p_srcChild->getLibraryName().length() > 0) {	// library root element has been copied above
+						p_srcChild->release();
+						continue;
+					}
 
 					Udm::Object srcChild = p_srcChild->clone();		//the cloned copy will be released in ~Object
 					Udm::Object dstChild;
@@ -568,7 +627,7 @@ namespace UdmUtil
 			Udm::Object dstChild = cam_i->second;		//this is a safe Object to Object copy
 			ObjectImpl* p_dstChild = dstChild.__impl();	//is also safe, we don't create an Object from this pointer
 					
-			if(!p_dstChild || p_dstChild==&Udm::_null)	throw udm_exception("Internal UdmCopy error");
+			if(!p_dstChild || p_dstChild==&Udm::_null) throw udm_exception("Internal UdmCopy error");
 			
 					
 

@@ -1570,11 +1570,21 @@ namespace UdmDom
 					string my_type_name = m_type.getPath2("::", false);
 
 					bool inserted = false;
+					DOM_Element insert_point;
 					for(DOM_Node n = aa.dom_element.getFirstChild(); n != (DOM_NullPtr *)NULL;n = n.getNextSibling())	
 					{
 						if( n.getNodeType() == DOM_Node::ELEMENT_NODE )
 						{
 							DOM_Element e = static_cast<DOM_Element&>(n);
+
+							// skip library roots
+							DomObject *eo = new DomObject(e, mydn);
+							string lib_name = eo->getLibraryName();
+							delete eo;
+							if (lib_name.length()) {
+								insert_point = e;
+								break;
+							}
 
 							string curr_child_name = findClass(e).getPath2("::", false);
 
@@ -1587,8 +1597,12 @@ namespace UdmDom
 
 						}
 					}
-				   if (!inserted)
-					aa.dom_element.appendChild(dom_element);
+
+					if (!inserted)
+						if (insert_point != NULL)
+							aa.dom_element.insertBefore(dom_element, insert_point);
+						else
+							aa.dom_element.appendChild(dom_element);
 
 
 			   }
@@ -2921,6 +2935,127 @@ namespace UdmDom
 		};
 
 		virtual ~DomObject(){};
+
+		bool isLibObject() const
+		{
+			DOM_Node parent = dom_element.getParentNode();
+			while (parent != NULL && parent.getNodeType() == DOM_Node::ELEMENT_NODE) {
+				DOMString pa = static_cast<DOM_Element&>(parent).getAttribute(DOMString(_udm_dom_ia_libname));
+				if (pa != NULL)
+					return true;
+				parent = parent.getParentNode();
+			}
+			return false;
+		}
+
+		string getLibraryName() const
+		{
+			string ret;
+
+			DOMString pa = dom_element.getAttribute(DOMString(_udm_dom_ia_libname));
+			if (pa != NULL)
+				ret = StrX(pa).localForm();
+
+			return ret;
+		}
+
+		void setLibraryName(const string &name)
+		{
+			// TODO: allow this only on root folders
+			if (name.length())
+				dom_element.setAttribute(DOMString(_udm_dom_ia_libname), DOMString(name.c_str()));
+			else {
+				dom_element.removeAttribute(DOMString(_udm_dom_ia_libname));
+				vector<ObjectImpl*> chds = getChildren(NULL, type());
+				for (vector<ObjectImpl*>::const_iterator i = chds.begin(); i != chds.end(); i++) {
+					static_cast<DomObject*>(*i)->setLibraryName(name);
+					(*i)->release();
+				}
+			}
+		}
+
+		ObjectImpl *createLibRootChild(const ::Uml::Class &meta, const bool need_safetype = false)
+		{
+				::Uml::Namespace parent_ns = meta.parent_ns();
+
+				string node_name, node_uri;
+				if (parent_ns)
+				{
+					node_name = parent_ns.getPath2("_", false) + ":";
+					node_uri = getNSURI(parent_ns.getPath2("/", false));
+				}
+				else
+				{
+					node_uri = getNSURI("__dgr_" + (string)::Uml::GetDiagram(meta).name());
+				}
+				node_name += (string)meta.name();
+
+				DomObject *dep = 
+					new DomObject(meta, dom_element.getOwnerDocument().createElementNS(node_uri.c_str(), node_name.c_str()), mydn);
+
+				// always attach libraries to the end
+				dom_element.appendChild(dep->dom_element);
+
+#if 0
+				//dep->setParent(this, Uml::theOther(role), false);
+
+				void setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct = true) 
+				{
+
+				DOM_Node currentparent = dep->dom_element.getParentNode();
+				Udm::Object this_o = clone();
+				DomObject &aa = *static_cast<DomObject *>(a);
+				Udm::Object new_par_o = aa.clone();
+
+				DOMString chas;
+
+				else if(DomDataNetwork::MultiRolesEnabled()) 
+					chas = dep->dom_element.getAttribute(DOMString("__child_as"));
+
+				::Uml::CompositionChildRole c_role;
+
+			   ::Uml::Composition comp = Uml::matchChildToParent(m_type, aa.m_type);
+				if(!role) 
+				{
+					if(!comp) throw udm_exception("Childrole has to be specified");
+					// if role == 0 and comp != 0, no test or __child_as is necessary
+					c_role = comp.childRole();
+				}
+				else if(comp != role.parent()) 
+				{  // either 0 or different kinds
+					comp = role.parent();
+					// if different, or comp is 0 because of 0 roles, one of the followings will catch it:
+					if(!Uml::IsDerivedFrom(m_type,::Uml::CompositionChildRole(comp.childRole()).target())) 
+					{
+						throw udm_exception("Invalid parentrole specified");
+					}
+					if(!Uml::IsDerivedFrom(aa.m_type, ::Uml::CompositionParentRole(comp.parentRole()).target())) 
+					{
+						throw udm_exception("Invalid parent specified");
+					}
+
+					// we only get here, if multiple roles match, so they have to be recorded
+					DOMString  ncomp(GetANameFor(comp).c_str());
+					if(chas != (DOM_NullPtr *)NULL) 
+					{
+						if(DSFind(chas,ncomp) < 0) 
+						{
+							chas.appendData(' ');
+							chas.appendData(ncomp);
+							dom_element.setAttribute(DOMString("__child_as"), chas);
+						}
+					}
+					else dom_element.setAttribute(DOMString("__child_as"), ncomp);
+
+					c_role = Uml::theOther(role);
+				}
+#endif
+
+				//set the default attributes
+				dep->setDefaultAttributes();
+
+				return dep;
+		}
 
 	};
 

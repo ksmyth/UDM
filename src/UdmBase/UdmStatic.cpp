@@ -330,7 +330,9 @@ namespace UdmStatic
 	refCount(ref),
 	m_type(meta), 
 	id_map_so_set_deleted(false),
-	m_parent(NULL)
+	m_parent(NULL),
+	lib_object(false),
+	lib_name("")
 	{ 
 	//	GetIdForObject((StaticObject*)this);
 	//	InsertObject((StaticObject*)this);
@@ -2740,6 +2742,19 @@ namespace UdmStatic
 				} while ((t != 0x00 )&& (i < MAX_NAME));
 				if (t != 0x00) throw udm_exception("MEM file corrupt!");
 				read += strlen(ccr_name) + 1;
+
+				//read children's unique ID
+				static unsigned long child_id;
+				if (!fread(&child_id, sizeof(unsigned long), 1, f))
+					throw udm_exception("can't read from file, probably MEM file is corrupted");
+				read += sizeof(unsigned long);
+
+				// libroot child
+				if (strlen(ccr_name) == 0) {
+					pair<uniqueId_type const, StaticObject*> m_ch_item(0, reinterpret_cast<StaticObject*>(child_id));
+					so->m_children.insert(m_ch_item);
+					continue;
+				}
 				
 				
 				//Level 1 cache: there's is a chance that it's the same childrole name as with the previous child
@@ -2805,12 +2820,6 @@ namespace UdmStatic
 					else
 						ccr = (*cc_i).second;
 				}
-
-				//read children's unique ID
-				static unsigned long child_id;
-				if (!fread(&child_id, sizeof(unsigned long), 1, f))
-					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read += sizeof(unsigned long);
 
 				//insert into  children's map 
 				//since our children is not created yet, 
@@ -3554,18 +3563,44 @@ namespace UdmStatic
 
 			}
 
-
-
-
-
-
-
-			//read the ending FF
-			static unsigned char end_of_obj;
-			if(!fread(&end_of_obj, sizeof(const unsigned char), 1, f))
+			// either the end of object marker or continuation marker
+			static unsigned char marker;
+			if (!fread(&marker, sizeof(unsigned char), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
 			read += sizeof(const unsigned char);
-			if (end_of_obj != 0xFF) throw udm_exception("MEM file corrupt!");
+			if (marker == 0xFE) {
+				// library name
+				static char tmp_lib_name[MAX_NAME+1];
+				static char *tmp_lib_name_p;
+				static char t;
+				static int i;
+			
+				tmp_lib_name_p = tmp_lib_name;
+				i = 0;
+				do
+				{
+					if (!fread(&t, sizeof(char), 1, f))
+						throw udm_exception("can't read from file, probably MEM file is corrupted");
+
+					*tmp_lib_name_p++ = t; i++;
+
+				} while ((t != 0x00 )&& (i < MAX_NAME));
+				if (t != 0x00) throw udm_exception("MEM file corrupt!");
+				read += strlen(tmp_lib_name) + 1;
+				so->setLibraryName2(tmp_lib_name);
+
+				if (!fread(&marker, sizeof(unsigned char), 1, f))
+					throw udm_exception("can't read from file, probably MEM file is corrupted");
+				read += sizeof(const unsigned char);
+			}
+
+
+
+
+
+
+
+			if (marker != 0xFF) throw udm_exception("MEM file corrupt!");
 		}
 		
 
@@ -3668,6 +3703,18 @@ namespace UdmStatic
 
 		for (; ch_i != m_children.end(); ch_i++)
 		{
+
+			//ccr_name_str might be empty,
+			//use MakeShortRolenames to be able to
+			//distinguish between them
+			//string ccr_name_str = ccr.name();
+			string ccr_name_str;
+
+			if (ch_i->first) {
+				const ::Uml::CompositionChildRole ccr = ::Uml::CompositionChildRole::Cast(meta_dn->ObjectById((*ch_i).first));
+				ccr_name_str = Uml::MakeShortRoleName(ccr);
+			}
+#if 0
 			
 			const ::Uml::CompositionChildRole ccr = ::Uml::CompositionChildRole::Cast(meta_dn->ObjectById((*ch_i).first));
 			
@@ -3677,6 +3724,7 @@ namespace UdmStatic
 			//distinguish between them
 			//string ccr_name_str = ccr.name();
 			string ccr_name_str = Uml::MakeShortRoleName(ccr);
+#endif
 
 			//write the name of the child role
 			//long ccr_str_length = ((*ccr_map_i).second).size();
@@ -4110,6 +4158,14 @@ namespace UdmStatic
 
 		}
 
+		// library name
+		static const unsigned char not_end_of_obj = 0xFE;
+		fwrite(&not_end_of_obj, sizeof(const unsigned char), 1, f);
+		length += sizeof(const unsigned char);
+
+		fwrite(lib_name.c_str(), lib_name.length() + 1, 1, f);
+		length += lib_name.length() + 1;
+
 
 
 
@@ -4187,6 +4243,70 @@ namespace UdmStatic
 		
 	}
 
+	bool StaticObject::isLibObject() const
+	{
+#if 0
+		return lib_object;
+#else
+		StaticObject *parent = m_parent;
+		while (parent) {
+			if (parent->getLibraryName().length())
+				return true;
+			parent = parent->m_parent;
+		}
+		return false;
+#endif
+	}
+
+	string StaticObject::getLibraryName() const
+	{
+		return lib_name;
+	}
+
+	void StaticObject::setLOFOnChildren(bool is_lib_object)
+	{
+		children_type::iterator i = m_children.begin();
+		while (i != m_children.end()) {
+			i->second->lib_object = is_lib_object;
+			i->second->setLOFOnChildren(is_lib_object);
+			i++;
+		}
+	}
+
+	void StaticObject::setLibraryName(const string &name)
+	{
+		lib_name = name;
+#if 0
+		setLOFOnChildren(lib_name.length() > 0);
+#else
+		if (name.length() == 0) {
+			children_type::iterator i = m_children.begin();
+			while (i != m_children.end()) {
+				i->second->setLibraryName(name);
+				i++;
+			}
+		}
+#endif
+	}
+
+	void StaticObject::setLibraryName2(const string &name)
+	{
+		lib_name = name;
+	}
+
+	ObjectImpl * StaticObject::createLibRootChild(const ::Uml::Class &meta, const bool need_safetype)
+	{
+		StaticObject *dep = new StaticObject(meta, 1);
+
+		// equivalent to dep->setParent:
+		pair<uniqueId_type const, StaticObject *> child(0, (StaticObject *) (dep->clone()));
+		m_children.insert(child);
+		dep->m_parent = this;
+
+		dep->setDefaultAttributes(false);
+
+		return dep->clone();
+	}
 
 	// --------------------------- Static Data Network funcitons
 

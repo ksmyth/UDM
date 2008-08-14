@@ -182,6 +182,37 @@ namespace Udm
 		return impl->getParent(NULL);
 	};
 
+	UDM_DLL bool Object::isLibObject() const
+	{
+		return impl->isLibObject();
+	}
+
+	UDM_DLL string Object::getLibraryName() const
+	{
+		return impl->getLibraryName();
+	}
+
+	UDM_DLL void Object::setLibraryName(const string &name)
+	{
+		impl->setLibraryName(name);
+	}
+
+	UDM_DLL Object Object::AttachLibrary(const Object &lib_src, const string &lib_name, t_lib_to_copy_map *copy_map)
+	{
+		ObjectImpl *lib_root;
+		if (!copy_map) {
+			lib_root = impl->AttachLibrary(lib_src.__impl(), lib_name);
+		}
+		else {
+			t_lib_to_copy_impl_map impl_map;
+			lib_root = impl->AttachLibrary(lib_src.__impl(), lib_name, &impl_map);
+			for (t_lib_to_copy_impl_map::const_iterator i = impl_map.begin(); i != impl_map.end(); i++)
+				copy_map->insert(make_pair(Object(i->first), Object(i->second)));
+		}
+
+		return Object(lib_root);
+	}
+
 
 	udm_exception NullObject::e("Object handle is null");
 
@@ -281,6 +312,7 @@ namespace Udm
 		}
 		return ret;
 	};
+
 
 	//	--- attribute setters/getters for multiple value (array) type attributes
 
@@ -1180,6 +1212,25 @@ namespace Udm
 		return status;
 	};
 
+	UDM_DLL ObjectImpl* ObjectImpl::AttachLibrary(ObjectImpl *lib_src, const string &lib_name, t_lib_to_copy_impl_map *copy_map)
+	{
+		ASSERT(lib_name.length() > 0);
+
+		ObjectImpl *lib_root = createLibRootChild(type());
+
+		UdmUtil::copy_assoc_map cam;
+		UdmUtil::CopyObjectHierarchy(lib_src, lib_root, lib_root->__getdn(), cam);
+
+		lib_root->setLibraryName(lib_name);
+
+		if (copy_map != NULL) {
+			copy_map->insert( make_pair(lib_src->clone(), lib_root->clone()) );
+			for (UdmUtil::copy_assoc_map::const_iterator i = cam.begin(); i != cam.end(); i++)
+				copy_map->insert( make_pair(i->first.__impl()->clone(), i->second.__impl()->clone()) );
+		}
+
+		return lib_root;
+	}
 
 
 

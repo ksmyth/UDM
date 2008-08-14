@@ -166,6 +166,17 @@ namespace UdmGme
 	// ---- connection through refport - hack
 		IMgaFCOsPtr FindReferencesToFCO(const IMgaFCOPtr& peer, const IMgaFCOPtr& preffered_ref = NULL) const;
 
+	// ---- library support
+		virtual bool isLibObject() const;
+		virtual string getLibraryName() const;
+		virtual void setLibraryName(const string &name);
+		virtual ObjectImpl* AttachLibrary(ObjectImpl *lib_src, const string &lib_name, Udm::t_lib_to_copy_impl_map *copy_map = NULL);
+		// not used, AttachLibrary is not emulated on this backend
+		virtual ObjectImpl *createLibRootChild(const ::Uml::Class &kind, const bool need_safetype = false) { return &Udm::_null; }
+
+		virtual ObjectImpl* LibRoot();
+		virtual void GetGuid(long *p1, long *p2, long *p3, long *p4) const;
+
 	};
 
 };

@@ -193,6 +193,9 @@ namespace UdmStatic
 		bool id_map_so_set_deleted;				// by default is false,
 												// but will be set to true when ~id_map is invoked.
 		
+		string lib_name;
+		bool lib_object;
+
 	public:
 
 		StaticObject(const ::Uml::Class &meta, 
@@ -344,9 +347,15 @@ namespace UdmStatic
 		StaticObject * FindCorrespondingObjectInStOrITree( StaticObject * where);
 		StaticObject * FindCorrespondingObjectInStOrI( StaticObject * where);
 		
-	
-
-
+		// libraries
+	protected:
+		void setLOFOnChildren(bool is_lib_object);
+	public:
+		bool isLibObject() const;
+		string getLibraryName() const;
+		void setLibraryName(const string &name);
+		void setLibraryName2(const string &name);
+		ObjectImpl *createLibRootChild(const ::Uml::Class &meta, const bool need_safetype = false);
 	};
 
 

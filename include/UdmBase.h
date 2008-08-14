@@ -278,6 +278,12 @@ namespace Udm
 
 	typedef map<string, udmvariant> tmap;
 	bool UDM_DLL IsDerivedFrom(const ::Uml::Class &derived, const ::Uml::Class &base);
+
+	class UDM_DLL ObjectImpl;
+	class UDM_DLL Object;
+
+	typedef map<ObjectImpl *, ObjectImpl *> t_lib_to_copy_impl_map;
+	typedef map<Object, Object> t_lib_to_copy_map;
 	
 	class UDM_DLL ObjectImpl
 	{
@@ -467,7 +473,14 @@ namespace Udm
 		void CopyAttributesFrom(const ObjectImpl*  from, bool direct = true);
 		void CopyAttributeFromArchetype(const ::Uml::Attribute& which);
 		void CopyAttributesFromArchetype();
-		
+
+		// libraries
+		virtual bool isLibObject() const = 0;
+		virtual string getLibraryName() const = 0;
+		virtual void setLibraryName(const string &name) = 0;
+		virtual ObjectImpl* AttachLibrary(ObjectImpl *lib_src, const string &lib_name, t_lib_to_copy_impl_map *copy_map = NULL);
+		virtual ObjectImpl *createLibRootChild(const ::Uml::Class &meta, const bool need_safetype = false) = 0;
+
 		
 	};
 
@@ -621,6 +634,11 @@ namespace Udm
 		virtual bool isSubtype() const {throw e;};
 		virtual bool isInstance() const {throw e;};
 	
+		virtual bool isLibObject() const {throw e;};
+		virtual string getLibraryName() const {throw e;};
+		virtual void setLibraryName(const string &name) {throw e;};
+		virtual ObjectImpl* AttachLibrary(ObjectImpl *lib_src, const string &lib_name, t_lib_to_copy_impl_map *copy_map = NULL) {throw e;};
+		virtual ObjectImpl *createLibRootChild(const ::Uml::Class &meta, const bool need_safetype = false) {throw e;};
 
 	};
 
@@ -2927,6 +2945,12 @@ namespace Udm
 		// distance from root; root is at level zero
 		int depth_level() const;
 
+		// libraries
+		virtual bool isLibObject() const;
+		virtual string getLibraryName() const;
+		virtual void setLibraryName(const string &name);
+		virtual Object AttachLibrary(const Object &lib_src, const string &lib_name, t_lib_to_copy_map *copy_map = NULL);
+
 
 	};
 
@@ -3069,7 +3093,6 @@ public:
 	virtual UDM_DLL const string & Str(){throw udm_exception("Unsupported method");};
 
 	virtual UDM_DLL set<Object> GetAllInstancesOf(const ::Uml::Class& meta);
-
 };
 
 
@@ -3786,6 +3809,7 @@ namespace UdmDom
 	static const char * _udm_dom_ia_desynched_atts = "_desynched_atts";
 	static const char * _udm_dom_ia_real_archetype = "_real_archetype";
 	static const char * _udm_dom_ia_subtype = "_subtype";
+	static const char * _udm_dom_ia_libname = "_libname";
 
 };
 

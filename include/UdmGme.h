@@ -133,6 +133,7 @@ namespace UdmGme
 		static Udm::DataNetwork *factory(const Udm::UdmDiagram &meta, Udm::UdmProject* project = NULL) {
 			return new GmeDataNetwork(meta, project);
 		}
+
 	private:
 		int writeOps;
 		bool hasOpened;

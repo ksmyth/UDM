@@ -141,6 +141,7 @@ AC_CONFIG_FILES([Makefile
 	tests/test_generic/Makefile
 	tests/test_generic2/Makefile
 	tests/testGetAdjacentObjects/Makefile
+	tests/test_libs/Makefile
 	tests/test_ns/Makefile
 	tests/testOCL/Makefile
 	tests/test_simpleudmops/Makefile

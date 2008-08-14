@@ -328,6 +328,7 @@ namespace DTDGen
 
 	// --------------------------- DTD generation
 
+	// TODO?: attached libraries
 	void GenerateDTDElement(const ::Uml::Class &c,  ostream &output)	
 	{
 		string name = c.name();
@@ -721,7 +722,7 @@ namespace DTDGen
 		return i != ns_ignore_set.end();
 	}
 
-	void GenerateXMLSchemaAttributes(const ::Uml::Class &c,  ostream &output, bool uxsdi)	
+	void GenerateXMLSchemaAttributes(const ::Uml::Class &c,  ostream &output, bool uxsdi, bool can_be_libroot)	
 {
 		string name = c.name();
 		::Uml::Namespace c_ns = c.parent_ns();
@@ -917,10 +918,12 @@ namespace DTDGen
 			output << "\t\t<xsd:attribute name=\"" << UdmDom::_udm_dom_ia_desynched_atts << "\" type=\"xsd:string\"/>" << endl;
 			output << "\t\t<xsd:attribute name=\"" << UdmDom::_udm_dom_ia_real_archetype << "\" type=\"xsd:boolean\"/>" << endl;
 			output << "\t\t<xsd:attribute name=\"" << UdmDom::_udm_dom_ia_subtype << "\" type=\"xsd:boolean\"/>" << endl;
+			if (can_be_libroot)
+				output << "\t\t<xsd:attribute name=\"" << UdmDom::_udm_dom_ia_libname << "\" type=\"xsd:string\"/>" << endl;
 		}
 };
 
-void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set<string> &ns_ignore_set, bool uxsdi, bool xsd_el_ta)	
+void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set<string> &ns_ignore_set, bool uxsdi, bool xsd_el_ta, bool can_be_libroot)
 {
 	string name = c.name();
 	bool has_text_attr = Uml::HasTextAttributes(c);
@@ -969,7 +972,7 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 	
 
 	::Uml::Namespace ns = c.parent_ns();
-	if (!cwcps.empty() || has_text_attr) 
+	if (!cwcps.empty() || has_text_attr || can_be_libroot) 
 	{
 		/* if text attribute is present, no order of child nodes are enforced, the content model is (A?,B?,C?)* */
 		if (has_text_attr || xsd_el_ta)
@@ -1024,11 +1027,22 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 			cwcps_i++;
 		}
 
+		// always attach libraries last
+		if (can_be_libroot)
+		{
+			output << "\t\t\t<xsd:element name=\"" << name << "\"";
+			if (ns != ::Uml::Namespace(NULL))
+				output << " type=\"" << ns.getPath2("_", false) << ":" << name << "Type\"";
+			else
+				output << " type=\"" << name << "Type\"";
+			output << " minOccurs=\"0\" maxOccurs=\"unbounded\"/>" << endl;
+		}
+
 		output << "\t\t</xsd:sequence>" << endl;
 	}
 
 	
-	GenerateXMLSchemaAttributes(c, output, uxsdi);
+	GenerateXMLSchemaAttributes(c, output, uxsdi, can_be_libroot);
 
 	if (uxsdi && only_base)
 	{
@@ -1179,7 +1193,8 @@ static void GenerateXMLSchemaForClasses(const ::Uml::Diagram &dgr,
 	{
 		if(uxsdi || !(bool)i->isAbstract() )
 		{
-			GenerateXMLSchemaElement(*i,  output, ns_ignore_set, uxsdi, xsd_el_ta);
+			bool is_not_contained = false;
+
 			// XSD elements can't be of abstract types,
 			// don't make them globals
 			if (!uxsdi || !(bool)i->isAbstract()) {
@@ -1192,10 +1207,14 @@ static void GenerateXMLSchemaForClasses(const ::Uml::Diagram &dgr,
 				if ((p_c.size() == 0) ||
 						(p_c.size() == 1 &&
 						(anc = *(p_c.begin())) &&
-						(anc == *i || (::Uml::IsDerivedFrom(*i, anc) && anc.isAbstract()))) ||
-					IsCrossNSCompositionChildEnd(*i))
+						(anc == *i || (::Uml::IsDerivedFrom(*i, anc) && anc.isAbstract()))))
+					is_not_contained = true;
+
+				if (is_not_contained || IsCrossNSCompositionChildEnd(*i))
 					globalElements.push_back(*i);
 			}
+
+			GenerateXMLSchemaElement(*i,  output, ns_ignore_set, uxsdi, xsd_el_ta, is_not_contained);
 
 		}
 		++i;

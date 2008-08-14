@@ -204,6 +204,7 @@ CHANGELOG
 #pragma warning( disable : 4786 )	// this is the stupid warning with truncating identifiers to 255 chars
 #include "CommonHeaders.h"
 #include <map>
+#include <iomanip>
 
 
 using namespace METALib;
@@ -281,6 +282,8 @@ namespace UdmGme
 
 		throw udm_exception(s);
 	}
+
+	SmartBSTR createGMEconnstr(string sn);
 
 	string getnameforassoc(const ::Uml::Association &ass, bool generate_name) 
 	{
@@ -2401,6 +2404,217 @@ bbreak:			;
 		*/
 
 	};
+
+
+	bool GmeObject::isLibObject() const
+	{
+		return (objself->IsLibObject == VARIANT_TRUE);
+	}
+
+	string GmeObject::getLibraryName() const
+	{
+		string ret;
+
+		if (folderself) {
+			SmartBSTR lib_name = folderself->LibraryName;
+			if (!(!lib_name)) {
+				ret = lib_name;
+				if (ret.substr(0, 4) == "MGA=")
+					ret.erase(0, 4);
+			}
+		}
+
+		return ret;
+	}
+
+	void GmeObject::setLibraryName(const string &name)
+	{
+		ASSERT(folderself != NULL);
+		folderself->LibraryName = SmartBSTR(name.c_str());
+	}
+
+	ObjectImpl * GmeObject::LibRoot()
+	{
+		ASSERT(isLibObject());
+
+		GmeObject *cur = this;
+		while (true) {
+			// the libroot of a library rootfolder is not the rootfolder itself
+			// but the containing library rootfolder
+			if (cur != this && cur->folderself != NULL) {
+				SmartBSTR lib_name = cur->folderself->LibraryName;
+				if (!(!lib_name))
+					return cur->clone();
+			}
+
+			ObjectImpl *parent = cur->getParent(NULL);
+			ASSERT(parent && parent != &Udm::_null);
+
+			if (cur != this)
+				cur->release();
+
+			cur = (GmeObject *) parent;
+		}
+	}
+
+	void GmeObject::GetGuid(long *p1, long *p2, long *p3, long *p4) const
+	{
+		objself->GetGuid(p1, p2, p3, p4);
+	}
+
+	class BinGuid {
+	protected:
+		long v1, v2, v3, v4;
+	public:
+		BinGuid() : v1(0), v2(0), v3(0), v4(0) {}
+		BinGuid(long p1, long p2, long p3, long p4) : v1(p1), v2(p2), v3(p3), v4(p4) {}
+
+		bool operator == (const BinGuid& peer) const
+		{
+			if( v1 != peer.v1) return false; // speed-up
+
+			return ( v1 == peer.v1
+					&& v2 == peer.v2
+					&& v3 == peer.v3
+					&& v4 == peer.v4);
+		}
+
+		bool operator != ( const BinGuid& peer) const
+		{
+			return !( *this == peer);
+		}
+
+		bool operator < ( const BinGuid& peer) const
+		{
+			if( v1 < peer.v1) return true; // speed-up
+
+			return v1 < peer.v1
+					|| v1 == peer.v1 && v2 < peer.v2
+					|| v1 == peer.v1 && v2 == peer.v2 && v3 < peer.v3
+					|| v1 == peer.v1 && v2 == peer.v2 && v3 == peer.v3 && v4 < peer.v4;
+		}
+
+		friend ostream & operator << (ostream &o, const BinGuid &v)
+		{
+			o << hex << v.v1 << "-" << v.v2 << "-" << v.v3 << "-" << v.v4 << dec;
+			return o;
+		}
+	};
+
+	class UniqueId {
+	protected:
+		BinGuid objectId, libId;
+	public:
+		UniqueId() {}
+		UniqueId(const BinGuid &po, const BinGuid &pl) : objectId(po), libId(pl) {}
+
+		bool operator == (const UniqueId &peer) const
+		{
+			return ( libId == peer.libId
+					&& objectId == peer.objectId);
+		}
+
+		bool operator< ( const UniqueId& peer) const
+		{
+			if( objectId < peer.objectId) return true;
+
+			return objectId < peer.objectId
+					|| objectId == peer.objectId && libId < peer.libId;
+		}
+
+		friend ostream & operator << (ostream &o, const UniqueId &v)
+		{
+			o << "[" << v.objectId << "]-[" << v.libId << "]";
+			return o;
+		}
+	};
+
+	typedef map<UniqueId, ObjectImpl *> t_uid_to_impl_map;
+	void BuildUniqueIdMap(ObjectImpl *po, t_uid_to_impl_map &m, bool obj_itself = true)
+	{
+		GmeObject *o = static_cast<GmeObject *>(po);
+
+		vector<ObjectImpl *> children = o->getChildren(NULL, NULL);
+		for (vector<ObjectImpl *>::const_iterator i = children.begin(); i != children.end(); i++) {
+			GmeObject *child = (GmeObject *) *i;
+			BuildUniqueIdMap(child, m);
+			child->release();
+		}
+
+		if (!obj_itself)
+			return;
+
+		long v1, v2, v3, v4;
+		BinGuid objId, libId;
+
+		o->GetGuid(&v1, &v2, &v3, &v4);
+		objId = BinGuid(v1, v2, v3, v4);
+
+		if (!o->isLibObject()) {
+			Object root = o->__getdn()->GetRootObject();
+			// for root we use BinGuid(0, 0, 0, 0)
+			if (o->uniqueId() != root.uniqueId()) {
+				static_cast<GmeObject *>(root.__impl())->GetGuid(&v1, &v2, &v3, &v4);
+				libId = BinGuid(v1, v2, v3, v4);
+			}
+		}
+		else {
+			ObjectImpl *lib_root = o->LibRoot();
+			ASSERT(lib_root && lib_root != &Udm::_null);
+			static_cast<GmeObject *>(lib_root)->GetGuid(&v1, &v2, &v3, &v4);
+			libId = BinGuid(v1, v2, v3, v4);
+			lib_root->release();
+		}
+
+		m.insert( make_pair(UniqueId(objId, libId), o->clone()) );
+	}
+
+	void MapLibToCopy(ObjectImpl *lib_root, ObjectImpl *copy_root, Udm::t_lib_to_copy_impl_map &m)
+	{
+		m.clear();
+		m.insert( make_pair(lib_root->clone(), copy_root->clone()) );
+
+		t_uid_to_impl_map lib_map, copy_map;
+		BuildUniqueIdMap(lib_root, lib_map, false);
+		BuildUniqueIdMap(copy_root, copy_map, false);
+
+#if 0
+		for (t_uid_to_impl_map::const_iterator i = lib_map.begin(); i != lib_map.end(); i++) {
+			UniqueId uid = i->first;
+			ObjectImpl *o = i->second;
+			cout << o->uniqueId() << ": " << "\t" << uid << endl;
+		}
+
+		for (t_uid_to_impl_map::const_iterator i = copy_map.begin(); i != copy_map.end(); i++) {
+			UniqueId uid = i->first;
+			ObjectImpl *o = i->second;
+			cout << o->uniqueId() << ": " << "\t" << uid << endl;
+		}
+#endif
+
+		for (t_uid_to_impl_map::const_iterator i_src = lib_map.begin(); i_src != lib_map.end(); i_src++) {
+			t_uid_to_impl_map::const_iterator i_dst = copy_map.find(i_src->first);
+			ASSERT(i_dst != copy_map.end());
+			m.insert( make_pair(i_src->second->clone(), i_dst->second->clone()) );
+		}
+	}
+
+	// TODO: copy the library from lib_src to a temporary file, attach from that file and set LibraryName to lib_name
+	ObjectImpl* GmeObject::AttachLibrary(ObjectImpl *lib_src, const string &lib_name, Udm::t_lib_to_copy_impl_map *copy_map)
+	{
+		ASSERT(folderself != NULL);
+
+		IMgaFolderPtr lib_rf;
+		COMTHROW(folderself->AttachLibrary(createGMEconnstr(lib_name), &lib_rf));
+
+		GmeObject *lib_root = new GmeObject(lib_rf, mydn);
+
+		if (copy_map)
+			MapLibToCopy(lib_src, lib_root, *copy_map);
+
+		return lib_root;
+	}
+
 
 
 
