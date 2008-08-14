@@ -692,9 +692,9 @@ void ClassGen::Children()
 
 	::Uml::Diagram dgr = ::Uml::GetDiagram(c);
 	::Uml::Namespace ns = c.parent_ns();
-	set< ::Uml::Class> allclasses = ns ? ns.classes() : dgr.classes();
+	::Uml::DiagramClasses allclasses = ::Uml::DiagramClasses(dgr);
 
-	for (set< ::Uml::Class>::iterator j = allclasses.begin(); j != allclasses.end(); j++) 
+	for (::Uml::DiagramClasses::iterator j = allclasses.begin(); j != allclasses.end(); j++) 
 	{
 		for (set< ::Uml::Class>::iterator k = childrenkinds.begin(); k != childrenkinds.end(); k++) 
 		{
