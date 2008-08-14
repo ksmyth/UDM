@@ -67,9 +67,8 @@ AC_CHECK_HEADER([boost/concept_check.hpp], [],
 	[AC_MSG_ERROR([boost/concept_check.hpp header is needed; please install Boost])])
 AC_CHECK_HEADER([boost/format.hpp], [],
 	[AC_MSG_ERROR([boost/format.hpp header is needed; please install Boost])])
-
-AC_CHECK_HEADER([loki/Typelist.h], [],
-	[AC_MSG_ERROR([loki/Typelist.h header is needed; please install Loki])])
+AC_CHECK_HEADER([boost/mpl/vector.hpp], [],
+	[AC_MSG_ERROR([boost/mpl/vector.hpp header is needed; please install Boost])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

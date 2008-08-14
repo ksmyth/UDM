@@ -701,6 +701,9 @@ if exist ..\..\etc\UdmProject.xsd attrib -r ..\..\etc\UdmProject.xsd
 				RelativePath="..\..\include\UdmBase.h">
 			</File>
 			<File
+				RelativePath="..\..\include\UdmMPL.h">
+			</File>
+			<File
 				RelativePath="..\..\include\UdmProject.h">
 			</File>
 			<File

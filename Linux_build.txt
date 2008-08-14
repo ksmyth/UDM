@@ -23,8 +23,7 @@ Build-environment preparation (RHEL 4):
   up2date boost-devel
 - install the following rpms from our repository:
   xerces-c, xerces-c-devel, xalan-c, xalan-c-devel, minizip, minizip-devel,
-  minizip-libs, pccts, swig1324, cppunit, cppunit-devel, loki-lib,
-  loki-lib-devel
+  minizip-libs, pccts, swig1324, cppunit, cppunit-devel
 - if the system is registered with RHN and subscribed to the
   "Extras" channel, then install either java-1.4.2-bea or java-1.4.2-ibm:
   up2date java-1.4.2-bea java-1.4.2-bea-devel

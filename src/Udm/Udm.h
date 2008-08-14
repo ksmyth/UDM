@@ -135,6 +135,8 @@ public:
 
 
 class UdmGen {
+	// maximum size of Boost MPL sequences created
+	static int mpl_seq_max_size;
 
 public:
 	::Uml::Diagram diagram;
@@ -143,7 +145,7 @@ public:
 	UdmGen(const ::Uml::Diagram &p_diagram, const UdmOpts &p_opts) : diagram(p_diagram), opts(p_opts) { }
 
 	void Generate(const ::Uml::Diagram &cross_dgr, const string &filename);
-	boost::format HPreamble(const string &fname) const;
+	vector<boost::format> HPreamble(const string &fname) const;
 	boost::format HPostamble(const string &fname) const;
 	boost::format HExport(const string &fname) const;
 	boost::format HIncludeExport(const string &fname) const;
@@ -153,6 +155,8 @@ public:
 
 	vector<boost::format> CPPURIMapping() const;
 	vector<boost::format> CPPXsdStorage() const;
+
+	static void SetMPLSequenceMaxSize(int size);
 };
 
 

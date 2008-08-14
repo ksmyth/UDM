@@ -13,6 +13,7 @@ this software.
 
 
 #include <fstream>
+#include <boost/mpl/vector.hpp>
 
 #include "Udm.h"
 #include "File2Code/File2Code.h"
@@ -292,12 +293,16 @@ bool InheritanceSolver::sortByActiveNamespace::operator()(const ::Uml::Class &a,
 }
 
 
-boost::format UdmGen::HPreamble(const string &fname) const
+int UdmGen::mpl_seq_max_size;
+
+vector<boost::format> UdmGen::HPreamble(const string &fname) const
 {
 	string hname("MOBIES_" + fname + "_H");
 	boost::to_upper(hname);
 
-	return boost::format("#ifndef %1%\n\
+	vector<boost::format> r;
+
+	r.push_back( boost::format("#ifndef %1%\n\
 #define %1%\n\
 \n\
 // header file %2%.h generated from diagram %3%\n\
@@ -315,8 +320,29 @@ boost::format UdmGen::HPreamble(const string &fname) const
 \n\
 #include <Uml.h>\n\
 \n\
-#include <boost/concept_check.hpp>\n\
-#include <loki/Typelist.h>\n\
+")
+		% hname
+		% fname
+		% (string) diagram.name()
+		% UDM_VERSION_MAJOR
+		% UDM_VERSION_MINOR
+		% (opts.rec_tstamp ? GetTime().c_str() : "") );
+
+	if (mpl_seq_max_size > BOOST_MPL_LIMIT_VECTOR_SIZE) {
+		// find the nearest upper multiple of ten
+		int new_limit = mpl_seq_max_size;
+		if (new_limit % 10)
+			new_limit = new_limit - new_limit % 10 + 10;
+
+		r.push_back( boost::format("\
+#define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS\n\
+#define BOOST_MPL_LIMIT_VECTOR_SIZE %1%\n\
+")
+			% new_limit );
+	}
+
+	r.push_back( boost::format("\
+#include <UdmMPL.h>\n\
 \n\
 #ifdef min\n\
 #undef min\n\
@@ -325,13 +351,9 @@ boost::format UdmGen::HPreamble(const string &fname) const
 #ifdef max\n\
 #undef max\n\
 #endif\n\
-\n")
-		% hname
-		% fname
-		% (string) diagram.name()
-		% UDM_VERSION_MAJOR
-		% UDM_VERSION_MINOR
-		% (opts.rec_tstamp ? GetTime().c_str() : "");
+\n") );
+
+	return r;
 }
 
 
@@ -500,7 +522,10 @@ void UdmGen::Generate(const ::Uml::Diagram &cross_dgr, const string &filename)
 	out_h.open( (filename + ".h").c_str() );
 	if (!out_h.good()) throw udm_exception("Error opening for write " + filename + ".h");
 
-	out_h << HPreamble(filename);
+	vector<boost::format> r1 = HPreamble(filename);
+	for (vector<boost::format>::const_iterator i = r1.begin(); i != r1.end(); i++)
+		out_h << *i;
+
 	out_h << HIncludeExport(filename);
 
 	dgen.OutH(out_h);
@@ -514,8 +539,8 @@ void UdmGen::Generate(const ::Uml::Diagram &cross_dgr, const string &filename)
 	out_cpp.open( (filename + ".cpp").c_str() );
 	if (!out_cpp.good()) throw udm_exception("Error opening for write " + filename + ".cpp");
 
-	vector<boost::format> r = CPPPreamble(filename, cross_dgr);
-	for (vector<boost::format>::const_iterator i = r.begin(); i != r.end(); i++)
+	vector<boost::format> r2 = CPPPreamble(filename, cross_dgr);
+	for (vector<boost::format>::const_iterator i = r2.begin(); i != r2.end(); i++)
 		out_cpp << *i << endl;
 
 	dgen.OutCPP(out_cpp);
@@ -525,6 +550,12 @@ void UdmGen::Generate(const ::Uml::Diagram &cross_dgr, const string &filename)
 
 	// diagram-export.h source
 	GenHExport(filename);
+}
+
+void UdmGen::SetMPLSequenceMaxSize(int size)
+{
+	if (size > mpl_seq_max_size)
+		mpl_seq_max_size = size;
 }
 
 void OutFmts(ostream &out, const string &idt, const vector<boost::format> &v, bool semicolon)

@@ -227,9 +227,6 @@ this software.
 #include <string>
 #include <map>
 
-#include <loki/Typelist.h>
-#include <boost/concept_check.hpp>
-
 namespace Uml
 {
 
@@ -3493,125 +3490,6 @@ public:
 
 
 
-	};
-
-	// Is ReturnType a public base of any type from the typelist, or
-	// is there an element in the typelist that is an alias to the
-	// ReturnType type?
-	// Returns a boolean value.
-	template <class ReturnType, class TList>
-	struct SuperSubclassTypelist
-	{
-		enum
-		{
-			value = (Loki::SuperSubclass<ReturnType, typename TList::Head>::value
-				 ? true
-				 : SuperSubclassTypelist<ReturnType, typename TList::Tail>::value)
-		};
-	};
-
-	template <class ReturnType>
-	struct SuperSubclassTypelist<ReturnType, Loki::NullType>
-	{
-		enum { value = false };
-	};
-
-	// The typelist contains elements of type pair<ReturnType, RoleType>.
-	// We want to find if the pair formed by the first two parameters can
-	// be found in the typelist this way: the role type must be the same
-	// and the return type template parameter is a public base of the
-	// return type from the typelist pair, or an alias.
-	// Returns a boolean value.
-	template <class ReturnType, class RoleType, class TList>
-	struct SuperSubclassTypelist2
-	{
-	private:
-		typedef typename TList::Head::first_type LookupReturnType;
-		typedef typename TList::Head::second_type LookupRoleType;
-	public:
-		enum
-		{
-			value = (Loki::IsSameType<RoleType, LookupRoleType>::value
-				 && Loki::SuperSubclass<ReturnType, LookupReturnType>::value
-				 ? true
-				 : SuperSubclassTypelist2<ReturnType, RoleType, typename TList::Tail>::value)
-		};
-	};
-
-	template <class ReturnType, class RoleType>
-	struct SuperSubclassTypelist2<ReturnType, RoleType, Loki::NullType>
-	{
-		enum { value = false };
-	};
-
-	// The typelist contains elements of type
-	// pair< ReturnType, pair<AssocClassType, RoleType> >.
-	// We want to find if the triplet formed by the first three parameters
-	// can be found by a typelist item in this way:
-	// - the role type must be the same
-	// - the return type template parameter is a public base of or it is an
-	//   alias of the return type stored in the item
-	// - the association class type template parameter is derived from or
-	//   it is an alias of the association class type stored in the item
-	// Returns a boolean value.
-	template <class ReturnType, class AClassType, class RoleType, class TList>
-	struct SuperSubclassTypelist3
-	{
-	private:
-		typedef typename TList::Head::first_type LookupReturnType;
-
-		typedef typename TList::Head::second_type SecPair;
-		typedef typename SecPair::first_type LookupAClassType;
-		typedef typename SecPair::second_type LookupRoleType;
-	public:
-		enum
-		{
-			value = (Loki::IsSameType<RoleType, LookupRoleType>::value
-				 && Loki::SuperSubclass<ReturnType, LookupReturnType>::value
-				 && Loki::SuperSubclass<LookupAClassType, AClassType>::value
-				 ? true
-				 : SuperSubclassTypelist3<ReturnType, AClassType, RoleType, typename TList::Tail>::value)
-		};
-	};
-
-	template <class ReturnType, class AClassType, class RoleType>
-	struct SuperSubclassTypelist3<ReturnType, AClassType, RoleType, Loki::NullType>
-	{
-		enum { value = false };
-	};
-
-	// Concepts
-	template <class ReturnType, class TList>
-	struct SuperSubclassTypelistConcept
-	{
-		void constraints()
-		{
-			enum { val = SuperSubclassTypelist<ReturnType, TList>::value ? 1 : -1 };
-			char temp[val];
-			boost::ignore_unused_variable_warning(temp);
-		}
-	};
-
-	template <class ReturnType, class RoleType, class TList>
-	struct SuperSubclassTypelist2Concept
-	{
-		void constraints()
-		{
-			enum { val = SuperSubclassTypelist2<ReturnType, RoleType, TList>::value ? 1 : -1 };
-			char temp[val];
-			boost::ignore_unused_variable_warning(temp);
-		}
-	};
-
-	template <class ReturnType, class AClassType, class RoleType, class TList>
-	struct SuperSubclassTypelist3Concept
-	{
-		void constraints()
-		{
-			enum { val = SuperSubclassTypelist3<ReturnType, AClassType, RoleType, TList>::value ? 1 : -1 };
-			char temp[val];
-			boost::ignore_unused_variable_warning(temp);
-		}
 	};
 
 

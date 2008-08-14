@@ -636,6 +636,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\UdmMPL.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\UdmProject.h"
 				>
 			</File>
