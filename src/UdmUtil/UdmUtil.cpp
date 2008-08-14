@@ -352,7 +352,10 @@ namespace UdmUtil
 						{
 							//if it's not a real archetype, we skip this child
 							//(it's there because the parent has an archetype)
-							if (!p_srcChild->hasRealArchetype()) continue;
+							if (!p_srcChild->hasRealArchetype()) {
+								p_srcChild->release();
+								continue;
+							}
 
 							//if same datanetwork, check if srcChild archetype is out-of-the-box or not
 							bool outOfBox_srcChildArc = dest_same_dn && !srcChildArc.IsNodeOfTree(p_srcRoot->clone());
@@ -388,6 +391,7 @@ namespace UdmUtil
 								
 									finished = false;//archetype it is not copied, it will be needed to
 												//walk the tree again
+									p_srcChild->release();
 									continue; //skip to the next children
 								
 							}
@@ -400,6 +404,7 @@ namespace UdmUtil
 								if (!outOfBox_srcChildArc && !reqIsObjectCopied(srcChild,cam))
 								{
 									finished = false;
+									p_srcChild->release();
 									continue;
 								}
 								//archetype is ready, so we create the new object, 
@@ -567,6 +572,7 @@ namespace UdmUtil
 							if (dest_same_dn) 
 							{
 								//cout << "Ignoring the copy of link with peer " << ExtractName(srcChild) << ", it has been detected as out of the box object!" << endl;
+								p_srcChild->release();
 								continue;
 							};
 							//if we are copying complete data networks, this should not happen!
