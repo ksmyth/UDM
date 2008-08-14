@@ -166,6 +166,9 @@ protected:
 	// start of class definition
 	boost::format class_def_start;
 
+	// typedefs
+	vector<boost::format> typedefs;
+
 	// constructors
 	vector<boost::format> ctor_defs;
 

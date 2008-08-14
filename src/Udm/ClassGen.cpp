@@ -221,6 +221,15 @@ void ClassGen::Basic(const InheritanceSolver &is)
 	// 8. cross diagram association class ends
 	// template <class EndType, class RoleType> Udm::CrossAssocEndAttr<EndType> cross_end() const { ... }
 	meth_defs.push_back( boost::format("template <class EndType, class RoleType> Udm::CrossAssocEndAttr<EndType> cross_end() const { boost::function_requires< Udm::WithRoleInTListConcept<EndType, RoleType, CrossAClassEnds> >(); return Udm::CrossAssocEndAttr<EndType>(impl, _type2ARole<RoleType>()); }") );
+
+	// typedef for stereotype
+	string stereotype = c.stereotype();
+	if (stereotype != "Atom" && stereotype != "Connection"
+		&& stereotype != "FCO" && stereotype != "Folder"
+		&& stereotype != "Model" && stereotype != "Reference"
+		&& stereotype != "Set")
+		stereotype = "Unknown";
+	typedefs.push_back( boost::format("typedef ::Udm::%1%MetaTag MetaKind") % stereotype );
 }
 
 
@@ -1112,6 +1121,7 @@ void ClassGen::OutDecls(ostream &out)
 	out << lidt << class_def_start << " {" << endl;
 	out << lidt << "public:" << endl;
 
+	OutFmts(out, idt, typedefs);
 	OutFmts(out, idt, ctor_defs, false);
 	OutFmts(out, idt, dtor_defs, false);
 	OutFmts(out, idt, meth_defs, false);

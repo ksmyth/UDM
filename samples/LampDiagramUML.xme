@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{6808720E-347B-46D7-9F14-196F5602ED43}" cdate="Fri Jul 04 15:40:43 2008" mdate="Fri Jul 04 15:40:43 2008" version="" metaguid="{D8D4D1A7-F9C1-4B28-96A2-8A81DB4E2A79}" metaversion="" metaname="UML">
+<project guid="{310ADFC1-1F0E-4840-AAC8-357C5BD8D879}" cdate="Fri Jul 04 15:40:43 2008" mdate="Fri Jul 04 15:40:43 2008" version="" metaguid="{D8D4D1A7-F9C1-4B28-96A2-8A81DB4E2A79}" metaversion="" metaname="UML">
 	<name>LampDiagram</name>
 	<comment></comment>
 	<author></author>
@@ -36,7 +36,7 @@
 						<value>false</value>
 					</attribute>
 					<attribute kind="Stereotype">
-						<value></value>
+						<value>Connection</value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-00000002" kind="Connector" role="Connector" guid="{2543DEDA-1A5A-47a7-BD18-8F3DEE580DD0}" relid="0x9">
@@ -81,7 +81,7 @@ registry annotations: String[0..*]
 						<value>false</value>
 					</attribute>
 					<attribute kind="Stereotype">
-						<value></value>
+						<value>Model</value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-00000004" kind="Class" role="Class" guid="{D8557CD5-E3AC-4d56-BE0F-C0FF0D6AD545}" relid="0x26">
@@ -102,7 +102,7 @@ registry annotations: String[0..*]
 						<value>false</value>
 					</attribute>
 					<attribute kind="Stereotype">
-						<value></value>
+						<value>Model</value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-00000005" kind="Class" role="Class" guid="{10679FAD-B756-44ec-A3B2-A00DF5BF7C60}" relid="0x6">
@@ -128,7 +128,7 @@ position:String[0..1]
 						<value>false</value>
 					</attribute>
 					<attribute kind="Stereotype">
-						<value></value>
+						<value>Atom</value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-00000006" kind="Class" role="Class" guid="{561A040D-D5E3-4aa0-B763-10F4A300E52E}" relid="0x1">
@@ -150,7 +150,7 @@ position:String[0..1]
 						<value>false</value>
 					</attribute>
 					<attribute kind="Stereotype">
-						<value></value>
+						<value>Folder</value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-00000007" kind="Class" role="Class" guid="{77459635-0B19-4702-9586-EF287524DE53}" relid="0x2">
@@ -175,7 +175,7 @@ name:String[0..1]
 						<value>true</value>
 					</attribute>
 					<attribute kind="Stereotype">
-						<value></value>
+						<value>Model</value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-00000008" kind="Class" role="Class" guid="{3E009B54-BE5C-49a2-8D31-4F137649A8E2}" relid="0x3">
@@ -199,7 +199,7 @@ name:String[0..1]
 						<value>false</value>
 					</attribute>
 					<attribute kind="Stereotype">
-						<value></value>
+						<value>Connection</value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-00000009" kind="Class" role="Class" guid="{B93DF9F0-5289-4bbe-829D-2DFF5DE66FAB}" relid="0x16">
@@ -222,7 +222,7 @@ Safe:Boolean[0..1
 						<value>false</value>
 					</attribute>
 					<attribute kind="Stereotype">
-						<value></value>
+						<value>Model</value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-0000000a" kind="Class" role="Class" guid="{5C381184-53CF-4d7b-BAA9-2194ECD24C75}" relid="0x13">
@@ -246,7 +246,7 @@ Wattage:Real[1]
 						<value>false</value>
 					</attribute>
 					<attribute kind="Stereotype">
-						<value></value>
+						<value>Model</value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-0000000b" kind="Inheritance" role="Inheritance" guid="{89850F16-B663-49b7-8EC5-3842B237823E}" relid="0x27">
@@ -296,7 +296,7 @@ Wattage:Real[1]
 						<value>false</value>
 					</attribute>
 					<attribute kind="Stereotype">
-						<value></value>
+						<value>Model</value>
 					</attribute>
 				</atom>
 				<atom id="id-0066-0000000e" kind="Inheritance" role="Inheritance" guid="{EA14A940-1CBD-4463-AE92-E4EB9DEF090A}" relid="0xf">

@@ -29,6 +29,17 @@ this software.
 
 namespace Udm
 {
+	struct AtomMetaTag {};
+	struct ConnectionMetaTag {};
+	struct FCOMetaTag {};
+	struct FolderMetaTag {};
+	struct ModelMetaTag {};
+	struct ReferenceMetaTag {};
+	struct SetMetaTag {};
+	struct UnknownMetaTag {};
+
+	typedef boost::mpl::vector<AtomMetaTag, ConnectionMetaTag, FCOMetaTag, FolderMetaTag, ModelMetaTag, ReferenceMetaTag, SetMetaTag, UnknownMetaTag> MetaTagList;
+
 	// Concepts
 
 	// The typelist contains an element that is a the same type as
