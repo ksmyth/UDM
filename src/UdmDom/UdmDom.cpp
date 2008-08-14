@@ -4151,30 +4151,20 @@ namespace UdmDom
 	};
 
 
-	static struct Startup
-	{
-		Startup()
-		{
-			XMLPlatformUtils::Initialize();
-		}
-
-		~Startup()
-		{
-			XMLPlatformUtils::Terminate();
-		}
-	} __startup;
-
 	bool  DomDataNetwork::multiroles;
 	UDM_DLL string  DomDataNetwork::DTDPath;
 
 	static class reg {
 		public:
 		reg() {
+			XMLPlatformUtils::Initialize();
 			DomDataNetwork::RegisterBackend("DOM", "xml", &DomDataNetwork::factory);
 			UdmDom::Dummy_For_Linker++;	//just to use the variable...
 		}	
 		~reg() {
 			DomDataNetwork::UnRegisterBackends();
+			//disabled due to crashes caused by destructors called after Terminate()
+			//XMLPlatformUtils::Terminate();
 		}
 	} _reg_unused;
 
