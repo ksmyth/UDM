@@ -6,7 +6,7 @@
 #include "wizard97.h"
 #include <fstream>
 
-#include <stdlib.h> //for system()
+#include <cstdlib> //for system()
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -108,7 +108,6 @@ void CGenerator::FileFilter(CString strFileName,bool & bSkip,bool&bReadOnly, boo
 
 #include "direct.h"
 #include <io.h>
-#include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "unzip.h"

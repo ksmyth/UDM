@@ -121,13 +121,13 @@ XERCES_CPP_NAMESPACE_USE
 #include "Uml.h"
 #include "UmlExt.h"
 #include "UdmUtil.h"
-#include <time.h>
+//#include <ctime>
 
 
 #ifdef _WIN32
 #include <io.h>
 #include <windows.h>
-#include <string.h>
+#include <cstring>
 
 // these redefinitions are for linking with the single-threaded runtime libs
 #define strdup _strdup
@@ -135,8 +135,7 @@ XERCES_CPP_NAMESPACE_USE
 #define access _access
 
 #else
-#include <unistd.h>
-#include <wchar.h>
+#include <cwchar>
 #endif
 
 #include <cstdio>

@@ -7,6 +7,7 @@
 #include <UdmBase.h>
 #include <UdmCintSwig.h>
 #include <fstream>
+#include <cstdlib>
 
 
 #include "SBML2Ex_xsd.h"

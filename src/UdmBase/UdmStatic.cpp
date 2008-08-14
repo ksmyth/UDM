@@ -230,6 +230,8 @@ CHANGELOG
 
 #include <map>
 //#include <slist>
+#include <cstdlib>
+#include <cstring>
 
 //SafeTypeContainer Static class maps
 Uml::SafeTypeContainer::ref_map_t Uml::SafeTypeContainer::ref_map;

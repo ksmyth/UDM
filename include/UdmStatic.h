@@ -53,7 +53,7 @@ CHANGELOG
 #endif
 
 
-#include <stdio.h> //file operations
+#include <cstdio> //file operations
 
 /*
 	this class is needed to prevent inserting exactly the same element-pair in a multimap

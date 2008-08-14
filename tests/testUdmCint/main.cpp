@@ -9,6 +9,7 @@
 #include <fstream>
 #include "GeneTF_xsd.h"
 #include "GeneTF_GeneTF_xsd.h"
+#include <cstdlib>
 
 void UdmTests::Test::readFromFile(std::istream& in, std::string& str)
 {

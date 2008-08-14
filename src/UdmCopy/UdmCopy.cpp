@@ -19,6 +19,8 @@ UDM_USE_MGA
 
 #include <UdmUtil.h>
 
+#include <cstdlib>
+
 /*
 static Diagram linkdiag;
 static Class linkpar;

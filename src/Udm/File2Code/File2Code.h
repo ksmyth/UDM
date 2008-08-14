@@ -9,7 +9,7 @@ typedef std::map<std::string, StrVec> StrStrVecMap;
 class File2Code
 {
 public:
-  typedef enum GenModeType{JAVA, CPP};
+  enum GenModeType{JAVA, CPP};
 
 protected:
   std::string m_dest_dir;

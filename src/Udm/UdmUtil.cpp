@@ -16,7 +16,7 @@ this software.
 #include "File2Code/File2Code.h"
 #include "UdmUtil.h"
 
-#include <time.h>
+#include <ctime>
 #include <fstream>
 
 std::string GetTime()	{

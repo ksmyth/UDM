@@ -22,7 +22,7 @@
 //###############################################################################################################################################
   
 #ifndef _WIN32
-#include <stdio.h>
+#include <cstdio>
 char *_itoa( int value, char *string, int radix )
 {
 	sprintf(string, "%d", value);
@@ -39,6 +39,8 @@ char *_itoa( int value, char *string, int radix )
 
 #include "UdmOclObject.h"
 #include "UdmOclType.h"
+
+#include <cstring>
 
 
 #define LINE_END std::string( "\n" )

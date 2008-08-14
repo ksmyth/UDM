@@ -46,7 +46,10 @@ this software.
 
 */
 //tmpnam
-#include <stdio.h>
+#include <cstdio>
+
+// memset
+#include <cstring>
 
 //UDM
 #include <UdmBase.h>
@@ -87,7 +90,6 @@ this software.
 #include <fstream>
 
 //UdmDom DomPath
-
 #include <UdmDom.h>
 
 void _udm_project_dummy_init(){};

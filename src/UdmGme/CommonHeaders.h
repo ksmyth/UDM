@@ -3,7 +3,7 @@
 #define _WIN32_WINNT 0x0400
 #endif
 #include <windows.h>
-#include <stdio.h>
+#include <cstdio>
 #include <tchar.h>
 //#include <objbase.h>
 //#include <atlbase.h>

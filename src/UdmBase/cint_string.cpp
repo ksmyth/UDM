@@ -13,6 +13,7 @@
 #include <UdmBase.h>
 #include <cint_string.h>
 
+#include <cstring>
 
 
 

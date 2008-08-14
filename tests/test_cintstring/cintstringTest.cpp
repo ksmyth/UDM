@@ -4,6 +4,7 @@
 #include <UdmBase.h>
 #include <cint_string.h>
 #include "cintstringTest.h"
+#include <cstring>
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::cintstringTest );

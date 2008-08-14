@@ -60,7 +60,7 @@ Changelog:
 #include <UdmUtil.h>
 #include "DTDGen.h"
 
-#include <time.h>
+#include <ctime>
 #include <fstream>
 
 namespace DTDGen

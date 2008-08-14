@@ -4,6 +4,8 @@
 #include <Uml.h>
 #include <UmlExt.h>
 
+#include <cstring>
+
 //! Constructor.
 /*!
   Creates and initializes the Java API generation.

@@ -93,6 +93,8 @@ CHANGELOG
 #include "UmlExt.h"
 #include <UdmUtil.h>
 #include <string>
+#include <cstdlib>
+#include <cstring>
 
 #ifndef _WIN32
 long long _atoi64(const char *x)  { long long i; sscanf(x,"%lld",&i);return i;};

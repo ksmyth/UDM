@@ -14,6 +14,7 @@ this software.
 #include "UmlExt.h"
 #include "UdmStatic.h"
 #include "UdmUtil.h"
+#include <cstring>
 
 /*
 	CHANGELOG

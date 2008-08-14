@@ -1,7 +1,7 @@
 #include "Utils.h"
 
 #include "../File2Code/File2Code.h"
-#include <time.h>
+#include <ctime>
 #include <UmlExt.h>
 #include <UdmUtil.h>
 
@@ -13,7 +13,8 @@
     _mkdir(fname.c_str());
   }
 #else	//WIN32
-  #include <errno.h>
+  #include <cerrno>
+  #include <cstring>
   #include <unistd.h>
   #include <utime.h>
   #include <sys/types.h>

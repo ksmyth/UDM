@@ -13,7 +13,6 @@ this software.
 
 #include "Uml.h"
 #include "UmlExt.h"
-#include <time.h>
 #include <map>
 #include "Udm.h"
 

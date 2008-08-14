@@ -60,7 +60,7 @@ protected:
 // int64
 
 #ifndef _WIN32
-#include <stdio.h>
+#include <cstdio>
 typedef long long __int64;
 #define __int64() long long()
 long long _atoi64(const char *x);

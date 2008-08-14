@@ -10,6 +10,7 @@
 #include "OCLObjectExBasic.h"
 #include "math.h"
 #include <algorithm>
+#include <cstring>
 
 //--------------------------8><----------
 #ifndef _WIN32

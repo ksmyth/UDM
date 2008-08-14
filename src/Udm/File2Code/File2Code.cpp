@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <algorithm>
 #include <limits>
-#include <time.h>
 
 #include "File2Code.h"
 

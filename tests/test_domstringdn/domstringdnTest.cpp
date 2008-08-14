@@ -5,6 +5,7 @@
 #include <UdmDom.h>
 #include "LampDiagram.h"
 #include "domstringdnTest.h"
+#include <cstring>
 
 
 // Registers the fixture into the 'registry'
