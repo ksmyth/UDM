@@ -675,11 +675,15 @@ void ClassGen::Children()
 		meta_init_links.push_back( boost::format("%1%::meta.parentRoles() = %1%_cpr") % cl_name );
 #endif
 
+	set< ::Uml::Class> childrenkinds_for_tl;
+	set< ::Uml::CompositionChildRole> childroles = ::Uml::AncestorCompositionPeerChildRoles(c);
+	for( set< ::Uml::CompositionChildRole>::const_iterator ci = childroles.begin(); ci != childroles.end(); ++ci)
+		childrenkinds_for_tl.insert(ci->target());
+	BuildTL(childrenkinds_for_tl, "ChildrenKinds", "children by returned type", children_kinds_tl);
+
 	::Uml::Diagram dgr = ::Uml::GetDiagram(c);
 	::Uml::Namespace ns = c.parent_ns();
 	set< ::Uml::Class> allclasses = ns ? ns.classes() : dgr.classes();
-
-	set< ::Uml::Class> childrenkinds_for_tl;
 
 	for (set< ::Uml::Class>::iterator j = allclasses.begin(); j != allclasses.end(); j++) 
 	{
@@ -700,14 +704,10 @@ void ClassGen::Children()
 				// template <class Pred> Udm::ChildrenAttr<T, Pred> R_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr<T, Pred>(impl, Udm::NULLCHILDROLE); }
 				meth_defs.push_back( boost::format("template <class Pred> Udm::ChildrenAttr< %1%, Pred> %2%_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< %1%, Pred>(impl, Udm::NULLCHILDROLE); }") % kind_children_cpp % kind_children_name );
 
-				childrenkinds_for_tl.insert(*j);
-
 				break;
 			}
 		}
 	}
-
-	BuildTL(childrenkinds_for_tl, "ChildrenKinds", "children by returned type", children_kinds_tl);
 }
 
 void ClassGen::Parents()
@@ -768,10 +768,14 @@ void ClassGen::Parents()
 		meta_init_links.push_back( boost::format("%1%::meta.childRoles() = %1%_ccr") % cl_name );
 #endif
 
+	set< ::Uml::Class> parentkinds_for_tl;
+
 	bool parent_defined = false;
 	set< ::Uml::CompositionParentRole> parroles = Uml::AncestorCompositionPeerParentRoles(c);
 	for( set< ::Uml::CompositionParentRole>::iterator ri = parroles.begin(); ri != parroles.end(); ri++) 
 	{
+		parentkinds_for_tl.insert(ri->target());
+
 		if(string(ri->name()) == "parent")
 		{
 			parent_defined = true;
@@ -779,7 +783,7 @@ void ClassGen::Parents()
 		}
 	}
 
-	set< ::Uml::Class> parentkinds_for_tl;
+	BuildTL(parentkinds_for_tl, "ParentKinds", "parent by returned type", parent_kinds_tl);
 
 	if(!parent_defined) 
 	{
@@ -797,8 +801,6 @@ void ClassGen::Parents()
 
 				// Udm::ParentAttr<T> parent() const { return Udm::ParentAttr<T>(impl, Udm::NULLPARENTROLE); }
 				meth_defs.push_back( boost::format("Udm::ParentAttr< %1%> parent() const { return Udm::ParentAttr< %1%>(impl, Udm::NULLPARENTROLE); }") % UmlClassCPPName(ans_class) );
-
-				parentkinds_for_tl.insert(ans_class);
 			}
 			else
 			{
@@ -806,14 +808,10 @@ void ClassGen::Parents()
 				{
 					// Udm::ParentAttr<T> T_parent() const { return Udm::ParentAttr<T>(impl, Udm::NULLPARENTROLE); }
 					meth_defs.push_back( boost::format("Udm::ParentAttr< %1%> %2%_parent() const { return Udm::ParentAttr< %1%>(impl, Udm::NULLPARENTROLE); }") % (string) ccc->name() % UmlClassCPPName(*ccc) );
-
-					parentkinds_for_tl.insert(*ccc);
 				}
 			}
 		}
 	}
-
-	BuildTL(parentkinds_for_tl, "ParentKinds", "parent by returned type", parent_kinds_tl);
 }
 
 
