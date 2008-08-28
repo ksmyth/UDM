@@ -5,9 +5,6 @@
 	Name="UdmOcl"
 	ProjectGUID="{5106C980-BC3D-48C5-A033-0D58C20F9980}"
 	RootNamespace="UdmOcl"
-	SccProjectName="&quot;$/MoBIESTransition/udm_ns2/src/UdmOcl&quot;, INZAAAAA"
-	SccLocalPath="."
-	SccProvider="MSSCCI:Microsoft Visual SourceSafe"
 	>
 	<Platforms>
 		<Platform

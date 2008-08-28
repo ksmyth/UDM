@@ -5,10 +5,6 @@
 	Name="File2Code"
 	ProjectGUID="{51A35FC8-1D28-4B8A-9592-CE334FFA7539}"
 	RootNamespace="File2Code"
-	SccProjectName="SAK"
-	SccAuxPath="SAK"
-	SccLocalPath="SAK"
-	SccProvider="SAK"
 	Keyword="Win32Proj"
 	>
 	<Platforms>

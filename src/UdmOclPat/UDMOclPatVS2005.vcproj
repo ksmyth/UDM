@@ -5,9 +5,6 @@
 	Name="UDMPat"
 	ProjectGUID="{EF8C7C28-568A-4335-9861-84ED3917E1A6}"
 	RootNamespace="UDMPat"
-	SccProjectName="&quot;$/MoBIESTransition/udm_ns2/src/UdmOclPat&quot;, QNZAAAAA"
-	SccLocalPath="."
-	SccProvider="MSSCCI:Microsoft Visual SourceSafe"
 	>
 	<Platforms>
 		<Platform

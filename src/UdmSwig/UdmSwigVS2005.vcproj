@@ -5,10 +5,6 @@
 	Name="UdmSwig"
 	ProjectGUID="{51AA434D-E6EE-494B-9DA6-85B511B019FC}"
 	RootNamespace="UdmSwig"
-	SccProjectName="SAK"
-	SccAuxPath="SAK"
-	SccLocalPath="SAK"
-	SccProvider="SAK"
 	>
 	<Platforms>
 		<Platform

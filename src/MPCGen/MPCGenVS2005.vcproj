@@ -5,10 +5,6 @@
 	Name="MPCGen"
 	ProjectGUID="{7E5263AA-49FA-4EA3-89D8-427F40C5B0BC}"
 	RootNamespace="MPCGen"
-	SccProjectName="SAK"
-	SccAuxPath="SAK"
-	SccLocalPath="SAK"
-	SccProvider="SAK"
 	Keyword="Win32Proj"
 	>
 	<Platforms>

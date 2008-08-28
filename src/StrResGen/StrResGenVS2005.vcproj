@@ -5,10 +5,6 @@
 	Name="StrResGen"
 	ProjectGUID="{B1C6E905-B4C5-4653-9D17-FA52EDA2991B}"
 	RootNamespace="StrResGen"
-	SccProjectName="SAK"
-	SccAuxPath="SAK"
-	SccLocalPath="SAK"
-	SccProvider="SAK"
 	>
 	<Platforms>
 		<Platform

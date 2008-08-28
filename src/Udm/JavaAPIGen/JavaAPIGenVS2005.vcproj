@@ -5,10 +5,6 @@
 	Name="JavaAPIGen"
 	ProjectGUID="{DCBD6ED0-5DD4-4C81-AF53-12F6F3D810B5}"
 	RootNamespace="JavaAPIGen"
-	SccProjectName="SAK"
-	SccAuxPath="SAK"
-	SccLocalPath="SAK"
-	SccProvider="SAK"
 	Keyword="Win32Proj"
 	>
 	<Platforms>

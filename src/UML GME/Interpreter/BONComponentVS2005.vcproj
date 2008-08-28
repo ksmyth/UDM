@@ -5,9 +5,6 @@
 	Name="Component"
 	ProjectGUID="{207DA527-EC80-4A83-B5C2-B2A02281AFBA}"
 	RootNamespace="Component"
-	SccProjectName="&quot;$/MoBIESTransition/udm_ns2/src/UML GME/Interpreter&quot;, XOZAAAAA"
-	SccLocalPath="."
-	SccProvider="MSSCCI:Microsoft Visual SourceSafe"
 	Keyword="AtlProj"
 	>
 	<Platforms>

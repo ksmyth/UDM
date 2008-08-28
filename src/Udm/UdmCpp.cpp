@@ -191,7 +191,7 @@ string InheritanceSolver::getAncestorList(const ::Uml::Class &cl) const
 	set< ::Uml::Class> bases = cl.baseTypes();
 	if( bases.size() == 0) 
 	{
-		if (virtualbaseclasses.find(cl) != virtualbaseclasses.end()) ret+= " virtual";
+		if (virtualbaseclasses.find(cl) != virtualbaseclasses.end()) ret+= " virtual ";
 		ret += "public Udm::Object";
 	}
 	else 
@@ -208,7 +208,7 @@ string InheritanceSolver::getAncestorList(const ::Uml::Class &cl) const
 			if (actmapi->second.find(cl) != actmapi->second.end())
 			{
 				ret += sep;
-				ret += " virtual";
+				ret += " virtual ";
 				sep = "";
 			};
 			if(*h != cl) 

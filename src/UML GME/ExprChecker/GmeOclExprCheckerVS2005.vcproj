@@ -5,9 +5,6 @@
 	Name="GmeOclExprChecker"
 	ProjectGUID="{C2E74DE0-8084-42E2-941D-F18816C98D88}"
 	RootNamespace="GmeOclExprChecker"
-	SccProjectName="&quot;$/MoBIESTransition/udm_ns2/src/UML GME/ExprChecker&quot;, WOZAAAAA"
-	SccLocalPath="."
-	SccProvider="MSSCCI:Microsoft Visual SourceSafe"
 	Keyword="MFCProj"
 	>
 	<Platforms>
@@ -790,11 +787,11 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="CompIcon.ico"
+				RelativePath="resources\compicon.ico"
 				>
 			</File>
 			<File
-				RelativePath="resources\compicon.ico"
+				RelativePath="CompIcon.ico"
 				>
 			</File>
 			<File
