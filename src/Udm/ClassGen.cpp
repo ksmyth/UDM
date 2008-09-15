@@ -397,7 +397,7 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 			}
 			else 
 			{
-				comments.push_back( boost::format("Access method for non-navigable association %1% omitted") % rel_name );
+				comments.push_back( boost::format("//Access method for non-navigable association %1% omitted") % rel_name );
 			}
 		}
 		else 
@@ -443,7 +443,7 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 			}
 			else 
 			{
-				comments.push_back( boost::format("Access method for non-navigable association %1% omitted") % rel_name );
+				comments.push_back( boost::format("//Access method for non-navigable association %1% omitted") % rel_name );
 			}
 		}
 	}
@@ -529,7 +529,7 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 				}
 				else 
 				{
-					comments.push_back( boost::format("Access method for non-navigable association %1% omitted") % rel_name );
+					comments.push_back( boost::format("//Access method for non-navigable association %1% omitted") % rel_name );
 				}
 			}
 			else 
@@ -599,7 +599,7 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 				}
 				else 
 				{
-					comments.push_back( boost::format("Access method for non-navigable association %1% omitted") % rel_name );
+					comments.push_back( boost::format("//Access method for non-navigable association %1% omitted") % rel_name );
 				}
 			}
 		}
@@ -672,7 +672,7 @@ void ClassGen::Children()
 		}
 		else 
 		{
-			comments.push_back( boost::format("Access method for non-navigable association %1% omitted") % rel_name );
+			comments.push_back( boost::format("//Access method for non-navigable association %1% omitted") % rel_name );
 		}
 	}
 
@@ -765,7 +765,7 @@ void ClassGen::Parents()
 		}
 		else 
 		{
-			comments.push_back( boost::format("Access method for non-navigable association %1% omitted") % rel_name );
+			comments.push_back( boost::format("//Access method for non-navigable association %1% omitted") % rel_name );
 		}
 	}
 
