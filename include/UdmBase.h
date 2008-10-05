@@ -2834,7 +2834,7 @@ namespace Udm
 		// Creates a link of a simple association or an association with association class. 
 		// If ascType.clsAssociation is not valid a simple association will be tried.
 		// On error results in false, true otherwise.
-		bool CreateLink(Object dstObject, const AssociationInfo& ascType);
+		bool CreateLink(Object dstObject, const AssociationInfo& ascType,const bool direct = true);
 		// Removes a link of a simple association or an association with association class
 		// if AscType.clsAssociation is not valid a simple association will be attempted
 		// On error or when there is no such link false, otherwise true is returned.	
