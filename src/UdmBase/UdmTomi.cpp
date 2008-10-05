@@ -1351,7 +1351,7 @@ UDM_DLL Object Object::CreateObject(const ::Uml::Class & clsType, const Composit
 // Creates a link of a simple association or an association with association class. 
 // If ascType.clsAssociation is not valid a simple association will be tried.
 // On error results in false, true otherwise.
-UDM_DLL bool Object::CreateLink(Object dstObject, const AssociationInfo& ascType)
+UDM_DLL bool Object::CreateLink(Object dstObject, const AssociationInfo& ascType, const bool direct)
 {
 	//srcObject is this
 	bool bRetVal=false;
@@ -1396,7 +1396,7 @@ UDM_DLL bool Object::CreateLink(Object dstObject, const AssociationInfo& ascType
 				//then, you set the assoc. class association with at least two setAssociation calls
 				//on at least two objects.
 
-				impl->setAssociation(::Uml::theOther(*p_currAssocRole),srcPeers, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
+				impl->setAssociation(::Uml::theOther(*p_currAssocRole),srcPeers, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER,direct);
 
 				//getassociation clone()-s it first
 
