@@ -569,14 +569,14 @@ namespace UdmUtil
 							//if we copy inside a datanetwork, we simply skip this peer.
 							//the user is responsible for recreating the connection
 
-							if (dest_same_dn) 
+					//		if (dest_same_dn) 
 							{
 								//cout << "Ignoring the copy of link with peer " << ExtractName(srcChild) << ", it has been detected as out of the box object!" << endl;
 								p_srcChild->release();
 								continue;
 							};
 							//if we are copying complete data networks, this should not happen!
-							throw udm_exception("Internal UdmCopy error");
+							//throw udm_exception("Internal UdmCopy error");
 						}
 					}
 					else

@@ -46,6 +46,83 @@ public:
 	{
 	}
 
+	void Copy(ObjectImpl *p_srcRoot, ObjectImpl *p_dstRoot, DataNetwork *p_dstBackend, UdmUtil::copy_assoc_map &cam, bool isGMEdst)
+	{
+		const Uml::Class root_class = p_srcRoot->type();
+		string roottype = root_class.name();
+		vector<ObjectImpl*> children = p_srcRoot->getChildren(NULL, p_srcRoot->type());
+
+		for (vector<ObjectImpl*>::const_iterator i = children.begin(); i != children.end(); i++) {
+
+			ObjectImpl *p_srcChild = *i;
+
+			string lib_name = p_srcChild->getLibraryName();
+			if(lib_name.length() == 0)
+			{
+				const Uml::Class childClass = p_srcChild->type();
+				string childtype = childClass.name();
+				if(childtype=="RootFolder" && roottype=="RootFolder" && isGMEdst)
+				{
+					Udm::Object srcChildObj = p_srcChild->clone();
+					lib_name = UdmUtil::ExtractName(srcChildObj);
+					if(lib_name.length() == 0 || lib_name=="<empty string>" || lib_name=="<no name specified>") 
+					{
+						lib_name="lib";
+					}
+				}
+			}
+
+			if (lib_name.length() == 0) {
+				p_srcChild->release();
+				continue;
+			}
+			string new_lib_name = lib_name.substr(0, lib_name.length() - 4) + "." + m_backend_ext;
+
+
+			// create datanetwork for standalone library and build map
+			// from source object to standalone library object
+			Udm::SmartDataNetwork libDN(m_meta);
+			const ::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(p_srcChild->type());
+			libDN.CreateNew(new_lib_name, m_metaloc, safe_type);
+			Object p_root = libDN.GetRootObject();
+			ObjectImpl *p_libRoot = p_root.__impl();
+
+			// copy, including nested libraries
+			UdmUtil::copy_assoc_map lib_cam;
+			Copy(p_srcChild, p_libRoot, &libDN, lib_cam, isGMEdst);
+			lib_cam.insert( make_pair(p_srcChild->clone(), p_libRoot->clone()) );
+			libDN.SaveAs(new_lib_name);
+
+
+			// attach library to destination host and build map
+			// from standalone library object to private copy object
+			// (the map already has a mapping from src root to dst root)
+			Udm::t_lib_to_copy_impl_map lib_copy_impl_cam;
+			ObjectImpl *p_newLibRoot = p_dstRoot->AttachLibrary(p_libRoot, new_lib_name, &lib_copy_impl_cam);
+
+			// we need a new map with Object elements instead of ObjectImpl* elements
+			UdmUtil::copy_assoc_map lib_copy_cam;
+			for (Udm::t_lib_to_copy_impl_map::const_iterator i = lib_copy_impl_cam.begin(); i != lib_copy_impl_cam.end(); i++) {
+				lib_copy_cam.insert( make_pair(i->first, i->second) );
+			}
+
+
+			// map from source to library private copy
+			for (UdmUtil::copy_assoc_map::const_iterator i = lib_cam.begin(); i != lib_cam.end(); i++) {
+				UdmUtil::copy_assoc_map::const_iterator fi = lib_copy_cam.find(i->second);
+				if (fi == lib_copy_cam.end())
+					throw udm_exception("object not found in map");
+				cam.insert( make_pair(i->first, fi->second) );
+			}
+
+			libDN.CloseNoUpdate();
+
+			cam.insert( make_pair(p_srcChild, p_newLibRoot) );
+		}
+
+		UdmUtil::CopyObjectHierarchy(p_srcRoot, p_dstRoot, p_dstBackend, cam);	
+	}
+
 	void Copy(ObjectImpl *p_srcRoot, ObjectImpl *p_dstRoot, DataNetwork *p_dstBackend, UdmUtil::copy_assoc_map &cam)
 	{
 		vector<ObjectImpl*> children = p_srcRoot->getChildren(NULL, p_srcRoot->type());
@@ -154,7 +231,9 @@ int main(int argc, char **argv) {
 			UdmCopy cp(udmDataDiagram, metaloc, toDN_ext);
 
 			UdmUtil::copy_assoc_map dummy;
-			cp.Copy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN, dummy);
+
+			cp.Copy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN, dummy,toDN_ext=="mga");
+//			cp.Copy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN,dummy);
 
 		}
 
@@ -165,7 +244,3 @@ int main(int argc, char **argv) {
 
 		return 0;
 }
-
-
-
-
