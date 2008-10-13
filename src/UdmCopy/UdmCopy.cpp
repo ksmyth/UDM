@@ -78,7 +78,7 @@ public:
 				continue;
 			}
 	//		string new_lib_name = lib_name.substr(0, lib_name.length() - 4) + "." + m_backend_ext;
-			string new_lib_name = lib_name + "." + m_backend_ext;
+			string new_lib_name = lib_name +  + "." + m_backend_ext;
 
 
 			// create datanetwork for standalone library and build map
@@ -172,13 +172,8 @@ int main(int argc, char **argv) {
 			string toDN_ext = toDN_name.substr(toDN_name.length() - 3, 3);
 
 			UdmUtil::copy_assoc_map dummy;
-			if(stricmp(toDN_ext.c_str(), "mga")==0)
-			{	
-				UdmCopy cp(udmDataDiagram, metaloc, toDN_ext);
-				cp.Copy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN,dummy);
-				}
-			else
-				UdmUtil::CopyObjectHierarchy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN, dummy);
+			UdmCopy cp(udmDataDiagram, metaloc, toDN_ext);
+			cp.Copy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN,dummy);
 		}
 
 		catch(udm_exception u) {
