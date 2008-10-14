@@ -51,11 +51,13 @@ public:
 		const Uml::Class root_class = p_srcRoot->type();
 		string roottype = root_class.name();
 
+		set<Udm::Object> libRoots;
 		vector<ObjectImpl*> children = p_srcRoot->getChildren(NULL, p_srcRoot->type());
 		for (vector<ObjectImpl*>::const_iterator i = children.begin(); i != children.end(); i++) {
 
 			ObjectImpl *p_srcChild = *i;
-
+			Udm::Object srcChild = p_srcChild->clone();
+			libRoots.insert(srcChild);
 			string lib_name = p_srcChild->getLibraryName();
 
 			if(lib_name.length() == 0)
@@ -122,7 +124,7 @@ public:
 			cam.insert( make_pair(p_srcChild, p_newLibRoot) );
 		}
 
-		UdmUtil::CopyObjectHierarchy(p_srcRoot, p_dstRoot, p_dstBackend, cam);
+		UdmUtil::CopyObjectHierarchy(p_srcRoot, p_dstRoot, p_dstBackend, cam,libRoots);
 	}
 };
 

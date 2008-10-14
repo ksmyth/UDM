@@ -129,7 +129,61 @@ namespace UdmUtil
 
 	}
 
-	
+
+	UDM_DLL int CopyObjectHierarchy(Udm::ObjectImpl* p_srcRoot, Udm::ObjectImpl* p_dstRoot, Udm::DataNetwork* p_dstBackend, copy_assoc_map &cam, set<Udm::Object> &libRoots)
+	{
+		// Due to library copying, we have to accept partially filled map.
+		//if (cam.size()) throw udm_exception("Association map copied objects should be empty!");
+		
+		bool finished = true;
+		bool first = true;
+
+		int ret;
+
+		while (!finished || first)
+		{
+			first = false;
+			finished = true;
+
+			//cout << endl << "Running again ... " << endl;
+			ret=reqCopyObjectHierarchy(p_srcRoot,p_dstRoot, p_dstBackend, finished, cam);
+		}
+		
+		//cout << endl << " Objects copied" << endl;	
+		if(!ret)
+		{
+			p_dstRoot->CopyAttributesFrom(p_srcRoot);	
+			vector<ObjectImpl*>children=p_srcRoot->getChildren(NULL,NULL);
+			vector<ObjectImpl*>::iterator p_currImpl;
+			for(p_currImpl=children.begin();p_currImpl!=children.end();p_currImpl++)
+			{
+				ObjectImpl* p_srcChild=*p_currImpl;				
+				Udm::Object srcChild = p_srcChild;//will be released in ~Object, p_srcChild is cloned, 
+												  //because it's returned by getChildren
+				if(libRoots.find(srcChild)!=libRoots.end()) continue;
+				
+				copy_assoc_map::iterator cam_i = cam.find(srcChild);
+				if (cam_i == cam.end()) 
+				{
+					throw udm_exception("Internal UdmCopy error");
+				}
+								
+				Udm::Object dstChild = cam_i->second;		//this is a safe Object to Object copy
+				ObjectImpl* p_dstChild = dstChild.__impl();	//is also safe, we don't create an Object from this pointer
+						
+				if(!p_dstChild || p_dstChild==&Udm::_null) throw udm_exception("Internal UdmCopy error");
+				ret=reqCopyLinks(p_srcChild,p_dstChild, cam, false);			
+				ret=reqCopyLinks(p_srcChild,p_dstChild, cam, false,false);
+			}	
+//			ret=reqCopyLinks(p_srcRoot,p_dstRoot,cam, false);			//copy simple links first
+
+//			ret=reqCopyLinks(p_srcRoot,p_dstRoot,cam, false, false);	//then assoc class based ones.
+		}
+		
+		return ret;
+
+	}
+
 	bool reqIsObjectCopied(const Udm::Object & srcDerived, const copy_assoc_map &cam)
 	{
 		set<Udm::Object> src_children = srcDerived.GetChildObjects();
@@ -564,6 +618,9 @@ namespace UdmUtil
 						}
 						else
 						{
+							//10/13/2008 by Feng: I comment the throw udm_exception in this section to to such scenatio:
+							//For attached library, there may be an outside reference refers to the object inside
+
 							//cout << " cam_i == cam.end() while looking for the copy " << endl;
 							
 							//if we copy inside a datanetwork, we simply skip this peer.
@@ -628,7 +685,10 @@ namespace UdmUtil
 		//	for (int i = 0; i<depth; i++,cout<<"\t");		
 		//	cout << "traversing: looking for: " << ExtractName(srcChild) << ", of type:" << ExtractName(srcChild.type()) << endl;
 			copy_assoc_map::iterator cam_i = cam.find(srcChild);
-			if (cam_i == cam.end()) throw udm_exception("Internal UdmCopy error");
+			if (cam_i == cam.end()) 
+			{
+				throw udm_exception("Internal UdmCopy error");
+			}
 							
 			Udm::Object dstChild = cam_i->second;		//this is a safe Object to Object copy
 			ObjectImpl* p_dstChild = dstChild.__impl();	//is also safe, we don't create an Object from this pointer

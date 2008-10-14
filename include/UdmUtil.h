@@ -37,6 +37,7 @@ namespace UdmUtil
 	
 	UDM_DLL int reqCopyLinks(Udm::ObjectImpl* p_srcRoot,Udm::ObjectImpl* p_dstRoot, copy_assoc_map& cam, const bool direct = true,const bool simpleLinks = true);	
 	UDM_DLL int CopyObjectHierarchy(Udm::ObjectImpl* p_srcRoot, Udm::ObjectImpl* p_dstRoot, Udm::DataNetwork* p_dstBackend, copy_assoc_map &cam);
+	UDM_DLL int CopyObjectHierarchy(Udm::ObjectImpl* p_srcRoot, Udm::ObjectImpl* p_dstRoot, Udm::DataNetwork* p_dstBackend, copy_assoc_map &cam, set<Udm::Object> &libRoots);
 	
 	//this utility tries to extract the name-like attribute
 	//using stupid heuristics and assuming odd things like
