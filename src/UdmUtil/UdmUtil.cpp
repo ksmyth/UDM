@@ -303,14 +303,14 @@ namespace UdmUtil
 		{
 			ObjectImpl* p_srcChild = *p_currImpl;			//source child
 
-			if (p_srcChild->getLibraryName().length() == 0) {
+			Udm::Object srcChild = p_srcChild->clone();		//the cloned copy will be released in ~Object
+			if(!isAttachedLib(srcChild)){
 				// not a library root, copy it below
 				p_srcChild->release();
 				continue;
 			}
 
-			Udm::Object srcChild = p_srcChild->clone();		//the cloned copy will be released in ~Object
-															//check whether the object was copied first
+			//check whether the object was copied first
 			copy_assoc_map::iterator cam_i = cam.find(srcChild);
 			if (cam_i != cam.end()) 
 			{
@@ -369,14 +369,15 @@ namespace UdmUtil
 				{
 					ObjectImpl* p_srcChild=*p_currImpl;				//source child
 					ObjectImpl* p_dstChild = &Udm::_null;			//the destination child(-to be-) variable
-
-					if (p_srcChild->getLibraryName().length() > 0) {	// library root element has been copied above
+					Udm::Object srcChild = p_srcChild->clone();		//the cloned copy will be released in ~Object
+					Udm::Object dstChild;
+					
+					if(isAttachedLib(srcChild)){
+				//	if (p_srcChild->getLibraryName().length() > 0) {	// library root element has been copied above				
 						p_srcChild->release();
 						continue;
 					}
 
-					Udm::Object srcChild = p_srcChild->clone();		//the cloned copy will be released in ~Object
-					Udm::Object dstChild;
 
 																	//check whether the object was copied first
 					copy_assoc_map::iterator cam_i = cam.find(srcChild);
@@ -854,4 +855,16 @@ namespace UdmUtil
 
 		return result;
 	}
+
+	UDM_DLL bool isAttachedLib(Udm::Object &obj)
+	{
+		if(obj.getLibraryName().length() > 0) 
+			return true;
+
+		Udm::Object parentObj = obj.GetParent();
+		string childType = (obj.type()).name();
+		string parentType = (parentObj.type()).name();
+		return (childType=="RootFolder" && parentType=="RootFolder");		
+	}
+
 };
