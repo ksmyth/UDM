@@ -57,6 +57,7 @@ namespace UdmUtil
 	// Converts a double value to a string, using the least necessary
 	// precision to represent the original double value.
 	UDM_DLL string doubleToString(double val, int minimum_precision = 2);
+	UDM_DLL bool isAttachedLib(Udm::Object &obj);
 };
 
 #endif //MOBIES_UDMUTIL_H
