@@ -13,12 +13,12 @@ libudm_la_LIBADD	= \
 	../src/UdmOcl/libudmocl.la \
 	../src/UdmOclPat/GOCL/src/libgocl.la \
 	$(XERCESLIBS) $(XALANLIBS) $(MINIZIPLIBS)
-libudm_la_LDFLAGS	= -version-info 3:1:0
+libudm_la_LDFLAGS	= -version-info 3:1:3
 # Force C++ linking
 nodist_EXTRA_libudm_la_SOURCES	= dummy.cxx
 
 libUdmSwig_la_SOURCES	=
 libUdmSwig_la_LIBADD	= ../src/UdmSwig/libudmswig.la libudm.la
-libUdmSwig_la_LDFLAGS	= -version-info 3:1:0
+libUdmSwig_la_LDFLAGS	= -version-info 3:1:3
 # Force C++ linking
 nodist_EXTRA_libUdmSwig_la_SOURCES	= dummy.cxx
