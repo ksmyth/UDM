@@ -332,6 +332,7 @@ namespace UdmStatic
 	id_map_so_set_deleted(false),
 	m_parent(NULL),
 	lib_object(false),
+	lib_root(false),
 	lib_name("")
 	{ 
 	//	GetIdForObject((StaticObject*)this);
@@ -2580,6 +2581,9 @@ namespace UdmStatic
 		list<StaticObject*> read_list;			//put the read object in a simple list, than translate the id's 			
 		static ::Uml::Class type;
 
+		// library roots
+		list<StaticObject*> lib_roots;
+
 
 		while (!feof(f))
 		{
@@ -3569,25 +3573,35 @@ namespace UdmStatic
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
 			read += sizeof(const unsigned char);
 			if (marker == 0xFE) {
-				// library name
-				static char tmp_lib_name[MAX_NAME+1];
-				static char *tmp_lib_name_p;
-				static char t;
-				static int i;
-			
-				tmp_lib_name_p = tmp_lib_name;
-				i = 0;
-				do
-				{
-					if (!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupted");
+				// library root flag and possible library name
+				static bool lib_root_val;
+				if (!fread(&lib_root_val, sizeof(bool), 1, f))
+					throw udm_exception("can't read from file, probably MEM file is corrupted");
+				read+= sizeof(bool);
+				so->lib_root = lib_root_val;
 
-					*tmp_lib_name_p++ = t; i++;
+				if (lib_root_val) {
+					static char tmp_lib_name[MAX_NAME+1];
+					static char *tmp_lib_name_p;
+					static char t;
+					static int i;
 
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(tmp_lib_name) + 1;
-				so->setLibraryName2(tmp_lib_name);
+					tmp_lib_name_p = tmp_lib_name;
+					i = 0;
+					do
+					{
+						if (!fread(&t, sizeof(char), 1, f))
+							throw udm_exception("can't read from file, probably MEM file is corrupted");
+
+						*tmp_lib_name_p++ = t; i++;
+
+					} while ((t != 0x00 )&& (i < MAX_NAME));
+					if (t != 0x00) throw udm_exception("MEM file corrupt!");
+					read += strlen(tmp_lib_name) + 1;
+					so->lib_name = tmp_lib_name;
+
+					lib_roots.push_back(so);
+				}
 
 				if (!fread(&marker, sizeof(unsigned char), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
@@ -3615,6 +3629,11 @@ namespace UdmStatic
 		{
 			read_list.front()->ValidatePointers(tr_map);
 			read_list.pop_front();
+		}
+
+		while (!lib_roots.empty()) {
+			lib_roots.front()->setLOFOnChildren(true);
+			lib_roots.pop_front();
 		}
 
 		//clear the caches
@@ -4158,14 +4177,18 @@ namespace UdmStatic
 
 		}
 
-		// library name
+		// library root flag and library name
 		static const unsigned char not_end_of_obj = 0xFE;
 		fwrite(&not_end_of_obj, sizeof(const unsigned char), 1, f);
 		length += sizeof(const unsigned char);
 
-		fwrite(lib_name.c_str(), lib_name.length() + 1, 1, f);
-		length += lib_name.length() + 1;
+		fwrite(&lib_root, sizeof(bool), 1, f);
+		length += sizeof(bool);
 
+		if (lib_root) {
+			fwrite(lib_name.c_str(), lib_name.length() + 1, 1, f);
+			length += lib_name.length() + 1;
+		}
 
 
 
@@ -4245,53 +4268,51 @@ namespace UdmStatic
 
 	bool StaticObject::isLibObject() const
 	{
-#if 0
 		return lib_object;
-#else
-		StaticObject *parent = m_parent;
-		while (parent) {
-			if (parent->getLibraryName().length())
-				return true;
-			parent = parent->m_parent;
-		}
-		return false;
-#endif
 	}
 
-	string StaticObject::getLibraryName() const
+	bool StaticObject::isLibRoot() const
 	{
-		return lib_name;
+		return lib_root;
+	}
+
+	bool StaticObject::getLibraryName(string &name) const
+	{
+		if (!isLibRoot())
+			return false;
+
+		name = lib_name;
+		return true;
 	}
 
 	void StaticObject::setLOFOnChildren(bool is_lib_object)
 	{
 		children_type::iterator i = m_children.begin();
 		while (i != m_children.end()) {
-			i->second->lib_object = is_lib_object;
-			i->second->setLOFOnChildren(is_lib_object);
+			StaticObject *co = i->second;
+			co->lib_object = is_lib_object;
+			co->setLOFOnChildren(is_lib_object);
 			i++;
 		}
 	}
 
-	void StaticObject::setLibraryName(const string &name)
+	void StaticObject::setLibraryName(const char *name)
 	{
-		lib_name = name;
-#if 0
-		setLOFOnChildren(lib_name.length() > 0);
-#else
-		if (name.length() == 0) {
+		if (name == NULL) {
+			lib_root = false;
+
+			// detach from all nested libraries
 			children_type::iterator i = m_children.begin();
 			while (i != m_children.end()) {
 				i->second->setLibraryName(name);
 				i++;
 			}
 		}
-#endif
-	}
-
-	void StaticObject::setLibraryName2(const string &name)
-	{
-		lib_name = name;
+		else {
+			lib_root = true;
+			lib_name = name;
+		}
+		setLOFOnChildren(name != NULL);
 	}
 
 	ObjectImpl * StaticObject::createLibRootChild(const ::Uml::Class &meta, const bool need_safetype)

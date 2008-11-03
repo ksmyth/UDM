@@ -168,8 +168,9 @@ namespace UdmGme
 
 	// ---- library support
 		virtual bool isLibObject() const;
-		virtual string getLibraryName() const;
-		virtual void setLibraryName(const string &name);
+		virtual bool isLibRoot() const;
+		virtual bool getLibraryName(string &name) const;
+		virtual void setLibraryName(const char *name);
 		virtual ObjectImpl* AttachLibrary(ObjectImpl *lib_src, const string &lib_name, Udm::t_lib_to_copy_impl_map *copy_map = NULL);
 		// not used, AttachLibrary is not emulated on this backend
 		virtual ObjectImpl *createLibRootChild(const ::Uml::Class &kind, const bool need_safetype = false) { return &Udm::_null; }

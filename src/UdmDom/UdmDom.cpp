@@ -1579,9 +1579,9 @@ namespace UdmDom
 
 							// skip library roots
 							DomObject *eo = new DomObject(e, mydn);
-							string lib_name = eo->getLibraryName();
+							bool is_libroot = eo->isLibRoot();
 							delete eo;
-							if (lib_name.length()) {
+							if (is_libroot) {
 								insert_point = e;
 								break;
 							}
@@ -2940,30 +2940,65 @@ namespace UdmDom
 		{
 			DOM_Node parent = dom_element.getParentNode();
 			while (parent != NULL && parent.getNodeType() == DOM_Node::ELEMENT_NODE) {
-				DOMString pa = static_cast<DOM_Element&>(parent).getAttribute(DOMString(_udm_dom_ia_libname));
-				if (pa != NULL)
+				DomObject * do_parent = new DomObject(static_cast<DOM_Element&>(parent), mydn);
+				bool parent_isLibRoot = do_parent->isLibRoot();
+				delete do_parent;
+
+				if (parent_isLibRoot)
 					return true;
+
 				parent = parent.getParentNode();
 			}
 			return false;
 		}
 
-		string getLibraryName() const
+		bool isLibRoot() const
 		{
-			string ret;
+			DOMString pa = dom_element.getAttribute(DOMString(_udm_dom_ia_libname));
+			if (pa != NULL)
+				return true;
+
+			// Feng says that there are cases of .xml files
+			// created outside Udm, where _libname does not exist
+			// and we should check if type of this object and
+			// type of its parent are "RootFolder".
+			if ((string)(m_type.name()) == "RootFolder") {
+				DOM_Node parent = dom_element.getParentNode();
+				while (parent != NULL && parent.getNodeType() == DOM_Node::ELEMENT_NODE) {
+					DomObject * do_parent = new DomObject(static_cast<DOM_Element&>(parent), mydn);
+					string parent_type = (do_parent->type()).name();
+					delete do_parent;
+
+					if (parent_type == "RootFolder")
+						return true;
+
+					parent = parent.getParentNode();
+				}
+			}
+
+			return false;
+		}
+
+		bool getLibraryName(string &name) const
+		{
+			if (!isLibRoot())
+				return false;
 
 			DOMString pa = dom_element.getAttribute(DOMString(_udm_dom_ia_libname));
 			if (pa != NULL)
-				ret = StrX(pa).localForm();
+				name = StrX(pa).localForm();
+			else
+				// for the case where _libname is not set, see isLibRoot()
+				name = "";
 
-			return ret;
+			return true;
 		}
 
-		void setLibraryName(const string &name)
+		void setLibraryName(const char *name)
 		{
 			// TODO: allow this only on root folders
-			if (name.length())
-				dom_element.setAttribute(DOMString(_udm_dom_ia_libname), DOMString(name.c_str()));
+			if (name != NULL)
+				dom_element.setAttribute(DOMString(_udm_dom_ia_libname), DOMString(name));
 			else {
 				dom_element.removeAttribute(DOMString(_udm_dom_ia_libname));
 				vector<ObjectImpl*> chds = getChildren(NULL, type());
@@ -2995,61 +3030,6 @@ namespace UdmDom
 
 				// always attach libraries to the end
 				dom_element.appendChild(dep->dom_element);
-
-#if 0
-				//dep->setParent(this, Uml::theOther(role), false);
-
-				void setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct = true) 
-				{
-
-				DOM_Node currentparent = dep->dom_element.getParentNode();
-				Udm::Object this_o = clone();
-				DomObject &aa = *static_cast<DomObject *>(a);
-				Udm::Object new_par_o = aa.clone();
-
-				DOMString chas;
-
-				else if(DomDataNetwork::MultiRolesEnabled()) 
-					chas = dep->dom_element.getAttribute(DOMString("__child_as"));
-
-				::Uml::CompositionChildRole c_role;
-
-			   ::Uml::Composition comp = Uml::matchChildToParent(m_type, aa.m_type);
-				if(!role) 
-				{
-					if(!comp) throw udm_exception("Childrole has to be specified");
-					// if role == 0 and comp != 0, no test or __child_as is necessary
-					c_role = comp.childRole();
-				}
-				else if(comp != role.parent()) 
-				{  // either 0 or different kinds
-					comp = role.parent();
-					// if different, or comp is 0 because of 0 roles, one of the followings will catch it:
-					if(!Uml::IsDerivedFrom(m_type,::Uml::CompositionChildRole(comp.childRole()).target())) 
-					{
-						throw udm_exception("Invalid parentrole specified");
-					}
-					if(!Uml::IsDerivedFrom(aa.m_type, ::Uml::CompositionParentRole(comp.parentRole()).target())) 
-					{
-						throw udm_exception("Invalid parent specified");
-					}
-
-					// we only get here, if multiple roles match, so they have to be recorded
-					DOMString  ncomp(GetANameFor(comp).c_str());
-					if(chas != (DOM_NullPtr *)NULL) 
-					{
-						if(DSFind(chas,ncomp) < 0) 
-						{
-							chas.appendData(' ');
-							chas.appendData(ncomp);
-							dom_element.setAttribute(DOMString("__child_as"), chas);
-						}
-					}
-					else dom_element.setAttribute(DOMString("__child_as"), ncomp);
-
-					c_role = Uml::theOther(role);
-				}
-#endif
 
 				//set the default attributes
 				dep->setDefaultAttributes();

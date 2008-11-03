@@ -187,12 +187,17 @@ namespace Udm
 		return impl->isLibObject();
 	}
 
-	UDM_DLL string Object::getLibraryName() const
+	UDM_DLL bool Object::isLibRoot() const
 	{
-		return impl->getLibraryName();
+		return impl->isLibRoot();
 	}
 
-	UDM_DLL void Object::setLibraryName(const string &name)
+	UDM_DLL bool Object::getLibraryName(string &name) const
+	{
+		return impl->getLibraryName(name);
+	}
+
+	UDM_DLL void Object::setLibraryName(const char *name)
 	{
 		impl->setLibraryName(name);
 	}
@@ -1221,7 +1226,7 @@ namespace Udm
 		UdmUtil::copy_assoc_map cam;
 		UdmUtil::CopyObjectHierarchy(lib_src, lib_root, lib_root->__getdn(), cam);
 
-		lib_root->setLibraryName(lib_name);
+		lib_root->setLibraryName(lib_name.c_str());
 
 		if (copy_map != NULL) {
 			copy_map->insert( make_pair(lib_src->clone(), lib_root->clone()) );

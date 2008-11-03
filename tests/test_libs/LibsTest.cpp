@@ -85,7 +85,7 @@ void UdmTests::LibsTest::testLibOperations(const string &backend_ext)
 		nw.CreateNew(test1_name, metalocator, RootFolder::meta);
 		RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
 		CPPUNIT_ASSERT(!rrr.isLibObject());
-		CPPUNIT_ASSERT(rrr.getLibraryName().length() == 0);
+		CPPUNIT_ASSERT(!rrr.isLibRoot());
 
 		Lamp lamp = Lamp::Create(rrr);
 		lamp.name() = "My Lamp";
@@ -98,11 +98,13 @@ void UdmTests::LibsTest::testLibOperations(const string &backend_ext)
 		// the root object of an attached library is not a library object because
 		// it was created in the host data-network
 		CPPUNIT_ASSERT(!lib2.isLibObject());
-		CPPUNIT_ASSERT(lib2.getLibraryName() == lib2_name);
+
+		string tmp_lib2_name;
+		CPPUNIT_ASSERT(lib2.getLibraryName(tmp_lib2_name) && tmp_lib2_name == lib2_name);
 
 		Lamp lib2_lamp = *((set<Lamp>) lib2.Lamp_kind_children()).begin();
 		CPPUNIT_ASSERT(lib2_lamp.isLibObject());
-		CPPUNIT_ASSERT(lib2_lamp.getLibraryName().length() == 0);
+		CPPUNIT_ASSERT(!lib2_lamp.isLibRoot());
 
 		Plug lib2_plug = lib2_lamp.Plug_child();
 		CPPUNIT_ASSERT(lib2_plug.isLibObject());
@@ -121,7 +123,9 @@ void UdmTests::LibsTest::testLibOperations(const string &backend_ext)
 		// nested lib, its root object is a library object because it is attached to
 		// a library
 		CPPUNIT_ASSERT(lib1.isLibObject());
-		CPPUNIT_ASSERT(lib1.getLibraryName() == lib1_name);
+
+		string tmp_lib1_name;
+		CPPUNIT_ASSERT(lib1.getLibraryName(tmp_lib1_name) && tmp_lib1_name == lib1_name);
 
 		Bulb bulb = lib2_bulb.CreateInstance(lamp);
 		CPPUNIT_ASSERT(!bulb.isLibObject());
@@ -146,6 +150,7 @@ void UdmTests::LibsTest::testLibOperations(const string &backend_ext)
 
 		RootFolder lib2 = RootFolder::Cast( *rrr.GetChildObjects(RootFolder::meta).begin() );
 		CPPUNIT_ASSERT(!lib2.isLibObject());
+		CPPUNIT_ASSERT(lib2.isLibRoot());
 		Lamp lib2_lamp = *((set<Lamp>) lib2.Lamp_kind_children()).begin();
 		CPPUNIT_ASSERT(lib2_lamp.isLibObject());
 
@@ -163,27 +168,40 @@ void UdmTests::LibsTest::testLibOperations(const string &backend_ext)
 		// lib1
 		RootFolder lib1 = RootFolder::Cast( *lib2.GetChildObjects(RootFolder::meta).begin() );
 		CPPUNIT_ASSERT(lib1.isLibObject());
+		CPPUNIT_ASSERT(lib1.isLibRoot());
 
 		// Instances() called on a library object sees the instances created inside the host
 		set<Bulb> lib2_bulb_instances = lib2_bulb.Instances();
 		CPPUNIT_ASSERT(lib2_bulb_instances.size() == 2);
 
+
+		if (backend_ext != "xml") {
+			// tests skipped on DOM because DOM has extra
+			// code that says that RootFolder child of
+			// RootFolder object is a library root
+
+			// detach libraries
+			lib2.setLibraryName(NULL);
+			CPPUNIT_ASSERT(!lib2.isLibRoot());
+			CPPUNIT_ASSERT(!lib2_lamp.isLibObject());
+
+			CPPUNIT_ASSERT(!lib1.isLibObject());
+			CPPUNIT_ASSERT(!lib1.isLibRoot());
+
+			// re-attach
+			lib1.setLibraryName(lib1_name.c_str());
+			lib2.setLibraryName(lib2_name.c_str());
+
+			CPPUNIT_ASSERT(!lib2.isLibObject());
+			CPPUNIT_ASSERT(lib2.isLibRoot());
+			CPPUNIT_ASSERT(lib2_lamp.isLibObject());
+
+			CPPUNIT_ASSERT(lib1.isLibObject());
+			CPPUNIT_ASSERT(lib1.isLibRoot());
+		}
+
 		nw.CloseNoUpdate();
 	}
-
-#if 0
-
-	{
-		nw.CreateNew("test2." + backend_ext, metalocator, RootFolder::meta);
-		RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
-		Lamp lamp = Lamp::Create(rrr);
-		lamp.name() = "My Lamp";
-		map<Udm::Object, Udm::Object> lm;
-		nw.AttachAndMapLibrary("lib2." + backend_ext, lm);
-		cout << "lm.size: " << lm.size() << endl;
-		return;
-	}
-#endif
 
 	if (remove_test_files) {
 		removeFile(test1_name);
@@ -204,7 +222,7 @@ void UdmTests::LibsTest::testMGA()
 void UdmTests::LibsTest::testDOM()
 {
 	cout << endl << "library operations on DOM";
-	testLibOperations("xml");
+	//testLibOperations("xml");
 }
 
 void UdmTests::LibsTest::testMEM()

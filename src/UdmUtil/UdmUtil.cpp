@@ -249,7 +249,7 @@ namespace UdmUtil
 		{
 			ObjectImpl* p_srcChild = *p_currImpl;			//source child
 
-			if (p_srcChild->getLibraryName().length() == 0) {
+			if (!p_srcChild->isLibRoot()) {
 				// not a library root, copy it below
 				p_srcChild->release();
 				continue;
@@ -286,7 +286,9 @@ namespace UdmUtil
 
 			ret = reqCopyObjectHierarchy(p_srcChild, p_dstChild, p_dstBackend, finished, cam);
 
-			p_dstChild->setLibraryName(p_srcChild->getLibraryName());
+			string lib_name;
+			if (p_srcChild->getLibraryName(lib_name))
+				p_dstChild->setLibraryName(lib_name.c_str());
 					
 			p_srcChild->release();		//this was obtained via getChildren()
 										//so it should be released.
@@ -316,7 +318,8 @@ namespace UdmUtil
 					ObjectImpl* p_srcChild=*p_currImpl;				//source child
 					ObjectImpl* p_dstChild = &Udm::_null;			//the destination child(-to be-) variable
 
-					if (p_srcChild->getLibraryName().length() > 0) {	// library root element has been copied above
+
+					if (p_srcChild->isLibRoot()) {	// library root element has been copied above
 						p_srcChild->release();
 						continue;
 					}
@@ -793,17 +796,6 @@ namespace UdmUtil
 		while (!precision_is_good);
 
 		return result;
-	}
-
-	UDM_DLL bool isAttachedLib(Udm::Object &obj)
-	{
-		if(obj.getLibraryName().length() > 0) 
-			return true;
-
-		Udm::Object parentObj = obj.GetParent();
-		string childType = (obj.type()).name();
-		string parentType = (parentObj.type()).name();
-		return (childType=="RootFolder" && parentType=="RootFolder");		
 	}
 
 };

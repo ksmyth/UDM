@@ -166,6 +166,7 @@ namespace UdmStatic
 	class StaticObject : public ObjectImpl
 	{
 		friend class id_map_t;					//id_map_t needs to alter the id_map_so_set_deleted flag
+		friend unsigned long StaticDataNetwork::DeSerialize(FILE*, map<unsigned long, const StaticObject*>&, Object&);
 	private:
 		StaticDataNetwork * mydn;
 
@@ -195,6 +196,7 @@ namespace UdmStatic
 		
 		string lib_name;
 		bool lib_object;
+		bool lib_root;
 
 	public:
 
@@ -352,9 +354,9 @@ namespace UdmStatic
 		void setLOFOnChildren(bool is_lib_object);
 	public:
 		bool isLibObject() const;
-		string getLibraryName() const;
-		void setLibraryName(const string &name);
-		void setLibraryName2(const string &name);
+		bool isLibRoot() const;
+		bool getLibraryName(string &name) const;
+		void setLibraryName(const char *name);
 		ObjectImpl *createLibRootChild(const ::Uml::Class &meta, const bool need_safetype = false);
 	};
 

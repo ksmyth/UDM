@@ -53,12 +53,25 @@ public:
 
 			ObjectImpl *p_srcChild = *i;
 
-			string lib_name = p_srcChild->getLibraryName();
-			if (lib_name.length() == 0) {
+			string lib_name;
+			if (!p_srcChild->getLibraryName(lib_name)) {
 				p_srcChild->release();
 				continue;
 			}
-			string new_lib_name = lib_name.substr(0, lib_name.length() - 4) + "." + m_backend_ext;
+
+			if (lib_name.length() == 0) { // a library with an empty lib name
+				Udm::Object srcChild = p_srcChild->clone();
+				lib_name = UdmUtil::ExtractName(srcChild);
+				if (lib_name.length() == 0 || lib_name == "<empty string>" || lib_name == "<no name specified>")
+					lib_name = "lib";
+			}
+
+			// remove file extension if it looks like a
+			// backend designation
+			if (lib_name.length() > 4 && lib_name[ lib_name.length() - 4 ] == '.')
+				lib_name = lib_name.substr(0, lib_name.length() - 4);
+
+			string new_lib_name = lib_name + "." + m_backend_ext;
 
 
 			// create datanetwork for standalone library and build map

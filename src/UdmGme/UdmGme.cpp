@@ -2411,26 +2411,36 @@ bbreak:			;
 		return (objself->IsLibObject == VARIANT_TRUE);
 	}
 
-	string GmeObject::getLibraryName() const
+	bool GmeObject::isLibRoot() const
 	{
-		string ret;
-
 		if (folderself) {
 			SmartBSTR lib_name = folderself->LibraryName;
 			if (!(!lib_name)) {
-				ret = lib_name;
-				if (ret.substr(0, 4) == "MGA=")
-					ret.erase(0, 4);
+				return true;
 			}
 		}
 
-		return ret;
+		return false;
 	}
 
-	void GmeObject::setLibraryName(const string &name)
+	bool GmeObject::getLibraryName(string &name) const
+	{
+		// only library roots have a library name
+		if (!isLibRoot())
+			return false;
+
+		SmartBSTR lib_name = folderself->LibraryName;
+		name = lib_name;
+		if (name.substr(0, 4) == "MGA=")
+			name.erase(0, 4);
+
+		return true;
+	}
+
+	void GmeObject::setLibraryName(const char *name)
 	{
 		ASSERT(folderself != NULL);
-		folderself->LibraryName = SmartBSTR(name.c_str());
+		folderself->LibraryName = SmartBSTR(name);
 	}
 
 	ObjectImpl * GmeObject::LibRoot()

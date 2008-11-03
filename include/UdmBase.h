@@ -475,9 +475,18 @@ namespace Udm
 		void CopyAttributesFromArchetype();
 
 		// libraries
+		// as in GME, the root folder of the library
+		// is not a library object (when the library is attached
+		// to the host, the root folder of the library is replaced
+		// by a child belonging to the host)
 		virtual bool isLibObject() const = 0;
-		virtual string getLibraryName() const = 0;
-		virtual void setLibraryName(const string &name) = 0;
+		virtual bool isLibRoot() const = 0;
+		// if the object is a library root, then the method will
+		// copy the library name into the parameter and will return
+		// true, otherwise the method will return false and will
+		// leave the parameter unchanged
+		virtual bool getLibraryName(string &name) const = 0;
+		virtual void setLibraryName(const char *name) = 0;
 		virtual ObjectImpl* AttachLibrary(ObjectImpl *lib_src, const string &lib_name, t_lib_to_copy_impl_map *copy_map = NULL);
 		virtual ObjectImpl *createLibRootChild(const ::Uml::Class &meta, const bool need_safetype = false) = 0;
 
@@ -635,8 +644,9 @@ namespace Udm
 		virtual bool isInstance() const {throw e;};
 	
 		virtual bool isLibObject() const {throw e;};
-		virtual string getLibraryName() const {throw e;};
-		virtual void setLibraryName(const string &name) {throw e;};
+		virtual bool isLibRoot() const {throw e;};
+		virtual bool getLibraryName(string &name) const {throw e;};
+		virtual void setLibraryName(const char *name) {throw e;};
 		virtual ObjectImpl* AttachLibrary(ObjectImpl *lib_src, const string &lib_name, t_lib_to_copy_impl_map *copy_map = NULL) {throw e;};
 		virtual ObjectImpl *createLibRootChild(const ::Uml::Class &meta, const bool need_safetype = false) {throw e;};
 
@@ -2947,8 +2957,9 @@ namespace Udm
 
 		// libraries
 		virtual bool isLibObject() const;
-		virtual string getLibraryName() const;
-		virtual void setLibraryName(const string &name);
+		virtual bool isLibRoot() const;
+		virtual bool getLibraryName(string &name) const;
+		virtual void setLibraryName(const char *name);
 		virtual Object AttachLibrary(const Object &lib_src, const string &lib_name, t_lib_to_copy_map *copy_map = NULL);
 
 
