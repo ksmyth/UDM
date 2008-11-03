@@ -65,6 +65,11 @@ namespace UdmUtil
 
 	//functions for copying a data network
 	
+	const CopyOpts DefCopyOpts = {
+		false,	// is_dn_copy
+		false	// is_lib_part
+	};
+
 	int reqCopyObjectHierarchy(ObjectImpl* p_srcRoot, ObjectImpl* p_dstRoot, DataNetwork* p_dstBackend, bool & finished, copy_assoc_map& cam );
 
 
@@ -98,7 +103,7 @@ namespace UdmUtil
 
 
 
-	UDM_DLL int CopyObjectHierarchy(Udm::ObjectImpl* p_srcRoot, Udm::ObjectImpl* p_dstRoot, Udm::DataNetwork* p_dstBackend, copy_assoc_map &cam)
+	UDM_DLL int CopyObjectHierarchy(Udm::ObjectImpl* p_srcRoot, Udm::ObjectImpl* p_dstRoot, Udm::DataNetwork* p_dstBackend, copy_assoc_map &cam, const CopyOpts &opts)
 	{
 		// Due to library copying, we have to accept partially filled map.
 		//if (cam.size()) throw udm_exception("Association map copied objects should be empty!");
@@ -121,8 +126,8 @@ namespace UdmUtil
 		if(!ret)
 		{
 			p_dstRoot->CopyAttributesFrom(p_srcRoot);	
-			ret=reqCopyLinks(p_srcRoot,p_dstRoot,cam, false);			//copy simple links first
-			ret=reqCopyLinks(p_srcRoot,p_dstRoot,cam, false, false);	//then assoc class based ones.
+			ret=reqCopyLinks(p_srcRoot,p_dstRoot,cam, false, true, opts);			//copy simple links first
+			ret=reqCopyLinks(p_srcRoot,p_dstRoot,cam, false, false, opts);	//then assoc class based ones.
 		}
 		
 		return ret;
@@ -500,9 +505,16 @@ namespace UdmUtil
 	}
 	
 	
-	UDM_DLL int reqCopyLinks(ObjectImpl* p_srcRoot, ObjectImpl* p_dstRoot,copy_assoc_map &cam, const bool direct,const bool simpleLinks)
+	UDM_DLL int reqCopyLinks(ObjectImpl* p_srcRoot, ObjectImpl* p_dstRoot,copy_assoc_map &cam, const bool direct,const bool simpleLinks, const CopyOpts &opts)
 	{
 		int ret=0;
+
+		// don't descend into a library part to copy the links, they will be created when copying the host
+		if (opts.is_dn_copy && p_dstRoot->isLibRoot()) {
+			//cout << "will not copy links inside a library" << endl;
+			return ret;
+		}
+
 		::Uml::Class srcClass= p_srcRoot->type();
 		::Uml::Class dstClass= p_dstRoot->type();
 
@@ -577,7 +589,13 @@ namespace UdmUtil
 								//cout << "Ignoring the copy of link with peer " << ExtractName(srcChild) << ", it has been detected as out of the box object!" << endl;
 								p_srcChild->release();
 								continue;
-							};
+							}
+							else if (opts.is_lib_part && (string)(p_currAssocRole->name()) == "ref") {
+								//cout << "The copied library object " << ExtractName(srcChild)
+								//	<< " is referred from the host; skipping link, it will be created when copying the host" << endl;
+								p_srcChild->release();
+								continue;
+							}
 							//if we are copying complete data networks, this should not happen!
 							throw udm_exception("Internal UdmCopy error");
 						}
@@ -642,7 +660,7 @@ namespace UdmUtil
 
 			//depth++;
 			/////////////// Recursive Call to Itself //////////////////
-			ret=reqCopyLinks(p_srcChild,p_dstChild, cam, direct, simpleLinks);			
+			ret=reqCopyLinks(p_srcChild,p_dstChild, cam, direct, simpleLinks, opts);			
 			/////////////////////////////////////////////////////
 			//depth--;
 			if(ret)return ret;

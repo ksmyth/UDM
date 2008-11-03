@@ -31,12 +31,21 @@ this software.
 namespace UdmUtil
 {
 	typedef map<Udm::Object, Udm::Object> copy_assoc_map;
+
+	struct CopyOpts {
+		// a data network copy has been started
+		bool is_dn_copy;
+		// the part corresponding to an attached library is being copied currently
+		bool is_lib_part;
+	};
+	extern const CopyOpts DefCopyOpts;
+
 	//utility which copies a subtree from a data network to another
 	//consistent (same) meta is assumed.
 	//direct parameter will be passed thru setAssociation
 	
-	UDM_DLL int reqCopyLinks(Udm::ObjectImpl* p_srcRoot,Udm::ObjectImpl* p_dstRoot, copy_assoc_map& cam, const bool direct = true,const bool simpleLinks = true);	
-	UDM_DLL int CopyObjectHierarchy(Udm::ObjectImpl* p_srcRoot, Udm::ObjectImpl* p_dstRoot, Udm::DataNetwork* p_dstBackend, copy_assoc_map &cam);
+	UDM_DLL int reqCopyLinks(Udm::ObjectImpl* p_srcRoot,Udm::ObjectImpl* p_dstRoot, copy_assoc_map& cam, const bool direct = true,const bool simpleLinks = true, const CopyOpts &opts = DefCopyOpts);
+	UDM_DLL int CopyObjectHierarchy(Udm::ObjectImpl* p_srcRoot, Udm::ObjectImpl* p_dstRoot, Udm::DataNetwork* p_dstBackend, copy_assoc_map &cam, const CopyOpts &opts = DefCopyOpts);
 	
 	//this utility tries to extract the name-like attribute
 	//using stupid heuristics and assuming odd things like

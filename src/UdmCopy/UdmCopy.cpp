@@ -46,7 +46,7 @@ public:
 	{
 	}
 
-	void Copy(ObjectImpl *p_srcRoot, ObjectImpl *p_dstRoot, DataNetwork *p_dstBackend, UdmUtil::copy_assoc_map &cam)
+	void Copy(ObjectImpl *p_srcRoot, ObjectImpl *p_dstRoot, DataNetwork *p_dstBackend, UdmUtil::copy_assoc_map &cam, bool inside_lib = false)
 	{
 		vector<ObjectImpl*> children = p_srcRoot->getChildren(NULL, p_srcRoot->type());
 		for (vector<ObjectImpl*>::const_iterator i = children.begin(); i != children.end(); i++) {
@@ -84,7 +84,7 @@ public:
 
 			// copy, including nested libraries
 			UdmUtil::copy_assoc_map lib_cam;
-			Copy(p_srcChild, p_libRoot, &libDN, lib_cam);
+			Copy(p_srcChild, p_libRoot, &libDN, lib_cam, true);
 			lib_cam.insert( make_pair(p_srcChild->clone(), p_libRoot->clone()) );
 			libDN.SaveAs(new_lib_name);
 
@@ -115,7 +115,8 @@ public:
 			cam.insert( make_pair(p_srcChild, p_newLibRoot) );
 		}
 
-		UdmUtil::CopyObjectHierarchy(p_srcRoot, p_dstRoot, p_dstBackend, cam);
+		UdmUtil::CopyOpts opts = { true, inside_lib };
+		UdmUtil::CopyObjectHierarchy(p_srcRoot, p_dstRoot, p_dstBackend, cam, opts);
 	}
 };
 
