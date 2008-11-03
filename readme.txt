@@ -65,6 +65,14 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
+11/3/08		-	Release 3.1.3
+
+		-	Support for attaching of data-networks as libraries, similar to GME libraries; emulate libraries in DOM and MEM backends
+		-	In the generated C++ code expose more type information using traits
+		-	Generated C++ code has new types and member function templates, to support generic programming
+		-	Default values of real attributes are not truncated anymore to six digits
+		-	Small memory leak fixes in OCL code
+
 6/29/07		-	Release 3.1.2
 
 		-	GME 7.6.29 support
