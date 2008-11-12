@@ -205,15 +205,17 @@ namespace Udm
 		}
 	};
 
-
 	template <class T>
 	struct UdmKindConcept 
 	{
 		void constraints()
 		{
-			typedef typename T::MetaKind MetaKind;
-			BOOST_MPL_ASSERT((boost::mpl::contains<Udm::MetaTagList, MetaKind> ));
+      BOOST_MPL_ASSERT_RELATION( value, !=, 0 );
 		}
+
+    typedef typename T::MetaKind MetaKind;
+    typedef UdmKindConcept type;
+    enum { value = boost::mpl::contains<Udm::MetaTagList, MetaKind>::value }; 
 	};
 
 	template <class L, class H>
@@ -221,12 +223,18 @@ namespace Udm
 	{
 		BOOST_CLASS_REQUIRE(L, Udm, UdmKindConcept);
 		BOOST_CLASS_REQUIRE(H, Udm, UdmKindConcept);
-
+    
 		void constraints()
 		{
-			BOOST_MPL_ASSERT((boost::is_same<L, H>));
-			BOOST_MPL_ASSERT((boost::is_same<typename L::MetaKind, typename H::MetaKind> ));
+      BOOST_MPL_ASSERT_RELATION( value, !=, 0 );
 		}
+    
+    typedef SameUdmKindsConcept type;
+    enum { value = UdmKindConcept<L>::value &&
+                   UdmKindConcept<H>::value && 
+                   boost::is_same<L, H>::value &&  
+                   boost::is_same<typename L::MetaKind, 
+                                  typename H::MetaKind>::value }; 
 	};
 
 	template <class ParentKind, class ChildKind>
@@ -234,12 +242,17 @@ namespace Udm
 	{
 		BOOST_CLASS_REQUIRE(ParentKind, Udm, UdmKindConcept);
 		BOOST_CLASS_REQUIRE(ChildKind, Udm, UdmKindConcept);
-	
-		void constraints()
+		
+    void constraints()
 		{
-			typedef typename ParentKind::ChildrenKinds ChildrenKinds;
-			BOOST_MPL_ASSERT((boost::mpl::contains<ChildrenKinds, ChildKind > ));
+      BOOST_MPL_ASSERT_RELATION( value, !=, 0 );
 		}
+
+ 	  typedef typename ParentKind::ChildrenKinds ChildrenKinds;
+    typedef ParentChildConcept type;
+    enum { value = UdmKindConcept<ParentKind>::value &&
+                   UdmKindConcept<ChildKind>::value && 
+                   boost::mpl::contains<ChildrenKinds, ChildKind>::value }; 
 	};
 
 }
