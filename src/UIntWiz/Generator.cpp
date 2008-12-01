@@ -44,9 +44,13 @@ void CGenerator::Generate()
 
 	GenerateProjectFile();
 
+#if _MSC_VER => 1400
+	std::string cmdline = "call \"%UDM_3RDPARTY_PATH%\\mpc\\mpc.exe\" -features \"mfc=1\" -type vc8 -ti vc8dll ";
+	cmdline += "\""+m_strDestinationPath+_INTERPRETER_CODE_PATH+"Component.mpc\"";
+#else
 	std::string cmdline = "call \"%UDM_3RDPARTY_PATH%\\mpc\\mpc.exe\" -features \"mfc=1\" -type vc71 -ti vc7dll ";
 	cmdline += "\""+m_strDestinationPath+_INTERPRETER_CODE_PATH+"Component.mpc\"";
-
+#endif
 	system(cmdline.c_str());
 }
 
@@ -652,12 +656,13 @@ bool CGenerator::GenerateProjectFile()
 	fprintf(fMpcFile,"  	gendir = .\n");
 	fprintf(fMpcFile,"  	ComponentLib.idl\n");
 	fprintf(fMpcFile,"  }\n\n");
+	fprintf(fMpcFile,"  dynamicflags += UDM_DYNAMIC_LINKING\n");
 	fprintf(fMpcFile,"  dllout = ./bin\n");
 	fprintf(fMpcFile,"  includes += . \\\n");
 	fprintf(fMpcFile,"  $(GME_ROOT)/SDK/BON \\\n");
 	fprintf(fMpcFile,"  $(UDM_PATH)/include\n");
 	fprintf(fMpcFile,"  libpaths += $(UDM_PATH)/lib\n");
-	fprintf(fMpcFile,"  libs += xerces-c_2 zlib UdmBase UdmGme UdmUtil UdmDom Uml UdmDll\n");
+	fprintf(fMpcFile,"  libs += UdmDll\n");
 	fprintf(fMpcFile,"  specific (vc6) {\n");
 	fprintf(fMpcFile,"  includes += $(UDM_3RDPARTY_PATH)/3rdparty/stl \n");
 	fprintf(fMpcFile,"  }\n\n");
