@@ -40,7 +40,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="zlib.lib"
+				AdditionalDependencies="zlibd.lib"
 				OutputFile="../../bin/UIntWizd.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
