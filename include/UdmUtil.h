@@ -38,7 +38,7 @@ namespace UdmUtil
 		// the part corresponding to an attached library is being copied currently
 		bool is_lib_part;
 	};
-	extern const CopyOpts DefCopyOpts;
+	extern UDM_DLL const CopyOpts DefCopyOpts;
 
 	//utility which copies a subtree from a data network to another
 	//consistent (same) meta is assumed.
