@@ -75,11 +75,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib File2CodeD.lib JavaAPIGenD.lib UdmXmiD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib xerces-depdom_2D.lib Xalan-C_1D.lib zlibD.lib"
+				AdditionalDependencies="UmlD.lib File2CodeD.lib JavaAPIGenD.lib UdmXmiD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib  Xalan-C_1D.lib zlibD.lib"
 				OutputFile="..\..\bin\UdmD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\lib;&quot;$(UDM_3RDPARTY_PATH)\xalan-c_1_11_0\lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib&quot;"
+				AdditionalLibraryDirectories="..\..\lib;&quot;$(UDM_3RDPARTY_PATH)\xalan-c_1_11_0\lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_5_0\lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\..\..\bin/Udmd.pdb"
 				GenerateMapFile="true"
@@ -170,11 +170,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib File2Code.lib JavaAPIGen.lib UdmXmi.lib UdmBase.lib Xalan-C_1.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib xerces-depdom_2.lib zlib.lib"
+				AdditionalDependencies="Uml.lib File2Code.lib JavaAPIGen.lib UdmXmi.lib UdmBase.lib Xalan-C_1.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib  zlib.lib"
 				OutputFile=".\..\..\bin\Udm.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\lib;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xalan-c_1_11_0\lib&quot;"
+				AdditionalLibraryDirectories="..\..\lib;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_5_0\lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xalan-c_1_11_0\lib&quot;"
 				ProgramDatabaseFile=".\..\..\bin/Udm.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"

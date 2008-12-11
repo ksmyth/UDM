@@ -77,11 +77,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib GOCLd.lib UdmOcld.lib jvm.lib jawt.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib xerces-depdom_2d.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib zlibd.lib"
+				AdditionalDependencies="UmlD.lib GOCLd.lib UdmOcld.lib jvm.lib jawt.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib  UdmBaseD.lib UdmDomD.lib UdmUtilD.lib zlibd.lib"
 				OutputFile="..\..\bin\UdmSwigD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(UDM_PATH)/lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xalan-c_1_11_0\lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(UDM_PATH)/lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xalan-c_1_11_0\lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_5_0\lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/UdmSwigD.pdb"
 				RandomizedBaseAddress="1"
@@ -173,11 +173,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib GOCL.lib UdmOcl.lib jvm.lib jawt.lib UdmPOI.lib xerces-c_2.lib xerces-depdom_2.lib UdmBase.lib UdmDom.lib UdmUtil.lib zlib.lib"
+				AdditionalDependencies="Uml.lib GOCL.lib UdmOcl.lib jvm.lib jawt.lib UdmPOI.lib xerces-c_2.lib  UdmBase.lib UdmDom.lib UdmUtil.lib zlib.lib"
 				OutputFile="..\..\bin\UdmSwig.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(UDM_PATH)/lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(UDM_PATH)/lib&quot;;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_5_0\lib&quot;"
 				IgnoreAllDefaultLibraries="false"
 				ProgramDatabaseFile=".\Release/UdmSwig.pdb"
 				RandomizedBaseAddress="1"

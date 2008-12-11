@@ -72,7 +72,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib xerces-depdom_2D.lib zlibD.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib  zlibD.lib"
 				OutputFile="$(UDM_PATH)\bin\cross_linksD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -164,7 +164,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib xerces-depdom_2.lib zlib.lib"
+				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib  zlib.lib"
 				OutputFile="$(UDM_PATH)\bin\cross_links.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

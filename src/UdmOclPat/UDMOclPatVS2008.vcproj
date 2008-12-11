@@ -74,11 +74,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib UdmOcl.lib GOCL.lib xerces-c_2.lib xerces-depdom_2.lib"
+				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib UdmOcl.lib GOCL.lib xerces-c_2.lib "
 				OutputFile="../../bin/UDMOclPat.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\Lib;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib&quot;"
+				AdditionalLibraryDirectories="..\..\Lib;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_5_0\lib&quot;"
 				IgnoreDefaultLibraryNames="mscvprt.lib msvcrt.lib"
 				ProgramDatabaseFile=".\Release/UDMOclPat.pdb"
 				SubSystem="1"
@@ -166,11 +166,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib xerces-depdom_2D.lib zlibD.lib UdmOclD.lib GOCLD.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib  zlibD.lib UdmOclD.lib GOCLD.lib"
 				OutputFile="../../bin/UDMOclPatD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\Lib;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib&quot;"
+				AdditionalLibraryDirectories="..\..\Lib;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_5_0\lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/UDMOclPatD.pdb"
 				SubSystem="1"

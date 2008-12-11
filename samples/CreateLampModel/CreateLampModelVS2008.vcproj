@@ -74,11 +74,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib xerces-depdom_2D.lib zlibD.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib  zlibD.lib"
 				OutputFile="$(UDM_PATH)\bin\CreateLampModelD.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(UDM_PATH)/lib,$(UDM_3RDPARTY_PATH)/xerces-c_2_8_0/lib,$(UDM_3RDPARTY_PATH)/zlib"
+				AdditionalLibraryDirectories="$(UDM_PATH)/lib,$(UDM_3RDPARTY_PATH)/xerces-c_2_5_0/lib,$(UDM_3RDPARTY_PATH)/zlib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/CreateLampModel.pdb"
 				SubSystem="1"
@@ -166,11 +166,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib xerces-c_2.lib xerces-depdom_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib"
+				AdditionalDependencies="Uml.lib xerces-c_2.lib  UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib"
 				OutputFile="$(UDM_PATH)\bin\CreateLampModel.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(UDM_PATH)/lib,$(UDM_3RDPARTY_PATH)/xerces-c_2_8_0/lib,$(UDM_3RDPARTY_PATH)/zlib"
+				AdditionalLibraryDirectories="$(UDM_PATH)/lib,$(UDM_3RDPARTY_PATH)/xerces-c_2_5_0/lib,$(UDM_3RDPARTY_PATH)/zlib"
 				ProgramDatabaseFile=".\Release/CreateLampModel.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"

@@ -72,11 +72,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib xerces-depdom_2D.lib zlibD.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib  zlibD.lib"
 				OutputFile="..\..\bin\UdmBackendDumpD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\lib\;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib&quot;"
+				AdditionalLibraryDirectories="..\..\lib\;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_5_0\lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/UdmBackendDump_d.pdb"
 				SubSystem="1"
@@ -166,11 +166,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib xerces-c_2.lib xerces-depdom_2.lib UdmBase.lib UdmDom.lib UdmGME.lib UdmUtil.lib zlib.lib"
+				AdditionalDependencies="Uml.lib xerces-c_2.lib  UdmBase.lib UdmDom.lib UdmGME.lib UdmUtil.lib zlib.lib"
 				OutputFile="..\..\bin\UdmBackendDump.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\..\lib\;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib&quot;"
+				AdditionalLibraryDirectories="..\..\lib\;&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_5_0\lib&quot;"
 				ProgramDatabaseFile=".\Release/UdmBackendDump.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"

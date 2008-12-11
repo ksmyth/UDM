@@ -72,7 +72,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cppunitd.lib testrunnerd.lib UdmDlld.lib zlibD.lib xerces-c_2D.lib xerces-depdom_2D.lib"
+				AdditionalDependencies="cppunitd.lib testrunnerd.lib UdmDlld.lib zlibD.lib xerces-c_2D.lib "
 				OutputFile="..\..\bin\Test_CrossLinksD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -165,7 +165,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cppunit.lib testrunner.lib UdmDll.lib zlib.lib xerces-c_2.lib xerces-depdom_2.lib"
+				AdditionalDependencies="cppunit.lib testrunner.lib UdmDll.lib zlib.lib xerces-c_2.lib "
 				OutputFile="..\..\bin\Test_CrossLinks.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

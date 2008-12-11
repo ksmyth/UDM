@@ -71,7 +71,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmGmeD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib xerces-depdom_2D.lib"
+				AdditionalDependencies="UmlD.lib UdmGmeD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib "
 				OutputFile=".\Debug/TestSignalFlow.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -164,7 +164,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib UdmBase.lib UdmGme.lib UdmUtil.lib zlib.lib UdmDom.lib xerces-c_2.lib xerces-depdom_2.lib cppunit.lib"
+				AdditionalDependencies="Uml.lib UdmBase.lib UdmGme.lib UdmUtil.lib zlib.lib UdmDom.lib xerces-c_2.lib  cppunit.lib"
 				OutputFile=".\Release/TestSignalFlow.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

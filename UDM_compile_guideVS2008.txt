@@ -30,7 +30,7 @@ Step-by-step guide:
 	JDK_PATH=
 		your Java 1.4.2 SDK path 
 	PATH=
-		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin;
+		%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\bin;
 		%UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin;
 		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\bin;
 		%UDM_3RDPARTY_PATH%\info-zip;
@@ -39,7 +39,7 @@ Step-by-step guide:
 		%UDM_PATH%\bin;
 		%PATH%
 	INCLUDE=
-		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\include;
+		%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\include;
 		%UDM_3RDPARTY_PATH%\Xalan-C_1_11_0\include;
 		%UDM_3RDPARTY_PATH%\antlr-2.7.7\lib\cpp;
 		%UDM_3RDPARTY_PATH%\zlib;
@@ -51,7 +51,7 @@ Step-by-step guide:
 		%INCLUDE%
 	LIB=
 		%UDM_3RDPARTY_PATH%\Xalan-C_1_11_0\lib;
-		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\lib;
+		%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\lib;
 		%UDM_3RDPARTY_PATH%\zlib;
 		%UDM_3RDPARTY_PATH%\antlr-2.7.7\lib;
 		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\lib;

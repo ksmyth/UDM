@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmDllD.lib cppunitd.lib testrunnerd.lib Xalan-C_1d.lib xerces-c_2D.lib xerces-depdom_2D.lib"
+				AdditionalDependencies="UdmDllD.lib cppunitd.lib testrunnerd.lib Xalan-C_1d.lib xerces-c_2D.lib "
 				OutputFile="$(OutDir)/testOCLD.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(UDM_PATH)/lib"
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmDll.lib cppunit.lib testrunner.lib xerces-c_2.lib xerces-depdom_2.lib"
+				AdditionalDependencies="UdmDll.lib cppunit.lib testrunner.lib xerces-c_2.lib "
 				OutputFile="$(OutDir)/testOCL.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(UDM_PATH)/lib"
