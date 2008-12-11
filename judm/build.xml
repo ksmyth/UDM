@@ -355,14 +355,18 @@
 		<!-- Modify the generated the SWIG/JNI interface -->
 		<echo> "Modify the generated the SWIG/JNI interface." </echo>
 		<!-- The generated UdmPseudoObject.java class must be modified by hand -->
-		<!-- Replace every occurence of SWIGTYPE_p_vectorTUdmLong_t by VectorOfLongs -->
+		<!-- Replace every occurence of SWIGTYPE_p_vectorTUdmLong_t or SWIGTYPE_p_vectorT_UdmLong_t by VectorOfLongs -->
 		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTUdmLong_t" value="VectorOfLongs" />
-		<!-- Replace every occurence of SWIGTYPE_p_vectorTdouble_t by VectorOfDoubles -->
+		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorT_UdmLong_t" value="VectorOfLongs" />
+		<!-- Replace every occurence of SWIGTYPE_p_vectorTdouble_t or SWIGTYPE_p_vectorT_double_t by VectorOfDoubles -->
 		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTdouble_t" value="VectorOfDoubles" />
-		<!-- Replace every occurence of SWIGTYPE_p_vectorTcint_string_t by VectorOfStrings -->
+		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorT_double_t" value="VectorOfDoubles" />
+		<!-- Replace every occurence of SWIGTYPE_p_vectorTcint_string_t or SWIGTYPE_p_vectorT_cint_string_t by VectorOfStrings -->
 		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTcint_string_t" value="VectorOfStrings" />
-		<!-- Replace every occurence of SWIGTYPE_p_vectorTbool_t by VectorOfBools -->
+		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorT_cint_string_t" value="VectorOfStrings" />
+		<!-- Replace every occurence of SWIGTYPE_p_vectorTbool_t or SWIGTYPE_p_vectorT_bool_t by VectorOfBools -->
 		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorTbool_t" value="VectorOfBools" />
+		<replace file="${udmswig.src.dir}/edu/vanderbilt/isis/udm/swig/UdmPseudoObject.java" token="SWIGTYPE_p_vectorT_bool_t" value="VectorOfBools" />
 
 	</target>
 
