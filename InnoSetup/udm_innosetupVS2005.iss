@@ -7,7 +7,7 @@
 
 #define UDMPATH GetEnv('UDM_PATH')
 #if UDMPATH == ""
-#define UDMPATH "C:\Projects\UDM"
+#define UDMPATH "E:\MoBIES\UDM"
 #endif
 
 #define UDM3rdPartyPATH GetEnv('UDM_3RDPARTY_PATH')
@@ -20,9 +20,9 @@
 #define GREATPATH "C:\Projects\GReAT"
 #endif
 
-#define UDMDLL "UdmDll_3_1_2.dll"
-#define UDMDLLD "UdmDll_3_1_2D.dll"
-#define UDMVER "3.1.2"
+#define UDMDLL "UdmDll_3_1_3.dll"
+#define UDMDLLD "UdmDll_3_1_3D.dll"
+#define UDMVER "3.1.3"
 #define GMEVER "7.6.29"
 #define OutputFileBase "Udm_setup"
 
@@ -65,7 +65,9 @@ Name: Full3rdParty; Description: Full 3rdParty Package; Types: Full
 Source: {#UDMPATH}\readmeVS2005.txt; DestDir: {app}; Components: Core; Flags: ignoreversion; DestName: readme.txt
 ; Udm_3rdparty_files
 Source: {#UDM3rdPartyPath}\ant-1.6.2\*; DestDir: {app}\3rdparty\ant-1.6.2; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: {#UDM3rdPartyPath}\boost_1_34_1\*; DestDir: {app}\3rdparty\boost_1_34_1; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: {#UDM3rdPartyPath}\junit\*; DestDir: {app}\3rdparty\junit; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: {#UDM3rdPartyPath}\loki-0.1.6\*; DestDir: {app}\3rdparty\loki-0.1.6; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: {#UDM3rdPartyPath}\mpc\*; DestDir: {app}\3rdparty\mpc; Excludes: clone_build_tree.exe, mnwc.exe, prj_install.exe, *.scc; Components: C Full3rdParty; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\mpc\config\*; DestDir: {app}\3rdparty\mpc\config; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\mpc\devtools\*; DestDir: {app}\3rdparty\mpc\devtools; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
@@ -111,7 +113,7 @@ Source: {#UDMPATH}\etc\compileUdmAPI.bat; DestDir: {app}\etc; Components: Core; 
 Source: {#UDMPATH}\etc\CreateMGA.vbs; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\etc\Uml.xsd; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\etc\UdmProject.xme; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
-Source: {#UDMPATH}\etc\UdmProject.xml; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\etc\UdmProject_udm.xml; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\etc\UdmProject.xsd; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\etc\Uml.xml; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\etc\Xme2UdmXml.bat; DestDir: {app}\etc; Components: Core; Flags: ignoreversion
@@ -137,6 +139,7 @@ Source: {#UDMPATH}\include\UdmCintSwig.h; DestDir: {app}\include; Flags: ignorev
 Source: {#UDMPATH}\include\UdmStatic.h; DestDir: {app}\include; Flags: ignoreversion
 Source: {#UDMPATH}\include\UmlExt.h; DestDir: {app}\include; Flags: ignoreversion
 Source: {#UDMPATH}\include\Uml.h; DestDir: {app}\include; Flags: ignoreversion
+Source: {#UDMPATH}\include\UdmMPL.h; DestDir: {app}\include; Flags: ignoreversion
 ;Udm lib folder
 Source: {#UDMPATH}\lib\GOCLD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\lib\UdmDll.lib; DestDir: {app}\lib; Flags: ignoreversion
