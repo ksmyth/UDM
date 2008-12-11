@@ -1,0 +1,67 @@
+UDM_compile_guide.txt
+Software requirements and a step-by-step guide to compile UDM source files
+on Windows with Visual Studio 2008 (or later)
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+Requirements:
+-------------------
+	- Visual Studio 2008 (or later)
+	- J2RE 1.4.2 (or later), Java Runtime Environment 	
+	- Java SDK 1.4.2 (or later) 
+		- must have JDK installed for compiling C++ Udm!
+
+Step-by-step guide:
+-------------------------
+	1.Download the UDM sources from the VSS project
+		$/MoBIESTransition/UDM_ns
+	of  the Mobies VSS database:
+		\\Atlantis\Project\Mobies\VSS\srcsafe.ini
+
+	2. Get UDM 3rd party files from:
+		\\Atlantis\Project\Mobies\Udm\Udm_ns\udm_ns_3rdpartyVS2008.zip
+	and unzip it onto your machine. 
+
+	3. Set your build environment as follows:
+		(Note: VS 2008 users select Tools/Options/Projects and Solutions/VC++ Directories to make these settings)
+	UDM_PATH=
+		your udm ns root folder (working folder for $/MoBIESTransition/UDM_ns) 
+	UDM_3RDPARTY_PATH=
+		your udm ns 3rdparty root folder (extracted from udm_ns_3rdpartyVS2008.zip)
+	JDK_PATH=
+		your Java 1.4.2 SDK path 
+	PATH=
+		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin;
+		%UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin;
+		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\bin;
+		%UDM_3RDPARTY_PATH%\info-zip;
+		%UDM_3RDPARTY_PATH%\sed;
+		%UDM_3RDPARTY_PATH%\swigwin-1.3.36;
+		%UDM_PATH%\bin;
+		%PATH%
+	INCLUDE=
+		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\include;
+		%UDM_3RDPARTY_PATH%\Xalan-C_1_11_0\include;
+		%UDM_3RDPARTY_PATH%\antlr-2.7.7\lib\cpp;
+		%UDM_3RDPARTY_PATH%\zlib;
+		%UDM_3RDPARTY_PATH%\zlib\contrib\minizip;
+		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\include;
+		%UDM_3RDPARTY_PATH%\boost-1.34.1;
+		%JDK_PATH%\include\win32;
+		%JDK_PATH%\include;
+		%INCLUDE%
+	LIB=
+		%UDM_3RDPARTY_PATH%\Xalan-C_1_11_0\lib;
+		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\lib;
+		%UDM_3RDPARTY_PATH%\zlib;
+		%UDM_3RDPARTY_PATH%\antlr-2.7.7\lib;
+		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\lib;
+		%UDM_3RDPARTY_PATH%\boost-1.34.1\lib;
+		%JDK_PATH%\lib
+		%LIB%
+	CLASSPATH=
+		%UDM_3RDPARTY_PATH%\antlr-2.7.7\antlr.jar;
+		%CLASSPATH%
+
+	4. Open Udm.sln in VS 2008, and (re)build solution with the following configurations: 
+			'Win32 Debug' and 
+			'Win32 Release' 

@@ -82,7 +82,7 @@
 				OutputFile="..\..\bin\LampTest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="../lib,../../Lib,../../3rdParty/xerces/xerces-c2_2_0-win32/lib,../../3rdParty/zlib,../../3rdParty/Cint"
+				AdditionalLibraryDirectories="../../lib"
 				ProgramDatabaseFile=".\Release/LampTest.pdb"
 				SubSystem="1"
 				TargetMachine="1"

@@ -374,7 +374,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="SingalFlow_uml.xme"
+			RelativePath="SignalFlow_uml.xme"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
