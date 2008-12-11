@@ -720,14 +720,13 @@ namespace UdmDom
 			DOMString a = dom_element.getAttribute(DOMString("_id"));
 			if(a == 0) 
 			{
-				//begins with 'id'				
 				char buf[20];
-				buf[0] = 'i';
-				buf[1] = 'd';
 				//we have a unique id for ordering
 				//so why maintain two of them ?
 				id  = uniqueId();	
+
 				//build the string attribute
+				//begins with 'id'				
 				
 				//ultoa is not POSIX
 				//ultoa(id , buf+2, 16);
@@ -781,11 +780,9 @@ namespace UdmDom
 					DOMString a = dom_element.getAttribute(DOMString("_id"));
 					if(a == 0) 
 					{
-						//begins with 'id'				
 						char buf[20];
-						buf[0] = 'i';
-						buf[1] = 'd';
 						id  = reinterpret_cast<uniqueId_type>(p);	
+						//begins with 'id'				
 						sprintf(buf,"id%lx", id);
 						a = buf;
 						
