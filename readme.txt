@@ -65,7 +65,7 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
-11/3/08		-	Release 3.1.3
+12/11/08	-	Release 3.1.3
 
 		-	Support for attaching of data-networks as libraries, similar to GME libraries; emulate libraries in DOM and MEM backends
 		-	In the generated C++ code expose more type information using traits
