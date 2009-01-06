@@ -4,6 +4,11 @@
 
 	<condition property="isWindows">
 	  <or>
+		<os name="Windows Vista" />
+		<and>
+			<os name="Windows NT (unknown)" />
+			<os version="6" />
+		</and>
 		<os name="Windows XP" />
 		<os name="Windows 2000" />
 		<os name="Windows Vista" />
