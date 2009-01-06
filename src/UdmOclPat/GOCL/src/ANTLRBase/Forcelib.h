@@ -20,19 +20,19 @@
 #else
 	#ifndef _UNICODE
 		#ifdef _DEBUG
-			#pragma comment(lib, "mfc42d.lib")
-			#pragma comment(lib, "mfcs42d.lib")
+			#pragma comment(lib, "mfc" _MFC_FILENAME_VER "d.lib")
+			#pragma comment(lib, "mfcs" _MFC_FILENAME_VER "d.lib")
 		#else
-			#pragma comment(lib, "mfc42.lib")
-			#pragma comment(lib, "mfcs42.lib")
+			#pragma comment(lib, "mfc" _MFC_FILENAME_VER ".lib")
+			#pragma comment(lib, "mfcs" _MFC_FILENAME_VER ".lib")
 		#endif
 	#else
 		#ifdef _DEBUG
-			#pragma comment(lib, "mfc42ud.lib")
-			#pragma comment(lib, "mfcs42ud.lib")
+			#pragma comment(lib, "mfc" _MFC_FILENAME_VER "ud.lib")
+			#pragma comment(lib, "mfcs" _MFC_FILENAME_VER "ud.lib")
 		#else
-			#pragma comment(lib, "mfc42u.lib")
-			#pragma comment(lib, "mfcs42u.lib")
+			#pragma comment(lib, "mfc" _MFC_FILENAME_VER "u.lib")
+			#pragma comment(lib, "mfcs" _MFC_FILENAME_VER "u.lib")
 		#endif
 	#endif
 #endif
