@@ -9,7 +9,7 @@ NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 8
    (This version of UDM can also be used with Visual Studio 2005 Express Edition
-    Please visit http://msdn.microsoft.com/vstudio/express/visualc/usingpsdk/ 
+    Please visit http://www.microsoft.com/express/2005/download/default.aspx 
     for instructions on how to download and install the free express edition)
 
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
