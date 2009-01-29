@@ -5,9 +5,6 @@
 	Name="CreateLampModel"
 	ProjectGUID="{7B2D07A4-E108-45B1-860B-43084AAB9192}"
 	RootNamespace="CreateLampModel"
-	SccProjectName="&quot;$/MoBIESTransition/UDM/samples/CreateLampModel&quot;, GBYAAAAA"
-	SccLocalPath="."
-	SccProvider="MSSCCI:Microsoft Visual SourceSafe"
 	>
 	<Platforms>
 		<Platform
