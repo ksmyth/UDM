@@ -285,7 +285,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="LampDiagram_udm.xml -&gt; C++ API"
-						CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\bin\UdmD.exe&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
+						CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\bin\Udm.exe&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
 						Outputs="$(InputDir)LampDiagram.xsd;$(InputDir)LampDiagram.cpp;$(InputDir)LampDiagram.h"
 					/>
 				</FileConfiguration>
