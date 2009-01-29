@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(UDM_PATH)\include\;.."
+				AdditionalIncludeDirectories="&quot;$(UDM_3RDPARTY_PATH)\boost_1_34_1&quot;;&quot;$(UDM_PATH)\include\&quot;;.."
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -139,7 +139,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(UDM_PATH)\include\;.."
+				AdditionalIncludeDirectories="&quot;$(UDM_3RDPARTY_PATH)\boost_1_34_1&quot;;&quot;$(UDM_PATH)\include\&quot;;..;$(NOINHERIT)"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="2"
