@@ -779,6 +779,7 @@ void ClassGen::Parents()
 
 	set< ::Uml::Class> parentkinds_for_tl;
 
+
 	bool parent_defined = false;
 	set< ::Uml::CompositionParentRole> parroles = Uml::AncestorCompositionPeerParentRoles(c);
 	for( set< ::Uml::CompositionParentRole>::iterator ri = parroles.begin(); ri != parroles.end(); ri++) 
@@ -793,7 +794,7 @@ void ClassGen::Parents()
 	}
 
 	BuildTL(parentkinds_for_tl, "ParentKinds", "parent by returned type", parent_kinds_tl);
-
+	
 	if(!parent_defined) 
 	{
 		set< ::Uml::Class> ans = Uml::CommonAncestorClasses(Uml::AncestorContainerClasses(c));
@@ -807,7 +808,6 @@ void ClassGen::Parents()
 			if (ans.size() == 1)
 			{
 				::Uml::Class ans_class = (::Uml::Class)(*ans.begin());
-
 				// Udm::ParentAttr<T> parent() const { return Udm::ParentAttr<T>(impl, Udm::NULLPARENTROLE); }
 				meth_defs.push_back( boost::format("Udm::ParentAttr< %1%> parent() const { return Udm::ParentAttr< %1%>(impl, Udm::NULLPARENTROLE); }") % UmlClassCPPName(ans_class) );
 			}
@@ -816,7 +816,7 @@ void ClassGen::Parents()
 				for(set< ::Uml::Class>::iterator ccc = ans.begin(); ccc != ans.end(); ccc++) 
 				{
 					// Udm::ParentAttr<T> T_parent() const { return Udm::ParentAttr<T>(impl, Udm::NULLPARENTROLE); }
-					meth_defs.push_back( boost::format("Udm::ParentAttr< %1%> %2%_parent() const { return Udm::ParentAttr< %1%>(impl, Udm::NULLPARENTROLE); }") % (string) ccc->name() % UmlClassCPPName(*ccc) );
+					meth_defs.push_back( boost::format("Udm::ParentAttr< %1%> %2%_parent() const { return Udm::ParentAttr< %1%>(impl, Udm::NULLPARENTROLE); }") % UmlClassCPPName(*ccc) % (string) ccc->name() );
 				}
 			}
 		}
