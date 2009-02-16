@@ -72,6 +72,9 @@ struct UdmOpts {
 
 	// Record time when code was generated
 	bool rec_tstamp;
+
+	// Output directory
+	string out_dir;
 };
 
 // not cross-link approved
@@ -91,12 +94,6 @@ std::string join(const std::string &sep, const vector<string> &v);
 //generate DTD (only if asked) and XSD
 void GenerateDSD(const ::Uml::Namespace &ns, const UdmOpts &opts, bool qualified_attrs_ns);
 void GenerateDSD(const ::Uml::Diagram &dgr, const string &fname, const UdmOpts &opts, bool qualified_attrs_ns);
-void CPPSetXsdStorage(const ::Uml::Diagram &diagram, ostream &output);
-void CPPSetURIMapping(const ::Uml::Diagram &diagram, 
-                      const map<string, string>& ns_map,
-                      ostream &output);
-
-void CPPIncludeXsdHeaders(const ::Uml::Diagram &diagram, ostream &output);
 
 
 namespace UdmCPPGen {

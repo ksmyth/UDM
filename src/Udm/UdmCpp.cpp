@@ -433,16 +433,16 @@ vector<boost::format> UdmGen::CPPXsdStorage() const
 		{
 			const ::Uml::Namespace& ns = *nses_i;
 			const std::string& nsn = NameToFilename(ns.getPath2("_"));
-			std::string infname(nsn + std::string(".xsd"));
+			std::string infname(opts.out_dir + nsn + std::string(".xsd"));
 
-			File2Code f2c(".//", nsn + std::string("_xsd"), infname, File2Code::CPP);
+			File2Code f2c(opts.out_dir, nsn + std::string("_xsd"), infname, File2Code::CPP);
 			f2c.gen();
 			r.push_back( boost::format("\tUdmDom::str_xsd_storage::StoreXsd(\"%1%.xsd\", %1%_xsd::getString());") % nsn );
 		}
 
 		const string& dgrn = diagram.name();
-		string infname(dgrn + ".xsd");
-		File2Code f2c(".//", dgrn + "_xsd", infname, File2Code::CPP);
+		string infname(opts.out_dir + dgrn + ".xsd");
+		File2Code f2c(opts.out_dir, dgrn + "_xsd", infname, File2Code::CPP);
 		f2c.gen();
 		r.push_back( boost::format("\tUdmDom::str_xsd_storage::StoreXsd(\"%1%.xsd\", %1%_xsd::getString());") % dgrn );
 	}
@@ -502,8 +502,8 @@ void UdmGen::GenHExport(const string &filename)
 		string exp_filename = filename + "_export.h";
 
 		ofstream out_export;
-		out_export.open( exp_filename.c_str() );
-		if (!out_export.good()) throw udm_exception("Error opening for write " + exp_filename);
+		out_export.open( (opts.out_dir + exp_filename).c_str() );
+		if (!out_export.good()) throw udm_exception("Error opening for write " + opts.out_dir + exp_filename);
 
 		out_export << HExport(filename);
 		out_export.close();
@@ -519,8 +519,8 @@ void UdmGen::Generate(const ::Uml::Diagram &cross_dgr, const string &filename)
 	// diagram.h source
 	ofstream out_h;
 
-	out_h.open( (filename + ".h").c_str() );
-	if (!out_h.good()) throw udm_exception("Error opening for write " + filename + ".h");
+	out_h.open( (opts.out_dir + filename + ".h").c_str() );
+	if (!out_h.good()) throw udm_exception("Error opening for write " + opts.out_dir + filename + ".h");
 
 	vector<boost::format> r1 = HPreamble(filename);
 	for (vector<boost::format>::const_iterator i = r1.begin(); i != r1.end(); i++)
@@ -536,8 +536,8 @@ void UdmGen::Generate(const ::Uml::Diagram &cross_dgr, const string &filename)
 
 	// diagram.cpp source
 	ofstream out_cpp;
-	out_cpp.open( (filename + ".cpp").c_str() );
-	if (!out_cpp.good()) throw udm_exception("Error opening for write " + filename + ".cpp");
+	out_cpp.open( (opts.out_dir + filename + ".cpp").c_str() );
+	if (!out_cpp.good()) throw udm_exception("Error opening for write " + opts.out_dir + filename + ".cpp");
 
 	vector<boost::format> r2 = CPPPreamble(filename, cross_dgr);
 	for (vector<boost::format>::const_iterator i = r2.begin(); i != r2.end(); i++)

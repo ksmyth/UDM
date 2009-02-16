@@ -45,15 +45,15 @@ void GenerateDSD(const ::Uml::Namespace &ns, const UdmOpts &opts, bool qualified
 
 	if (opts.generate_dtd)
 	{
-		ff.open( (nsfname+".dtd").c_str() );
-		if(!ff.good()) throw udm_exception("Error opening for write " + nsfname + ".dtd");
+		ff.open( (opts.out_dir + nsfname + ".dtd").c_str() );
+		if(!ff.good()) throw udm_exception("Error opening for write " + opts.out_dir + nsfname + ".dtd");
 		else DTDGen::GenerateDTD(ns, ff);
 		ff.close();
 		ff.clear();
 	}
 
-	ff.open( (nsfname+".xsd").c_str() );
-	if(!ff.good()) throw udm_exception("Error opening for write " + nsfname + ".xsd");
+	ff.open( (opts.out_dir + nsfname + ".xsd").c_str() );
+	if(!ff.good()) throw udm_exception("Error opening for write " + opts.out_dir + nsfname + ".xsd");
 	else DTDGen::GenerateXMLSchema(ns, ff, opts.ns_map, opts.ns_ignore, opts.uxsdi, opts.xsd_el_ta, qualified_attrs_ns);
 	ff.close();
 }
@@ -64,69 +64,17 @@ void GenerateDSD(const ::Uml::Diagram &dgr, const string &fname, const UdmOpts &
 
 	if (opts.generate_dtd)
 	{
-		ff.open( (fname + ".dtd").c_str() );
-		if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".dtd");
+		ff.open( (opts.out_dir + fname + ".dtd").c_str() );
+		if(!ff.good()) throw udm_exception("Error opening for write " + opts.out_dir + fname + ".dtd");
 		else DTDGen::GenerateDTD(dgr, ff);
 		ff.close();
 		ff.clear();
 	}
 
-	ff.open( (fname+".xsd").c_str() );
-	if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".xsd");
+	ff.open( (opts.out_dir + fname + ".xsd").c_str() );
+	if(!ff.good()) throw udm_exception("Error opening for write " + opts.out_dir + fname + ".xsd");
 	else DTDGen::GenerateXMLSchema(dgr, ff, opts.ns_map, opts.ns_ignore, opts.uxsdi, opts.xsd_el_ta, qualified_attrs_ns);
 	ff.close();
-}
-
-void CPPSetURIMapping(const ::Uml::Diagram &diagram, 
-                      const map<string, string>& ns_map,
-                      ostream &output)
-{
-	if (!ns_map.empty())
-	{
-		output << "\n\t\t// URI namespace mapping for dom backend, udm was invoked with switch -u" << "\n";
-		map<string, string>::const_iterator it =  ns_map.begin();
-		for(;it != ns_map.end(); ++it)
-		{
-			const std::string& ns=it->first;
-			const std::string& uri=it->second;
-			std::string xsdname = (string)diagram.name() + "_" + UdmUtil::replace_delimiter(ns, "::", "_") + ".xsd";
-
-			output << "\t\t" << "UdmDom::AddURIToUMLNamespaceMapping(\""<< uri<<"\",\""<<ns<<"\",\""<<xsdname<<"\" );" << std::endl;
-		}
-	}
-}
-
-void CPPSetXsdStorage(const ::Uml::Diagram &diagram, ostream &output)
-{
-	::Uml::DiagramNamespaces nses(diagram);
-	for (::Uml::DiagramNamespaces::iterator nses_i = nses.begin(); nses_i != nses.end(); ++nses_i)
-	{
-		const ::Uml::Namespace& ns = *nses_i;
-		const std::string& nsn = NameToFilename(ns.getPath2("_"));
-		std::string infname(nsn + std::string(".xsd"));
-
-		File2Code f2c(".//", nsn + std::string("_xsd"), infname, File2Code::CPP);
-		f2c.gen();
-		output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << nsn << ".xsd\", " << nsn <<"_xsd::getString());"<< endl;
-	}
-	const string& dgrn = diagram.name();
-	string infname(dgrn + ".xsd");
-	File2Code f2c(".//", dgrn + "_xsd", infname, File2Code::CPP);
-	f2c.gen();
-	output << "\t\t" << "UdmDom::str_xsd_storage::StoreXsd(\"" << dgrn << ".xsd\", " << dgrn <<"_xsd::getString());"<< endl << endl;
-}
-
-void CPPIncludeXsdHeaders(const ::Uml::Diagram &diagram, ostream & output)
-{
-	output << "#include \"UdmDom.h\"" << endl; 
-	output << "#include \"" << diagram.name() << "_xsd.h\"" << endl;
-	::Uml::DiagramNamespaces nses(diagram);
-	for (::Uml::DiagramNamespaces::iterator nses_i = nses.begin(); nses_i != nses.end(); nses_i++)
-	{
-		::Uml::Namespace ns = *nses_i;	
-		output << "#include \"" << NameToFilename(ns.getPath2("_")) << "_xsd.h\"" << endl << endl; 
-	}
-	output << endl;
 }
 
 string UmlClassCPPName(const ::Uml::Class &cl)

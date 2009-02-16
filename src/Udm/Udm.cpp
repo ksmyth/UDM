@@ -44,6 +44,8 @@ int main(int argc, char **argv) {
 
 		opts.rec_tstamp = true;
 
+		opts.out_dir = "./";
+
 		string inputfile; 
 		//string tempdiagfile; 
 		string fname; 
@@ -51,7 +53,7 @@ int main(int argc, char **argv) {
 
 
 		if (argc <= 1)
-			throw udm_exception("Usage: udm <diagramfilename> [<genfilesnamebase>] [-d <Uml.xsd searchpath>] [-m|c] [-v] [-t] [-l] [-x]\n");
+			throw udm_exception("Usage: udm <diagramfilename> [<genfilesnamebase>] [-d <Uml.xsd searchpath>] [-m|c] [-v] [-t] [-l] [-x] [-o <output dir>]\n");
 
 		for(int argn = 1; argn < argc; argn++) 
 		{
@@ -191,6 +193,10 @@ int main(int argc, char **argv) {
 								default:
 									goto usage;
 							}
+							break;
+					case 'o':
+							opts.out_dir = optp;
+							opts.out_dir.append("/");
 							break;
 					default:
 							goto usage;
@@ -386,8 +392,8 @@ usage:
 
 		if (opts.mode == UdmOpts::C_SHARP) {
 			ofstream ff;
-			ff.open( (fname + ".cs").c_str());
-			if(!ff.good()) throw udm_exception("Error opening for write " + fname + ".cpp");
+			ff.open( (opts.out_dir + fname + ".cs").c_str());
+			if(!ff.good()) throw udm_exception("Error opening for write " + opts.out_dir + fname + ".cpp");
 			else {
 				//	if(new_meta) GenerateNewCS(diagram, ff, fname);
 				//	else GenerateCS(diagram,  ff, fname);
