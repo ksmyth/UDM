@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="CreateLampModel"
+	ProjectGUID="{7B2D07A4-E108-45B1-860B-43084AAB9192}"
+	RootNamespace="CreateLampModel"
+	SccProjectName="&quot;$/MoBIESTransition/UDM/samples/CreateLampModel&quot;, GBYAAAAA"
+	SccAuxPath=""
+	SccLocalPath="."
+	SccProvider="MSSCCI:Microsoft Visual SourceSafe">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="..\..\..\..\..\Build\Win32\VC7.1\Debug"
+			IntermediateDirectory="$(OutDir)\obj\samples\$(ProjectName)"
+			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="CommonHeaders.h"
+				PrecompiledHeaderFile="$(IntDir)/CreateLampModel.pch"
+				AssemblerListingLocation="$(IntDir)/"
+				ObjectFile="$(IntDir)/"
+				ProgramDataBaseFileName="$(IntDir)/"
+				BrowseInformation="1"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib"
+				OutputFile="$(OutDir)\CreateLampModelD.exe"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="$(OutDir),$(UDM_3RDPARTY_PATH)/xerces-c_2_5_0/lib,$(UDM_3RDPARTY_PATH)/zlib"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(IntDir)/CreateLampModel.pdb"
+				SubSystem="1"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(IntDir)/CreateLampModel.tlb"
+				HeaderFileName=""/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"
+				Description="Create directory for generated files"
+				CommandLine="mkdir &quot;$(OutDir)\Gen\samples&quot;
+exit 0
+"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="..\..\..\..\..\Build\Win32\VC7.1\Release"
+			IntermediateDirectory="$(OutDir)\obj\samples\$(ProjectName)"
+			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile="$(IntDir)/CreateLampModel.pch"
+				AssemblerListingLocation="$(IntDir)/"
+				ObjectFile="$(IntDir)/"
+				ProgramDataBaseFileName="$(IntDir)/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="Uml.lib Xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib"
+				OutputFile="$(OutDir)\CreateLampModel.exe"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="$(OutDir),$(UDM_3RDPARTY_PATH)/xerces-c_2_5_0/lib,$(UDM_3RDPARTY_PATH)/zlib"
+				ProgramDatabaseFile="$(IntDir)/CreateLampModel.pdb"
+				SubSystem="1"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(IntDir)/CreateLampModel.tlb"
+				HeaderFileName=""/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"
+				Description="Create directory for generated files"
+				CommandLine="mkdir &quot;$(OutDir)\Gen\samples&quot;
+exit 0
+"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+			<File
+				RelativePath="..\..\..\..\..\samples\CreateLampModel\CreateLampModel.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\samples\CreateLampModel\CreateLampModel.rc">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\samples\LampDiagram.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\samples\LampDiagram.cpp">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\samples\LampDiagram.h">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\samples\LampDiagram.h">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+			</File>
+		</Filter>
+		<Filter
+			Name="UML Diagrams"
+			Filter="xml">
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\samples\LampDiagram_udm.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="LampDiagram_udm.xml -&gt; C++ API"
+						CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\samples&quot; &quot;$(InputPath)&quot; -v
+"
+						Outputs="$(OutDir)\Gen\samples\LampDiagram.xsd; $(OutDir)\Gen\samples\LampDiagram.cpp; $(OutDir)\Gen\samples\LampDiagram.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\samples\LampDiagram_udm.xml">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="LampDiagram_udm.xml -&gt; C++ API"
+						CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\samples&quot; &quot;$(InputPath)&quot; -v
+"
+						Outputs="$(OutDir)\Gen\samples\LampDiagram.xsd; $(OutDir)\Gen\samples\LampDiagram.cpp; $(OutDir)\Gen\samples\LampDiagram.h"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\samples\LampDiagramUML.xme">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="$(InputFileName) -&gt; LampDiagram_udm.xml"
+						CommandLine="cd &quot;$(TargetDir)\Gen\samples&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;
+"
+						Outputs="$(OutDir)\Gen\samples\$(InputName).mga;$(OutDir)\Gen\samples\LampDiagram_udm.xml"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="$(InputFileName) -&gt; LampDiagram_udm.xml"
+						CommandLine="cd &quot;$(TargetDir)\Gen\samples&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;
+"
+						Outputs="$(OutDir)\Gen\samples\$(InputName).mga;$(OutDir)\Gen\samples\LampDiagram_udm.xml"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\samples\LampDiagramGME.xme">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="$(InputFileName) -&gt; LampDiagram.xmp, Registering LampDiagram paradigm"
+						CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME
+&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;
+"
+						Outputs="$(InputDir)LampDiagram.xmp;$(InputDir)LampDiagram.xmp.log;$(InputDir)LampDiagram.mta;$(InputDir)$(InputName).mga"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="$(InputFileName) -&gt; LampDiagram.xmp, Registering LampDiagram paradigm"
+						CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME
+&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;
+"
+						Outputs="$(InputDir)LampDiagram.xmp;$(InputDir)LampDiagram.xmp.log;$(InputDir)LampDiagram.mta;$(InputDir)$(InputName).mga"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

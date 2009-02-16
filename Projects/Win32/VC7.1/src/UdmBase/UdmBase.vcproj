@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="UdmBase"
+	ProjectGUID="{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}"
+	SccProjectName=""
+	SccLocalPath="">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="..\..\..\..\..\Build\Win32\VC7.1\Release"
+			IntermediateDirectory="$(OutDir)\obj\src\$(ProjectName)"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="..\..\..\..\..\include"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile="$(IntDir)\UdmBase.pch"
+				AssemblerListingLocation="$(IntDir)/"
+				ObjectFile="$(IntDir)/"
+				ProgramDataBaseFileName="$(IntDir)/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/UdmBase.lib"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="..\..\..\..\..\Build\Win32\VC7.1\Debug"
+			IntermediateDirectory="$(OutDir)\obj\src\$(ProjectName)"
+			ConfigurationType="4"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\..\..\..\..\include"
+				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile="$(IntDir)\UdmBase.pch"
+				AssemblerListingLocation="$(IntDir)/"
+				ObjectFile="$(IntDir)/"
+				ProgramDataBaseFileName="$(IntDir)/"
+				BrowseInformation="1"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/UdmBaseD.lib"
+				SuppressStartupBanner="TRUE"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="BootUdmCompile Release|Win32"
+			OutputDirectory="..\..\..\..\..\Build\Win32\VC7.1\BootUdmCompileRelease"
+			IntermediateDirectory="$(OutDir)\obj\src\$(ProjectName)"
+			ConfigurationType="1">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=""/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="cd &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot;
+move UdmProject.h ..\..\..\..\..\..\include
+move UdmProject.xsd ..\..\..\..\..\..\etc
+move UdmProject_xsd.h ..\..\..\..\..\..\src\UdmBase
+move UdmProject.cpp ..\..\..\..\..\..\src\UdmBase
+"/>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="if exist ..\..\..\..\..\etc\UdmProject_udm.xml attrib -r ..\..\..\..\..\etc\UdmProject_udm.xml
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.h attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.h
+if exist ..\..\..\..\..\include\UdmProject.h attrib -r ..\..\..\..\..\include\UdmProject.h
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.cpp attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.cpp
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.xsd attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.xsd
+if exist ..\..\..\..\..\etc\UdmProject.xsd attrib -r ..\..\..\..\..\etc\UdmProject.xsd
+mkdir &quot;$(OutDir)\..\Gen\src\$(ProjectName)
+exit 0
+"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="BootUdmCompile Debug|Win32"
+			OutputDirectory="..\..\..\..\..\Build\Win32\VC7.1\BootUdmCompileDebug"
+			IntermediateDirectory="$(OutDir)\obj\src\$(ProjectName)"
+			ConfigurationType="1">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=""/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="cd &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot;
+move UdmProject.h ..\..\..\..\..\..\include
+move UdmProject.xsd ..\..\..\..\..\..\etc
+move UdmProject_xsd.h ..\..\..\..\..\..\src\UdmBase
+move UdmProject.cpp ..\..\..\..\..\..\src\UdmBase
+"/>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="if exist ..\..\..\..\..\etc\UdmProject_udm.xml attrib -r ..\..\..\..\..\etc\UdmProject_udm.xml
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.h attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.h
+if exist ..\..\..\..\..\include\UdmProject.h attrib -r ..\..\..\..\..\include\UdmProject.h
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.cpp attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.cpp
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.xsd attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.xsd
+if exist ..\..\..\..\..\etc\UdmProject.xsd attrib -r ..\..\..\..\..\etc\UdmProject.xsd
+mkdir &quot;$(OutDir)\..\Gen\src\$(ProjectName)
+exit 0
+"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+			<File
+				RelativePath="..\..\..\..\..\src\UdmBase\cint_string.cpp">
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\UdmBase\DTDGen.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\UdmBase\Project.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\UdmBase\UdmBase.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\UdmBase\UdmProject.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\UdmBase\UdmStatic.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\UdmBase\UdmTomi.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\UdmBase\UmlExt.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath="..\..\..\..\..\include\cint_string.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\UdmBase\DTDGen.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\include\ErrHand.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\include\UdmBase.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\include\UdmMPL.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\include\UdmProject.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\include\UdmStatic.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\include\UmlExt.h">
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\..\..\..\..\etc\UdmProject.xme">
+			<FileConfiguration
+				Name="BootUdmCompile Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(InputDir)$(InputName).mga;$(InputDir)$(InputName)_udm.xml"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="BootUdmCompile Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(InputDir)$(InputName).mga;$(InputDir)$(InputName)_udm.xml"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\etc\UdmProject_udm.xml">
+			<FileConfiguration
+				Name="BootUdmCompile Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;$(OutDir)\..\Release\Udm.exe&quot; -o &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot; &quot;$(InputPath)&quot; -g -m
+"
+					Outputs="$(OutDir)\..\Gen\src\Udm\UdmProject.h; $(OutDir)\..\Gen\src\Udm\UdmProject.cpp; $(OutDir)\..\Gen\src\Udm\UdmProject.xsd; $(OutDir)\..\Gen\src\Udm\UdmProject_xsd.h"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="BootUdmCompile Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;$(OutDir)\..\Debug\UdmD.exe&quot; -o &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot; &quot;$(InputPath)&quot; -g -m
+"
+					Outputs="$(OutDir)\..\Gen\src\Udm\UdmProject.h; $(OutDir)\..\Gen\src\Udm\UdmProject.cpp; $(OutDir)\..\Gen\src\Udm\UdmProject.xsd; $(OutDir)\..\Gen\src\Udm\UdmProject_xsd.h"/>
+			</FileConfiguration>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
