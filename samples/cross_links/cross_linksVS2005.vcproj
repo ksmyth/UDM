@@ -388,7 +388,7 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="&quot;$(UDM_PATH)\bin\UdmD.exe&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="CD1.cpp;CD2.cpp;CD3.cpp;CL.cpp;CD1.h;CD2.h;CD3.h;CL.h;CD1.xsd;CD2.xsd;CD3.xsd;CL.xsd"
 				/>
 			</FileConfiguration>
