@@ -7,6 +7,7 @@
 #include "domstringdnTest.h"
 #include <cstring>
 
+#include <fstream>
 
 // Registers the fixture into the 'registry'
 
@@ -201,20 +202,26 @@ xml_xsd += "</xsd:schema>";
 string xml_str = "<RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"LampDiagram.xsd\"><Lamp name=\"Host Lamp \" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Sequence tester lamp\"><Bulb name=\"Bulb 1\" Voltage=\"10.000000\" Wattage=\"100.000000\"/><Bulb name=\"Bulb 2\" Voltage=\"20.000000\" Wattage=\"200.000000\"/><Bulb name=\"Bulb 3\" Voltage=\"30.000000\" Wattage=\"300.000000\"/><Plug/></Lamp></RootFolder>";
 string xml_verify_str = 
 
-"<RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"LampDiagram.xsd\">\n\
-	<Lamp name=\" name changed!\" sample=\"3.14159\" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Sequence tester lamp\">\n\
-		<Bulb name=\"Bulb 1\" Voltage=\"10.000000\" Wattage=\"100.000000\"/>\n\
-		<Bulb name=\"Bulb 2\" Voltage=\"20.000000\" Wattage=\"200.000000\"/>\n\
-		<Bulb name=\"Bulb 3\" Voltage=\"30.000000\" Wattage=\"300.000000\"/>\n\
-		<Plug/>\n\
-	</Lamp>\n\
-</RootFolder>\n\n";
+"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n\
+<RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"LampDiagram.xsd\">\n\
+\n\
+  <Lamp ArrayBool=\"false;false;true;true\" ArrayInt=\"2;3;4;5\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ArrayStr=\"first;second;\" ModelName=\"Sequence tester lamp\" name=\" name changed!\">\n\
+    <Bulb Voltage=\"10.000000\" Wattage=\"100.000000\" name=\"Bulb 1\"/>\n\
+    <Bulb Voltage=\"20.000000\" Wattage=\"200.000000\" name=\"Bulb 2\"/>\n\
+    <Bulb Voltage=\"30.000000\" Wattage=\"300.000000\" name=\"Bulb 3\"/>\n\
+    <Plug/>\n\
+  </Lamp>\n\
+\n\
+</RootFolder>\n";
 
 	string xml_verify_str1 = 
 
-"<RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"LampDiagram.xsd\">\n\
-	<Lamp name=\"cool!\" sample=\"3.141592\" ArrayInt=\"2;3;4;5\" ArrayStr=\"first;second;\" ArrayBool=\"false;false;true;true\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ModelName=\"Default Lamp Name\"/>\n\
-</RootFolder>\n\n";
+"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n\
+<RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"LampDiagram.xsd\">\n\
+\n\
+  <Lamp ArrayBool=\"false;false;true;true\" ArrayInt=\"2;3;4;5\" ArrayReal=\"6.000000000000000;7.000000000000000;8.000000000000000;9.000000000000000\" ArrayStr=\"first;second;\" ModelName=\"Default Lamp Name\" name=\"cool!\" sample=\"3.141592\"/>\n\
+\n\
+</RootFolder>\n";
 
 
 	UdmDom::str_xsd_storage::StoreXsd("LampDiagram.xsd", xml_xsd);
@@ -240,7 +247,7 @@ string xml_verify_str =
 	ddn.CloseWithUpdate();
 
 	const string & outstr1 = ddn.Str();
-	
+
 	CPPUNIT_ASSERT(  strcmp(xml_verify_str1.c_str(), outstr1.c_str()) == 0);
 
 };

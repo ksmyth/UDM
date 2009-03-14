@@ -40,14 +40,14 @@ CHANGELOG:
 
 //GNU does not allow using namespace aliases in forward declarations
 XERCES_CPP_NAMESPACE_BEGIN
-	class DOM_Node;
-	class DOM_Element;
-	class DOMString;
+	class DOMNode;
+	class DOMElement;
+	class XercesDOMParser;
 XERCES_CPP_NAMESPACE_END
 XERCES_CPP_NAMESPACE_USE
 
-typedef map<unsigned long, DOM_Element> IdToDomElementMap;
-typedef pair<const unsigned long, DOM_Element> IdToDomElementMapItem;
+typedef map<unsigned long, DOMElement*> IdToDomElementMap;
+typedef pair<const unsigned long, DOMElement*> IdToDomElementMapItem;
 
 	
 namespace UdmDom
@@ -71,9 +71,10 @@ namespace UdmDom
 		bool saveondestroy;
 		bool str_based;
 		string str;
+		XercesDOMParser *parser;
 
 		void AddToMetaClassesCache(const set< ::Uml::Class> &classes);
-		void MapNamespaces(DOM_Node &d);
+		void MapNamespaces(const DOMNode *d);
 
 	public:
 		static UDM_DLL string DTDPath;
@@ -98,7 +99,7 @@ namespace UdmDom
 									const string &metalocator, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 		
-		UDM_DLL void MapExistingIDs(DOM_Node &d);
+		UDM_DLL void MapExistingIDs(const DOMNode &d);
 		UDM_DLL void SaveAs(string systemname); 
 		UDM_DLL void CloseWithUpdate();
 		UDM_DLL void CloseNoUpdate();
@@ -123,8 +124,8 @@ namespace UdmDom
 		
 		//map of Elements in the Diagram
 		IdToDomElementMap DomElements;
-		void DoMapping(const DOM_Element &e, long id,  bool force);
-		DOM_Element Search(const DOM_Node &d, const DOMString &str);
+		void DoMapping(DOMElement *const e, long id, bool force);
+		DOMElement* Search(const XMLCh *str);
 
 		//get the string if datanetwork is str_based
 
@@ -195,14 +196,16 @@ namespace UdmDom
 #define CATCH_XML_EXCEPTION(where)  }\
 		catch(XMLException &e)\
 		{\
-			StrX msg = e.getMessage();\
 			string what = "Udm: XMLException: ";\
-			what += msg.localForm();\
+			const char *buf = XMLString::transcode(e.getMessage());	\
+			what += buf;\
+			delete [] buf;\
 			if (e.getType())\
 			{\
-				msg = e.getType();	\
-				what += ", of type:";\
-				what += msg.localForm();\
+				what += ", of type: ";\
+				buf = XMLString::transcode(e.getType());\
+				what += buf;\
+				delete [] buf;\
 			}\
 			what += ", in File: ";\
 			what += e.getSrcFile();\
