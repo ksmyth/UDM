@@ -29,13 +29,15 @@ this software.
 Directory structure
 -------------------
 
-/bin			binary executables and DLLs
+/Build			binary executables, DLLs and other generated files
+/bin			binary executables (Linux only)
 /doc			documentation
 /etc			essential diagrams, DTDs, conversion XSL scripts
 /3rdParty		third party libraries and tools used by this packages
 /include		UDM C++ include files
+/Projects		VC++ solutions and projects
 /samples		sample data models and UDM applications
-/lib			UDM static libraries
+/lib			UDM libraries (Linux only)
 
 
 -------
@@ -65,7 +67,7 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
-12/11/08	-	Release 3.1.3
+11/3/08		-	Release 3.1.3
 
 		-	Support for attaching of data-networks as libraries, similar to GME libraries; emulate libraries in DOM and MEM backends
 		-	In the generated C++ code expose more type information using traits

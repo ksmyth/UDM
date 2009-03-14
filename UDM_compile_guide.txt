@@ -36,7 +36,6 @@ Step-by-step guide:
 		%UDM_3RDPARTY_PATH%\info-zip;
 		%UDM_3RDPARTY_PATH%\sed;
 		%UDM_3RDPARTY_PATH%\SWIG-1.3.24;
-		%UDM_PATH%\bin;
 		%PATH%
 	INCLUDE=
 		%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\include;
