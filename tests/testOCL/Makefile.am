@@ -25,6 +25,9 @@ sources-stamp: SBML2_udm.xml ../../bin/Udm Makefile
 		-d ../../etc -t -v -g -T \
 		-u math=http://www.w3.org/1998/Math/MathML \
 		-u sbml=http://www.sbml.org/sbml/level2
+	@if test "$(top_srcdir)" != "$(top_builddir)"; then \
+		cp -f "$(srcdir)/versionCheck.xml" .; \
+	fi
 	@mv -f sources-temp $@
 
 $(BUILT_SOURCES): sources-stamp

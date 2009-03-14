@@ -45,6 +45,9 @@ sources-stamp: GeneTF_udm.xml SBML2Ex_udm.xml ../../bin/Udm Makefile
 		-u jigcell=http://mpf.biol.vt.edu/ns \
 		-u bc=http://www.sbml.org/2001/ns/biocharon \
 		-u flux=http://arep.med.harvard.edu/fluxns
+	@if test "$(top_srcdir)" != "$(top_builddir)"; then \
+		cp -f "$(srcdir)/versionCheck.xml" .; \
+	fi
 	@mv -f sources-temp $@
 
 $(BUILT_SOURCES): sources-stamp
