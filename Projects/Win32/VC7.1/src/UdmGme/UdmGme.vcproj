@@ -172,7 +172,7 @@
 				RelativePath="..\..\..\..\..\src\UdmGme\MgaDefs.h">
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\UdmGme\UdmGme.h">
+				RelativePath="..\..\..\..\..\include\UdmGme.h">
 			</File>
 		</Filter>
 	</Files>

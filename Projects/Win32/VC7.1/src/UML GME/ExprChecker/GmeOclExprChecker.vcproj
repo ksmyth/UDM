@@ -25,7 +25,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include,..\..\..\..\..\..\include"
+				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,$(OutDir)\..\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include,..\..\..\..\..\..\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;BUILDER_OBJECT_NETWORK"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -97,7 +97,7 @@ exit 0
 				Name="VCCLCompilerTool"
 				Optimization="1"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include,..\..\..\..\..\..\include"
+				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,$(OutDir)\..\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include,..\..\..\..\..\..\include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;BUILDER_OBJECT_NETWORK"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -259,7 +259,7 @@ exit 0
 						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\ExprChecker"
 						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
 						TypeLibraryName="$(TargetDir)\obj\src\UML GME\ExprChecker\ComponentLib.tlb"
-						Outputs="..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\ExprChecker\ComponentLib_h.h; ..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\ExprChecker\ComponentLib_i.c; ..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\ExprChecker\ComponentLib_p.c; ..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\ExprChecker\dlldata.c"/>
+						Outputs="$(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_h.h; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_i.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_p.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\dlldata.c"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release MinDependency|Win32">
@@ -268,7 +268,7 @@ exit 0
 						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\ExprChecker"
 						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
 						TypeLibraryName="$(TargetDir)\obj\src\UML GME\ExprChecker\ComponentLib.tlb"
-						Outputs="..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\ExprChecker\ComponentLib_h.h; ..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\ExprChecker\ComponentLib_i.c; ..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\ExprChecker\ComponentLib_p.c; ..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\ExprChecker\dlldata.c"/>
+						Outputs="$(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_h.h; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_i.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_p.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\dlldata.c"/>
 				</FileConfiguration>
 			</File>
 			<File

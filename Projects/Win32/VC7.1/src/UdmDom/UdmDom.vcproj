@@ -167,7 +167,7 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath="..\..\..\..\..\src\UdmDom\UdmDom.h">
+				RelativePath="..\..\..\..\..\include\UdmDom.h">
 			</File>
 		</Filter>
 	</Files>

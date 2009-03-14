@@ -41,7 +41,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib GOCLd.lib UdmOcld.lib jvm.lib jawt.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib  UdmUtilD.lib zlibd.lib"
+				AdditionalDependencies="UmlD.lib GOCLd.lib UdmOcld.lib jvm.lib jawt.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib zlibd.lib"
 				OutputFile="$(OutDir)\UdmSwigD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -155,21 +155,21 @@
 				Name="Debug|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="mkdir ..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmSwig
-cd ..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmSwig
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;
+cd  &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;
 swig.exe -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\..\..\..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o $(InputName)_wrap.cpp &quot;$(InputPath)&quot;
 "
-					Outputs="..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmSwig\$(InputName)_wrap.cpp"/>
+					Outputs="$(OutDir)\..\Gen\src\UdmSwig\$(InputName)_wrap.cpp"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="mkdir ..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmSwig
-cd ..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmSwig
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;
+cd  &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;
 swig.exe -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\..\..\..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o $(InputName)_wrap.cpp &quot;$(InputPath)&quot;
 "
-					Outputs="..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmSwig\$(InputName)_wrap.cpp"/>
+					Outputs="$(OutDir)\..\Gen\src\UdmSwig\$(InputName)_wrap.cpp"/>
 			</FileConfiguration>
 		</File>
 		<File

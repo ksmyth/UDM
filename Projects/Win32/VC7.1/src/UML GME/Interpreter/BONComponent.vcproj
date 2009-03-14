@@ -26,7 +26,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\include"
+				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,$(OutDir)\..\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -96,7 +96,7 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\include"
+				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,$(OutDir)\..\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -597,22 +597,22 @@ echo regsvr32 exec. time &gt; &quot;$(OutDir)\regsvr32.trg&quot;
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Generating code from attribute.g"
- 					CommandLine="mkdir &quot;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter&quot;
-cd &quot;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter&quot;
+ 					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;
+cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;
 java antlr.Tool &quot;$(InputPath)&quot;
 "
-					Outputs="..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Pattrib.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Pattrib.cpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Lattrib.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Lattrib.cpp"/>
+					Outputs="$(OutDir)\..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lattrib.cpp"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release MinDependency|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Generating code from attribute.g"
-					CommandLine="mkdir &quot;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter&quot;
-cd &quot;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter&quot;
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;
+cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;
 java antlr.Tool &quot;$(InputPath)&quot;
 "
-					Outputs="..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Pattrib.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Pattrib.cpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Lattrib.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Lattrib.cpp"/>
+					Outputs="$(OutDir)\..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lattrib.cpp"/>
 			</FileConfiguration>
 		</File>
 		<File
@@ -622,22 +622,22 @@ java antlr.Tool &quot;$(InputPath)&quot;
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Generating code from cardinality.g"
-					CommandLine="mkdir &quot;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter&quot;
-cd &quot;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter&quot;
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;
+cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;
 java antlr.Tool &quot;$(InputPath)&quot;
 "
-					Outputs="..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Pcardin.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Pcardin.cpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Lcardin.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Lcardin.cpp"/>
+					Outputs="$(OutDir)\..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lcardin.cpp"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release MinDependency|Win32">
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Generating code from cardinality.g"
-					CommandLine="mkdir &quot;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter&quot;
-cd &quot;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter&quot;
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;
+cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;
 java antlr.Tool &quot;$(InputPath)&quot;
 "
-					Outputs="..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Pcardin.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Pcardin.cpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Lcardin.hpp;..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UML GME\Interpreter\Lcardin.cpp"/>
+					Outputs="$(OutDir)\..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lcardin.cpp"/>
 			</FileConfiguration>
 		</File>
 		<File

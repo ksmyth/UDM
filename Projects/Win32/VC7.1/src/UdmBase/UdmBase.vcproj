@@ -522,7 +522,7 @@ exit 0
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;$(OutDir)\..\Release\Udm.exe&quot; -o &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot; &quot;$(InputPath)&quot; -g -m
 "
-					Outputs="$(OutDir)\..\Gen\src\Udm\UdmProject.h; $(OutDir)\..\Gen\src\Udm\UdmProject.cpp; $(OutDir)\..\Gen\src\Udm\UdmProject.xsd; $(OutDir)\..\Gen\src\Udm\UdmProject_xsd.h"/>
+					Outputs="$(OutDir)\..\Gen\src\UdmBase\UdmProject.h; $(OutDir)\..\Gen\src\UdmBase\UdmProject.cpp; $(OutDir)\..\Gen\src\UdmBase\UdmProject.xsd; $(OutDir)\..\Gen\src\UdmBase\UdmProject_xsd.h"/>
 			</FileConfiguration>
 			<FileConfiguration
 				Name="BootUdmCompile Debug|Win32">
@@ -530,7 +530,7 @@ exit 0
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;$(OutDir)\..\Debug\UdmD.exe&quot; -o &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot; &quot;$(InputPath)&quot; -g -m
 "
-					Outputs="$(OutDir)\..\Gen\src\Udm\UdmProject.h; $(OutDir)\..\Gen\src\Udm\UdmProject.cpp; $(OutDir)\..\Gen\src\Udm\UdmProject.xsd; $(OutDir)\..\Gen\src\Udm\UdmProject_xsd.h"/>
+					Outputs="$(OutDir)\..\Gen\src\UdmBase\UdmProject.h; $(OutDir)\..\Gen\src\UdmBase\UdmProject.cpp; $(OutDir)\..\Gen\src\UdmBase\UdmProject.xsd; $(OutDir)\..\Gen\src\UdmBase\UdmProject_xsd.h"/>
 			</FileConfiguration>
 		</File>
 	</Files>

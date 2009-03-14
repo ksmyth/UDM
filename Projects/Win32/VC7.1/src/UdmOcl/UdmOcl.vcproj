@@ -75,7 +75,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\..\..\include, ..\..\..\..\..\src\UdmOclPat\GOCL\include"
+				AdditionalIncludeDirectories="..\..\..\..\..\include,..\..\..\..\..\src\UdmOclPat\GOCL\include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;OCL_USING_STL_NAMESPACE;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -186,7 +186,7 @@
 				Name="Header Files"
 				Filter="h;hpp;hxx;hm;inl">
 				<File
-					RelativePath="..\..\..\..\..\src\UdmOcl\UdmOcl.h">
+					RelativePath="..\..\..\..\..\include\UdmOcl.h">
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\src\UdmOcl\UdmOclObject.h">

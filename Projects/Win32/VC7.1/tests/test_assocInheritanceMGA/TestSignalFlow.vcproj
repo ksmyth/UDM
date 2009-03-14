@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="TestSignalFlow"
+	RootNamespace="TestSignalFlow"
+	SccProjectName="SAK"
+	SccAuxPath="SAK"
+	SccLocalPath="SAK"
+	SccProvider="SAK">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="..\..\..\..\..\Build\Win32\VC7.1\Debug"
+			IntermediateDirectory="$(OutDir)\obj\tests\$(ProjectName)"
+			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\tests\test_assocInheritanceMGA"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				PrecompiledHeaderFile="$(IntDir)/TestSignalFlow.pch"
+				AssemblerListingLocation="$(IntDir)/"
+				ObjectFile="$(IntDir)/"
+				ProgramDataBaseFileName="$(IntDir)/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="UmlD.lib UdmGmeD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib"
+				OutputFile="$(OutDir)\TestSignalFlow.exe"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="$(OutDir)"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(IntDir)/TestSignalFlow.pdb"
+				SubSystem="1"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(IntDir)/TestSignalFlow.tlb"
+				HeaderFileName=""/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot;
+&quot;$(TargetPath)&quot;
+"/>
+			<Tool
+				Name="VCPreBuildEventTool"
+				Description="Create directory for generated files"
+				CommandLine="mkdir &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot;
+exit 0
+"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="..\..\..\..\..\Build\Win32\VC7.1\Release"
+			IntermediateDirectory="$(OutDir)\obj\tests\$(ProjectName)"
+			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\tests\test_assocInheritanceMGA"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile="$(IntDir)/TestSignalFlow.pch"
+				AssemblerListingLocation="$(IntDir)/"
+				ObjectFile="$(IntDir)/"
+				ProgramDataBaseFileName="$(IntDir)/"
+				WarningLevel="3"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="Uml.lib UdmBase.lib UdmGme.lib UdmUtil.lib zlib.lib UdmDom.lib xerces-c_2.lib cppunit.lib"
+				OutputFile="$(OutDir)\TestSignalFlow.exe"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="$(OutDir)"
+				ProgramDatabaseFile="$(IntDir)/TestSignalFlow.pdb"
+				SubSystem="1"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(IntDir)/TestSignalFlow.tlb"
+				HeaderFileName=""/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot;
+&quot;$(TargetPath)&quot;
+"/>
+			<Tool
+				Name="VCPreBuildEventTool"
+				Description="Create directory for generated files"
+				CommandLine="mkdir &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot;
+exit 0
+"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
+			<File
+				RelativePath="..\..\..\..\..\tests\test_assocInheritanceMGA\AssociationInheritanceTest.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\tests\test_assocInheritanceMGA\main.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath="..\..\..\..\..\tests\test_assocInheritanceMGA\AssociationInheritanceTest.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\tests\test_assocInheritanceMGA\SignalFlow.h">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\tests\test_assocInheritanceMGA\SignalFlow.h">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\..\..\..\..\tests\test_assocInheritanceMGA\sf1.xme">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="sf1.xml -&gt; sf1.mga"
+					CommandLine="cd &quot;$(TargetDir)\Gen\tests\test_assocInheritanceMGA&quot;
+&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot; SignalFlow
+"
+					AdditionalDependencies=""
+					Outputs="$(OutDir)\Gen\tests\test_assocInheritanceMGA\$(InputName).mga"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="sf1.xml -&gt; sf1.mga"
+					CommandLine="cd &quot;$(TargetDir)\Gen\tests\test_assocInheritanceMGA&quot;
+&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot; SignalFlow
+"
+					Outputs="$(OutDir)\Gen\tests\test_assocInheritanceMGA\$(InputName).mga"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\tests\test_assocInheritanceMGA\SignalFlow_meta.xme">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Signalflow_meta.xme -&gt; Signalflow_meta.xmp, Registering SignalFlow paradigm"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME
+&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(InputDir)\SignalFlow.xmp; $(InputDir)\SignalFlow.xmp.log; $(InputDir)\SignalFlow.mta; $(InputDir)\$(InputName).mga"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="Signalflow_meta.xme -&gt; Signalflow_meta.xmp, Registering SignalFlow paradigm"
+					CommandLine="cd &quot;$(InputDir)&quot;
+&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME
+&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(InputDir)\SignalFlow.xmp; $(InputDir)\SignalFlow.xmp.log; $(InputDir)\SignalFlow.mta; $(InputDir)\$(InputName).mga"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\tests\test_assocInheritanceMGA\SignalFlow_udm.xml">
+			<FileConfiguration
+				Name="Debug|Win32"
+				ExcludedFromBuild="TRUE">
+				<Tool
+					Name="VCCustomBuildTool"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="SignaFlow_udm.xml -&gt; C++ API"
+					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot; &quot;$(InputPath)&quot;
+"
+					Outputs="$(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.h; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\tests\test_assocInheritanceMGA\SignalFlow_udm.xml">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="SignaFlow_udm.xml -&gt; C++ API"
+					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot; &quot;$(InputPath)&quot;
+"
+					Outputs="$(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.h; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="TRUE">
+				<Tool
+					Name="VCCustomBuildTool"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\tests\test_assocInheritanceMGA\SignalFlow_uml.xme">
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="SignalFlow_uml.xme -&gt; SignalFlow_udm.xml "
+					CommandLine="cd &quot;$(TargetDir)\Gen\tests\test_assocInheritanceMGA&quot;
+&quot;$(UDM_PATH)\etc\Xme2UdmXml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(OutDir)\Gen\tests\test_assocInheritanceMGA\$(InputName).mga;$(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow_udm.xml"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="SignalFlow_uml.xme -&gt; SignalFlow_udm.xml "
+					CommandLine="cd &quot;$(TargetDir)\Gen\tests\test_assocInheritanceMGA&quot;
+&quot;$(UDM_PATH)\etc\Xme2UdmXml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;
+"
+					Outputs="$(OutDir)\Gen\tests\test_assocInheritanceMGA\$(InputName).mga;$(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow_udm.xml"/>
+			</FileConfiguration>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

@@ -48,7 +48,7 @@
 				OutputFile="$(OutDir)\CreateLampModelD.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(OutDir),$(UDM_3RDPARTY_PATH)/xerces-c_2_5_0/lib,$(UDM_3RDPARTY_PATH)/zlib"
+				AdditionalLibraryDirectories="$(OutDir)"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(IntDir)/CreateLampModel.pdb"
 				SubSystem="1"
@@ -116,7 +116,7 @@ exit 0
 				OutputFile="$(OutDir)\CreateLampModel.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(OutDir),$(UDM_3RDPARTY_PATH)/xerces-c_2_5_0/lib,$(UDM_3RDPARTY_PATH)/zlib"
+				AdditionalLibraryDirectories="$(OutDir)"
 				ProgramDatabaseFile="$(IntDir)/CreateLampModel.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>

@@ -428,19 +428,19 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="cd $(InputDir)
+						CommandLine="cd &quot;$(InputDir)&quot;
 zip.exe -r UdmInterpreter.zip UdmInterpreter -x *.scc
 "
-						Outputs="UdmInterpreter.zip"/>
+						Outputs="$(InputDir)\UdmInterpreter.zip"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="cd $(InputDir)
+						CommandLine="cd &quot;$(InputDir)&quot;
 zip.exe -r UdmInterpreter.zip UdmInterpreter -x *.scc
 "
-						Outputs="UdmInterpreter.zip"/>
+						Outputs="$(InputDir)\UdmInterpreter.zip"/>
 				</FileConfiguration>
 			</File>
 			<File

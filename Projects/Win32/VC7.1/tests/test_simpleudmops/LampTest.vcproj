@@ -2,11 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="UDMPat"
-	ProjectGUID="{EF8C7C28-568A-4335-9861-84ED3917E1A6}"
-	SccProjectName="&quot;$/MoBIESTransition/udm_ns/src/UdmOclPat&quot;, QNZAAAAA"
+	Name="LampTest"
+	SccProjectName="&quot;$/MoBIESTransition/udm_ns&quot;, RIZAAAAA"
 	SccAuxPath=""
-	SccLocalPath="."
+	SccLocalPath="..\.."
 	SccProvider="MSSCCI:Microsoft Visual SourceSafe">
 	<Platforms>
 		<Platform
@@ -16,7 +15,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\..\..\..\Build\Win32\VC7.1\Release"
-			IntermediateDirectory="$(OutDir)\obj\src\$(ProjectName)"
+			IntermediateDirectory="$(OutDir)\obj\tests\$(ProjectName)"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -25,13 +24,13 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\..\..\include,..\..\..\..\..\src\UdmOclPat\GOCL\Include"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile="$(IntDir)/UDMOclPat.pch"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile="$(IntDir)/LampTest.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/"
@@ -42,21 +41,23 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib UdmOcl.lib GOCL.lib xerces-c_2.lib"
-				OutputFile="$(OutDir)\UDMOclPat.exe"
+				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib Xerces-c_2.lib zlib.lib cppunit_dll.lib"
+				OutputFile="$(OutDir)\LampTest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(OutDir)"
-				IgnoreDefaultLibraryNames="mscvprt.lib msvcrt.lib"
-				ProgramDatabaseFile="$(IntDir)/UDMOclPat.pdb"
+				ProgramDatabaseFile="$(IntDir)/LampTest.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName="$(IntDir)/UDMOclPat.tlb"
+				TypeLibraryName="$(IntDir)/LampTest.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="cd &quot;$(OutDir)\Gen\samples&quot;
+&quot;$(TargetPath)&quot;
+"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -79,7 +80,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\..\..\..\Build\Win32\VC7.1\Debug"
-			IntermediateDirectory="$(OutDir)\obj\src\$(ProjectName)"
+			IntermediateDirectory="$(OutDir)\obj\tests\$(ProjectName)"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -87,12 +88,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\..\include,..\..\..\..\..\src\UdmOclPat\GOCL\Include"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile="$(IntDir)/UDMOclPat.pch"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile="$(IntDir)/LampTest.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/"
@@ -104,21 +106,24 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2D.lib zlibD.lib UdmOclD.lib GOCLD.lib"
-				OutputFile="$(OutDir)\UDMOclPatD.exe"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib cppunitd_dll.lib"
+				OutputFile="$(OutDir)\LampTest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(OutDir)"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(IntDir)/UDMOclPat.pdb"
+				ProgramDatabaseFile="$(IntDir)/LampTest.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName="$(IntDir)/UDMOclPat.tlb"
+				TypeLibraryName="$(IntDir)/LampTest.tlb"
 				HeaderFileName=""/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="cd &quot;$(OutDir)\Gen\samples&quot;
+&quot;$(TargetPath)&quot;
+"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -146,7 +151,62 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath="..\..\..\..\..\src\UdmOclPat\UDMPat.cpp">
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\samples\LampDiagram.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\samples\LampDiagram.cpp">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\tests\test_simpleudmops\LampTest.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\tests\test_simpleudmops\UDMTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -169,10 +229,27 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\samples\LampDiagram.h">
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\samples\LampDiagram.h">
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCustomBuildTool"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\tests\test_simpleudmops\UDMTest.h">
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

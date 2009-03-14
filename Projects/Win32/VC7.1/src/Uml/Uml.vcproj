@@ -215,6 +215,18 @@ exit 0
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
 				RelativePath="..\..\..\..\..\src\Uml\Uml.cpp">
+				<FileConfiguration
+					Name="BootUdmCompile Debug|Win32"
+					ExcludedFromBuild="true">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="BootUdmCompile Release|Win32"
+					ExcludedFromBuild="true">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -222,7 +234,7 @@ exit 0
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath="..\..\..\..\..\src\Uml\Uml.h">
+				RelativePath="..\..\..\..\..\include\Uml.h">
 			</File>
 		</Filter>
 		<File
