@@ -190,6 +190,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				TreatWChar_tAsBuiltInType="false"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -244,6 +245,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				TreatWChar_tAsBuiltInType="false"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

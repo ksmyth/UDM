@@ -422,12 +422,11 @@
 					>
 					<Tool
 						Name="VCMIDLTool"
-						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\Interpreter"
 						AdditionalOptions="/server none /client none"
-						TargetEnvironment="win32"
+						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\Interpreter"
+						TypeLibraryName="$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb"
 						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\Interpreter"
 						HeaderFileName="$(InputName).h"
-						TypeLibraryName="$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -435,12 +434,11 @@
 					>
 					<Tool
 						Name="VCMIDLTool"
-						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\Interpreter"
 						AdditionalOptions="/server none /client none"
-						TargetEnvironment="win32"
+						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\Interpreter"
+						TypeLibraryName="$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb"
 						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\Interpreter"
 						HeaderFileName="$(InputName).h"
-						TypeLibraryName="$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb"
 					/>
 				</FileConfiguration>
 			</File>
@@ -771,7 +769,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Generating code from attribute.g"
- 					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;java antlr.Tool &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;java -cp &quot;$(UDM_3RDPARTY_PATH)\antlr-2.7.1\antlr.jar&quot; antlr.Tool &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lattrib.cpp"
 				/>
 			</FileConfiguration>
@@ -781,7 +779,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Generating code from attribute.g"
- 					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;java antlr.Tool &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;java -cp &quot;$(UDM_3RDPARTY_PATH)\antlr-2.7.1\antlr.jar&quot; antlr.Tool &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lattrib.cpp"
 				/>
 			</FileConfiguration>
@@ -795,7 +793,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Generating code from cardinality.g"
-					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;java antlr.Tool &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;java -cp &quot;$(UDM_3RDPARTY_PATH)\antlr-2.7.1\antlr.jar&quot; antlr.Tool &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lcardin.cpp"
 				/>
 			</FileConfiguration>
@@ -805,7 +803,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Generating code from cardinality.g"
-					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;java antlr.Tool &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;&#x0D;&#x0A;java -cp &quot;$(UDM_3RDPARTY_PATH)\antlr-2.7.1\antlr.jar&quot; antlr.Tool &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)\..\Gen\src\UML GME\Interpreter\Lcardin.cpp"
 				/>
 			</FileConfiguration>

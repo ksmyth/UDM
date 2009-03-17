@@ -345,9 +345,8 @@
 					<Tool
 						Name="VCMIDLTool"
 						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\ExprChecker"
-						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
 						TypeLibraryName="$(TargetDir)\obj\src\UML GME\ExprChecker\ComponentLib.tlb"
-						Outputs="$(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_h.h; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_i.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_p.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\dlldata.c"
+						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -356,9 +355,8 @@
 					<Tool
 						Name="VCMIDLTool"
 						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\ExprChecker"
-						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
 						TypeLibraryName="$(TargetDir)\obj\src\UML GME\ExprChecker\ComponentLib.tlb"
-						Outputs="$(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_h.h; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_i.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_p.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\dlldata.c"
+						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
 					/>
 				</FileConfiguration>
 			</File>
@@ -795,11 +793,11 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\compicon.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\compicon.ico"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico"
 				>
 			</File>
 			<File
