@@ -233,7 +233,7 @@ protected:
 		// - for CompositionParentRole, CompositionChildRole and AssociationRole of classless association:
 		//   pair<ReturnedType, RoleType>
 		// - for AssociationRole of associations with an association class
-		//   pair< ReturnedType, pair<AssociationClas, RoleType> >
+		//   pair< ReturnedType, pair<AssociationClass, RoleType> >
 		vector<boost::format> typedefs;
 		// name the types created above
 		vector<string> typenames_single;	// the target can be a single item
@@ -241,7 +241,7 @@ protected:
 	};
 
 	// typelists for ReturnedType
-	void BuildTL(const set< ::Uml::Class> &s, const string &tl_name, const string &description, vector<boost::format> &result);
+	void BuildTL(const set< ::Uml::Class> &s, const string &tl_name, const string &description, vector<boost::format> &result, bool sort_tl = false);
 	// types and typelists for pair<ReturnedType, Role> or pair< ReturnedType, pair<AssociationClass, Role> >
 	// Role can be: CompositionParentRole, CompositionChildRole, AssociationRole
 	void BuildTL(const TLHelper &tlhlp, const string &tl_single_name, const string &tl_multi_name, const string &description, vector<boost::format> &result);

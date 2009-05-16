@@ -133,6 +133,72 @@ namespace Udm
 
 
 	// The typelist contains elements of type
+	// boost::mpl::pair<ReturnType, RoleType>.
+	// We want to find if the pair formed by the first two parameters can
+	// be found in the typelist this way: the role type must be the same
+	// and the return type template parameter is a public base of the
+	// return type from the typelist pair, or an alias, or derived from
+	// the return type from the typelist pair.
+	template <class ReturnType, class RoleType, class TList>
+	struct WithRoleInTListConcept_B
+	{
+		void constraints()
+		{
+#if BOOST_VERSION >= 103500
+			typedef typename
+			boost::mpl::find_if<
+				TList,
+				boost::mpl::and_<
+					boost::is_same<
+						RoleType,
+						boost::mpl::second< boost::mpl::placeholders::_1 >
+					>,
+					boost::mpl::or_<
+						boost::is_base_of<
+							ReturnType,
+							boost::mpl::first< boost::mpl::placeholders::_1 >
+						>,
+						boost::is_base_of<
+							boost::mpl::first< boost::mpl::placeholders::_1 >,
+							ReturnType
+						>
+					>
+				>
+			>::type iter;
+#else
+			typedef typename
+			boost::mpl::find_if<
+				TList,
+				boost::mpl::and_<
+					boost::is_same<
+						RoleType,
+						boost::mpl::second< boost::mpl::placeholders::_1 >
+					>,
+					boost::mpl::or_<
+						boost::is_same<
+							ReturnType,
+							boost::mpl::first< boost::mpl::placeholders::_1 >
+						>,
+						boost::mpl::or_<
+							boost::is_base_of<
+								ReturnType,
+								boost::mpl::first< boost::mpl::placeholders::_1 >
+							>,
+							boost::is_base_of<
+								boost::mpl::first< boost::mpl::placeholders::_1 >,
+								ReturnType
+							>
+						>
+					>
+				>
+			>::type iter;
+#endif
+			BOOST_MPL_ASSERT_NOT(( boost::is_same<iter, typename boost::mpl::end<TList>::type> ));
+		}
+	};
+
+
+	// The typelist contains elements of type
 	// boost::mpl::pair< ReturnType, pair<AssocClassType, RoleType> >.
 	// We want to find if the triplet formed by the first three parameters
 	// can be found by a typelist item in this way:
@@ -205,17 +271,15 @@ namespace Udm
 		}
 	};
 
+
 	template <class T>
 	struct UdmKindConcept 
 	{
 		void constraints()
 		{
-      BOOST_MPL_ASSERT_RELATION( value, !=, 0 );
+			typedef typename T::MetaKind MetaKind;
+			BOOST_MPL_ASSERT((boost::mpl::contains<Udm::MetaTagList, MetaKind> ));
 		}
-
-    typedef typename T::MetaKind MetaKind;
-    typedef UdmKindConcept type;
-    enum { value = boost::mpl::contains<Udm::MetaTagList, MetaKind>::value }; 
 	};
 
 	template <class L, class H>
@@ -223,18 +287,12 @@ namespace Udm
 	{
 		BOOST_CLASS_REQUIRE(L, Udm, UdmKindConcept);
 		BOOST_CLASS_REQUIRE(H, Udm, UdmKindConcept);
-    
+
 		void constraints()
 		{
-      BOOST_MPL_ASSERT_RELATION( value, !=, 0 );
+			BOOST_MPL_ASSERT((boost::is_same<L, H>));
+			BOOST_MPL_ASSERT((boost::is_same<typename L::MetaKind, typename H::MetaKind> ));
 		}
-    
-    typedef SameUdmKindsConcept type;
-    enum { value = UdmKindConcept<L>::value &&
-                   UdmKindConcept<H>::value && 
-                   boost::is_same<L, H>::value &&  
-                   boost::is_same<typename L::MetaKind, 
-                                  typename H::MetaKind>::value }; 
 	};
 
 	template <class ParentKind, class ChildKind>
@@ -242,17 +300,12 @@ namespace Udm
 	{
 		BOOST_CLASS_REQUIRE(ParentKind, Udm, UdmKindConcept);
 		BOOST_CLASS_REQUIRE(ChildKind, Udm, UdmKindConcept);
-		
-    void constraints()
+	
+		void constraints()
 		{
-      BOOST_MPL_ASSERT_RELATION( value, !=, 0 );
+			typedef typename ParentKind::ChildrenKinds ChildrenKinds;
+			BOOST_MPL_ASSERT((boost::mpl::contains<ChildrenKinds, ChildKind > ));
 		}
-
- 	  typedef typename ParentKind::ChildrenKinds ChildrenKinds;
-    typedef ParentChildConcept type;
-    enum { value = UdmKindConcept<ParentKind>::value &&
-                   UdmKindConcept<ChildKind>::value && 
-                   boost::mpl::contains<ChildrenKinds, ChildKind>::value }; 
 	};
 
 }

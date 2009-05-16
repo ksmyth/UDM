@@ -198,11 +198,11 @@ void ClassGen::Basic(const InheritanceSolver &is)
 
 	// 5. children
 	// template <class ChildType, class RoleType> Udm::ChildAttr<ChildType> child() const { ... }
-	meth_defs.push_back( boost::format("template <class ChildType, class RoleType> Udm::ChildAttr<ChildType> child() const { boost::function_requires< Udm::WithRoleInTListConcept<ChildType, RoleType, ChildrenSingle> >(); return Udm::ChildAttr<ChildType>(impl, _type2CCRole<RoleType>()); }") );
+	meth_defs.push_back( boost::format("template <class ChildType, class RoleType> Udm::ChildAttr<ChildType> child() const { boost::function_requires< Udm::WithRoleInTListConcept_B<ChildType, RoleType, ChildrenSingle> >(); return Udm::ChildAttr<ChildType>(impl, _type2CCRole<RoleType>()); }") );
 	// template <class ChildrenType, class RoleType> Udm::ChildrenAttr<ChildrenType> children() const { ... }
-	meth_defs.push_back( boost::format("template <class ChildrenType, class RoleType> Udm::ChildrenAttr<ChildrenType> children() const { boost::function_requires< Udm::WithRoleInTListConcept<ChildrenType, RoleType, ChildrenMulti> >(); return Udm::ChildrenAttr<ChildrenType>(impl, _type2CCRole<RoleType>()); }") );
+	meth_defs.push_back( boost::format("template <class ChildrenType, class RoleType> Udm::ChildrenAttr<ChildrenType> children() const { boost::function_requires< Udm::WithRoleInTListConcept_B<ChildrenType, RoleType, ChildrenMulti> >(); return Udm::ChildrenAttr<ChildrenType>(impl, _type2CCRole<RoleType>()); }") );
 	// template <class ChildrenType, class RoleType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_sorted() const { ... }
-	meth_defs.push_back( boost::format("template <class ChildrenType, class RoleType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_sorted() const { boost::function_requires< Udm::WithRoleInTListConcept<ChildrenType, RoleType, ChildrenMulti> >(); return Udm::ChildrenAttr<ChildrenType, Pred>(impl, _type2CCRole<RoleType>()); }") );
+	meth_defs.push_back( boost::format("template <class ChildrenType, class RoleType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_sorted() const { boost::function_requires< Udm::WithRoleInTListConcept_B<ChildrenType, RoleType, ChildrenMulti> >(); return Udm::ChildrenAttr<ChildrenType, Pred>(impl, _type2CCRole<RoleType>()); }") );
 	// template <class ChildrenType> Udm::ChildrenAttr<ChildrenType> children_kind() const { ... }
 	meth_defs.push_back( boost::format("template <class ChildrenType> Udm::ChildrenAttr<ChildrenType> children_kind() const { boost::function_requires< Udm::InTListConcept<ChildrenType, ChildrenKinds> >(); return Udm::ChildrenAttr<ChildrenType>(impl, Udm::NULLCHILDROLE); }") );
 	// template <class ChildrenType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_kind_sorted() const { ... }
@@ -687,8 +687,11 @@ void ClassGen::Children()
 	set< ::Uml::Class> childrenkinds_for_tl;
 	set< ::Uml::CompositionChildRole> childroles = ::Uml::AncestorCompositionPeerChildRoles(c);
 	for( set< ::Uml::CompositionChildRole>::const_iterator ci = childroles.begin(); ci != childroles.end(); ++ci)
-		childrenkinds_for_tl.insert(ci->target());
-	BuildTL(childrenkinds_for_tl, "ChildrenKinds", "children by returned type", children_kinds_tl);
+	{
+		set< ::Uml::Class> descendants = Uml::DescendantClasses(ci->target());
+		childrenkinds_for_tl.insert(descendants.begin(), descendants.end());
+	}
+	BuildTL(childrenkinds_for_tl, "ChildrenKinds", "children by returned type", children_kinds_tl, true);
 
 	::Uml::Diagram dgr = ::Uml::GetDiagram(c);
 	::Uml::Namespace ns = c.parent_ns();
@@ -1065,7 +1068,14 @@ void ClassGen::OtherLinks()
 	}
 }
 
-void ClassGen::BuildTL(const set< ::Uml::Class> &s, const string &tl_name, const string &description, vector<boost::format> &result)
+static bool cmpClasses(const Uml::Class &a, const Uml::Class &b)
+{
+	if (Uml::IsDerivedFrom(a, b))
+		return true;
+	return a < b;
+}
+
+void ClassGen::BuildTL(const set< ::Uml::Class> &s, const string &tl_name, const string &description, vector<boost::format> &result, bool sort_tl)
 {
 	result.clear();
 
@@ -1073,8 +1083,18 @@ void ClassGen::BuildTL(const set< ::Uml::Class> &s, const string &tl_name, const
 
 	vector<string> class_names;
 	class_names.reserve(s.size());
-	for (set< ::Uml::Class>::const_iterator i = s.begin(); i != s.end(); i++)
-		class_names.push_back( UmlClassCPPName(*i) );
+
+	if (sort_tl)
+	{
+		vector< ::Uml::Class> sorted_v(s.begin(), s.end());
+		sort(sorted_v.begin(), sorted_v.end(), cmpClasses);
+
+		for (vector< ::Uml::Class>::const_iterator i = sorted_v.begin(); i != sorted_v.end(); i++)
+			class_names.push_back( UmlClassCPPName(*i) );
+	}
+	else
+		for (set< ::Uml::Class>::const_iterator i = s.begin(); i != s.end(); i++)
+			class_names.push_back( UmlClassCPPName(*i) );
 
 	result.push_back( boost::format("typedef boost::mpl::vector< %1%> %2%") % join(", ", class_names) % tl_name );
 	gen.SetMPLSequenceMaxSize(class_names.size());

@@ -280,6 +280,10 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				s_cl.insert(cl1);
 				bulb1.connectors<ControlLink, Switch, Bulb::AR_dst>() = s_cl;
 				switch1.connectors<ControlLink, Bulb, Switch::AR_src>() = s_cl;
+				// this should fail to compile if enabled
+#if CHECK_COMPILE
+				switch1.connectors<ControlLink, HalogenBulb, Switch::AR_src>() = s_cl;
+#endif
 	
 
 				ControlLink cl2 = ControlLink::Create(doubleBulbLamp);
@@ -292,6 +296,10 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				cl3.end<Switch, ControlLink::ACE_dst>() = switch3;
 				cl3.name() = "Halogen Bulb  switcher";
 
+				// this should fail to compile if enabled
+#if CHECK_COMPILE
+				CPPUNIT_ASSERT( (bulb3 == cl3.end<HalogenBulb, ControlLink::ACE_src>()) );
+#endif
 
 
 			
@@ -322,6 +330,10 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 
 				set<Bulb> s_bulb = doubleBulbLamp.children_kind<Bulb>();
 				CPPUNIT_ASSERT (s_bulb.size() == 3);
+
+				// can also search children by derived type
+				set<HalogenBulb> s_hbulb = doubleBulbLamp.children_kind<HalogenBulb>();
+				CPPUNIT_ASSERT(s_hbulb.size() == 1);
 
 				for(set<Bulb>::iterator s_bulb_i = s_bulb.begin(); s_bulb_i != s_bulb.end(); s_bulb_i++)
 				{
@@ -468,7 +480,12 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 			CPPUNIT_ASSERT(dbl_switches.size() == 3);
 			set<ElectricDevice> dbl_switches_as_ED = doubleBulbLamp.children<ElectricDevice, Lamp::CR_FunctionSwitch>();
 			CPPUNIT_ASSERT(dbl_switches_as_ED.size() == 3);
-			
+
+			set<Bulb> dbl_bulbs = doubleBulbLamp.children<Bulb, Lamp::CR_Bulb_children>();
+			CPPUNIT_ASSERT(dbl_bulbs.size() == 3);
+
+			set<HalogenBulb> dbl_hbulbs = doubleBulbLamp.children<HalogenBulb, Lamp::CR_Bulb_children>();
+			CPPUNIT_ASSERT(dbl_hbulbs.size() == 1);
 
 			//testing assignment
 						
