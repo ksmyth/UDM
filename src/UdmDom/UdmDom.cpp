@@ -2975,24 +2975,6 @@ namespace UdmDom
 			if (!EmptyVal(pa))
 				return true;
 
-			// Feng says that there are cases of .xml files
-			// created outside Udm, where _libname does not exist
-			// and we should check if type of this object and
-			// type of its parent are "RootFolder".
-			if ((string)(m_type.name()) == "RootFolder") {
-				DOMNode *parent = dom_element->getParentNode();
-				while (parent != NULL && parent->getNodeType() == DOMNode::ELEMENT_NODE) {
-					DomObject * do_parent = new DomObject(static_cast<DOMElement*>(parent), mydn);
-					string parent_type = (do_parent->type()).name();
-					delete do_parent;
-
-					if (parent_type == "RootFolder")
-						return true;
-
-					parent = parent->getParentNode();
-				}
-			}
-
 			return false;
 		}
 
