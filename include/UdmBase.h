@@ -2817,11 +2817,11 @@ namespace Udm
 		set<Object> GetChildObjects() const;
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves all children considering child types but not role names.
-		set<Object> GetChildObjects(const ::Uml::Class & clsType);
+		set<Object> GetChildObjects(const ::Uml::Class & clsType) const;
 		// UDM TOMI Paradigm Independent Interface
 		// Retrieves all children considering role names and child types.
 		// To ignore child types set clsChildType to ClassType(NULL).
-		set<Object> GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Class & clsChildType);
+		set<Object> GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Class & clsChildType) const;
 		// UDM TOMI Paradigm Independent Interface
 		// Test if the object is in the tree rooted at where
 		bool IsNodeOfTree(const Object &where);

@@ -1002,7 +1002,7 @@ UDM_DLL set<Object> Object::GetChildObjects() const
 
 // UDM TOMI Paradigm Independent Interface
 // Retrieves all children considering child types but not role names.
-UDM_DLL set<Object> Object::GetChildObjects(const ::Uml::Class &clsType)
+UDM_DLL set<Object> Object::GetChildObjects(const ::Uml::Class &clsType) const
 {
 	//object is this
 	//object is this
@@ -1023,7 +1023,7 @@ UDM_DLL set<Object> Object::GetChildObjects(const ::Uml::Class &clsType)
 // UDM TOMI Paradigm Independent Interface
 // Retrieves all children considering role names and child types.
 // To ignore child types set clsChildType to ClassType(NULL).
-UDM_DLL set<Object> Object::GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Class &clsChildType)
+UDM_DLL set<Object> Object::GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Class &clsChildType) const
 {
 	//object is this
 	set<Udm::Object> objChildren;
