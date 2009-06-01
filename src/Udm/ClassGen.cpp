@@ -1070,9 +1070,14 @@ void ClassGen::OtherLinks()
 
 static bool cmpClasses(const Uml::Class &a, const Uml::Class &b)
 {
-	if (Uml::IsDerivedFrom(a, b))
+	if (&a == &b || a == b)
+		return false;
+	else if (Uml::IsDerivedFrom(a, b))
 		return true;
-	return a < b;
+	else if (Uml::IsDerivedFrom(b, a))
+		return false;
+	else
+		return a < b;
 }
 
 void ClassGen::BuildTL(const set< ::Uml::Class> &s, const string &tl_name, const string &description, vector<boost::format> &result, bool sort_tl)
