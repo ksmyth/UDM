@@ -111,6 +111,14 @@ int main(int argc, char **argv) {
 					opts.rec_tstamp = false;
 					continue;
 				}
+				else if (c == '-')
+				{
+					if (!string("leesa").compare(argv[argn] + 2))
+					{
+						opts.mode = UdmOpts::CXX_GENERIC;
+						continue;
+					}
+				}
 				
 				char *optp;
 				if(strlen(argv[argn]) == 2) 
@@ -211,7 +219,7 @@ int main(int argc, char **argv) {
 			else
 			{
 usage:
-				throw udm_exception("Usage: udm <diagramfilename> [<genfilesnamebase>] [-d <Uml.XSD searchpath>] [-m|c|s] [-v] [-t] [-l] [-x]\n");
+				throw udm_exception("Usage: udm <diagramfilename> [<genfilesnamebase>] [-d <Uml.XSD searchpath>] [-m|c|s] [-v] [-t] [-l] [-x] [--leesa]\n");
 			}
 		}
 

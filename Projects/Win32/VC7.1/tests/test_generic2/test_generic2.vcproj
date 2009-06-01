@@ -26,7 +26,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\tests\test_generic2"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -57,7 +57,7 @@
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\samples&quot;
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_generic2&quot;
 &quot;$(TargetPath)&quot;
 "/>
 			<Tool
@@ -68,7 +68,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="$(OutDir)\Gen\samples"/>
+				AdditionalIncludeDirectories="$(OutDir)\Gen\tests\test_generic2"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -91,7 +91,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\tests\test_generic2"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -123,7 +123,7 @@
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\samples&quot;
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_generic2&quot;
 &quot;$(TargetPath)&quot;
 "/>
 			<Tool
@@ -134,7 +134,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="$(OutDir)\Gen\samples"/>
+				AdditionalIncludeDirectories="$(OutDir)\Gen\tests\test_generic2"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -177,7 +177,7 @@
 				RelativePath="..\..\..\..\..\tests\test_generic2\genericTest.rc">
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\samples\LampDiagram.cpp">
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\tests\test_generic2\LampDiagram.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -194,7 +194,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\samples\LampDiagram.cpp">
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\tests\test_generic2\LampDiagram.cpp">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -239,7 +239,7 @@
 				RelativePath="..\..\..\..\..\tests\test_generic2\genericTest.h">
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\samples\LampDiagram.h">
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\tests\test_generic2\LampDiagram.h">
 				<FileConfiguration
 					Name="Debug|Win32"
 					ExcludedFromBuild="TRUE">
@@ -248,7 +248,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\samples\LampDiagram.h">
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\tests\test_generic2\LampDiagram.h">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -258,6 +258,40 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\tests\test_generic2\resource.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="UML Diagrams"
+			Filter="xml">
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Debug\Gen\samples\LampDiagram_udm.xml">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="LampDiagram_udm.xml -&gt; C++ API"
+						CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_generic2&quot; &quot;$(InputPath)&quot; -v --leesa
+"
+						Outputs="$(OutDir)\Gen\tests\test_generic2\LampDiagram.xsd; $(OutDir)\Gen\tests\test_generic2\LampDiagram.cpp; $(OutDir)\Gen\tests\test_generic2\LampDiagram.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="TRUE"/>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC7.1\Release\Gen\samples\LampDiagram_udm.xml">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="LampDiagram_udm.xml -&gt; C++ API"
+						CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_generic2&quot; &quot;$(InputPath)&quot; -v --leesa
+"
+						Outputs="$(OutDir)\Gen\tests\test_generic2\LampDiagram.xsd; $(OutDir)\Gen\tests\test_generic2\LampDiagram.cpp; $(OutDir)\Gen\tests\test_generic2\LampDiagram.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="TRUE"/>
 			</File>
 		</Filter>
 	</Files>

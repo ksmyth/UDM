@@ -26,7 +26,6 @@ struct UdmOpts {
 	enum Mode {
 		CXX_DEFAULT,		// C++
 		CXX_GENERIC,		// C++ with support for generic programming
-		CXX_GENERIC_COMPAT,	// C++ with support for generic programming and compatibility API based on dynamic meta
 		C_SHARP,
 		JAVA
 	} mode;

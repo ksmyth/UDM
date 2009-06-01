@@ -155,81 +155,84 @@ void ClassGen::Basic(const InheritanceSolver &is)
 	// Udm::ArchetypeAttr<C> Archetype() const { return Udm::ArchetypeAttr<C>(impl); }
 	meth_defs.push_back( boost::format("Udm::ArchetypeAttr<%1%> Archetype() const { return Udm::ArchetypeAttr<%1%>(impl); }") % cl_name );
 
-	// map role types to the static data members
-	meth_defs.push_back( boost::format("template <typename T> const ::Uml::AssociationRole& _type2ARole() const;") );
-	meth_defs.push_back( boost::format("template <typename T> const pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> _type2ACARole() const;") );
-	meth_defs.push_back( boost::format("template <typename T> const ::Uml::CompositionParentRole& _type2CPRole() const;") );
-	meth_defs.push_back( boost::format("template <typename T> const ::Uml::CompositionChildRole& _type2CCRole() const;") );
 
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+	{
+		// map role types to the static data members
+		meth_defs.push_back( boost::format("template <typename T> const ::Uml::AssociationRole& _type2ARole() const;") );
+		meth_defs.push_back( boost::format("template <typename T> const pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> _type2ACARole() const;") );
+		meth_defs.push_back( boost::format("template <typename T> const ::Uml::CompositionParentRole& _type2CPRole() const;") );
+		meth_defs.push_back( boost::format("template <typename T> const ::Uml::CompositionChildRole& _type2CCRole() const;") );
 
-	// member function templates
+		// member function templates
 
-	// 1. associations without an association class
-	// template <class PeerType, class RoleType> Udm::PointerAttr<PeerType> peer() const { ... }
-	meth_defs.push_back( boost::format("template <class PeerType, class RoleType> Udm::PointerAttr<PeerType> peer() const { boost::function_requires< Udm::WithRoleInTListConcept<PeerType, RoleType, AssociationsSingle> >(); return Udm::PointerAttr<PeerType>(impl, _type2ARole<RoleType>()); }") );
-	// template <class PeersType, class RoleType> Udm::AssocAttr<PeersType> peers() const { ... }
-	meth_defs.push_back( boost::format("template <class PeersType, class RoleType> Udm::AssocAttr<PeersType> peers() const { boost::function_requires< Udm::WithRoleInTListConcept<PeersType, RoleType, AssociationsMulti> >(); return Udm::AssocAttr<PeersType>(impl, _type2ARole<RoleType>()); }") );
-	// template <class PeersType, class RoleType, class Pred> Udm::AssocAttr<PeersType, Pred> peers_sorted(const Pred &) const { ... }
-	meth_defs.push_back( boost::format("template <class PeersType, class RoleType, class Pred> Udm::AssocAttr<PeersType, Pred> peers_sorted() const { boost::function_requires< Udm::WithRoleInTListConcept<PeersType, RoleType, AssociationsMulti> >(); return Udm::AssocAttr<PeersType, Pred>(impl, _type2ARole<RoleType>()); }") );
+		// 1. associations without an association class
+		// template <class PeerType, class RoleType> Udm::PointerAttr<PeerType> peer() const { ... }
+		meth_defs.push_back( boost::format("template <class PeerType, class RoleType> Udm::PointerAttr<PeerType> peer() const { boost::function_requires< Udm::WithRoleInTListConcept<PeerType, RoleType, AssociationsSingle> >(); return Udm::PointerAttr<PeerType>(impl, _type2ARole<RoleType>()); }") );
+		// template <class PeersType, class RoleType> Udm::AssocAttr<PeersType> peers() const { ... }
+		meth_defs.push_back( boost::format("template <class PeersType, class RoleType> Udm::AssocAttr<PeersType> peers() const { boost::function_requires< Udm::WithRoleInTListConcept<PeersType, RoleType, AssociationsMulti> >(); return Udm::AssocAttr<PeersType>(impl, _type2ARole<RoleType>()); }") );
+		// template <class PeersType, class RoleType, class Pred> Udm::AssocAttr<PeersType, Pred> peers_sorted(const Pred &) const { ... }
+		meth_defs.push_back( boost::format("template <class PeersType, class RoleType, class Pred> Udm::AssocAttr<PeersType, Pred> peers_sorted() const { boost::function_requires< Udm::WithRoleInTListConcept<PeersType, RoleType, AssociationsMulti> >(); return Udm::AssocAttr<PeersType, Pred>(impl, _type2ARole<RoleType>()); }") );
 
-	// 2. associations with association class
-	// template <class ConnectorType, class PeerType, class RoleType> Udm::AClassPointerAttr<ConnectorType, PeerType> connector() const { ... }
-	meth_defs.push_back( boost::format("template <class ConnectorType, class PeerType, class RoleType> Udm::AClassPointerAttr<ConnectorType, PeerType> connector() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorType, RoleType, AssociationsWAClassSingle> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassPointerAttr<ConnectorType, PeerType>(impl, *roles_mp.first, *roles_mp.second); }") );
-	// template <class ConnectorsType, class PeerType, class RoleType> Udm::AClassAssocAttr<ConnectorsType, PeerType> connectors() const { ... }
-	meth_defs.push_back( boost::format("template <class ConnectorsType, class PeerType, class RoleType> Udm::AClassAssocAttr<ConnectorsType, PeerType> connectors() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorsType, RoleType, AssociationsWAClassMulti> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassAssocAttr<ConnectorsType, PeerType>(impl, *roles_mp.first, *roles_mp.second); }") );
-	// template <class ConnectorsType, class PeerType, class RoleType, class Pred> Udm::AClassAssocAttr<ConnectorsType, PeerType, Pred> connectors_sorted() const { ... }
-	meth_defs.push_back( boost::format("template <class ConnectorsType, class PeerType, class RoleType, class Pred> Udm::AClassAssocAttr<ConnectorsType, PeerType, Pred> connectors_sorted() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorsType, RoleType, AssociationsWAClassMulti> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassAssocAttr<ConnectorsType, PeerType, Pred>(impl, *roles_mp.first, *roles_mp.second); }") );
+		// 2. associations with association class
+		// template <class ConnectorType, class PeerType, class RoleType> Udm::AClassPointerAttr<ConnectorType, PeerType> connector() const { ... }
+		meth_defs.push_back( boost::format("template <class ConnectorType, class PeerType, class RoleType> Udm::AClassPointerAttr<ConnectorType, PeerType> connector() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorType, RoleType, AssociationsWAClassSingle> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassPointerAttr<ConnectorType, PeerType>(impl, *roles_mp.first, *roles_mp.second); }") );
+		// template <class ConnectorsType, class PeerType, class RoleType> Udm::AClassAssocAttr<ConnectorsType, PeerType> connectors() const { ... }
+		meth_defs.push_back( boost::format("template <class ConnectorsType, class PeerType, class RoleType> Udm::AClassAssocAttr<ConnectorsType, PeerType> connectors() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorsType, RoleType, AssociationsWAClassMulti> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassAssocAttr<ConnectorsType, PeerType>(impl, *roles_mp.first, *roles_mp.second); }") );
+		// template <class ConnectorsType, class PeerType, class RoleType, class Pred> Udm::AClassAssocAttr<ConnectorsType, PeerType, Pred> connectors_sorted() const { ... }
+		meth_defs.push_back( boost::format("template <class ConnectorsType, class PeerType, class RoleType, class Pred> Udm::AClassAssocAttr<ConnectorsType, PeerType, Pred> connectors_sorted() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorsType, RoleType, AssociationsWAClassMulti> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassAssocAttr<ConnectorsType, PeerType, Pred>(impl, *roles_mp.first, *roles_mp.second); }") );
 
-	// 3. cross diagram associations without an association class
-	// template <class PeerType, class RoleType> Udm::CrossPointerAttr<PeerType> cross_peer() const { ... }
-	meth_defs.push_back( boost::format("template <class PeerType, class RoleType> Udm::CrossPointerAttr<PeerType> cross_peer() const { boost::function_requires< Udm::WithRoleInTListConcept<PeerType, RoleType, CrossAssociationsSingle> >(); return Udm::CrossPointerAttr<PeerType>(impl, _type2ARole<RoleType>()); }") );
-	// template <class PeersType, class RoleType> Udm::CrossAssocAttr<PeersType> cross_peers() const { ... }
-	meth_defs.push_back( boost::format("template <class PeersType, class RoleType> Udm::CrossAssocAttr<PeersType> cross_peers() const { boost::function_requires< Udm::WithRoleInTListConcept<PeersType, RoleType, CrossAssociationsMulti> >(); return Udm::CrossAssocAttr<PeersType>(impl, _type2ARole<RoleType>()); }") );
-	// template <class PeersType, class RoleType, class Pred> Udm::CrossAssocAttr<PeersType, Pred> cross_peers_sorted(const Pred &) const { ... }
-	meth_defs.push_back( boost::format("template <class PeersType, class RoleType, class Pred> Udm::CrossAssocAttr<PeersType, Pred> cross_peers_sorted() const { boost::function_requires< Udm::WithRoleInTListConcept<PeersType, RoleType, CrossAssociationsMulti> >(); return Udm::CrossAssocAttr<PeersType, Pred>(impl, _type2ARole<RoleType>()); }") );
+		// 3. cross diagram associations without an association class
+		// template <class PeerType, class RoleType> Udm::CrossPointerAttr<PeerType> cross_peer() const { ... }
+		meth_defs.push_back( boost::format("template <class PeerType, class RoleType> Udm::CrossPointerAttr<PeerType> cross_peer() const { boost::function_requires< Udm::WithRoleInTListConcept<PeerType, RoleType, CrossAssociationsSingle> >(); return Udm::CrossPointerAttr<PeerType>(impl, _type2ARole<RoleType>()); }") );
+		// template <class PeersType, class RoleType> Udm::CrossAssocAttr<PeersType> cross_peers() const { ... }
+		meth_defs.push_back( boost::format("template <class PeersType, class RoleType> Udm::CrossAssocAttr<PeersType> cross_peers() const { boost::function_requires< Udm::WithRoleInTListConcept<PeersType, RoleType, CrossAssociationsMulti> >(); return Udm::CrossAssocAttr<PeersType>(impl, _type2ARole<RoleType>()); }") );
+		// template <class PeersType, class RoleType, class Pred> Udm::CrossAssocAttr<PeersType, Pred> cross_peers_sorted(const Pred &) const { ... }
+		meth_defs.push_back( boost::format("template <class PeersType, class RoleType, class Pred> Udm::CrossAssocAttr<PeersType, Pred> cross_peers_sorted() const { boost::function_requires< Udm::WithRoleInTListConcept<PeersType, RoleType, CrossAssociationsMulti> >(); return Udm::CrossAssocAttr<PeersType, Pred>(impl, _type2ARole<RoleType>()); }") );
 
-	// 4. cross diagram associations with association class
-	// template <class ConnectorType, class PeerType, class RoleType> Udm::AClassCrossPointerAttr<ConnectorType, PeerType> cross_connector() const { ... }
-	meth_defs.push_back( boost::format("template <class ConnectorType, class PeerType, class RoleType> Udm::AClassCrossPointerAttr<ConnectorType, PeerType> cross_connector() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorType, RoleType, CrossAssociationsWAClassSingle> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassCrossPointerAttr<ConnectorType, PeerType>(impl, *roles_mp.first, *roles_mp.second); }") );
-	// template <class ConnectorsType, class PeerType, class RoleType> Udm::AClassCrossAssocAttr<ConnectorsType, PeerType> cross_connectors() const { ... }
-	meth_defs.push_back( boost::format("template <class ConnectorsType, class PeerType, class RoleType> Udm::AClassCrossAssocAttr<ConnectorsType, PeerType> cross_connectors() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorsType, RoleType, CrossAssociationsWAClassMulti> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassCrossAssocAttr<ConnectorsType, PeerType>(impl, *roles_mp.first, *roles_mp.second); }") );
-	// template <class ConnectorsType, class PeerType, class RoleType, class Pred> Udm::AClassCrossAssocAttr<ConnectorsType, PeerType, Pred> cross_connectors_sorted() const { ... }
-	meth_defs.push_back( boost::format("template <class ConnectorsType, class PeerType, class RoleType, class Pred> Udm::AClassCrossAssocAttr<ConnectorsType, PeerType, Pred> cross_connectors_sorted() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorsType, RoleType, CrossAssociationsWAClassMulti> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassCrossAssocAttr<ConnectorsType, PeerType, Pred>(impl, *roles_mp.first, *roles_mp.second); }") );
+		// 4. cross diagram associations with association class
+		// template <class ConnectorType, class PeerType, class RoleType> Udm::AClassCrossPointerAttr<ConnectorType, PeerType> cross_connector() const { ... }
+		meth_defs.push_back( boost::format("template <class ConnectorType, class PeerType, class RoleType> Udm::AClassCrossPointerAttr<ConnectorType, PeerType> cross_connector() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorType, RoleType, CrossAssociationsWAClassSingle> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassCrossPointerAttr<ConnectorType, PeerType>(impl, *roles_mp.first, *roles_mp.second); }") );
+		// template <class ConnectorsType, class PeerType, class RoleType> Udm::AClassCrossAssocAttr<ConnectorsType, PeerType> cross_connectors() const { ... }
+		meth_defs.push_back( boost::format("template <class ConnectorsType, class PeerType, class RoleType> Udm::AClassCrossAssocAttr<ConnectorsType, PeerType> cross_connectors() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorsType, RoleType, CrossAssociationsWAClassMulti> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassCrossAssocAttr<ConnectorsType, PeerType>(impl, *roles_mp.first, *roles_mp.second); }") );
+		// template <class ConnectorsType, class PeerType, class RoleType, class Pred> Udm::AClassCrossAssocAttr<ConnectorsType, PeerType, Pred> cross_connectors_sorted() const { ... }
+		meth_defs.push_back( boost::format("template <class ConnectorsType, class PeerType, class RoleType, class Pred> Udm::AClassCrossAssocAttr<ConnectorsType, PeerType, Pred> cross_connectors_sorted() const { boost::function_requires< Udm::WithAClassAndRoleInTListConcept<PeerType, ConnectorsType, RoleType, CrossAssociationsWAClassMulti> >(); pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> roles_mp = _type2ACARole<RoleType>(); return Udm::AClassCrossAssocAttr<ConnectorsType, PeerType, Pred>(impl, *roles_mp.first, *roles_mp.second); }") );
 
-	// 5. children
-	// template <class ChildType, class RoleType> Udm::ChildAttr<ChildType> child() const { ... }
-	meth_defs.push_back( boost::format("template <class ChildType, class RoleType> Udm::ChildAttr<ChildType> child() const { boost::function_requires< Udm::WithRoleInTListConcept_B<ChildType, RoleType, ChildrenSingle> >(); return Udm::ChildAttr<ChildType>(impl, _type2CCRole<RoleType>()); }") );
-	// template <class ChildrenType, class RoleType> Udm::ChildrenAttr<ChildrenType> children() const { ... }
-	meth_defs.push_back( boost::format("template <class ChildrenType, class RoleType> Udm::ChildrenAttr<ChildrenType> children() const { boost::function_requires< Udm::WithRoleInTListConcept_B<ChildrenType, RoleType, ChildrenMulti> >(); return Udm::ChildrenAttr<ChildrenType>(impl, _type2CCRole<RoleType>()); }") );
-	// template <class ChildrenType, class RoleType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_sorted() const { ... }
-	meth_defs.push_back( boost::format("template <class ChildrenType, class RoleType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_sorted() const { boost::function_requires< Udm::WithRoleInTListConcept_B<ChildrenType, RoleType, ChildrenMulti> >(); return Udm::ChildrenAttr<ChildrenType, Pred>(impl, _type2CCRole<RoleType>()); }") );
-	// template <class ChildrenType> Udm::ChildrenAttr<ChildrenType> children_kind() const { ... }
-	meth_defs.push_back( boost::format("template <class ChildrenType> Udm::ChildrenAttr<ChildrenType> children_kind() const { boost::function_requires< Udm::InTListConcept<ChildrenType, ChildrenKinds> >(); return Udm::ChildrenAttr<ChildrenType>(impl, Udm::NULLCHILDROLE); }") );
-	// template <class ChildrenType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_kind_sorted() const { ... }
-	meth_defs.push_back( boost::format("template <class ChildrenType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_kind_sorted() const { boost::function_requires< Udm::InTListConcept<ChildrenType, ChildrenKinds> >(); return Udm::ChildrenAttr<ChildrenType, Pred>(impl, Udm::NULLCHILDROLE); }") );
+		// 5. children
+		// template <class ChildType, class RoleType> Udm::ChildAttr<ChildType> child() const { ... }
+		meth_defs.push_back( boost::format("template <class ChildType, class RoleType> Udm::ChildAttr<ChildType> child() const { boost::function_requires< Udm::WithRoleInTListConcept_B<ChildType, RoleType, ChildrenSingle> >(); return Udm::ChildAttr<ChildType>(impl, _type2CCRole<RoleType>()); }") );
+		// template <class ChildrenType, class RoleType> Udm::ChildrenAttr<ChildrenType> children() const { ... }
+		meth_defs.push_back( boost::format("template <class ChildrenType, class RoleType> Udm::ChildrenAttr<ChildrenType> children() const { boost::function_requires< Udm::WithRoleInTListConcept_B<ChildrenType, RoleType, ChildrenMulti> >(); return Udm::ChildrenAttr<ChildrenType>(impl, _type2CCRole<RoleType>()); }") );
+		// template <class ChildrenType, class RoleType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_sorted() const { ... }
+		meth_defs.push_back( boost::format("template <class ChildrenType, class RoleType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_sorted() const { boost::function_requires< Udm::WithRoleInTListConcept_B<ChildrenType, RoleType, ChildrenMulti> >(); return Udm::ChildrenAttr<ChildrenType, Pred>(impl, _type2CCRole<RoleType>()); }") );
+		// template <class ChildrenType> Udm::ChildrenAttr<ChildrenType> children_kind() const { ... }
+		meth_defs.push_back( boost::format("template <class ChildrenType> Udm::ChildrenAttr<ChildrenType> children_kind() const { boost::function_requires< Udm::InTListConcept<ChildrenType, ChildrenKinds> >(); return Udm::ChildrenAttr<ChildrenType>(impl, Udm::NULLCHILDROLE); }") );
+		// template <class ChildrenType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_kind_sorted() const { ... }
+		meth_defs.push_back( boost::format("template <class ChildrenType, class Pred> Udm::ChildrenAttr<ChildrenType, Pred> children_kind_sorted() const { boost::function_requires< Udm::InTListConcept<ChildrenType, ChildrenKinds> >(); return Udm::ChildrenAttr<ChildrenType, Pred>(impl, Udm::NULLCHILDROLE); }") );
 
-	// 6. parents
-	// template <class ParentType, class RoleType> Udm::ParentAttr<ParentType> parent() const { ... }
-	meth_defs.push_back( boost::format("template <class ParentType, class RoleType> Udm::ParentAttr<ParentType> parent() const { boost::function_requires< Udm::WithRoleInTListConcept<ParentType, RoleType, Parents> >(); return Udm::ParentAttr<ParentType>(impl, _type2CPRole<RoleType>()); }") );
-	// template <class ParentType> Udm::ParentAttr<ParentType> parent_kind() const { ... }
-	meth_defs.push_back( boost::format("template <class ParentType> Udm::ParentAttr<ParentType> parent_kind() const { boost::function_requires< Udm::InTListConcept<ParentType, ParentKinds> >(); return Udm::ParentAttr<ParentType>(impl, Udm::NULLPARENTROLE); }") );
+		// 6. parents
+		// template <class ParentType, class RoleType> Udm::ParentAttr<ParentType> parent() const { ... }
+		meth_defs.push_back( boost::format("template <class ParentType, class RoleType> Udm::ParentAttr<ParentType> parent() const { boost::function_requires< Udm::WithRoleInTListConcept<ParentType, RoleType, Parents> >(); return Udm::ParentAttr<ParentType>(impl, _type2CPRole<RoleType>()); }") );
+		// template <class ParentType> Udm::ParentAttr<ParentType> parent_kind() const { ... }
+		meth_defs.push_back( boost::format("template <class ParentType> Udm::ParentAttr<ParentType> parent_kind() const { boost::function_requires< Udm::InTListConcept<ParentType, ParentKinds> >(); return Udm::ParentAttr<ParentType>(impl, Udm::NULLPARENTROLE); }") );
 
-	// 7. association class ends
-	// template <class EndType, class RoleType> Udm::AssocEndAttr<EndType> end() const { ... }
-	meth_defs.push_back( boost::format("template <class EndType, class RoleType> Udm::AssocEndAttr<EndType> end() const { boost::function_requires< Udm::WithRoleInTListConcept<EndType, RoleType, AClassEnds> >(); return Udm::AssocEndAttr<EndType>(impl, _type2ARole<RoleType>()); }") );
+		// 7. association class ends
+		// template <class EndType, class RoleType> Udm::AssocEndAttr<EndType> end() const { ... }
+		meth_defs.push_back( boost::format("template <class EndType, class RoleType> Udm::AssocEndAttr<EndType> end() const { boost::function_requires< Udm::WithRoleInTListConcept<EndType, RoleType, AClassEnds> >(); return Udm::AssocEndAttr<EndType>(impl, _type2ARole<RoleType>()); }") );
 
-	// 8. cross diagram association class ends
-	// template <class EndType, class RoleType> Udm::CrossAssocEndAttr<EndType> cross_end() const { ... }
-	meth_defs.push_back( boost::format("template <class EndType, class RoleType> Udm::CrossAssocEndAttr<EndType> cross_end() const { boost::function_requires< Udm::WithRoleInTListConcept<EndType, RoleType, CrossAClassEnds> >(); return Udm::CrossAssocEndAttr<EndType>(impl, _type2ARole<RoleType>()); }") );
+		// 8. cross diagram association class ends
+		// template <class EndType, class RoleType> Udm::CrossAssocEndAttr<EndType> cross_end() const { ... }
+		meth_defs.push_back( boost::format("template <class EndType, class RoleType> Udm::CrossAssocEndAttr<EndType> cross_end() const { boost::function_requires< Udm::WithRoleInTListConcept<EndType, RoleType, CrossAClassEnds> >(); return Udm::CrossAssocEndAttr<EndType>(impl, _type2ARole<RoleType>()); }") );
 
-	// typedef for stereotype
-	string stereotype = c.stereotype();
-	if (stereotype != "Atom" && stereotype != "Connection"
-		&& stereotype != "FCO" && stereotype != "Folder"
-		&& stereotype != "Model" && stereotype != "Reference"
-		&& stereotype != "Set")
-		stereotype = "Unknown";
-	typedefs.push_back( boost::format("typedef ::Udm::%1%MetaTag MetaKind") % stereotype );
+		// typedef for stereotype
+		string stereotype = c.stereotype();
+		if (stereotype != "Atom" && stereotype != "Connection"
+			&& stereotype != "FCO" && stereotype != "Folder"
+			&& stereotype != "Model" && stereotype != "Reference"
+			&& stereotype != "Set")
+			stereotype = "Unknown";
+		typedefs.push_back( boost::format("typedef ::Udm::%1%MetaTag MetaKind") % stereotype );
+	}
 }
 
 
@@ -378,7 +381,9 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 				{
 					// Udm::PointerAttr<T> A() const { return Udm::PointerAttr<T>(impl, meta_A); }
 					meth_defs.push_back( boost::format("Udm::PointerAttr< %1%> %2%() const { return Udm::PointerAttr< %1%>(impl, meta_%2%); }") % oclass_cpp_name % rel_name );
-					assoc_tlhlp.typenames_single.push_back(tl_typename);
+
+					if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+						assoc_tlhlp.typenames_single.push_back(tl_typename);
 				}
 				else
 				{
@@ -387,13 +392,18 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 
 					// template <class Pred> Udm::AssocAttr<T, Pred> A_sorted(const Pred &) const { return Udm::AssocAttr<T, Pred>(impl, meta_A); }
 					meth_defs.push_back( boost::format("template <class Pred> Udm::AssocAttr< %1%, Pred> %2%_sorted(const Pred &) const { return Udm::AssocAttr< %1%, Pred>(impl, meta_%2%); }") % oclass_cpp_name % rel_name );
-					assoc_tlhlp.typenames_multi.push_back(tl_typename);
+
+					if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+						assoc_tlhlp.typenames_multi.push_back(tl_typename);
 				}
 
-				assoc_tlhlp.roles2type.push_back( boost::format("class AR_%1% {}") % rel_name );
-				assoc_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, AR_%1% > %3%") % rel_name % oclass_cpp_name % tl_typename );
+				if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+				{
+					assoc_tlhlp.roles2type.push_back( boost::format("class AR_%1% {}") % rel_name );
+					assoc_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, AR_%1% > %3%") % rel_name % oclass_cpp_name % tl_typename );
 
-				meth_speclzs.push_back( boost::format("template <> const ::Uml::AssociationRole& %1%::_type2ARole< %1%::AR_%2% >() const { return meta_%2%; }") % cl_name % rel_name );
+					meth_speclzs.push_back( boost::format("template <> const ::Uml::AssociationRole& %1%::_type2ARole< %1%::AR_%2% >() const { return meta_%2%; }") % cl_name % rel_name );
+				}
 			}
 			else 
 			{
@@ -425,7 +435,9 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 				{
 					// Udm::AClassPointerAttr<T1, T2> A() const { return Udm::AClassPointerAttr<T1, T2>(impl, meta_A, meta_A_rev);  }
 					meth_defs.push_back( boost::format("Udm::AClassPointerAttr< %1%, %2%> %3%() const { return Udm::AClassPointerAttr< %1%, %2%>(impl, meta_%3%, meta_%3%_rev); }") % aclass_cpp_name % oclass_cpp_name % rel_name );
-					assoc_ac_tlhlp.typenames_single.push_back(tl_typename);
+
+					if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+						assoc_ac_tlhlp.typenames_single.push_back(tl_typename);
 				}
 				else
 				{	
@@ -433,13 +445,18 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 					meth_defs.push_back( boost::format("Udm::AClassAssocAttr< %1%, %2%> %3%() const { return Udm::AClassAssocAttr< %1%, %2%>(impl, meta_%3%, meta_%3%_rev); }") % aclass_cpp_name % oclass_cpp_name % rel_name );
 					// template <class Pred> Udm::AClassAssocAttr<T1, T2> A_sorted(const Pred &) const { return Udm::AClassAssocAttr<T1, T2, Pred>(impl, meta_A, meta_A_rev); }
 					meth_defs.push_back( boost::format("template <class Pred> Udm::AClassAssocAttr< %1%, %2%, Pred> %3%_sorted(const Pred &) const { return Udm::AClassAssocAttr< %1%, %2%, Pred>(impl, meta_%3%, meta_%3%_rev); }") % aclass_cpp_name % oclass_cpp_name % rel_name );
-					assoc_ac_tlhlp.typenames_multi.push_back(tl_typename);
+
+					if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+						assoc_ac_tlhlp.typenames_multi.push_back(tl_typename);
 				}
 
-				assoc_ac_tlhlp.roles2type.push_back( boost::format("class AR_%1% {}") % rel_name );
-				assoc_ac_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %3%, boost::mpl::pair< %2%, AR_%1% > > %4%") % rel_name % aclass_cpp_name % oclass_cpp_name % tl_typename );
+				if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+				{
+					assoc_ac_tlhlp.roles2type.push_back( boost::format("class AR_%1% {}") % rel_name );
+					assoc_ac_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %3%, boost::mpl::pair< %2%, AR_%1% > > %4%") % rel_name % aclass_cpp_name % oclass_cpp_name % tl_typename );
 
-				meth_speclzs.push_back( boost::format("template <> const pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> %1%::_type2ACARole< %1%::AR_%2% >() const { return make_pair(&meta_%2%, &meta_%2%_rev); }") % cl_name % rel_name );
+					meth_speclzs.push_back( boost::format("template <> const pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> %1%::_type2ACARole< %1%::AR_%2% >() const { return make_pair(&meta_%2%, &meta_%2%_rev); }") % cl_name % rel_name );
+				}
 			}
 			else 
 			{
@@ -448,8 +465,11 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 		}
 	}
 
-	BuildTL(assoc_tlhlp, "AssociationsSingle", "AssociationsMulti", "associations by returned type and role", associations_tl);
-	BuildTL(assoc_ac_tlhlp, "AssociationsWAClassSingle", "AssociationsWAClassMulti", "associations by returned type, association class and role", associations_ac_tl);
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+	{
+		BuildTL(assoc_tlhlp, "AssociationsSingle", "AssociationsMulti", "associations by returned type and role", associations_tl);
+		BuildTL(assoc_ac_tlhlp, "AssociationsWAClassSingle", "AssociationsWAClassMulti", "associations by returned type, association class and role", associations_ac_tl);
+	}
 
 
 #if 0
@@ -511,7 +531,9 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 					{
 						// Udm::CrossPointerAttr<T> A() const { return Udm::CrossPointerAttr<T>(impl, meta_A); }
 						meth_defs.push_back( boost::format("Udm::CrossPointerAttr< %1%> %2%() const { return Udm::CrossPointerAttr< %1%>(impl, meta_%2%); }") % (cname + "::" + oname) % rel_name );
-						cross_assoc_tlhlp.typenames_single.push_back(tl_typename);
+
+						if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+							cross_assoc_tlhlp.typenames_single.push_back(tl_typename);
 					}
 					else
 					{
@@ -519,13 +541,18 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 						meth_defs.push_back( boost::format("Udm::CrossAssocAttr< %1%> %2%() const { return Udm::CrossAssocAttr< %1%>(impl, meta_%2%); }") % (cname + "::" + oname) % rel_name );
 						// template <class Pred> Udm::CrossAssocAttr<T, Pred> A_sorted(const Pred &) const
 						meth_defs.push_back( boost::format("template <class Pred> Udm::CrossAssocAttr< %1%, Pred> %2%_sorted(const Pred &) const { return Udm::CrossAssocAttr< %1%, Pred>(impl, meta_%2%); }") % (cname + "::" + oname) % rel_name );
-						cross_assoc_tlhlp.typenames_multi.push_back(tl_typename);
+
+						if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+							cross_assoc_tlhlp.typenames_multi.push_back(tl_typename);
 					}
 
-					cross_assoc_tlhlp.roles2type.push_back( boost::format("class AR_%1% {}") % rel_name );
-					cross_assoc_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, AR_%1% > %3%") % rel_name % (cname + "::" + oname) % tl_typename);
+					if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+					{
+						cross_assoc_tlhlp.roles2type.push_back( boost::format("class AR_%1% {}") % rel_name );
+						cross_assoc_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, AR_%1% > %3%") % rel_name % (cname + "::" + oname) % tl_typename);
 
-					meth_speclzs.push_back( boost::format("template <> const ::Uml::AssociationRole& %1%::_type2ARole< %1%::AR_%2% >() const { return meta_%2%; }") % cl_name % rel_name );
+						meth_speclzs.push_back( boost::format("template <> const ::Uml::AssociationRole& %1%::_type2ARole< %1%::AR_%2% >() const { return meta_%2%; }") % cl_name % rel_name );
+					}
 				}
 				else 
 				{
@@ -581,7 +608,9 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 					{
 						// Udm::AClassCrossPointerAttr<T1, T2> A() const { return Udm::AClassCrossPointerAttr<T1, T2>(impl, meta_A, meta_A_rev); }
 						meth_defs.push_back( boost::format("Udm::AClassCrossPointerAttr< %1%, %2%> %3%() const { return Udm::AClassCrossPointerAttr< %1%, %2%>(impl, meta_%3%, meta_%3%_rev); }") % (cl_dgr + "::" + clname) % (cname + "::" + oname) % rel_name );
-						cross_assoc_ac_tlhlp.typenames_single.push_back(tl_typename);
+
+						if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+							cross_assoc_ac_tlhlp.typenames_single.push_back(tl_typename);
 					}
 					else
 					{
@@ -589,13 +618,18 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 						meth_defs.push_back( boost::format("Udm::AClassCrossAssocAttr< %1%, %2%> %3%() const { return Udm::AClassCrossAssocAttr< %1%, %2%>(impl, meta_%3%, meta_%3%_rev); }") % (cl_dgr + "::" + clname) % (cname + "::" + oname) % rel_name );
 						// template <class Pred> Udm::AClassCrossAssocAttr<T1, T2, Pred> A_sorted(const Pred &) const { return Udm::AClassCrossPointerAttr<T1, T2, Pred>(impl, meta_A, meta_A_rev); }
 						meth_defs.push_back( boost::format("template <class Pred> Udm::AClassCrossAssocAttr< %1%, %2%, Pred> %3%_sorted(const Pred &) const { return Udm::AClassCrossAssocAttr< %1%, %2%, Pred>(impl, meta_%3%, meta_%3%_rev); }") % (cl_dgr + "::" + clname) % (cname + "::" + oname) % rel_name );
-						cross_assoc_ac_tlhlp.typenames_multi.push_back(tl_typename);
+
+						if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+							cross_assoc_ac_tlhlp.typenames_multi.push_back(tl_typename);
 					}
 
-					cross_assoc_ac_tlhlp.roles2type.push_back( boost::format("class AR_%1% {}") % rel_name );
-					cross_assoc_ac_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %3%, boost::mpl::pair< %2%, AR_%1% > > %4%") % rel_name % (cl_dgr + "::" + clname) % (cname + "::" + oname) % tl_typename);
+					if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+					{
+						cross_assoc_ac_tlhlp.roles2type.push_back( boost::format("class AR_%1% {}") % rel_name );
+						cross_assoc_ac_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %3%, boost::mpl::pair< %2%, AR_%1% > > %4%") % rel_name % (cl_dgr + "::" + clname) % (cname + "::" + oname) % tl_typename);
 
-					meth_speclzs.push_back( boost::format("template <> const pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> %1%::_type2ACARole< %1%::AR_%2% >() const { return make_pair(&meta_%2%, &meta_%2%_rev); }") % cl_name % rel_name );
+						meth_speclzs.push_back( boost::format("template <> const pair<const ::Uml::AssociationRole*, const ::Uml::AssociationRole*> %1%::_type2ACARole< %1%::AR_%2% >() const { return make_pair(&meta_%2%, &meta_%2%_rev); }") % cl_name % rel_name );
+					}
 				}
 				else 
 				{
@@ -605,8 +639,11 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 		}
 	}
 
-	BuildTL(cross_assoc_tlhlp, "CrossAssociationsSingle", "CrossAssociationsMulti", "cross associations by returned type and role", cross_associations_tl);
-	BuildTL(cross_assoc_ac_tlhlp, "CrossAssociationsWAClassSingle", "CrossAssociationsWAClassMulti", "cross associations by returned type, association class and role", cross_associations_ac_tl);
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+	{
+		BuildTL(cross_assoc_tlhlp, "CrossAssociationsSingle", "CrossAssociationsMulti", "cross associations by returned type and role", cross_associations_tl);
+		BuildTL(cross_assoc_ac_tlhlp, "CrossAssociationsWAClassSingle", "CrossAssociationsWAClassMulti", "cross associations by returned type, association class and role", cross_associations_ac_tl);
+	}
 }
 
 
@@ -653,7 +690,9 @@ void ClassGen::Children()
 			{
 				// Udm::ChildAttr<T> R() const { return Udm::ChildAttr<T>(impl, meta_R); }
 				meth_defs.push_back( boost::format("Udm::ChildAttr< %1%> %2%() const { return Udm::ChildAttr< %1%>(impl, meta_%2%); }") % child_name % rel_name );
-				children_tlhlp.typenames_single.push_back(tl_typename);
+
+				if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+					children_tlhlp.typenames_single.push_back(tl_typename);
 			}
 			else
 			{
@@ -662,13 +701,17 @@ void ClassGen::Children()
 				// template <class Pred> Udm::ChildrenAttr<T, Pred> R_sorted(const Pred &) const { return Udm::ChildrenAttr<T, Pred>(impl, meta_R); }
 				meth_defs.push_back( boost::format("template <class Pred> Udm::ChildrenAttr< %1%, Pred> %2%_sorted(const Pred &) const { return Udm::ChildrenAttr< %1%, Pred>(impl, meta_%2%); }") % child_name % rel_name );
 
-				children_tlhlp.typenames_multi.push_back(tl_typename);
+				if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+					children_tlhlp.typenames_multi.push_back(tl_typename);
 			}
 
-			children_tlhlp.roles2type.push_back( boost::format("class CR_%1% {}") % rel_name );
-			children_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, CR_%1% > %3%") % rel_name % child_name % tl_typename );
+			if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+			{
+				children_tlhlp.roles2type.push_back( boost::format("class CR_%1% {}") % rel_name );
+				children_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, CR_%1% > %3%") % rel_name % child_name % tl_typename );
 
-			meth_speclzs.push_back( boost::format("template <> const ::Uml::CompositionChildRole& %1%::_type2CCRole< %1%::CR_%2% >() const { return meta_%2%; }") % cl_name % rel_name );
+				meth_speclzs.push_back( boost::format("template <> const ::Uml::CompositionChildRole& %1%::_type2CCRole< %1%::CR_%2% >() const { return meta_%2%; }") % cl_name % rel_name );
+			}
 		}
 		else 
 		{
@@ -676,7 +719,8 @@ void ClassGen::Children()
 		}
 	}
 
-	BuildTL(children_tlhlp, "ChildrenSingle", "ChildrenMulti", "children by returned type and role", children_tl);
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+		BuildTL(children_tlhlp, "ChildrenSingle", "ChildrenMulti", "children by returned type and role", children_tl);
 
 
 #if 0
@@ -689,9 +733,12 @@ void ClassGen::Children()
 	for( set< ::Uml::CompositionChildRole>::const_iterator ci = childroles.begin(); ci != childroles.end(); ++ci)
 	{
 		set< ::Uml::Class> descendants = Uml::DescendantClasses(ci->target());
-		childrenkinds_for_tl.insert(descendants.begin(), descendants.end());
+
+		if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+			childrenkinds_for_tl.insert(descendants.begin(), descendants.end());
 	}
-	BuildTL(childrenkinds_for_tl, "ChildrenKinds", "children by returned type", children_kinds_tl, true);
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+		BuildTL(childrenkinds_for_tl, "ChildrenKinds", "children by returned type", children_kinds_tl, true);
 
 	::Uml::Diagram dgr = ::Uml::GetDiagram(c);
 	::Uml::Namespace ns = c.parent_ns();
@@ -759,12 +806,15 @@ void ClassGen::Parents()
 			// Udm::ParentAttr<T> R() const { return Udm::ParentAttr<T>(impl, meta_R); }
 			meth_defs.push_back( boost::format("Udm::ParentAttr< %1%> %2%() const { return Udm::ParentAttr< %1%>(impl, meta_%2%); }") % parent_name % rel_name );
 
-			parents_tlhlp.roles2type.push_back( boost::format("class PR_%1% {}") % rel_name );
-			string tl_typename = "_PR_" + rel_name + "__" + parent.getPath2("_", false);
-			parents_tlhlp.typenames_single.push_back(tl_typename);
-			parents_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, PR_%1% > %3%") % rel_name % parent_name % tl_typename );
+			if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+			{
+				parents_tlhlp.roles2type.push_back( boost::format("class PR_%1% {}") % rel_name );
+				string tl_typename = "_PR_" + rel_name + "__" + parent.getPath2("_", false);
+				parents_tlhlp.typenames_single.push_back(tl_typename);
+				parents_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, PR_%1% > %3%") % rel_name % parent_name % tl_typename );
 
-			meth_speclzs.push_back( boost::format("template <> const ::Uml::CompositionParentRole& %1%::_type2CPRole< %1%::PR_%2% >() const { return meta_%2%; }") % cl_name % rel_name );
+				meth_speclzs.push_back( boost::format("template <> const ::Uml::CompositionParentRole& %1%::_type2CPRole< %1%::PR_%2% >() const { return meta_%2%; }") % cl_name % rel_name );
+			}
 		}
 		else 
 		{
@@ -772,7 +822,8 @@ void ClassGen::Parents()
 		}
 	}
 
-	BuildTL(parents_tlhlp, "Parents", "", "parent by returned type and role", parents_tl);
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+		BuildTL(parents_tlhlp, "Parents", "", "parent by returned type and role", parents_tl);
 
 
 #if 0
@@ -787,7 +838,8 @@ void ClassGen::Parents()
 	set< ::Uml::CompositionParentRole> parroles = Uml::AncestorCompositionPeerParentRoles(c);
 	for( set< ::Uml::CompositionParentRole>::iterator ri = parroles.begin(); ri != parroles.end(); ri++) 
 	{
-		parentkinds_for_tl.insert(ri->target());
+		if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+			parentkinds_for_tl.insert(ri->target());
 
 		if(string(ri->name()) == "parent")
 		{
@@ -796,7 +848,8 @@ void ClassGen::Parents()
 		}
 	}
 
-	BuildTL(parentkinds_for_tl, "ParentKinds", "parent by returned type", parent_kinds_tl);
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+		BuildTL(parentkinds_for_tl, "ParentKinds", "parent by returned type", parent_kinds_tl);
 	
 	if(!parent_defined) 
 	{
@@ -869,12 +922,15 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 				// association_class::meta_OTHER_ROLE_end_ = OTHER_ROLE_target::meta_ROLE_rev = ROLE_target::meta_OTHER_ROLE
 				meta_init_links.push_back( boost::format("%1%::meta_%2%_end_ = %3%::meta_%4%_rev = %5%::meta_%6%") % cl_name % orel_name % UmlClassCPPName(the_other.target(), c.parent_ns()) % rel_name % UmlClassCPPName(tclass, c.parent_ns()) % orel_name );
 
-				aclass_tlhlp.roles2type.push_back( boost::format("class ACE_%1% {}") % rel_name );
-				string tl_typename = "_ACE_" + rel_name + "__" + tclass.getPath2("_", false);
-				aclass_tlhlp.typenames_single.push_back(tl_typename);
-				aclass_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, ACE_%1% > %3%") % rel_name % tclass_cpp_name % tl_typename );
+				if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+				{
+					aclass_tlhlp.roles2type.push_back( boost::format("class ACE_%1% {}") % rel_name );
+					string tl_typename = "_ACE_" + rel_name + "__" + tclass.getPath2("_", false);
+					aclass_tlhlp.typenames_single.push_back(tl_typename);
+					aclass_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, ACE_%1% > %3%") % rel_name % tclass_cpp_name % tl_typename );
 
-				meth_speclzs.push_back( boost::format("template <> const ::Uml::AssociationRole& %1%::_type2ARole< %1%::ACE_%2% >() const { return meta_%2%_end_; }") % cl_name % rel_name );
+					meth_speclzs.push_back( boost::format("template <> const ::Uml::AssociationRole& %1%::_type2ARole< %1%::ACE_%2% >() const { return meta_%2%_end_; }") % cl_name % rel_name );
+				}
 			}
 
 			// _end_ association roles
@@ -882,7 +938,8 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 		}
 	}
 
-	BuildTL(aclass_tlhlp, "AClassEnds", "", "association class ends by returned type and role", aclass_ends_tl);
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+		BuildTL(aclass_tlhlp, "AClassEnds", "", "association class ends by returned type and role", aclass_ends_tl);
 
 
 	// for typelist
@@ -926,24 +983,28 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 
 					corba_meta_init_links.push_back( boost::format("%2%::meta_%1%_end_ = %3%::meta_%1%") % rel_name % cl_name % UmlClassCPPName(::Uml::theOther(*i).target()) );
 
-					cross_aclass_tlhlp.roles2type.push_back( boost::format("class ACE_%1% {}") % rel_name );
-
-					string tl_typename = "_ACE_" + rel_name;
+					if (gen.opts.mode == UdmOpts::CXX_GENERIC)
 					{
-						string s = from + "::" + oname;
-						boost::replace_all(s, "::", "_");
-						tl_typename += "__" + s;
-					}
-					cross_aclass_tlhlp.typenames_single.push_back(tl_typename);
-					cross_aclass_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, ACE_%1% > %3%") % rel_name % (from + "::" + oname) % tl_typename );
+						cross_aclass_tlhlp.roles2type.push_back( boost::format("class ACE_%1% {}") % rel_name );
 
-					meth_speclzs.push_back( boost::format("template <> const ::Uml::AssociationRole& %1%::_type2ARole< %1%::ACE_%2% >() const { return meta_%2%_end_; }") % cl_name % rel_name );
+						string tl_typename = "_ACE_" + rel_name;
+						{
+							string s = from + "::" + oname;
+							boost::replace_all(s, "::", "_");
+							tl_typename += "__" + s;
+						}
+						cross_aclass_tlhlp.typenames_single.push_back(tl_typename);
+						cross_aclass_tlhlp.typedefs.push_back( boost::format("typedef boost::mpl::pair< %2%, ACE_%1% > %3%") % rel_name % (from + "::" + oname) % tl_typename );
+
+						meth_speclzs.push_back( boost::format("template <> const ::Uml::AssociationRole& %1%::_type2ARole< %1%::ACE_%2% >() const { return meta_%2%_end_; }") % cl_name % rel_name );
+					}
 				}
 			}
 		}
 	}
 
-	BuildTL(cross_aclass_tlhlp, "CrossAClassEnds", "", "cross association class by returned type and role", cross_aclass_ends_tl);
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC)
+		BuildTL(cross_aclass_tlhlp, "CrossAClassEnds", "", "cross association class by returned type and role", cross_aclass_ends_tl);
 }
 
 

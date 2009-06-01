@@ -13,6 +13,8 @@
 #include <unistd.h>
 #endif	//WIN32
 
+#include <cstdlib>
+
 
 // Registers the fixture into the 'registry'
 

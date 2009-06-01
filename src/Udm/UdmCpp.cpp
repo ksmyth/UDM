@@ -328,21 +328,25 @@ vector<boost::format> UdmGen::HPreamble(const string &fname) const
 		% UDM_VERSION_MINOR
 		% (opts.rec_tstamp ? GetTime().c_str() : "") );
 
-	if (mpl_seq_max_size > BOOST_MPL_LIMIT_VECTOR_SIZE) {
-		// find the nearest upper multiple of ten
-		int new_limit = mpl_seq_max_size;
-		if (new_limit % 10)
-			new_limit = new_limit - new_limit % 10 + 10;
+	if (opts.mode == UdmOpts::CXX_GENERIC) {
+		if (mpl_seq_max_size > BOOST_MPL_LIMIT_VECTOR_SIZE) {
+			// find the nearest upper multiple of ten
+			int new_limit = mpl_seq_max_size;
+			if (new_limit % 10)
+				new_limit = new_limit - new_limit % 10 + 10;
 
-		r.push_back( boost::format("\
+			r.push_back( boost::format("\
 #define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS\n\
 #define BOOST_MPL_LIMIT_VECTOR_SIZE %1%\n\
 ")
-			% new_limit );
+				% new_limit );
+		}
+
+		r.push_back( boost::format("\
+#include <UdmMPL.h>\n") );
 	}
 
 	r.push_back( boost::format("\
-#include <UdmMPL.h>\n\
 \n\
 #ifdef min\n\
 #undef min\n\
