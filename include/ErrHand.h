@@ -24,12 +24,6 @@ this software.
 #endif
 #endif
 
-#ifdef WIN32
-#define TYPENAME
-#else
-#define TYPENAME typename
-#endif
-
 #ifndef ASSERT
 #define ASSERT assert
 #endif

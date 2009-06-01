@@ -205,14 +205,10 @@ this software.
 #pragma warning( disable : 4503 ) //Decorated name length exceeded
 #pragma warning( disable : 4103 ) //used #pragma pack to change alignment
 
-#ifndef TYPENAME
-#define TYPENAME
-#endif
-#else
-#ifndef TYPENAME
-#define TYPENAME typename
 #endif
 
+#ifndef TYPENAME
+#define TYPENAME typename
 #endif
 
 #ifndef MOBIES_ERRHAND_H
@@ -3045,7 +3041,7 @@ private:
 	unsigned long dn_id;
 
 public:
-	virtual UDM_DLL ~DataNetwork() { if(rootobject) throw udm_exception("Dirty abort!"); }
+	virtual UDM_DLL ~DataNetwork();
 // Load/Persist
 	virtual void CreateNew(const string &systemname, 
 									const string &metalocator, const ::Uml::Class &rootclass, 
@@ -3094,14 +3090,14 @@ public:
 // so care needs to be taken when using them
 // DOM&GME are TypeSafe Data Networks
 // we override this for Static and Smart
-	virtual UDM_DLL bool IsTypeSafe() {return true;};
+	virtual UDM_DLL bool IsTypeSafe();
 //string support
 	virtual	UDM_DLL void CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass, 
-									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS){throw udm_exception("Unsupported method");};
+									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 	virtual UDM_DLL void OpenExistingFromString(string &str, 
 									const string &metalocator, 
-									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS){throw udm_exception("Unsupported method");};
-	virtual UDM_DLL const string & Str(){throw udm_exception("Unsupported method");};
+									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+	virtual UDM_DLL const string & Str();
 
 	virtual UDM_DLL set<Object> GetAllInstancesOf(const ::Uml::Class& meta);
 };
@@ -3334,12 +3330,12 @@ public:
 
 
 
-	class DynamicMetaSpecifier
+	class UDM_DLL DynamicMetaSpecifier
 	{
 	public:
 		const string metalocator;
 		const Udm::UdmDiagram& dgr;
-		UDM_DLL DynamicMetaSpecifier(const string& ml, const UdmDiagram& d) : metalocator(ml), dgr(d) {};
+		DynamicMetaSpecifier(const string& ml, const UdmDiagram& d) : metalocator(ml), dgr(d) {};
 	};
 
 

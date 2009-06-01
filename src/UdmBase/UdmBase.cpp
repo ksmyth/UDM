@@ -318,6 +318,34 @@ namespace Udm
 		return ret;
 	};
 
+	UDM_DLL DataNetwork::~DataNetwork()
+	{
+		if (rootobject) throw udm_exception("Dirty abort!");
+	}
+
+	UDM_DLL bool DataNetwork::IsTypeSafe()
+	{
+		return true;
+	}
+
+	UDM_DLL void DataNetwork::CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass, 
+									enum Udm::BackendSemantics sem)
+	{
+		throw udm_exception("Unsupported method");
+	}
+
+	UDM_DLL void DataNetwork::OpenExistingFromString(string &str, 
+									const string &metalocator, 
+									enum Udm::BackendSemantics sem)
+	{
+		throw udm_exception("Unsupported method");
+	}
+
+	UDM_DLL const string & DataNetwork::Str()
+	{
+		throw udm_exception("Unsupported method");
+	}
+
 
 	//	--- attribute setters/getters for multiple value (array) type attributes
 
