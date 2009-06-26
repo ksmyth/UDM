@@ -74,7 +74,7 @@ namespace UdmUtil
 
 
 
-	UDM_DLL string ExtractName(Udm::Object ob,  const string att_name )
+	UDM_DLL string ExtractName(const Udm::Object &ob,  const string &att_name )
 	{
 		::Uml::Class cls= ob.type();				
 		set< ::Uml::Attribute> attrs=cls.attributes();		

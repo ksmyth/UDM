@@ -50,7 +50,7 @@ namespace UdmUtil
 	//this utility tries to extract the name-like attribute
 	//using stupid heuristics and assuming odd things like
 	//the name of the name attribute is "name". Anyway, it might be useful.
-	UDM_DLL string ExtractName(Udm::Object ob, const string att_name = "name");
+	UDM_DLL string ExtractName(const Udm::Object &ob, const string &att_name = "name");
 
 
 	//note: escape_char is not escaped unless it is contained in to_escape_chars

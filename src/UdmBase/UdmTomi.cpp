@@ -1959,7 +1959,7 @@ UDM_DLL bool Object::CreateLink(Object& dst, const AssociationInfo& ass)
 };
 */
 
-UDM_DLL string Object::getPath( const std::string& strDelimiter , bool bReverseOrder, bool bNeedRootFolder, const string att_name, bool omit_lead_delim) const
+UDM_DLL string Object::getPath( const std::string& strDelimiter , bool bReverseOrder, bool bNeedRootFolder, const string &att_name, bool omit_lead_delim) const
 {
 		
 	if (*this == impl->__getdn()->GetRootObject())
