@@ -1375,45 +1375,62 @@ namespace UdmStatic
 		if (meta)
 		{
 			//cases 2 & 3
-
-			pair<children_type::const_iterator, children_type::const_iterator> t = 
-			m_children.equal_range(meta.uniqueId());
-
-			while( t.first != t.second )
+			int c = m_children.count(meta.uniqueId());
+			if (c)
 			{
-				
+				ret.reserve(c);
+
+				pair<children_type::const_iterator, children_type::const_iterator> t = 
+				m_children.equal_range(meta.uniqueId());
+
 				if (cls)
 				{
 					//case 3
-					if (Uml::IsDerivedFrom((*t.first).second->m_type, cls))
-						//type is ok
-						ret.push_back((*t.first).second->clone());
+					while( t.first != t.second )
+					{
+						if (Uml::IsDerivedFrom((*t.first).second->m_type, cls))
+							//type is ok
+							ret.push_back((*t.first).second->clone());
+						++t.first;
+					}
 				}
 				else
+				{
 					//case 2
-					ret.push_back((*t.first).second->clone());
-					
-		
-				++t.first;
+					while( t.first != t.second )
+					{
+						ret.push_back((*t.first).second->clone());
+						++t.first;
+					}
+				}
 			}
 		}
 		else
 		{
 			//cases 0 & 1
+			ret.reserve(m_children.size());
 			children_type::const_iterator t = m_children.begin();
-			while (t!= m_children.end())
+
+			if (cls)
 			{
-				if(cls)
+				while (t!= m_children.end())
 				{
 					//case 1
 					if (Uml::IsDerivedFrom((*t).second->m_type, cls))
 						//type is ok
 						ret.push_back((*t).second->clone());
+
+					++t;
 				}
-				else
+			}
+			else {
+				while (t!= m_children.end())
+				{
 					ret.push_back((*t).second->clone());
 					//++((*t).second->refCount);
-				++t;
+
+					++t;
+				}
 			}
 		}
 
@@ -1616,8 +1633,10 @@ namespace UdmStatic
 			if(!comp) throw  udm_exception("Role must be specified for " + casestr);
 			role = comp.childRole();
 		}
-		
-		if(!Uml::IsDerivedFrom(m_type, Uml::theOther(role).target())) 
+
+		::Uml::CompositionParentRole parentrole = Uml::theOther(role);
+
+		if(!Uml::IsDerivedFrom(m_type, parentrole.target())) 
 		{
 			throw udm_exception("Invalid childrole specified for creating " + casestr);
 		}
@@ -1628,7 +1647,7 @@ namespace UdmStatic
 
 		StaticObject *dep = new StaticObject(meta, 1, (StaticObject*)archetype, subtype, real_archetype);
 		//set the parent
-		dep->setParent(this, Uml::theOther(role), false);
+		dep->setParent(this, parentrole, false);
 
 		
 		
@@ -1671,11 +1690,12 @@ namespace UdmStatic
 			p_currClass!=ancestorClasses.end(); p_currClass++)
 			{
 				set< ::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
-				for(set< ::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
-					p_currRole!=compParentRoles.end(); p_currRole++)
+				for(set< ::Uml::CompositionParentRole>::iterator p_currParentRole = compParentRoles.begin();
+					p_currParentRole != compParentRoles.end(); p_currParentRole++)
 					{
-						::Uml::Class childClass=Uml::theOther(*p_currRole).target();
-						vector<ObjectImpl*>children= archetype->getChildren(Uml::theOther(*p_currRole),childClass);
+						::Uml::CompositionChildRole p_currChildRole = Uml::theOther(*p_currParentRole);
+						::Uml::Class childClass = p_currChildRole.target();
+						vector<ObjectImpl*>children = archetype->getChildren(p_currChildRole, childClass);
 						for(vector<ObjectImpl*>::iterator p_currImpl=children.begin();
 							p_currImpl!=children.end();p_currImpl++)
 							{
@@ -1686,11 +1706,11 @@ namespace UdmStatic
 								Object newchild;
 								if (need_safetype)
 								{
-									newchild = dep->createChild(Uml::theOther(*p_currRole), Uml::SafeTypeContainer::GetSafeType(p_srcChild->type()), p_srcChild, subtype, false, true);
+									newchild = dep->createChild(p_currChildRole, Uml::SafeTypeContainer::GetSafeType(p_srcChild->type()), p_srcChild, subtype, false, true);
 								}
 								else
 								{
-									newchild = dep->createChild(Uml::theOther(*p_currRole), p_srcChild->type(), p_srcChild, subtype, false, false);
+									newchild = dep->createChild(p_currChildRole, p_srcChild->type(), p_srcChild, subtype, false, false);
 
 								}
 
@@ -1818,7 +1838,8 @@ namespace UdmStatic
 			//without any further checking
 			pair<assoc_type::const_iterator, assoc_type::const_iterator> t = 
 			associations.equal_range(meta.uniqueId());
-	
+			ret.reserve(associations.count(meta.uniqueId()));
+
 			while( t.first != t.second )
 			{
 				ret.push_back((*t.first).second->clone());
@@ -1836,8 +1857,21 @@ namespace UdmStatic
 			//we need to return the associated objects, not the classes of the associations
 			
 			
+			//this call gets recursive if we are implementing any two of the three abstraction levels 
+			//(meta-meta, meta, instance)
+
+			//i believe this next line is free of inheritence issues ... 
+			::Uml::Class assClass = ((::Uml::Association) meta.parent()).assocClass();	
+			set< ::Uml::Class> assClassDsc_s;
+			if (assClass)
+			{
+				assClassDsc_s = Uml::DescendantClasses(assClass);
+				ret.reserve(ret.size() + assClassDsc_s.size());
+			}
+
 			pair<assoc_type::const_iterator, assoc_type::const_iterator> t = 
 			associations.equal_range(meta.uniqueId());
+			ret.reserve(associations.count(meta.uniqueId()));
 
 			while( t.first != t.second )
 			{
@@ -1846,21 +1880,14 @@ namespace UdmStatic
 				if (!assoc_so) 
 					throw udm_exception("StaticObject in map is NULL");
 				
-				//this call gets recursive if we are implementing any two of the three abstraction levels 
-				//(meta-meta, meta, instance)
-
-				//i believe this next line is free of inheritence issues ... 
-				::Uml::Class assClass = ::Uml::Association(meta.parent()).assocClass();	
 				if (assClass)
 				{
 
 					//now let's deal with assoc. classes.
 					//we can be a descendant of an assoc. class either
-					set< ::Uml::Class> dsc_s = Uml::DescendantClasses(assClass);
-					set< ::Uml::Class>::iterator dsc_i = dsc_s.find(assoc_so->m_type);	
+					set< ::Uml::Class>::iterator dsc_i = assClassDsc_s.find(assoc_so->m_type);	
 
-					//if (assClass == assoc_so->m_type)	
-					if (dsc_i != dsc_s.end())
+					if (dsc_i != assClassDsc_s.end())
 					{
 						//peer is an assoc class
 						//via this parentrole
@@ -1871,6 +1898,7 @@ namespace UdmStatic
 						{
 							ret.push_back((*tt.first).second->clone());	
 							++tt.first;
+							size++;
 						}
 						if (size > 1) 
 							throw udm_exception("Corrupt StaticObject maps: One end of an association class is associated to more than one objects!");
@@ -1892,6 +1920,7 @@ namespace UdmStatic
 		// whenever I'm an assoc class  or a peer, and the assoc. classes are needed
 		pair<assoc_type::const_iterator, assoc_type::const_iterator> t = 
 			associations.equal_range(meta.uniqueId());
+		ret.reserve(associations.count(meta.uniqueId()));
 
 		while( t.first != t.second )
 		{
