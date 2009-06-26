@@ -5,8 +5,8 @@ Linux
 Requirements:
 -------------
 - GCC 3.x (or later)
-- Xerces-C++ 2.5.0
-- Xalan-C++ 1.8.0
+- Xerces-C++ 2.5.0 (or later)
+- Xalan-C++ 1.8.0 (or later)
 - SWIG 1.3.23 (or later)
 - minizip
 - cppunit
@@ -15,7 +15,17 @@ Requirements:
 - ant
 - junit
 - Boost
-- Loki
+
+Build-environment preparation (RHEL 5):
+----------------------------------------------
+- enable EPEL repository: http://fedoraproject.org/wiki/EPEL
+- install development tools and libraries
+  yum groupinstall 'Development Libraries' 'Development Tools' 'Java Development'
+  yum install ccache cppunit-devel swig xalan-c-devel xerces-c-devel
+  yum install ant ant-junit ant-trax junit xerces-j2 xalan-j2 xml-commons-apis
+  yum install java-1.6.0-openjdk java-1.6.0-openjdk-devel
+- install the following rpms from our repository:
+  minizip, minizip-devel, minizip-libs, pccts
 
 Build-environment preparation (RHEL 4):
 ----------------------------------------------
