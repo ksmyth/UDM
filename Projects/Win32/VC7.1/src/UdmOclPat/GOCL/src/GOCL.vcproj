@@ -22,7 +22,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\src\ANTLRBase,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\Include"
+				AdditionalIncludeDirectories="$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\src\ANTLRBase,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;OCL_USING_STL_NAMESPACE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -73,7 +73,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\src\ANTLRBase,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\Include"
+				AdditionalIncludeDirectories="$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\src\ANTLRBase,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;OCL_USING_STL_NAMESPACE"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -205,25 +205,25 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="mkdir ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src
-cd ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src
+						CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;
+cd &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;
 copy /y &quot;$(InputPath)&quot; .
-&quot;$(InputDir)\ANTLRBase\antlr&quot; -CC -ft OCLTokens.h -fl OCLParser.dlg -mrhoist off $(InputFileName)
+&quot;$(InputDir)\ANTLRBase\antlr&quot; -CC -ft OCLTokens.h -fl OCLParser.dlg -mrhoist off &quot;$(InputFileName)&quot;
 &quot;$(InputDir)\ANTLRBase\dlg&quot; -C2 -i -CC -cl OCLLexer OCLParser.dlg
 "
-						Outputs="..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLLexer.h; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLParser.h; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\ocl.cpp; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLTokens.h; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLParser.dlg"/>
+						Outputs="$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\ocl.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLTokens.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.dlg"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="mkdir ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src
-cd ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src
+						CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;
+cd &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;
 copy /y &quot;$(InputPath)&quot; .
-&quot;$(InputDir)\ANTLRBase\antlr&quot; -CC -ft OCLTokens.h -fl OCLParser.dlg -mrhoist off $(InputFileName)
+&quot;$(InputDir)\ANTLRBase\antlr&quot; -CC -ft OCLTokens.h -fl OCLParser.dlg -mrhoist off &quot;$(InputFileName)&quot;
 &quot;$(InputDir)\ANTLRBase\dlg&quot; -C2 -i -CC -cl OCLLexer OCLParser.dlg
 "
-						Outputs="..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLLexer.h; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLParser.h; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\ocl.cpp; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLTokens.h; ..\..\..\..\..\..\..\Build\Win32\VC7.1\Gen\src\UdmOclPat\GOCL\src\OCLParser.dlg"/>
+						Outputs="$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\ocl.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLTokens.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.dlg"/>
 				</FileConfiguration>
 			</File>
 			<File
