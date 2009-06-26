@@ -132,7 +132,7 @@
 		<property name="util.src.dir" location="${srcdir}/src/util" />
 
 		<!-- Swig generated Java code -->
-		<property name="udmswig.src.dir" location="${srcdir}/src/UdmSwig" />
+		<property name="udmswig.src.dir" location="${udm.dir}/judm/src/UdmSwig" />
 
 		<!-- Convenience wrapper for the Swig generated Java code -->
 		<property name="udmswiglight.src.dir" location="${srcdir}/src/UdmSwigLight" />

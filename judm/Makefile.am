@@ -19,9 +19,9 @@ all: $(OBJS)
 
 clean: build.xml
 	ant -buildfile $(srcdir)/build.xml \
-		-Dudm.dir=`pwd`/.. \
+		-Dudm.dir=$(top_builddir) \
 		-Dudm.src.dir=$(srcdir)/.. \
-		-Dbasedir=`pwd` \
+		-Dbasedir=$(top_builddir)/judm \
 		-Dsrcdir=$(srcdir) \
 		clean
 	@rm -f sources-stamp
@@ -29,9 +29,9 @@ clean: build.xml
 check: $(OBJS)
 	UDM_PATH=`pwd`/.. ant \
 		-buildfile $(srcdir)/build.xml \
-		-Dudm.dir=`pwd`/.. \
+		-Dudm.dir=$(top_builddir) \
 		-Dudm.src.dir=$(srcdir)/.. \
-		-Dbasedir=`pwd` \
+		-Dbasedir=$(top_builddir)/judm \
 		-Dsrcdir=$(srcdir) \
 		test
 
@@ -40,9 +40,9 @@ sources-stamp: build.xml ../bin/Udm Makefile
 	@rm -f sources-temp
 	@touch sources-temp
 	ant -buildfile $(srcdir)/build.xml \
-		-Dudm.dir=`pwd`/.. \
+		-Dudm.dir=$(top_builddir) \
 		-Dudm.src.dir=$(srcdir)/.. \
-		-Dbasedir=`pwd` \
+		-Dbasedir=$(top_builddir)/judm \
 		-Dsrcdir=$(srcdir) \
 		rebuild
 	@mv -f sources-temp $@
