@@ -9,9 +9,10 @@
 			<os name="Windows NT (unknown)" />
 			<os version="6" />
 		</and>
+		<os name="Windows 2008" />
+		<os name="Windows 2003" />
 		<os name="Windows XP" />
 		<os name="Windows 2000" />
-		<os name="Windows Vista" />
       </or>
 	</condition>
 
