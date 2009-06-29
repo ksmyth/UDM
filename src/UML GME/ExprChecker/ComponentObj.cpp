@@ -23,7 +23,7 @@
 
 #include "GMECOM.h"
 #include "ComHelp.h"
-#include "ComponentLib.h"
+#include "ComponentLib_h.h"
 #include "ComponentConfig.h"
 #include "ComponentObj.h"
 #include "ComponentLib_i.c"

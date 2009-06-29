@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,$(OutDir)\..\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\include"
+				AdditionalIncludeDirectories="&quot;$(GME_ROOT)\sdk\bon&quot;;&quot;$(GME_ROOT)\sdk\bon\common&quot;;&quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;;..\..\..\..\..\..\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -151,7 +151,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,$(OutDir)\..\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\include"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;;&quot;$(GME_ROOT)\sdk\bon\common&quot;;&quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;;..\..\..\..\..\..\include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -254,7 +254,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\Builder.cpp"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Builder.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -308,7 +308,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComHelp.cpp"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComHelp.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -388,7 +388,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComponentDll.cpp"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentDll.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -415,14 +415,14 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComponentLib.idl"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentLib.idl"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCMIDLTool"
-						AdditionalOptions="/server none /client none"
+						AdditionalOptions="/server none /client none   /I &quot;$(GME_ROOT)\Interfaces&quot;"
 						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\Interpreter"
 						TypeLibraryName="$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb"
 						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\Interpreter"
@@ -434,16 +434,16 @@
 					>
 					<Tool
 						Name="VCMIDLTool"
-						AdditionalOptions="/server none /client none"
+						AdditionalOptions="/server none /client none  /I &quot;$(GME_ROOT)\Interfaces&quot;"
 						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\Interpreter"
 						TypeLibraryName="$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb"
 						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\Interpreter"
-						HeaderFileName="$(InputName).h"
+						HeaderFileName="$(InputName)_h.h"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComponentObj.cpp"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentObj.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -468,6 +468,14 @@
 						BrowseInformation="1"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Console.cpp"
+				>
+			</File>
+			<File
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Formatter.cpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\GetRelativeFilename.cpp"
@@ -699,7 +707,7 @@
 				>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\Builder.h"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Builder.h"
 				>
 			</File>
 			<File
@@ -707,7 +715,7 @@
 				>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComHelp.h"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComHelp.h"
 				>
 			</File>
 			<File
@@ -719,15 +727,23 @@
 				>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComponentDll.h"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentDll.h"
 				>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComponentObj.h"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentObj.h"
 				>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\GMECOM.H"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Console.h"
+				>
+			</File>
+			<File
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Formatter.h"
+				>
+			</File>
+			<File
+				RelativePath="$(GME_ROOT)\sdk\bon\common\GMECOM.H"
 				>
 			</File>
 			<File
@@ -748,6 +764,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\StdAfx.h"
+				>
+			</File>
+			<File
+				RelativePath="$(GME_ROOT)\sdk\bon\common\targetver.h"
 				>
 			</File>
 		</Filter>

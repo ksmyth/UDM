@@ -112,7 +112,7 @@
 
 
 //Component.h
-#include "Component.h"
+#include "BONComponent.h"
 #include "int_exception.h"
 
 #include "Resource.h"

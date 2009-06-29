@@ -51,7 +51,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,$(OutDir)\..\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include,..\..\..\..\..\..\include"
+				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon\Common,$(OutDir)\..\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include,..\..\..\..\..\..\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;BUILDER_OBJECT_NETWORK"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -154,7 +154,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="1"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon,$(OutDir)\..\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include,..\..\..\..\..\..\include"
+				AdditionalIncludeDirectories="$(GME_ROOT)\sdk\bon\Common,$(OutDir)\..\Gen\src\UML GME\Interpreter,..\..\..\..\..\..\src\UML GME\Interpreter,..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include,..\..\..\..\..\..\include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;BUILDER_OBJECT_NETWORK"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -282,7 +282,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComHelp.cpp"
+				RelativePath="$(GME_ROOT)\sdk\bon\Common\ComHelp.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -309,7 +309,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComponentDll.cpp"
+				RelativePath="$(GME_ROOT)\sdk\bon\Common\ComponentDll.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -336,17 +336,17 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComponentLib.idl"
+				RelativePath="$(GME_ROOT)\sdk\bon\Common\ComponentLib.idl"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCMIDLTool"
+						AdditionalOptions="/I &quot;$(GME_ROOT)\Interfaces&quot;"
 						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\ExprChecker"
-						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
 						TypeLibraryName="$(TargetDir)\obj\src\UML GME\ExprChecker\ComponentLib.tlb"
-						Outputs="$(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_h.h; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_i.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_p.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\dlldata.c"
+						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -354,10 +354,10 @@
 					>
 					<Tool
 						Name="VCMIDLTool"
+						AdditionalOptions="/I &quot;$(GME_ROOT)\Interfaces&quot;"
 						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\ExprChecker"
-						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
 						TypeLibraryName="$(TargetDir)\obj\src\UML GME\ExprChecker\ComponentLib.tlb"
-						Outputs="$(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_h.h; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_i.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\ComponentLib_p.c; $(OutDir)\..\Gen\src\UML GME\ExprChecker\dlldata.c"
+						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
 					/>
 				</FileConfiguration>
 			</File>
@@ -721,7 +721,7 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\ComHelp.h"
+				RelativePath="$(GME_ROOT)\sdk\bon\Common\ComHelp.h"
 				>
 			</File>
 			<File
@@ -733,7 +733,7 @@
 				>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\GMECOM.H"
+				RelativePath="$(GME_ROOT)\sdk\bon\Common\GMECOM.H"
 				>
 			</File>
 			<File
@@ -794,11 +794,11 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\compicon.ico"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\compicon.ico"
 				>
 			</File>
 			<File

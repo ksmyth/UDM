@@ -11,6 +11,6 @@ Set oMGAProj= CreateObject( "Mga.MgaProject")
 oMGAProj.Open "MGA=" & mga_file
 'MsgBox mga_file
 Set launcher= CreateObject( "Mga.MgaLauncher")
-launcher.RunComponent "MGA.Interpreter.MetaGME", oMGAProj, Nothing, Nothing, CLng( 128)
+launcher.RunComponent "MGA.Interpreter.MetaInterpreter", oMGAProj, Nothing, Nothing, CLng( 128)
 oMGAProj.Close
 
