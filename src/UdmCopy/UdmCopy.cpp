@@ -7,6 +7,7 @@
 
 #include "Uml.h"
 #include "UmlExt.h"
+#include "UdmStatic.h"
 
 using namespace Uml;
 using namespace Udm;
@@ -135,7 +136,15 @@ int main(int argc, char **argv) {
 		try {
 
 			// Opening the XML meta of the host graph
-			ddnMeta.OpenExisting(argv[3],"uml.dtd", Udm::CHANGES_LOST_DEFAULT);
+			Udm::SmartDataNetwork ddnMeta_in(::Uml::diagram);
+			ddnMeta_in.OpenExisting(argv[3],"uml.dtd", Udm::CHANGES_LOST_DEFAULT);
+
+			UdmStatic::StaticDataNetwork ddnMeta(::Uml::diagram);
+			ddnMeta.CreateNew("", "", ::Uml::SafeTypeContainer::GetSafeType(ddnMeta_in.GetRootObject().type()), Udm::CHANGES_LOST_DEFAULT);
+			{
+				UdmUtil::copy_assoc_map dummy;
+				UdmUtil::CopyObjectHierarchy(ddnMeta_in.GetRootObject().__impl(), ddnMeta.GetRootObject().__impl(), &ddnMeta, dummy);
+			}
 
 			// Casting the DataNetwork to diagram
 			theUmlDiagram = ::Uml::Diagram::Cast(ddnMeta.GetRootObject());
