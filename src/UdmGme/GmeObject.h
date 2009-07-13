@@ -174,6 +174,7 @@ namespace UdmGme
 		virtual ObjectImpl* AttachLibrary(ObjectImpl *lib_src, const string &lib_name, Udm::t_lib_to_copy_impl_map *copy_map = NULL);
 		// not used, AttachLibrary is not emulated on this backend
 		virtual ObjectImpl *createLibRootChild(const ::Uml::Class &kind, const bool need_safetype = false) { return &Udm::_null; }
+		virtual vector<ObjectImpl*> getLibRoots() const;
 
 		virtual ObjectImpl* LibRoot();
 		virtual void GetGuid(long *p1, long *p2, long *p3, long *p4) const;

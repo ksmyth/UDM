@@ -4358,6 +4358,22 @@ namespace UdmStatic
 		return dep->clone();
 	}
 
+   	vector<ObjectImpl*> StaticObject::getLibRoots() const
+	{
+		vector<ObjectImpl*> ret;
+		ret.reserve(m_children.size());
+
+		children_type::const_iterator t = m_children.begin();
+		while (t!= m_children.end())
+		{
+			if (t->second->lib_root)
+				ret.push_back((*t).second->clone());
+			++t;
+		}
+	
+		return ret;
+	}
+
 	// --------------------------- Static Data Network funcitons
 
 	StaticDataNetwork::~StaticDataNetwork()

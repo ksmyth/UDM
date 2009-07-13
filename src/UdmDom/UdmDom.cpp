@@ -3031,6 +3031,24 @@ namespace UdmDom
 				return dep;
 		}
 
+		vector<ObjectImpl*> getLibRoots() const
+		{
+			vector<ObjectImpl*> ret;
+			
+			for(DOMNode *n = dom_element->getFirstChild(); n != NULL; n = n->getNextSibling())	
+			{
+				if( n->getNodeType() == DOMNode::ELEMENT_NODE )
+				{
+					DOMElement *e = static_cast<DOMElement*>(n);
+					const XMLCh *pa = e->getAttribute(gXML__libname);
+					if (!EmptyVal(pa))
+						ret.push_back(new DomObject(findClass(*e), e, mydn));
+				}
+
+			}
+			return ret;
+		}
+
 	};
 
 //	unsigned long DomObject::idcount = time(NULL);

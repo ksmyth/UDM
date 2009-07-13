@@ -2467,6 +2467,24 @@ bbreak:			;
 		}
 	}
 
+	vector<ObjectImpl*> GmeObject::getLibRoots() const 
+	{
+		vector<ObjectImpl*> ret;
+
+		if (folderself) 
+		{
+			IMgaFoldersPtr fchds = folderself->ChildFolders;
+			
+			MGACOLL_ITERATE(IMgaFolder, fchds) 
+			{
+				SmartBSTR lib_name = MGACOLL_ITER->LibraryName;
+				if (!(!lib_name))
+				  ret.push_back(new GmeObject( MGACOLL_ITER, mydn));
+			} MGACOLL_ITERATE_END;
+		}
+		return ret;
+	}
+
 	void GmeObject::GetGuid(long *p1, long *p2, long *p3, long *p4) const
 	{
 		objself->GetGuid(p1, p2, p3, p4);

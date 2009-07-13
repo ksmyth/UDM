@@ -485,6 +485,7 @@ namespace Udm
 		virtual void setLibraryName(const char *name) = 0;
 		virtual ObjectImpl* AttachLibrary(ObjectImpl *lib_src, const string &lib_name, t_lib_to_copy_impl_map *copy_map = NULL);
 		virtual ObjectImpl *createLibRootChild(const ::Uml::Class &meta, const bool need_safetype = false) = 0;
+		virtual vector<ObjectImpl*> getLibRoots() const = 0;
 
 		
 	};
@@ -645,6 +646,7 @@ namespace Udm
 		virtual void setLibraryName(const char *name) {throw e;};
 		virtual ObjectImpl* AttachLibrary(ObjectImpl *lib_src, const string &lib_name, t_lib_to_copy_impl_map *copy_map = NULL) {throw e;};
 		virtual ObjectImpl *createLibRootChild(const ::Uml::Class &meta, const bool need_safetype = false) {throw e;};
+		virtual vector<ObjectImpl*> getLibRoots() const {throw e;};
 
 	};
 

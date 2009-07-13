@@ -358,6 +358,7 @@ namespace UdmStatic
 		bool getLibraryName(string &name) const;
 		void setLibraryName(const char *name);
 		ObjectImpl *createLibRootChild(const ::Uml::Class &meta, const bool need_safetype = false);
+		vector<ObjectImpl*> getLibRoots() const;
 	};
 
 

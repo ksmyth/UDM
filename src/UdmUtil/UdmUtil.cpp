@@ -249,17 +249,10 @@ namespace UdmUtil
 		
 
 		// copy first the private library copies (createLibRootChild must be used instead of createChild)
-		vector<ObjectImpl*> children = p_srcRoot->getChildren(NULL, NULL);
-		for(vector<ObjectImpl*>::const_iterator p_currImpl = children.begin(); p_currImpl != children.end(); p_currImpl++)
+		vector<ObjectImpl*> lib_roots = p_srcRoot->getLibRoots();
+		for(vector<ObjectImpl*>::const_iterator p_currImpl = lib_roots.begin(); p_currImpl != lib_roots.end(); p_currImpl++)
 		{
 			ObjectImpl* p_srcChild = *p_currImpl;			//source child
-
-			if (!p_srcChild->isLibRoot()) {
-				// not a library root, copy it below
-				p_srcChild->release();
-				continue;
-			}
-
 			Udm::Object srcChild = p_srcChild->clone();		//the cloned copy will be released in ~Object
 															//check whether the object was copied first
 			copy_assoc_map::iterator cam_i = cam.find(srcChild);
@@ -295,7 +288,7 @@ namespace UdmUtil
 			if (p_srcChild->getLibraryName(lib_name))
 				p_dstChild->setLibraryName(lib_name.c_str());
 					
-			p_srcChild->release();		//this was obtained via getChildren()
+			p_srcChild->release();		//this was obtained via getLibRoots()
 										//so it should be released.
 			p_dstChild->release();		//this was obtained from createLibRootChild and needs to be released.
 					
