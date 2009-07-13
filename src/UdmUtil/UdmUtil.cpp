@@ -314,9 +314,10 @@ namespace UdmUtil
 			for(set< ::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
 				p_currRole!=compParentRoles.end(); p_currRole++)
 			{
-				::Uml::Class childClass=theOther(*p_currRole).target();
+				::Uml::CompositionChildRole o_role = theOther(*p_currRole);
+				::Uml::Class childClass = o_role.target();
 			
-				vector<ObjectImpl*>children= p_srcRoot->getChildren(theOther(*p_currRole),childClass);
+				vector<ObjectImpl*>children= p_srcRoot->getChildren(o_role,childClass);
 				for(vector<ObjectImpl*>::iterator p_currImpl=children.begin();
 					p_currImpl!=children.end();p_currImpl++)
 				{
@@ -426,11 +427,11 @@ namespace UdmUtil
 
 								if (p_dstBackend->IsTypeSafe())
 						
-									p_dstChild=p_dstRoot->createChild(theOther(*p_currRole), p_srcChild->type(), p_dstChildArc, subtype);
+									p_dstChild=p_dstRoot->createChild(o_role, p_srcChild->type(), p_dstChildArc, subtype);
 								else
 								{
 									const ::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(p_srcChild->type());
-									p_dstChild=p_dstRoot->createChild(theOther(*p_currRole), safe_type, p_dstChildArc, subtype, true, true);
+									p_dstChild=p_dstRoot->createChild(o_role, safe_type, p_dstChildArc, subtype, true, true);
 								}
 
 								//do the mapping for the derived block as well
@@ -442,11 +443,11 @@ namespace UdmUtil
 						{
 							if (p_dstBackend->IsTypeSafe())
 						
-								p_dstChild=p_dstRoot->createChild(theOther(*p_currRole), p_srcChild->type());
+								p_dstChild=p_dstRoot->createChild(o_role, p_srcChild->type());
 							else
 							{
 								const ::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(p_srcChild->type());
-								p_dstChild=p_dstRoot->createChild(theOther(*p_currRole), safe_type);
+								p_dstChild=p_dstRoot->createChild(o_role, safe_type);
 							}
 						}
 
