@@ -55,7 +55,7 @@
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				TreatWChar_tAsBuiltInType="false"
+				TreatWChar_tAsBuiltInType="true"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile="$(IntDir)/UdmDll.pch"
 				AssemblerListingLocation="$(IntDir)/"
@@ -64,6 +64,7 @@
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				CompileAs="0"
+				OmitDefaultLibName="false"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -82,7 +83,7 @@
 				OutputFile="$(OutDir)\UdmDll_3_1_3.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(OutDir)"
+				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
 				ProgramDatabaseFile="$(IntDir)/UdmDll.pdb"
 				OptimizeReferences="1"
 				RandomizedBaseAddress="1"
