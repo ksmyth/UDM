@@ -48,7 +48,7 @@
 #include "GMECOM.h"
 
 #ifdef BUILDER_OBJECT_NETWORK
-#include "Component.h"
+#include "BONComponent.h"
 #include "Builder.h"
 #endif
 
