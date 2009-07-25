@@ -125,7 +125,7 @@
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				TreatWChar_tAsBuiltInType="true"
+				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile="$(IntDir)/UdmDom.pch"
 				AssemblerListingLocation="$(IntDir)/"
