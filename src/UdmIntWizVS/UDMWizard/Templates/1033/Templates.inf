@@ -1,0 +1,9 @@
+RawComponent.cpp
+RawComponent.h
+CompIcon.ico
+Component.def
+Component.rc
+ComponentConfig.h
+Resource.h
+StdAfx.cpp
+StdAfx.h
