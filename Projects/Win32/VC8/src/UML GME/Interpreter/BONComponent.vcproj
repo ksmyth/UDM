@@ -510,10 +510,6 @@
 				/>
 			</FileConfiguration>
 		</File>
-		<File
-			RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\ConfigureComponent.exe"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
