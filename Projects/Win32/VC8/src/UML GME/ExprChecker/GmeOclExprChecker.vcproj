@@ -44,14 +44,12 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName="$(IntDir)/GmeOclExprChecker.tlb"
-				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\..\..\src\UML GME\ExprChecker&quot;;&quot;$(GME_ROOT)\sdk\bon\common&quot;;&quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;BUILDER_OBJECT_NETWORK_V2"
+				AdditionalIncludeDirectories="&quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;;&quot;..\..\..\..\..\..\src\UML GME\ExprChecker&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\include;&quot;$(GME_ROOT)\sdk\bon\common&quot;"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
@@ -147,16 +145,13 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName="$(IntDir)/GmeOclExprChecker.tlb"
-				OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\Interpreter"
-				HeaderFileName=""
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="1"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\..\..\src\UML GME\ExprChecker&quot;;&quot;$(GME_ROOT)\sdk\bon\common&quot;;&quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;BUILDER_OBJECT_NETWORK_V2"
+				AdditionalIncludeDirectories="&quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;;&quot;..\..\..\..\..\..\src\UML GME\ExprChecker&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\include;&quot;$(GME_ROOT)\sdk\bon\common&quot;"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -230,146 +225,23 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.cpp"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="$(GME_ROOT)\sdk\bon\common\ComHelp.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentDll.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentLib.idl"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCMIDLTool"
-						AdditionalOptions="/I &quot;$(GME_ROOT)\Interfaces&quot;"
-						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\ExprChecker"
-						TypeLibraryName="$(TargetDir)\obj\src\UML GME\ExprChecker\ComponentLib.tlb"
-						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\ExprChecker"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCMIDLTool"
-						AdditionalOptions="/I &quot;$(GME_ROOT)\Interfaces&quot;"
-						AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\ExprChecker"
-						TypeLibraryName="$(TargetDir)\obj\src\UML GME\ExprChecker\ComponentLib.tlb"
-						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\Interpreter"
-						HeaderFileName="$(InputName)_h.h"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\ComponentObj.cpp"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentObj.cpp"
 				>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\SDK\BON\Common\Console.cpp"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Console.cpp"
 				>
 			</File>
 			<File
@@ -377,31 +249,16 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\GMECommon.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def"
@@ -432,137 +289,22 @@
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\GMESyntacticSemanticDialog.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\Build\Win32\VC8\Gen\src\UML GME\Interpreter\Lattrib.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\Build\Win32\VC8\Gen\src\UML GME\Interpreter\Lcardin.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\Build\Win32\VC8\Gen\src\UML GME\Interpreter\Pattrib.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\Build\Win32\VC8\Gen\src\UML GME\Interpreter\Pcardin.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\StdAfx.cpp"
@@ -572,13 +314,8 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
 						UsePrecompiledHeader="1"
 						PrecompiledHeaderThrough="stdafx.h"
-						BrowseInformation="1"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -586,122 +323,26 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
 						UsePrecompiledHeader="1"
 						PrecompiledHeaderThrough="stdafx.h"
-						BrowseInformation="1"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\UMLConstraint.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\UMLFacade.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\UMLTypeEx.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release MinDependency|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BrowseInformation="1"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -709,11 +350,11 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="$(GME_ROOT)\sdk\bon\common\ComHelp.h"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\ComponentConfig.h"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComHelp.h"
 				>
 			</File>
 			<File
@@ -721,7 +362,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\ComponentObj.h"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\ComponentConfig.h"
+				>
+			</File>
+			<File
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentObj.h"
 				>
 			</File>
 			<File
@@ -734,6 +379,14 @@
 			</File>
 			<File
 				RelativePath="$(GME_ROOT)\sdk\bon\common\GMECOM.H"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.h"
 				>
 			</File>
 			<File
@@ -774,10 +427,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.h"
-				>
-			</File>
-			<File
-				RelativePath="$(GME_ROOT)\sdk\bon\common\targetver.h"
 				>
 			</File>
 			<File
@@ -822,10 +471,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\ConfigureComponent.exe"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
