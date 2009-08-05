@@ -146,7 +146,7 @@
 			 <TABLE WIDTH="160" HEIGHT="28" BORDER="0" CELLPADDING="0" CELLSPACING="0" CLASS="LINKTEXTSELECTED">
 			  <TR VALIGN="MIDDLE">
 	  		   <TD WIDTH="162">
-				<SPAN ID="Settings" TITLE="" onClick="Next(document, 'Settings.htm');" TABINDEX="1">Component Settings</SPAN>
+				<SPAN ID="Settings" TITLE="" onClick="Next(document, 'Settings.htm');" TABINDEX="1">UDM Settings</SPAN>
 			   </TD>
 			   <TD WIDTH="4">
 				<IMG SRC="../../Images/spacer.gif" HEIGHT="1" WIDTH="4">
@@ -193,14 +193,112 @@
 
             <TABLE CLASS="CONTENT" BORDER="0" CELLPADDING="0" CELLSPACING="0">
 			<COL WIDTH="12"><COL WIDTH="185"><COL WIDTH="12"><COL WIDTH="185"><COL WIDTH="12"><COL WIDTH="185"><COL WIDTH="12">
- 			 <TR>
-  			  <TD VALIGN="TOP" HEIGHT="12" COLSPAN="5">
+ 			 
+ 			<TR>
+  			  <TD VALIGN="TOP" WIDTH="12">
   				&nbsp;
+  			  </TD>
+  			  <TD VALIGN="TOP" HEIGHT="80" COLSPAN="5">
+  				&nbsp;
+  				 <P CLASS="Spacer">&nbsp;</P>
+  				<SPAN CLASS="itemText">Model Access:
+					 <P CLASS="Spacer">&nbsp;</P>
+	
+	  				 <INPUT TYPE="radio" CLASS="Radio" NAME="mgaaccess" ID="DIRECT_MGA_ACCESS" ACCESSKEY="m" TITLE="GME models will be accessed via the UDM MGA backend.">
+	  	 			 <DIV CLASS="itemTextRadioB" TITLE="GME models will be accessed via the UDM MGA backend." ID="DIV3" >
+		  			  <LABEL FOR="UDM_LINKING_DYNAMIC" TITLE="GME models will be accessed via the UDM MGA backend." ID="LABEL4" >Direct <U>M</U>GA Access</LABEL>
+	  	 			 </DIV>
+	  				 <BR>
+	  
+	  			 	 <INPUT TYPE="radio" CLASS="Radio" NAME="mgaaccess" ID="STATIC_UDM_ACCESS" ACCESSKEY="c" TITLE="Models are accessed via UDM memory backend, and the modifications do not affect the GME models.">
+	  	 			 <DIV CLASS="itemTextRadioB" TITLE="Models are accessed via UDM memory backend, and the modifications do not affect the GME models." ID="DIV4" >
+		  			  <LABEL FOR="STATIC_UDM_ACCESS" TITLE="Models are accessed via UDM memory backend, and the modifications do not affect the GME models." ID="LABEL5" ><U>C</U>ached model access</LABEL>
+	  	 			 </DIV>	  	 			  				  	 			 
+				</SPAN>				
+    			<P CLASS="ElementSpacer">&nbsp;</P>
+  			  </TD>
+ 			 </TR>
+ 			 
+ 			 <TR>
+  			  <TD VALIGN="TOP" WIDTH="12">
+  				&nbsp;
+  			  </TD>
+  			  <TD VALIGN="TOP" HEIGHT="80" COLSPAN="5">
+  				&nbsp;
+  				 <P CLASS="Spacer">&nbsp;</P>
+  				<SPAN CLASS="itemText">Loading the metamodel:
+					 <P CLASS="Spacer">&nbsp;</P>
+	
+	  				 <INPUT TYPE="radio" CLASS="Radio" NAME="metaloading" ID="META_LOADING_STATIC" ACCESSKEY="l" TITLE="Meta will be linked to the interpreter.">
+	  	 			 <DIV CLASS="itemTextRadioB" TITLE="Meta will be linked to the interpreter." ID="DIV5" >
+		  			  <LABEL FOR="META_LOADING_STATIC" TITLE="Meta will be linked to the interpreter." ID="LABEL6" ><U>L</U>oad statically</LABEL>
+	  	 			 </DIV>
+	  				 <BR>
+	  
+	  			 	 <INPUT TYPE="radio" CLASS="Radio" NAME="metaloading" ID="META_LOADING_DYNAMIC" ACCESSKEY="o" TITLE="Meta will be loaded at runtime.">
+	  	 			 <DIV CLASS="itemTextRadioB" TITLE="Meta will be loaded at runtime." ID="DIV6" >
+		  			  <LABEL FOR="META_LOADING_DYNAMIC" TITLE="Meta will be loaded at runtime." ID="LABEL7" >L<U>o</U>ad dynamically</LABEL>
+	  	 			 </DIV>	  	 			  				  	 			 
+				</SPAN>				
+    			<P CLASS="ElementSpacer">&nbsp;</P>
+  			  </TD>
+ 			 </TR>
+ 			 
+ 			 
+ 			 <TR>
+  			  <TD VALIGN="TOP" WIDTH="12">
+  				&nbsp;
+  			  </TD>
+  			  <TD VALIGN="TOP" HEIGHT="80" COLSPAN="5">
+  				&nbsp;
+  				 <P CLASS="Spacer">&nbsp;</P>
+  				<SPAN CLASS="itemText">UDM Library Linkage:
+					 <P CLASS="Spacer">&nbsp;</P>
+	
+	  				 <INPUT TYPE="radio" CLASS="Radio" NAME="udmlinking" ID="UDM_LINKING_DYNAMIC" ACCESSKEY="d" TITLE="UDM will be linked as a DLL to your interpreter.">
+	  	 			 <DIV CLASS="itemTextRadioB" TITLE="UDM will be linked as a DLL to your interpreter." ID="DIV1" >
+		  			  <LABEL FOR="UDM_LINKING_DYNAMIC" TITLE="UDM will be linked as a DLL to your interpreter." ID="LABEL1" ><U>D</U>ynamic linkage</LABEL>
+	  	 			 </DIV>
+	  				 <BR>
+	  
+	  			 	 <INPUT TYPE="radio" CLASS="Radio" NAME="udmlinking" ID="UDM_LINKING_STATIC" ACCESSKEY="s" TITLE="UDM will be linked as a statically to your interpreter.">
+	  	 			 <DIV CLASS="itemTextRadioB" TITLE="UDM will be linked as a statically to your interpreter." ID="DIV2" >
+		  			  <LABEL FOR="UDM_LINKING_STATIC" TITLE="UDM will be linked as a statically to your interpreter." ID="LABEL2" ><U>S</U>tatic linkage</LABEL>
+	  	 			 </DIV>	  	 			  				  	 			 
+				</SPAN>				
+    			<P CLASS="ElementSpacer">&nbsp;</P>
   			  </TD>
  			 </TR>
 		 	 <TR VALIGN="TOP">
- 			 <TD VALIGN="TOP" WIDTH="12">
+ 			  <TD VALIGN="TOP" WIDTH="12">
   				&nbsp;
+  			  </TD>
+  			  <TD VALIGN="TOP" COLSPAN="2">
+  				<P CLASS="ElementSpacer">&nbsp;</P>
+	  	 	    
+	  	 	    <div id="divHidden" style="visibility: hidden; width: 0px; height: 0px">
+                    <input type=file id="headerFileInput">
+                </div>
+
+
+  	 			<SPAN CLASS="itemText" TITLE="Header file generated by the tool udm.exe.">
+ 				    <LABEL ID="AUT_ID5" FOR="HEADER_FILE">Header file:</LABEL>    			    
+	    		    <INPUT CLASS="itemTextTwoColumnLong" TYPE="text" ID="HEADER_FILE" TITLE="Header file generated by the tool udm.exe.">
+	    		    <input type=button value="Browse..." onclick="setFileName('HEADER_FILE', 'headerFileInput');">
+		    	</SPAN>
+
+  				<P CLASS="Spacer">&nbsp;</P>
+
+	  	 	    <div id="div7" style="visibility: hidden; width: 0px; height: 0px">
+                    <input type=file id="cppFileInput">
+                </div>
+	  	 			    
+  	 			<SPAN CLASS="itemText" TITLE="C++ file generated by the tool udm.exe.">
+ 				    <LABEL ID="LABEL3" FOR="CPP_FILE">C++ file:</LABEL>    			    
+	    		    <INPUT CLASS="itemTextTwoColumnLong" TYPE="text" ID="CPP_FILE" TITLE="C++ file generated by the tool udm.exe.">
+	    		    <input type=button value="Browse..." onclick="setFileName('CPP_FILE', 'cppFileInput');">
+		    	</SPAN>
+
   			  </TD>
   		  	  <TD VALIGN="TOP" WIDTH="12">
   				&nbsp;
@@ -294,6 +392,13 @@ tab_array[0] = Default;
 tab_array[1] = Basic;
 tab_array[2] = Settings;
 tab_array[3] = Advanced;
+
+
+function setFileName(textID, fileNameID)
+{  
+  document.all[fileNameID].click();
+  document.all[textID].value = document.all[fileNameID].value;
+}
 
 // This is an example of a function which initializes the page
 //

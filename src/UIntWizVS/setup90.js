@@ -166,11 +166,11 @@ function main()
 		return;
 	}
 
-	// Create GME folder
+	// Create UDM folder
 	var strDestGMEFolder = "";
 	try
 	{
-		strDestGMEFolder = FileSys.BuildPath(strDestFolder, "GME");
+		strDestGMEFolder = FileSys.BuildPath(strDestFolder, "UDM");
 		if(!FileSys.FolderExists(strDestGMEFolder))
 			FileSys.CreateFolder(strDestGMEFolder);
 		if(bDebug)
@@ -227,5 +227,5 @@ function main()
 		return;
 	}
 
-	WScript.Echo("GME Component Wizard successfully installed!");
+	WScript.Echo("UDM Interpreter Wizard successfully installed!");
 }

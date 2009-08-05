@@ -170,7 +170,7 @@ function main()
 	var strDestGMEFolder = "";
 	try
 	{
-		strDestGMEFolder = FileSys.BuildPath(strDestFolder, "GME");
+		strDestGMEFolder = FileSys.BuildPath(strDestFolder, "UDM");
 		if(!FileSys.FolderExists(strDestGMEFolder))
 			FileSys.CreateFolder(strDestGMEFolder);
 		if(bDebug)
@@ -223,9 +223,9 @@ function main()
 		var strError = "no info";
 		if(e.description.length != 0)
 			strError = e.description;
-		WScript.Echo("ERROR: Cannot read and write GME\\UDMInterpreterWizard.vsdir (" + strError + ")");
+		WScript.Echo("ERROR: Cannot read and write UDM\\UDMInterpreterWizard.vsdir (" + strError + ")");
 		return;
 	}
 
-	WScript.Echo("GME Component Wizard successfully installed!");
+	WScript.Echo("UDM Interpreter Wizard successfully installed!");
 }
