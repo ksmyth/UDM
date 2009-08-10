@@ -237,6 +237,15 @@
 		  			    <LABEL FOR="BON_ICON_SUPPORT" TITLE="Check this and customize the icon resource to be shown on the GME toolbar" ID="AUT_ID4" >Toolbar <U>i</U>con support</LABEL>
 	  	 			 </DIV>
 				</SPAN>
+ 
+                <P CLASS="ElementSpacer">&nbsp;</P>
+       			<SPAN CLASS="itemText">
+	  				 <INPUT CLASS="CheckBox" TYPE="checkbox" ID="USE_CONSOLE" ACCESSKEY="u" TITLE="Check this if you want to use the GME console in your application.">	  	 			 
+	  				 <DIV CLASS="itemTextCheckboxA" TITLE="Check this if you want to use the GME console in your application.">
+		  			    <LABEL FOR="USE_CONSOLE" TITLE="Check this if you want to use the GME console in your application." ID="LABEL1" ><U>U</U>se GME console</LABEL>
+	  	 			 </DIV>
+	  	 			 <P CLASS="ElementSpacer">&nbsp;</P>
+				</SPAN>
     							
   		  	  </TD>
   		  	  <TD VALIGN="TOP" WIDTH="12">
@@ -244,8 +253,27 @@
   		  	  </TD>
  		  	 </TR>
  			 <TR>
-  			  <TD VALIGN="TOP" HEIGHT="100%" COLSPAN="7">
+  			 <TD VALIGN="TOP" WIDTH="12">
   				&nbsp;
+  			  </TD>
+
+  			  <TD VALIGN="TOP" HEIGHT="100%" COLSPAN="7">
+  				<P CLASS="ElementSpacer">&nbsp;</P>
+  				<SPAN CLASS="itemText">Loading the metamodel:
+					 <P CLASS="Spacer">&nbsp;</P>
+	
+	  				 <INPUT TYPE="radio" CLASS="Radio" NAME="metaloading" ID="META_LOADING_STATIC" ACCESSKEY="l" TITLE="Meta will be linked to the interpreter.">
+	  	 			 <DIV CLASS="itemTextRadioB" TITLE="Meta will be linked to the interpreter." ID="DIV5" >
+		  			  <LABEL FOR="META_LOADING_STATIC" TITLE="Meta will be linked to the interpreter." ID="LABEL6" ><U>L</U>oad statically</LABEL>
+	  	 			 </DIV>
+	  				 <BR>
+	  
+	  			 	 <INPUT TYPE="radio" CLASS="Radio" NAME="metaloading" ID="META_LOADING_DYNAMIC" ACCESSKEY="o" TITLE="Meta will be loaded at runtime.">
+	  	 			 <DIV CLASS="itemTextRadioB" TITLE="Meta will be loaded at runtime." ID="DIV6" >
+		  			  <LABEL FOR="META_LOADING_DYNAMIC" TITLE="Meta will be loaded at runtime." ID="LABEL7" >L<U>o</U>ad dynamically</LABEL>
+	  	 			 </DIV>	  	 			  				  	 			 
+				</SPAN>				    			
+
   			  </TD>
  			 </TR>
 		 	</TABLE>

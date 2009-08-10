@@ -1,3 +1,11 @@
+UdmConfig.h
+UdmApp.cpp
+UdmApp.h
+string_utils.h
+Console.cpp
+Console.h
+Formatter.cpp
+Formatter.h
 RawComponent.cpp
 RawComponent.h
 CompIcon.ico
