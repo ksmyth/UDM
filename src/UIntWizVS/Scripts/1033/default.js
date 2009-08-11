@@ -138,100 +138,138 @@ function AddConfig(proj, strProjectName)
 {
 	try
 	{
-	// --------------------------- DEBUG SETTINGS --------------------------- //
-	
-	    // DEBUG GENERAL SETTINGS
-		var config = proj.Object.Configurations('Debug');
-		config.IntermediateDirectory = '$(ConfigurationName)';
-		config.OutputDirectory = '$(ConfigurationName)';
-		config.ConfigurationType = ConfigurationTypes.typeDynamicLibrary;
-        config.useOfMfc = useOfMfc.useMfcDynamic;
-        config.CharacterSet = charSet.charSetMBCS;
-        
-        // DEBUG CUSTOM BUILD SETTINGS
-        var CBTool = config.Tools('VCCustomBuildTool');
-        CBTool.Description = "Performing registration (requires elevated priviledges on Windows Vista)...";
-		CBTool.CommandLine = "regsvr32 /s /c \"$(TargetPath)\"\necho regsvr32 exec. time > \"$(OutDir)\\regsvr32.trg\"\n";
-		CBTool.Outputs = "$(OutDir)\\regsvr32.trg";
-		
-		// DEBUG MIDL SETTINGS
-		var MIDLTool = config.Tools('VCMIDLTool');
-		MIDLTool.PreprocessorDefinitions="_DEBUG";
-		MIDLTool.MkTypLibCompatible="false";
-		MIDLTool.ValidateParameters="true";
-		MIDLTool.TypeLibraryName = ".\\ComponentLib.tlb";
-		MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces";
-        
-        // DEBUG COMPILER SETTINGS
-		var CLTool = config.Tools('VCCLCompilerTool');
-		CLTool.Optimization = optimizeOption.optimizeDisabled;
-		CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common";
-		CLTool.PreprocessorDefinitions = "_DEBUG;WIN32;_WINDOWS;_USRDLL";
-		CLTool.BasicRuntimeChecks = basicRuntimeCheckOption.runtimeBasicCheckAll;
-		CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDebugDLL;
-        CLTool.WarningLevel = "3";
-		CLTool.DebugInformationFormat = debugOption.debugEditAndContinue;
+	    // --------------------------- DEBUG SETTINGS --------------------------- //
+    	
+	        // DEBUG GENERAL SETTINGS
+		    var config = proj.Object.Configurations('Debug');
+		    config.IntermediateDirectory = '$(ConfigurationName)';
+		    config.OutputDirectory = '$(ConfigurationName)';
+		    config.ConfigurationType = ConfigurationTypes.typeDynamicLibrary;
+            config.useOfMfc = useOfMfc.useMfcDynamic;
+            config.CharacterSet = charSet.charSetMBCS;
+            
+            // DEBUG CUSTOM BUILD SETTINGS
+            var CBTool = config.Tools('VCCustomBuildTool');
+            CBTool.Description = "Performing registration (requires elevated priviledges on Windows Vista)...";
+		    CBTool.CommandLine = "regsvr32 /s /c \"$(TargetPath)\"\necho regsvr32 exec. time > \"$(OutDir)\\regsvr32.trg\"\n";
+		    CBTool.Outputs = "$(OutDir)\\regsvr32.trg";
+    		
+		    // DEBUG MIDL SETTINGS
+		    var MIDLTool = config.Tools('VCMIDLTool');
+		    MIDLTool.PreprocessorDefinitions="_DEBUG";
+		    MIDLTool.MkTypLibCompatible="false";
+		    MIDLTool.ValidateParameters="true";
+		    MIDLTool.TypeLibraryName = ".\\ComponentLib.tlb";
+		    MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces";
+            
+            // DEBUG COMPILER SETTINGS
+		    var CLTool = config.Tools('VCCLCompilerTool');
+		    CLTool.Optimization = optimizeOption.optimizeDisabled;
+		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)\include";
+		    CLTool.PreprocessorDefinitions = "_DEBUG;WIN32;_WINDOWS;_USRDLL";
+		    CLTool.BasicRuntimeChecks = basicRuntimeCheckOption.runtimeBasicCheckAll;
+		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDebugDLL;
+            CLTool.WarningLevel = "3";
+		    CLTool.DebugInformationFormat = debugOption.debugEditAndContinue;
 
-        // DEBUG RESOURCE COMPILER SETTINGS
-		var RCTool = config.Tools('VCResourceCompilerTool');
-		RCTool.PreprocessorDefinitions = "_DEBUG";
-		RCTool.AdditionalIncludeDirectories = "$(IntDir)";
-		RCTool.Culture = enumResourceLangID.rcEnglishUS;
-		
-        // DEBUG LINKER SETTINGS
-		var LinkTool = config.Tools('VCLinkerTool');
-		LinkTool.LinkIncremental = linkIncrementalType.linkIncrementalYes;
-		LinkTool.GenerateDebugInformation = "true";
-		LinkTool.SubSystem = subSystemOption.subSystemWindows;
-		LinkTool.TargetMachine = machineTypeOption.machineX86;
-		LinkTool.ModuleDefinitionFile = 'Component.def';
-		
-	// --------------------------- RELEASE SETTINGS --------------------------- //
-        
-        // RELEASE GENERAL SETTINGS
-		config = proj.Object.Configurations('Release');
-		config.IntermediateDirectory = '$(ConfigurationName)';
-		config.OutputDirectory = '$(ConfigurationName)';
-	    config.ConfigurationType = ConfigurationTypes.typeDynamicLibrary;
-	    config.useOfMfc  = useOfMfc.useMfcDynamic;
-	    config.CharacterSet = charSet.charSetMBCS;
-	    
-	    // RELEASE CUSTOM BUILD SETTINGS
-	    var CBTool = config.Tools('VCCustomBuildTool');
-        CBTool.Description = "Performing registration (requires elevated priviledges on Windows Vista)...";
-		CBTool.CommandLine = "regsvr32 /s /c \"$(TargetPath)\"\necho regsvr32 exec. time > \"$(OutDir)\\regsvr32.trg\"\n";
-		CBTool.Outputs = "$(OutDir)\\regsvr32.trg";
+            // DEBUG RESOURCE COMPILER SETTINGS
+		    var RCTool = config.Tools('VCResourceCompilerTool');
+		    RCTool.PreprocessorDefinitions = "_DEBUG";
+		    RCTool.AdditionalIncludeDirectories = "$(IntDir)";
+		    RCTool.Culture = enumResourceLangID.rcEnglishUS;
+    		
+            // DEBUG LINKER SETTINGS
+		    var LinkTool = config.Tools('VCLinkerTool');
+		    LinkTool.LinkIncremental = linkIncrementalType.linkIncrementalYes;
+		    LinkTool.GenerateDebugInformation = "true";
+		    LinkTool.SubSystem = subSystemOption.subSystemWindows;
+		    LinkTool.TargetMachine = machineTypeOption.machineX86;
+		    LinkTool.ModuleDefinitionFile = 'Component.def';
+		    
+		    if(wizard.FindSymbol("UDM_LINKING_STATIC"))
+            {
+                   // DEBUG UDM SETTINGS
+                  LinkTool.AdditionalDependencies = "UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib";
+                  LinkTool.AdditionalLibraryDirectories += ";.;$(UDM_PATH)\lib";
+                  LinkTool.OutputFile = "$(OutDir)\$(ProjectName)d.dll"
+            }
+            
+            
+            if(wizard.FindSymbol("UDM_LINKING_DYNAMIC"))
+            {
+                   CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING;_DEBUG;WIN32;_WINDOWS;_USRDLL";
+                   LinkTool.AdditionalDependencies += ";UdmDlld.lib";
+                   LinkTool.AdditionalLibraryDirectories += ";.;$(UDM_PATH)\lib";
+                   LinkTool.OutputFile = "$(OutDir)\$(ProjectName)d.dll"                   
+            }	    
 
-        // RELEASE MIDL SETTINGS
-        var MIDLTool = config.Tools('VCMIDLTool');
-        MIDLTool.PreprocessorDefinitions = "NDEBUG";
-		MIDLTool.MkTypLibCompatible = "false";
-		MIDLTool.ValidateParameters = "true";
-		MIDLTool.TypeLibraryName = ".\\ComponentLib.tlb";
-		MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces";
-		
-		// RELEASE COMPILER SETTINGS
-		var CLTool = config.Tools('VCCLCompilerTool');
-		CLTool.Optimization = optimizeOption.optimizeMaxSpeed;
-		CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common";
-		CLTool.PreprocessorDefinitions = "NDEBUG;WIN32;_WINDOWS;_USRDLL";
-		CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDLL;
-		CLTool.WarningLevel = "3";
-		CLTool.DebugInformationFormat = debugOption.debugEnabled;
-		
-		// RELEASE RESOURCE COMPILER SETTINGS
-		var RCTool = config.Tools('VCResourceCompilerTool');
-		RCTool.PreprocessorDefinitions = "NDEBUG";
-		RCTool.AdditionalIncludeDirectories = "$(IntDir)";
-		RCTool.Culture = enumResourceLangID.rcEnglishUS;
+    		
+	    // --------------------------- RELEASE SETTINGS --------------------------- //
+            
+            // RELEASE GENERAL SETTINGS
+		    config = proj.Object.Configurations('Release');
+		    config.IntermediateDirectory = '$(ConfigurationName)';
+		    config.OutputDirectory = '$(ConfigurationName)';
+	        config.ConfigurationType = ConfigurationTypes.typeDynamicLibrary;
+	        config.useOfMfc  = useOfMfc.useMfcDynamic;
+	        config.CharacterSet = charSet.charSetMBCS;
+    	    
+	        // RELEASE CUSTOM BUILD SETTINGS
+	        var CBTool = config.Tools('VCCustomBuildTool');
+            CBTool.Description = "Performing registration (requires elevated priviledges on Windows Vista)...";
+		    CBTool.CommandLine = "regsvr32 /s /c \"$(TargetPath)\"\necho regsvr32 exec. time > \"$(OutDir)\\regsvr32.trg\"\n";
+		    CBTool.Outputs = "$(OutDir)\\regsvr32.trg";
 
-        // RELASE LINKER SETTINGS
-		var LinkTool = config.Tools('VCLinkerTool');
-		LinkTool.LinkIncremental = linkIncrementalType.linkIncrementalNo;
-		LinkTool.GenerateDebugInformation = "true";
-		LinkTool.SubSystem = subSystemOption.subSystemWindows;
-		LinkTool.TargetMachine = machineTypeOption.machineX86;
-		LinkTool.ModuleDefinitionFile = 'Component.def';
+            // RELEASE MIDL SETTINGS
+            var MIDLTool = config.Tools('VCMIDLTool');
+            MIDLTool.PreprocessorDefinitions = "NDEBUG";
+		    MIDLTool.MkTypLibCompatible = "false";
+		    MIDLTool.ValidateParameters = "true";
+		    MIDLTool.TypeLibraryName = ".\\ComponentLib.tlb";
+		    MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces";
+    		
+		    // RELEASE COMPILER SETTINGS
+		    var CLTool = config.Tools('VCCLCompilerTool');
+		    CLTool.Optimization = optimizeOption.optimizeMaxSpeed;
+		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)\include";
+		    CLTool.PreprocessorDefinitions = "NDEBUG;WIN32;_WINDOWS;_USRDLL";
+		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDLL;
+		    CLTool.WarningLevel = "3";
+		    CLTool.DebugInformationFormat = debugOption.debugEnabled;
+    		
+		    // RELEASE RESOURCE COMPILER SETTINGS
+		    var RCTool = config.Tools('VCResourceCompilerTool');
+		    RCTool.PreprocessorDefinitions = "NDEBUG";
+		    RCTool.AdditionalIncludeDirectories = "$(IntDir)";
+		    RCTool.Culture = enumResourceLangID.rcEnglishUS;
+
+            // RELASE LINKER SETTINGS
+		    var LinkTool = config.Tools('VCLinkerTool');
+		    LinkTool.LinkIncremental = linkIncrementalType.linkIncrementalNo;
+		    LinkTool.GenerateDebugInformation = "true";
+		    LinkTool.SubSystem = subSystemOption.subSystemWindows;
+		    LinkTool.TargetMachine = machineTypeOption.machineX86;
+		    LinkTool.ModuleDefinitionFile = 'Component.def';
+
+            if(wizard.FindSymbol("UDM_LINKING_STATIC"))
+            {
+                   // RELEASE UDM SETTINGS
+                  LinkTool.AdditionalDependencies = "Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib Xerces-c_2.lib zlib.lib";
+                  LinkTool.AdditionalLibraryDirectories += ";.;$(UDM_PATH)\lib";
+                  LinkTool.OutputFile = "$(OutDir)\$(ProjectName).dll"
+            }
+            
+            
+            if(wizard.FindSymbol("UDM_LINKING_DYNAMIC"))
+            {
+                   // RELEASE UDM SETTINGS
+                   CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING;_DEBUG;WIN32;_WINDOWS;_USRDLL";
+                   LinkTool.AdditionalDependencies += ";UdmDll.lib";
+                   LinkTool.AdditionalLibraryDirectories += ";.;$(UDM_PATH)\lib";
+                   LinkTool.OutputFile = "$(OutDir)\$(ProjectName).dll"                   
+            }	    
+ 
+
 	}
 	catch(e)
 	{
