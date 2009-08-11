@@ -3,10 +3,10 @@ UdmApp.cpp
 UdmApp.h
 string_utils.h
 [!if USE_CONSOLE]
-Console.cpp
-Console.h
-Formatter.cpp
-Formatter.h
+UdmConsole.cpp
+UdmConsole.h
+UdmFormatter.cpp
+UdmFormatter.h
 [!endif]
 RawComponent.cpp
 RawComponent.h

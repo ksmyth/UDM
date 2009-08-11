@@ -5,9 +5,9 @@ ComponentDll.cpp
 ComponentLib.idl
 ComponentObj.h
 ComponentObj.cpp
-Console.h
-Console.cpp
-Formatter.h
-Formatter.cpp
+UdmConsole.h
+UdmConsole.cpp
+UdmFormatter.h
+UdmFormatter.cpp
 GMECOM.H
 targetver.h
