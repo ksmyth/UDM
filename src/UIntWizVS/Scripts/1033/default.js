@@ -17,6 +17,17 @@ function OnFinish(selProj, selObj)
 		AddFilesToCustomProj(selProj, strProjectName, strProjectPath, InfFile);
 		InfFile = CreateCustomInfFile('Common.inf');
 		AddCommonFilesToCustomProj(selProj, InfFile);
+		
+		var headerPath = wizard.FindSymbol('HEADER_FILE');
+		AddMetaFilesToCustomProj(selProj, strProjectName, strProjectPath,headerPath );
+		
+		var cppPath = wizard.FindSymbol('CPP_FILE');
+		if(cppPath!='')
+		{
+		    AddMetaFilesToCustomProj(selProj, strProjectName, strProjectPath,cppPath );
+		}
+		
+		
 		PchSettings(selProj);
 		InfFile.Delete();
 
@@ -44,8 +55,16 @@ function CreateCoClassUUIDExploded()
 
 function CreateNamespaceAndHeaderName()
 {
+
     
     var headerPath = wizard.FindSymbol('HEADER_FILE');
+    if(headerPath == '')
+    {
+        wizard.AddSymbol('VALID_HEADER_TO_INCLUDE', false);
+        return;
+
+    }
+ 
     var fileNamePieces = headerPath.split('\\');
     if(fileNamePieces.length<1)
     {
@@ -62,6 +81,7 @@ function CreateNamespaceAndHeaderName()
     wizard.AddSymbol('VALID_HEADER_TO_INCLUDE', true);
     
 }
+
 
 
 function CreateCustomProject(strProjectName, strProjectPath)
@@ -341,6 +361,52 @@ function GetTargetName(strName, strProjectName)
 		throw e;
 	}
 }
+
+
+function AddMetaFilesToCustomProj(proj, strProjectName, strProjectPath, strPath)
+{
+
+    
+    if(strPath=='') 
+    {   
+        return;
+    }
+        
+    var fileNamePos = strPath.lastIndexOf("\\");
+    var fileNameNoPath = '';
+  
+
+    if(fileNamePos == -1)
+    {
+        fileNameNoPath = strPath;
+    }
+    else
+    {         
+        fileNameNoPath =  strPath.substr(fileNamePos+1);
+    }
+
+    
+    var strFile = strProjectPath + '\\' + fileNameNoPath;
+    if(strPath!= fileNameNoPath)
+    {
+        	 wizard.OkCancelAlert(strFile);
+
+	    try
+	    {
+		    var projItems = proj.ProjectItems
+		    wizard.RenderTemplate(strPath, strFile, true);
+	    }
+	    catch(e)
+	    {
+	            // Might not be present
+	    }
+	 }
+
+	 wizard.OkCancelAlert('fuck');
+	 proj.Object.AddFile(strFile);
+}
+
+
 
 function AddFilesToCustomProj(proj, strProjectName, strProjectPath, InfFile)
 {
