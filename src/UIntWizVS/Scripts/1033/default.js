@@ -165,7 +165,7 @@ function AddConfig(proj, strProjectName)
             // DEBUG COMPILER SETTINGS
 		    var CLTool = config.Tools('VCCLCompilerTool');
 		    CLTool.Optimization = optimizeOption.optimizeDisabled;
-		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)\include";
+		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include";
 		    CLTool.PreprocessorDefinitions = "_DEBUG;WIN32;_WINDOWS;_USRDLL";
 		    CLTool.BasicRuntimeChecks = basicRuntimeCheckOption.runtimeBasicCheckAll;
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDebugDLL;
@@ -190,17 +190,17 @@ function AddConfig(proj, strProjectName)
             {
                    // DEBUG UDM SETTINGS
                   LinkTool.AdditionalDependencies = "UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib";
-                  LinkTool.AdditionalLibraryDirectories += ";.;$(UDM_PATH)\lib";
-                  LinkTool.OutputFile = "$(OutDir)\$(ProjectName)d.dll"
+                  LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
+                  LinkTool.OutputFile = "$(OutDir)/$(ProjectName)d.dll"
             }
             
             
             if(wizard.FindSymbol("UDM_LINKING_DYNAMIC"))
             {
                    CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING;_DEBUG;WIN32;_WINDOWS;_USRDLL";
-                   LinkTool.AdditionalDependencies += ";UdmDlld.lib";
-                   LinkTool.AdditionalLibraryDirectories += ";.;$(UDM_PATH)\lib";
-                   LinkTool.OutputFile = "$(OutDir)\$(ProjectName)d.dll"                   
+                   LinkTool.AdditionalDependencies = "UdmDlld.lib";
+                   LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
+                   LinkTool.OutputFile = "$(OutDir)/$(ProjectName)d.dll"                   
             }	    
 
     		
@@ -231,7 +231,7 @@ function AddConfig(proj, strProjectName)
 		    // RELEASE COMPILER SETTINGS
 		    var CLTool = config.Tools('VCCLCompilerTool');
 		    CLTool.Optimization = optimizeOption.optimizeMaxSpeed;
-		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)\include";
+		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include";
 		    CLTool.PreprocessorDefinitions = "NDEBUG;WIN32;_WINDOWS;_USRDLL";
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDLL;
 		    CLTool.WarningLevel = "3";
@@ -255,8 +255,8 @@ function AddConfig(proj, strProjectName)
             {
                    // RELEASE UDM SETTINGS
                   LinkTool.AdditionalDependencies = "Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib Xerces-c_2.lib zlib.lib";
-                  LinkTool.AdditionalLibraryDirectories += ";.;$(UDM_PATH)\lib";
-                  LinkTool.OutputFile = "$(OutDir)\$(ProjectName).dll"
+                  LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
+                  LinkTool.OutputFile = "$(OutDir)/$(ProjectName).dll"
             }
             
             
@@ -264,9 +264,9 @@ function AddConfig(proj, strProjectName)
             {
                    // RELEASE UDM SETTINGS
                    CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING;_DEBUG;WIN32;_WINDOWS;_USRDLL";
-                   LinkTool.AdditionalDependencies += ";UdmDll.lib";
-                   LinkTool.AdditionalLibraryDirectories += ";.;$(UDM_PATH)\lib";
-                   LinkTool.OutputFile = "$(OutDir)\$(ProjectName).dll"                   
+                   LinkTool.AdditionalDependencies = "UdmDll.lib";
+                   LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
+                   LinkTool.OutputFile = "$(OutDir)/$(ProjectName).dll"                   
             }	    
  
 

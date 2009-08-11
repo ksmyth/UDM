@@ -33,7 +33,7 @@ using namespace std;
 #include "UdmUtil.h"
 
 #include "UdmApp.h"
-
+#include "UdmConfig.h"
 
 // this method is called after all the generic initialization is done
 // this should be empty, unless application-specific initialization is needed
@@ -129,10 +129,10 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 			UdmGme::GmeDataNetwork dngBackend(udmDataDiagram);
 
 #else
-		using namespace META_NAMESPACE1;
+		using namespace META_NAMESPACE;
 
 		// Loading the project
-		UdmGme::GmeDataNetwork dngBackend(META_NAMESPACE1::diagram);
+		UdmGme::GmeDataNetwork dngBackend(META_NAMESPACE::diagram);
 
 #endif
 		try
@@ -166,7 +166,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 	#ifdef _DYNAMIC_META
 			UdmStatic::StaticDataNetwork dnsCacheBackend(udmDataDiagram);
 	#else
-			UdmStatic::StaticDataNetwork dnsCacheBackend(META_NAMESPACE1::diagram);
+			UdmStatic::StaticDataNetwork dnsCacheBackend(META_NAMESPACE::diagram);
 	#endif
 
 			const Uml::Class & safeType = Uml::SafeTypeContainer::GetSafeType(dngBackend.GetRootObject().type());

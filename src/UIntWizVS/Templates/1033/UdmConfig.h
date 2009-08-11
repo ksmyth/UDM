@@ -12,9 +12,7 @@
 #define _USE_CONSOLE
 [!endif]
 
-[!if META_LOADING_STATIC]
-#define META_NAMESPACE
-[!endif]
+
 
 [!if META_LOADING_DYNAMIC && DYNAMIC_META_XML_BACKEND]
 #define _DYNAMIC_META
