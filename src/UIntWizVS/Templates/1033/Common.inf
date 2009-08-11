@@ -3,11 +3,5 @@ ComHelp.cpp
 ComponentDll.h
 ComponentDll.cpp
 ComponentLib.idl
-ComponentObj.h
-ComponentObj.cpp
-UdmConsole.h
-UdmConsole.cpp
-UdmFormatter.h
-UdmFormatter.cpp
 GMECOM.H
 targetver.h
