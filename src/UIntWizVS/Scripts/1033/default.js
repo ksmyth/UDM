@@ -389,7 +389,7 @@ function AddMetaFilesToCustomProj(proj, strProjectName, strProjectPath, strPath)
     var strFile = strProjectPath + '\\' + fileNameNoPath;
     if(strPath!= fileNameNoPath)
     {
-        	 wizard.OkCancelAlert(strFile);
+        
 
 	    try
 	    {
@@ -402,7 +402,6 @@ function AddMetaFilesToCustomProj(proj, strProjectName, strProjectPath, strPath)
 	    }
 	 }
 
-	 wizard.OkCancelAlert('fuck');
 	 proj.Object.AddFile(strFile);
 }
 
