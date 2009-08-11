@@ -8,9 +8,13 @@
 
 #include <ComHelp.h>
 #include <GMECOM.h>
-#include <Console.h>
 #include "ComponentConfig.h"
 #include "RawComponent.h"
+
+[!if USE_CONSOLE]
+// Console
+#include "Console.h"
+[!endif]
 
 
 // Udm includes
@@ -29,7 +33,6 @@ using namespace std;
 #include "UdmUtil.h"
 
 #include "UdmApp.h"
-#include "Console.h"
 
 
 // this method is called after all the generic initialization is done
@@ -73,9 +76,10 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 	
 	try
 	{
-	  // Setting up the console
+[!if USE_CONSOLE]	  
+		// Setting up the console
 		GMEConsole::Console::setupConsole(ccpProject);
-
+[!endif]
 
 	  if(interactive)
 	  {
@@ -243,19 +247,14 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 			// Close GME Backend (we may close it twice, but GmeDataNetwork handles it)
 			dngBackend.CloseNoUpdate();
 
+[!if USE_CONSOLE]
 			GMEConsole::Console::Error::writeLine(exc.what());
+[!else]
+			AfxMessageBox(exc.what());
+[!endif]
 			return S_FALSE;
 		}
 	  }
-	}
-	catch(udm_exception &exc)
-	{
-		CUdmApp::msgq.PushMessage(CMessage(exc.what(), MESSAGE_ERROR));
-		string output;
-		output =  CUdmApp::msgq.GetAllMessages();
-		output = CUdmApp::msgq.GetSummary();
-		GMEConsole::Console::Out::writeLine(output);
-		return S_FALSE;
 	}
 	catch(...)
 	{

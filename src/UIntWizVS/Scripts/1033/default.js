@@ -7,7 +7,8 @@ function OnFinish(selProj, selObj)
 		var strProjectName = wizard.FindSymbol('PROJECT_NAME');
 		
 		CreateCoClassUUIDExploded();
-
+        CreateNamespaceAndHeaderName();
+        
 		selProj = CreateCustomProject(strProjectName, strProjectPath);
 		AddConfig(selProj, strProjectName);
 		AddFilters(selProj);
@@ -40,6 +41,28 @@ function CreateCoClassUUIDExploded()
 	    wizard.AddSymbol('COCLASS_UUID_EXPLODED' + (i+1), exploded[i]);
 	}	
 }
+
+function CreateNamespaceAndHeaderName()
+{
+    
+    var headerPath = wizard.FindSymbol('HEADER_FILE');
+    var fileNamePieces = headerPath.split('\\');
+    if(fileNamePieces.length<1)
+    {
+        wizard.AddSymbol('VALID_HEADER_TO_INCLUDE', false);
+        return;
+    }
+    var fileName = fileNamePieces[fileNamePieces.length-1];    
+    wizard.AddSymbol('HEADER_TO_INCLUDE',fileName);
+    
+    var fileNameNoExt = fileName.split('.')[0];
+    
+    wizard.AddSymbol('NAMESPACE_NAME',fileNameNoExt);
+    
+    wizard.AddSymbol('VALID_HEADER_TO_INCLUDE', true);
+    
+}
+
 
 function CreateCustomProject(strProjectName, strProjectPath)
 {

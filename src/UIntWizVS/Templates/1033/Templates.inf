@@ -2,10 +2,12 @@ UdmConfig.h
 UdmApp.cpp
 UdmApp.h
 string_utils.h
+[!if USE_CONSOLE]
 Console.cpp
 Console.h
 Formatter.cpp
 Formatter.h
+[!endif]
 RawComponent.cpp
 RawComponent.h
 CompIcon.ico
