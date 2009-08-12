@@ -3160,8 +3160,8 @@ bbreak:			;
 	}
 	
 	SmartBSTR createGMEconnstr(string sn) {
-		if(!strnicmp(sn.c_str(),"GME:", 4))	sn.erase(0,4);
-		if(sn[3] != '=' && !strnicmp(sn.c_str() + sn.size() - 4 , ".mga",4)) {
+		if(!_strnicmp(sn.c_str(),"GME:", 4))	sn.erase(0,4);
+		if(sn[3] != '=' && !_strnicmp(sn.c_str() + sn.size() - 4 , ".mga",4)) {
 			sn.insert(0, "MGA=");
 		}
 		return SmartBSTR(sn.c_str());

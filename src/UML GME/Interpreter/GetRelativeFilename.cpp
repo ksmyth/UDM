@@ -43,7 +43,7 @@ char* GetRelativeFilename(const char *currentDirectory,const char *absoluteFilen
 	if(currentDirectory[0] != absoluteFilename[0])
 	{
 		// not on the same drive, so only absolute filename will do
-		strcpy(relativeFilename, absoluteFilename);
+		strcpy_s(relativeFilename, absoluteFilename);
 		return relativeFilename;
 	}
 
@@ -67,7 +67,7 @@ char* GetRelativeFilename(const char *currentDirectory,const char *absoluteFilen
 			i++;
 		}
 
-		strcpy(relativeFilename, &absoluteFilename[i]);
+		strcpy_s(relativeFilename, &absoluteFilename[i]);
 		return relativeFilename;
 	}
 

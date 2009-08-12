@@ -15,6 +15,7 @@
 
 // This name will appear in the popup window for interpreter selection.
 #define COMPONENT_NAME "UMLOCLExpressionChecker"
+#define TOOLTIP_TEXT "UMLOCLExpressionChecker"
 
 
 // This #define determines the interpreter type:
