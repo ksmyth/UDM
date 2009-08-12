@@ -43,15 +43,15 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
 				AdditionalOptions="/server none /client none /I &quot;$(GME_ROOT)\Interfaces&quot;"
+				PreprocessorDefinitions="_DEBUG"
 				AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\Interpreter"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;;..\..\..\..\..\..\include;&quot;$(GME_ROOT)\sdk\bon\common&quot;"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="true"
@@ -145,8 +145,8 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
 				AdditionalOptions="/server none /client none /I &quot;$(GME_ROOT)\Interfaces&quot;"
+				PreprocessorDefinitions="NDEBUG"
 				AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\Interpreter"
 			/>
 			<Tool
@@ -154,7 +154,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;;..\..\..\..\..\..\include;&quot;$(GME_ROOT)\sdk\bon\common&quot;"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -228,11 +228,19 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\BONComponent.cpp"
 				>
 			</File>
 			<File
 				RelativePath="$(GME_ROOT)\sdk\bon\common\Builder.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.cpp"
 				>
 			</File>
 			<File
@@ -306,23 +314,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\GetRelativeFilename.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\int_exception.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.cpp"
 				>
 			</File>
 			<File
@@ -362,17 +358,29 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\BONComponent.h"
 				>
 			</File>
 			<File
 				RelativePath="$(GME_ROOT)\sdk\bon\common\Builder.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.h"
 				>
 			</File>
 			<File
@@ -401,14 +409,6 @@
 			</File>
 			<File
 				RelativePath="$(GME_ROOT)\sdk\bon\common\GMECOM.H"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.h"
 				>
 			</File>
 			<File

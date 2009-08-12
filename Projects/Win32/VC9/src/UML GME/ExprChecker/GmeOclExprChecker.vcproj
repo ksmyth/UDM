@@ -50,7 +50,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;;&quot;..\..\..\..\..\..\src\UML GME\ExprChecker&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\include;&quot;$(GME_ROOT)\sdk\bon\common&quot;"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="true"
@@ -151,7 +151,7 @@
 				Optimization="1"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;$(OutDir)\..\Gen\src\UML GME\Interpreter&quot;;&quot;..\..\..\..\..\..\src\UML GME\ExprChecker&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\include;&quot;$(GME_ROOT)\sdk\bon\common&quot;"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -224,7 +224,11 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.cpp"
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.cpp"
 				>
 			</File>
 			<File
@@ -245,14 +249,6 @@
 			</File>
 			<File
 				RelativePath="$(GME_ROOT)\sdk\bon\common\Formatter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.cpp"
 				>
 			</File>
 			<File
@@ -306,6 +302,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\StdAfx.cpp"
 				>
 				<FileConfiguration
@@ -349,7 +349,11 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.h"
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.h"
 				>
 			</File>
 			<File
@@ -357,11 +361,11 @@
 				>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentDll.h"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\ComponentConfig.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\ComponentConfig.h"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\ComponentDll.h"
 				>
 			</File>
 			<File
@@ -378,14 +382,6 @@
 			</File>
 			<File
 				RelativePath="$(GME_ROOT)\sdk\bon\common\GMECOM.H"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.h"
 				>
 			</File>
 			<File
@@ -414,6 +410,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\..\Build\Win32\VC9\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.h"
 				>
 			</File>
 			<File
@@ -446,11 +446,11 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\compicon.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\compicon.ico"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico"
 				>
 			</File>
 			<File
