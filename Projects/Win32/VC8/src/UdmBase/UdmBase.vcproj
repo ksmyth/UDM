@@ -44,7 +44,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
