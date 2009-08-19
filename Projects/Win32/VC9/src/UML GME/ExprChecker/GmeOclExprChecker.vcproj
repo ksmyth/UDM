@@ -252,6 +252,10 @@
 				>
 			</File>
 			<File
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Exceptions.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\GMECommon.cpp"
 				>
 			</File>

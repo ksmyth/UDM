@@ -229,6 +229,10 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Exceptions.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.cpp"
 				>
 			</File>
