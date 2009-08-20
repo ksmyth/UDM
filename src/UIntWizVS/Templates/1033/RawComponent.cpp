@@ -96,7 +96,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 			Uml::Diagram theUmlDiagram;
 
 			// Opening the XML meta of the project
-			ddnMeta.OpenExisting(config.metaPath,"uml.dtd", Udm::CHANGES_LOST_DEFAULT);
+			ddnMeta.OpenExisting(META_PATH,"uml.dtd", Udm::CHANGES_LOST_DEFAULT);
 
 			// Casting the DataNetwork to diagram
 			theUmlDiagram = Uml::Diagram::Cast(ddnMeta.GetRootObject());
@@ -108,11 +108,11 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 
 	#elif defined _DYNAMIC_META_STATIC
 			// Loading the meta for the project
-			UdmStatic::StaticDataNetwork  dnsMeta(Uml::diagram);
+			Udm::SmartDataNetwork  dnsMeta(Uml::diagram);
 			Uml::Diagram theUmlDiagram;
 
 			// Opening the static meta of the project
-			dnsMeta.OpenExisting(config.metaPath, "", Udm::CHANGES_LOST_DEFAULT);
+			dnsMeta.OpenExisting(META_PATH, "", Udm::CHANGES_LOST_DEFAULT);
 
 			// Casting the DataNetwork to diagram
 			theUmlDiagram = Uml::Diagram::Cast(dnsMeta.GetRootObject());
@@ -164,20 +164,21 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 #ifdef _ACCESS_MEMORY
 			// Creating Cache
 	#ifdef _DYNAMIC_META
-			UdmStatic::StaticDataNetwork dnsCacheBackend(udmDataDiagram);
+			Udm::SmartDataNetwork dnsCacheBackend(udmDataDiagram);
 	#else
-			UdmStatic::StaticDataNetwork dnsCacheBackend(META_NAMESPACE::diagram);
+			Udm::SmartDataNetwork dnsCacheBackend(META_NAMESPACE::diagram);
 	#endif
 
 			const Uml::Class & safeType = Uml::SafeTypeContainer::GetSafeType(dngBackend.GetRootObject().type());
 
-			dnsCacheBackend.CreateNew("","",safeType, Udm::CHANGES_LOST_DEFAULT);
+			dnsCacheBackend.CreateNew("tmp.mem","",safeType, Udm::CHANGES_LOST_DEFAULT);
 
-			Udm::Object nullObject(&Udm::__null);
+			Udm::Object nullObject(&Udm::_null);
 			UdmUtil::copy_assoc_map copyAssocMap;
 			copyAssocMap[currentObject]=nullObject; // currentObject may be null object
 
-			for(set<Udm::Object>::iterator p_CurrSelObject=selectedObjects.begin();
+			set<Udm::Object>::iterator p_CurrSelObject;
+			for(p_CurrSelObject=selectedObjects.begin();
 				p_CurrSelObject!=selectedObjects.end();p_CurrSelObject++)
 			{
 					pair<Udm::Object const, Udm::Object> item(*p_CurrSelObject, nullObject);

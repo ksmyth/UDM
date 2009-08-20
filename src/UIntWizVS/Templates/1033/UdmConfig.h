@@ -1,7 +1,7 @@
 #ifndef UDM_CONFIG_H
 #define UDM_CONFIG_H
 
-#include<string> // STL
+#include <string> // STL
 
 
 [!if DYNAMIC_META_XML_BACKEND && META_LOADING_DYNAMIC || USE_XML_BACKEND]
@@ -22,6 +22,7 @@
 [!if META_LOADING_DYNAMIC && DYNAMIC_META_STATIC_DATA_NETWORK]
 #define _DYNAMIC_META
 #define _DYNAMIC_META_STATIC
+#define META_PATH "[!output VALID_META_PATH]"
 [!endif]
 
 [!if STATIC_UDM_ACCESS]

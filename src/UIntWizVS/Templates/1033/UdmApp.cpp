@@ -106,20 +106,26 @@ void CUdmApp::UdmMain(
 	AfxMessageBox(rootObjectName.c_str());
 
 	// Displaying the focus object
-	string focusObjectName("Focus Object Name: ");
-	focusObjectName+=ExtractName(focusObject);
-	AfxMessageBox(focusObjectName.c_str());
+	if(focusObject!=&Udm::_null)
+	{
+		string focusObjectName("Focus Object Name: ");
+		focusObjectName+=ExtractName(focusObject);
+		AfxMessageBox(focusObjectName.c_str());
+	}
 
 	// Displaying selected objects
-	string selObjNames("Selected Objects:\r\n");
-	// Iterate set
-	for(set<Udm::Object>::iterator i=selectedObjects.begin();
-													i!=selectedObjects.end();i++)
+	if(!selectedObjects.empty())
 	{
-		selObjNames+=ExtractName(*i);
-		selObjNames+="\r\n";
+		string selObjNames("Selected Objects:\r\n");
+		// Iterate set
+		for(set<Udm::Object>::iterator i=selectedObjects.begin();
+														i!=selectedObjects.end();i++)
+		{
+			selObjNames+=ExtractName(*i);
+			selObjNames+="\r\n";
+		}
+		AfxMessageBox(selObjNames.c_str());	
 	}
-	AfxMessageBox(selObjNames.c_str());	
 #endif
 /****************************** Demo Code End *************************/
 													

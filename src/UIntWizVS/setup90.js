@@ -227,5 +227,5 @@ function main()
 		return;
 	}
 
-	WScript.Echo("UDM Interpreter Wizard successfully installed!");
+//	WScript.Echo("UDM Interpreter Wizard successfully installed!");
 }

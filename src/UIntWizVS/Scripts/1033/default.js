@@ -8,6 +8,7 @@ function OnFinish(selProj, selObj)
 		
 		CreateCoClassUUIDExploded();
         CreateNamespaceAndHeaderName();
+        CreateDynamicLoadingMetaPath();
         
 		selProj = CreateCustomProject(strProjectName, strProjectPath);
 		AddConfig(selProj, strProjectName);
@@ -54,9 +55,7 @@ function CreateCoClassUUIDExploded()
 }
 
 function CreateNamespaceAndHeaderName()
-{
-
-    
+{  
     var headerPath = wizard.FindSymbol('HEADER_FILE');
     if(headerPath == '')
     {
@@ -82,7 +81,26 @@ function CreateNamespaceAndHeaderName()
     
 }
 
+function CreateDynamicLoadingMetaPath() 
+{
+    var xmlPath = wizard.FindSymbol('DYNAMIC_META_BACKEND_PATH');
+    if (xmlPath == '') {
+        wizard.AddSymbol('VALID_META_PATH', false);
+        return;
+    }
 
+    var fileNamePieces = xmlPath.split('\\');
+    if (fileNamePieces.length < 1) {
+        wizard.AddSymbol('VALID_META_PATH', false);
+        return;
+    }
+
+    var valid_path = fileNamePieces[0];
+    for (var i = 1; i < fileNamePieces.length; i++) {
+        valid_path = valid_path + '\\\\' + fileNamePieces[i];
+    }
+    wizard.AddSymbol('VALID_META_PATH', valid_path);	
+}
 
 function CreateCustomProject(strProjectName, strProjectPath)
 {
@@ -189,6 +207,8 @@ function AddConfig(proj, strProjectName)
 		    CLTool.PreprocessorDefinitions = "_DEBUG;WIN32;_WINDOWS;_USRDLL";
 		    CLTool.BasicRuntimeChecks = basicRuntimeCheckOption.runtimeBasicCheckAll;
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDebugDLL;
+		    CLTool.TreatWChar_tAsBuiltInType = "true";
+		    CLTool.UsePrecompiledHeader = "0";
             CLTool.WarningLevel = "3";
 		    CLTool.DebugInformationFormat = debugOption.debugEditAndContinue;
 
@@ -254,6 +274,8 @@ function AddConfig(proj, strProjectName)
 		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include";
 		    CLTool.PreprocessorDefinitions = "NDEBUG;WIN32;_WINDOWS;_USRDLL";
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDLL;
+		    CLTool.TreatWChar_tAsBuiltInType = "true";
+		    CLTool.UsePrecompiledHeader = "0";
 		    CLTool.WarningLevel = "3";
 		    CLTool.DebugInformationFormat = debugOption.debugEnabled;
     		
@@ -299,7 +321,8 @@ function AddConfig(proj, strProjectName)
 
 function PchSettings(proj)
 {
-	SetCommonPchSettings(proj);
+    //	SetCommonPchSettings(proj);
+    SetNoPchSettings(proj);
 }
 
 function DelFile(fso, strWizTempFile)
