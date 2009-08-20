@@ -12,25 +12,28 @@ Requirements:
 
 Step-by-step guide:
 -------------------------
-	1.Download the UDM sources from the VSS project
-		$/MoBIESTransition/UDM_ns
-	of  the Mobies VSS database:
-		\\Atlantis\Project\Mobies\VSS\srcsafe.ini
+	1. Download the UDM sources from the SVN repository:
+		https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/
 
 	2. Get UDM 3rd party files from:
-		\\Atlantis\Project\Mobies\Udm\Udm_ns\udm_ns_3rdpartyVS2008.zip
+		\\Atlantis\Project\Mobies\Udm\Udm_ns\3rdparty_vs2008_V1.zip
 	and unzip it onto your machine. 
 
-	3. Set your build environment as follows:
-		(Note: VS 2008 users select Tools/Options/Projects and Solutions/VC++ Directories to make these settings)
+	3. Download the Boost C++ libraries:
+		http://www.boost.org/
+	and extract into 3rdparty_VS2008 as boost-1.34.1. You needn't compile Boost.
+
+	4. Set your build environment as follows:
+		(Note: Use Tools/Options/Projects and Solutions/VC++ Directories to make these settings)
 	UDM_PATH=
-		your udm ns root folder (working folder for $/MoBIESTransition/UDM_ns) 
+		your UDM SVN root folder (where /MoBIES/UDM/trunk/ is checked out)
 	UDM_3RDPARTY_PATH=
-		your udm ns 3rdparty root folder (extracted from udm_ns_3rdpartyVS2008.zip)
+		your UDM 3rdparty root folder (extracted from 3rdparty_vs2008_V1.zip)
 	JDK_PATH=
-		your Java 1.4.2 SDK path 
+		your Java 1.4.2 (or later) SDK path, e.g. c:\Program Files\Java\jdk1.6.0_16
+		(Note: Once the above variables are set, you may use Projects/Win32/VC9/src/set-paths.bat to set following)
 	PATH=
-		%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\bin;
+		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin;
 		%UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin;
 		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\bin;
 		%UDM_3RDPARTY_PATH%\info-zip;
@@ -38,7 +41,7 @@ Step-by-step guide:
 		%UDM_3RDPARTY_PATH%\swigwin-1.3.36;
 		%PATH%
 	INCLUDE=
-		%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\include;
+		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\include;
 		%UDM_3RDPARTY_PATH%\Xalan-C_1_11_0\include;
 		%UDM_3RDPARTY_PATH%\antlr-2.7.7\lib\cpp;
 		%UDM_3RDPARTY_PATH%\zlib;
@@ -50,7 +53,7 @@ Step-by-step guide:
 		%INCLUDE%
 	LIB=
 		%UDM_3RDPARTY_PATH%\Xalan-C_1_11_0\lib;
-		%UDM_3RDPARTY_PATH%\xerces-c_2_5_0\lib;
+		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\lib;
 		%UDM_3RDPARTY_PATH%\zlib;
 		%UDM_3RDPARTY_PATH%\antlr-2.7.7\lib;
 		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\lib;
