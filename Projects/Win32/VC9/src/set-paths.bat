@@ -3,6 +3,14 @@
 rem set JDK_PATH=c:\Program Files\Java\jdk1.6.0_16
 rem set UMD_3RDPARTY_PATH=C:\Documents and Settings\kevin\My Documents\UDM\3rdparty_VS2008
 
+pushd %CD%
+cd /d %~dp0
+pushd %CD%
+cd ..\..\..\..
+set UDM_PATH=%CD%
+popd
+popd
+
 if not exist "%UDM_3RDPARTY_PATH%" echo Set UDM_3RDPARTY_PATH & goto :eof
 if not exist "%JDK_PATH%" echo Set JDK_PATH & goto :eof
 if not exist "%GME_ROOT%" echo Set GME_ROOT & goto :eof
