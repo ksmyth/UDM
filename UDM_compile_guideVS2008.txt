@@ -25,13 +25,13 @@ Step-by-step guide:
 
 	4. Set your build environment as follows:
 		(Note: Use Tools/Options/Projects and Solutions/VC++ Directories to make these settings)
-	UDM_PATH=
-		your UDM SVN root folder (where /MoBIES/UDM/trunk/ is checked out)
 	UDM_3RDPARTY_PATH=
 		your UDM 3rdparty root folder (extracted from 3rdparty_vs2008_V1.zip)
 	JDK_PATH=
 		your Java 1.4.2 (or later) SDK path, e.g. c:\Program Files\Java\jdk1.6.0_16
 		(Note: Once the above variables are set, you may use Projects/Win32/VC9/src/set-paths.bat to set following)
+	UDM_PATH=
+		your UDM SVN root folder (where /MoBIES/UDM/trunk/ is checked out)
 	PATH=
 		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin;
 		%UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin;
