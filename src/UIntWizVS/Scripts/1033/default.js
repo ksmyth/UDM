@@ -204,7 +204,7 @@ function AddConfig(proj, strProjectName)
 		    var CLTool = config.Tools('VCCLCompilerTool');
 		    CLTool.Optimization = optimizeOption.optimizeDisabled;
 		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include";
-		    CLTool.PreprocessorDefinitions = "_DEBUG;WIN32;_WINDOWS;_USRDLL";
+		    CLTool.PreprocessorDefinitions = "WIN32;_DEBUG;_WINDOWS;_USRDLL";
 		    CLTool.BasicRuntimeChecks = basicRuntimeCheckOption.runtimeBasicCheckAll;
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDebugDLL;
 		    CLTool.TreatWChar_tAsBuiltInType = "true";
@@ -237,10 +237,10 @@ function AddConfig(proj, strProjectName)
             
             if(wizard.FindSymbol("UDM_LINKING_DYNAMIC"))
             {
-                   CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING;_DEBUG;WIN32;_WINDOWS;_USRDLL";
-                   LinkTool.AdditionalDependencies = "UdmDlld.lib";
-                   LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
-                   LinkTool.OutputFile = "$(OutDir)/$(ProjectName)d.dll"                   
+                CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING";
+                LinkTool.AdditionalDependencies = "UdmDlld.lib";
+                LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
+                LinkTool.OutputFile = "$(OutDir)/$(ProjectName)d.dll"                   
             }	    
 
     		
@@ -272,7 +272,7 @@ function AddConfig(proj, strProjectName)
 		    var CLTool = config.Tools('VCCLCompilerTool');
 		    CLTool.Optimization = optimizeOption.optimizeMaxSpeed;
 		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include";
-		    CLTool.PreprocessorDefinitions = "NDEBUG;WIN32;_WINDOWS;_USRDLL";
+		    CLTool.PreprocessorDefinitions = "WIN32;NDEBUG;_WINDOWS;_USRDLL";
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDLL;
 		    CLTool.TreatWChar_tAsBuiltInType = "true";
 		    CLTool.UsePrecompiledHeader = "0";
@@ -305,10 +305,10 @@ function AddConfig(proj, strProjectName)
             if(wizard.FindSymbol("UDM_LINKING_DYNAMIC"))
             {
                    // RELEASE UDM SETTINGS
-                   CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING;_DEBUG;WIN32;_WINDOWS;_USRDLL";
-                   LinkTool.AdditionalDependencies = "UdmDll.lib";
-                   LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
-                   LinkTool.OutputFile = "$(OutDir)/$(ProjectName).dll"                   
+                CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING";
+                LinkTool.AdditionalDependencies = "UdmDll.lib";
+                LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
+                LinkTool.OutputFile = "$(OutDir)/$(ProjectName).dll"                   
             }	    
  
 
