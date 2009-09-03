@@ -64,12 +64,12 @@ Name: Full3rdParty; Description: Full 3rdParty Package; Types: Full
 ;Udm Root folder
 Source: {#UDMPATH}\readme.txt; DestDir: {app}; Components: Core; Flags: ignoreversion
 ; Udm_3rdparty_files
-Source: {#UDM3rdPartyPath}\ant-1.6.2\*; DestDir: {app}\3rdparty\ant-1.6.2; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: {#UDM3rdPartyPath}\antlr-2.7.7\*; DestDir: {app}\3rdparty\antlr-2.7.7; Excludes: *.scc; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDM3rdPartyPath}\ant-1.6.2\*; DestDir: {app}\3rdparty\ant-1.6.2; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDM3rdPartyPath}\antlr-2.7.7\*; DestDir: {app}\3rdparty\antlr-2.7.7; Excludes: *.scc; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: {#UDM3rdPartyPath}\boost_1_36_0\*; DestDir: {app}\3rdparty\boost_1_36_0; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: {#UDM3rdPartyPath}\cppunit-1.12.1\*; DestDir: {app}\3rdparty\cppunit-1.12.1; Excludes: *.scc; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: {#UDM3rdPartyPath}\junit\*; DestDir: {app}\3rdparty\junit; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-;Source: {#UDM3rdPartyPath}\loki-0.1.6\*; DestDir: {app}\3rdparty\loki-0.1.6; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDM3rdPartyPath}\cppunit-1.12.1\*; DestDir: {app}\3rdparty\cppunit-1.12.1; Excludes: *.scc; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDM3rdPartyPath}\junit\*; DestDir: {app}\3rdparty\junit; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDM3rdPartyPath}\info-zip\*; DestDir: {app}\3rdparty\info-zip; Excludes: *.scc; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: {#UDM3rdPartyPath}\mpc\*; DestDir: {app}\3rdparty\mpc; Excludes: clone_build_tree.exe, mnwc.exe, prj_install.exe, *.scc; Components: C Full3rdParty; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\mpc\config\*; DestDir: {app}\3rdparty\mpc\config; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\mpc\devtools\*; DestDir: {app}\3rdparty\mpc\devtools; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion

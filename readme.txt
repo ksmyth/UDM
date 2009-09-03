@@ -8,9 +8,7 @@ This archive contains the UDM package developed by ISIS / Vanderbilt University.
 Copyright
 ------------
 
-
-
-Copyright (c) Vanderbilt University, 2000-2007
+Copyright (c) Vanderbilt University, 2008-2009
 
 Permission is granted to use this software for academic/research purposes
 
@@ -29,17 +27,17 @@ this software.
 Directory structure
 -------------------
 
-/Build			binary executables, DLLs and other generated files
 /bin			binary executables (Linux only)
 /doc			documentation
 /etc			essential diagrams, DTDs, conversion XSL scripts
 /3rdParty		third party libraries and tools used by this packages
 /include		UDM C++ include files
-/Projects		VC++ solutions and projects
 /samples		sample data models and UDM applications
 /lib			UDM libraries (Linux only)
 
 
+Please notice that: xerces-c_2_8, Xalan-C_1_11 dll files in the bin folder are the same files in the
+3rdparty\xerces-c_2_8_0\bin and 3rdparty\xalan-c_1_11_0\bin.
 -------
 Credits
 -------
@@ -67,7 +65,7 @@ Please see /Documents/UDMAPI.pdf for further documentation.
 -----------------
 Changelog 
 -----------------
-08/31/09	-	Release 3.2.1
+09/03/09	-	Release 3.2.1
 		
 		- 	Performance improvements in MEM and DOM backends
 		- 	Performance improvements in the data network copy tool, UdmCopy
@@ -1318,8 +1316,6 @@ Changelog
 			3. A manual page for the new tool
 
 
-		
-
 03/06/02 - endre
 	
 	Implemented DomDataNetwork::SaveAs(), GMEDataNetwork::SaveAs() upon request.
@@ -1329,8 +1325,6 @@ Changelog
 
 	Minor bug that could cause an access violation in xerces.dll when deleting objects from the 
 DOM tree. Fixed.
-
-
 
 
 02/07/02 - endre

@@ -15,7 +15,7 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
-08/31/09		-	Release 3.2.1
+09/03/09		-	Release 3.2.1
 		
 		- 	Performance improvements in MEM and DOM backends
 		- 	Performance improvements in the data network copy tool, UdmCopy
