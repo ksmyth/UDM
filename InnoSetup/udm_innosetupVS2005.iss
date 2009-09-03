@@ -23,7 +23,7 @@
 #define UDMDLL "UdmDll_3_1_3.dll"
 #define UDMDLLD "UdmDll_3_1_3D.dll"
 #define UDMVER "3.1.3"
-#define GMEVER "9.6.16"
+#define GMEVER "9.7.1"
 #define OutputFileBase "Udm_setup_VC8"
 
 [Setup]
@@ -92,7 +92,7 @@ Source: {#UDM3rdPartyPath}\xalan-c_1_8_0\bin\Xalan-C_1_8.dll; DestDir: {app}\bin
 Source: {#UDM3rdPartyPath}\xalan-c_1_8_0\bin\XalanMessages_1_8.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC8\Release\{#UDMDLL}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC8\Debug\{#UDMDLLD}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
-Source: {#UDMPATH}\Build\Win32\VC8\Release\GmeOclExprChecker.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
+;Source: {#UDMPATH}\Build\Win32\VC8\Release\GmeOclExprChecker.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
 Source: {#UDMPATH}\Build\Win32\VC8\Release\UML2XML.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
 Source: {#GREATPATH}\bin\MetaGME2Uml.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
 Source: {#UDMPATH}\Build\Win32\VC8\Release\Udm.exe; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
@@ -108,7 +108,7 @@ Source: {#UDMPATH}\Build\Win32\VC8\Release\UdmSwig.dll; DestDir: {app}\bin; Comp
 ;Udm Doc folder
 Source: {#UDMPATH}\doc\UDMAPI.pdf; DestDir: {app}\doc; Flags: ignoreversion; Components: Core
 Source: {#UDMPATH}\doc\UdmInterpreterWizard.pdf; DestDir: {app}\doc; Flags: ignoreversion; Components: Core
-Source: {#UDMPATH}\judm\build\build_win\judm\apidoc\*; DestDir: {app}\doc\apidoc; Excludes: *.scc; Flags: recursesubdirs createallsubdirs ignoreversion; Components: Java
+;Source: {#UDMPATH}\judm\build\build_win\judm\apidoc\*; DestDir: {app}\doc\apidoc; Excludes: *.scc; Flags: recursesubdirs createallsubdirs ignoreversion; Components: Java
 ;Udm etc folder
 Source: {#UDMPATH}\etc\MPCGen.exe; DestDir: {app}\etc; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\etc\StrResGen.exe; DestDir: {app}\etc; Components: C; Flags: ignoreversion
