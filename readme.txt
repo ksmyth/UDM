@@ -8,7 +8,7 @@ This archive contains the UDM package developed by ISIS / Vanderbilt University.
 Copyright
 ------------
 
-Copyright (c) Vanderbilt University, 2008-2009
+Copyright (c) Vanderbilt University, 2001-2009
 
 Permission is granted to use this software for academic/research purposes
 
