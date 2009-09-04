@@ -28,7 +28,7 @@
 
 [Setup]
 AppName=UDM {#UDMVER}
-APPVerName=UDM
+APPVerName=ISIS UDM v{#UDMVER}
 AppVersion={#UDMVER}
 AppPublisher=ISIS, Vanderbilt University
 AppPublisherURL=http://www.escherinstitute.org/Plone/tools/suites/mic/udm
@@ -43,7 +43,7 @@ OutputBaseFilename={#OutputFileBase}
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=true
-AppCopyright=Copyright (C) 2000-2006 ISIS, Vanderbilt University
+AppCopyright=Copyright (C) 2001-2009 ISIS, Vanderbilt University
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
