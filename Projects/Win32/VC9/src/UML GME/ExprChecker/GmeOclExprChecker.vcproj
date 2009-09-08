@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="WINDOWS-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
@@ -163,6 +163,7 @@
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
+				DebugInformationFormat="3"
 				CompileAs="0"
 			/>
 			<Tool
@@ -186,7 +187,8 @@
 				AdditionalLibraryDirectories="$(OutDir)"
 				IgnoreDefaultLibraryNames="nafxcw.lib,msvcrtd.lib"
 				ModuleDefinitionFile="..\..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def"
-				ProgramDatabaseFile="$(IntDir)/GmeOclExprChecker.pdb"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -248,11 +250,11 @@
 				>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\sdk\bon\common\Formatter.cpp"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Exceptions.cpp"
 				>
 			</File>
 			<File
-				RelativePath="$(GME_ROOT)\sdk\bon\common\Exceptions.cpp"
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Formatter.cpp"
 				>
 			</File>
 			<File
@@ -450,11 +452,11 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\compicon.ico"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\compicon.ico"
 				>
 			</File>
 			<File

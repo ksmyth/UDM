@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="WINDOWS-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
@@ -167,6 +167,7 @@
 				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
+				DebugInformationFormat="3"
 				CompileAs="0"
 			/>
 			<Tool
@@ -190,7 +191,8 @@
 				AdditionalLibraryDirectories="$(OutDir)"
 				IgnoreDefaultLibraryNames=""
 				ModuleDefinitionFile="..\..\..\..\..\..\src\UML GME\Interpreter\Component.def"
-				ProgramDatabaseFile="$(IntDir)/UML2XML.pdb"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -245,10 +247,6 @@
 			</File>
 			<File
 				RelativePath="$(GME_ROOT)\sdk\bon\common\ComHelp.cpp"
-				>
-			</File>
-			<File
-				RelativePath="$(GME_ROOT)\sdk\bon\common\Exceptions.cpp"
 				>
 			</File>
 			<File
@@ -311,6 +309,10 @@
 			</File>
 			<File
 				RelativePath="$(GME_ROOT)\sdk\bon\common\Console.cpp"
+				>
+			</File>
+			<File
+				RelativePath="$(GME_ROOT)\sdk\bon\common\Exceptions.cpp"
 				>
 			</File>
 			<File
