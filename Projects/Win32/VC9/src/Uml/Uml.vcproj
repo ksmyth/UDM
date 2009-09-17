@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="WINDOWS-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
@@ -81,6 +81,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy $(TargetPath) $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 		<Configuration
@@ -145,6 +146,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy $(TargetPath) $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 		<Configuration
@@ -209,7 +211,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot;&#x0D;&#x0A;copy Uml.h ..\..\..\..\..\..\include&#x0D;&#x0A;move Uml.* ..\..\..\..\..\..\src\Uml&#x0D;&#x0A;move Uml_export.h ..\..\..\..\..\..\src\Uml&#x0D;&#x0A;move Uml_xsd.h ..\..\..\..\..\..\src\Uml&#x0D;&#x0A;"
+				CommandLine="copy $(TargetPath) $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 		<Configuration
@@ -277,7 +279,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot;&#x0D;&#x0A;copy Uml.h ..\..\..\..\..\..\include&#x0D;&#x0A;move Uml.* ..\..\..\..\..\..\src\Uml&#x0D;&#x0A;move Uml_export.h ..\..\..\..\..\..\src\Uml&#x0D;&#x0A;move Uml_xsd.h ..\..\..\..\..\..\src\Uml&#x0D;&#x0A;"
+				CommandLine="copy $(TargetPath) $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 	</Configurations>
@@ -293,7 +295,7 @@
 				RelativePath="..\..\..\..\..\src\Uml\Uml.cpp"
 				>
 				<FileConfiguration
-					Name="BootUdmCompile Debug|Win32"
+					Name="BootUdmCompile Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -301,7 +303,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="BootUdmCompile Release|Win32"
+					Name="BootUdmCompile Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool

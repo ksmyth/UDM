@@ -80,6 +80,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy  $(TargetPath) $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 		<Configuration
@@ -143,6 +144,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy  $(TargetPath) $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 	</Configurations>

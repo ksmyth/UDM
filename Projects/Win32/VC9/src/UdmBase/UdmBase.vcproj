@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="WINDOWS-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
@@ -90,6 +90,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy  $(TargetPath) $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 		<Configuration
@@ -166,6 +167,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="copy  $(TargetPath) $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 		<Configuration
@@ -219,7 +221,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot;&#x0D;&#x0A;move UdmProject.h ..\..\..\..\..\..\include&#x0D;&#x0A;move UdmProject.xsd ..\..\..\..\..\..\etc&#x0D;&#x0A;move UdmProject_xsd.h ..\..\..\..\..\..\src\UdmBase&#x0D;&#x0A;move UdmProject.cpp ..\..\..\..\..\..\src\UdmBase&#x0D;&#x0A;"
+				CommandLine="copy  $(TargetPath) $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 		<Configuration
@@ -274,7 +276,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot;&#x0D;&#x0A;move UdmProject.h ..\..\..\..\..\..\include&#x0D;&#x0A;move UdmProject.xsd ..\..\..\..\..\..\etc&#x0D;&#x0A;move UdmProject_xsd.h ..\..\..\..\..\..\src\UdmBase&#x0D;&#x0A;move UdmProject.cpp ..\..\..\..\..\..\src\UdmBase&#x0D;&#x0A;"
+				CommandLine="copy  $(TargetPath) $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 	</Configurations>
