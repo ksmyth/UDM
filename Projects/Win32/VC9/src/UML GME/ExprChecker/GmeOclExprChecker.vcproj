@@ -114,7 +114,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy  $(TargetPath) $(UDM_PATH)\bin"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin"
 			/>
 		</Configuration>
 		<Configuration
@@ -216,7 +216,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy  $(TargetPath) $(UDM_PATH)\bin"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin"
 			/>
 		</Configuration>
 	</Configurations>

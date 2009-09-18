@@ -113,7 +113,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) $(UDM_PATH)\bin&#x0D;&#x0A;copy $(OutDir)\UdmDll.lib $(UDM_PATH)\lib"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin&#x0D;&#x0A;copy $(OutDir)\UdmDll.lib $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 		<Configuration
@@ -212,7 +212,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) $(UDM_PATH)\bin&#x0D;&#x0A;copy $(OutDir)\UdmDllD.lib $(UDM_PATH)\lib"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin&#x0D;&#x0A;copy $(OutDir)\UdmDllD.lib $(UDM_PATH)\lib"
 			/>
 		</Configuration>
 	</Configurations>
