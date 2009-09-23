@@ -39,14 +39,16 @@ set INCLUDE=%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\include;^
 %JDK_PATH%\include\win32;^
 %JDK_PATH%\include;^
 %GME_ROOT%\Interfaces;^
-%GME_ROOT%\Gme\Interfaces
+%GME_ROOT%\Gme\Interfaces;^
+%INCLUDE%
 
 set LIB=%UDM_3RDPARTY_PATH%\Xalan-C_1_11_0\lib;^
 %UDM_3RDPARTY_PATH%\xerces-c_2_8_0\lib;^
 %UDM_3RDPARTY_PATH%\zlib;^
 %UDM_3RDPARTY_PATH%\antlr-2.7.7\lib;^
 %UDM_3RDPARTY_PATH%\cppunit-1.12.1\lib;^
-%JDK_PATH%\lib
+%JDK_PATH%\lib;^
+%LIB%
 
 set CLASSPATH=%UDM_3RDPARTY_PATH%\antlr-2.7.7\antlr.jar;^
 %CLASSPATH%
