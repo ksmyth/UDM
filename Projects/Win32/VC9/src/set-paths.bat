@@ -35,7 +35,7 @@ set INCLUDE=%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\include;^
 %UDM_3RDPARTY_PATH%\zlib;^
 %UDM_3RDPARTY_PATH%\zlib\contrib\minizip;^
 %UDM_3RDPARTY_PATH%\cppunit-1.12.1\include;^
-%UDM_3RDPARTY_PATH%\boost-1_36_0;^
+%UDM_3RDPARTY_PATH%\boost_1_36_0;^
 %JDK_PATH%\include\win32;^
 %JDK_PATH%\include;^
 %GME_ROOT%\Interfaces;^
