@@ -113,6 +113,7 @@
 
 #include "BONComponent.h"
 #include "int_exception.h"
+#include "Console.h"
 
 #include "Resource.h"
 
@@ -302,7 +303,15 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		//do we have stg to say?
 		if (str.length())
 			AfxMessageBox(e.what().c_str());
-	};
+	}
+	catch (udm_exception &e)
+	{
+		std::string err = std::string("Caught udm_exception in UML2XML: \"") + e.what() + "\"";
+		GMEConsole::Console::SetupConsole(builder.GetProject());
+		GMEConsole::Console::Error::WriteLine(err.c_str());
+		if (!(param & GME_SILENT_MODE))
+			AfxMessageBox(err.c_str());
+	}
 }
 
 int CComponent::GatherPackageFolders(CBuilderFolder *folder,CPackageBuilderList &packages)
