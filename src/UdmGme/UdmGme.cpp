@@ -3211,7 +3211,11 @@ bbreak:			;
 		COMTHROW(project.CreateInstance(	OLESTR("Mga.MgaProject")));
 		CheckVersion(project);
 		VARIANT_BOOL ro;
-		COMTHROW(project->Open( createGMEconnstr(systemname), &ro));
+		try {
+			COMTHROW(project->Open( createGMEconnstr(systemname), &ro));
+		} catch (udm_exception e) {
+			throw udm_exception(std::string("Cannot open ") + systemname + ": " + e.what());
+		}
 		COMTHROW(project->CreateTerritory(NULL, &priv.terr, NULL));
 
 	// BUGFIX:
