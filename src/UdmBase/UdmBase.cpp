@@ -120,7 +120,7 @@ namespace Udm
 	UDM_DLL ObjectImpl *Object::__Cast(const Object &a, const ::Uml::Class &meta)
 	{
 		if(a && !Uml::IsDerivedFrom(a.type(), meta) )
-			throw udm_exception("Invalid cast");
+			throw udm_exception("Invalid cast from type '" + UdmUtil::ExtractName(a.type()) + "' to type '" + UdmUtil::ExtractName(meta) + "'");
 
 		return a.impl->clone();
 	}
