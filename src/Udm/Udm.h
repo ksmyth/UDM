@@ -173,7 +173,13 @@ protected:
 
 	// methods
 	vector<boost::format> meth_defs;
-	vector<boost::format> meth_speclzs;	// specializations
+	// methods accessing composition relationships (for MPL code)
+	vector<boost::format> meth_defs_mpl_comp;
+	// methods accessing association relationships (for MPL code)
+	vector<boost::format> meth_defs_mpl_assoc;
+	// method specializations
+	vector<boost::format> meth_speclzs_mpl_comp;
+	vector<boost::format> meth_speclzs_mpl_assoc;
 
 	// meta static members
 	vector<boost::format> meta_decls;
