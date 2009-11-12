@@ -3245,7 +3245,12 @@ bbreak:			;
 		IMgaProjectPtr  &project = priv.project;
 		COMTHROW(project.CreateInstance(	OLESTR("MGA.MgaProject")));
 		CheckVersion(project);
-		COMTHROW(project->Create( createGMEconnstr(systemname), SmartBSTR(metalocator.c_str())));
+		try {
+			COMTHROW(project->Create( createGMEconnstr(systemname), SmartBSTR(metalocator.c_str())));
+		} catch (udm_exception e) {
+			throw udm_exception(std::string("Cannot create ") + systemname + " with meta name " +
+				metalocator + ": " + e.what());
+		}
 		IMgaTerritoryPtr terr;
 		COMTHROW(project->CreateTerritory(NULL, &terr, NULL));
 
