@@ -514,6 +514,8 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 
 				meta_init_links.push_back( boost::format("%2%::meta_%1% = %3%::meta_%1%") % rel_name % cl_name % UmlClassCPPName(cross_cl) );
 
+				meta_init_links2.push_back( boost::format("%2%::meta_%1% = %3%::meta_%1%") % rel_name % cl_name % UmlClassCPPName(cross_cl) );
+
 				old_meta_init_links.push_back( boost::format("%2%::meta_%1% = %3%::meta_%1%") % rel_name % cl_name % UmlClassCPPName(cross_cl) );
 
 				corba_meta_init_links.push_back( boost::format("%2%::meta_%1% = %3%::meta_%1%") % rel_name % cl_name % UmlClassCPPName(cross_cl) );
