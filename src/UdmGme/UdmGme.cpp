@@ -1381,7 +1381,8 @@ bbreak:			;
 				}
 			} MGACOLL_ITERATE_END;
 			if(rr == NULL) 
-				throw udm_exception("Parent cannot have children of this kind");
+				throw udm_exception("Parent of type " + UdmUtil::ExtractName(this->type()) +
+					" cannot have children of kind '" + UdmUtil::ExtractName(kind.type()) + "'");
 		}	
 
 		if (!archetype)
