@@ -21,7 +21,7 @@ Step-by-step guide:
 
 	3. Download the Boost C++ libraries:
 		http://www.boost.org/
-	and extract into 3rdparty_VS2008 as boost-1.34.1. You needn't compile Boost.
+	and extract into 3rdparty_VS2008 as boost_1_36_0. You needn't compile Boost.
 
 	4. Set your build environment as follows:
 		(Note: Use Tools/Options/Projects and Solutions/VC++ Directories to make these settings)
@@ -47,7 +47,7 @@ Step-by-step guide:
 		%UDM_3RDPARTY_PATH%\zlib;
 		%UDM_3RDPARTY_PATH%\zlib\contrib\minizip;
 		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\include;
-		%UDM_3RDPARTY_PATH%\boost-1.34.1;
+		%UDM_3RDPARTY_PATH%\boost_1_36_0;
 		%JDK_PATH%\include\win32;
 		%JDK_PATH%\include;
 		%INCLUDE%
@@ -57,7 +57,7 @@ Step-by-step guide:
 		%UDM_3RDPARTY_PATH%\zlib;
 		%UDM_3RDPARTY_PATH%\antlr-2.7.7\lib;
 		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\lib;
-		%UDM_3RDPARTY_PATH%\boost-1.34.1\lib;
+		%UDM_3RDPARTY_PATH%\boost_1_36_0\lib;
 		%JDK_PATH%\lib
 		%LIB%
 	CLASSPATH=
