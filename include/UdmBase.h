@@ -3030,11 +3030,12 @@ protected:
 	UDM_DLL DataNetwork(const Udm::UdmDiagram &metainfo, UdmProject * project = NULL);
 
 public:
-	typedef struct bt {
+	struct bt {
 		string sig, ext;
-		DataNetwork *(*crea)(const UdmDiagram &, UdmProject*);
+		Udm::DataNetwork *(*crea)(const Udm::UdmDiagram &, Udm::UdmProject*);
 		struct bt *next;
-	} backendtabt;
+	};
+	typedef struct bt backendtabt;
 private: 
 	
 	static backendtabt *backendtab;
