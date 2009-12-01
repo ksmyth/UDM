@@ -7,7 +7,7 @@ ALL RIGHTS RESERVED
 
 1. Windows Operating system (preferably NT, 2000, XP)
 
-2. GME 9, R9.8.28 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 9, R9.11.12 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 9
@@ -18,11 +18,19 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+11/30/09		-	Release 3.2.2
+		-	Fix bug with uninitialized Association metas when Initialize()ing from a file (e.g. with the GREngine)
+		-	Allow users of MPL code to turn off compilation of unneeded methods
+				By defining preprocessor macro MPL_NO_COMPOSITIONS MPL methods and typenames for to parent/children relationships are not compiled.
+				Preprocessor macro MPL_NO_ASSOCIATIONS does the same thing, but for associations.
+		-	GME 9.11.12 compatibility
+
+
 09/03/09		-	Release 3.2.1
 		
 		- 	Performance improvements in MEM and DOM backends
 		- 	Performance improvements in the data network copy tool, UdmCopy
-		- 	C++ generic programming code is genereated only if Udm is called with parameter --leesa
+		- 	C++ generic programming code is generated only if Udm is called with parameter --leesa
 		- 	Improved concepts and typelists for representing composition relationships in the generic programming API
 		-	add udm interpreter visual studio project wizard
 		- 	GME 9.8.28 compatibility

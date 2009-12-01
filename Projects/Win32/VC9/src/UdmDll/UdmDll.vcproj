@@ -81,7 +81,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="UdmUtil.lib UdmBase.lib UDMPOI.lib UdmOcl.lib Uml.lib UdmDom.lib UdmGme.lib UdmXMI.lib Xalan-C_1.lib xerces-c_2.lib zlib.lib GOCL.lib"
-				OutputFile="$(OutDir)\UdmDll_3_2_1.dll"
+				OutputFile="$(OutDir)\UdmDll_3_2_2.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
@@ -179,7 +179,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="UdmBaseD.lib UdmOclD.lib UdmPOID.lib UmlD.lib UdmDomD.lib UdmGmeD.lib UdmXMID.lib UdmUtilD.lib Xalan-C_1D.lib xerces-c_2D.lib zlibD.lib GOCLD.lib"
-				OutputFile="$(OutDir)\UdmDll_3_2_1D.dll"
+				OutputFile="$(OutDir)\UdmDll_3_2_2D.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(OutDir)"

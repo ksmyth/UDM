@@ -20,9 +20,9 @@
 #define GREATPATH "C:\Projects\GReAT"
 #endif
 
-#define UDMDLL "UdmDll_3_2_1.dll"
-#define UDMDLLD "UdmDll_3_2_1D.dll"
-#define UDMVER "3.2.1"
+#define UDMDLL "UdmDll_3_2_2.dll"
+#define UDMDLLD "UdmDll_3_2_2D.dll"
+#define UDMVER "3.2.2"
 #define GMEVER "9.8.28"
 #define OutputFileBase "Udm_setup_VC9"
 
@@ -64,25 +64,25 @@ Name: Full3rdParty; Description: Full 3rdParty Package; Types: Full
 ;Udm Root folder
 Source: {#UDMPATH}\readme.txt; DestDir: {app}; Components: Core; Flags: ignoreversion
 ; Udm_3rdparty_files
-;Source: {#UDM3rdPartyPath}\ant-1.6.2\*; DestDir: {app}\3rdparty\ant-1.6.2; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-;Source: {#UDM3rdPartyPath}\antlr-2.7.7\*; DestDir: {app}\3rdparty\antlr-2.7.7; Excludes: *.scc; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: {#UDM3rdPartyPath}\boost_1_36_0\*; DestDir: {app}\3rdparty\boost_1_36_0; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-;Source: {#UDM3rdPartyPath}\cppunit-1.12.1\*; DestDir: {app}\3rdparty\cppunit-1.12.1; Excludes: *.scc; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-;Source: {#UDM3rdPartyPath}\junit\*; DestDir: {app}\3rdparty\junit; Excludes: *.scc; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-;Source: {#UDM3rdPartyPath}\info-zip\*; DestDir: {app}\3rdparty\info-zip; Excludes: *.scc; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: {#UDM3rdPartyPath}\mpc\*; DestDir: {app}\3rdparty\mpc; Excludes: clone_build_tree.exe, mnwc.exe, prj_install.exe, *.scc; Components: C Full3rdParty; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\mpc\config\*; DestDir: {app}\3rdparty\mpc\config; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\mpc\devtools\*; DestDir: {app}\3rdparty\mpc\devtools; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\mpc\docs\*; DestDir: {app}\3rdparty\mpc\docs; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion recursesubdirs
-Source: {#UDM3rdPartyPath}\mpc\history\*; DestDir: {app}\3rdparty\mpc\history; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\mpc\modules\*; DestDir: {app}\3rdparty\mpc\modules; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion recursesubdirs
-Source: {#UDM3rdPartyPath}\mpc\templates\*; DestDir: {app}\3rdparty\mpc\templates; Excludes: *.scc; Components: C Full3rdParty; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\*; DestDir: {app}\3rdparty\xalan-c_1_11_0\bin; Excludes: *.scc; Components: Core; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\include\*; DestDir: {app}\3rdparty\xalan-c_1_11_0\include; Excludes: *.scc; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\lib\*; DestDir: {app}\3rdparty\xalan-c_1_11_0\lib; Excludes: *.scc; Components: Core; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\bin\*; DestDir: {app}\3rdparty\xerces-c_2_8_0\bin; Excludes: *.scc; Components: Core; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\include\*; DestDir: {app}\3rdparty\xerces-c_2_8_0\include; Excludes: *.scc; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\lib\*; DestDir: {app}\3rdparty\xerces-c_2_8_0\lib; Excludes: *.scc; Components: Core; Flags: ignoreversion
+;Source: {#UDM3rdPartyPath}\ant-1.6.2\*; DestDir: {app}\3rdparty\ant-1.6.2; Excludes: .svn; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDM3rdPartyPath}\antlr-2.7.7\*; DestDir: {app}\3rdparty\antlr-2.7.7; Excludes: .svn; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: {#UDM3rdPartyPath}\boost_1_36_0\*; DestDir: {app}\3rdparty\boost_1_36_0; Excludes: .svn,\lib; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDM3rdPartyPath}\cppunit-1.12.1\*; DestDir: {app}\3rdparty\cppunit-1.12.1; Excludes: .svn; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDM3rdPartyPath}\junit\*; DestDir: {app}\3rdparty\junit; Excludes: .svn; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: {#UDM3rdPartyPath}\info-zip\*; DestDir: {app}\3rdparty\info-zip; Excludes: .svn; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: {#UDM3rdPartyPath}\mpc\*; DestDir: {app}\3rdparty\mpc; Excludes: clone_build_tree.exe, mnwc.exe, prj_install.exe, .svn; Components: C Full3rdParty; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\mpc\config\*; DestDir: {app}\3rdparty\mpc\config; Excludes: .svn; Components: C Full3rdParty; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\mpc\devtools\*; DestDir: {app}\3rdparty\mpc\devtools; Excludes: .svn; Components: C Full3rdParty; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\mpc\docs\*; DestDir: {app}\3rdparty\mpc\docs; Excludes: .svn; Components: C Full3rdParty; Flags: ignoreversion recursesubdirs
+Source: {#UDM3rdPartyPath}\mpc\history\*; DestDir: {app}\3rdparty\mpc\history; Excludes: .svn; Components: C Full3rdParty; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\mpc\modules\*; DestDir: {app}\3rdparty\mpc\modules; Excludes: .svn; Components: C Full3rdParty; Flags: ignoreversion recursesubdirs
+Source: {#UDM3rdPartyPath}\mpc\templates\*; DestDir: {app}\3rdparty\mpc\templates; Excludes: .svn; Components: C Full3rdParty; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\*; DestDir: {app}\3rdparty\xalan-c_1_11_0\bin; Excludes: .svn; Components: Core; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\include\*; DestDir: {app}\3rdparty\xalan-c_1_11_0\include; Excludes: .svn; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\lib\*; DestDir: {app}\3rdparty\xalan-c_1_11_0\lib; Excludes: .svn; Components: Core; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\bin\*; DestDir: {app}\3rdparty\xerces-c_2_8_0\bin; Excludes: .svn; Components: Core; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\include\*; DestDir: {app}\3rdparty\xerces-c_2_8_0\include; Excludes: .svn; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\lib\*; DestDir: {app}\3rdparty\xerces-c_2_8_0\lib; Excludes: .svn; Components: Core; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\zlib\license.txt; DestDir: {app}\3rdparty\zlib; Components: Core; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\zlib\zlib.lib; DestDir: {app}\3rdparty\zlib; Components: Core; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\zlib\zlibD.lib; DestDir: {app}\3rdparty\zlib; Components: Core; Flags: ignoreversion
@@ -111,7 +111,7 @@ Source: {#UDMPATH}\judm\build\build_win\judm\judm.jar; DestDir: {app}\bin; Compo
 ;Udm Doc folder
 Source: {#UDMPATH}\doc\UDMAPI.pdf; DestDir: {app}\doc; Flags: ignoreversion; Components: Core
 Source: {#UDMPATH}\doc\UdmInterpreterWizard.pdf; DestDir: {app}\doc; Flags: ignoreversion; Components: Core
-Source: {#UDMPATH}\judm\build\build_win\judm\apidoc\*; DestDir: {app}\doc\apidoc; Excludes: *.scc; Flags: recursesubdirs createallsubdirs ignoreversion; Components: Java
+Source: {#UDMPATH}\judm\build\build_win\judm\apidoc\*; DestDir: {app}\doc\apidoc; Excludes: .svn; Flags: recursesubdirs createallsubdirs ignoreversion; Components: Java
 ;Udm etc folder
 Source: {#UDMPATH}\etc\MPCGen.exe; DestDir: {app}\etc; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\etc\StrResGen.exe; DestDir: {app}\etc; Components: C; Flags: ignoreversion
@@ -174,7 +174,7 @@ Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmGme.lib; DestDir: {app}\lib; Flags
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmOcl.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmBase.lib; DestDir: {app}\lib; Flags: ignoreversion
 ;Udm Interpreter Wizard Script folder
-Source: {#UDMPATH}\src\UIntWizVS\*; DestDir: {app}\UdmIntWizard; Excludes: setup80.*,*.ncb,*.suo,*.user,.svn\*; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: {#UDMPATH}\src\UIntWizVS\*; DestDir: {app}\UdmIntWizard; Excludes: setup80.*,*.ncb,*.suo,*.user,.svn; Flags: ignoreversion recursesubdirs createallsubdirs
 ;Udm Samples folder/C++
 Source: {#UDMPATH}\samples\CreateLampModel\CreateLampModelVS2008.vcproj; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\samples\LampDiagramGME.xme; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
@@ -208,25 +208,6 @@ Filename: {app}\UdmIntWizard\setup90.bat; Flags: skipifdoesntexist postinstall r
 [Code]
 var
   InstallSystemWide: Boolean;
-function InitializeSetup(): Boolean;
-var
-  GME_Path : String;
-  oGME :  Variant;
-begin
-  GME_Path := GetEnv('GME_ROOT');
-  if GME_Path = '' then begin
-    MsgBox('Unable to locate GME r{#GMEVER}.  Please install GME r{#GMEVER} first.', mbError, MB_OK);
-    Result := False;
-  end else begin
-	oGME := CreateOleObject('GME.Application');
-	if oGME.Version = '{#GMEVER}' then begin
-		Result := True;
-	end else begin
-		MsgBox('Udm {#UDMVER} needs GME r{#GMEVER}. The current GME version is '+oGME.Version+'.'#13#13'Please install GME r{#GMEVER} first.', mbError, MB_OK);
-		Result := False;
-	end;
-  end;
-end;
 
 function InitializeUninstall(): Boolean;
 begin
