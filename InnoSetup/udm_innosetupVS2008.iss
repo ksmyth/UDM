@@ -176,12 +176,13 @@ Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmBase.lib; DestDir: {app}\lib; Flag
 ;Udm Interpreter Wizard Script folder
 Source: {#UDMPATH}\src\UIntWizVS\*; DestDir: {app}\UdmIntWizard; Excludes: setup80.*,*.ncb,*.suo,*.user,.svn; Flags: ignoreversion recursesubdirs createallsubdirs
 ;Udm Samples folder/C++
-Source: {#UDMPATH}\samples\CreateLampModel\CreateLampModelVS2008.vcproj; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
-Source: {#UDMPATH}\samples\LampDiagramGME.xme; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
-Source: {#UDMPATH}\samples\LampDiagramUML.xme; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
+Source: {#UDMPATH}\Projects\Win32\VC9\samples\samples-paths-installer.vsprops; DestDir: {app}\samples\C++; DestName: "samples-paths.vsprops"; Components: C; Flags: ignoreversion
+Source: {#UDMPATH}\Projects\Win32\VC9\samples\CreateLampModel\CreateLampModel.vcproj; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
+Source: {#UDMPATH}\samples\CreateLampModel\LampDiagramGME.xme; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
+Source: {#UDMPATH}\samples\CreateLampModel\LampDiagramUML.xme; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\samples\CreateLampModel\CreateLampModel.rc; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\samples\CreateLampModel\CreateLampModel.cpp; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
-Source: {#UDMPATH}\samples\cross_links\cross_linksVS2008.vcproj; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
+Source: {#UDMPATH}\Projects\Win32\VC9\samples\cross_links\cross_links.vcproj; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\samples\cross_links\cross_links.cpp; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\samples\cross_links\CL.xme; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
 ;Udm Samples folder/java
