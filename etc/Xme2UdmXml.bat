@@ -5,6 +5,6 @@
 ::	1. <xme_infile>: GME model to import
 ::	2. <mga_save_file>: GME model save file name
 ::
-call "%UDM_PATH%\etc\CreateMga.vbs" "%1" "%2" UML
-call "%UDM_PATH%\etc\CreateUdmXml.vbs" "%2"
+call "%UDM_PATH%\etc\CreateMga.vbs" %1 %2 UML
+call "%UDM_PATH%\etc\CreateUdmXml.vbs" %2
 
