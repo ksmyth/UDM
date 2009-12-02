@@ -17,10 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\..\..\..\Build\Win32\VC9\Debug"
-			IntermediateDirectory="$(OutDir)\obj\samples\$(ProjectName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\samples-paths.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -28,7 +26,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Create directory for generated files"
-				CommandLine="mkdir &quot;$(OutDir)\Gen\samples&quot;&#x0D;&#x0A;exit 0&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;$(GenPath)&quot;&#x0D;&#x0A;exit 0"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -47,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -70,7 +68,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="_DEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
+				AdditionalIncludeDirectories=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -81,7 +79,7 @@
 				OutputFile="$(OutDir)\CreateLampModelD.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(OutDir)"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)/CreateLampModel.pdb"
 				SubSystem="1"
@@ -113,10 +111,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\..\..\..\Build\Win32\VC9\Release"
-			IntermediateDirectory="$(OutDir)\obj\samples\$(ProjectName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\samples-paths.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -124,7 +120,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Create directory for generated files"
-				CommandLine="mkdir &quot;$(OutDir)\Gen\samples&quot;&#x0D;&#x0A;exit 0&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;$(GenPath)&quot;&#x0D;&#x0A;exit 0"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -144,7 +140,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -165,7 +161,7 @@
 				Name="VCResourceCompilerTool"
 				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
-				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples"
+				AdditionalIncludeDirectories=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -176,7 +172,7 @@
 				OutputFile="$(OutDir)\CreateLampModel.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(OutDir)"
+				AdditionalLibraryDirectories=""
 				ProgramDatabaseFile="$(IntDir)/CreateLampModel.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
@@ -214,7 +210,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\..\..\samples\CreateLampModel\CreateLampModel.cpp"
+				RelativePath="$(SourceDir)\CreateLampModel.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -238,11 +234,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\samples\CreateLampModel\CreateLampModel.rc"
+				RelativePath="$(SourceDir)\CreateLampModel.rc"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram.cpp"
+				RelativePath="$(DebugGenPath)\LampDiagram.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -258,16 +254,24 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
 					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram.cpp"
+				RelativePath="$(ReleaseGenPath)\LampDiagram.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
 					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
@@ -285,20 +289,28 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram.h"
+				RelativePath="$(DebugGenPath)\LampDiagram.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
 					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram.h"
+				RelativePath="$(ReleaseGenPath)\LampDiagram.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
 					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -306,7 +318,7 @@
 			Filter="xml"
 			>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram_udm.xml"
+				RelativePath="$(DebugGenPath)\LampDiagram_udm.xml"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -314,35 +326,43 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="LampDiagram_udm.xml -&gt; C++ API"
-						CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\samples&quot; &quot;$(InputPath)&quot; -v"
-						Outputs="$(OutDir)\Gen\samples\LampDiagram.xsd; $(OutDir)\Gen\samples\LampDiagram.cpp; $(OutDir)\Gen\samples\LampDiagram.h"
+						CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
+						Outputs="$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
 					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram_udm.xml"
+				RelativePath="$(ReleaseGenPath)\LampDiagram_udm.xml"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
 					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="LampDiagram_udm.xml -&gt; C++ API"
-						CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\samples&quot; &quot;$(InputPath)&quot; -v"
-						Outputs="$(OutDir)\Gen\samples\LampDiagram.xsd; $(OutDir)\Gen\samples\LampDiagram.cpp; $(OutDir)\Gen\samples\LampDiagram.h"
+						CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
+						Outputs="$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\samples\LampDiagramGME.xme"
+				RelativePath="$(SourceDir)\LampDiagramGME.xme"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -366,7 +386,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\samples\LampDiagramUML.xme"
+				RelativePath="$(SourceDir)\LampDiagramUML.xme"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -374,8 +394,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="$(InputFileName) -&gt; LampDiagram_udm.xml"
-						CommandLine="cd &quot;$(TargetDir)\Gen\samples&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Gen\samples\$(InputName).mga;$(OutDir)\Gen\samples\LampDiagram_udm.xml"
+						CommandLine="cd &quot;$(GenPath)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
+						Outputs="$(GenPath)\$(InputName).mga;$(GenPath)\LampDiagram_udm.xml"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -384,8 +404,8 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="$(InputFileName) -&gt; LampDiagram_udm.xml"
-						CommandLine="cd &quot;$(TargetDir)\Gen\samples&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Gen\samples\$(InputName).mga;$(OutDir)\Gen\samples\LampDiagram_udm.xml"
+						CommandLine="cd &quot;$(GenPath)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
+						Outputs="$(GenPath)\$(InputName).mga;$(GenPath)\LampDiagram_udm.xml"
 					/>
 				</FileConfiguration>
 			</File>
