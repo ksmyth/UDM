@@ -17,10 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\..\..\..\Build\Win32\VC9\Debug"
-			IntermediateDirectory="$(OutDir)\obj\samples\$(ProjectName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\samples-paths.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -29,7 +27,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Create directory for generated files"
-				CommandLine="mkdir &quot;$(OutDir)\Gen\samples\cross_links&quot;&#x0D;&#x0A;exit 0&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;$(GenPath)&quot;&#x0D;&#x0A;exit 0&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -48,7 +46,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples\cross_links"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -78,7 +76,7 @@
 				OutputFile="$(OutDir)\cross_linksD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(OutDir)"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)/cross_links.pdb"
 				SubSystem="1"
@@ -110,10 +108,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\..\..\..\Build\Win32\VC9\Release"
-			IntermediateDirectory="$(OutDir)\obj\samples\$(ProjectName)"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\samples-paths.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -122,7 +118,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Create directory for generated files"
-				CommandLine="mkdir &quot;$(OutDir)\Gen\samples\cross_links&quot;&#x0D;&#x0A;exit 0&#x0D;&#x0A;"
+				CommandLine="mkdir &quot;$(GenPath)&quot;&#x0D;&#x0A;exit 0&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -142,7 +138,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\..\..\include;$(OutDir)\Gen\samples\cross_links"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -172,7 +168,7 @@
 				OutputFile="$(OutDir)\cross_links.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(OutDir)"
+				AdditionalLibraryDirectories=""
 				ProgramDatabaseFile="$(IntDir)/cross_links.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
@@ -210,7 +206,29 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\cross_links\CD1.cpp"
+				RelativePath="$(ReleaseGenPath)\CD1.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="$(DebugGenPath)\CD1.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -233,7 +251,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\cross_links\CD1.cpp"
+				RelativePath="$(ReleaseGenPath)\CD2.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -255,7 +273,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\cross_links\CD2.cpp"
+				RelativePath="$(DebugGenPath)\CD2.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -278,29 +296,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\cross_links\CD2.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\cross_links\CD3.cpp"
+				RelativePath="$(DebugGenPath)\CD3.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -323,7 +319,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\cross_links\CD3.cpp"
+				RelativePath="$(ReleaseGenPath)\CD3.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -345,7 +341,29 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\cross_links\CL.cpp"
+				RelativePath="$(ReleaseGenPath)\CL.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="$(DebugGenPath)\CL.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -364,28 +382,6 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\cross_links\CL.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
 			</File>
@@ -420,19 +416,7 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\cross_links\CD1.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\cross_links\CD1.h"
+				RelativePath="$(ReleaseGenPath)\CD1.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -444,7 +428,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\cross_links\CD2.h"
+				RelativePath="$(DebugGenPath)\CD1.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -456,7 +440,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\cross_links\CD2.h"
+				RelativePath="$(ReleaseGenPath)\CD2.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -468,7 +452,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\cross_links\CD3.h"
+				RelativePath="$(DebugGenPath)\CD2.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -480,7 +464,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\cross_links\CD3.h"
+				RelativePath="$(ReleaseGenPath)\CD3.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -492,7 +476,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\cross_links\CL.h"
+				RelativePath="$(DebugGenPath)\CD3.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -504,10 +488,22 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\cross_links\CL.h"
+				RelativePath="$(ReleaseGenPath)\CL.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="$(DebugGenPath)\CL.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -529,8 +525,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="cd &quot;$(TargetDir)\Gen\samples\cross_links&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
-					Outputs="$(OutDir)\Gen\samples\cross_links\$(InputName).mga;$(OutDir)\Gen\samples\cross_links\CL_udm.udm"
+					CommandLine="cd &quot;$(GenPath)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
+					Outputs="$(GenPath)\$(InputName).mga;$(GenPath)\CL_udm.udm"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -538,13 +534,34 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="cd &quot;$(TargetDir)\Gen\samples\cross_links&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
-					Outputs="$(OutDir)\Gen\samples\cross_links\$(InputName).mga;$(OutDir)\Gen\samples\cross_links\CL_udm.udm"
+					CommandLine="cd &quot;$(GenPath)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\xme2udmxml&quot; &quot;$(InputPath)&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
+					Outputs="$(GenPath)\$(InputName).mga;$(GenPath)\CL_udm.udm"
 				/>
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\cross_links\CL_udm.udm"
+			RelativePath="$(DebugGenPath)\CL_udm.udm"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					Outputs="$(GenPath)\CD1.cpp; $(GenPath)\CD2.cpp; $(GenPath)\CD3.cpp; $(GenPath)\CL.cpp; $(GenPath)\CD1.h; $(GenPath)\CD2.h; $(GenPath)\CD3.h; $(GenPath)\CL.h; $(GenPath)\CD1.xsd; $(GenPath)\CD2.xsd; $(GenPath)\CD3.xsd; $(GenPath)\CL.xsd"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="$(ReleaseGenPath)\CL_udm.udm"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -559,29 +576,8 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\samples\cross_links&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-					Outputs="$(OutDir)\Gen\samples\cross_links\CD1.cpp; $(OutDir)\Gen\samples\cross_links\CD2.cpp; $(OutDir)\Gen\samples\cross_links\CD3.cpp; $(OutDir)\Gen\samples\cross_links\CL.cpp; $(OutDir)\Gen\samples\cross_links\CD1.h; $(OutDir)\Gen\samples\cross_links\CD2.h; $(OutDir)\Gen\samples\cross_links\CD3.h; $(OutDir)\Gen\samples\cross_links\CL.h; $(OutDir)\Gen\samples\cross_links\CD1.xsd; $(OutDir)\Gen\samples\cross_links\CD2.xsd; $(OutDir)\Gen\samples\cross_links\CD3.xsd; $(OutDir)\Gen\samples\cross_links\CL.xsd"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\cross_links\CL_udm.udm"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\samples\cross_links&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-					Outputs="$(OutDir)\Gen\samples\cross_links\CD1.cpp; $(OutDir)\Gen\samples\cross_links\CD2.cpp; $(OutDir)\Gen\samples\cross_links\CD3.cpp; $(OutDir)\Gen\samples\cross_links\CL.cpp; $(OutDir)\Gen\samples\cross_links\CD1.h; $(OutDir)\Gen\samples\cross_links\CD2.h; $(OutDir)\Gen\samples\cross_links\CD3.h; $(OutDir)\Gen\samples\cross_links\CL.h; $(OutDir)\Gen\samples\cross_links\CD1.xsd; $(OutDir)\Gen\samples\cross_links\CD2.xsd; $(OutDir)\Gen\samples\cross_links\CD3.xsd; $(OutDir)\Gen\samples\cross_links\CL.xsd"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
+					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					Outputs="$(GenPath)\CD1.cpp; $(GenPath)\CD2.cpp; $(GenPath)\CD3.cpp; $(GenPath)\CL.cpp; $(GenPath)\CD1.h; $(GenPath)\CD2.h; $(GenPath)\CD3.h; $(GenPath)\CL.h; $(GenPath)\CD1.xsd; $(GenPath)\CD2.xsd; $(GenPath)\CD3.xsd; $(GenPath)\CL.xsd"
 				/>
 			</FileConfiguration>
 		</File>
