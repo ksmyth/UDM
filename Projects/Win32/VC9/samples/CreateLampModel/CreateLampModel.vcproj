@@ -326,7 +326,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="LampDiagram_udm.xml -&gt; C++ API"
-						CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
+						CommandLine="&quot;$(UDM_PATH)\bin\UdmD.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
 						Outputs="$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h"
 					/>
 				</FileConfiguration>
@@ -356,7 +356,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="LampDiagram_udm.xml -&gt; C++ API"
-						CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
+						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
 						Outputs="$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h"
 					/>
 				</FileConfiguration>
