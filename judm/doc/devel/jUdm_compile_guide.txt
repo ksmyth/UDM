@@ -8,30 +8,18 @@ Requirements:
 
 Step-by-step guide:
 -------------------------
-	1. Setup UDM
-		1.1 Download the UDM_NS sources from the VSS project
-			From now on, I will use <udm_ns> to denote the root of the UDM_NS.
-		1.2 Get UDM 3rd party files from \\atlantis\project\mobies\udm\udm_ns\udm_ns_3rdparty.zip
-		1.3 ...
-	
-	2. Set the CLASSPATH environment variable
-		2.1 Add <j2sdk_root>\jre\lib\rt.jar to the CLASSPATH
-		2.2 Add <j2sdk_root>\lib\tools.jar  to the CLASSPATH
-		2.3 Add %UDM_3RDPARTY_PATH%\junit\junit.jar to the CLASSPATH
-		2.4 Add '.', i.e., the current directory to the CLASSPATH
-	
-	3. Compile and build the UDM_NS solution
+	1. Compile and build the UDM_NS solution
 		follow the guidelines described in the "Udm_ns compile guide" to compile UDM_ns
 
-	4. Set up ANT tool
+	2. Set up ANT tool
+	   (Note: if you have used scripts/vc*-env.bat to set up the environment, then skip this step)
 	   Before running ant, some additional set up must be done:
 		  - Add the bin directory to the PATH 
 		  - Set the ANT_HOME environment variable to the directory 
-		    where Ant is  installed (you can use the 3rdparty/ant directory)
+		    where Ant is  installed (you can use the udm_3rdparty/ant directory)
 		  - Set the JAVA_HOME environment variable to the directory 
 		    where JDK (< 1.4.2) is installed
-		  - Add the tools.jar to the classpath
-		  - Add the %ANT_HOME%\lib to the classpath
+		  - Add %ANT_HOME%\lib, %UDM_3RDPARTY_PATH%\junit\junit.jar and current directory to the classpath
 		
 		    Example: Windows OS
 		             Ant is installed in c:\ant\
@@ -39,12 +27,12 @@ Step-by-step guide:
 		             set ANT_HOME=c:\ant
 		             set JAVA_HOME=c:\jdk1.4.2
 		             set PATH=%PATH%;%ANT_HOME%\bin
-		             set CLASSPATH=%CLASSPATH%;%JAVA_HOME%\lib\tools.jar;%ANT_HOME%\lib
+		             set CLASSPATH=%CLASSPATH%;%ANT_HOME%\lib;%UDM_3RDPARTY_PATH%\junit\junit.jar;.
 
-	5. Open a command shell and go to the directory <udm_ns>\judm. 
-		Using ANT you can run the following targets:
+	3. Open a command shell and go to the directory <udm_ns>\judm. 
+		Using the wrapper script ..\scripts\run-ant-on-judm.bat you can run the following targets:
 
-		5.1 ant rebuild
+		5.1 ..\scripts\run-ant-on-judm.bat <select Udm build parameters> rebuild
 			Target “rebuild” re-initializes the build’s distribution environment 
 			(<udm_ns>\judm\build\build_win) after completely removing any previous build
 			from the disk, copies the necessary dll-s into this build directory, 
@@ -52,14 +40,17 @@ Step-by-step guide:
 			creates jar files (jUdm and other domain-specific jar files), updates batch files, and
 			generates javadoc API documentation.
 
-		5.2 ant build
+		    For example:
+		    ..\scripts\run-ant-on-judm.bat VC9 Debug rebuild
+
+		5.2 ..\scripts\run-ant-on-judm.bat <select Udm build parameters> build
 			Target “build” re-initializes the build’s distribution environment 
 			(<udm_ns>\judm\build\build_win), copies the necessary dll-s into this build directry, 
 			compiles the swig and domain-specific source codes.
 			This task requires the existence of the swig and domain-specific source codes, so you
 			have to run either "rebuild" or "generate" task prior running this task.
 
-		5.3 ant compile
+		5.3 ..\scripts\run-ant-on-judm.bat <select Udm build parameters> compile
 			Target “compile” re-initializes the build’s distribution environment 
 			(<udm_ns>\judm\build\build_win) by copying the necessary dll-s into this build directory 
 			and compiling the swig and domain-specific source codes.
@@ -67,7 +58,7 @@ Step-by-step guide:
 			This task requires the existence of the swig and domain-specific source codes, so you
 			have to run either "rebuild" or "generate" task prior running this task.
 
-		5.4 ant generate
+		5.4 ..\scripts\run-ant-on-judm.bat <select Udm build parameters> generate
 			Target “generate” re-initializes the build’s distribution environment 
 			(<udm_ns>\judm\build\build_win) by copying the necessary dll-s into this build directory, 
 			and updating, re-generating the swig and domain-specific source codes.

@@ -25,9 +25,9 @@ Step-by-step guide:
 
 	2. Open a command shell and go to the directory <udm_ns>\judm
 
-	3. Using ANT you have to run the following target:
+	3. Using wrapper script ..\scripts\run-ant-on-judm.bat you have to run the following target:
 
-		ant rebuild
+		..\scripts\run-ant-on-judm.bat <select Udm build parameters> rebuild
 			Target “rebuild” re-initializes the build’s distribution environment 
 			(<udm_ns>\judm\build\build_win) after completely removing any previous build
 			from the disk, copies the necessary dll-s into this build directory, 

@@ -1,25 +1,22 @@
 @echo off
 
-rem set JDK_PATH=c:\Program Files\Java\jdk1.6.0_16
-rem set UMD_3RDPARTY_PATH=C:\Documents and Settings\kevin\My Documents\UDM\3rdparty_VS2008
+: Read UDM_3RDPARTY_PATH and JDK_PATH from script with local settings
+if exist %~dp0vc9-env-local.bat call %~dp0vc9-env-local.bat
 
-if exist "%UDM_PATH%" goto :udm_path_set
+if not defined UDM_3RDPARTY_PATH echo Set UDM_3RDPARTY_PATH & exit /b 1
+if not defined JDK_PATH echo Set JDK_PATH & exit /b 1
+if not defined GME_ROOT echo Set GME_ROOT & exit /b 1
+
+if defined UDM_PATH goto :udm_path_set
 
 rem Determine UDM_PATH
 pushd %CD%
-rem cd to directory containing this script
-cd /d %~dp0
-pushd %CD%
-cd ..\..\..\..
+rem cd to the parent directory of this script
+cd /d %~dp0..
 set UDM_PATH=%CD%
-popd
 popd
 
 :udm_path_set
-
-if not exist "%UDM_3RDPARTY_PATH%" echo Set UDM_3RDPARTY_PATH & goto :eof
-if not exist "%JDK_PATH%" echo Set JDK_PATH & goto :eof
-if not exist "%GME_ROOT%" echo Set GME_ROOT & goto :eof
 
 set PATH=%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin;^
 %UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin;^
@@ -27,6 +24,7 @@ set PATH=%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin;^
 %UDM_3RDPARTY_PATH%\info-zip;^
 %UDM_3RDPARTY_PATH%\sed;^
 %UDM_3RDPARTY_PATH%\swigwin-1.3.36;^
+%UDM_3RDPARTY_PATH%\ant-1.6.2\bin;^
 %PATH%
 
 set INCLUDE=%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\include;^
@@ -50,5 +48,10 @@ set LIB=%UDM_3RDPARTY_PATH%\Xalan-C_1_11_0\lib;^
 %JDK_PATH%\lib;^
 %LIB%
 
-set CLASSPATH=%UDM_3RDPARTY_PATH%\antlr-2.7.7\antlr.jar;^
-%CLASSPATH%
+set JAVA_HOME=%JDK_PATH%
+
+set _CLASSPATH=%UDM_3RDPARTY_PATH%\junit\junit.jar;^
+%UDM_3RDPARTY_PATH%\antlr-2.7.7\antlr.jar
+if defined CLASSPATH (set CLASSPATH=%_CLASSPATH%;%CLASSPATH%) else (set CLASSPATH=%_CLASSPATH%)
+
+set ANT_HOME=%UDM_3RDPARTY_PATH%\ant-1.6.2

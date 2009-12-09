@@ -19,17 +19,13 @@ Step-by-step guide:
 		\\Atlantis\Project\Mobies\Udm\Udm_ns\3rdparty_vs2008_V1.zip
 	and unzip it onto your machine. 
 
-	3. Download the Boost C++ libraries:
-		http://www.boost.org/
-	and extract into 3rdparty_VS2008 as boost_1_36_0. You needn't compile Boost.
-
-	4. Set your build environment as follows:
-		(Note: Use Tools/Options/Projects and Solutions/VC++ Directories to make these settings)
+	3. Set your build environment as follows:
+		(Note: either use Tools/Options/Projects and Solutions/VC++ Directories to make these settings or create a script called scripts/vc9-env-local.bat and set them there)
 	UDM_3RDPARTY_PATH=
 		your UDM 3rdparty root folder (extracted from 3rdparty_vs2008_V1.zip)
 	JDK_PATH=
 		your Java 1.4.2 (or later) SDK path, e.g. c:\Program Files\Java\jdk1.6.0_16
-		(Note: Once the above variables are set, you may use Projects/Win32/VC9/src/set-paths.bat to set following)
+		(Note: Once the above variables are set, you may use scripts/vc9-env.bat to set following)
 	UDM_PATH=
 		your UDM SVN root folder (where /MoBIES/UDM/trunk/ is checked out)
 	PATH=
@@ -57,7 +53,6 @@ Step-by-step guide:
 		%UDM_3RDPARTY_PATH%\zlib;
 		%UDM_3RDPARTY_PATH%\antlr-2.7.7\lib;
 		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\lib;
-		%UDM_3RDPARTY_PATH%\boost_1_36_0\lib;
 		%JDK_PATH%\lib
 		%LIB%
 	CLASSPATH=
