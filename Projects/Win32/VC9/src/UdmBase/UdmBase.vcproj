@@ -221,7 +221,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\lib"
+				CommandLine="cd &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot;&#x0D;&#x0A;move UdmProject.h ..\..\..\..\..\..\include&#x0D;&#x0A;move UdmProject.xsd ..\..\..\..\..\..\etc&#x0D;&#x0A;move UdmProject_xsd.h ..\..\..\..\..\..\src\UdmBase&#x0D;&#x0A;move UdmProject.cpp ..\..\..\..\..\..\src\UdmBase&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -276,7 +276,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\lib"
+				CommandLine="cd &quot;$(OutDir)\..\Gen\src\$(ProjectName)&quot;&#x0D;&#x0A;move UdmProject.h ..\..\..\..\..\..\include&#x0D;&#x0A;move UdmProject.xsd ..\..\..\..\..\..\etc&#x0D;&#x0A;move UdmProject_xsd.h ..\..\..\..\..\..\src\UdmBase&#x0D;&#x0A;move UdmProject.cpp ..\..\..\..\..\..\src\UdmBase&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
