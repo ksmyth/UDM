@@ -1016,6 +1016,10 @@ protected:
 	};
 	vector<CrossFwdDecls> cross_fwd_decls;
 
+	// statements with specializations of IsDescendant, for which the
+	// value is the true value, _True_
+	vector<boost::format> is_descendant_pairs;
+
 	InheritanceSolver is;
 
 	void CustomProcess(const ::Uml::Diagram &cross_diagram, const InheritanceSolver &p_is);
@@ -1029,6 +1033,7 @@ public:
 	}
 
 	void OutCrossFwdDecls(ostream &out);
+	void OutIsDescendantPairs(ostream &out);
 
 	void OutH(ostream &out);
 };

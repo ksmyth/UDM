@@ -28,6 +28,11 @@ static string GetNsfromFromStr(const string& fromstr )
 	return fromstr.substr(i +1, string::npos);
 }
 
+static bool cmpClasses(const Uml::Class &a, const Uml::Class &b)
+{
+	return UmlClassCPPName(a) < UmlClassCPPName(b);
+}
+
 
 namespace UdmCPPGen {
 
@@ -256,6 +261,29 @@ void DiagramGen::CustomProcess(const ::Uml::Diagram &cross_diagram, const Inheri
 			}
 		}
 	}
+
+
+	// IsDescendant pairs
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC) {
+
+		::Uml::DiagramClasses all_classes(c);
+
+		vector< ::Uml::Class> all_classes_v;
+		for (::Uml::DiagramClasses::iterator i = all_classes.begin(); i != all_classes.end(); i++)
+			all_classes_v.push_back(*i);
+		sort(all_classes_v.begin(), all_classes_v.end(), cmpClasses);
+
+		for (vector< ::Uml::Class>::const_iterator parent = all_classes_v.begin(); parent != all_classes_v.end(); parent++) {
+			for (vector< ::Uml::Class>::const_iterator child = all_classes_v.begin(); child != all_classes_v.end(); child++) {
+				vector< ::Uml::ChildRoleChain> chains;
+				if (::Uml::GetChildRoleChain(*parent, *child, chains))
+					is_descendant_pairs.push_back( boost::format("template <> struct IsDescendant < %1%, %2%> : _True_ {};" )
+								       % UmlClassCPPName(*parent)
+								       % UmlClassCPPName(*child)
+								       );
+			}
+		}
+	}
 }
 
 void DiagramGen::OutCrossFwdDecls(ostream &out)
@@ -272,6 +300,29 @@ void DiagramGen::OutCrossFwdDecls(ostream &out)
 
 		out << endl;
 	}
+}
+
+void DiagramGen::OutIsDescendantPairs(ostream &out)
+{
+	if (gen.opts.mode != UdmOpts::CXX_GENERIC)
+		return;
+
+	out << boost::format("\
+#ifndef PARADIGM_HAS_DESCENDANT_PAIRS\n\
+#define PARADIGM_HAS_DESCENDANT_PAIRS\n\
+#endif // PARADIGM_HAS_DESCENDANT_PAIRS\n\
+\n\
+\tstruct _False_ { enum { value = 0 }; };\n\
+\tstruct _True_  { enum { value = 1 }; };\n\
+\n\
+\ttemplate <class T, class U>\n\
+\tstruct IsDescendant : _False_ {};\n\
+\n");
+
+	for (vector<boost::format>::const_iterator i = is_descendant_pairs.begin(); i != is_descendant_pairs.end(); i++)
+		out << "\t" << *i << endl;
+
+	out << endl;
 }
 
 void DiagramGen::OutH(ostream &out)
@@ -355,6 +406,8 @@ void DiagramGen::OutH(ostream &out)
 		ngen.EndNS(out);
 	}
 	
+
+	OutIsDescendantPairs(out);
 
 	EndNS(out);
 }
