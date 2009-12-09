@@ -3609,7 +3609,11 @@ namespace UdmDom
 						IdToDomElementMapItem item_to_store(id, dd);
 						pair<IdToDomElementMap::iterator, bool> ins_res;
 						ins_res = DomElements.insert(item_to_store);
+						//check for uniqueness
 						ASSERT(ins_res.second);
+
+						//set uniqueId to id
+						dd->setUserData(gXML__id, (void*) id, NULL);
 
 					}//eo if (id)
 				}//eo if (a != 0)
