@@ -233,14 +233,6 @@
 		<mkdir dir="${judm.dir}" />
 		<mkdir dir="${judm.bin.dir}" />
 		
-		<copy todir="${judm.bin.dir}">
-			<!-- Copy xerces in the directory of the distribution -->
-			<fileset dir="${udm_3rdparty.dir}/xerces-c_2_8_0/bin">
-				<include name="xerces*.dll" />
-				<exclude name="*D.dll" />
-			</fileset>
-		</copy>
-
 		<!-- Copy Udm executable and UdmSwig DLL in the directory of the distribution -->
 		<copy file="${udm.bin.dir}/${udm.bin.exe}" tofile="${judm.bin.dir}/udm.exe" overwrite="true" verbose="true" />
 		<copy file="${udm.bin.dir}/${udm.bin.swigdll}" tofile="${judm.bin.dir}/udmswig.dll" overwrite="true" verbose="true" />
@@ -317,7 +309,6 @@
 			<classpath>
 				<path refid="compile.classpath" />
 				<pathelement location="${build.dir}/${dspackage}/classes/main" />
-				<pathelement location="${junit.dir}/junit.jar" />
 			</classpath>
 		</javac>
 
@@ -413,13 +404,13 @@
 
 		<!-- Generate UDM XML from the XME XML file -->
 		<exec dir="samples/${dspackage}/meta" executable="cmd">
-			<arg line="/c &quot;${udm.etc.dir}/xme2udmxml&quot; ${dspackage}_uml.xme ${dspackage}.mga " />
+			<arg line="/c ${udm.etc.dir}/xme2udmxml ${dspackage}_uml.xme ${dspackage}.mga " />
 		</exec>
 		
 		<!-- Generate UDM XML from the XME XML file -->
-		<echo> Run ${udm.dir}\bin\udm.exe ${dspackage}_udm.xml ${udm_options} </echo>
-		<exec dir="samples/${dspackage}/meta" executable="cmd">
-			<arg line="/c &quot;${udm.bin.dir}\${udm.bin.exe}&quot; ${dspackage}_udm.xml ${udm_options}" />
+		<echo> Run ${udm.bin.dir}\udm.exe ${dspackage}_udm.xml ${udm_options} </echo>
+		<exec dir="samples/${dspackage}/meta" executable="${udm.bin.dir}/${udm.bin.exe}">
+			<arg line="${dspackage}_udm.xml ${udm_options}" />
 		</exec>
 		
 		<!-- Update source code -->
