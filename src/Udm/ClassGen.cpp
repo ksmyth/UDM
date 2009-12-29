@@ -422,8 +422,9 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 			// ::Uml::AssociationRole C::meta_A_rev
 			meta_defs.push_back( boost::format("::Uml::AssociationRole %2%::meta_%1%_rev") % rel_name % cl_name );
 
-			// set the _rev -s
-			meta_init_links2.push_back( boost::format("%3%::meta_%4%_rev = %1%::meta_%2%") % cl_name % rel_name % UmlClassCPPName(oclass, c.parent_ns()) % (string) i->name());
+			// set the _rev's and _end_'s
+			meta_init_links2.push_back( boost::format("%1%::meta_%2%_end_ = %3%::meta_%4%_rev = %5%::meta_%6%") 
+				% UdmUtil::ExtractName(aclass) % rel_name % oclass_cpp_name % (string) i->name() % cl_name % rel_name );
 
 			if (the_other.isNavigable()) 
 			{
@@ -935,8 +936,6 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 				}
 			}
 
-			// _end_ association roles
-			meta_init_links2.push_back( boost::format("%1%::meta_%2%_end_ = %3%::meta_%2%") % cl_name % rel_name % UmlClassCPPName(the_other.target(), c.parent_ns()) );
 		}
 	}
 
