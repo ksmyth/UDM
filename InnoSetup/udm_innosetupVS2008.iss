@@ -20,10 +20,9 @@
 #define GREATPATH "C:\Projects\GReAT"
 #endif
 
-#define UDMDLL "UdmDll_3_2_2.dll"
-#define UDMDLLD "UdmDll_3_2_2D.dll"
-#define UDMVER "3.2.2"
-#define GMEVER "9.8.28"
+#define UDMDLL "UdmDll_3_2.dll"
+#define UDMDLLD "UdmDll_3_2D.dll"
+#define UDMVER "3.2.3"
 #define OutputFileBase "Udm_setup_VC9"
 
 [Setup]
@@ -43,7 +42,7 @@ OutputBaseFilename={#OutputFileBase}
 Compression=lzma
 SolidCompression=yes
 ChangesEnvironment=true
-AppCopyright=Copyright (C) 2001-2009 ISIS, Vanderbilt University
+AppCopyright=Copyright (C) 2001-2010 ISIS, Vanderbilt University
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl

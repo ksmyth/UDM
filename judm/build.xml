@@ -309,6 +309,7 @@
 			<classpath>
 				<path refid="compile.classpath" />
 				<pathelement location="${build.dir}/${dspackage}/classes/main" />
+				<pathelement location="${junit.dir}/junit.jar" />
 			</classpath>
 		</javac>
 
@@ -404,7 +405,7 @@
 
 		<!-- Generate UDM XML from the XME XML file -->
 		<exec dir="samples/${dspackage}/meta" executable="cmd">
-			<arg line="/c ${udm.etc.dir}/xme2udmxml ${dspackage}_uml.xme ${dspackage}.mga " />
+			<arg line="/c &quot;${udm.etc.dir}/xme2udmxml&quot; ${dspackage}_uml.xme ${dspackage}.mga " />
 		</exec>
 		
 		<!-- Generate UDM XML from the XME XML file -->
@@ -679,7 +680,7 @@
 	</target>
 
 	<!-- Generate a domain-specific API documentation -->
-	<target name="ds-apidoc" description="Generate ${dspackage} API documentation">
+	<target name="ds-apidoc" description="Generate ${dspackage} API documentation" depends="init-windows-compile.classpath">
 		<fail unless="dspackage" message="Missing parameter: dspackage" />
 		
 		<!-- Create library for apidoc -->
@@ -687,7 +688,7 @@
 		<mkdir dir="${build.dir}/${dspackage}/apidoc" />
 
 		<!-- Generate a domain-specific API documentation --> 
-		<javadoc failonerror="no" classpathref="compile.classpath" defaultexcludes="yes" useexternalfile="yes" verbose="no" destdir="${build.dir}/${dspackage}/apidoc" windowtitle="${dspackage} API">
+		<javadoc failonerror="yes" classpathref="compile.classpath" defaultexcludes="yes" useexternalfile="yes" verbose="no" destdir="${build.dir}/${dspackage}/apidoc" windowtitle="${dspackage} API">
 			<fileset dir="${build.dir}/${dspackage}/src/main" defaultexcludes="yes"/>
 			<fileset dir="${build.dir}/${dspackage}/src/test" defaultexcludes="yes"/>
 		    <doctitle><![CDATA[<h1>${dspackage} API</h1>]]></doctitle>

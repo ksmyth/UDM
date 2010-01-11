@@ -1,4 +1,4 @@
-Copyright (c) Vanderbilt University, 2001-2009
+Copyright (c) Vanderbilt University, 2001-2010
 ALL RIGHTS RESERVED
 
 ** UDM : Universal Data Model **
@@ -7,7 +7,7 @@ ALL RIGHTS RESERVED
 
 1. Windows Operating system (preferably NT, 2000, XP)
 
-2. GME 9, R9.11.12 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 9, R9.12.15 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 9
@@ -18,6 +18,12 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+01/9/10			-	Release 3.2.3
+		-	For LEESA programs, add struct IsDescendant<T, U> that can be used to check at compile time if U can be contained, either directly or indirectly, by T.
+		-	Use uniqueId from file with DOM backend (_id attribute)
+		-	Fix uninitialized AssocEnd when Initialize(ing) from file
+		-	Udm .dll is renamed UdmDll_3_2.dll so dependent projects need not be recompiled next release
+
 11/30/09		-	Release 3.2.2
 		-	Fix bug with uninitialized Association metas when Initialize()ing from a file (e.g. with the GREngine)
 		-	Allow users of MPL code to turn off compilation of unneeded methods
