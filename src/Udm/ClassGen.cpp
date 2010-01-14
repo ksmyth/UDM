@@ -359,7 +359,7 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 
 		string rel_name = ::Uml::MakeRoleName(the_other);
 		::Uml::Class oclass = the_other.target();
-		string oclass_cpp_name = UmlClassCPPName(oclass);
+		string oclass_cpp_name = UmlClassCPPName(oclass, c.parent_ns());
 
 		//meta_init_links.push_back( boost::format("%1%_ar.insert(%2%::meta_%3%)") % cl_name % UmlClassCPPName(oclass, c.parent_ns()) % ::Uml::MakeRoleName(*i) );
 		meta_init_links.push_back( boost::format("%1%::meta_%2%.target() = %3%::meta") % UmlClassCPPName(i->target(), c.parent_ns()) % rel_name % UmlClassCPPName(oclass, c.parent_ns()) );
@@ -412,6 +412,8 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 		}
 		else 
 		{
+			string aclass_cpp_name = UmlClassCPPName(aclass, c.parent_ns());
+
 			// static ::Uml::AssociationRole meta_A
 			meta_decls.push_back( boost::format("static ::Uml::AssociationRole meta_%1%") % rel_name );
 			// ::Uml::AssociationRole C::meta_A
@@ -423,13 +425,10 @@ void ClassGen::Associations(const ::Uml::Diagram &cross_dgr)
 			meta_defs.push_back( boost::format("::Uml::AssociationRole %2%::meta_%1%_rev") % rel_name % cl_name );
 
 			// set the _rev's and _end_'s
-			meta_init_links2.push_back( boost::format("%1%::meta_%2%_end_ = %3%::meta_%4%_rev = %5%::meta_%6%") 
-				% UdmUtil::ExtractName(aclass) % rel_name % oclass_cpp_name % (string) i->name() % cl_name % rel_name );
+			meta_init_links2.push_back( boost::format("%1%::meta_%2%_end_ = %3%::meta_%4%_rev = %5%::meta_%6%") % aclass_cpp_name % rel_name % oclass_cpp_name % (string) i->name() % cl_name % rel_name );
 
 			if (the_other.isNavigable()) 
 			{
-				string aclass_cpp_name = UmlClassCPPName(aclass);
-				string oclass_cpp_name = UmlClassCPPName(oclass);
 				string tl_typename = "_AR_" + rel_name + "__" + aclass.getPath2("_", false) + "__" + oclass.getPath2("_", false);
 
 				if (the_other.max() == 1)
