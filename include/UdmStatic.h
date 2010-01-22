@@ -129,7 +129,7 @@ namespace UdmStatic
 
 		void OpenExisting(const string &systemname, 
 								const string &metalocator = "", 
-								enum Udm::BackendSemantics sem);
+								enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 
 		
 		void SaveAs(string systemname);

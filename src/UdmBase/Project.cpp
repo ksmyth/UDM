@@ -651,7 +651,7 @@ namespace Udm
 		ff.close();
 		ff.clear();
 			
-		cross_links->CreateNew(temp_path + PATHDELIM + (string)(_udm_pr_dn.systemname()), _udm_pr_dn.metalocator(), Uml::classByName(*cross_diag.dgr, "_gen_cont"));
+		cross_links->CreateNew(temp_path + PATHDELIM + (string)(_udm_pr_dn.systemname()), _udm_pr_dn.metalocator(), Uml::classByName(*cross_diag.dgr, "_gen_cont"), Udm::CHANGES_PERSIST_ALWAYS);
 		
 		//restoring DTD path 
 		UdmDom::DomDataNetwork::DTDPath = saved_dtd_path;	

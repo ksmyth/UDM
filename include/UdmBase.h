@@ -3051,7 +3051,7 @@ public:
 									enum BackendSemantics sem) = 0;
 	virtual void OpenExisting(const string &systemname, 
 									const string &metalocator = "", 
-									enum BackendSemantics sem) = 0;
+									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) = 0;
 	virtual void CloseWithUpdate() = 0;
 	virtual void CloseNoUpdate()			{  throw udm_exception("Unsupported method"); }
 	virtual void SaveAs(string systemname) {  throw udm_exception("Unsupported method"); }
@@ -3172,7 +3172,7 @@ public:
 
 	virtual void OpenExisting(const string &systemname, 
 									const string &metalocator = "", 
-									enum BackendSemantics sem) {
+									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) {
 		if(dn) throw udm_exception("DataNetwork is already open"); 
 		DataNetwork *dn1 = CreateBackend(systemname, metaroot,pr);
 		if(!dn1) throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"

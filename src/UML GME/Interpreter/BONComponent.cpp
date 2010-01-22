@@ -202,7 +202,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 			}
 
 			::UdmDom::DomDataNetwork dn(::Uml::diagram);
-			dn.CreateNew((LPCTSTR) filepath, "Uml", ::Uml::Diagram::meta);
+			dn.CreateNew((LPCTSTR) filepath, "Uml", ::Uml::Diagram::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
 			package->SetUmlDiagram(::Uml::Diagram::Cast(dn.GetRootObject()));
 			package->BuildUML();
@@ -245,7 +245,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 			}
 
 			Udm::UdmProject pr;
-			pr.CreateNewMeta((LPCTSTR) name, (LPCTSTR) filepath, dnsvec);
+			pr.CreateNewMeta((LPCTSTR) name, (LPCTSTR) filepath, dnsvec, Udm::CHANGES_PERSIST_ALWAYS);
 			cross_uml_dgr = ::Uml::Diagram::Cast(pr.GetCrossMetaNetwork().GetRootObject());
 
 			mPos = packages->GetHeadPosition();

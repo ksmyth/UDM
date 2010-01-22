@@ -1281,7 +1281,7 @@ bool UdmPseudoDataNetwork::CreateNewToString(const char * meta_locator, const Ud
 		//init dgr!
 		UdmDom::DomDataNetwork * ddn = new UdmDom::DomDataNetwork(dgr);
 
-		ddn->CreateNewToString(meta_locator, rc);
+		ddn->CreateNewToString(meta_locator, rc, Udm::CHANGES_PERSIST_ALWAYS);
 		dn_id = ddn->uniqueId();
 		
 		Udm::Object root_o = ddn->GetRootObject();
@@ -1367,7 +1367,7 @@ bool UdmPseudoDataNetwork::OpenExistingFromString(const char * sys_name, const c
 
     string  a(sys_name);
     string  b(meta_locator);
-    ddn->OpenExistingFromString(a, b);
+	ddn->OpenExistingFromString(a, b, Udm::CHANGES_PERSIST_ALWAYS);
 		dn_id = ddn->uniqueId();
 		
 		Udm::Object root_o = ddn->GetRootObject();
@@ -1804,7 +1804,7 @@ bool  UPO_LoadDiagramFromString(const char * xml_meta_file, const char * xml_str
 		replaceAll(xml,"\\&quot;","&quot;");
 		replaceAll(xml,"\\n","&#10;");
 
-		ddn->OpenExistingFromString(xml, "Uml.xsd");
+		ddn->OpenExistingFromString(xml, "Uml.xsd", Udm::CHANGES_PERSIST_ALWAYS);
 		*loaded_dgr = ::Uml::Diagram::Cast(ddn->GetRootObject());
 
 		if (!loaded_dgr) throw udm_exception("UML Diagram could not be loaded!");
