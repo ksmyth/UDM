@@ -5,9 +5,9 @@ ALL RIGHTS RESERVED
 
 ** Software Requirement**
 
-1. Windows Operating system (preferably NT, 2000, XP)
+1. Windows Operating system (2000, XP, Vista, 7)
 
-2. GME 9, R9.12.15 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 10, R10.1.11 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 9
