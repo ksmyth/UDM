@@ -109,16 +109,16 @@ namespace UdmGme
 		UDM_DLL ~GmeDataNetwork();
 		UDM_DLL void CreateNew(const string &systemname, 
 			const string &metalocator, const ::Uml::Class &rootclass, 
-									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+									enum Udm::BackendSemantics sem);
 		
 		// For Udm-based Interpreters ///////////////////
-		UDM_DLL void OpenExisting(LPUNKNOWN pUnknown, enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+		UDM_DLL void OpenExisting(LPUNKNOWN pUnknown, enum Udm::BackendSemantics sem);
 		UDM_DLL Object Gme2Udm(LPUNKNOWN pUnknown);
 		/////////////////////////////////////////////////
 
 		UDM_DLL void OpenExisting(const string &systemname, 
 									const string &metalocator, 
-									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+									enum Udm::BackendSemantics sem);
 		UDM_DLL void CloseWithUpdate();
 		UDM_DLL void CloseNoUpdate();
 		UDM_DLL void SaveAs(string systemname); 

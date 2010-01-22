@@ -123,13 +123,13 @@ namespace UdmStatic
 		
 		void CreateNew(const string &systemname, 
 								const string &metalocator, const ::Uml::Class &rootclass, 
-								enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+								enum Udm::BackendSemantics sem);
 		
 		
 
 		void OpenExisting(const string &systemname, 
 								const string &metalocator = "", 
-								enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+								enum Udm::BackendSemantics sem);
 
 		
 		void SaveAs(string systemname);

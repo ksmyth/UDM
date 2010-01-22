@@ -86,19 +86,19 @@ namespace UdmDom
 		UDM_DLL ~DomDataNetwork();
 		UDM_DLL void CreateNew(const string &systemname, 
 									const string &metalocator, const ::Uml::Class &rootclass, 
-									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+									enum Udm::BackendSemantics sem);
 
 		UDM_DLL void CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass, 
-									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+									enum Udm::BackendSemantics sem);
 
 
 		UDM_DLL void OpenExisting(const string &systemname, 
 									const string &metalocator, 
-									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+									enum Udm::BackendSemantics sem);
 		
 		UDM_DLL void OpenExistingFromString(string &str, 
 									const string &metalocator, 
-									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+									enum Udm::BackendSemantics sem);
 		
 		UDM_DLL void MapExistingIDs(const DOMNode &d);
 		UDM_DLL void SaveAs(string systemname); 
