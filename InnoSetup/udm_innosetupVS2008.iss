@@ -5,6 +5,8 @@
 #pragma option -v+
 #pragma verboselevel 9
 
+#define GMEVER "10.1.11"
+
 #define UDMPATH GetEnv('UDM_PATH')
 #if UDMPATH == ""
 #define UDMPATH "C:\Projects\UDM"
@@ -307,11 +309,40 @@ begin
 	end;
 end;
 
+function CheckVersions(): Boolean;
+var
+  gme_path : String;
+  oGME :  Variant;
+  vs_path : String;
+begin
+  Result := True;
+#ifdef GMEVER
+  gme_path := GetEnv('GME_ROOT');
+  /////////////////////////////////////////////////////////
+  // CASE #1: No GME installed
+  /////////////////////////////////////////////////////////
+  if gme_path = '' then begin
+    MsgBox('Unable to locate GME r{#GMEVER}.  Please install GME r{#GMEVER} first.', mbError, MB_OK);
+    Result := False;
+  /////////////////////////////////////////////////////////
+  // ELSE: wrong GME installed
+  ////////////////////////////////////////////////////////
+  end else begin
+    oGME := CreateOleObject('GME.Application');
+	  if oGME.Version <> '{#GMEVER}' then begin
+	  	Result := MsgBox('This version of UDM ({#UDMVER}) is recommended for use with GME {#GMEVER}. The currently installed GME version is '+oGME.Version+'.'#13#13+'Are you sure you wish to continue with the installation?', mbConfirmation, MB_YESNO) = idYes;
+  	end
+    IDispatchInvoke(oGME, False, 'Exit', []);
+  end;
+#endif
+end;
+
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
   MyComponents : String;
   MyCompLen : Integer;
 begin
+  Result := True;
   if CurPageID = wpSelectComponents then begin
     MyComponents := WizardSelectedComponents(false);
     MyCompLen := length(MyComponents);
@@ -321,5 +352,8 @@ begin
       InstallSystemWide := false;
     end;
   end;
-  Result := True;
+  if CurPageID = wpInfoBefore then begin
+    Result := CheckVersions();
+  end;
 end;
+
