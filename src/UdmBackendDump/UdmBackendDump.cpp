@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 		udmDataDiagram.init = dummy;
 
 		Udm::SmartDataNetwork sdnBackend(udmDataDiagram);
-		sdnBackend.OpenExisting(argv[1]);
+		sdnBackend.OpenExisting(argv[1], "", Udm::CHANGES_PERSIST_ALWAYS);
 
 		// Dump to stdout
 		{

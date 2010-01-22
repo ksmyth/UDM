@@ -367,7 +367,7 @@ namespace Udm
 		//Udm::SmartDataNetwork dn(::UdmProject::diagram);
 
 		project_dn = new Udm::SmartDataNetwork(::UdmProject::diagram);
-		project_dn->OpenExisting(project_path, "UdmProject.xsd");
+		project_dn->OpenExisting(project_path, "UdmProject.xsd", Udm::CHANGES_PERSIST_ALWAYS);
 		Project = project_dn->GetRootObject();
 
 		::UdmProject::Project _project = ::UdmProject::Project::Cast(Project);
