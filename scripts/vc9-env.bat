@@ -1,7 +1,7 @@
 @echo off
 
 : Read UDM_3RDPARTY_PATH and JDK_PATH from script with local settings
-if exist %~dp0vc9-env-local.bat call %~dp0vc9-env-local.bat
+if exist "%~dp0"vc9-env-local.bat call "%~dp0"vc9-env-local.bat
 
 if not defined UDM_3RDPARTY_PATH echo Set UDM_3RDPARTY_PATH & exit /b 1
 if not defined JDK_PATH echo Set JDK_PATH & exit /b 1
