@@ -79,7 +79,7 @@ public:
 			// from source object to standalone library object
 			Udm::SmartDataNetwork libDN(m_meta);
 			const ::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(p_srcChild->type());
-			libDN.CreateNew(new_lib_name, m_metaloc, safe_type);
+			libDN.CreateNew(new_lib_name, m_metaloc, safe_type, Udm::CHANGES_PERSIST_ALWAYS);
 			Object p_root = libDN.GetRootObject();
 			ObjectImpl *p_libRoot = p_root.__impl();
 
