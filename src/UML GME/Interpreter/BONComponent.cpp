@@ -1018,6 +1018,14 @@ void CCompositeClass::BuildAssociations()
 				ASSERT(direct);
 				CClassBase *dst = dynamic_cast<CClassBase *>(direct->GetDestination());
 				ASSERT(dst && dst->composite);
+				if (!dst) {
+					// UDM-47
+					CComPtr<IMgaFCO> destFco;
+					COMVERIFY(direct->GetIConnection()->get_Dst(&destFco));
+					CBstr name;
+					COMVERIFY(destFco->get_Name(name));
+					throw udm_exception(static_cast<CString>(name) + " is a null reference");
+				}
 				RegisterAssociation(direct,dst->composite);
 			}
 		}
