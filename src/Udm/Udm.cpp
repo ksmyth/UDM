@@ -28,6 +28,40 @@ this software.
 
 #include "Udm.h"
 
+static const char* udm_usage = 
+"Usage: udm <diagramfilename> [<genfilesnamebase>] [-d <Uml.XSD searchpath>] \
+				[-m|c] [-v] [-t] [-l <macro>] [-x]\n"
+"\n"
+" [default] dynamic meta\n"
+"  -m static meta\n"
+"  -c corba meta\n"
+"\n"
+"  [default] Generate C++\n"
+"  -s Generate C#\n"
+"  -j Generate Java\n"
+"  --leesa Generate C++ with support for generic programming\n"
+"\n"
+"  -t generate DTD\n"
+"  -x Use XSD inheritance features when generating XSDs\n"
+"  -e Generate XSD elements like they would have text attributes\n"
+"  -g Integrate the XSD into the generated API\n"
+"\n"
+"  -d <Uml.XSD searchpath>"
+"  -u <UMLContainerName> Add UMLContainerName to URI Mapping\n"
+"  -i <UMLContainerName> Add UMLContainerName to ignore list\n"
+"  -q <UMLContainerName> Add UMLContainerName to qualified attribute namespace list\n"
+"  -T Don't record time when code was generated\n"
+"  -w [c|d|n] How to group classes and namespaces into files:\n"
+"             c: One .cpp file per class\n"
+"             d: All classes from a diagram and its sub-namespaces into a single .cpp\n"
+"             n: All classes from a namespace into a single .cpp\n"
+"  -o <Output directory>\n"
+"\n"
+"C++ options:\n"
+"  -v Support for C++ visitor pattern\n"
+"  -l <macro> Insert macro before definitions\n";
+
+
 int main(int argc, char **argv) {
 	try
 	{
@@ -53,7 +87,7 @@ int main(int argc, char **argv) {
 
 
 		if (argc <= 1)
-			throw udm_exception("Usage: udm <diagramfilename> [<genfilesnamebase>] [-d <Uml.xsd searchpath>] [-m|c] [-v] [-t] [-l] [-x] [-o <output dir>]\n");
+			throw udm_exception(udm_usage);
 
 		for(int argn = 1; argn < argc; argn++) 
 		{
@@ -123,8 +157,9 @@ int main(int argc, char **argv) {
 				char *optp;
 				if(strlen(argv[argn]) == 2) 
 				{
-					if(++argn >= argc) goto usage;
-					 optp = argv[argn];
+					if(++argn >= argc) 
+						throw udm_exception(udm_usage);
+					optp = argv[argn];
 				}
 				else 
 					optp = argv[argn]+2;
@@ -199,7 +234,7 @@ int main(int argc, char **argv) {
 									opts.cxx_source_unit = UdmOpts::UNIT_NAMESPACE;
 									break;
 								default:
-									goto usage;
+									throw udm_exception(udm_usage);
 							}
 							break;
 					case 'o':
@@ -207,7 +242,7 @@ int main(int argc, char **argv) {
 							opts.out_dir.append("/");
 							break;
 					default:
-							goto usage;
+							throw udm_exception(udm_usage);
 				}
 			}
 			else if(inputfile.empty()) {
@@ -218,39 +253,7 @@ int main(int argc, char **argv) {
 			}
 			else
 			{
-usage:
-				throw udm_exception("Usage: udm <diagramfilename> [<genfilesnamebase>] [-d <Uml.XSD searchpath>] \
-									[-m|c] [-v] [-t] [-l <macro>] [-x]\n"
-				"\n"
-				" [default] dynamic meta\n"
-				"  -m static meta\n"
-				"  -c corba meta\n"
-				"\n"
-				"  [default] Generate C++\n"
-				"  -s Generate C#\n"
-				"  -j Generate Java\n"
-				"  --leesa Generate C++ with support for generic programming\n"
-				"\n"
-				"  -t generate DTD\n"
-				"  -x Use XSD inheritance features when generating XSDs\n"
-				"  -e Generate XSD elements like they would have text attributes\n"
-				"  -g Integrate the XSD into the generated API\n"
-				"\n"
-				"  -d <Uml.XSD searchpath>"
-				"  -u <UMLContainerName> Add UMLContainerName to URI Mapping\n"
-				"  -i <UMLContainerName> Add UMLContainerName to ignore list\n"
-				"  -q <UMLContainerName> Add UMLContainerName to qualified attribute namespace list\n"
-				"  -T Don't record time when code was generated\n"
-				"  -w [c|d|n] How to group classes and namespaces into files:\n"
-				"             c: One .cpp file per class\n"
-				"             d: All classes from a diagram and its sub-namespaces into a single .cpp\n"
-				"             n: All classes from a namespace into a single .cpp\n"
-				"  -o <Output directory>\n"
-				"\n"
-				"C++ options:\n"
-				"  -v Support for C++ visitor pattern\n"
-				"  -l <macro> Insert macro before definitions\n"
-				);
+				throw udm_exception(udm_usage);
 			}
 		}
 
