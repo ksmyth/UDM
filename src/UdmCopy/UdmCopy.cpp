@@ -126,6 +126,15 @@ int main(int argc, char **argv) {
 		
 		if(argc != 4 && argc != 5) {
 			cout << "Usage: UdmCopy <indataname> <outdataname> <diagramname> [<metalocator>]" << endl;
+			cout << "  where: <diagramname>: Udm .xml file" << endl;
+			cout << "         <metalocator>: .xsd file" << endl;
+			cout << "  The .xsd must be in the current directory or PATH, or <metalocator> must be specified." << endl;
+			cout << "  Example mga->xml: UdmCopy model.mga model.xml paradigm.xml" << endl;
+			cout << "  Example mga->xml: UdmCopy model.mga model.xml path-to/paradigm.xml path-to/paradigm.xsd" << endl;
+			cout << "  Example xml->mga: UdmCopy model.xml model.mga paradigm.xml" << endl;
+			cout << "  Example mem->mga: UdmCopy model.mem model.mga paradigm.xml" << endl;
+			cout << "  Example mga->mem: UdmCopy model.mga model.mem paradigm.xml" << endl;
+			cout << "Available backends: " + Udm::DataNetwork::DumpBackendNames() << endl;
 			return(-1);
 		}
 
