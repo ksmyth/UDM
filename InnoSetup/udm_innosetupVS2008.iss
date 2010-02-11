@@ -5,7 +5,7 @@
 #pragma option -v+
 #pragma verboselevel 9
 
-#define GMEVER "10.1.11"
+#define GMEVER "10.2.9"
 
 #define UDMPATH GetEnv('UDM_PATH')
 #if UDMPATH == ""
@@ -28,6 +28,7 @@
 #define OutputFileBase "Udm_setup_VC9"
 
 [Setup]
+AppID=ISIS UDM
 AppName=UDM {#UDMVER}
 APPVerName=ISIS UDM v{#UDMVER}
 AppVersion={#UDMVER}
@@ -352,7 +353,7 @@ begin
       InstallSystemWide := false;
     end;
   end;
-  if CurPageID = wpInfoBefore then begin
+  if (CurPageID = wpInfoBefore) and not WizardSilent() then begin
     Result := CheckVersions();
   end;
 end;
