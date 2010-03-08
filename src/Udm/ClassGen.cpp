@@ -1214,23 +1214,27 @@ void ClassGen::OutDecls(ostream &out)
 	OutFmts(out, idt, meta_decls);
 	OutFmts(out, idt, comments, false);
 
-	out << "#ifndef MPL_NO_COMPOSITIONS" << endl;
-	OutFmts(out, idt, meth_defs_mpl_comp, false);
-	OutFmts(out, idt, parents_tl);
-	OutFmts(out, idt, parent_kinds_tl);
-	OutFmts(out, idt, children_tl);
-	OutFmts(out, idt, children_kinds_tl);
-	out << "#endif // MPL_NO_COMPOSITIONS" << endl;
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC) {
+		out << "#ifndef MPL_NO_COMPOSITIONS" << endl;
+		OutFmts(out, idt, meth_defs_mpl_comp, false);
+		OutFmts(out, idt, parents_tl);
+		OutFmts(out, idt, parent_kinds_tl);
+		OutFmts(out, idt, children_tl);
+		OutFmts(out, idt, children_kinds_tl);
+		out << "#endif // MPL_NO_COMPOSITIONS" << endl;
+	}
 
-	out << "#ifndef MPL_NO_ASSOCIATIONS" << endl;
-	OutFmts(out, idt, meth_defs_mpl_assoc, false);
-	OutFmts(out, idt, associations_tl);
-	OutFmts(out, idt, associations_ac_tl);
-	OutFmts(out, idt, cross_associations_tl);
-	OutFmts(out, idt, cross_associations_ac_tl);
-	OutFmts(out, idt, aclass_ends_tl);
-	OutFmts(out, idt, cross_aclass_ends_tl);
-	out << "#endif // MPL_NO_ASSOCIATIONS" << endl;
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC) {
+		out << "#ifndef MPL_NO_ASSOCIATIONS" << endl;
+		OutFmts(out, idt, meth_defs_mpl_assoc, false);
+		OutFmts(out, idt, associations_tl);
+		OutFmts(out, idt, associations_ac_tl);
+		OutFmts(out, idt, cross_associations_tl);
+		OutFmts(out, idt, cross_associations_ac_tl);
+		OutFmts(out, idt, aclass_ends_tl);
+		OutFmts(out, idt, cross_aclass_ends_tl);
+		out << "#endif // MPL_NO_ASSOCIATIONS" << endl;
+	}
 
 	out << lidt << "};" << endl << endl;
 }
@@ -1241,13 +1245,15 @@ void ClassGen::OutDefs(ostream &out)
 
 	OutFmts(out, lidt, meta_defs);
 
-	out << "#ifndef MPL_NO_COMPOSITIONS" << endl;
-	OutFmts(out, lidt, meth_speclzs_mpl_comp, false);
-	out << "#endif // MPL_NO_COMPOSITIONS" << endl;
+	if (gen.opts.mode == UdmOpts::CXX_GENERIC) {
+		out << "#ifndef MPL_NO_COMPOSITIONS" << endl;
+		OutFmts(out, lidt, meth_speclzs_mpl_comp, false);
+		out << "#endif // MPL_NO_COMPOSITIONS" << endl;
 
-	out << "#ifndef MPL_NO_ASSOCIATIONS" << endl;
-	OutFmts(out, lidt, meth_speclzs_mpl_assoc, false);
-	out << "#endif // MPL_NO_ASSOCIATIONS" << endl;
+		out << "#ifndef MPL_NO_ASSOCIATIONS" << endl;
+		OutFmts(out, lidt, meth_speclzs_mpl_assoc, false);
+		out << "#endif // MPL_NO_ASSOCIATIONS" << endl;
+	}
 }
 
 void ClassGen::OutMetaCreate(ostream &out)
