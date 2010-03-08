@@ -433,8 +433,8 @@ namespace UdmGme
 					string co_id_str = i->second;
 					if ((co_id_str.length() > 3) && ( co_id_str.substr(0, 3).compare("id-") == 0))
 					{
-						IMgaFCOPtr obj = dn->priv.project->GetObjectByID(co_id_str.c_str());
-						COMTHROW(ret->Append(obj));
+						IMgaFCOPtr fco = dn->priv.project->GetFCOByID(co_id_str.c_str());
+						COMTHROW(ret->Append(fco));
 					}
 				}
 			}
@@ -462,27 +462,32 @@ namespace UdmGme
 			// the chain of references linking the connection to the source or
 			// destination
 			IMgaSimpleConnectionPtr conn(self);
+			IMgaFCOsPtr references;
+
 			SmartBSTR src_role_name = conn->RegistryValue["sRefParent"];
-
-			try
-			{
-				IMgaFCOsPtr references = role_name.compare(src_role_name) == 0 ? conn->GetSrcReferences() : conn->GetDstReferences();
-				if (references->GetCount() > 0)
-				{
-					IMgaFCOPtr fco = references->GetItem(1);
-
-					if (!only_ifNavigable || (only_ifNavigable && role_isNavigable))
-						COMTHROW(ret->Append(fco));
-
-					if (set_registry)
-					{
-						RpHelperAddToRegistry(self, fco, role_name, role_isNavigable);
-						RpHelperAddToRegistry(fco, self, other_role_name, other_role_isNavigable);
-					}
-				}
+			if (!src_role_name) {
+				SmartBSTR dst_role_name = conn->RegistryValue["dRefParent"];
+				try {
+					references = role_name.compare(dst_role_name) == 0 ? conn->GetDstReferences() : conn->GetSrcReferences();
+				} catch (...) {}
+			} else {
+				try {
+					references = role_name.compare(src_role_name) == 0 ? conn->GetSrcReferences() : conn->GetDstReferences();
+				} catch (...) {}
 			}
-			catch (udm_exception &)
+
+			if (references != NULL && references->GetCount() > 0)
 			{
+				IMgaFCOPtr fco = references->GetItem(1);
+
+				if (!only_ifNavigable || (only_ifNavigable && role_isNavigable))
+					COMTHROW(ret->Append(fco));
+
+				if (set_registry)
+				{
+					RpHelperAddToRegistry(self, fco, role_name, role_isNavigable);
+					RpHelperAddToRegistry(fco, self, other_role_name, other_role_isNavigable);
+				}
 			}
 		}
 		else if (self->GetObjType() == OBJTYPE_REFERENCE)
@@ -495,7 +500,7 @@ namespace UdmGme
 			MGACOLL_ITERATE(IMgaConnPoint, cp)
 			{
 				IMgaSimpleConnectionPtr conn = MGACOLL_ITER->Owner;
-				IMgaFCOsPtr references = RpHelperFindPeerFCOs(conn, other_role_name, other_role_isNavigable, role_name, role_isNavigable, dn, true, false);
+				IMgaFCOsPtr references = RpHelperFindPeerFCOsFromModel(conn, other_role_name, other_role_isNavigable, role_name, role_isNavigable, dn, true, false);
 				MGACOLL_ITERATE(IMgaFCO, references)
 				{
 					if (reference->GetIsEqual(MGACOLL_ITER) == VARIANT_TRUE)
@@ -552,13 +557,62 @@ namespace UdmGme
 		return ret;
 	}
 
+#if 0
+	// Before connecting self to peer, check that the result would be valid.
+	// The result is invalid if self and/or peer is already connected to a different fco.
+	bool RpHelperNotValidConn(const IMgaFCOPtr &self, const IMgaFCOPtr &peer, const string &role_name, const string &other_role_name)
+	{
+
+		if (self->GetObjType() == OBJTYPE_CONNECTION)
+		{
+			IMgaSimpleConnectionPtr conn(self);
+			SmartBSTR src_role_name = conn->RegistryValue["sRefParent"];
+
+			try
+			{
+				IMgaFCOsPtr references = role_name.compare(src_role_name) == 0 ? conn->GetSrcReferences() : conn->GetDstReferences();
+				if (references->GetCount() > 0)
+				{
+					IMgaFCOPtr fco = references->GetItem(1);
+					if (fco->GetIsEqual(peer) != VARIANT_TRUE)
+						return true;
+				}
+			}
+			catch (udm_exception &)
+			{
+			}
+		}
+		else if (self->GetObjType() == OBJTYPE_REFERENCE)
+		{
+			IMgaSimpleConnectionPtr conn(peer);
+			SmartBSTR src_role_name = conn->RegistryValue["sRefParent"];
+
+			try
+			{
+				IMgaFCOsPtr references = other_role_name.compare(src_role_name) == 0 ? conn->GetSrcReferences() : conn->GetDstReferences();
+				if (references->GetCount() > 0)
+				{
+					IMgaFCOPtr fco = references->GetItem(1);
+					if (fco->GetIsEqual(self) != VARIANT_TRUE)
+						return true;
+				}
+			}
+			catch (udm_exception &)
+			{
+			}
+		}
+
+		return false;
+	}
+#endif
+
 	IMgaFCOPtr getPrefferedSrcRef(const IMgaSimpleConnectionPtr& conn, const GmeDataNetwork * dn)
 	{
 		SmartBSTR regrolename = conn->RegistryValue["sRefParent"];
 		IMgaFCOPtr ret;
 		if (!(!regrolename))
 		{
-			IMgaFCOsPtr references = RpHelperFindPeerFCOs(conn, string(regrolename), true, "", false, dn, true, false);
+			IMgaFCOsPtr references = RpHelperFindPeerFCOsFromRegistry(conn, string(regrolename), true, dn);
 			if (references->GetCount() == 1)
 					ret = references->GetItem(1);
 		};
@@ -571,7 +625,7 @@ namespace UdmGme
 		IMgaFCOPtr ret;
 		if (!(!regrolename))
 		{
-			IMgaFCOsPtr references = RpHelperFindPeerFCOs(conn, string(regrolename), true, "", false, dn, true, false);
+			IMgaFCOsPtr references = RpHelperFindPeerFCOsFromRegistry(conn, string(regrolename), true, dn);
 			if (references->GetCount() == 1)
 					ret = references->GetItem(1);
 		};
@@ -870,11 +924,15 @@ bbreak:			;
 					{
 						for (vector<ObjectImpl*>::const_iterator i = kvect.begin(); i != kvect.end(); i++)
 						{
-                            IMgaFCOPtr connecting_object = static_cast<GmeObject *>(*i)->self;
+							IMgaFCOPtr connecting_object = static_cast<GmeObject *>(*i)->self;
+#if 0
+							if (RpHelperNotValidConn(self, connecting_object, meta.name(), ::Uml::theOther(meta).name()))
+								throw udm_exception("Connection to reference port already exists, delete it first before changing the reference!");
+#endif
 							RpHelperAddToRegistry(self, connecting_object, meta.name(), meta.isNavigable());
 							RpHelperAddToRegistry(connecting_object, self, ::Uml::theOther(meta).name(), ::Uml::theOther(meta).isNavigable());
 						}
-					} else
+					}
 					if (pvect.size())
 					{
 						for (vector<ObjectImpl*>::const_iterator i = pvect.begin(); i != pvect.end(); i++)
@@ -1101,10 +1159,10 @@ bbreak:			;
 			{
 				if (nn.rp_helper)
 				{
-					IMgaFCOsPtr fcos = RpHelperFindPeerFCOs(self,
+					IMgaFCOsPtr fcos = RpHelperFindPeerFCOsFromModel(self,
 						meta.name(), meta.isNavigable(),
 						::Uml::theOther(meta).name(), ::Uml::theOther(meta).isNavigable(),
-						(GmeDataNetwork *)mydn, true);
+						(GmeDataNetwork *)mydn, true, false);
 					MGACOLL_ITERATE(IMgaFCO, fcos)
 					{
 						ret.push_back(new GmeObject(MGACOLL_ITER, mydn));
@@ -1597,10 +1655,9 @@ bbreak:			;
 				assocmapitem nn = ((GmeDataNetwork *)__getdn())->amap.find(assoc.uniqueId())->second;
 				if (nn.ot == OBJTYPE_CONNECTION && nn.rp_helper)
 				{
-					IMgaFCOsPtr fcos = RpHelperFindPeerFCOs(self,
-						ars_i->name(), ars_i->isNavigable(),
-						::Uml::theOther(*ars_i).name(), ::Uml::theOther(*ars_i).isNavigable(),
-						(GmeDataNetwork *)__getdn(), false, false);
+					IMgaFCOsPtr fcos = RpHelperFindPeerFCOsFromRegistry(self,
+						ars_i->name(), false,
+						(GmeDataNetwork *)__getdn());
 					MGACOLL_ITERATE(IMgaFCO, fcos)
 					{
 						RpHelperRemoveFromRegistry(MGACOLL_ITER, self, ars_i->name());
