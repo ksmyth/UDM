@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release MinDependency|Win32">
+      <Configuration>Release MinDependency</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>UML2XML</ProjectName>
+    <ProjectGuid>{207DA527-EC80-4A83-B5C2-B2A02281AFBA}</ProjectGuid>
+    <RootNamespace>Component</RootNamespace>
+    <Keyword>AtlProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfAtl>Static</UseOfAtl>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\..\..\Build\Win32\VC10\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)obj\src\UML GME\Interpreter\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">..\..\..\..\..\..\Build\Win32\VC10\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(OutDir)obj\src\UML GME\Interpreter\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">false</LinkIncremental>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <CustomBuildStep>
+      <Message>Performing registration</Message>
+      <Command>regsvr32 /s /c "$(TargetPath)" &amp;&amp; ^
+echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
+</Command>
+      <Outputs>$(IntDir)regsvr32.trg;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <Midl>
+      <AdditionalOptions>/server none /client none /I "$(GME_ROOT)\Interfaces" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(GME_ROOT)\GME\Interfaces;$(GME_ROOT)\Interfaces;..\..\..\..\..\..\src\UML GME\Interpreter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\..\include;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)BONComponent.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ANTLRD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>..\..\..\..\..\..\src\UML GME\Interpreter\Component.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)UML2XML.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>$(OutDir)UML2XML.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">
+    <CustomBuildStep>
+      <Message>Performing registration</Message>
+      <Command>regsvr32 /s /c "$(TargetPath)" &amp;&amp; ^
+echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
+</Command>
+      <Outputs>$(IntDir)regsvr32.trg;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <Midl>
+      <AdditionalOptions>/server none /client none /I "$(GME_ROOT)\Interfaces" %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(GME_ROOT)\GME\Interfaces;$(GME_ROOT)\Interfaces;..\..\..\..\..\..\src\UML GME\Interpreter;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\..\include;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeaderOutputFile>$(IntDir)BONComponent.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>ANTLR.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>..\..\..\..\..\..\src\UML GME\Interpreter\Component.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>$(OutDir)UML2XML.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\BONComponent.cpp" />
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Builder.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.cpp" />
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\ComHelp.cpp" />
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\ComponentDll.cpp" />
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\ComponentObj.cpp" />
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Console.cpp" />
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Exceptions.cpp" />
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Formatter.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\GetRelativeFilename.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\int_exception.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lattrib.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lcardin.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pattrib.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pcardin.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\src\UML GME\Interpreter\Component.def" />
+    <None Include="..\..\..\..\..\..\src\UML GME\Interpreter\compicon.ico" />
+    <CustomBuild Include="..\..\..\..\..\..\src\UML GME\Interpreter\attribute.g">
+      <FileType>Document</FileType>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating code from attribute.g</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(OutDir)..\Gen\src\UML GME\Interpreter"
+cd "$(OutDir)..\Gen\src\UML GME\Interpreter"
+java antlr.Tool "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">Generating code from attribute.g</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">mkdir "$(OutDir)..\Gen\src\UML GME\Interpreter"
+cd "$(OutDir)..\Gen\src\UML GME\Interpreter"
+java antlr.Tool "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\..\..\..\src\UML GME\Interpreter\cardinality.g">
+      <FileType>Document</FileType>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating code from cardinality.g</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(OutDir)..\Gen\src\UML GME\Interpreter"
+cd "$(OutDir)..\Gen\src\UML GME\Interpreter"
+java antlr.Tool "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">Generating code from cardinality.g</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">mkdir "$(OutDir)..\Gen\src\UML GME\Interpreter"
+cd "$(OutDir)..\Gen\src\UML GME\Interpreter"
+java antlr.Tool "%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\Component.rc">
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="$(GME_ROOT)\sdk\bon\common\ComponentLib.idl">
+      <TypeLibraryName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb</TypeLibraryName>
+      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(TargetDir)\..\Gen\src\UML GME\Interpreter</OutputDirectory>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(FileName)_h.h</HeaderFileName>
+      <TypeLibraryName Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb</TypeLibraryName>
+      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(TargetDir)\..\Gen\src\UML GME\Interpreter</OutputDirectory>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">%(FileName)_h.h</HeaderFileName>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\BONComponent.h" />
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\Builder.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.h" />
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\ComHelp.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\ComponentConfig.h" />
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\ComponentDll.h" />
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\ComponentObj.h" />
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\Console.h" />
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\Formatter.h" />
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\GMECOM.H" />
+    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\int_exception.h" />
+    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lattrib.hpp" />
+    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lcardin.hpp" />
+    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pattrib.hpp" />
+    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp" />
+    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pcardin.hpp" />
+    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp" />
+    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\Resource.h" />
+    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\StdAfx.h" />
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\UdmDll\UdmDll.vcxproj">
+      <Project>{3cae3dee-065e-426c-9c3c-f1f59217c00b}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
