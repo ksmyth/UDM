@@ -110,7 +110,7 @@ long long _atoi64(const char *x)  { long long i; sscanf(x,"%lld",&i);return i;};
 #define _strnicmp(a, b, n) strncasecmp(a,b,n)
 #endif
 
-namespace Udm
+namespace UDM_NAMESPACE
 {
 
 	const ::Uml::CompositionChildRole NULLCHILDROLE;

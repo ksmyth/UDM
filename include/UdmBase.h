@@ -242,7 +242,7 @@ namespace Uml
 
 class UDM_DLL cint_string;
 
-namespace Udm
+namespace UDM_NAMESPACE
 {
 // --------------------------- ObjectImpl
 

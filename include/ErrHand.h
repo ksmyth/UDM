@@ -35,6 +35,31 @@ this software.
 using namespace std;
 
 
+#ifdef _WIN32
+#if (_MSC_VER == 1600) /* VS2010 */
+#define UDM_NAMESPACE Udm_VS10
+namespace UDM_NAMESPACE {};
+namespace Udm = UDM_NAMESPACE;
+#ifdef _DEBUG
+#define UDM_DLL_LIB "UdmDll_VS10D.lib"
+#else
+#define UDM_DLL_LIB "UdmDll_VS10.lib"
+#endif
+#else
+#define UDM_NAMESPACE Udm
+#ifdef _DEBUG
+#define UDM_DLL_LIB "UdmDllD.lib"
+#else
+#define UDM_DLL_LIB "UdmDll.lib"
+#endif
+#endif /* _MSC_VER == 1600 */
+
+#if defined(UDM_DYNAMIC_LINKING) && !defined(UDM_DLL_EXPORT)
+#pragma comment(lib, UDM_DLL_LIB)
+#endif
+#else
+#define UDM_NAMESPACE Udm
+#endif /* _WIN32 */
 
 class udm_exception : public exception
 {

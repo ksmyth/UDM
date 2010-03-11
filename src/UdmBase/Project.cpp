@@ -115,7 +115,7 @@ void _udm_project_dummy_init(){};
 	12/12/03 =	Changed the cross class-diagram delimiter string rom "_" to "_cross_ph_"
 */
 
-namespace Udm
+namespace UDM_NAMESPACE
 {
 
 	UDM_DLL UdmProject::UdmProject(bool static_pr) : cross_meta_dn(NULL), cross_meta(NULL), cross_links(NULL), zipfile(""), project_dn(NULL)
