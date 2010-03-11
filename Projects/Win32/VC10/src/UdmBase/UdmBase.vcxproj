@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="BootUdmCompile Debug|Win32">
+      <Configuration>BootUdmCompile Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="BootUdmCompile Release|Win32">
+      <Configuration>BootUdmCompile Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}</ProjectGuid>
+    <RootNamespace>UdmBase</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\..\Build\Win32\VC10\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)obj\src\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\..\Build\Win32\VC10\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)obj\src\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">..\..\..\..\..\Build\Win32\VC10\BootUdmCompileDebug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">$(OutDir)obj\src\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">..\..\..\..\..\Build\Win32\VC10\BootUdmCompileRelease\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">$(OutDir)obj\src\$(ProjectName)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>$(IntDir)UdmBase.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\lib</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>$(IntDir)UdmBase.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Lib>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Lib>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\lib</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">
+    <PreBuildEvent>
+      <Command>if exist ..\..\..\..\..\etc\UdmProject_udm.xml attrib -r ..\..\..\..\..\etc\UdmProject_udm.xml
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.h attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.h
+if exist ..\..\..\..\..\include\UdmProject.h attrib -r ..\..\..\..\..\include\UdmProject.h
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.cpp attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.cpp
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.xsd attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.xsd
+if exist ..\..\..\..\..\etc\UdmProject.xsd attrib -r ..\..\..\..\..\etc\UdmProject.xsd
+mkdir "$(OutDir)..\Gen\src\$(ProjectName)"
+exit 0
+</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>cd "$(OutDir)..\Gen\src\$(ProjectName)"
+move UdmProject.h ..\..\..\..\..\..\include
+move UdmProject.xsd ..\..\..\..\..\..\etc
+move UdmProject_xsd.h ..\..\..\..\..\..\src\UdmBase
+move UdmProject.cpp ..\..\..\..\..\..\src\UdmBase
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">
+    <PreBuildEvent>
+      <Command>if exist ..\..\..\..\..\etc\UdmProject_udm.xml attrib -r ..\..\..\..\..\etc\UdmProject_udm.xml
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.h attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.h
+if exist ..\..\..\..\..\include\UdmProject.h attrib -r ..\..\..\..\..\include\UdmProject.h
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.cpp attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.cpp
+if exist ..\..\..\..\..\src\UdmBase\UdmProject.xsd attrib -r ..\..\..\..\..\src\UdmBase\UdmProject.xsd
+if exist ..\..\..\..\..\etc\UdmProject.xsd attrib -r ..\..\..\..\..\etc\UdmProject.xsd
+mkdir "$(OutDir)..\Gen\src\$(ProjectName)"
+exit 0
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>cd "$(OutDir)..\Gen\src\$(ProjectName)"
+move UdmProject.h ..\..\..\..\..\..\include
+move UdmProject.xsd ..\..\..\..\..\..\etc
+move UdmProject_xsd.h ..\..\..\..\..\..\src\UdmBase
+move UdmProject.cpp ..\..\..\..\..\..\src\UdmBase
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\src\UdmBase\cint_string.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\UdmBase\DTDGen.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">true</ExcludedFromBuild>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
+      <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</BrowseInformation>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\UdmBase\Project.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">true</ExcludedFromBuild>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
+      <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</BrowseInformation>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\UdmBase\UdmBase.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">true</ExcludedFromBuild>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
+      <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</BrowseInformation>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\UdmBase\UdmProject.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">true</ExcludedFromBuild>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
+      <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</BrowseInformation>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\UdmBase\UdmStatic.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">true</ExcludedFromBuild>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
+      <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</BrowseInformation>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\UdmBase\UdmTomi.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">true</ExcludedFromBuild>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
+      <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</BrowseInformation>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\UdmBase\UmlExt.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">true</ExcludedFromBuild>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
+      <BrowseInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</BrowseInformation>
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\include\cint_string.h" />
+    <ClInclude Include="..\..\..\..\..\src\UdmBase\DTDGen.h" />
+    <ClInclude Include="..\..\..\..\..\include\ErrHand.h" />
+    <ClInclude Include="..\..\..\..\..\include\UdmBase.h" />
+    <ClInclude Include="..\..\..\..\..\include\UdmMPL.h" />
+    <ClInclude Include="..\..\..\..\..\include\UdmProject.h" />
+    <ClInclude Include="..\..\..\..\..\include\UdmStatic.h" />
+    <ClInclude Include="..\..\..\..\..\include\UmlExt.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\..\..\etc\UdmProject.xme">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">cd "%(RootDir)%(Directory)"
+"$(UDM_PATH)\etc\xme2udmxml" "%(FileName).xme" "%(FileName).mga"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">%(RootDir)%(Directory)%(FileName).mga;%(RootDir)%(Directory)%(FileName)_udm.xml;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">cd "%(RootDir)%(Directory)"
+"$(UDM_PATH)\etc\xme2udmxml" "%(FileName).xme" "%(FileName).mga"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">%(RootDir)%(Directory)%(FileName).mga;%(RootDir)%(Directory)%(FileName)_udm.xml;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\..\..\etc\UdmProject_udm.xml">
+      <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">"$(OutDir)..\Debug\UdmD.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">$(OutDir)..\Gen\src\UdmBase\UdmProject.h; $(OutDir)..\Gen\src\UdmBase\UdmProject.cpp; $(OutDir)..\Gen\src\UdmBase\UdmProject.xsd; $(OutDir)..\Gen\src\UdmBase\UdmProject_xsd.h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">"$(OutDir)..\Release\Udm.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">$(OutDir)..\Gen\src\UdmBase\UdmProject.h; $(OutDir)..\Gen\src\UdmBase\UdmProject.cpp; $(OutDir)..\Gen\src\UdmBase\UdmProject.xsd; $(OutDir)..\Gen\src\UdmBase\UdmProject_xsd.h;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
