@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Component"
+	Name="UML2XML"
 	ProjectGUID="{207DA527-EC80-4A83-B5C2-B2A02281AFBA}"
 	RootNamespace="Component"
 	Keyword="AtlProj"
