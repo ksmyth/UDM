@@ -357,14 +357,14 @@ namespace UdmDom
 		//we should take a look why is this invoked with empty string
 		//ASSERT (a != 0);
 		
-		const char *buf = XMLString::transcode(a);
+		char *buf = XMLString::transcode(a);
 
 		char *endptr;
 		// start parsing after the "id" prefix
 		unsigned long retval = strtoul(buf + 2, &endptr, 16);
 		ASSERT(*endptr == '\0');
 
-		delete [] buf;
+		XMLString::release(&buf);
 
 		return retval;
 
@@ -431,16 +431,16 @@ namespace UdmDom
 			throw udm_exception(e_description);
 		}
 
-		const char *ns_uri_p = XMLString::transcode(namespaceURI);
+		char *ns_uri_p = XMLString::transcode(namespaceURI);
 
 		xsd_ns_mapping_storage::str_str_map::iterator it_ns_map = xsd_ns_mapping_storage::static_xsd_ns_mapping_container.find(ns_uri_p);
 		if (it_ns_map != xsd_ns_mapping_storage::static_xsd_ns_mapping_container.end()) {
-			delete [] ns_uri_p;
+			XMLString::release(&ns_uri_p);
 			return it_ns_map->second;
 		} else {
 			string uri_prefix(UDM_DOM_URI_PREFIX);
 			string ns_uri(ns_uri_p);
-			delete [] ns_uri_p;
+			XMLString::release(&ns_uri_p);
 
 			// UDM_DOM_URI_PREFIX + namespace_path(delim = "/")
 			if (ns_uri.compare(0, uri_prefix.length(), uri_prefix)) {
@@ -523,25 +523,25 @@ namespace UdmDom
 
 	static inline void setAttrValue(DOMElement &element, const string &name, const string &value)
 	{
-		const XMLCh *name_buf = XMLString::transcode(name.c_str());
-		const XMLCh *value_buf = XMLString::transcode(value.c_str());
+		XMLCh *name_buf = XMLString::transcode(name.c_str());
+		XMLCh *value_buf = XMLString::transcode(value.c_str());
 		element.setAttribute(name_buf, value_buf);
-		delete [] name_buf;
-		delete [] value_buf;
+		XMLString::release(&name_buf);
+		XMLString::release(&value_buf);
 	}
 
 	static inline void setAttrValue(DOMElement &element, const XMLCh *name, const string &value)
 	{
-		const XMLCh *value_buf = XMLString::transcode(value.c_str());
+		XMLCh *value_buf = XMLString::transcode(value.c_str());
 		element.setAttribute(name, value_buf);
-		delete [] value_buf;
+		XMLString::release(&value_buf);
 	}
 
 	static inline const XMLCh *getAttrValue(DOMElement &element, const string &name)
 	{
-		const XMLCh *name_buf = XMLString::transcode(name.c_str());
+		XMLCh *name_buf = XMLString::transcode(name.c_str());
 		const XMLCh *value = element.getAttribute(name_buf);
-		delete [] name_buf;
+		XMLString::release(&name_buf);
 
 		return value;
 	}
@@ -549,11 +549,11 @@ namespace UdmDom
 	void setTextValue(DOMElement &parent_element, const string &value)
 	{
 		
-		const XMLCh *value_buf = XMLString::transcode(value.c_str());
+		XMLCh *value_buf = XMLString::transcode(value.c_str());
 		DOMText *tn = parent_element.getOwnerDocument()->createTextNode(value_buf);
 		parent_element.appendChild(tn);
 		tn->setNodeValue(value_buf);
-		delete [] value_buf;
+		XMLString::release(&value_buf);
 	};
 
 	void setTextValues(DOMElement &parent_element, const vector<string> &values)
@@ -574,11 +574,11 @@ namespace UdmDom
 			if ( (n->getNodeType() == DOMNode::TEXT_NODE))
 			{
 				DOMText *tn = (DOMText*)n;
-				const char *a = XMLString::transcode(tn->getNodeValue());
+				char *a = XMLString::transcode(tn->getNodeValue());
         
 				values.push_back(a);
 
-				delete [] a;
+				XMLString::release(&a);
 			}
 		}
 	}
@@ -592,9 +592,9 @@ namespace UdmDom
 			if ( (n->getNodeType() == DOMNode::TEXT_NODE))
 			{
 				DOMText *tn = (DOMText*)n;
-				const char *a = XMLString::transcode(tn->getNodeValue());
+				char *a = XMLString::transcode(tn->getNodeValue());
 				retval = a;
-				delete [] a;
+				XMLString::release(&a);
 				break;
 			}
 		}
@@ -707,9 +707,9 @@ namespace UdmDom
 				key += ns_path + ":";
 			}
 
-			const char *cl_name = XMLString::transcode(element.getLocalName());	//class name
+			char *cl_name = XMLString::transcode(element.getLocalName());	//class name
 			key += cl_name;
-			delete [] cl_name;
+			XMLString::release(&cl_name);
 
 			map<string, ::Uml::Class>::iterator mcc_i = ((DomDataNetwork *)mydn)->meta_class_cache.find(key);
 
@@ -730,10 +730,10 @@ namespace UdmDom
 		static int DSFind(const XMLCh *where, const string &what) {
 			if(where == NULL) return -1;
 			
-			const XMLCh *what_buf = XMLString::transcode(what.c_str());
+			XMLCh *what_buf = XMLString::transcode(what.c_str());
 			int index = XMLString::patternMatch(where, what_buf);
 
-			delete [] what_buf;
+			XMLString::release(&what_buf);
 
 			return index;
 		};
@@ -745,6 +745,8 @@ namespace UdmDom
 			return XMLString::patternMatch(where, what);
 		};
 
+		// NOTE: DSAppend use new[], but DSAppendTo uses XMLPlatformUtils::fgMemoryManager->allocate.
+		// This should probably be fixed
 		static XMLCh* DSAppend(const XMLCh *src, const string &data)
 		{
 			ASSERT(src != NULL);
@@ -753,10 +755,10 @@ namespace UdmDom
 			XMLString::copyString(retval, src);
 			XMLString::catString(retval, gXML_space);
 
-			const XMLCh *data_buf = XMLString::transcode(data.c_str());
+			XMLCh *data_buf = XMLString::transcode(data.c_str());
 			XMLString::catString(retval, data_buf);
 
-			delete [] data_buf;
+			XMLString::release(&data_buf);
 
 			return retval;
 		}
@@ -786,14 +788,15 @@ namespace UdmDom
 				new_target = XMLString::replicate(data);
 			else {
 				int new_length = XMLString::stringLen(*target) + XMLString::stringLen(data) + 1;
-				new_target = new XMLCh[new_length];
+				// FIXME: this depends on XMLString::release internals (it and fgArrayMemoryManager use delete[]/new[])
+				new_target = (XMLCh*) XMLPlatformUtils::fgArrayMemoryManager->allocate(new_length * sizeof(XMLCh));
 
 				XMLString::copyString(new_target, *target);
 				XMLString::catString(new_target, data);
 			}
 
 			if (releaseTarget)
-				delete [] *target;
+				XMLString::release(target);
 
 			*target = new_target;
 			return new_target;
@@ -898,7 +901,7 @@ namespace UdmDom
 			
 			//DOMString pa = dom_element.getAttribute(DOMString("desynched_atts"));
 			const XMLCh *pa = dom_element->getAttribute(gXML__desynched_atts);
-			const XMLCh *myname_buf = XMLString::transcode(myname.c_str());
+			XMLCh *myname_buf = XMLString::transcode(myname.c_str());
 			if(EmptyVal(pa)) 
 			{
 				//dom_element.setAttribute( DOMString("desynched_atts"), DOMString(myname.c_str()));
@@ -918,7 +921,7 @@ namespace UdmDom
 				}
 			}
 
-			delete [] myname_buf;
+			XMLString::release(&myname_buf);
 		}
 
 		bool is_attribute_desynched(const string &myname) const
@@ -1004,15 +1007,15 @@ namespace UdmDom
 			}	
 			else
 			{
-				const XMLCh *name_buf = XMLString::transcode( ((string) meta.name()).c_str() );
+				XMLCh *name_buf = XMLString::transcode( ((string) meta.name()).c_str() );
 				DOMAttr *as = dom_element->getAttributeNode(name_buf);
 				if(as != NULL && as->getSpecified()) 
 				{
-					const char *a_buf = XMLString::transcode(as->getValue());
+					char *a_buf = XMLString::transcode(as->getValue());
 					a = a_buf;
-					delete [] a_buf;
+					XMLString::release(&a_buf);
 				}
-				delete [] name_buf;
+				XMLString::release(&name_buf);
 	//			if(!a.length()) return meta.defvalue();
 			}
 			return a;
@@ -1146,7 +1149,7 @@ namespace UdmDom
 //			}
 			if(EmptyVal(a)) return 0;
 
-			const char *a_buf = XMLString::transcode(a);
+			char *a_buf = XMLString::transcode(a);
 
 			char *endptr;
 			__int64 retval;
@@ -1158,11 +1161,11 @@ namespace UdmDom
 
 			if (*endptr != '\0')
 			{
-				delete [] a_buf;
+				XMLString::release(&a_buf);
 				throw udm_exception("Attr is of non-integer format");
 			}
 
-			delete [] a_buf;
+			XMLString::release(&a_buf);
 
 			return retval;
 		}
@@ -1236,18 +1239,18 @@ namespace UdmDom
 //			}
 			if(EmptyVal(a)) return 0.0;
 
-			const char *a_buf = XMLString::transcode(a);
+			char *a_buf = XMLString::transcode(a);
 
 			char *endptr;
 			double d = strtod(a_buf, &endptr);
 
 			if (*endptr != '\0')
 			{
-				delete [] a_buf;
+				XMLString::release(&a_buf);
 				throw udm_exception("Attr is of non-float format");
 			}
 
-			delete [] a_buf;
+			XMLString::release(&a_buf);
 
 			return d;
 		}
@@ -1389,12 +1392,12 @@ namespace UdmDom
 		void removeAssociation(const string &tname, const string &oname, 
 								const string &myid) 
 		{
-			const XMLCh *tname_buf = XMLString::transcode(tname.c_str());
-			const XMLCh *origattr = XMLString::replicate( dom_element->getAttribute(tname_buf) );
+			XMLCh *tname_buf = XMLString::transcode(tname.c_str());
+			XMLCh *origattr = XMLString::replicate( dom_element->getAttribute(tname_buf) );
 			dom_element->removeAttribute(tname_buf);
-			delete [] tname_buf;
+			XMLString::release(&tname_buf);
 
-			const XMLCh *oname_buf = XMLString::transcode(oname.c_str());
+			XMLCh *oname_buf = XMLString::transcode(oname.c_str());
 			XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = dom_element->getOwnerDocument();
 
 			const BaseRefVectorOf<XMLCh> *v = XMLString::tokenizeString(origattr);
@@ -1422,7 +1425,7 @@ namespace UdmDom
 							e->setAttribute(oname_buf, cpa_new);
 						else
 							e->removeAttribute(oname_buf);
-						delete [] cpa_new;
+						XMLString::release(&cpa_new);
 					}
 					else
 						e->removeAttribute(oname_buf);
@@ -1430,8 +1433,8 @@ namespace UdmDom
 			}
 
 			delete v;
-			delete [] oname_buf;
-			delete [] origattr;
+			XMLString::release(&oname_buf);
+			XMLString::release(&origattr);
 		}
 
 		void recursiveRemoveAssocs() 
@@ -1785,13 +1788,13 @@ namespace UdmDom
 								XMLCh *chas_new = XMLString::replicate(chas);
 								DSRemoveSubstr(chas_new, (p ? p - 1 : 0), ncomp.length() + 1);  // make sure we delete a separator as well
 								dom_element->setAttribute(gXML___child_as, chas_new);
-								delete [] chas_new;
+								XMLString::release(&chas_new);
 								return;												// do not delete child if multiroles were in effect
 							}
 
-							const XMLCh *ncomp_buf = XMLString::transcode(ncomp.c_str());
+							XMLCh *ncomp_buf = XMLString::transcode(ncomp.c_str());
 							ASSERT( XMLString::compareString(chas, ncomp_buf) == 0);
-							delete [] ncomp_buf;
+							XMLString::release(&ncomp_buf);
 						}
 						else 
 						{ 
@@ -2598,8 +2601,8 @@ namespace UdmDom
 				tname += "_end_";
 			}
 			
-			const XMLCh *oname_buf = XMLString::transcode(oname.c_str());
-			const XMLCh *tname_buf = XMLString::transcode(tname.c_str());
+			XMLCh *oname_buf = XMLString::transcode(oname.c_str());
+			XMLCh *tname_buf = XMLString::transcode(tname.c_str());
 			XMLCh *origattr = XMLString::replicate( dom_element->getAttribute(tname_buf) );
 
 			XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = dom_element->getOwnerDocument();
@@ -2658,7 +2661,7 @@ namespace UdmDom
 			}
 
 			if(aa == NULL) dom_element->removeAttribute(tname_buf);
-			else dom_element->setAttribute(tname_buf, aa);
+			else dom_element->setAttribute(tname_buf, aa); //KMS FIXME: don't we need to XMLString::release aa?
 
 			{
 				const BaseRefVectorOf<XMLCh> *v = XMLString::tokenizeString(origattr);
@@ -2696,9 +2699,9 @@ namespace UdmDom
 				delete v;
 			}
 
-			delete [] origattr;
-			delete [] tname_buf;
-			delete [] oname_buf;
+			XMLString::release(&origattr);
+			XMLString::release(&tname_buf);
+			XMLString::release(&oname_buf);
 
 
 

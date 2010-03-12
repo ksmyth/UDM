@@ -198,15 +198,15 @@ namespace UdmDom
 		catch(XMLException &e)\
 		{\
 			string what = "Udm: XMLException: ";\
-			const char *buf = XMLString::transcode(e.getMessage());	\
+			char *buf = XMLString::transcode(e.getMessage());	\
 			what += buf;\
-			delete [] buf;\
+			XMLString::release(&buf);\
 			if (e.getType())\
 			{\
 				what += ", of type: ";\
 				buf = XMLString::transcode(e.getType());\
 				what += buf;\
-				delete [] buf;\
+				XMLString::release(&buf);\
 			}\
 			what += ", in File: ";\
 			what += e.getSrcFile();\
