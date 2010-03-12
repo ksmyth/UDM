@@ -27,11 +27,6 @@
 
 #define BON_ICON_SUPPORT
 
-
-// This is the location of the GME2000 interfaces file (Mga.idl, Meta.idl, etc)
-#define GME_BASE c:\program files\gme
-
-
 // not defined: #define BON_ICON_SUPPORT
 
 // Just to please the whims of those Microsoft jerks:
