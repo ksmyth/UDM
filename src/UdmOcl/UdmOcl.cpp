@@ -1089,7 +1089,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 			_pos = _start+3;
 			_start = strExpression.find_first_not_of(strWhitespace, _pos);
 			_end = strExpression.find("::", _start);
-			if(_end < 0) throw(udm_exception("Error defining method"));
+			if(_end == std::string::npos) throw(udm_exception("Error defining method"));
 			std::string strClassName = strExpression.substr(_start, _end - _start);
 
 			::Uml::Class cls = ::Uml::classByName(metaDiagram, strClassName);
@@ -1097,12 +1097,12 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 
 			_start = _end + 2;
 			_end = strExpression.find('(', _start);
-			if(_end < 0) throw(udm_exception("Error defining method"));
+			if(_end == std::string::npos) throw(udm_exception("Error defining method"));
 			std::string strMethodName = strExpression.substr(_start, _end - _start);
 
 			_start = _end + 1;
 			_end = strExpression.find(')', _start);
-			if(_end < 0) throw(udm_exception("Error defining method"));
+			if(_end == std::string::npos) throw(udm_exception("Error defining method"));
 			std::string strArgList = strExpression.substr(_start, _end - _start);
 
 			_pos = strExpression.find(':', _end);
@@ -1113,7 +1113,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 			_pos = strExpression.find("defmethod", _end);
 			_start = strExpression.find(':', _pos) + 1;
 			_end = strExpression.find("$:>", _start);
-			if(_end < 0) throw(udm_exception("Error defining method"));
+			if(_end == std::string::npos) throw(udm_exception("Error defining method"));
 			std::string strMethodExpression = strExpression.substr(_start, _end - _start);
 
 			::Uml::ConstraintDefinition cd = ::Uml::ConstraintDefinition::Create(cls);
@@ -1195,3 +1195,5 @@ namespace UdmOcl {
 	}
 
 }; // namespace UdmOcl
+
+UDM_DLL bool KMSTESTING( ) { return true; }
