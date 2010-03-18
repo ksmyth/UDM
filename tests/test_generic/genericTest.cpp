@@ -73,7 +73,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 
 	Udm::SmartDataNetwork nw(LampDiagram::diagram);
 
-		nw.CreateNew(src,"LampDiagram", RootFolder::meta);
+		nw.CreateNew(src,"LampDiagram", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
 		{
 			RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
@@ -591,7 +591,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 			//testing assignment
 						
 			Udm::SmartDataNetwork snw(LampDiagram::diagram);
-			snw.CreateNew(dst,"LampDiagram",RootFolder::meta);
+			snw.CreateNew(dst,"LampDiagram",RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 			snw = nw;						//Datanetwork copy operator
 			//snw = nw;						//this should be also OK, but it does not work yet in case of MEM-MEM copy
 

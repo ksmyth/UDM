@@ -43,7 +43,7 @@ void UdmTests::Test::readSBML(const std::string& fname)
 
 
   UdmDom::DomDataNetwork  ind(::SBML2::diagram);
-  ind.OpenExistingFromString(xml,sbml_xsdName);
+  ind.OpenExistingFromString(xml,sbml_xsdName, Udm::CHANGES_PERSIST_ALWAYS);
   ind.CloseNoUpdate();
 
 }
@@ -71,7 +71,7 @@ void UdmTests::Test::readTest()
 
 
   UdmDom::DomDataNetwork  ind(::SBML2::diagram);
-  ind.OpenExistingFromString(xml,sbml_xsdName);
+  ind.OpenExistingFromString(xml,sbml_xsdName, Udm::CHANGES_PERSIST_ALWAYS);
   ind.CloseNoUpdate();
 
 }
@@ -172,7 +172,7 @@ void UdmTests::Test::selfTest()
 
   {
     UdmDom::DomDataNetwork  in(::SBML2::diagram);
-  in.OpenExisting("test.xml",sbml_xsdName);
+  in.OpenExisting("test.xml",sbml_xsdName, Udm::CHANGES_PERSIST_ALWAYS);
   in.CloseNoUpdate();
   }
 
@@ -239,7 +239,7 @@ void UdmTests::Test::read(const std::string& fname,
 
 
   UdmDom::DomDataNetwork  indn(::SBML2::diagram);
-	indn.OpenExistingFromString(xml,sbml_xsdName);
+	indn.OpenExistingFromString(xml,sbml_xsdName, Udm::CHANGES_PERSIST_ALWAYS);
 
 
 

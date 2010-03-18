@@ -66,7 +66,7 @@ bool UdmTests::childrenorderTest::ordertest(const char * dgr_name)
 
 	Udm::SmartDataNetwork nw(LampDiagram::diagram);
 
-	nw.CreateNew(dgr_name,"LampDiagram", RootFolder::meta);
+	nw.CreateNew(dgr_name,"LampDiagram", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
 	{
 		RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
@@ -97,7 +97,7 @@ bool UdmTests::childrenorderTest::ordertest(const char * dgr_name)
 
 	}
 	nw.CloseWithUpdate();
-	nw.OpenExisting(dgr_name, "LampDiagram");
+	nw.OpenExisting(dgr_name, "LampDiagram", Udm::CHANGES_PERSIST_ALWAYS);
 	{
 		RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
 		set<Lamp> lamps = rrr.Lamp_kind_children();

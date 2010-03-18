@@ -12,7 +12,7 @@ using namespace Udm;
 void UdmTests::refPortsTest::testRefPorts()
 {
 	Udm::SmartDataNetwork dn(RefPort::diagram);
-	dn.CreateNew("RefPortInst.mga", "RefPort", RootFolder::meta);
+	dn.CreateNew("RefPortInst.mga", "RefPort", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
 	//creating root folder
 	RootFolder rf = RootFolder::Cast(dn.GetRootObject());

@@ -60,7 +60,7 @@ void UdmTests::LibsTest::testLibOperations(const string &backend_ext)
 
 	// create a datanetwork that will be attached later as a library
 	{
-		nw_lib1.CreateNew(lib1_name, metalocator, RootFolder::meta);
+		nw_lib1.CreateNew(lib1_name, metalocator, RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 		RootFolder lib1_root = RootFolder::Cast(nw_lib1.GetRootObject());
 		createLamp(lib1_root, "Lib1");
 		nw_lib1.CloseWithUpdate();
@@ -69,7 +69,7 @@ void UdmTests::LibsTest::testLibOperations(const string &backend_ext)
 	// create another datanetwork that will also be attached as a library;
 	// attach to this the first library
 	{
-		nw_lib2.CreateNew(lib2_name, metalocator, RootFolder::meta);
+		nw_lib2.CreateNew(lib2_name, metalocator, RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 		RootFolder rrr = RootFolder::Cast(nw_lib2.GetRootObject());
 		createLamp(rrr, "Lib2");
 
@@ -82,7 +82,7 @@ void UdmTests::LibsTest::testLibOperations(const string &backend_ext)
 
 	// create a new data-network and attach the previous lib
 	{
-		nw.CreateNew(test1_name, metalocator, RootFolder::meta);
+		nw.CreateNew(test1_name, metalocator, RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 		RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
 		CPPUNIT_ASSERT(!rrr.isLibObject());
 		CPPUNIT_ASSERT(!rrr.isLibRoot());
@@ -138,7 +138,7 @@ void UdmTests::LibsTest::testLibOperations(const string &backend_ext)
 
 	// reopen the project and repeat some tests
 	{
-		nw.OpenExisting(test1_name, metalocator);
+		nw.OpenExisting(test1_name, metalocator, Udm::CHANGES_PERSIST_ALWAYS);
 		RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
 		CPPUNIT_ASSERT(!rrr.isLibObject());
 		Lamp lamp = *((set<Lamp>) rrr.Lamp_kind_children()).begin();

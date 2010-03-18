@@ -26,7 +26,7 @@ void readTest(const std::string& fname)
 {
 
 	Udm::SmartDataNetwork  out(CHost::diagram);
-	out.OpenExisting(fname.c_str());
+	out.OpenExisting(fname.c_str(), "", Udm::CHANGES_PERSIST_ALWAYS);
 
 	out.CloseNoUpdate();
 }

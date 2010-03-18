@@ -228,7 +228,7 @@ string xml_verify_str =
 	
 
 	UdmDom::DomDataNetwork ddn(LampDiagram::diagram);
-	ddn.OpenExistingFromString(xml_str,"LampDiagram.xsd");
+	ddn.OpenExistingFromString(xml_str,"LampDiagram.xsd", Udm::CHANGES_PERSIST_ALWAYS);
 	RootFolder rf = RootFolder::Cast(ddn.GetRootObject());
 	Lamp l = *( (set<Lamp>(rf.Lamp_kind_children())).begin());
 	CPPUNIT_ASSERT(l.uniqueId() == 13);
@@ -242,7 +242,7 @@ string xml_verify_str =
 	CPPUNIT_ASSERT( strcmp(xml_verify_str.c_str(), outstr.c_str()) == 0);
 
 
-	ddn.CreateNewToString("LampDiagram.xsd", RootFolder::meta);
+	ddn.CreateNewToString("LampDiagram.xsd", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 	RootFolder rf1 = RootFolder::Cast(ddn.GetRootObject());
 	Lamp l1 = Lamp::Create(rf1);
 	l1.name() = "cool!";

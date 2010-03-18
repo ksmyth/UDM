@@ -45,7 +45,7 @@ int main_regtest(int argc, char *argv[])
 	{
 		Udm::SmartDataNetwork nw(diagram);
 
-		nw.CreateNew(argv[1],"LampDiagram", RootFolder::meta);
+		nw.CreateNew(argv[1],"LampDiagram", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
 		{
 			RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
@@ -346,7 +346,7 @@ xml_xsd += "<xsd:attribute name=\"_archetype\" type=\"xsd:IDREF\"/>\
 
 
 		UdmDom::DomDataNetwork ddn(LampDiagram::diagram);
-		ddn.OpenExistingFromString(xml_str,"LampDiagram.xsd");
+		ddn.OpenExistingFromString(xml_str,"LampDiagram.xsd", Udm::CHANGES_PERSIST_ALWAYS);
 		RootFolder rf = RootFolder::Cast(ddn.GetRootObject());
 		Lamp l = *( (set<Lamp>(rf.Lamp_kind_children())).begin());
 		l.name() = " name changed!";
@@ -356,7 +356,7 @@ xml_xsd += "<xsd:attribute name=\"_archetype\" type=\"xsd:IDREF\"/>\
 		cout << outstr << endl;
 		
 
-		ddn.CreateNewToString("LampDiagram.xsd", RootFolder::meta);
+		ddn.CreateNewToString("LampDiagram.xsd", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 		RootFolder rf1 = RootFolder::Cast(ddn.GetRootObject());
 		Lamp l1 = Lamp::Create(rf1);
 		l1.name() = "cool!";
@@ -396,7 +396,7 @@ int main1(int argc, char * argv[])
 		
 		Udm::SmartDataNetwork nw(diagram);
 
-		nw.CreateNew(argv[1],"LampDiagram", RootFolder::meta);
+		nw.CreateNew(argv[1],"LampDiagram", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
 		{
 			RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
@@ -425,7 +425,7 @@ int main1(int argc, char * argv[])
 
 		}
 		nw.CloseWithUpdate();
-		nw.OpenExisting(argv[1], "LampDiagram");
+		nw.OpenExisting(argv[1], "LampDiagram", Udm::CHANGES_PERSIST_ALWAYS);
 		{
 			RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
 			set<Lamp> lamps = rrr.Lamp_kind_children();
@@ -549,7 +549,7 @@ int main_arch_der_sub_test(int argc, char * argv[])
 		
 		Udm::SmartDataNetwork nw(diagram);
 
-		nw.CreateNew(argv[1],"LampDiagram", RootFolder::meta);
+		nw.CreateNew(argv[1],"LampDiagram", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
 		{
 			RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
@@ -629,7 +629,7 @@ int main_arch_der_sub_test(int argc, char * argv[])
 		}
 		nw.CloseWithUpdate();
 		
-		nw.OpenExisting(argv[1],"LampDiagram");
+		nw.OpenExisting(argv[1],"LampDiagram", Udm::CHANGES_PERSIST_ALWAYS);
 		{
 			RootFolder rf = RootFolder::Cast(nw.GetRootObject());
 			vector<Lamp> rf_lamps = rf.Lamp_kind_children();
@@ -718,7 +718,7 @@ int main(int argc, char* argv[])
 		
 		Udm::SmartDataNetwork nw(diagram);
 
-		nw.CreateNew(argv[1],"LampDiagram", RootFolder::meta);
+		nw.CreateNew(argv[1],"LampDiagram", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 
 		{
 			RootFolder rrr = RootFolder::Cast(nw.GetRootObject());
@@ -1178,7 +1178,7 @@ int main(int argc, char* argv[])
 			//testing assignment
 						
 			Udm::SmartDataNetwork snw(diagram);
-			snw.CreateNew(argv[2],"LampDiagram",RootFolder::meta);
+			snw.CreateNew(argv[2],"LampDiagram",RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
 			snw = nw;						//Datanetwork copy operator
 			snw = nw;						//Datanetwork copy operator - again - should not duplicate
 

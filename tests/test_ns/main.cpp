@@ -29,7 +29,7 @@ void readTest(const std::string& fname)
 {
 
 	Udm::SmartDataNetwork in(test_ns::diagram);
-	in.OpenExisting(fname.c_str(), "test_ns_AB.xsd");
+	in.OpenExisting(fname.c_str(), "test_ns_AB.xsd", Udm::CHANGES_PERSIST_ALWAYS);
 
 	test_ns::AB::AB ab = test_ns::AB::AB::Cast(in.GetRootObject());
 
@@ -47,7 +47,7 @@ int main()
 
 		// test initialization from another diagram
 		Udm::SmartDataNetwork udmDN(Uml::diagram);
-		udmDN.OpenExisting("test_ns_udm.xml");
+		udmDN.OpenExisting("test_ns_udm.xml", "", Udm::CHANGES_PERSIST_ALWAYS);
 		
 		Uml::Diagram theUmlDiagram(Uml::Diagram::Cast(udmDN.GetRootObject()));
 		test_ns::Initialize(theUmlDiagram);
