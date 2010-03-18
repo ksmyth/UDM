@@ -95,6 +95,7 @@
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)UdmDll_VS10.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ForceSymbolReferences>?UnInitialize@Ocl@@YAXXZ</ForceSymbolReferences>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin
@@ -147,6 +148,7 @@ copy "$(OutDir)"\UdmDll_VS10.lib "$(UDM_PATH)"\lib
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)UdmDll_VS10D.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ForceSymbolReferences>?UnInitialize@Ocl@@YAXXZ</ForceSymbolReferences>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin
