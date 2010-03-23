@@ -320,6 +320,8 @@ namespace UDM_NAMESPACE
 
 	UDM_DLL DataNetwork::~DataNetwork()
 	{
+		dntab.erase(dn_id);
+
 		if (rootobject) throw udm_exception("Dirty abort!");
 	}
 

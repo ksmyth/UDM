@@ -1627,12 +1627,13 @@ CString CComponent::GetFilePath(CBuilder &builder, CBuilderObject *focus, char *
 		if(CreateDirectory((LPCSTR)transDirName, NULL)==0)
 		{	int le = GetLastError();
 			if(le != 183)
-			{	LPVOID lpMsgBuf;
+			{	LPTSTR lpMsgBuf;
 				FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 								NULL, le, 0, (LPTSTR) &lpMsgBuf, 0, NULL );
 				CString msg = "Uml2Xml Error: Unable to create directory " + transDirName + "\n";
 				msg += (LPCSTR)lpMsgBuf;
-				throw int_exception((LPCSTR)msg);
+				LocalFree(lpMsgBuf);
+				throw int_exception(std::string((LPCSTR)msg));
 			}
 		}
 		SetCurrentDirectory((LPCSTR)transDirName);
