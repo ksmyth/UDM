@@ -1196,4 +1196,3 @@ namespace UdmOcl {
 
 }; // namespace UdmOcl
 
-UDM_DLL bool KMSTESTING( ) { return true; }
