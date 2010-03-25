@@ -1010,6 +1010,9 @@ namespace Uml
 
 	UDM_DLL const Class & SafeTypeContainer::GetSafeType(const Class &a)
 	{
+		//if (!dynamic_cast<UdmStatic::StaticObject*>(a.__impl())) {
+			// FIXME: uniqueIds are not guaranteed to be unique across datanetworks
+		//}
 		//check if we already have a type equivalent with this
 		type_map_t::const_iterator i = type_map.find(a.uniqueId());
 		if (i == type_map.end())
@@ -1030,7 +1033,7 @@ namespace Uml
 			if (!m_ins_res.second) throw udm_exception("Could not insert new type in type_map!");
 
 			//insert in reference map
-			//with 1 as initial reference coutn value
+			//with 1 as initial reference count value
 			ref_map_t_item ref_item(new_type, 1);
 			ref_map_t_ires ref_res = ref_map.insert(ref_item);
 			if (!ref_res.second) throw udm_exception("Cound not insert new item in references map!");
@@ -1072,18 +1075,23 @@ namespace Uml
 			if ((*ref_i).second == 0)
 			{
 
-				//now we have to find it in the other map to and delete from both
-				type_map_t::iterator i = type_map.find(a.uniqueId());
+				// now we have to find it in the other map too and delete from both
+				// we can't use pointer->uniqueId() here: if it's a closed Dom or Gme backend, uniqueId() will crash
+				type_map_t::iterator i;
+				for (i = type_map.begin(); i != type_map.end(); i++) {
+					if (i->second == pointer) {
+						break;
+					}
+				}
 				if (i == type_map.end())
 				{
-					//we can not drop exception here 
+					//we can not throw exception here 
 					//because it might be called on main()-s '}' 
-					//sow we just complain about this
+					//so we just complain about this
 					cout << " SafeTypeContainer: Fatal error, corrupt maps. Object found in reference map was not found in type map. Likely to crash from now on... " << endl;
-				}
-
+				} else
+					type_map.erase(i);
 				ref_map.erase(ref_i);
-				type_map.erase(i);
 				delete pointer;
 			}
 
