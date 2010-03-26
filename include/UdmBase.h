@@ -3048,10 +3048,10 @@ public:
 // Load/Persist
 	virtual void CreateNew(const string &systemname, 
 									const string &metalocator, const ::Uml::Class &rootclass, 
-									enum BackendSemantics sem) = 0;
+									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) = 0;
 	virtual void OpenExisting(const string &systemname, 
 									const string &metalocator, 
-									enum BackendSemantics sem) = 0;
+									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) = 0;
 	virtual void CloseWithUpdate() = 0;
 	virtual void CloseNoUpdate()			{  throw udm_exception("Unsupported method"); }
 	virtual void SaveAs(string systemname) {  throw udm_exception("Unsupported method"); }
@@ -3096,10 +3096,10 @@ public:
 	virtual UDM_DLL bool IsTypeSafe();
 //string support
 	virtual	UDM_DLL void CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass, 
-									enum Udm::BackendSemantics sem);
+									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 	virtual UDM_DLL void OpenExistingFromString(string &str, 
 									const string &metalocator, 
-									enum Udm::BackendSemantics sem);
+									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 	virtual UDM_DLL const string & Str();
 
 	virtual UDM_DLL set<Object> GetAllInstancesOf(const ::Uml::Class& meta);
@@ -3161,7 +3161,7 @@ public:
 	
 	virtual void CreateNew(const string &systemname, 
 									const string &metalocator, const ::Uml::Class &rootclass, 
-									enum BackendSemantics sem) {
+									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) {
 		if(dn) throw udm_exception("DataNetwork is already open"); 
 		DataNetwork *dn1 = CreateBackend(systemname, metaroot, pr);
 		if(!dn1) throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"
@@ -3172,7 +3172,7 @@ public:
 
 	virtual void OpenExisting(const string &systemname, 
 									const string &metalocator, 
-									enum BackendSemantics sem) {
+									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) {
 		if(dn) throw udm_exception("DataNetwork is already open"); 
 		DataNetwork *dn1 = CreateBackend(systemname, metaroot,pr);
 		if(!dn1) throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"
@@ -3253,7 +3253,7 @@ public:
 
 	//string support
 	virtual	void CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass, 
-									enum Udm::BackendSemantics sem)
+									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS)
 	{
 		if(dn) throw udm_exception("DataNetwork is already open"); 
 		DataNetwork *dn1 = CreateBackend("string_dom.xml", metaroot, pr);//the name can be anything, which ends in .xml. String backend is supported only by DOM
@@ -3265,7 +3265,7 @@ public:
 	};
 	virtual void OpenExistingFromString(string &str, 
 									const string &metalocator, 
-									enum Udm::BackendSemantics sem)
+									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS)
 	{
 		if(dn) throw udm_exception("DataNetwork is already open"); 
 		DataNetwork *dn1 = CreateBackend("string_dom.xml", metaroot, pr);//the name can be anything, which ends in .xml. String backend is supported only by DOM
@@ -3413,13 +3413,13 @@ public:
 		UDM_DLL UdmProject(bool static_pr = false);
 
 		//this will automatically open the datenetwork containing the cross links
-		virtual void UDM_DLL OpenExisting(const string & project_file, enum BackendSemantics);
+		virtual void UDM_DLL OpenExisting(const string & project_file, enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
 
 		//create new Udm project
-		virtual void UDM_DLL CreateNew(const string & project_file, vector<DataNetworkSpecifier>, const Udm::UdmDiagram& cross_diag , enum BackendSemantics);
+		virtual void UDM_DLL CreateNew(const string & project_file, vector<DataNetworkSpecifier>, const Udm::UdmDiagram& cross_diag , enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
 
 		//create new meta Udm project
-		virtual void UDM_DLL CreateNewMeta(const string & project_name, const string & project_file, vector<DataNetworkSpecifier>, enum BackendSemantics);
+		virtual void UDM_DLL CreateNewMeta(const string & project_name, const string & project_file, vector<DataNetworkSpecifier>, enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
 
 		// Returns true if project is open.
 		bool IsOpen() { return Project;}
@@ -3515,8 +3515,8 @@ public:
 
 		//all of these will throw an exception because they are not suitable for Static projects
 		UDM_DLL StaticUdmProject();		//this will throw an exception - StaticUdmProject is constructed from existing datanetworks
-		UDM_DLL StaticUdmProject(const string & project_file, vector<DataNetworkSpecifier>, const Udm::UdmDiagram& cross_diag , enum BackendSemantics);
-		void UDM_DLL OpenExisting(const string & project_file, enum BackendSemantics);
+		UDM_DLL StaticUdmProject(const string & project_file, vector<DataNetworkSpecifier>, const Udm::UdmDiagram& cross_diag , enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
+		void UDM_DLL OpenExisting(const string & project_file, enum BackendSemantics = Udm::CHANGES_PERSIST_ALWAYS);
 		void UDM_DLL ValidateIDs(const string& sysname, const map<const unsigned long, const unsigned long> &tr_map);
 		void UDM_DLL AddDynamicMeta(const DynamicMetaSpecifier&);
 		void UDM_DLL ResetDynamicMetas();
