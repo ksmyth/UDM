@@ -303,14 +303,14 @@ copy /y "%(FullPath)" .
 "%(RootDir)%(Directory)\ANTLRBase\antlr" -CC -ft OCLTokens.h -fl OCLParser.dlg -mrhoist off ocl.g
 "%(RootDir)%(Directory)\ANTLRBase\dlg" -C2 -i -CC -cl OCLLexer OCLParser.dlg
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.h; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.h; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\ocl.cpp; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLTokens.h; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.dlg;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.h;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.h;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\ocl.cpp;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLTokens.h;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.dlg</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(OutDir)..\Gen\src\UdmOclPat\GOCL\src"
 cd "$(OutDir)..\Gen\src\UdmOclPat\GOCL\src"
 copy /y "%(FullPath)" .
 "%(RootDir)%(Directory)\ANTLRBase\antlr" -CC -ft OCLTokens.h -fl OCLParser.dlg -mrhoist off ocl.g
 "%(RootDir)%(Directory)\ANTLRBase\dlg" -C2 -i -CC -cl OCLLexer OCLParser.dlg
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.h; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.h; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\ocl.cpp; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLTokens.h; $(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.dlg;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.h;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.h;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\ocl.cpp;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLTokens.h;$(OutDir)..\Gen\src\UdmOclPat\GOCL\src\OCLParser.dlg</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
