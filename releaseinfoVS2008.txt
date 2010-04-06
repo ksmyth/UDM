@@ -18,6 +18,17 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+04/6/09			-	Release 3.2.4
+		-	boost is no longer redistributed with Udm.
+		-	Fix crash with Gme backend and refports (UDM-55)
+		-	Automatic linking with Visual Studio: when UDM_DYNAMIC_LINKING is defined, the linker will automatically link with UdmDll.lib or UdmDllD.lib (as appropriate)
+		-	Fix crash when Udm is dynamically unloaded and Dom or Gme backends are used as metamodels. (UDM-57)
+		-	CHANGES_PERSIST_ALWAYS and CHANGES_PERSIST_DEFAULT are deprecated. If the DataNetwork is being destructed during a stack unwinding due to an exception and throws an exception, C++ guarantees that terminate() will be called. It is recommended to use CHANGES_PERSIST_ALWAYS and CloseWithUpdate. (UDM-54)
+		-	Fix crash with using Uml2Xml interpreter on a model with NULL references (UDM-47)
+		-	Fix memory leaks with Dom backend.
+		-	Better UdmCopy usage message
+
+
 01/9/10			-	Release 3.2.3
 		-	For LEESA programs, add struct IsDescendant<T, U> that can be used to check at compile time if U can be contained, either directly or indirectly, by T.
 		-	Use uniqueId from file with DOM backend (_id attribute)

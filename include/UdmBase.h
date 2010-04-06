@@ -3852,6 +3852,6 @@ inline UDM_DLL ostream & operator<< (ostream &o, Udm::StringAttr c) { o << (stri
 
 //versioning
 #define UDM_VERSION_MAJOR 3
-#define UDM_VERSION_MINOR 23
+#define UDM_VERSION_MINOR 24
 #define UDM_VERSION UDM_VERSION_MAJOR * 100 + UDM_VERSION_MINOR
 #endif//MOBIES_UDMBASE_H
