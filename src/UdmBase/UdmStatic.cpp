@@ -2012,6 +2012,8 @@ namespace UdmStatic
 		// refuse to set an association unless it's coming from archetype
 		// (reference links are exceptions)
 
+		::Uml::AssociationRole orole = Uml::theOther(meta);
+
 		if (m_parent->archetype && !m_parent->subtype && direct && !isRefLink(meta, mode, nvect))
 		{
 			//my parent is an instance object
@@ -2170,7 +2172,7 @@ namespace UdmStatic
 				}
 				
 				//find the role provided
-				set< ::Uml::AssociationRole>::iterator i = roles.find(Uml::theOther(meta));
+				set< ::Uml::AssociationRole>::iterator i = roles.find(orole);
 			
 				if (i == roles.end()) 
 					throw udm_exception("Invalid meta specified in StaticObject::setAssociation!");
@@ -2194,7 +2196,7 @@ namespace UdmStatic
 				roles.insert(c_roles.begin(), c_roles.end());
 			}
 			
-			set< ::Uml::AssociationRole>::iterator i = roles.find(Uml::theOther(meta));
+			set< ::Uml::AssociationRole>::iterator i = roles.find(orole);
 			if (i == roles.end()) 
 				throw udm_exception("Invalid meta specified in StaticObject::setAssociation!");
 			
@@ -2238,7 +2240,7 @@ namespace UdmStatic
 		for (assoc_type::iterator j = t.first; j != t.second; j++)
 		{
 			pair<assoc_type::iterator, assoc_type::iterator> w = 
-				j->second->associations.equal_range((Uml::theOther(meta)).uniqueId());
+				j->second->associations.equal_range(orole.uniqueId());
 			
 			for (assoc_type::iterator k = w.first; k != w.second; k++)
 			{
@@ -2308,7 +2310,7 @@ namespace UdmStatic
 
 					pair<assoc_type::iterator, assoc_type::iterator> w;
 
-					w = s_or_i_of_so->associations.equal_range((Uml::theOther(meta)).uniqueId());
+					w = s_or_i_of_so->associations.equal_range(orole.uniqueId());
 					while (w.first != w.second)
 					{
 						if (w.first->second == s_or_i_of_this)
@@ -2374,7 +2376,7 @@ namespace UdmStatic
 			associations.safe_insert(associated);
 			
 			//and the other one for my party
-			pair<uniqueId_type const, StaticObject*> ass_me((Uml::theOther(meta)).uniqueId(), (StaticObject*)this->clone());
+			pair<uniqueId_type const, StaticObject*> ass_me(orole.uniqueId(), (StaticObject*)this->clone());
 			((StaticObject*)(*it_to_ass))->associations.safe_insert(ass_me);
 		}
 
@@ -2430,7 +2432,7 @@ namespace UdmStatic
 				s_or_i_of_this->associations.safe_insert(ass1);
 			
 				//and the other one for my party
-				pair<uniqueId_type const, StaticObject*> ass2((Uml::theOther(meta)).uniqueId(), (StaticObject*)(s_or_i_of_this->clone()));
+				pair<uniqueId_type const, StaticObject*> ass2(orole.uniqueId(), (StaticObject*)(s_or_i_of_this->clone()));
 				s_or_i_of_so->associations.safe_insert(ass2);
 
 

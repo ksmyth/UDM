@@ -920,17 +920,24 @@ bbreak:			;
 					
 
 					if (kvect.size() > 1 && self->GetObjType() != OBJTYPE_REFERENCE) throw udm_exception("In case of np_helper connection there should be maximum one connecting object!");
+
+					::Uml::AssociationRole orole = ::Uml::theOther(meta);
+					string oname = orole.name();
+					bool oIsNavigable = orole.isNavigable();
+
+					bool isNavigable = meta.isNavigable();
+
 					if (kvect.size())
 					{
 						for (vector<ObjectImpl*>::const_iterator i = kvect.begin(); i != kvect.end(); i++)
 						{
 							IMgaFCOPtr connecting_object = static_cast<GmeObject *>(*i)->self;
 #if 0
-							if (RpHelperNotValidConn(self, connecting_object, meta.name(), ::Uml::theOther(meta).name()))
+							if (RpHelperNotValidConn(self, connecting_object, rname, oname))
 								throw udm_exception("Connection to reference port already exists, delete it first before changing the reference!");
 #endif
-							RpHelperAddToRegistry(self, connecting_object, meta.name(), meta.isNavigable());
-							RpHelperAddToRegistry(connecting_object, self, ::Uml::theOther(meta).name(), ::Uml::theOther(meta).isNavigable());
+							RpHelperAddToRegistry(self, connecting_object, rname, isNavigable);
+							RpHelperAddToRegistry(connecting_object, self, oname, oIsNavigable);
 						}
 					}
 					if (pvect.size())
@@ -938,8 +945,8 @@ bbreak:			;
 						for (vector<ObjectImpl*>::const_iterator i = pvect.begin(); i != pvect.end(); i++)
 						{
                             IMgaFCOPtr connecting_object = static_cast<GmeObject *>(*i)->self;
-							RpHelperRemoveFromRegistry(self, connecting_object, meta.name());
-							RpHelperRemoveFromRegistry(connecting_object, self, ::Uml::theOther(meta).name());
+							RpHelperRemoveFromRegistry(self, connecting_object, rname);
+							RpHelperRemoveFromRegistry(connecting_object, self, oname);
 						}
 					};
 				}//if (nn.rp_helper)
@@ -1159,9 +1166,10 @@ bbreak:			;
 			{
 				if (nn.rp_helper)
 				{
+					::Uml::AssociationRole orole = ::Uml::theOther(meta);
 					IMgaFCOsPtr fcos = RpHelperFindPeerFCOsFromModel(self,
-						meta.name(), meta.isNavigable(),
-						::Uml::theOther(meta).name(), ::Uml::theOther(meta).isNavigable(),
+						rname, meta.isNavigable(),
+						orole.name(), orole.isNavigable(),
 						(GmeDataNetwork *)mydn, true, false);
 					MGACOLL_ITERATE(IMgaFCO, fcos)
 					{
@@ -1644,7 +1652,8 @@ bbreak:			;
 			for (ars_i = ars.begin(); ars_i != ars.end(); ars_i++)
 			{
 				if (ars_i->isNavigable()) all_roles.insert(*ars_i);
-				if (Uml::theOther(*ars_i).isNavigable()) all_roles.insert(Uml::theOther(*ars_i));
+				::Uml::AssociationRole orole = Uml::theOther(*ars_i);
+				if (orole.isNavigable()) all_roles.insert(orole);
 
 			};
 			
@@ -1656,11 +1665,11 @@ bbreak:			;
 				if (nn.ot == OBJTYPE_CONNECTION && nn.rp_helper)
 				{
 					IMgaFCOsPtr fcos = RpHelperFindPeerFCOsFromRegistry(self,
-						ars_i->name(), false,
+						oar_name, false,
 						(GmeDataNetwork *)__getdn());
 					MGACOLL_ITERATE(IMgaFCO, fcos)
 					{
-						RpHelperRemoveFromRegistry(MGACOLL_ITER, self, ars_i->name());
+						RpHelperRemoveFromRegistry(MGACOLL_ITER, self, oar_name);
 					}
 					MGACOLL_ITERATE_END;
 				};
@@ -1937,12 +1946,13 @@ bbreak:			;
 	{
 		SmartBSTR val;
 		string ret;
+		string rname = meta.name();
 
 		if (meta.registry())
 		{
 			//to be written as a registry value
 			IMgaRegNodePtr reg_node;
-			BSTR reg_node_name = SmartBSTR(((string)meta.name()).c_str());
+			BSTR reg_node_name = SmartBSTR(rname.c_str());
 		
 			if (folderself)
 				COMTHROW(folderself->get_RegistryNode(reg_node_name, &reg_node));
@@ -1954,8 +1964,8 @@ bbreak:			;
 
 
 		}
-		if((string)meta.name() == "name") val = objself->Name;
-		else if((string)meta.name() == "position") 
+		if(rname == "name") val = objself->Name;
+		else if(rname == "position") 
 		{
 			long x, y;
 			IMgaPartsPtr parts; 
@@ -1991,7 +2001,7 @@ bbreak:			;
 			}
 			else return("");
 		}
-		else val = testself->StrAttrByName[SmartBSTR(NAMEGET(meta))];
+		else val = testself->StrAttrByName[SmartBSTR(rname.c_str())];
 		return (char *)val;
 	}
 
@@ -2037,12 +2047,13 @@ bbreak:			;
 	void GmeObject::setStringAttr(const ::Uml::Attribute &meta, const string &a, const bool direct)
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
+		string rname = meta.name();
 
 		if (meta.registry())
 		{
 			//to be written as a registry value
 			IMgaRegNodePtr reg_node;
-			BSTR reg_node_name = SmartBSTR(((string)meta.name()).c_str());
+			BSTR reg_node_name = SmartBSTR(rname.c_str());
 		
 			if (folderself)
 				COMTHROW(folderself->get_RegistryNode(reg_node_name, &reg_node));
@@ -2053,8 +2064,8 @@ bbreak:			;
 
 
 		}
-		else if((string)meta.name() == "name") objself->Name = SmartBSTR(a.c_str());
-		else if((string)meta.name() == "position") 
+		else if(rname == "name") objself->Name = SmartBSTR(a.c_str());
+		else if(rname == "position") 
 		{
 			if (!a.size()) return;		//empty strings should be allowed and nothing should happen in such cases.
 
@@ -2087,7 +2098,7 @@ bbreak:			;
 			}
 
 		}
-		else testself->StrAttrByName[SmartBSTR(NAMEGET(meta))] = SmartBSTR(a.c_str());
+		else testself->StrAttrByName[SmartBSTR(rname.c_str())] = SmartBSTR(a.c_str());
 	};
 
 	bool GmeObject::getBooleanAttr(const ::Uml::Attribute &meta) const	
@@ -2161,10 +2172,11 @@ bbreak:			;
 
 	vector<string> GmeObject::getStringAttrArr(const ::Uml::Attribute &meta) const
 	{
-		if (meta.registry() && (string)meta.name() == "annotations")
+		string rname = meta.name();
+		if (meta.registry() && rname == "annotations")
 		{
 			IMgaRegNodePtr reg_node;
-			BSTR reg_node_name = SmartBSTR(((string)meta.name()).c_str());
+			BSTR reg_node_name = SmartBSTR(rname.c_str());
 		
 			if (folderself)
 				COMTHROW(folderself->get_RegistryNode(reg_node_name, &reg_node));
@@ -2186,12 +2198,13 @@ bbreak:			;
 
 	void GmeObject::setStringAttrArr(const ::Uml::Attribute &meta, const vector<string> &a, const bool direct)
 	{
-		if (meta.registry() && (string)meta.name() == "annotations")
+		string rname = meta.name();
+		if (meta.registry() && rname == "annotations")
 		{
 			((GmeDataNetwork*)mydn)->CountWriteOps();
 
 			IMgaRegNodePtr reg_node;
-			BSTR reg_node_name = SmartBSTR(((string)meta.name()).c_str());
+			BSTR reg_node_name = SmartBSTR(rname.c_str());
 		
 			if (folderself)
 				COMTHROW(folderself->get_RegistryNode(reg_node_name, &reg_node));
@@ -2225,11 +2238,12 @@ bbreak:			;
 
 	long GmeObject::getAttrStatus(const ::Uml::Attribute &meta) const
 	{
-		if ((string)meta.name() == "name")
+		string rname = meta.name();
+		if (rname == "name")
 		{
 			return ATTSTATUS_HERE;
 		}
-		else if ((string)meta.name() == "position")
+		else if (rname == "position")
 		{
 			// XXX for now
 			return ATTSTATUS_HERE;
@@ -2237,7 +2251,7 @@ bbreak:			;
 		else if (meta.registry())
 		{
 			IMgaRegNodePtr reg_node;
-			BSTR reg_node_name = SmartBSTR(((string)meta.name()).c_str());
+			BSTR reg_node_name = SmartBSTR(rname.c_str());
 		
 			if (folderself)
 				COMTHROW(folderself->get_RegistryNode(reg_node_name, &reg_node));
@@ -2251,7 +2265,7 @@ bbreak:			;
 		else
 		{
 			IMgaMetaAttributePtr attr_meta;
-			COMTHROW(MetaFCO()->get_AttributeByName(SmartBSTR(NAMEGET(meta)), &attr_meta));
+			COMTHROW(MetaFCO()->get_AttributeByName(SmartBSTR(rname.c_str()), &attr_meta));
 			return testself->GetAttribute(attr_meta)->GetStatus();
 		}
 	}
@@ -2847,10 +2861,12 @@ bbreak:			;
 						goto archetype_ready;
 					}
 					*/
+					::Uml::AssociationRole orole = Uml::theOther(*j);
 					//check if the rolename is reference or set-member relationship
 					if(!aclass && (rolename == "ref" || rolename == "members")) 
 					{
-						nn.metaobj = MetaObjLookup(metaproj, PATHGET((::Uml::Class)Uml::theOther(*j).target()));
+						::Uml::Class otarget = orole.target();
+						nn.metaobj = MetaObjLookup(metaproj, PATHGET(otarget));
 
 						// the reference could be an abstract UML class
 						if (nn.metaobj == NULL && rolename == "ref")
@@ -2859,7 +2875,7 @@ bbreak:			;
 							role_to_MetaFCO_map role_map;
 
 							// get rolenames of all descendants that are a reference
-							set< ::Uml::Class> other_descs = Uml::DescendantClasses((::Uml::Class)Uml::theOther(*j).target());
+							set< ::Uml::Class> other_descs = Uml::DescendantClasses(otarget);
 							for (set< ::Uml::Class>::iterator desc_i = other_descs.begin(); desc_i != other_descs.end(); desc_i++)
 							{	
 								IMgaMetaFCOPtr p = MetaObjLookup(metaproj, PATHGET(*desc_i));
@@ -2876,7 +2892,7 @@ bbreak:			;
 								}
 							}
 
-							role_to_MetaFCO_map::iterator i = role_map.find(::Uml::MakeRoleName(Uml::theOther(*j)));
+							role_to_MetaFCO_map::iterator i = role_map.find(::Uml::MakeRoleName(orole));
 							if (i != role_map.end())
 							{
 								// the reference is a single non-abstract descendant because a descendant exists
@@ -2904,12 +2920,12 @@ bbreak:			;
 								}
 							}
 						}
-						nn.primary = Uml::theOther(*j);
+						nn.primary = orole;
 						expect = rolename == "ref" ? OBJTYPE_REFERENCE : OBJTYPE_SET;
 						break;
 					}
 					//check if it is a connection and the rolenames directly identify the source and the destination
-					if(rolename == "dst" && (!Uml::theOther(*j).isNavigable() || (string)Uml::theOther(*j).name() == "src")) 
+					if(rolename == "dst" && (!orole.isNavigable() || (string)orole.name() == "src")) 
 					{
 						set< ::Uml::Class> deriveds = Uml::DescendantClasses(aclass);
 						nn.primary = Uml::theOther(*j);
@@ -2979,10 +2995,8 @@ bbreak:			;
 						set< ::Uml::AssociationRole>::iterator j;
 						for(j = roles.begin(); j != roles.end(); j++) 
 						{
-							if(!Uml::theOther(*j).isNavigable()) continue;
-
-							bool isnavi1 = j->isNavigable();
-							bool isnavi2 = Uml::theOther(*j).isNavigable();
+							::Uml::AssociationRole orole = Uml::theOther(*j);
+							if(!orole.isNavigable()) continue;
 
 							IMgaMetaFCOPtr bt = MetaObjLookup(metaproj, PATHGET((::Uml::Class)j->target()));
 							if(bt) 
@@ -3008,16 +3022,16 @@ bbreak:			;
 								}//switch(bt->GetObjType()) 
 								if (nn.rp_helper)
 								{
-									if ( (sRefParent == SmartBSTR(Uml::MakeRoleName(Uml::theOther(*j)).c_str())) || (dRefParent == SmartBSTR(Uml::MakeRoleName(Uml::theOther(*j)).c_str())) )
+									if ( (sRefParent == SmartBSTR(Uml::MakeRoleName(orole).c_str())) || (dRefParent == SmartBSTR(Uml::MakeRoleName(orole).c_str())) )
 									{
-										nn.primary = Uml::theOther( *j);
+										nn.primary = orole;
 										nn.metaobj = bt;
 										expect = bt->GetObjType();
 									}
 									break;
 
 								};//	if (nn.rp_helper)
-								if( Uml::theOther(*j).isNavigable() && therename == SmartBSTR(Uml::MakeRoleName(Uml::theOther(*j)).c_str()) && 	(!j->isNavigable() || herename == SmartBSTR(Uml::MakeRoleName(*j).c_str())) ) 
+								if( orole.isNavigable() && therename == SmartBSTR(Uml::MakeRoleName(orole).c_str()) && 	(!j->isNavigable() || herename == SmartBSTR(Uml::MakeRoleName(*j).c_str())) ) 
 								{
 									nn.primary = *j;
 									nn.metaobj = bt;

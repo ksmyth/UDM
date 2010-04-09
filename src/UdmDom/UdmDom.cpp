@@ -2284,15 +2284,16 @@ namespace UdmDom
 						for(set< ::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
 							p_currRole!=compParentRoles.end(); p_currRole++)
 							{
-								::Uml::Class childClass=Uml::theOther(*p_currRole).target();
-								vector<ObjectImpl*>children= archetype->getChildren(Uml::theOther(*p_currRole),childClass);
+								::Uml::CompositionChildRole oRole = Uml::theOther(*p_currRole);
+								::Uml::Class childClass = oRole.target();
+								vector<ObjectImpl*>children= archetype->getChildren(oRole, childClass);
 								for(vector<ObjectImpl*>::iterator p_currImpl=children.begin();
 									p_currImpl!=children.end();p_currImpl++)
 									{
 										ObjectImpl* p_srcChild=*p_currImpl;
 										Udm::Object srcChild = p_srcChild;	//it will be released OK
 
-										Object newchild = dep->createChild(Uml::theOther(*p_currRole), p_srcChild->type(), p_srcChild, subtype, false);
+										Object newchild = dep->createChild(oRole, p_srcChild->type(), p_srcChild, subtype, false);
 
 										UdmUtil::copy_assoc_map::value_type map_item(srcChild, newchild);
 										cam.insert(map_item);
@@ -2542,7 +2543,8 @@ namespace UdmDom
 			
 			const XMLCh *myid = GetID();
 			string tname = Uml::MakeRoleName(role);
-			string oname = Uml::MakeRoleName(Uml::theOther(role));
+			::Uml::AssociationRole orole = Uml::theOther(role);
+			string oname = Uml::MakeRoleName(orole);
 
 			
 
@@ -2624,7 +2626,7 @@ namespace UdmDom
 				}
 
 				if(EmptyVal(pa)) peer.dom_element->setAttribute(oname_buf, myid);
-				else if(Uml::theOther(role).max() == 1) 
+				else if(orole.max() == 1) 
 				{
 					DOMElement *currentpeer = doc->getElementById(pa);
 					if(currentpeer != NULL) 

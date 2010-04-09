@@ -261,20 +261,21 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 
 			// Checking role names
 			string strSrcRoleName = p_currAssocRole->name();
-			string strDstRoleName = ::Uml::theOther(*p_currAssocRole).name();
+			::Uml::AssociationRole oRole = ::Uml::theOther(*p_currAssocRole);
+			string strDstRoleName = oRole.name();
 
 			if ((strSrcRoleName != ascType.strSrcRoleName && !ascType.strSrcRoleName.empty()) || (strDstRoleName != ascType.strDstRoleName && !ascType.strDstRoleName.empty()))
 				continue;
 
 			// Check if there is an association class for this role
-			::Uml::Association assoc = ::Uml::theOther(*p_currAssocRole).parent();
+			::Uml::Association assoc = oRole.parent();
 			::Uml::Class assoc_cls = assoc.assocClass();
 			if (ascType.clsAssociation != ::Uml::Class(NULL) && assoc_cls == ::Uml::Class(NULL))
 				continue;
 
 			// If a simple association, get the matching peers and continue with the next role
 			if (assoc_cls == ::Uml::Class(NULL)) {
-				vector<ObjectImpl*> dstPeers = impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::TARGETFROMPEER);
+				vector<ObjectImpl*> dstPeers = impl->getAssociation(oRole, Udm::TARGETFROMPEER);
 
 	                        for(vector<ObjectImpl*>::iterator p_currDstPeer=dstPeers.begin(); p_currDstPeer != dstPeers.end(); p_currDstPeer++)
 				{
@@ -290,7 +291,7 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 			}
 
 			// Check all association with classes
-			vector<ObjectImpl*> assocs = impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::CLASSFROMTARGET);
+			vector<ObjectImpl*> assocs = impl->getAssociation(oRole, Udm::CLASSFROMTARGET);
 
 			for(vector<ObjectImpl*>::iterator p_currAssoc = assocs.begin(); p_currAssoc != assocs.end(); p_currAssoc++)
 			{
@@ -302,7 +303,7 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 					continue;
 
 				// Get and test the peers
-				vector<ObjectImpl*> dstPeers = assocCls_obj.impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::TARGETFROMCLASS);
+				vector<ObjectImpl*> dstPeers = assocCls_obj.impl->getAssociation(oRole, Udm::TARGETFROMCLASS);
 				for(vector<ObjectImpl*>::iterator p_currDstPeer = dstPeers.begin(); p_currDstPeer != dstPeers.end(); p_currDstPeer++)
 				{
 					Udm::Object dstObject(*p_currDstPeer);
@@ -383,18 +384,19 @@ UDM_DLL multiset< pair<Object, Object> > Object::GetAdjacentObjectsWithAssocClas
 
 			// Checking role names
 			string strSrcRoleName = p_currAssocRole->name();
-			string strDstRoleName = ::Uml::theOther(*p_currAssocRole).name();
+			::Uml::AssociationRole oRole = ::Uml::theOther(*p_currAssocRole);
+			string strDstRoleName = oRole.name();
 
 			if ((strSrcRoleName != ascType.strSrcRoleName && !ascType.strSrcRoleName.empty()) || (strDstRoleName != ascType.strDstRoleName && !ascType.strDstRoleName.empty()))
 				continue;
 
 			// Check if there is an association class for this role
-			::Uml::Association assoc = ::Uml::theOther(*p_currAssocRole).parent();
+			::Uml::Association assoc = oRole.parent();
 			::Uml::Class assoc_cls = assoc.assocClass();
 			if (assoc_cls == ::Uml::Class(NULL))
 				continue;
 
-			vector<ObjectImpl*> assocs = impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::CLASSFROMTARGET);
+			vector<ObjectImpl*> assocs = impl->getAssociation(oRole, Udm::CLASSFROMTARGET);
 
 			for(vector<ObjectImpl*>::iterator p_currAssoc = assocs.begin(); p_currAssoc != assocs.end(); p_currAssoc++)
 			{
@@ -406,7 +408,7 @@ UDM_DLL multiset< pair<Object, Object> > Object::GetAdjacentObjectsWithAssocClas
 					continue;
 
 				// Get and test the peers
-				vector<ObjectImpl*> dstPeers = assocCls_obj.impl->getAssociation(::Uml::theOther(*p_currAssocRole), Udm::TARGETFROMCLASS);
+				vector<ObjectImpl*> dstPeers = assocCls_obj.impl->getAssociation(oRole, Udm::TARGETFROMCLASS);
 				for(vector<ObjectImpl*>::iterator p_currDstPeer = dstPeers.begin(); p_currDstPeer != dstPeers.end(); p_currDstPeer++)
 				{
 					Udm::Object dstObject(*p_currDstPeer);
@@ -1124,7 +1126,8 @@ UDM_DLL set<Object> Object::GetAssociationClassObjects(Object dstObject, const A
 
 			
 			string strSrcRole=p_currAssocRole->name();
-			string strDstRole=::Uml::theOther(*p_currAssocRole).name();
+			::Uml::AssociationRole oRole = ::Uml::theOther(*p_currAssocRole);
+			string strDstRole = oRole.name();
 
 			if (ascType.clsAssociation)
 			{
@@ -1136,7 +1139,7 @@ UDM_DLL set<Object> Object::GetAssociationClassObjects(Object dstObject, const A
 
 
 			//impls are cloned in getAssociation() call!
-			vector<ObjectImpl*>dstPeers=impl->getAssociation(::Uml::theOther(*p_currAssocRole),Udm::CLASSFROMTARGET);
+			vector<ObjectImpl*>dstPeers=impl->getAssociation(oRole,Udm::CLASSFROMTARGET);
 	
 			vector<ObjectImpl*>::iterator dstPeers_i = dstPeers.begin();
 			
@@ -1371,7 +1374,8 @@ UDM_DLL bool Object::CreateLink(Object dstObject, const AssociationInfo& ascType
 							p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
 			string strSrcRoleName= p_currAssocRole->name();
-			string strDstRoleName=::Uml::theOther(*p_currAssocRole).name();
+			::Uml::AssociationRole oRole = ::Uml::theOther(*p_currAssocRole);
+			string strDstRoleName = oRole.name();
 
 			if(strSrcRoleName==ascType.strSrcRoleName &&
 			   strDstRoleName==ascType.strDstRoleName)
@@ -1381,7 +1385,7 @@ UDM_DLL bool Object::CreateLink(Object dstObject, const AssociationInfo& ascType
 				::Uml::Class assocClass=::Uml::Association(p_currAssocRole->parent()).assocClass();
 
 				
-				vector<ObjectImpl*>srcPeers=impl->getAssociation(::Uml::theOther(*p_currAssocRole), assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
+				vector<ObjectImpl*>srcPeers=impl->getAssociation(oRole, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
 
 
 
@@ -1396,7 +1400,7 @@ UDM_DLL bool Object::CreateLink(Object dstObject, const AssociationInfo& ascType
 				//then, you set the assoc. class association with at least two setAssociation calls
 				//on at least two objects.
 
-				impl->setAssociation(::Uml::theOther(*p_currAssocRole),srcPeers, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER,direct);
+				impl->setAssociation(oRole,srcPeers, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER,direct);
 
 				//getassociation clone()-s it first
 
@@ -1472,7 +1476,8 @@ UDM_DLL bool Object::DeleteLink(Object dstObject, const Object::AssociationInfo 
 							p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 		{
 			string strSrcRoleName= p_currAssocRole->name();
-			string strDstRoleName=::Uml::theOther(*p_currAssocRole).name();
+			::Uml::AssociationRole oRole = ::Uml::theOther(*p_currAssocRole);
+			string strDstRoleName = oRole.name();
 
 			if(strSrcRoleName==ascType.strSrcRoleName &&
 			   strDstRoleName==ascType.strDstRoleName)
@@ -1482,7 +1487,7 @@ UDM_DLL bool Object::DeleteLink(Object dstObject, const Object::AssociationInfo 
 				::Uml::Class assocClass=::Uml::Association(p_currAssocRole->parent()).assocClass();
 
 				
-				vector<ObjectImpl*>srcPeers=impl->getAssociation(::Uml::theOther(*p_currAssocRole), assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
+				vector<ObjectImpl*>srcPeers=impl->getAssociation(oRole, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
 				vector<ObjectImpl*> newsrcPeers;
 				
 				
@@ -1496,7 +1501,7 @@ UDM_DLL bool Object::DeleteLink(Object dstObject, const Object::AssociationInfo 
 					else bRetVal = true;
 				}
 
-				impl->setAssociation(::Uml::theOther(*p_currAssocRole),newsrcPeers, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
+				impl->setAssociation(oRole,newsrcPeers, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
 				bRetVal=true;
 			}
 		}
