@@ -22,7 +22,7 @@ void myDisplay(char *msg)
 }
 
 
-const char * UdmTests::cintUdmPseudoTest::getRndFileName()
+char * UdmTests::cintUdmPseudoTest::getRndFileName()
 {
 #ifdef WIN32
 		char * def_tmp_dir = "c:\\";
@@ -123,14 +123,16 @@ bool UdmTests::cintUdmPseudoTest::cintudmpseudotest(const char * dgr_name)
 
 void UdmTests::cintUdmPseudoTest::testDOM()
 {
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".xml";
 	cintudmpseudotest(fname_std.c_str());
+	free(fname);
 };
 
 void UdmTests::cintUdmPseudoTest::testMEM()
 {
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".mem";
 	cintudmpseudotest(fname_std.c_str());
+	free(fname);
 };

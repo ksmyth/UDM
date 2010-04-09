@@ -14,7 +14,7 @@ namespace UdmTests
 
 		
 	private:
-		const char * getRndFileName();
+		char * getRndFileName();
 		bool cintudmpseudotest(const char *);	//returns false if failed
 		public:
 		void testDOM();

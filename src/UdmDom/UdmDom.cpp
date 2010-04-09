@@ -1686,7 +1686,7 @@ namespace UdmDom
 
 					// we only get here, if multiple roles match, so they have to be recorded
 					string ncomp = GetANameFor(comp);
-					const XMLCh *ncomp_buf = XMLString::transcode(ncomp.c_str());
+					XMLCh *ncomp_buf = XMLString::transcode(ncomp.c_str());
 					if(!EmptyVal(chas)) 
 					{
 						if(DSFind(chas,ncomp) < 0) 
@@ -1697,6 +1697,7 @@ namespace UdmDom
 						}
 					}
 					else dom_element->setAttribute(gXML___child_as, ncomp_buf);
+					XMLString::release(&ncomp_buf);
 
 					c_role = Uml::theOther(role);
 				}
@@ -1773,6 +1774,7 @@ namespace UdmDom
 						}
 						if(!Uml::IsDerivedFrom(aa.m_type, role.target())) 
 						{			// irrelevant role, no change
+							parent->release();
 							return;
 						}
 //#ifdef RECORD_ROLES
@@ -1783,12 +1785,16 @@ namespace UdmDom
 							string ncomp(GetANameFor(comp));
 							const XMLCh *chas = dom_element->getAttribute(gXML___child_as);
 							int p = DSFind(chas , ncomp);
-							if(p < 0) return; // not found, no change
+							if(p < 0) {
+								parent->release();
+								return; // not found, no change
+							}
 							if(p != 0 || XMLString::stringLen(chas) != ncomp.length()) {
 								XMLCh *chas_new = XMLString::replicate(chas);
 								DSRemoveSubstr(chas_new, (p ? p - 1 : 0), ncomp.length() + 1);  // make sure we delete a separator as well
 								dom_element->setAttribute(gXML___child_as, chas_new);
 								XMLString::release(&chas_new);
+								parent->release();
 								return;												// do not delete child if multiroles were in effect
 							}
 
@@ -1823,6 +1829,7 @@ namespace UdmDom
 					dom_element->removeAttribute(gXML___child_as);
 					aa.dom_element->removeChild(dom_element);
 //#endif
+					parent->release();
 				}
 			}
 
@@ -2694,6 +2701,7 @@ namespace UdmDom
 								e->setAttribute(oname_buf, cpa_new);
 							else
 								e->removeAttribute(oname_buf);
+							XMLString::release(&cpa_new);
 						}
 						else
 							e->removeAttribute(oname_buf);
@@ -3565,8 +3573,6 @@ namespace UdmDom
 		if(saveondestroy) CloseWithUpdate();
 		else CloseNoUpdate();
 
-		releaseDOMParser(&parser);
-
 		ddnmap::iterator ff ;
 		for(ff = DDNMap.begin(); ff != DDNMap.end(); ff++) {
 			if(*ff == this) break;
@@ -3574,6 +3580,8 @@ namespace UdmDom
 
 		if(ff == DDNMap.end()) throw udm_exception("Corrupt DOM DN map");
 		DDNMap.erase(ff);
+
+		releaseDOMParser(&parser);
 
 		CATCH_XML_EXCEPTION("DomDataNetwork::~DataNetwork()")
 	}
@@ -3700,6 +3708,7 @@ namespace UdmDom
 		{
 			const InputSource * is = new MemBufInputSource( (const unsigned char *)str.c_str(), str.size(), gXML_MBIS);
 			parser->parse(*is);
+			delete is;
 		}
 		/*
 			Our MobiesErrorHandler throws udm_exceptions...

@@ -25,7 +25,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::childrenorderTest );
 
 using namespace LampDiagram;
 
-const char * UdmTests::childrenorderTest::getRndFileName()
+char * UdmTests::childrenorderTest::getRndFileName()
 {
 #ifdef WIN32
 		char * def_tmp_dir = "c:\\";
@@ -162,16 +162,18 @@ bool UdmTests::childrenorderTest::ordertest(const char * dgr_name)
 
 void UdmTests::childrenorderTest::testDOM()
 {
-	const char * fname = getRndFileName();
+	char *fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".xml";
 	ordertest(fname_std.c_str());
 	removeFile(fname_std);
+	free(fname);
 };
 
 void UdmTests::childrenorderTest::testMEM()
 {
-	const char * fname = getRndFileName();
+	char *fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".mem";
 	ordertest(fname_std.c_str());
 	removeFile(fname_std);
+	free(fname);
 };

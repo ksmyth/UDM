@@ -24,7 +24,7 @@ namespace UdmTests
 
 		
 	private:
-		const char * getRndFileName();
+		char * getRndFileName();
 		void removeFile(const string &pathname);
 		bool generictest(const char *, const char *);	//returns false if failed
 		public:

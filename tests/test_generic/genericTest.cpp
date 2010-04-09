@@ -32,7 +32,7 @@ UDM_USE_MGA
 
 using namespace LampDiagram;
 
-const char * UdmTests::genericTest::getRndFileName()
+char * UdmTests::genericTest::getRndFileName()
 {
 #ifdef WIN32
 		char * def_tmp_dir = "c:\\";
@@ -609,99 +609,108 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 void UdmTests::genericTest::testDOMMGA()
 {
 	cout << endl << "generic tests and copy DOM to MGA";
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".xml";
 	std::string fname_std_1 = std::string(fname) + ".mga";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 	removeFile(fname_std);
 	removeFile(fname_std_1);
+	free(fname);
 };
 
 void UdmTests::genericTest::testMEMMGA()
 {
 	cout << endl << "generic tests and copy MEM to MGA:";
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".mem";
 	std::string fname_std_1 = std::string(fname) + ".mga";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 	removeFile(fname_std);
 	removeFile(fname_std_1);
+	free(fname);
 };
 
 void UdmTests::genericTest::testMGAMGA()
 {
 	cout << endl << "generic tests and copy MGA to MGA:";
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".mga";
 	std::string fname_std_1 = std::string(fname) + "1.mga";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 	removeFile(fname_std);
 	removeFile(fname_std_1);
+	free(fname);
 };
 
 void UdmTests::genericTest::testMGADOM()
 {
 	cout << endl << "generic tests and copy MGA to DOM:";
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".mga";
 	std::string fname_std_1 = std::string(fname) + ".xml";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 	removeFile(fname_std);
 	removeFile(fname_std_1);
+	free(fname);
 };
 
 void UdmTests::genericTest::testMGAMEM()
 {
 	cout << endl << "generic tests and copy MGA to MEM:";
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".mga";
 	std::string fname_std_1 = std::string(fname) + ".mem";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 	removeFile(fname_std);
 	removeFile(fname_std_1);
+	free(fname);
 };
 #endif // _WIN32
 
 void UdmTests::genericTest::testDOMDOM()
 {
 	cout << endl << "generic tests and copy DOM to DOM:";
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".xml";
 	std::string fname_std_1 = std::string(fname) + "1.xml";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 	removeFile(fname_std);
 	removeFile(fname_std_1);
+	free(fname);
 };
 
 void UdmTests::genericTest::testDOMMEM()
 {
 	cout << endl << "generic tests and copy DOM to MEM:";
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".xml";
 	std::string fname_std_1 = std::string(fname) + ".mem";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 	removeFile(fname_std);
 	removeFile(fname_std_1);
+	free(fname);
 };
 
 void UdmTests::genericTest::testMEMMEM()
 {
 	cout << endl << "generic tests and copy MEM to MEM:";
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".mem";
 	std::string fname_std_1 = std::string(fname) + "1.mem";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 	removeFile(fname_std);
 	removeFile(fname_std_1);
+	free(fname);
 };
 
 void UdmTests::genericTest::testMEMDOM()
 {
 	cout << endl << "generic tests and copy MEM to DOM:";
-	const char * fname = getRndFileName();
+	char * fname = getRndFileName();
 	std::string fname_std = std::string(fname) + ".mem";
 	std::string fname_std_1 = std::string(fname) + ".xml";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
 	removeFile(fname_std);
 	removeFile(fname_std_1);
+	free(fname);
 };
