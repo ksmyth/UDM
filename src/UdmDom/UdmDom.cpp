@@ -333,16 +333,6 @@ namespace UdmDom
 	};
 	
 // --------------------------- DomObject
-	//typedefs for maps for enhancing DomObject::Search
-	
-	typedef list<DomDataNetwork *> ddnmap; 
-
-
-	//static maps
-	static ddnmap DDNMap;
-	//static IdToDomElementMap DomElements;
-
-
 
 	//function which returns the long id from the string id
 	//used in Search(), and release()
@@ -3509,7 +3499,6 @@ namespace UdmDom
 		str_based = false;
 		str = "";
 		
-		DDNMap.push_front(this);
 		saveondestroy = false;
 		rootobject = NULL;
 		/*if(!LoadLibrary("..\\lib\\xerces-c_1_2")) MessageBox(NULL, "Baj van", "Load lib", 0); */
@@ -3555,31 +3544,12 @@ namespace UdmDom
 		if(!rootobject)
 		{
 			//somebody might have already close it with either CloseUpdate or CloseNoUpdate ! 
-			// you have to remove from the map in this cases as well
-			// i guess it's still imperative that it should be in the map.
-			ddnmap::iterator ff;
-			for(ff = DDNMap.begin(); ff != DDNMap.end(); ff++) 
-			{
-				if(*ff == this) break;
-			}
-			
-			if(ff == DDNMap.end()) throw udm_exception("Corrupt DOM DN map");
-			DDNMap.erase(ff);
-
 			releaseDOMParser(&parser);
 			return;
 		}
 
 		if(saveondestroy) CloseWithUpdate();
 		else CloseNoUpdate();
-
-		ddnmap::iterator ff ;
-		for(ff = DDNMap.begin(); ff != DDNMap.end(); ff++) {
-			if(*ff == this) break;
-		}
-
-		if(ff == DDNMap.end()) throw udm_exception("Corrupt DOM DN map");
-		DDNMap.erase(ff);
 
 		releaseDOMParser(&parser);
 
