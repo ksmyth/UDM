@@ -282,26 +282,8 @@ namespace UdmStatic
 				(*so_set_i)->id_map_so_set_deleted = true;
 				so_set.erase(so_set_i);
 			};
-			
-			while (!SDNMap.empty())
-			{
-				sdnmap::iterator sdn_next = SDNMap.begin();
-				sdnmap::iterator  sdn_i;
-				
-				
-				while (sdn_next != SDNMap.end())
-				{
-					sdn_i = sdn_next;
-					sdn_next++;
-				}
-				//sdn_i will point to the last dn in the slist
 
-				delete *sdn_i; //this will invalidate the iterator!
-			}
-
-			if (SDNMap.size()) cout << "Warning: SDNMap not empty by the end of id_map destructor!" << endl;
-			//SDNMap.erase(SDNMap.begin(), SDNMap.end());
-
+			SDNMap.clear();
 		};
 	
 
