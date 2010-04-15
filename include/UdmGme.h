@@ -113,6 +113,8 @@ namespace UdmGme
 		
 		// For Udm-based Interpreters ///////////////////
 		UDM_DLL void OpenExisting(LPUNKNOWN pUnknown, enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+		// KMS: Two OpenExistings for ABI Compatibility. Merge next minor release
+		UDM_DLL void OpenExisting(LPUNKNOWN pUnknown, enum Udm::BackendSemantics sem /*= Udm::CHANGES_PERSIST_ALWAYS*/, bool customtransactions /*= false*/);
 		UDM_DLL Object Gme2Udm(LPUNKNOWN pUnknown);
 		/////////////////////////////////////////////////
 

@@ -61,6 +61,9 @@ namespace UdmGme
 		uniqueId_type __uniqueId;
 		bool __uniqueId_set;
 		const DataNetwork * mydn;
+#ifdef _DEBUG
+		std::string name;
+#endif
 		
 		void RemoveHelperConnections();
 

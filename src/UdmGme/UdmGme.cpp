@@ -2064,7 +2064,13 @@ bbreak:			;
 
 
 		}
-		else if(rname == "name") objself->Name = SmartBSTR(a.c_str());
+		else if(rname == "name")
+		{
+			objself->Name = SmartBSTR(a.c_str()); 
+#ifdef _DEBUG
+			name = a; 
+#endif
+		}
 		else if(rname == "position") 
 		{
 			if (!a.size()) return;		//empty strings should be allowed and nothing should happen in such cases.
@@ -2339,6 +2345,9 @@ bbreak:			;
 	{ 
 		__uniqueId_set=false;
 		mydn = dn;
+#ifdef _DEBUG
+		name = (const char*)obj->GetName();
+#endif
 	};
 
 	inline GmeObject::GmeObject(IMgaFCO *obj, const DataNetwork * dn) : self(obj) 
@@ -2347,6 +2356,9 @@ bbreak:			;
 		__uniqueId_set=false;
 		mydn = dn;
 		m_type = findClass();
+#ifdef _DEBUG
+		name = (const char*)obj->GetName();
+#endif
 		if (!mydn) throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
 	};
 
@@ -2354,6 +2366,9 @@ bbreak:			;
 	{
 		__uniqueId_set=false;
 		mydn = dn;
+#ifdef _DEBUG
+		name = (const char*)obj->GetName();
+#endif
 		if (!mydn) throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
 	};
 
@@ -2363,15 +2378,17 @@ bbreak:			;
 		__uniqueId_set=false;
 		mydn = dn;
 		m_type = findClass();
+#ifdef _DEBUG
+		name = (const char*)obj->GetName();
+#endif
 		if (!mydn) throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
 	};
 
 	inline ObjectImpl * GmeObject::clone()
 	{
-		GmeObject *bb = new GmeObject(m_type, self, mydn);
-		bb->folderself = folderself;
-		return bb;
-		if (!mydn) throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
+		return self
+			? new GmeObject(m_type, self, mydn)
+			: new GmeObject(m_type, folderself, mydn);
 	};
 
 	inline void GmeObject::release()
@@ -3241,20 +3258,29 @@ bbreak:			;
 
 	// For BON: Tihamer Levendovszky
 
-	void GmeDataNetwork::OpenExisting(LPUNKNOWN pUnknown, enum Udm::BackendSemantics sem )
+	void GmeDataNetwork::OpenExisting(LPUNKNOWN pUnknown, enum Udm::BackendSemantics sem) {
+		OpenExisting(pUnknown, sem, false);
+	}
+
+	void GmeDataNetwork::OpenExisting(LPUNKNOWN pUnknown, enum Udm::BackendSemantics sem, bool customtransactions )
 	{
 		semantics = sem;
 		hasOpened=true;
 		IMgaProjectPtr  &project = priv.project;
 		project.Attach((IMgaProject *)pUnknown, true);
 
-		COMTHROW(project->CreateTerritory(NULL, &priv.terr, NULL));
+		if (customtransactions) {
+			priv.terr = 0;
+		} else {
+			COMTHROW(project->CreateTerritory(NULL, &priv.terr, NULL));
+		}
 
 		// For write
 		project->Preferences |= MGAPREF_IGNORECONNCHECKS;
 
 
-		COMTHROW(project->BeginTransaction(priv.terr, TRANSACTION_GENERAL));
+		if (priv.terr)
+			COMTHROW(project->BeginTransaction(priv.terr, TRANSACTION_GENERAL));
 		try {
 			amapInitialize(GetRootMeta(), project->RootMeta);
 // get rootfolder & get name
@@ -3262,8 +3288,10 @@ bbreak:			;
 			rootobject = new GmeObject( project->RootFolder, this);
 		}
 		catch(gme_exc &s) { 
-			COMTHROW(project->AbortTransaction());
-			COMTHROW(priv.terr->Destroy());
+			if (priv.terr) {
+				COMTHROW(project->AbortTransaction());
+				COMTHROW(priv.terr->Destroy());
+			}
 			COMTHROW(project->Close(VARIANT_TRUE));
 			throw s;
 		}
@@ -3323,11 +3351,10 @@ bbreak:			;
 			throw udm_exception(std::string("Cannot create ") + systemname + " with meta name " +
 				metalocator + ": " + e.what());
 		}
-		IMgaTerritoryPtr terr;
-		COMTHROW(project->CreateTerritory(NULL, &terr, NULL));
+		COMTHROW(project->CreateTerritory(NULL, &priv.terr, NULL));
 
 		project->Preferences |= MGAPREF_IGNORECONNCHECKS;
-		COMTHROW(project->BeginTransaction(terr, TRANSACTION_GENERAL));
+		COMTHROW(project->BeginTransaction(priv.terr, TRANSACTION_GENERAL));
 		try {
 // get rootfolder & get name
 			amapInitialize(GetRootMeta(), project->RootMeta);
@@ -3395,8 +3422,10 @@ bbreak:			;
 			//since the last change, amap is local to the datanetwork, and has to be cleaned each time.
 			amap.clear();
 			
-			COMTHROW(priv.project->CommitTransaction());
-			priv.terr = NULL;
+			if (priv.terr) {
+				COMTHROW(priv.project->CommitTransaction());
+				priv.terr = NULL;
+			}
 			if(!hasOpened)
 				COMTHROW(priv.project->Close(VARIANT_FALSE));
 		}
@@ -3412,8 +3441,10 @@ bbreak:			;
 			//since the last change, amap is local to the datanetwork, and has to be cleaned each time.
 			amap.clear();
 			
-			COMTHROW(priv.project->AbortTransaction());
-			priv.terr = NULL;
+			if (priv.terr) {
+				COMTHROW(priv.project->AbortTransaction());
+				priv.terr = NULL;
+			}
 			if(!hasOpened)
 				COMTHROW(priv.project->Close(VARIANT_TRUE));
 		}
@@ -3422,9 +3453,11 @@ bbreak:			;
 	UDM_DLL void GmeDataNetwork::SaveAs(string systemname) 
 	{  
 		if(rootobject) {
-			COMTHROW(priv.project->CommitTransaction());
+			if (priv.terr)
+				COMTHROW(priv.project->CommitTransaction());
 			COMTHROW(priv.project->Save(createGMEconnstr(systemname), VARIANT_TRUE	));
-			COMTHROW(priv.project->BeginTransaction(priv.terr, TRANSACTION_GENERAL));
+			if (priv.terr)
+				COMTHROW(priv.project->BeginTransaction(priv.terr, TRANSACTION_GENERAL));
 		}
 	}
 	UDM_DLL void GmeDataNetwork::CloseAs(string systemname) 
@@ -3435,13 +3468,17 @@ bbreak:			;
 
 	UDM_DLL void GmeDataNetwork::CommitEditSequence() 
 	{
+		if (priv.terr) {
 			COMTHROW(priv.project->CommitTransaction());
 			COMTHROW(priv.project->BeginTransaction(priv.terr, TRANSACTION_GENERAL));
+		}
 	}
 	UDM_DLL void GmeDataNetwork::AbortEditSequence() 
 	{
+		if (priv.terr) {
 			COMTHROW(priv.project->AbortTransaction());
 			COMTHROW(priv.project->BeginTransaction(priv.terr, TRANSACTION_GENERAL));
+		}
 	}
 
 	void GmeDataNetwork::CountWriteOps()
