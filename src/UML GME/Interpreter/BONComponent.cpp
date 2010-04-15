@@ -195,7 +195,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 			if (param & GME_SILENT_MODE && (!isUMT) )
 				filepath = name + "_udm.xml";
 			else
-				filepath = GetFilePath(builder, focus, "xml", "XML files (*.xml)|*.xml");
+				filepath = GetFilePath(builder, focus, "xml", "XML files (*.xml)|*.xml||");
 
 			if(filepath == "")
 			{	throw int_exception("");
@@ -229,7 +229,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		if (param & GME_SILENT_MODE && (!isUMT) )
 			filepath = name + "_udm.udm";
 		else
-			filepath = GetFilePath(builder, focus,"udm","Udm Project Files (*.udm)|*.udm");
+			filepath = GetFilePath(builder, focus,"udm","Udm Project Files (*.udm)|*.udm||");
 		if(filepath == "")
 		{	throw int_exception("");
 			
