@@ -169,6 +169,7 @@ void CGen< ::Uml::Diagram>::CustomProcess(const ::Uml::Diagram &cross_diagram, c
 		meth_defs.push_back( boost::format("%1%void Initialize(const ::Uml::Diagram &dgr)\n\
 \t{\n\
 \t\t%2%\n\
+\t\tif (meta == dgr) return;\n\
 \t\tmeta = dgr;\n\
 \n\
 \t\tInitMeta(dgr);\n\
