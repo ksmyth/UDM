@@ -1179,9 +1179,6 @@ namespace UDM_NAMESPACE
 		//creating a non-persistent cross-link data network 
 		cross_meta = const_cast<Udm::UdmDiagram*>(&cross_diag);
 		cross_links = new UdmStatic::StaticDataNetwork(cross_diag);
-//		const ::Uml::Class& root_cls = cross_diag.dgr->__impl()->__getdn()->IsTypeSafe() 
-//			? ::Uml::classByName(*cross_diag.dgr, "_gen_cont")
-//			: Uml::SafeTypeContainer::GetSafeType(::Uml::classByName(*cross_diag.dgr, "_gen_cont"));
 		const ::Uml::Class& root_cls = Uml::SafeTypeContainer::GetSafeType(::Uml::classByName(*cross_diag.dgr, "_gen_cont"));
 		cross_links->CreateNew(" ", " ", root_cls, CHANGES_LOST_DEFAULT);
 	
