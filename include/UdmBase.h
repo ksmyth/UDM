@@ -237,7 +237,6 @@ namespace Uml
 	class UDM_DLL CompositionChildRole;
 	class UDM_DLL Constraint;
 	class UDM_DLL ConstraintDefinition;
-	const UDM_DLL AssociationRole &theOther1(const AssociationRole &role);
 };
 
 class UDM_DLL cint_string;
@@ -3050,7 +3049,7 @@ public:
 									const string &metalocator, const ::Uml::Class &rootclass, 
 									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) = 0;
 	virtual void OpenExisting(const string &systemname, 
-									const string &metalocator, 
+									const string &metalocator = "",
 									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) = 0;
 	virtual void CloseWithUpdate() = 0;
 	virtual void CloseNoUpdate()			{  throw udm_exception("Unsupported method"); }
@@ -3171,7 +3170,7 @@ public:
 	}
 
 	virtual void OpenExisting(const string &systemname, 
-									const string &metalocator, 
+									const string &metalocator = "", 
 									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) {
 		if(dn) throw udm_exception("DataNetwork is already open"); 
 		DataNetwork *dn1 = CreateBackend(systemname, metaroot,pr);
