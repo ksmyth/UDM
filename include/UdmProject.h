@@ -2,17 +2,20 @@
 #define MOBIES_UDMPROJECT_H
 
 // header file UdmProject.h generated from diagram UdmProject
-// generated with Udm version 3.0 on Sun Feb 17 22:55:39 2008
+// generated with Udm version 3.24 on Wed Apr 21 10:19:49 2010
 
 #include <UdmBase.h>
 
 #if !defined(UDM_VERSION_MAJOR) || !defined(UDM_VERSION_MINOR)
 #    error "Udm headers too old, they do not define UDM_VERSION"
 #elif UDM_VERSION_MAJOR < 3
-#    error "Udm headers too old, minimum version required 3.0"
-#elif UDM_VERSION_MAJOR == 3 && UDM_VERSION_MINOR < 0
-#    error "Udm headers too old, minimum version required 3.0"
+#    error "Udm headers too old, minimum version required 3.24"
+#elif UDM_VERSION_MAJOR == 3 && UDM_VERSION_MINOR < 24
+#    error "Udm headers too old, minimum version required 3.24"
 #endif
+
+#include <Uml.h>
+
 
 #ifdef min
 #undef min
@@ -50,8 +53,8 @@ namespace UdmProject {
 		Udm::StringAttr metaDgr() const { return Udm::StringAttr(impl, meta_metaDgr); }
 		Udm::StringAttr systemname() const { return Udm::StringAttr(impl, meta_systemname); }
 		Udm::StringAttr metalocator() const { return Udm::StringAttr(impl, meta_metalocator); }
-		Udm::ParentAttr< ::UdmProject::Project> instances_Project_parent() const { return Udm::ParentAttr< ::UdmProject::Project>(impl, meta_instances_Project_parent); }
 		Udm::ParentAttr< ::UdmProject::Project> cross_associations_Project_parent() const { return Udm::ParentAttr< ::UdmProject::Project>(impl, meta_cross_associations_Project_parent); }
+		Udm::ParentAttr< ::UdmProject::Project> instances_Project_parent() const { return Udm::ParentAttr< ::UdmProject::Project>(impl, meta_instances_Project_parent); }
 		Udm::ParentAttr< ::UdmProject::Project> crosslinks_Project_parent() const { return Udm::ParentAttr< ::UdmProject::Project>(impl, meta_crosslinks_Project_parent); }
 		Udm::ParentAttr< ::UdmProject::Project> parent() const { return Udm::ParentAttr< ::UdmProject::Project>(impl, Udm::NULLPARENTROLE); }
 
@@ -59,8 +62,8 @@ namespace UdmProject {
 		static ::Uml::Attribute meta_metaDgr;
 		static ::Uml::Attribute meta_systemname;
 		static ::Uml::Attribute meta_metalocator;
-		static ::Uml::CompositionParentRole meta_instances_Project_parent;
 		static ::Uml::CompositionParentRole meta_cross_associations_Project_parent;
+		static ::Uml::CompositionParentRole meta_instances_Project_parent;
 		static ::Uml::CompositionParentRole meta_crosslinks_Project_parent;
 
 	};
@@ -81,9 +84,9 @@ namespace UdmProject {
 		template <class Pred> Udm::DerivedAttr<Project, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<Project, Pred>(impl); }
 		Udm::ArchetypeAttr<Project> Archetype() const { return Udm::ArchetypeAttr<Project>(impl); }
 		Udm::StringAttr name() const { return Udm::StringAttr(impl, meta_name); }
+		Udm::ChildAttr< ::UdmProject::Datanetwork> cross_associations() const { return Udm::ChildAttr< ::UdmProject::Datanetwork>(impl, meta_cross_associations); }
 		Udm::ChildrenAttr< ::UdmProject::Datanetwork> instances() const { return Udm::ChildrenAttr< ::UdmProject::Datanetwork>(impl, meta_instances); }
 		template <class Pred> Udm::ChildrenAttr< ::UdmProject::Datanetwork, Pred> instances_sorted(const Pred &) const { return Udm::ChildrenAttr< ::UdmProject::Datanetwork, Pred>(impl, meta_instances); }
-		Udm::ChildAttr< ::UdmProject::Datanetwork> cross_associations() const { return Udm::ChildAttr< ::UdmProject::Datanetwork>(impl, meta_cross_associations); }
 		Udm::ChildAttr< ::UdmProject::Datanetwork> crosslinks() const { return Udm::ChildAttr< ::UdmProject::Datanetwork>(impl, meta_crosslinks); }
 		Udm::ChildrenAttr< ::UdmProject::Datanetwork> Datanetwork_kind_children() const { return Udm::ChildrenAttr< ::UdmProject::Datanetwork>(impl, Udm::NULLCHILDROLE); }
 		template <class Pred> Udm::ChildrenAttr< ::UdmProject::Datanetwork, Pred> Datanetwork_kind_children_sorted(const Pred &) const { return Udm::ChildrenAttr< ::UdmProject::Datanetwork, Pred>(impl, Udm::NULLCHILDROLE); }
@@ -91,8 +94,8 @@ namespace UdmProject {
 
 		static ::Uml::Class meta;
 		static ::Uml::Attribute meta_name;
-		static ::Uml::CompositionChildRole meta_instances;
 		static ::Uml::CompositionChildRole meta_cross_associations;
+		static ::Uml::CompositionChildRole meta_instances;
 		static ::Uml::CompositionChildRole meta_crosslinks;
 
 	};

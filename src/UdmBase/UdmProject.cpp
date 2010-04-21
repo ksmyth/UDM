@@ -1,6 +1,6 @@
 // cpp (meta datanetwork format) source file UdmProject.cpp
 // generated from diagram UdmProject
-// generated on Sun Feb 17 22:55:39 2008
+// generated on Wed Apr 21 10:19:49 2010
 
 #include "UdmProject.h"
 #include <UmlExt.h>
@@ -15,14 +15,14 @@ namespace UdmProject {
 	::Uml::Attribute Datanetwork::meta_metaDgr;
 	::Uml::Attribute Datanetwork::meta_systemname;
 	::Uml::Attribute Datanetwork::meta_metalocator;
-	::Uml::CompositionParentRole Datanetwork::meta_instances_Project_parent;
 	::Uml::CompositionParentRole Datanetwork::meta_cross_associations_Project_parent;
+	::Uml::CompositionParentRole Datanetwork::meta_instances_Project_parent;
 	::Uml::CompositionParentRole Datanetwork::meta_crosslinks_Project_parent;
 
 	::Uml::Class Project::meta;
 	::Uml::Attribute Project::meta_name;
-	::Uml::CompositionChildRole Project::meta_instances;
 	::Uml::CompositionChildRole Project::meta_cross_associations;
+	::Uml::CompositionChildRole Project::meta_instances;
 	::Uml::CompositionChildRole Project::meta_crosslinks;
 
 	::Uml::Diagram meta;
@@ -37,10 +37,10 @@ namespace UdmProject {
 		Project::meta = ::Uml::CreateClass();
 		Project::meta_name = ::Uml::CreateAttribute();
 
-		Datanetwork::meta_instances_Project_parent = ::Uml::CreateCompositionParentRole();
-		Project::meta_instances = ::Uml::CreateCompositionChildRole();
 		Datanetwork::meta_cross_associations_Project_parent = ::Uml::CreateCompositionParentRole();
 		Project::meta_cross_associations = ::Uml::CreateCompositionChildRole();
+		Datanetwork::meta_instances_Project_parent = ::Uml::CreateCompositionParentRole();
+		Project::meta_instances = ::Uml::CreateCompositionChildRole();
 		Datanetwork::meta_crosslinks_Project_parent = ::Uml::CreateCompositionParentRole();
 		Project::meta_crosslinks = ::Uml::CreateCompositionChildRole();
 
@@ -63,15 +63,15 @@ namespace UdmProject {
 		{
 			::Uml::Composition comp = ::Uml::CreateComposition();
 			::Uml::InitComposition(comp, meta, "Composition");
-			::Uml::InitCompositionParentRole(Datanetwork::meta_instances_Project_parent, comp, "instances_Project_parent", true, Project::meta);
-			::Uml::InitCompositionChildRole(Project::meta_instances, comp, "instances", true, 0, -1, Datanetwork::meta);
+			::Uml::InitCompositionParentRole(Datanetwork::meta_cross_associations_Project_parent, comp, "cross_associations_Project_parent", true, Project::meta);
+			::Uml::InitCompositionChildRole(Project::meta_cross_associations, comp, "cross_associations", true, 0, 1, Datanetwork::meta);
 
 		}
 		{
 			::Uml::Composition comp = ::Uml::CreateComposition();
 			::Uml::InitComposition(comp, meta, "Composition");
-			::Uml::InitCompositionParentRole(Datanetwork::meta_cross_associations_Project_parent, comp, "cross_associations_Project_parent", true, Project::meta);
-			::Uml::InitCompositionChildRole(Project::meta_cross_associations, comp, "cross_associations", true, 0, 1, Datanetwork::meta);
+			::Uml::InitCompositionParentRole(Datanetwork::meta_instances_Project_parent, comp, "instances_Project_parent", true, Project::meta);
+			::Uml::InitCompositionChildRole(Project::meta_instances, comp, "instances", true, 0, -1, Datanetwork::meta);
 
 		}
 		{
