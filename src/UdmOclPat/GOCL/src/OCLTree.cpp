@@ -3152,7 +3152,7 @@ namespace OclTree
 			if(PatHelper::f_pat_output != NULL && *(PatHelper::f_pat_output) && PatHelper::f_pat_output->is_open()) {
 				*(PatHelper::f_pat_output) << iValue;
 			} else {
-				fprintf( stdout, "%d", iValue );
+				fprintf( stdout, "%ld", iValue );
 			}
 		}
 		else {

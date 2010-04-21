@@ -318,7 +318,7 @@ namespace OclBasic
 		double lValue;
 		Real::GetValue( lValue );
 		char chBuffer[ 100 ];
-		sprintf( chBuffer, "%d", (long) lValue );
+		sprintf( chBuffer, "%ld", (long) lValue );
 		return "ocl::Integer { " + std::string( chBuffer ) + " }";
 	}
 
