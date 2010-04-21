@@ -4948,10 +4948,14 @@ namespace Uml
 
 			if ((Class)(cpr.target()) == what_target_class)
 			{
-				string cmp_to = cpr.name();
-				string o_cmp_to = ccrs_i->name();
+				bool role_name_match = (target_name == NULL || strlen(target_name) == 0)
+					? true
+					: !strcmp(target_name, ((string)cpr.name()).c_str());
+				bool orole_name_match = (target_name == NULL || strlen(orole_name) == 0)
+					? true
+					: !strcmp(orole_name, ((string)ccrs_i->name()).c_str());
 
-				if ((!strcmp(target_name, cmp_to.c_str())) && (!strcmp(orole_name, o_cmp_to.c_str())) )
+				if ( role_name_match && orole_name_match )
 				{
 					if (found)
 						throw udm_exception(string("Duplicate role name: ") + string(target_name) + string(" for class: ") + (string)what_target_class.name() );
@@ -4977,10 +4981,14 @@ namespace Uml
 
 			if ((Class)(ccr.target()) == what_target_class)
 			{
-				string cmp_to = ccr.name();
-				string o_cmp_to = cprs_i->name();
+				bool role_name_match = (target_name == NULL || strlen(target_name) == 0)
+					? true
+					: !strcmp(target_name, ((string)ccr.name()).c_str());
+				bool orole_name_match = (target_name == NULL || strlen(orole_name) == 0)
+					? true
+					: !strcmp(orole_name, ((string)cprs_i->name()).c_str());
 
-				if ( (!strcmp(target_name, cmp_to.c_str())) && (!strcmp(orole_name, o_cmp_to.c_str())) )
+				if ( role_name_match && orole_name_match )
 				{
 					if (found)
 						throw udm_exception(string("Duplicate role name: ") + string(target_name) + string(" for class: ") + (string)what_target_class.name() );
@@ -5005,9 +5013,11 @@ namespace Uml
 
 			if ((Class)(ar.target()) == what_target_class)
 			{
-				string cmp_to = ar.name();
+				bool role_name_match = (target_name == NULL || strlen(target_name) == 0)
+					? true
+					: !strcmp(target_name, ((string)ar.name()).c_str());
 
-				if (!strcmp(target_name, cmp_to.c_str()))
+				if (role_name_match)
 				{
 					if (found)
 						throw udm_exception(string("Duplicate role name: ") + string(target_name) + string(" for class: ") + (string)what_target_class.name() );
