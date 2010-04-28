@@ -2876,7 +2876,7 @@ namespace UdmStatic
 				do
 				{
 					if (!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupted");
+						throw udm_exception("can't read from file, probably MEM file is corrupt");
 					*asr_name_p++ = t; i++;
 
 				} while ((t != 0x00 )&& (i < MAX_NAME));
@@ -2977,7 +2977,7 @@ namespace UdmStatic
 
 				//insert into  associations map 
 				//since our associated objects are not created yet, 
-				//we put it's id for the value of the pointer
+				//we put its id for the value of the pointer
 				//anyway, it won't be referenced and we'll change it when coming back 
 				//from recursion
 				pair<uniqueId_type const, StaticObject*> m_ass_item(asr.uniqueId(), reinterpret_cast<StaticObject*>(assed_id));
@@ -3037,14 +3037,14 @@ namespace UdmStatic
 				do
 				{
 					if (!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupted");
+						throw udm_exception("can't read from file, probably MEM file is corrupt");
 					*sa_name_p++ = t; i++;
 
 				} while ((t != 0x00 )&& (i < MAX_NAME));
 				if (t != 0x00) throw udm_exception("MEM file corrupt!");
 				read += strlen(sa_name) + 1;
 
-				//get it's id from the att_map 
+				//get its id from the att_map 
 				static map<string, uniqueId_type>::iterator sa_i;
 				sa_i = att_map.find(string(sa_name));
 				if (sa_i == att_map.end()) throw udm_exception(string("Attribute: ") + string(sa_name) + string(" was not found for class ") + (string)type.name());
@@ -4432,24 +4432,31 @@ namespace UdmStatic
 		this->sem = sem;
 	};
 
-	void StaticDataNetwork::OpenExisting(const string &systemname, const string &metalocator,	enum Udm::BackendSemantics sem )
+	void StaticDataNetwork::OpenExisting(const string &systemname, const string &metalocator, enum Udm::BackendSemantics sem )
 	{
 		FILE * f = fopen(systemname.c_str(), "rb");
 		map<unsigned long, const StaticObject *> tr_map;
 		
+		this->systemname = systemname;
+		this->sem = sem;
+
 		if (f)
 		{
 			
-			unsigned long bytes = DeSerialize(f, tr_map,  rootobject); 
+			unsigned long bytes;
+			try {
+				bytes = DeSerialize(f, tr_map,  rootobject); 
+			} catch (udm_exception& e) {
+				// This may leak memory, but due to the reinterpret_casts in DeSerialize, we can't do any better without rewriting DeSerialize
+				rootobject = Udm::null;
+				fclose(f);
+				throw e;
+			}
 			fclose(f);
 			if (!bytes) throw udm_exception("Openexisting  failed");
 		
 		}
 		else throw udm_exception("OpenExisting() could not open file for reading!");
-		
-		this->systemname = systemname;
-		this->sem = sem;
-		
 		
 		//if this datanetwork is part of a project
 		//the project's cross-link datanetwork must be
