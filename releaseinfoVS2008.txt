@@ -18,14 +18,15 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
-04/6/09			-	Release 3.2.4
+04/6/10			-	Release 3.2.4
 		-	boost is no longer redistributed with Udm.
+		-	CHANGES_PERSIST_ALWAYS and CHANGES_PERSIST_DEFAULT are deprecated. If the DataNetwork is being destructed during a stack unwinding due to an exception and throws an exception, C++ guarantees that terminate() will be called. It is recommended to use CHANGES_PERSIST_ALWAYS and CloseWithUpdate. (UDM-54)
 		-	Fix crash with Gme backend and refports (UDM-55)
 		-	Automatic linking with Visual Studio: when UDM_DYNAMIC_LINKING is defined, the linker will automatically link with UdmDll.lib or UdmDllD.lib (as appropriate)
 		-	Fix crash when Udm is dynamically unloaded and Dom or Gme backends are used as metamodels. (UDM-57)
-		-	CHANGES_PERSIST_ALWAYS and CHANGES_PERSIST_DEFAULT are deprecated. If the DataNetwork is being destructed during a stack unwinding due to an exception and throws an exception, C++ guarantees that terminate() will be called. It is recommended to use CHANGES_PERSIST_ALWAYS and CloseWithUpdate. (UDM-54)
 		-	Fix crash with using Uml2Xml interpreter on a model with NULL references (UDM-47)
 		-	Fix memory leaks with Dom backend.
+		-	Added UdmDll_3_2_VS10.dll, built with Visual Studio 2010 Release Candidate
 		-	Better UdmCopy usage message
 
 
@@ -1355,7 +1356,7 @@ Credits
 
 	Miklos Maroti <mmaroti@math.vanderbilt.edu>			- original screenplay
 	Arpad Bakay <arpad.bakay@vanderbilt.edu>			- developer & maintainer(-2002) 
-	Endre Magyari <endre.magyari@vanderbilt.edu>			- developer & current maintaine
+	Endre Magyari <endre.magyari@vanderbilt.edu>			- developer & current maintainer
 	Tihamer Levendovszky <tihamer.levendovszky@vanderbilt.edu>	- UdmTomi developer
 	Tamas Paka<tamas.paka@vanderbilt.edu>				- Constraint Manager developer
 
@@ -1364,7 +1365,7 @@ Credits
 Contact and support
 --------------------
 Contact Endre Magyari for support.
-Upgrades, accessories are posted to http://www.isis.vanderilt.edu/Projects/mobies/default.html
+Updates are posted to http://repo.isis.vanderbilt.edu/downloads/
 
 
 -----------------

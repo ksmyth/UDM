@@ -27,13 +27,13 @@ this software.
 Directory structure
 -------------------
 
-/bin			binary executables (Linux only)
+/bin			binary executables
 /doc			documentation
 /etc			essential diagrams, DTDs, conversion XSL scripts
-/3rdParty		third party libraries and tools used by this packages
+/3rdParty		third party libraries and tools used by this package
 /include		UDM C++ include files
 /samples		sample data models and UDM applications
-/lib			UDM libraries (Linux only)
+/lib			UDM libraries
 
 
 Please notice that: xerces-c_2_8, Xalan-C_1_11 dll files in the bin folder are the same files in the
@@ -44,7 +44,7 @@ Credits
 
 	Miklos Maroti <mmaroti@math.vanderbilt.edu>			- original screenplay
 	Arpad Bakay <arpad.bakay@vanderbilt.edu>			- developer & maintainer(-2002) 
-	Endre Magyari <endre.magyari@vanderbilt.edu>			- developer & current maintaine
+	Endre Magyari <endre.magyari@vanderbilt.edu>			- developer & current maintainer
 	Tihamer Levendovszky <tihamer.levendovszky@vanderbilt.edu>	- UdmTomi developer
 	Tamas Paka<tamas.paka@vanderbilt.edu>				- Constraint Manager developer
 
@@ -53,7 +53,7 @@ Credits
 Contact and support
 --------------------
 Contact Endre Magyari for support.
-Upgrades, accessories are posted to http://www.isis.vanderilt.edu/Projects/mobies/default.html
+Updates are posted to http://repo.isis.vanderbilt.edu/downloads/
 
 
 -----------------
