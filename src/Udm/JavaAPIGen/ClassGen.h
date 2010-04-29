@@ -40,16 +40,7 @@ class ClassGen
 
     //! Generates the composition roles ( create ).
     void construction( );
-    
-    //! Generates containments ( createChild + getXXXChildren ).
-    void accessChildren( );
-    
-    //! Generates attribute setters and getters.
-    void accessAttributes( );
-
-    //! Generate association functions.
-    void associations( );
-
+ 
   private:
     //! The UML representation of this class.
     const ::Uml::Class & m_cl;
@@ -63,6 +54,8 @@ class ClassGen
    //! Destination class file.
    ofstream m_output;
 
+   ofstream m_ioutput;
+
   //! Tha name of the class.
   const string m_cl_name;
 
@@ -74,5 +67,34 @@ class ClassGen
 
   // The name of the base class of this class.
   string m_base_name;
+
+  template <class OS_I>
+  class CG {
+	const ::Uml::Class & m_cl;
+	const string m_package_name;
+	ofstream& m_output;
+	OS_I& m_ioutput;
+	const string m_cl_name;
+	const string m_ns_path;
+
+  public:
+	  CG(const ::Uml::Class & m_cl,
+		const string& m_package_name,
+		ofstream& m_output,
+		OS_I& m_ioutput,
+		const string& m_cl_name,
+		const string& m_ns_path) :
+	  		m_cl(m_cl), m_package_name(m_package_name),	m_output(m_output),	m_ioutput(m_ioutput),
+				m_cl_name(m_cl_name), m_ns_path(m_ns_path) {}
+
+	//! Generates containments ( createChild + getXXXChildren ).
+	void accessChildren( );
+   
+    //! Generates attribute setters and getters.
+    void accessAttributes( );
+
+    //! Generate association functions.
+    void associations( );
+  };
 };
 #endif //ClassGen_H

@@ -6,6 +6,8 @@
 
 #include <cstring>
 
+#include <sstream>
+
 //! Constructor.
 /*!
   Creates and initializes the Java API generation.
@@ -21,6 +23,7 @@ ClassGen::ClassGen( const ::Uml::Class &cl
   , m_base_name( "UdmPseudoObject" )
 {
 }
+
 
 //! Destructor.
 /*!
@@ -44,9 +47,30 @@ void ClassGen::generate()
   getMetaClass( );
 
   construction( );
-  accessChildren( );
-  accessAttributes( );
-  associations( );
+  CG<ofstream> cg(m_cl, m_package_name, m_output, m_ioutput, m_cl_name, m_ns_path);
+  cg.accessChildren( );
+  cg.accessAttributes( );
+  cg.associations( );
+
+  set< ::Uml::Class> bases = m_cl.baseTypes();
+  set< ::Uml::Class>::iterator basesIt = bases.begin();
+  for (; basesIt != bases.end(); basesIt++)
+  {
+	  if (basesIt == bases.begin())
+		  // These methods are defined via inheritance
+		  continue;
+
+	  // TODO: lowercase this?
+    string pck = Utils::getPackageSignature( *basesIt, m_ns_path, m_package_name );
+	std::stringstream ioutput; // The method declarations for the interface will be in a base interface, so we ignore them
+	CG<stringstream> cg(*basesIt, pck, m_output, ioutput, basesIt->name(), m_ns_path);
+	m_output << " // Methods for " << basesIt->name() << endl;
+	cg.accessChildren();
+	cg.accessAttributes();
+	cg.associations();
+    m_base_name = pck + (string)bases.begin()->name();
+  }
+
 
   close( );
 }
@@ -62,6 +86,11 @@ void ClassGen::open()
 
   if ( !m_output.good() )
     throw udm_exception( "Error opening for write " + m_cl_name + ".java" );
+
+  m_ioutput.open( (m_package_name + "//I" + m_cl_name + ".java").c_str() );
+
+  if ( !m_ioutput.good() )
+    throw udm_exception( "Error opening for write I" + m_cl_name + ".java" );
 }
 
 //! Closes the JAVA source file.
@@ -73,6 +102,13 @@ void ClassGen::close()
   // close the file
   m_output.close();
   m_output.clear();
+
+  // close the class
+  m_ioutput << "}" << endl;
+
+  // close the file
+  m_ioutput.close();
+  m_ioutput.clear();
 }
 
 //! Generates the header of the source file.
@@ -84,9 +120,11 @@ void ClassGen::header( )
 
   //package
   m_output << "package " << Utils::toPackageName( m_package_name ) << ";" << endl << endl;
+  m_ioutput << "package " << Utils::toPackageName( m_package_name ) << ";" << endl << endl;
 
   // imports
   m_output << "import edu.vanderbilt.isis.udm.*;" << endl << endl;
+  m_ioutput << "import edu.vanderbilt.isis.udm.UdmException;" << endl << endl;
 
   // generate class documentation
   m_output << "/**" << endl;
@@ -105,8 +143,19 @@ void ClassGen::constructor( )
   if ( m_cl.isAbstract() )
     m_output << "abstract ";
 
-  m_output << "class " << m_cl_name << " extends " << m_base_name << endl;
+  m_output << "class " << m_cl_name << " extends " << m_base_name << " implements I" << m_cl_name << endl;
+  m_ioutput << "public interface I" << m_cl_name << " ";
+  set< ::Uml::Class> bases = m_cl.baseTypes();
+  set< ::Uml::Class>::iterator basesIt = bases.begin();
+  for (; basesIt != bases.end(); basesIt++)
+  {
+	m_ioutput << string((basesIt != bases.begin()) ? ", " : "extends ");
+    string pck = Utils::getPackageSignature( *basesIt, m_ns_path, m_package_name );
+	m_ioutput << pck + string("I") + (string)basesIt->name();
+  }
+
   m_output << "{" << endl;
+  m_ioutput << "{" << endl;
 
   //////
   // generate meta information
@@ -116,6 +165,8 @@ void ClassGen::constructor( )
   {
     m_output << "\tpublic static final String META_TYPE = \"" << m_cl_name << "\";" << endl;
     m_output << "\tpublic static final String META_TYPE_NS = \"" << m_ns_path_orig << "\";" << endl;
+    m_ioutput << "\tpublic static final String META_TYPE = \"" << m_cl_name << "\";" << endl;
+    m_ioutput << "\tpublic static final String META_TYPE_NS = \"" << m_ns_path_orig << "\";" << endl;
     m_output << "\tprivate static UdmPseudoObject metaClass;" << endl;
     m_output << endl;
   }
@@ -126,7 +177,7 @@ void ClassGen::constructor( )
   m_output << "\t * Constructor." << endl;
   m_output << "\t * @param  upo The object that helps the initialization of the instance " << endl;
   m_output << "\t * @param  metaDiagram The diagram of the data network" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   m_output << "\tprotected " << m_cl_name << "(UdmPseudoObject upo, Diagram metaDiagram) \n\t\tthrows UdmException" << endl;
   m_output << "\t{" << endl;
@@ -138,8 +189,6 @@ void ClassGen::constructor( )
 void ClassGen::findBaseClass( )
 {
   set< ::Uml::Class> bases = m_cl.baseTypes();
-  if ( bases.size() > 1 )
-    throw udm_exception( string( "Java does not support multiple inheritence. Class:" ) + m_cl_name );
 
   if ( bases.size() )
   {
@@ -188,7 +237,7 @@ void ClassGen::construction( )
     m_output << "\t * Creates an instance of the class in the container specified by the parameter. " << endl;
     m_output << "\t * @param  parent The parent container" << endl;
     m_output << "\t * @return  An instance of the class <code>" << ret_type_name << "</code>" << endl;
-    m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+    m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
     m_output << "\t */ " << endl;
 
     if ( comp )
@@ -229,7 +278,8 @@ void ClassGen::construction( )
 }
 
 //! Generates containments ( createChild + getXXXChildren ).
-void ClassGen::accessChildren( )
+template <class OS_I>
+void ClassGen::CG<OS_I>::accessChildren( )
 {
   m_output << "\t/* Accessing children */" << endl << endl;
 
@@ -245,7 +295,7 @@ void ClassGen::accessChildren( )
         continue;
 
       ::Uml::Composition comp = Uml::matchChildToParent( *c_d_i, m_cl );
-      string c_i_name = c_d_i->name();
+      string c_i_name = getInterfaceIfNeeded(*c_d_i);
       string pkg_name = Utils::getPackageSignature( *c_d_i, m_ns_path, m_package_name );
 
       // without child role
@@ -259,9 +309,10 @@ void ClassGen::accessChildren( )
           m_output << "\t/**" << endl;
           m_output << "\t * Returns all the children of type <code>" << c_i_name << "<code> of this container. " << endl;
           m_output << "\t * @return  The children in an array" << endl;
-          m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+          m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
           m_output << "\t */ " << endl;
           m_output << "\tpublic " << pkg_name << c_i_name << "[] get" << c_i_name << "Children()\n\t\tthrows UdmException " << endl;
+		  m_ioutput << "\tpublic " << pkg_name << c_i_name << "[] get" << c_i_name << "Children() throws UdmException;" << endl;
           m_output << "\t{" << endl;
 
           if ( strcmp(ccr_name.c_str(), "") == 0 )
@@ -288,10 +339,10 @@ void ClassGen::accessChildren( )
           m_output << "\t/**" << endl;
           m_output << "\t * Return the child of type <code>" << c_i_name << "<code> of this container. " << endl;
           m_output << "\t * @return  The child" << endl;
-          m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+          m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
           m_output << "\t */ " << endl;
-          m_output << "\tpublic " << pkg_name << c_i_name << " get" << c_i_name << "Child()\n\t\tthrows UdmException "
-              << endl;
+          m_output << "\tpublic " << pkg_name << c_i_name << " get" << c_i_name << "Child()\n\t\tthrows UdmException " << endl;
+          m_ioutput << "\tpublic " << pkg_name << c_i_name << " get" << c_i_name << "Child() throws UdmException;" << endl;
           m_output << "\t{" << endl;
 
           if ( strcmp(ccr_name.c_str(), "") == 0 )
@@ -318,9 +369,10 @@ void ClassGen::accessChildren( )
         m_output << "\t/**" << endl;
         m_output << "\t * Returns all the children of type <code>" << c_i_name << "<code> of this container. " << endl;
         m_output << "\t * @return  The children in an array" << endl;
-        m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+        m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
         m_output << "\t */ " << endl;
         m_output << "\tpublic " << pkg_name << c_i_name << "[] get" << c_i_name << "Children()\n\t\tthrows UdmException " << endl;
+        m_ioutput << "\tpublic " << pkg_name << c_i_name << "[] get" << c_i_name << "Children() throws UdmException; " << endl;
         m_output << "\t{" << endl;
         m_output << "\t\tUdmPseudoObjectContainer container = getChildren(null," ;
         m_output << pkg_name << c_i_name << ".META_TYPE, " << pkg_name << c_i_name << ".META_TYPE_NS);" << endl;
@@ -338,7 +390,7 @@ void ClassGen::accessChildren( )
         {
           ::Uml::Class parent = Uml::theOther(*ccrs_i).target();
           ::Uml::Class child = ccrs_i->target();
-          string child_name = child.name( );
+		  string child_name = getInterfaceIfNeeded(child);
           pkg_name = Utils::getPackageSignature( child, m_ns_path, m_package_name );
           ::Uml::Composition comp = Uml::matchChildToParent( child, parent );
 
@@ -361,10 +413,12 @@ void ClassGen::accessChildren( )
               m_output << "\t * Returns the children <code>" << child_name << "<code> of this container. " << endl;
               m_output << "\t * which have role <code>" << ccr_name << "<code>." << endl;
               m_output << "\t * @return  The children in an array" << endl;
-              m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+              m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
               m_output << "\t */ " << endl;
               m_output << "\tpublic " << pkg_name << child_name << "[] get" << ccr_name
                   << "Children()\n\t\tthrows UdmException " << endl;
+              m_ioutput << "\tpublic " << pkg_name << child_name << "[] get" << ccr_name
+                  << "Children() throws UdmException; " << endl;
               m_output << "\t{" << endl;
               m_output << "\t\tUdmPseudoObjectContainer container = getChildren(";
               m_output << Utils::getCCRString( *ccrs_i) << "," << pkg_name << child_name << ".META_TYPE, " << pkg_name << child_name << ".META_TYPE_NS);" << endl;
@@ -382,9 +436,10 @@ void ClassGen::accessChildren( )
               m_output << "\t * Returns the child <code>" << child_name << "<code> of this container. " << endl;
               m_output << "\t * which has role <code>" << ccr_name << "<code>." << endl;
               m_output << "\t * @return  The children in an array" << endl;
-              m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+              m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
               m_output << "\t */ " << endl;
               m_output << "\tpublic " << pkg_name << child_name << " get" << ccr_name << "Child()\n\t\tthrows UdmException " << endl;
+              m_ioutput << "\tpublic " << pkg_name << child_name << " get" << ccr_name << "Child() throws UdmException;" << endl;
               m_output << "\t{" << endl;
               m_output << "\t\tUdmPseudoObjectContainer container = getChildren(" ;
               m_output << Utils::getCCRString(*ccrs_i) << "," << pkg_name << child_name << ".META_TYPE, " << pkg_name << child_name << ".META_TYPE_NS);" << endl;
@@ -401,7 +456,8 @@ void ClassGen::accessChildren( )
 }
 
 //! Generates attribute setters and getters.
-void ClassGen::accessAttributes( )
+template <class OS_I>
+void ClassGen::CG<OS_I>::accessAttributes( )
 {
   m_output << "\t/* Attribute setters, getters */" << endl << endl;
 
@@ -416,6 +472,7 @@ void ClassGen::accessAttributes( )
     m_output << "\t * Attribute for <code>" << att_name << "</code>." << endl;
     m_output << "\t */" << endl;
     m_output << "\tpublic static final String " << att_name << " = \"" << att_name << "\";" << endl;
+    m_ioutput << "\tpublic static final String " << att_name << " = \"" << att_name << "\";" << endl;
     m_output << endl;
 
     // type of the attribute
@@ -479,9 +536,10 @@ void ClassGen::accessAttributes( )
     m_output << "\t/**" << endl;
     m_output << "\t * Sets the value of the attribute <code>" << att_name << "</code> to a value specified by the parameter." << endl;
     m_output << "\t * @param _v The new value of the attribute" << endl;
-    m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+    m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
     m_output << "\t */ " << endl;
     m_output << "\tpublic void set" << att_name << "(" << jtype << " _v)\n\t\tthrows UdmException " << endl;
+    m_ioutput << "\tpublic void set" << att_name << "(" << jtype << " _v) throws UdmException;" << endl;
     m_output << "\t{" << endl;
     m_output << "\t\tset" << upo_call << "(" << att_name << ", _v);" << endl;
     m_output << "\t}" << endl;
@@ -491,9 +549,10 @@ void ClassGen::accessAttributes( )
     m_output << "\t/**" << endl;
     m_output << "\t * Returns the value of the attribute <code>" << att_name << "</code>." << endl;
     m_output << "\t * @return  The value" << endl;
-    m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+    m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
     m_output << "\t */ " << endl;
     m_output << "\tpublic " << jtype << " get" << att_name << "()\n\t\tthrows UdmException " << endl;
+    m_ioutput << "\tpublic " << jtype << " get" << att_name << "() throws UdmException;" << endl;
     m_output << "\t{" << endl;
     m_output << "\t\treturn get" << upo_call << "(" << att_name << ");" << endl;
     m_output << "\t}" << endl;
@@ -501,8 +560,29 @@ void ClassGen::accessAttributes( )
   } 
 }
 
+bool isInterfaceNeeded(::Uml::Class& klass) {
+	// The interface is needed if klass has a subclass that will not inherit from it in the Java code
+	set< ::Uml::Class> subtypes = klass.subTypes();
+	set< ::Uml::Class>::iterator subtypesIt = subtypes.begin();
+	for (; subtypesIt != subtypes.end(); subtypesIt++) {
+		set< ::Uml::Class> bases = subtypesIt->baseTypes();
+		if (*bases.begin() != klass)
+			// Only the first base will be inherited
+			return true;
+		if (isInterfaceNeeded(*subtypesIt))
+			return true;
+	}
+
+	return false;
+}
+
+string getInterfaceIfNeeded(Uml::Class& klass) {
+	return string(isInterfaceNeeded(klass) ? "I" : "") + string(klass.name());
+}
+
 //! Generate association functions.
-void ClassGen::associations( )
+template <class OS_I>
+void ClassGen::CG<OS_I>::associations( )
 {
   m_output << "\t/* Associations */" << endl << endl;
 
@@ -517,22 +597,23 @@ void ClassGen::associations( )
     {
       ::Uml::Class target_cl = a_r_i->target();
 
-      string tname = target_cl.name();
+	  string tname = getInterfaceIfNeeded(target_cl);
       string ar_name = a_r_i->name();
 
       string pkg_name = Utils::getPackageSignature(target_cl, m_ns_path, m_package_name);
 
       m_output << "\t/*" << endl;
-      m_output << "\t * Asoociation with role name <code>" << ar_name << "</code>." << endl;
+      m_output << "\t * Association with role name <code>" << ar_name << "</code>." << endl;
       m_output << "\t */" << endl;
 
       // setter for the association
       m_output << "\t/**" << endl;
       m_output << "\t * Sets the end of the association with role name <code>" << ar_name << "</code>." << endl;
       m_output << "\t * @param a The end of the association" << endl;
-      m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+      m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
       m_output << "\t */ " << endl;
       m_output << "\tpublic void set" << ar_name << "(" << pkg_name << tname << " a)\n\t\tthrows UdmException" << endl;
+      m_ioutput << "\tpublic void set" << ar_name << "(" << pkg_name << tname << " a) throws UdmException;" << endl;
       m_output << "\t{" << endl;
       m_output << "\t\tUdmPseudoObjectContainer container = new UdmPseudoObjectContainer(1);" << endl;
       m_output << "\t\tcontainer.setAt(0, a);" << endl;
@@ -544,9 +625,10 @@ void ClassGen::associations( )
       m_output << "\t/**" << endl;
       m_output << "\t * Returns the end of the association with role name <code>" << ar_name << "</code>." << endl;
       m_output << "\t * @return The end of the association" << endl;
-      m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+      m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
       m_output << "\t */ " << endl;
       m_output << "\tpublic " << pkg_name << tname << " get" << ar_name << "()\n\t\tthrows UdmException" << endl;
+      m_ioutput << "\tpublic " << pkg_name << tname << " get" << ar_name << "() throws UdmException;" << endl;
       m_output << "\t{" << endl;
       m_output << "\t\tUdmPseudoObjectContainer container = getAssociation(\"" << ar_name << "\", UdmHelper.TARGET_FROM_CLASS);" << endl;
       m_output << "\t\tif (container.getLength() > 0)" << endl << endl;
@@ -579,10 +661,10 @@ void ClassGen::associations( )
           helper_mode = "CLASS_FROM_TARGET";
       }
 
-      string tname = to_class.name();
+      string tname = getInterfaceIfNeeded(to_class);
 
       m_output << "\t/*" << endl;
-      m_output << "\t * Asoociation with role name <code>" << to_asr_name << "</code>." << endl;
+      m_output << "\t * Association with role name <code>" << to_asr_name << "</code>." << endl;
       m_output << "\t */" << endl;
       m_output << endl;
 
@@ -595,23 +677,29 @@ void ClassGen::associations( )
         m_output << "\t/**" << endl;
         m_output << "\t * Sets the other end of the association with role name <code>" << to_asr_name << "</code>." << endl;
         m_output << "\t * @param a The other end of the association" << endl;
-        m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+        m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
         m_output << "\t */ " << endl;
         m_output << "\tpublic void set" << to_asr_name << "(" << pckg_signature << tname << " a)\n\t\tthrows UdmException" << endl;
+        m_ioutput << "\tpublic void set" << to_asr_name << "(" << pckg_signature << tname << " a) throws UdmException;" << endl;
         m_output << "\t{" << endl;
-        m_output << "\t\tsetAssociation(\"" << to_asr_name << "\", a, UdmHelper." << helper_mode << ");" << endl;
+		m_output << "\t\tsetAssociation(\"" << to_asr_name << "\", a, UdmHelper." << helper_mode << ");" << endl;
         m_output << "\t}" << endl;
         m_output << endl;
 
         m_output << "\t/**" << endl;
         m_output << "\t * Returns the other end of the association with role name <code>" << to_asr_name << "</code>." << endl;
         m_output << "\t * @return The other end of the association" << endl;
-        m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+        m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
         m_output << "\t */ " << endl;
         m_output << "\tpublic " << pckg_signature << tname << " get" << to_asr_name << "()\n\t\tthrows UdmException" << endl;
+        m_ioutput << "\tpublic " << pckg_signature << tname << " get" << to_asr_name << "() throws UdmException;" << endl;
         m_output << "\t{" << endl;
         m_output << "\t\tUdmPseudoObject result = getSingleAssociatedObject(\"" << to_asr_name << "\", UdmHelper." << helper_mode << ");" << endl;
-        m_output << "\t\treturn (result == null) ? null : new " << pckg_signature << tname << "(result, getDiagram());" << endl;
+		if (isInterfaceNeeded(to_class)) {
+			m_output << "\t\treturn (result == null) ? null : (" << pckg_signature << tname << ")Utils.wrapWithSubclass(new UdmPseudoObject(result, getDiagram()), getDiagram());" << endl;
+		} else {
+	        m_output << "\t\treturn (result == null) ? null : new " << pckg_signature << tname << "(result, getDiagram());" << endl;
+		}
         m_output << "\t}" << endl;
         m_output << endl;
       }
@@ -620,9 +708,10 @@ void ClassGen::associations( )
         m_output << "\t/**" << endl;
         m_output << "\t * Sets the other ends of the association with role name <code>" << to_asr_name << "</code>." << endl;
         m_output << "\t * @param a The other ends of the association" << endl;
-        m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+        m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
         m_output << "\t */ " << endl;
         m_output << "\tpublic void set" << to_asr_name << "(" << pckg_signature << tname << "[] a)\n\t\tthrows UdmException" << endl;
+        m_ioutput << "\tpublic void set" << to_asr_name << "(" << pckg_signature << tname << "[] a) throws UdmException;" << endl;
         m_output << "\t{" << endl;
         m_output << "\t\tsetAssociation(\"" << to_asr_name << "\", new UdmPseudoObjectContainer(a), UdmHelper." << helper_mode << ");" << endl;
         m_output << "\t}" << endl;
@@ -631,9 +720,10 @@ void ClassGen::associations( )
         m_output << "\t/**" << endl;
         m_output << "\t * Returns the other ends of the association with role name <code>" << to_asr_name << "</code>." << endl;
         m_output << "\t * @return The other ends of the association" << endl;
-        m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+        m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
         m_output << "\t */ " << endl;
         m_output << "\tpublic " << pckg_signature << tname << "[] get" << to_asr_name << "()\n\t\tthrows UdmException" << endl;
+        m_ioutput << "\tpublic " << pckg_signature << tname << "[] get" << to_asr_name << "() throws UdmException;" << endl;
         m_output << "\t{" << endl;
         m_output << "\t\tUdmPseudoObjectContainer objs = getAssociation(\"" << to_asr_name << "\", UdmHelper." << helper_mode << ");" << endl;
         m_output << "\t\treturn (" << pckg_signature << tname << "[]) " << pckg_signature << "Utils.wrapWithSubclass(objs, " << pckg_signature << tname << ".class, getDiagram());" << endl;
