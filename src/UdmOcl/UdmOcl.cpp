@@ -409,7 +409,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		: ConstraintBase( pFacade )
 	{
 		char chBuffer[ 30 ];
-		sprintf( chBuffer, "UdmPatConstraint%d", lCounter++ );
+		sprintf( chBuffer, "UdmPatConstraint%ld", lCounter++ );
 		std::string strType = /*"meta::" + */_strContext;	//strContext should be fullt qualified!
 		std::string strName = chBuffer;
 		std::string strExpression = _strExpression;
