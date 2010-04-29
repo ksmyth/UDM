@@ -4,6 +4,7 @@
 
 	<condition property="isWindows">
 	  <or>
+		<os name="Windows 7" />
 		<os name="Windows Vista" />
 		<and>
 			<os name="Windows NT (unknown)" />
