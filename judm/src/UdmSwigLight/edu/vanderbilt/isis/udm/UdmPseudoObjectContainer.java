@@ -27,6 +27,18 @@ public class UdmPseudoObjectContainer {
     }
     
     /**
+     * Initializes a container from the provided array.
+     *
+     * @throws ClassCastException if an Object in items isn't a UdmPseudoObject
+     */
+    public UdmPseudoObjectContainer(Object[] items) {
+        this(items.length);
+        for (int i = 0; i < items.length; i++) {
+            setAt(i, (UdmPseudoObject)items[i]);
+        }
+    }
+    
+    /**
      * A package private method
      */
     UdmPseudoObjectContainer(UdmPseudoObjectS swigContainer) {
