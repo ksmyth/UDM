@@ -82,7 +82,7 @@ public abstract class UdmFactory {
         } 
         catch (UnsatisfiedLinkError linkEx)
 		{
-        	err = "Could not find UdmSwig.\n Searched in folders:\n";
+        	err = "Could not load UdmSwig " + linkEx.getMessage() + "\n Searched in folders:\n";
         	err += "java.library.path: " +System.getProperties().get("java.library.path")+"\n";
         	success = false;
 		}
@@ -110,11 +110,11 @@ public abstract class UdmFactory {
         	findSwigDll();
             if (SWIG_LIB_PATH == null)
             {
-            	err += "No UDM_PATH environment variable defined";
+            	err += "Can't search UDM_PATH: no UDM_PATH environment variable defined";
             }
             else
             {
-            	err += "UDM_PATH: " + SWIG_LIB_PATH;
+            	err += "Tried $UDM_PATH='" + SWIG_LIB_PATH + "'";
             	success = true;
                 try
 				{
@@ -122,6 +122,7 @@ public abstract class UdmFactory {
 				}
 	            catch (UnsatisfiedLinkError linkEx1)
 				{
+					err += "\n\t" + linkEx1.getMessage();
 	            	success = false;
 				}
             }
