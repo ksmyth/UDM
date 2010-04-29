@@ -334,6 +334,15 @@ public class UdmPseudoObject implements Comparable {
             throws UdmException {
         setAssociation(associationRole, otherObject, UNSPECIFIED_MODE);
     }
+
+    public void setAssociation(String associationRole, Object otherObject)
+            throws UdmException {
+        setAssociation(associationRole, (UdmPseudoObject) otherObject);
+    }
+
+    public void setAssociation(String associationRole, Object otherObject, int mode) throws UdmException {
+    	setAssociation(associationRole, (UdmPseudoObject)otherObject, mode);
+    }
     
     public UdmPseudoObject getSingleAssociatedObject(String associationRole, int mode) throws UdmException {
         UdmPseudoObjectContainer result;
