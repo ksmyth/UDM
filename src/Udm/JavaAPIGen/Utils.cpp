@@ -56,7 +56,7 @@ void Utils::makeDir (  const std::string& dirname )
 
 //! The copyright text for the generated Java API.
 string Utils::m_copyright_text = 
-    string("/* This is a generalt file, do not modify its content.\n")
+    string("/* This is a generated file, do not modify its content.\n")
   + " * Copyright (c) Vanderbilt University, 2000-2005\n"
   + " * ALL RIGHTS RESERVED\n"
   + " * Vanderbilt University disclaims all warranties with regard to this \n"

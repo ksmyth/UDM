@@ -249,7 +249,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 	catch(...)
 	{
 		ccpProject->AbortTransaction();
-		AfxMessageBox("An unexpected error has occured during the interpretation process.");
+		AfxMessageBox("An unexpected error has occurred during the interpretation process.");
 		return E_UNEXPECTED;
 	}
 	return S_OK;

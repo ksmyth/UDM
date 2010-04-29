@@ -386,7 +386,7 @@ int main(int argc, char **argv) {
 			//do the XmiTUdm conversion
 			if (XmiToUdm(inputfile.c_str(), input_udm.c_str()) != 0)
 			{
-				throw udm_exception("An error occured during translating from XMI UML to UDM UML.");
+				throw udm_exception("An error occurred during translating from XMI UML to UDM UML.");
 			}
 
 			//set the input to the newly converted file

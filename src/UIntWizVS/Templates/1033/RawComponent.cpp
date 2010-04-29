@@ -261,7 +261,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 	{
 		ccpProject->AbortTransaction();
 		// This can be a problem with the GME Console, so we display it in a message box
-		AfxMessageBox("An unexpected error has occured during the interpretation process.");
+		AfxMessageBox("An unexpected error has occurred during the interpretation process.");
 		return E_UNEXPECTED;
 	}
 	return S_OK;

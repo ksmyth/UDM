@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 //	}
 //	catch(udm_exception &exc) 
 //	{
-//		cout<<"Exception occured: "<<exc.what()<<endl;
+//		cout<<"Exception occurred: "<<exc.what()<<endl;
 //	}
 
 	return 0;

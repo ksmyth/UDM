@@ -59,7 +59,7 @@ void UdmVizDump::Dump(Udm::SmartDataNetwork *sdnBackend)
 	} 
 	catch(udm_exception &exc) 
 	{
-		cerr<<"Exception occured: "<<exc.what()<<endl;
+		cerr<<"Exception occurred: "<<exc.what()<<endl;
 	}
 }
 

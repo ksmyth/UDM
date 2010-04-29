@@ -299,7 +299,7 @@ namespace OclTree
 			violation.strMessage = "Expression evaluated to false.";
 		else
 			if ( strMessage == "UNEX" )
-				violation.strMessage = "Unexpected exception occured.";
+				violation.strMessage = "Unexpected exception occurred.";
 			else
 				violation.strMessage = strMessage;
 		violation.strSignature = strSignature;

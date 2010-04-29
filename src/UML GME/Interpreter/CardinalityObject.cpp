@@ -62,7 +62,7 @@ CardinalityObject::CardinalityObject(const std::string str)
 	}
 	catch (...)
 	{
-		throw CardinalityObjectException(std::string("Unknown Parse error occured while parsing:") + str);
+		throw CardinalityObjectException(std::string("Unknown Parse error occurred while parsing:") + str);
 
 	}
 

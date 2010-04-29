@@ -294,7 +294,7 @@ void CBackendDump::Dump(Udm::SmartDataNetwork *sdnBackend)
 	} 
 	catch(udm_exception &exc) 
 	{
-		*dump<<"Exception occured: "<<exc.what()<<endl;
+		*dump<<"Exception occurred: "<<exc.what()<<endl;
 	}
 
 }

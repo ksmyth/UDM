@@ -157,7 +157,7 @@ AttributeObject::AttributeObject(std::string str)
 
 	catch (...)
 	{
-		throw AttributeObjectException(std::string("Unknown Parse error occured while parsing:") + str);
+		throw AttributeObjectException(std::string("Unknown Parse error occurred while parsing:") + str);
 
 	}
 

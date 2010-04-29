@@ -78,7 +78,7 @@ void FactoryGen::addToFactoryRepository( )
   m_factory_output << "\t * Returns an instance of the factory <code>" << m_root_name << m_type << "Factory</code>" << endl;
   m_factory_output << containerDescriptionDoc( ) << endl;
   m_factory_output << "\t * @return An instance of the factory <code>" << m_root_name << m_type << "Factory</code>." << endl;
-  m_factory_output << "\t * @throws UdmException If any Udm related exception occured" << endl;
+  m_factory_output << "\t * @throws UdmException If any Udm related exception occurred" << endl;
   m_factory_output << "\t * @see " << Utils::toPackageName( m_package_name ) << "." << m_root_name << m_type << "Factory " << endl;
   m_factory_output << "\t */ " << endl;
   m_factory_output << "\tpublic static " << Utils::toPackageName( m_package_name ) << "." << m_root_name << m_type << "Factory get" << namespaceOrDiagramName( )
@@ -370,7 +370,7 @@ void FactoryGen::constructor( )
   //  generate the constructor
   m_output << "\t/**" << endl;
   m_output << "\t * Constructor." << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   m_output << "\tpublic " << m_root_name << m_type << "Factory()\n\t\t throws UdmException " << endl;
   m_output << "\t{" << endl;
@@ -392,7 +392,7 @@ void FactoryGen::initializeMetaClasses( )
   // generate a function to initialize the meta classes 
   m_output << "\t/**" << endl;
   m_output << "\t * Initializes the meta classes." << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   m_output << "\tprivate void initializeMetaClasses() \n\t\t throws UdmException " << endl;
   m_output << "\t{" << endl;
@@ -462,7 +462,7 @@ void FactoryGen::createDNInFile( )
   m_output << m_root_name << "</code> in the file specified by the parameter." << endl;
   m_output << "\t * @param  instanceFileName The name of the instance file" << endl;
   m_output << "\t * @return  The root object of the data network" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic " << m_root_name << " create" << "(String instanceFileName) \n\t\t throws UdmException" << endl;
@@ -486,7 +486,7 @@ void FactoryGen::createDNInString( )
   m_output << "\t * Creates a new data network with root object of type <code>";
   m_output << m_root_name << "</code> in a string." << endl;
   m_output << "\t * @return  The root object of the data network" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic " << m_root_name << " create" << "()\n\t\t throws UdmException" << endl;
@@ -518,7 +518,7 @@ void FactoryGen::openDNFromFile( )
   m_output << "\t * Opens an existing data network from the file specified by the parameter." << endl;
   m_output << "\t * @param  instanceFileName The name of the instance file" << endl;
   m_output << "\t * @return  The root object of the data network" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic " << m_root_name << " open(String instanceFileName) \n\t\t throws UdmException" << endl;
@@ -536,7 +536,7 @@ void FactoryGen::openDNFromFile( )
   m_output << "\t * Opens an existing data network from the stream specified by the parameter." << endl;
   m_output << "\t * @param  xmlStream The stream that contains the xml" << endl;
   m_output << "\t * @return  The root object of the data network" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic " << m_root_name << " open(InputStream xmlStream) \n\t\t throws UdmException" << endl;
@@ -558,7 +558,7 @@ void FactoryGen::openDNFromString( )
   m_output << "\t * Opens an existing data network from a string specified by the parameter." << endl;
   m_output << "\t * @param  xmlString The string containing the xml." << endl;
   m_output << "\t * @return  The root object of the data network" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic " << m_root_name << " open(String xmlString) \n\t\t throws UdmException" << endl;
@@ -576,7 +576,7 @@ void FactoryGen::openDNFromString( )
   m_output << "\t * Opens an existing data network from the stream specified by the parameter." << endl;
   m_output << "\t * @param  xmlStream The stream that contains the xml" << endl;
   m_output << "\t * @return  The root object of the data network" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic " << m_root_name << " open(InputStream xmlStream) \n\t\t throws UdmException" << endl;
@@ -606,7 +606,7 @@ void FactoryGen::saveDNFile( )
   //generate the save function 
   m_output << "\t/**" << endl;
   m_output << "\t * Closes and updates the data network by saving the changes in the data network." << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic void save() \n\t\t throws UdmException" << endl;
@@ -622,7 +622,7 @@ void FactoryGen::saveDNFile( )
   m_output << "\t * Closes the data network, saves the changes in a file" << endl;
   m_output << "\t * specified by the parameter, and unloads the diagram." << endl;
   m_output << "\t * @param  instanceFileName The name of the m_output file where the xml will be stored" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic void saveAs(String instanceFileName) \n\t\t throws UdmException" << endl;
@@ -641,7 +641,7 @@ void FactoryGen::saveDNString( )
   m_output << "\t/**" << endl;
   m_output << "\t * Closes and updates the data network by saving the changes in the data network." << endl;
   m_output << "\t * @return  The data network in a string" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic String save() \n\t\t throws UdmException" << endl;
@@ -663,7 +663,7 @@ void FactoryGen::saveAsStream( )
   m_output << "\t * Closes and updates the data network, saves the changes in a stream," << endl;
   m_output << "\t * and unloads the diagram." << endl;
   m_output << "\t * @return  The data network in a stream" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic InputStream saveAsStream() \n\t\t throws UdmException" << endl;
@@ -684,7 +684,7 @@ void FactoryGen::checkConstraints( )
   m_output << "\t/**" << endl;
   m_output << "\t * Calls the constraint checker." << endl;
   m_output << "\t * @return  The result of the constriant evaluation" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic String checkConstraints() \n\t\t throws UdmException" << endl;
@@ -700,7 +700,7 @@ void FactoryGen::closeDN( )
   // generate the close function 
   m_output << "\t/**" << endl;
   m_output << "\t * Closes the data network without updating it and unloads the diagram." << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic void close() \n\t\t throws UdmException" << endl;

@@ -108,7 +108,7 @@ void UtilsGen::wrapper( )
   m_output << "\t * @param  obj The generic udm object" << endl;
   m_output << "\t * @param  diagram The diagram of the data network that contains <code>obj</code>" << endl;
   m_output << "\t * @return  The domain specific object" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic static UdmPseudoObject wrapWithSubclass(UdmPseudoObject obj, Diagram diagram)";
@@ -142,7 +142,7 @@ void UtilsGen::wrapper( )
   m_output << "\t * @param  arrayClass The type of the array class" << endl;
   m_output << "\t * @param  diagram The diagram of the data network that contains <code>obj</code>" << endl;
   m_output << "\t * @return  The array of domain specific objects" << endl;
-  m_output << "\t * @throws  UdmException If any Udm related exception occured" << endl;
+  m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
   m_output << "\tpublic static UdmPseudoObject[] wrapWithSubclass(UdmPseudoObjectContainer objs, Class arrayClass, Diagram diagram) \n\t\t throws UdmException " << endl;

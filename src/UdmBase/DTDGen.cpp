@@ -298,7 +298,7 @@ namespace DTDGen
 		{
 			//the generic n..m, n<m case
 			if (cwcp.second.first > cwcp.second.second)
-				throw udm_exception("Invalid cardinality occured: min > max");
+				throw udm_exception("Invalid cardinality occurred: min > max");
 
 			ret+="(";
 			for (__int64 i = cwcp.second.first; i <= cwcp.second.second; i++)

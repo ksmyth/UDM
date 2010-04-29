@@ -177,24 +177,24 @@ namespace UDM_NAMESPACE
 		{
 			unz_file_info ufi;
 			if (unzGetCurrentFileInfo(zf, &ufi, NULL, 0, NULL, 0, NULL, 0) != UNZ_OK)
-				throw udm_exception("Unknown UNZ error occured!");
+				throw udm_exception("Unknown UNZ error occurred!");
 
 			char * filename = new char[ufi.size_filename + 1];
 			if (unzGetCurrentFileInfo(zf, NULL, filename, ufi.size_filename + 1, NULL,0,NULL,0) != UNZ_OK)
-				throw udm_exception("Unknown UNZ error occured!");
+				throw udm_exception("Unknown UNZ error occurred!");
 
 			string tempfilename = temp_path + PATHDELIM + filename;
 			delete [] filename;
 
 			if (unzOpenCurrentFile(zf) != UNZ_OK)
-				throw udm_exception("Unknown UNZ error occured!");
+				throw udm_exception("Unknown UNZ error occurred!");
 			
 			char * buff = new char[ufi.uncompressed_size];
 			if ((unsigned long)unzReadCurrentFile(zf, buff, ufi.uncompressed_size) != ufi.uncompressed_size)
-				throw udm_exception("Unknown UNZ error occured!");
+				throw udm_exception("Unknown UNZ error occurred!");
 
 			if (unzCloseCurrentFile(zf) != UNZ_OK)
-				throw udm_exception("Unknown UNZ error occured!");
+				throw udm_exception("Unknown UNZ error occurred!");
 			
 
 			FILE * file = fopen(tempfilename.c_str(), "wb");
@@ -1179,6 +1179,9 @@ namespace UDM_NAMESPACE
 		//creating a non-persistent cross-link data network 
 		cross_meta = const_cast<Udm::UdmDiagram*>(&cross_diag);
 		cross_links = new UdmStatic::StaticDataNetwork(cross_diag);
+//		const ::Uml::Class& root_cls = cross_diag.dgr->__impl()->__getdn()->IsTypeSafe() 
+//			? ::Uml::classByName(*cross_diag.dgr, "_gen_cont")
+//			: Uml::SafeTypeContainer::GetSafeType(::Uml::classByName(*cross_diag.dgr, "_gen_cont"));
 		const ::Uml::Class& root_cls = Uml::SafeTypeContainer::GetSafeType(::Uml::classByName(*cross_diag.dgr, "_gen_cont"));
 		cross_links->CreateNew(" ", " ", root_cls, CHANGES_LOST_DEFAULT);
 	
