@@ -469,11 +469,11 @@ namespace UdmGme
 				SmartBSTR dst_role_name = conn->RegistryValue["dRefParent"];
 				try {
 					references = role_name.compare(dst_role_name) == 0 ? conn->GetDstReferences() : conn->GetSrcReferences();
-				} catch (...) {}
+				} catch (udm_exception& e) {}
 			} else {
 				try {
 					references = role_name.compare(src_role_name) == 0 ? conn->GetSrcReferences() : conn->GetDstReferences();
-				} catch (...) {}
+				} catch (udm_exception& e) {}
 			}
 
 			if (references != NULL && references->GetCount() > 0)
@@ -1838,7 +1838,7 @@ bbreak:			;
 					mn = PATHGET(kind);
 					rr = mmodel->RoleByName[SmartBSTR(mn.c_str())];
 				}
-				catch(...)
+				catch(udm_exception& )
 				{
 					mn = PATHGET(kind) + (string)ccr.name();
 					rr = mmodel->RoleByName[SmartBSTR(mn.c_str())];
@@ -3127,8 +3127,16 @@ bbreak:			;
 					} //if (descs.size() <= 1)
 				} //if (nn.metaobj == NULL)
 			}//if (nn.metaobj == NULL)
-			if(nn.metaobj == NULL && !nn.metaobjs_count) 
-				throw udm_exception(string("Cannot resolve association ") +  getnameforassoc(assoc, true) + "\n");
+			if(nn.metaobj == NULL && !nn.metaobjs_count) {
+				string rolenames;
+				std::set<Uml::AssociationRole> roles = assoc.AssociationRole_kind_children();
+				std::set<Uml::AssociationRole>::iterator rolesIt = roles.begin();
+				for (; rolesIt != roles.end(); rolesIt++) {
+					rolenames += string("'") + string(rolesIt->name()) + "' ";
+				}
+				throw udm_exception(string("Cannot resolve association '") + getnameforassoc(assoc, true) + 
+					"' with rolenames " + rolenames + "\n");
+			}
 
 
 			{
