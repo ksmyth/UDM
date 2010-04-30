@@ -216,6 +216,8 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 			if(isUMT)
 			{	
 				CString sysCall = "call \"%UDM_PATH%\\bin\\Udm.exe\" \"" + filepath + "\"";
+				if (!(param & GME_SILENT_MODE))
+					sysCall += "|| pause";
 				if(system(LPCSTR(sysCall))!=0)
 					throw int_exception("Uml2Xml Error: Unable to run command: "+ sysCall);
 			}
@@ -290,6 +292,8 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 
 		if(isUMT)
 		{	CString sysCall = "call \"%UDM_PATH%\\bin\\Udm.exe\" \"" + filepath + "\"";
+			if (!(param & GME_SILENT_MODE))
+				sysCall += "|| pause";
 			if(system(LPCSTR(sysCall))!=0)
 				throw int_exception("Uml2Xml Error: Unable to run command: "+ sysCall);
 		}
@@ -1111,7 +1115,7 @@ void CRole::ParseCardinality()
 	}
 	catch(const CardinalityObjectException &e)
 	{
-		AfxMessageBox(CString("Parser error occured while parsing cardinality string: ") + e.what());
+		AfxMessageBox(CString("Parser error occurred while parsing cardinality string: ") + e.what());
 	}
 
 };
