@@ -3047,35 +3047,28 @@ namespace UdmStatic
 				//get its id from the att_map 
 				static map<string, uniqueId_type>::iterator sa_i;
 				sa_i = att_map.find(string(sa_name));
-				if (sa_i == att_map.end()) throw udm_exception(string("Attribute: ") + string(sa_name) + string(" was not found for class ") + (string)type.name());
+				if (sa_i == att_map.end()) throw udm_exception(string("Attribute: '") + string(sa_name) + string("' was not found for class ") + (string)type.name());
 				
 				//read the attribute value
-				static char sa_val[10*MAX_NAME+1];
-				static char * sa_val_p;
-				sa_val_p = sa_val;
-				i = 0;
+
+				std::string sa_val;
+				sa_val.reserve(10*MAX_NAME);
 				do
 				{
 					if(!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupted");
-					*sa_val_p++ = t; i++;
+						throw udm_exception("can't read from file, probably MEM file is corrupt");
+					sa_val.push_back(t);
+				} while (t != 0x00);
+				read += sa_val.length();
+				sa_val.erase(sa_val.end() - 1); // remove terminating nul
 
-				} while ((t != 0x00 )&& (i < 10*MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(sa_val) + 1;
 
 				//add the attribute to the object
 			
 				
-			//	static string sa_val_str;
 				pair<uniqueId_type const, string> sa_item((*sa_i).second, sa_val );
 				
 				static pair<map<uniqueId_type, string>::iterator, bool> ins_res;
-				
-
-//				(uniqueId_type)(sa_item.first) = (*sa_i).second;
-//				sa_val_str = sa_val;
-//				sa_item.second = sa_val_str;
 
 				ins_res = so->stringAttrs.insert(sa_item);
 				if (!ins_res.second) throw udm_exception(" String Attribute could not be added to StaticObject!");
