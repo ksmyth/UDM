@@ -85,6 +85,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
+				ForceSymbolReferences="?UnInitialize@Ocl@@YAXXZ"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
 				OptimizeReferences="1"
@@ -113,7 +114,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin&#x0D;&#x0A;copy &quot;$(OutDir)&quot;\UdmDll.lib &quot;$(UDM_PATH)&quot;\lib&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(OutDir)&quot;\UdmDll.lib &quot;$(UDM_PATH)&quot;\lib&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -184,8 +185,9 @@
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(OutDir)"
 				IgnoreDefaultLibraryNames=""
+				ForceSymbolReferences="?UnInitialize@Ocl@@YAXXZ"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(IntDir)/UdmDllD.pdb"
+				ProgramDatabaseFile="$(IntDir)\$(TargetName).pdb"
 				OptimizeReferences="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -212,7 +214,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin&#x0D;&#x0A;copy &quot;$(OutDir)&quot;\UdmDllD.lib &quot;$(UDM_PATH)&quot;\lib&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(OutDir)&quot;\UdmDllD.lib &quot;$(UDM_PATH)&quot;\lib&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
