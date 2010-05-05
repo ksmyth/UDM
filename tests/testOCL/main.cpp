@@ -6,9 +6,19 @@
 
 int main(int argc, char* argv[])
 {
-  UdmTests::Test t;
-  t.test();
+	try {
+		UdmTests::Test t;
+		t.test();
+	} catch (udm_exception& e) {
+		std::cout << e.what();
+		return 6;
+	} catch (std::exception& e) {
+		std::cout << e.what();
+		return 5;
+	}
+	return 0;
 }
+
 /*
 CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::Test );
 int main(int argc, char* argv[])

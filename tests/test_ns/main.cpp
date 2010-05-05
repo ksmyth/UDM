@@ -47,7 +47,7 @@ int main()
 
 		// test initialization from another diagram
 		Udm::SmartDataNetwork udmDN(Uml::diagram);
-		udmDN.OpenExisting("test_ns_udm.xml", "", Udm::CHANGES_PERSIST_ALWAYS);
+		udmDN.OpenExisting("test_ns_udm.xml", "", Udm::CHANGES_LOST_DEFAULT);
 		
 		Uml::Diagram theUmlDiagram(Uml::Diagram::Cast(udmDN.GetRootObject()));
 		test_ns::Initialize(theUmlDiagram);

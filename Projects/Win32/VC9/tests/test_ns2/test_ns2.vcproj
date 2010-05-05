@@ -190,10 +190,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_ns2\CHost.cpp"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns2\CHost.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -202,10 +202,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns2\CHost.cpp"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_ns2\CHost.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -224,10 +224,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_ns2\CHost.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns2\CHost.h"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -236,10 +236,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns2\CHost.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_ns2\CHost.h"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -262,9 +262,9 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					Description="$(InputName).xme -&gt; $(InputName).xmp, Registering $(InputName) paradigm"
+					Description="$(InputDir)$(InputName).xmp;$(InputDir)$(InputName).mta;$(InputDir)$(InputName).mga $(InputName).xme -&gt; $(InputName).xmp, Registering $(InputName) paradigm"
 					CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\CreateMga&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
-					Outputs="$(InputName).xmp;$(InputName).xmp.log;$(InputName).mta;$(InputName).mga"
+					Outputs="$(InputDir)$(InputName).xmp"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -274,7 +274,28 @@
 					Name="VCCustomBuildTool"
 					Description="$(InputName).xme -&gt; $(InputName).xmp, Registering $(InputName) paradigm"
 					CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\CreateMga&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
-					Outputs="$(InputName).xmp;$(InputName).xmp.log;$(InputName).mta;$(InputName).mga"
+					Outputs="$(InputDir)$(InputName).xmp;$(InputDir)$(InputName).mga;$(InputDir)$(InputName).mta"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns2\CHost_udm.xml"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_ns2&quot; &quot;$(InputPath)&quot; -t -v&#x0D;&#x0A;"
+					Outputs="$(OutDir)\Gen\tests\test_ns2\CHost.cpp; $(OutDir)\Gen\tests\test_ns2\CHost.h; $(OutDir)\Gen\tests\test_ns2\CHost.dtd; $(OutDir)\Gen\tests\test_ns2\CHost.xsd; $(OutDir)\Gen\tests\test_ns2\CHost_A.dtd; $(OutDir)\Gen\tests\test_ns2\CHost_A.xsd; $(OutDir)\Gen\tests\test_ns2\CHost_B.dtd; $(OutDir)\Gen\tests\test_ns2\CHost_B.xsd; $(OutDir)\Gen\tests\test_ns2\CHost_C.dtd; $(OutDir)\Gen\tests\test_ns2\CHost_C.xsd"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
 				/>
 			</FileConfiguration>
 		</File>
@@ -294,29 +315,9 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_ns2&quot; $(InputPath) -t -v&#x0D;&#x0A;"
-					Outputs="$(OutDir)\Gen\tests\test_ns2\CHost.cpp; $(OutDir)\Gen\tests\test_ns2\CHost.h; $(OutDir)\Gen\tests\test_ns2\CHost.dtd; $(OutDir)\Gen\tests\test_ns2\CHost.xsd; $(OutDir)\Gen\tests\test_ns2\CHost_A.dtd; $(OutDir)\Gen\tests\test_ns2\CHost_A.xsd; $(OutDir)\Gen\tests\test_ns2\CHost_B.dtd; $(OutDir)\Gen\tests\test_ns2\CHost_B.xsd; $(OutDir)\Gen\tests\test_ns2\CHost_C.dtd; $(OutDir)\Gen\tests\test_ns2\CHost_C.xsd"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns2\CHost_udm.xml"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_ns2&quot; $(InputPath) -t -v&#x0D;&#x0A;"
-					Outputs="$(OutDir)\Gen\tests\test_ns2\CHost.cpp; $(OutDir)\Gen\tests\test_ns2\CHost.h; $(OutDir)\Gen\tests\test_ns2\CHost.dtd; $(OutDir)\Gen\tests\test_ns2\CHost.xsd; $(OutDir)\Gen\tests\test_ns2\CHost_A.dtd; $(OutDir)\Gen\tests\test_ns2\CHost_A.xsd; $(OutDir)\Gen\tests\test_ns2\CHost_B.dtd; $(OutDir)\Gen\tests\test_ns2\CHost_B.xsd; $(OutDir)\Gen\tests\test_ns2\CHost_C.dtd; $(OutDir)\Gen\tests\test_ns2\CHost_C.xsd"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
+					Description="Udm.exe $(InputFileName) "
+					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_ns2&quot; &quot;$(InputPath)&quot; -t -v&#x0D;&#x0A;"
+					Outputs="$(OutDir)\Gen\tests\test_ns2\CHost.cpp;$(OutDir)\Gen\tests\test_ns2\CHost.h;$(OutDir)\Gen\tests\test_ns2\CHost.dtd;$(OutDir)\Gen\tests\test_ns2\CHost.xsd;$(OutDir)\Gen\tests\test_ns2\CHost_A.dtd;$(OutDir)\Gen\tests\test_ns2\CHost_A.xsd;$(OutDir)\Gen\tests\test_ns2\CHost_B.dtd;$(OutDir)\Gen\tests\test_ns2\CHost_B.xsd;$(OutDir)\Gen\tests\test_ns2\CHost_C.dtd;$(OutDir)\Gen\tests\test_ns2\CHost_C.xsd"
 				/>
 			</FileConfiguration>
 		</File>
