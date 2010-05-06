@@ -4,16 +4,7 @@
 
 	<condition property="isWindows">
 	  <or>
-		<os name="Windows 7" />
-		<os name="Windows Vista" />
-		<and>
-			<os name="Windows NT (unknown)" />
-			<os version="6" />
-		</and>
-		<os name="Windows 2008" />
-		<os name="Windows 2003" />
-		<os name="Windows XP" />
-		<os name="Windows 2000" />
+		<os family="Windows" />
       </or>
 	</condition>
 
@@ -28,6 +19,9 @@
 		<property name="build.dir" location="build/build_win" />
 		<property name="junit.dir" location="${udm_3rdparty.dir}/junit" />
 		<property name="srcdir" location="${basedir}" />
+		<property name="windir" environment="env" value="${env.windir}" />
+		<available file="${windir}\SysWoW64\cmd.exe" property="cmd.exe" value="${windir}\SysWoW64\cmd.exe" />
+		<property name="cmd.exe" value="cmd.exe" />
 
 		<!--
 			If UdmD.exe exists and it is newer than Udm.exe or Udm.exe does not exist,
@@ -405,7 +399,7 @@
 		<delete dir="samples/${dspackage}/src/main/test" />
 
 		<!-- Generate UDM XML from the XME XML file -->
-		<exec dir="samples/${dspackage}/meta" executable="cmd">
+		<exec dir="samples/${dspackage}/meta" executable="${cmd.exe}">
 			<arg line="/c &quot;${udm.etc.dir}/xme2udmxml&quot; ${dspackage}_uml.xme ${dspackage}.mga " />
 		</exec>
 		
