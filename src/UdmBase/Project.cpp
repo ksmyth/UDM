@@ -123,12 +123,12 @@ namespace UDM_NAMESPACE
 		if (static_pr) return;//if it's a static datanetwork we don't do shit ;)
 			
 #ifdef WIN32
-		char * def_tmp_dir = "c:\\";
+		const char * def_tmp_dir = "c:\\";
 #else
-		char * def_tmp_dir = "/tmp/";
+		const char * def_tmp_dir = "/tmp/";
 #endif
 		
-		char * tmp_dir = NULL;
+		const char * tmp_dir = NULL;
 		tmp_dir = getenv(WIN_TEMP_ENV);
 		if (!tmp_dir)
 			tmp_dir = getenv(WIN_TMP_ENV);
