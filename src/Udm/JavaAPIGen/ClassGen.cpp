@@ -277,7 +277,7 @@ void ClassGen::construction( )
   }
 }
 
-bool isInterfaceNeeded(::Uml::Class& klass) {
+bool isInterfaceNeeded(const ::Uml::Class& klass) {
 	// The interface is needed if klass has a subclass that will not inherit from it in the Java code
 	set< ::Uml::Class> subtypes = klass.subTypes();
 	set< ::Uml::Class>::iterator subtypesIt = subtypes.begin();
@@ -293,7 +293,7 @@ bool isInterfaceNeeded(::Uml::Class& klass) {
 	return false;
 }
 
-string getInterfaceIfNeeded(Uml::Class& klass) {
+string getInterfaceIfNeeded(const Uml::Class& klass) {
 	return string(isInterfaceNeeded(klass) ? "I" : "") + string(klass.name());
 }
 
