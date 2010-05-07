@@ -8,6 +8,6 @@ cmd /c "call "%~dp0_%~nx0" %*"
 exit /b
 
 :usage
-echo Runs GME from specified UDM build
-echo Usage: %0 ^<VC7.1^|VC8^|VC9^> ^<Debug^|Release^> ^<parameters to GME^>
+echo zips model files necessary for Linux build.
+echo Usage: %0 ^<VC7.1^|VC8^|VC9^> ^<Debug^|Release^>
 exit /b
