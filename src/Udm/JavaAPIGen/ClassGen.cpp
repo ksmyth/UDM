@@ -277,6 +277,27 @@ void ClassGen::construction( )
   }
 }
 
+bool isInterfaceNeeded(::Uml::Class& klass) {
+	// The interface is needed if klass has a subclass that will not inherit from it in the Java code
+	set< ::Uml::Class> subtypes = klass.subTypes();
+	set< ::Uml::Class>::iterator subtypesIt = subtypes.begin();
+	for (; subtypesIt != subtypes.end(); subtypesIt++) {
+		set< ::Uml::Class> bases = subtypesIt->baseTypes();
+		if (*bases.begin() != klass)
+			// Only the first base will be inherited
+			return true;
+		if (isInterfaceNeeded(*subtypesIt))
+			return true;
+	}
+
+	return false;
+}
+
+string getInterfaceIfNeeded(Uml::Class& klass) {
+	return string(isInterfaceNeeded(klass) ? "I" : "") + string(klass.name());
+}
+
+
 //! Generates containments ( createChild + getXXXChildren ).
 template <class OS_I>
 void ClassGen::CG<OS_I>::accessChildren( )
@@ -558,26 +579,6 @@ void ClassGen::CG<OS_I>::accessAttributes( )
     m_output << "\t}" << endl;
     m_output << endl;
   } 
-}
-
-bool isInterfaceNeeded(::Uml::Class& klass) {
-	// The interface is needed if klass has a subclass that will not inherit from it in the Java code
-	set< ::Uml::Class> subtypes = klass.subTypes();
-	set< ::Uml::Class>::iterator subtypesIt = subtypes.begin();
-	for (; subtypesIt != subtypes.end(); subtypesIt++) {
-		set< ::Uml::Class> bases = subtypesIt->baseTypes();
-		if (*bases.begin() != klass)
-			// Only the first base will be inherited
-			return true;
-		if (isInterfaceNeeded(*subtypesIt))
-			return true;
-	}
-
-	return false;
-}
-
-string getInterfaceIfNeeded(Uml::Class& klass) {
-	return string(isInterfaceNeeded(klass) ? "I" : "") + string(klass.name());
 }
 
 //! Generate association functions.
