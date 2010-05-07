@@ -675,8 +675,11 @@ namespace UDM_NAMESPACE
 
 		StringAttr &operator =(const StringAttr &a) { return operator =( string(a) ); }
 
-		typedef const char * charp;
-//		operator charp() const { return string().c_str(); } 
+		bool operator==(const StringAttr &a) const { return string() == static_cast<string>(a); }
+
+		bool operator==(const string &a) const { return string() == a; }
+
+		bool operator==(const char* const a) const { return string() == a; }
 	};
 
 // --------------------------- BooleanAttr
@@ -3833,8 +3836,17 @@ inline UDM_DLL ostream & operator<< (ostream &o, __int64 i) { char k[30];sprintf
 inline UDM_DLL ostream & operator<< (ostream &o, Udm::StringAttr c) { o << (string)c; return o; };
 
 //defines for using backends
+#ifdef _WIN32
+#if !defined(UDM_DYNAMIC_LINKING) || defined(UDM_DLL_EXPORT)
+#define UDM_USE_DOM __pragma(comment(linker, "/include:?DummyFL@UdmDom@@3HA"))
+#define UDM_USE_MGA __pragma(comment(linker, "/include:?DummyFL@UdmGme@@3HA"))
+#else
+#define UDM_USE_DOM __pragma(comment(linker, "/include:__imp_?DummyFL@UdmDom@@3HA"))
+#define UDM_USE_MGA __pragma(comment(linker, "/include:__imp_?DummyFL@UdmGme@@3HA"))
+#endif
+#else
 #define UDM_USE_DOM namespace UdmDom{extern UDM_DLL int DummyFL;static int *Dummy_For_Linker = &DummyFL; static struct _use_var{_use_var(){Dummy_For_Linker++;}} __unused;};
-#define UDM_USE_MGA namespace UdmGme{extern UDM_DLL int DummyFL;static int *Dummy_For_Linker = &DummyFL; static struct _use_var{_use_var(){Dummy_For_Linker++;}} __unused;};
+#endif
 
 
 
