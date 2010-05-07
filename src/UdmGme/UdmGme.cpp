@@ -2275,11 +2275,35 @@ bbreak:			;
 			return testself->GetAttribute(attr_meta)->GetStatus();
 		}
 	}
-	
+
+	string UdmId2GmeId(uniqueId_type udmId) {
+		char buffer[24];
+		sprintf_s(buffer, "id-%04X-%08X", udmId / 100000000 + 100, udmId % 100000000);
+		return string(buffer);
+	}
+
+	uniqueId_type GmeId2UdmId(const wchar_t* gmeId) {
+		long p, c;
+		if(swscanf(gmeId, OLESTR("id-%04lx-%08lx"), &c, &p) != 2 ||
+			(c-=100) > OBJTYPE_FOLDER || c < OBJTYPE_MODEL || p > 100000000) 
+		{
+			COMTHROW(("OBJID too big or invalid", 1));
+		}
+		return 100000000 * c + p;
+	}
+
+	uniqueId_type GmeId2UdmId(const char* gmeId) {
+		long p, c;
+		if(sscanf(gmeId, "id-%04lx-%08lx", &c, &p) != 2 ||
+			(c-=100) > OBJTYPE_FOLDER || c < OBJTYPE_MODEL || p > 100000000) 
+		{
+			COMTHROW(("OBJID too big or invalid", 1));
+		}
+		return 100000000 * c + p;
+	}
 
 	uniqueId_type GmeObject::uniqueId() const 
 	{
-		long p, c;
 		SmartBSTR nn;
 		if (__uniqueId_set) return __uniqueId;
 
@@ -2288,12 +2312,7 @@ bbreak:			;
 		else 
 			nn = self->ID;
 
-		if(swscanf(nn, OLESTR("id-%04lx-%08lx"), &c, &p) != 2 ||
-			(c-=100) > OBJTYPE_FOLDER || c < OBJTYPE_MODEL || p > 100000000) 
-		{
-			COMTHROW(("OBJID too big or invalid", 1));
-		}
-		return __set_uniqueId(100000000 * c + p);
+		return __set_uniqueId(GmeId2UdmId(static_cast<const wchar_t*>(nn)));
 	};
 
 

@@ -141,10 +141,13 @@ namespace UdmGme
 		bool hasOpened;
 	};
 
-	// MAKE SURE LINKER LOADS GmeLib
-	extern UDM_DLL int DummyFL;
-	static int *Dummy_For_Linker = &DummyFL;
 
+	// Id conversion routines
+	UDM_DLL string UdmId2GmeId(Udm::Object::uniqueId_type udmId);
+	UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const wchar_t* gmeId);
+	UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const char* gmeId);
+
+	UDM_USE_MGA
 }
 
 #endif//MOBIES_UDMGME_H
