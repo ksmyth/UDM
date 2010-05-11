@@ -32,6 +32,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Running $(ProjectName)"
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_cintstring&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				Outputs="NONE"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -105,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_cintstring&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -125,6 +128,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Running $(ProjectName)"
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_cintstring&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				Outputs="NONE"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -198,7 +204,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_cintstring&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>

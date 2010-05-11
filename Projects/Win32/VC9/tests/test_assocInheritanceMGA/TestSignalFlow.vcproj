@@ -32,6 +32,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Running $(ProjectName)"
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				Outputs="NONE"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -105,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -125,6 +128,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Running $(ProjectName)"
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				Outputs="NONE"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -199,7 +205,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -257,6 +263,27 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp"
 				>
 				<FileConfiguration
@@ -278,27 +305,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -309,10 +315,10 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_assocInheritanceMGA\SignalFlow.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_assocInheritanceMGA\SignalFlow.h"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -321,10 +327,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_assocInheritanceMGA\SignalFlow.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_assocInheritanceMGA\SignalFlow.h"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -383,28 +389,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_assocInheritanceMGA\SignalFlow_udm.xml"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					Description="SignaFlow_udm.xml -&gt; C++ API"
-					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-					Outputs="$(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.h; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
 			RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_assocInheritanceMGA\SignalFlow_udm.xml"
 			>
 			<FileConfiguration
@@ -423,6 +407,28 @@
 					Description="SignaFlow_udm.xml -&gt; C++ API"
 					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.h; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_assocInheritanceMGA\SignalFlow_udm.xml"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					Description="SignaFlow_udm.xml -&gt; C++ API"
+					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					Outputs="$(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.h; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
 				/>
 			</FileConfiguration>
 		</File>

@@ -31,6 +31,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Running $(ProjectName)"
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\testOCL&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				Outputs="NONE"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -96,7 +99,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\tests\testOCL&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -114,6 +117,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Running $(ProjectName)"
+				CommandLine="cd $(SolutionDir)..\..\..\..\tests\testOCL&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				Outputs="NONE"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -177,7 +183,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd $(SolutionDir)..\..\..\..\tests\testOCL&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -194,10 +200,10 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testOCL\SBML2.cpp"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\testOCL\SBML2.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -206,10 +212,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\testOCL\SBML2.cpp"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testOCL\SBML2.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -228,10 +234,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testOCL\SBML2.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\testOCL\SBML2.h"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -240,10 +246,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\testOCL\SBML2.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testOCL\SBML2.h"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -263,6 +269,27 @@
 			>
 		</Filter>
 		<File
+			RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\testOCL\SBML2_udm.xml"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\testOCL&quot; &quot;$(InputPath)&quot; -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g&#x0D;&#x0A;"
+					Outputs="$(OutDir)\Gen\tests\testOCL\SBML2.cpp; $(OutDir)\Gen\tests\testOCL\SBML2.h; $(OutDir)\Gen\tests\testOCL\SBML2.dtd; $(OutDir)\Gen\tests\testOCL\SBML2.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_xsd.h; $(OutDir)\Gen\tests\testOCL\SBML2_math.dtd; $(OutDir)\Gen\tests\testOCL\SBML2_math.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_math_xsd.h; $(OutDir)\Gen\tests\testOCL\SBML2_sbml.dtd; $(OutDir)\Gen\tests\testOCL\SBML2_sbml.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_sbml_xsd.h"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
 			RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testOCL\SBML2_udm.xml"
 			>
 			<FileConfiguration
@@ -281,27 +308,6 @@
 					Description="Udm.exe $(InputName)"
 					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\testOCL&quot; &quot;$(InputPath)&quot; -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g&#x0D;&#x0A;"
 					Outputs="$(OutDir)\Gen\tests\testOCL\SBML2.cpp; $(OutDir)\Gen\tests\testOCL\SBML2.h; $(OutDir)\Gen\tests\testOCL\SBML2.dtd; $(OutDir)\Gen\tests\testOCL\SBML2.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_xsd.h; $(OutDir)\Gen\tests\testOCL\SBML2_math.dtd; $(OutDir)\Gen\tests\testOCL\SBML2_math.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_math_xsd.h; $(OutDir)\Gen\tests\testOCL\SBML2_sbml.dtd; $(OutDir)\Gen\tests\testOCL\SBML2_sbml.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_sbml_xsd.h"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\testOCL\SBML2_udm.xml"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\testOCL&quot; &quot;$(InputPath)&quot; -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g&#x0D;&#x0A;"
-					Outputs="$(OutDir)\Gen\tests\testOCL\SBML2.cpp; $(OutDir)\Gen\tests\testOCL\SBML2.h; $(OutDir)\Gen\tests\testOCL\SBML2.dtd; $(OutDir)\Gen\tests\testOCL\SBML2.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_xsd.h; $(OutDir)\Gen\tests\testOCL\SBML2_math.dtd; $(OutDir)\Gen\tests\testOCL\SBML2_math.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_math_xsd.h; $(OutDir)\Gen\tests\testOCL\SBML2_sbml.dtd; $(OutDir)\Gen\tests\testOCL\SBML2_sbml.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_sbml_xsd.h"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
 				/>
 			</FileConfiguration>
 		</File>

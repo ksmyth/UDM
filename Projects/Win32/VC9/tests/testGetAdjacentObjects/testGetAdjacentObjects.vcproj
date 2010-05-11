@@ -31,6 +31,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Running $(ProjectName)"
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\testGetAdjacentObjects&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				Outputs="NONE"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -96,7 +99,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\tests\testGetAdjacentObjects&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -114,6 +117,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Running $(ProjectName)"
+				CommandLine="cd &quot;$(OutDir)\Gen\tests\testGetAdjacentObjects&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				Outputs="NONE"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -177,7 +183,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\tests\testGetAdjacentObjects&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -194,18 +200,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\PackageA.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\testGetAdjacentObjects\PackageA.cpp"
 				>
 				<FileConfiguration
@@ -218,7 +212,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\PackageB.cpp"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\PackageA.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -242,7 +236,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\PackageB.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -266,6 +260,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\tests\testGetAdjacentObjects\TestGetAdjacentObjects.cpp"
 				>
 			</File>
@@ -275,18 +281,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\PackageA.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
 			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\testGetAdjacentObjects\PackageA.h"
 				>
@@ -300,7 +294,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\PackageB.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\PackageA.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -324,7 +318,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\PackageB.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -340,6 +334,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -382,28 +388,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios_udm.udm"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Generating UDM API files..."
-						CommandLine="&quot;$(OutDir)\udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\testGetAdjacentObjects&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Gen\tests\testGetAdjacentObjects\PackageA.cpp; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageA.h; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageA.xsd; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageB.cpp; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageB.h; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageB.xsd; $(OutDir)\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp; $(OutDir)\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h; $(OutDir)\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.xsd"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\testGetAdjacentObjects\testAssociationScenarios_udm.udm"
 				>
 				<FileConfiguration
@@ -422,6 +406,28 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios_udm.udm"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating UDM API files..."
+						CommandLine="&quot;$(OutDir)\udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\testGetAdjacentObjects&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\Gen\tests\testGetAdjacentObjects\PackageA.cpp; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageA.h; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageA.xsd; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageB.cpp; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageB.h; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageB.xsd; $(OutDir)\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp; $(OutDir)\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h; $(OutDir)\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.xsd"
 					/>
 				</FileConfiguration>
 			</File>
