@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="WINDOWS-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
@@ -220,7 +220,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>
@@ -231,7 +230,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
@@ -245,7 +243,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>
@@ -256,7 +253,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
@@ -275,11 +271,33 @@
 			Name="Generated Files"
 			>
 			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\CL.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_crosslinks\CL.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE"
+					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -291,31 +309,19 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\CL.cpp"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\CL.h"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE"
+					ExcludedFromBuild="true"
 					>
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -332,8 +338,18 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\CL.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\CL_udm.udm"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating UDM API files from $(InputPath)"
+						CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_crosslinks&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;&#x0D;&#x0A;"
+						Outputs="$(OutDir)\Gen\tests\test_crosslinks\Package1.h; $(OutDir)\Gen\tests\test_crosslinks\Package1.cpp; $(OutDir)\Gen\tests\test_crosslinks\Package1.xsd; $(OutDir)\Gen\tests\test_crosslinks\Package2.h; $(OutDir)\Gen\tests\test_crosslinks\Package2.cpp; $(OutDir)\Gen\tests\test_crosslinks\Package2.xsd; $(OutDir)\Gen\tests\test_crosslinks\CL.cpp; $(OutDir)\Gen\tests\test_crosslinks\CL.h; $(OutDir)\Gen\tests\test_crosslinks\CL.xsd; $(OutDir)\Gen\tests\test_crosslinks\CLPackage.cpp; $(OutDir)\Gen\tests\test_crosslinks\CLPackage.h; $(OutDir)\Gen\tests\test_crosslinks\CLPackage.xsd; $(OutDir)\Gen\tests\test_crosslinks\Package2_NSp.xsd; $(OutDir)\Gen\tests\test_crosslinks\Package2_NSp_NSc.xsd"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="true"
@@ -366,16 +382,16 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\CL_udm.udm"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\CLPackage.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
-						Name="VCCustomBuildTool"
-						Description="Generating UDM API files from $(InputPath)"
-						CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_crosslinks&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;&#x0D;&#x0A;"
-						Outputs="$(OutDir)\Gen\tests\test_crosslinks\Package1.h; $(OutDir)\Gen\tests\test_crosslinks\Package1.cpp; $(OutDir)\Gen\tests\test_crosslinks\Package1.xsd; $(OutDir)\Gen\tests\test_crosslinks\Package2.h; $(OutDir)\Gen\tests\test_crosslinks\Package2.cpp; $(OutDir)\Gen\tests\test_crosslinks\Package2.xsd; $(OutDir)\Gen\tests\test_crosslinks\CL.cpp; $(OutDir)\Gen\tests\test_crosslinks\CL.h; $(OutDir)\Gen\tests\test_crosslinks\CL.xsd; $(OutDir)\Gen\tests\test_crosslinks\CLPackage.cpp; $(OutDir)\Gen\tests\test_crosslinks\CLPackage.h; $(OutDir)\Gen\tests\test_crosslinks\CLPackage.xsd; $(OutDir)\Gen\tests\test_crosslinks\Package2_NSp.xsd; $(OutDir)\Gen\tests\test_crosslinks\Package2_NSp_NSc.xsd"
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -383,7 +399,7 @@
 					ExcludedFromBuild="true"
 					>
 					<Tool
-						Name="VCCustomBuildTool"
+						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -404,31 +420,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\CLPackage.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -457,6 +449,28 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\Package1.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_crosslinks\Package1.cpp"
 				>
 				<FileConfiguration
@@ -473,31 +487,19 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\Package1.cpp"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\Package1.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
-						Name="VCCLCompilerTool"
+						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -514,14 +516,24 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\Package1.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\Package2.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+					/>
+				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
-						Name="VCCustomBuildTool"
+						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -542,43 +554,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_crosslinks\Package2.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_crosslinks\Package2.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -587,6 +563,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_crosslinks\Package2.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool

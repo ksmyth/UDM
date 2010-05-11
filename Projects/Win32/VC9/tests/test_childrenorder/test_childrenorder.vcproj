@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="WINDOWS-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
@@ -105,7 +105,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\samples&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;"
+				CommandLine="cd &quot;$(OutDir)\Gen\samples&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -198,7 +198,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cd &quot;$(OutDir)\Gen\samples&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;"
+				CommandLine="cd &quot;$(OutDir)\Gen\samples&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -218,7 +218,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>
@@ -229,7 +228,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
@@ -237,28 +235,6 @@
 			<File
 				RelativePath="..\..\..\..\..\tests\test_childrenorder\childrenorderTest.rc"
 				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram.cpp"
@@ -269,17 +245,37 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE"
+					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
 			</File>
@@ -292,7 +288,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>
@@ -303,7 +298,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
@@ -318,23 +312,27 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCustomBuildTool"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
+					ExcludedFromBuild="true"
+					>
 					<Tool
-						Name="VCCustomBuildTool"/>
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
 				</FileConfiguration>
 			</File>
 			<File

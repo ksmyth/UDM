@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="WINDOWS-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
@@ -218,7 +218,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
@@ -228,7 +227,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>
@@ -237,28 +235,6 @@
 			<File
 				RelativePath="..\..\..\..\..\tests\test_generic\genericTest.rc"
 				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram.cpp"
@@ -277,9 +253,29 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -292,7 +288,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
@@ -302,7 +297,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>
@@ -318,10 +312,10 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram.h"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -330,10 +324,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram.h"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="WINDOWS-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
@@ -194,10 +194,10 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns\test_ns.cpp"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_ns\test_ns.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -206,10 +206,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_ns\test_ns.cpp"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns\test_ns.cpp"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -224,10 +224,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns\test_ns.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_ns\test_ns.h"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -236,10 +236,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_ns\test_ns.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns\test_ns.h"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -254,27 +254,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns\test_ns_udm.xml"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_ns&quot; &quot;$(InputPath)&quot; -t -v"
-					Outputs="$(OutDir)\Gen\tests\test_ns\test_ns.cpp; $(OutDir)\Gen\tests\test_ns\test_ns.h; $(OutDir)\Gen\tests\test_ns\test_ns.dtd; $(OutDir)\Gen\tests\test_ns\test_ns.xsd; $(OutDir)\Gen\tests\test_ns\test_ns_A.dtd; $(OutDir)\Gen\tests\test_ns\test_ns_A.xsd; $(OutDir)\Gen\tests\test_ns\test_ns_B.dtd; $(OutDir)\Gen\tests\test_ns\test_ns_B.xsd; $(OutDir)\Gen\tests\test_ns\test_ns_AB.dtd; $(OutDir)\Gen\tests\test_ns\test_ns_AB.xsd"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-				/>
-			</FileConfiguration>
-		</File>
 		<File
 			RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_ns\test_ns_udm.xml"
 			>
@@ -294,6 +273,27 @@
 					Description="$(OutDir)\Gen\tests\test_ns\test_ns.cpp;$(OutDir)\Gen\tests\test_ns\test_ns.h;$(OutDir)\Gen\tests\test_ns\test_ns.dtd;$(OutDir)\Gen\tests\test_ns\test_ns.xsd;$(OutDir)\Gen\tests\test_ns\test_ns_A.dtd;$(OutDir)\Gen\tests\test_ns\test_ns_A.xsd;$(OutDir)\Gen\tests\test_ns\test_ns_B.dtd;$(OutDir)\Gen\tests\test_ns\test_ns_B.xsd;$(OutDir)\Gen\tests\test_ns\test_ns_AB.dtd;$(OutDir)\Gen\tests\test_ns\test_ns_AB.xsd Udm.exe $(InputFileName)"
 					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_ns&quot; &quot;$(InputPath)&quot; -t -v&#x0D;&#x0A;"
 					Outputs="$(OutDir)\Gen\tests\test_ns\test_ns.cpp;$(OutDir)\Gen\tests\test_ns\test_ns.h;$(OutDir)\Gen\tests\test_ns\test_ns.dtd;$(OutDir)\Gen\tests\test_ns\test_ns.xsd;$(OutDir)\Gen\tests\test_ns\test_ns_A.dtd;$(OutDir)\Gen\tests\test_ns\test_ns_A.xsd;$(OutDir)\Gen\tests\test_ns\test_ns_B.dtd;$(OutDir)\Gen\tests\test_ns\test_ns_B.xsd;$(OutDir)\Gen\tests\test_ns\test_ns_AB.dtd;$(OutDir)\Gen\tests\test_ns\test_ns_AB.xsd"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_ns\test_ns_udm.xml"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_ns&quot; &quot;$(InputPath)&quot; -t -v&#x0D;&#x0A;"
+					Outputs="$(OutDir)\Gen\tests\test_ns\test_ns.cpp; $(OutDir)\Gen\tests\test_ns\test_ns.h; $(OutDir)\Gen\tests\test_ns\test_ns.dtd; $(OutDir)\Gen\tests\test_ns\test_ns.xsd; $(OutDir)\Gen\tests\test_ns\test_ns_A.dtd; $(OutDir)\Gen\tests\test_ns\test_ns_A.xsd; $(OutDir)\Gen\tests\test_ns\test_ns_B.dtd; $(OutDir)\Gen\tests\test_ns\test_ns_B.xsd; $(OutDir)\Gen\tests\test_ns\test_ns_AB.dtd; $(OutDir)\Gen\tests\test_ns\test_ns_AB.xsd"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
 				/>
 			</FileConfiguration>
 		</File>

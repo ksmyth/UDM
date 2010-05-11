@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="WINDOWS-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
@@ -218,7 +218,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
@@ -228,7 +227,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>
@@ -243,7 +241,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
@@ -253,7 +250,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>

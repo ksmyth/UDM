@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="WINDOWS-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
@@ -218,7 +218,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
@@ -228,7 +227,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>
@@ -237,28 +235,6 @@
 			<File
 				RelativePath="..\..\..\..\..\tests\test_generic2\genericTest.rc"
 				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_generic2\LampDiagram.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_generic2\LampDiagram.cpp"
@@ -277,9 +253,29 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_generic2\LampDiagram.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
 			</File>
@@ -292,7 +288,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="2"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
@@ -302,7 +297,6 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						Optimization="0"
-						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 					/>
@@ -318,10 +312,10 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_generic2\LampDiagram.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_generic2\LampDiagram.h"
 				>
 				<FileConfiguration
-					Name="Debug|Win32"
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -330,10 +324,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\tests\test_generic2\LampDiagram.h"
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\tests\test_generic2\LampDiagram.h"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -348,36 +342,45 @@
 		</Filter>
 		<Filter
 			Name="UML Diagrams"
-			Filter="xml">
+			Filter="xml"
+			>
 			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram_udm.xml">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="LampDiagram_udm.xml -&gt; C++ API"
-						CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_generic2&quot; &quot;$(InputPath)&quot; -v --leesa
-"
-						Outputs="$(OutDir)\Gen\tests\test_generic2\LampDiagram.xsd; $(OutDir)\Gen\tests\test_generic2\LampDiagram.cpp; $(OutDir)\Gen\tests\test_generic2\LampDiagram.h"/>
-				</FileConfiguration>
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram_udm.xml"
+				>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE"/>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\Build\Win32\VC9\Release\Gen\samples\LampDiagram_udm.xml">
-				<FileConfiguration
-					Name="Release|Win32">
+					>
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="LampDiagram_udm.xml -&gt; C++ API"
-						CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_generic2&quot; &quot;$(InputPath)&quot; -v --leesa
-"
-						Outputs="$(OutDir)\Gen\tests\test_generic2\LampDiagram.xsd; $(OutDir)\Gen\tests\test_generic2\LampDiagram.cpp; $(OutDir)\Gen\tests\test_generic2\LampDiagram.h"/>
+						CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_generic2&quot; &quot;$(InputPath)&quot; -v --leesa&#x0D;&#x0A;"
+						Outputs="$(OutDir)\Gen\tests\test_generic2\LampDiagram.xsd; $(OutDir)\Gen\tests\test_generic2\LampDiagram.cpp; $(OutDir)\Gen\tests\test_generic2\LampDiagram.h"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32"
-					ExcludedFromBuild="TRUE"/>
+					ExcludedFromBuild="true"
+					>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram_udm.xml"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="LampDiagram_udm.xml -&gt; C++ API"
+						CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_generic2&quot; &quot;$(InputPath)&quot; -v --leesa&#x0D;&#x0A;"
+						Outputs="$(OutDir)\Gen\tests\test_generic2\LampDiagram.xsd; $(OutDir)\Gen\tests\test_generic2\LampDiagram.cpp; $(OutDir)\Gen\tests\test_generic2\LampDiagram.h"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>
