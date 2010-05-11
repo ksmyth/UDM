@@ -4,11 +4,17 @@
 
 #include "AssociationInheritanceTest.h"
 
+#ifdef _WIN32
+UDM_USE_MGA
+#endif
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 using namespace SignalFlow;
+
+CPPUNIT_TEST_SUITE_REGISTRATION(CAssociationInheritanceTest);
 
 CAssociationInheritanceTest::CAssociationInheritanceTest()
 {
@@ -39,13 +45,10 @@ void CAssociationInheritanceTest::TestAssociationInheritance()
 	Signal sf = Signal::Cast(bsf);	//It failed, before bug was fixed would throw invalid cast
 
 	nw1.CloseNoUpdate();
-	CPPUNIT_ASSERT(true /*made it here with no Exception*/);
 	}
-
 	catch(const udm_exception &e)	{
-		cout << endl << "Exception: " << e.what()  << endl;
-		CPPUNIT_ASSERT(false /* Exception occured */);
-	} 
+		CPPUNIT_ASSERT_MESSAGE(e.what(), 0);
+	}
 }
 
 void CAssociationInheritanceTest::setUp()

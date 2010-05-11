@@ -1,50 +1,23 @@
-#include "SignalFlow.h"
-
-#ifdef _WIN32
-UDM_USE_MGA
-#endif
-
-//UDM_USE_DOM
-
-
-#include <Uml.h>
-#include <UdmStatic.h>
-#include <UmlExt.h>
-#include <UdmBase.h>
-
-#include <cppunit/TestResult.h>
-#include <cppunit/TestResultCollector.h>
-#include <cppunit/TestRunner.h>
-#include <cppunit/TextTestProgressListener.h>
 #include <cppunit/CompilerOutputter.h>
 
-#include "AssociationInheritanceTest.h"
+#include <cppunit/ui/text/TestRunner.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 int main(int argc, char* argv[])
 {
+	CPPUNIT_NS::Test *suite = CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest();
 
-	// Create the event manager and test controller
-	CPPUNIT_NS::TestResult controller;
+	// Adds the test to the list of test to run
+	CPPUNIT_NS::TextUi::TestRunner runner;
+	runner.addTest( suite );
 
-	// Add a listener that colllects test results
-	CPPUNIT_NS::TestResultCollector result;
-	controller.addListener( &result );        
+	// Change the default outputter to a compiler error format outputter
+	runner.setOutputter( new CPPUNIT_NS::CompilerOutputter( &runner.result(),
+                                                       std::cerr ) );
+	// Run the test.
+	bool wasSucessful = runner.run();
 
-	// Add a listener that prints dots as tests run.
-	CPPUNIT_NS::TextTestProgressListener progress;
-	controller.addListener( &progress ); 
-
-	CPPUNIT_NS::TestRunner runner;
-	runner.addTest( CAssociationInheritanceTest::suite() );
-	runner.run(controller,"");
-
-	// Print test results in a compiler like format.
-    CPPUNIT_NS::CompilerOutputter outputter( &result, std::cerr );
-    outputter.write(); 
-
-
-	return 0;
+	// Return error code 1 if the one of test failed.
+	return wasSucessful ? 0 : 1;
+	
 }
-
-
-

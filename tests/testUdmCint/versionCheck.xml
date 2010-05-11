@@ -7,7 +7,7 @@
       xsi:schemaLocation="http://www.sbml.org/sbml/level2
                             SBML2Ex_sbml.xsd"
 
-      version="2" level="2">
+      version="1" level="2">
 <model id="versionCheck" name="versionCheck">
 
 <!--

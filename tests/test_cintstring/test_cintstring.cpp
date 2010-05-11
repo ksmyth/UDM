@@ -1,12 +1,7 @@
-// test_cintstring.cpp : Defines the entry point for the console application.
-//
-
-//#include "stdafx.h"
-#include <UdmBase.h>
-#include <cint_string.h>
 #include <cppunit/CompilerOutputter.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
+
 #include <cppunit/ui/text/TestRunner.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 int main(int argc, char* argv[])
 {

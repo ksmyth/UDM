@@ -23,7 +23,7 @@ bool UdmTests::remove_test_files = true;
 
 void UdmTests::LibsTest::removeFile(const string &pathname)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	_unlink(pathname.c_str());
 #else
 	unlink(pathname.c_str());

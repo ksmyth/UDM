@@ -2,7 +2,6 @@
 #include <UdmBase.h>
 
 
-// Registers the fixture into the 'registry'
 
 
 
@@ -14,6 +13,9 @@
 #include "SBML2.h"
 #include <stdexcept>
 #include "Test.h"
+
+// Registers the fixture into the 'registry'
+CPPUNIT_TEST_SUITE_REGISTRATION(UdmTests::Test);
 
 /*
 #include  "sbml_xsd.h"
@@ -34,7 +36,7 @@ void UdmTests::Test::readSBML(const std::string& fname)
 
   std::ifstream in(fname.c_str());
   if (!in.good())
-    throw std::runtime_error("File could not open");
+    throw std::runtime_error("Could not open " + fname);
 
   std::stringstream ins;
   ins << in.rdbuf();
@@ -59,7 +61,7 @@ void UdmTests::Test::readTest()
 
   std::ifstream in("test.xml");
   if (!in.good())
-    throw std::runtime_error("File could not open");
+    throw std::runtime_error("Could not open test.xml");
 
   std::stringstream ins;
   ins << in.rdbuf();
@@ -199,11 +201,7 @@ void UdmTests::Test::evaluate(const ::Uml::Diagram& metaDiagram,
 	}
 	catch ( const udm_exception& ex )
 	{
-		out << "failed" << std::endl;
-		out << ex.what() ;
-	}
-	catch (... )
-	{
+		CPPUNIT_ASSERT_MESSAGE(ex.what(), 0);
 	}
 
 	Ocl::UnInitialize( metaDiagram );
@@ -219,7 +217,7 @@ void UdmTests::Test::read(const std::string& fname,
   std::ostringstream tmp;
   std::ifstream in(fname.c_str());
   if (!in.good())
-    throw std::runtime_error("File could not open");
+    throw std::runtime_error("Could not open " + fname);
 
   ins << in.rdbuf();
 

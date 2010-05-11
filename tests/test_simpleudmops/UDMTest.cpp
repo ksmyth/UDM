@@ -10,6 +10,8 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+CPPUNIT_TEST_SUITE_REGISTRATION( CUDMTest );
+
 CUDMTest::CUDMTest():m_xmlfile(LampDiagram::diagram)
 {
 
