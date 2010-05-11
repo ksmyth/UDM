@@ -183,6 +183,7 @@ int main(int argc, char* argv[])
 	catch(udm_exception &e)
 	{
 		cout << e.what() << endl;
+		return 11;
 	};
 
 	return 0;
