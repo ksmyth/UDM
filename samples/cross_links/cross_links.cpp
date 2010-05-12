@@ -25,9 +25,9 @@ int main_static(int argc, char * argv[])
 		Udm::SmartDataNetwork sm2(CD2::diagram);
 		Udm::SmartDataNetwork sm3(CD3::diagram);
 
-		sm1.CreateNew("sm1.xml", "CD1", CD1::M1::meta);
-		sm2.CreateNew("sm2.xml", "CD2", CD2::M2::meta);
-		sm3.CreateNew("sm3.xml", "CD3", CD3::MM3::meta);
+		sm1.CreateNew("sm1.xml", "CD1", CD1::M1::meta, Udm::CHANGES_LOST_DEFAULT);
+		sm2.CreateNew("sm2.xml", "CD2", CD2::M2::meta, Udm::CHANGES_LOST_DEFAULT);
+		sm3.CreateNew("sm3.xml", "CD3", CD3::MM3::meta, Udm::CHANGES_LOST_DEFAULT);
 
 		CD1::M1 m1 = CD1::M1::Cast(sm1.GetRootObject());
 		CD2::M2 m2 = CD2::M2::Cast(sm2.GetRootObject());
@@ -62,6 +62,9 @@ int main_static(int argc, char * argv[])
 		m3.src() = a;
 
 
+		sm1.CloseWithUpdate();
+		sm2.CloseWithUpdate();
+		sm3.CloseWithUpdate();
 	}
 	catch (udm_exception &e)
 	{

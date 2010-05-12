@@ -35,14 +35,14 @@ void CUDMTest::tearDown()
 
 void CUDMTest::TestFileCreation()
 {
-	m_xmlfile.CreateNew( "abc.xml", "LampDiagram.xsd", LampDiagram::RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
+	m_xmlfile.CreateNew( "abc.xml", "LampDiagram.xsd", LampDiagram::RootFolder::meta, Udm::CHANGES_LOST_DEFAULT);
 		
 	CPPUNIT_ASSERT((m_root = LampDiagram::RootFolder::Cast(m_xmlfile.GetRootObject())));
 }
 
 void CUDMTest::TestObjectCreation()
 {
-	m_xmlfile.OpenExisting( "abc.xml", "LampDiagram.xsd", Udm::CHANGES_PERSIST_ALWAYS);
+	m_xmlfile.OpenExisting( "abc.xml", "LampDiagram.xsd", Udm::CHANGES_LOST_DEFAULT);
 	m_root = LampDiagram::RootFolder::Cast(m_xmlfile.GetRootObject());
 
 	//test that each item is successfully created
@@ -132,7 +132,7 @@ void CUDMTest::GetNetwork()
 {
 	//cppunit uses a separate instance of this class to run each test
 	//rebuild the existing network
-	m_xmlfile.OpenExisting( "abc.xml", "LampDiagram.xsd", Udm::CHANGES_PERSIST_ALWAYS);
+	m_xmlfile.OpenExisting( "abc.xml", "LampDiagram.xsd", Udm::CHANGES_LOST_DEFAULT);
 	m_root = LampDiagram::RootFolder::Cast(m_xmlfile.GetRootObject());
 	set<LampDiagram::Lamp> lamps = m_root.Lamp_kind_children();
 	m_lamp = *(lamps.begin());
