@@ -739,16 +739,20 @@
 	<target name="ds-test" description="Run unit tests on ${dspackage}.">
 		<echo> Test ${dspackage}... </echo>
 		<fail unless="dspackage" message="Missing parameter: dspackage" />
-		
+
+		<!-- on Windows, the PATH for the junit call is inherited with the assumption that scripts/VC9-env.bat was called before ant was invoked -->
+		<condition property="test.pathvar" value="UNNEEDED">
+			<isset property="isWindows"/>
+		</condition>
+		<property name="test.pathvar" value="PATH" />
 		<!-- Run junit tests -->
 		<junit fork="yes" dir="${build.dir}/${dspackage}">
 			<!-- This is necessary for System.load("UdmSwig") to succeed -->
 			<jvmarg value="-Djava.library.path=${judm.dir}${path.separator}${judm.dir}/bin${path.separator}${udm.bin.dir}/../lib/.libs" />
 			<jvmarg value="-Djava.util.logging.config.file=${udmswiglight.src.dir}/debug-logging.properties" />
 			<!-- We need to add the dir containing the DLLs that UdmSwig depends on
-				to the PATH rather than java.library.path. Unfortunately they won't be
-				loaded when they are not added. -->
-			<env key="PATH" path="${judm.dir}${path.separator}${judm.dir}/bin"/>
+				to the PATH rather than java.library.path.  -->
+			<env key="${test.pathvar}" path="${judm.dir}${path.separator}${judm.dir}/bin"/>
 			<classpath>
 				<path refid="compile.classpath" />
 				<pathelement location="${build.dir}/${dspackage}/classes/main" />
