@@ -38,7 +38,7 @@
 						<uptodate srcfile="${udm.bin.dir}/Udm.exe" targetfile="${udm.bin.dir}/UdmD.exe" />
 					</and>
 				</or>
-				</and>
+			</and>
 		</condition>
 		<!-- when ant is upgraded, remove this and use "else" in the previous condition -->
 		<condition property="udm.bin.exe" value="Udm.exe">
