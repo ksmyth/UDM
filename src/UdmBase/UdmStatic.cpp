@@ -283,6 +283,8 @@ namespace UdmStatic
 				so_set.erase(so_set_i);
 			};
 
+			while (!SDNMap.empty())
+				delete *SDNMap.rbegin();
 			SDNMap.clear();
 		};
 	
