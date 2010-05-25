@@ -86,7 +86,17 @@ function main()
 		}
 		catch(e)
 		{
-			WScript.Echo("ERROR: Cannot find where Visual Studio 2008 is installed.");
+			try
+			{
+				var strVC9ExKey = "HKLM\\Software\\Microsoft\\VCExpress\\9.0\\Setup\\VC\\ProductDir";
+				strValue = WSShell.RegRead(strVC9ExKey);
+			}
+			catch(e)
+			{
+				WScript.Echo("ERROR: Cannot find where Visual Studio 2008 is installed.");
+				return;
+			}
+			WScript.Echo("Visual Studio Express doesn't support Wizards. UdmInterpreter Wizard will be unavailable.");
 			return;
 		}
 	}
