@@ -202,7 +202,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 			}
 
 			::UdmDom::DomDataNetwork dn(::Uml::diagram);
-			dn.CreateNew((LPCTSTR) filepath, "Uml", ::Uml::Diagram::meta, Udm::CHANGES_PERSIST_ALWAYS);
+			dn.CreateNew((LPCTSTR) filepath, "Uml", ::Uml::Diagram::meta, Udm::CHANGES_LOST_DEFAULT);
 
 			package->SetUmlDiagram(::Uml::Diagram::Cast(dn.GetRootObject()));
 			package->BuildUML();
