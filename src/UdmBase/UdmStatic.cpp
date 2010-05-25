@@ -2532,7 +2532,17 @@ namespace UdmStatic
 
 	};
 	
-	
+	static void DeSerializeString(FILE* f, std::string &result) {
+		result.reserve(500);
+		char t;
+		do
+		{
+			if(!fread(&t, sizeof(char), 1, f))
+				throw udm_exception("can't read from file, probably MEM file is corrupt");
+			result.push_back(t);
+		} while (t != 0x00);
+		result.erase(result.end() - 1); // remove terminating nul
+	}
 
 	unsigned long StaticDataNetwork::DeSerialize(FILE *f, map<unsigned long, const StaticObject*>& tr_map,  Object & root_o)
 	{
@@ -2609,30 +2619,10 @@ namespace UdmStatic
 
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
 			}
-			read+= sizeof(unsigned long);
 
 			//read my type from file
-			static char type_name[MAX_NAME+1];
-			static string stl_type_name;
-
-			static char * type_name_p;
-			type_name_p = type_name;
-
-			static char t;
-			static int i;
-			
-			i = 0;
-			do
-			{
-				if (!fread(&t, sizeof(char), 1, f))
-					throw udm_exception("can't read from file, probably MEM file is corrupted");
-
-				*type_name_p++ = t; i++;
-
-			} while ((t != 0x00 )&& (i < MAX_NAME));
-			if (t != 0x00) throw udm_exception("MEM file corrupt!");
-			read += strlen(type_name) + 1;
-			stl_type_name = type_name;
+			string stl_type_name;
+			DeSerializeString(f, stl_type_name);
 			if (stl_type_name.at(0) == ':') stl_type_name.erase(0, 1);
 			
 			//now we have the type name.
@@ -2675,18 +2665,15 @@ namespace UdmStatic
 			static unsigned long archetype_id;
 			if (!fread(&archetype_id, sizeof(unsigned long), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(unsigned long);
 
 			static bool subtype_val;
 			if (!fread(&subtype_val, sizeof(bool), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(bool);
 
 
 			static bool real_archetype_val;
 			if (!fread(&real_archetype_val, sizeof(bool), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(bool);
 
 
 			//create &obtain reference to  a safe type
@@ -2729,16 +2716,14 @@ namespace UdmStatic
 			if (!fread(&children_no, sizeof(unsigned long), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
 
-			read+= sizeof(unsigned long);
-
 			role_key.first = type;		//set the first part of the key to our type, this remains the same when adding childrens and associations
 			//composition child roles are ordered in the file
 			//so we just make use of this
 
-			static char ccr_name_prev[MAX_NAME + 1];
+			static string ccr_name_prev;
 			static ::Uml::CompositionChildRole ccr;
 
-			*ccr_name_prev = '\0';	//reset previous child role name to empty string
+			ccr_name_prev = "";	//reset previous child role name to empty string
 			ccr = &Udm::_null;		//reset previous composition child role to null
 
 			//for each children
@@ -2746,28 +2731,16 @@ namespace UdmStatic
 			for (j = 0; j < children_no; j++)
 			{
 				//read composition childrole
-				static char ccr_name[MAX_NAME+1];
-				static char * ccr_name_p;
-				ccr_name_p = ccr_name;
-				i = 0;
-				do
-				{
-					if (!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupted");
-					*ccr_name_p++ = t; i++;
-
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(ccr_name) + 1;
+				string ccr_name;
+				DeSerializeString(f, ccr_name);
 
 				//read children's unique ID
 				static unsigned long child_id;
 				if (!fread(&child_id, sizeof(unsigned long), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read += sizeof(unsigned long);
 
 				// libroot child
-				if (strlen(ccr_name) == 0) {
+				if (ccr_name.length() == 0) {
 					pair<uniqueId_type const, StaticObject*> m_ch_item(0, reinterpret_cast<StaticObject*>(child_id));
 					so->m_children.insert(m_ch_item);
 					continue;
@@ -2775,10 +2748,10 @@ namespace UdmStatic
 				
 				
 				//Level 1 cache: there's is a chance that it's the same childrole name as with the previous child
-				if (strcmp(ccr_name, ccr_name_prev) || !ccr)
+				if (ccr_name != ccr_name_prev || !ccr)
 				{
 					ccr = &Udm::_null;
-					strcpy(ccr_name_prev, ccr_name);
+					ccr_name_prev = ccr_name;
 				
 					//level 2 cache, check with the ccr_cache map
 					role_key.second = ccr_name;
@@ -2832,7 +2805,7 @@ namespace UdmStatic
 							}
 							if	(ccr) break;
 						}
-						if (!ccr) throw udm_exception(string(" Composition child role ") + string(ccr_name) + string(" was not found in meta information"));
+						if (!ccr) throw udm_exception(string(" Composition child role ") + ccr_name + string(" was not found in meta information"));
 					}
 					else
 						ccr = (*cc_i).second;
@@ -2857,42 +2830,25 @@ namespace UdmStatic
 			static unsigned long ass_no;
 			if (!fread(&ass_no, sizeof(unsigned long), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(unsigned long);
 
-			static ::Uml::AssociationRole asr;
-			static char asr_name_prev[MAX_NAME+1];
-
-			asr = &Udm::_null;
-			*asr_name_prev = '\0';
+			::Uml::AssociationRole asr;
+			string asr_name_prev;
 
 			//for each association
 			for (j = 0; j < ass_no; j++)
 			{
 				//read composition childrole
-				static char asr_name[MAX_NAME+1];
-				static char * asr_name_p;
-				asr_name_p = asr_name;
-				i = 0;
-				do
-				{
-					if (!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupt");
-					*asr_name_p++ = t; i++;
-
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(asr_name) + 1;
-
-
+				string asr_name;
+				DeSerializeString(f, asr_name);
 
 				//find composition childrole
 				//as theother's of my composition parent roles
 				//need to consider here my ancestor's, too
 				//static ::Uml::AssociationRole asr;
 				
-				if (strcmp(asr_name, asr_name_prev) || !asr)
+				if (asr_name != asr_name_prev || !asr)
 				{	//level 1 cache failed
-					strcpy(asr_name_prev, asr_name);
+					asr_name_prev = asr_name;
 					asr = &Udm::_null;
 					
 					//level 2 cache
@@ -2973,7 +2929,6 @@ namespace UdmStatic
 				static unsigned long assed_id;
 				if (!fread(&assed_id, sizeof(unsigned long), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read += sizeof(unsigned long);
 
 				//insert into  associations map 
 				//since our associated objects are not created yet, 
@@ -3023,48 +2978,26 @@ namespace UdmStatic
 			static unsigned long sa_no;
 			if (!fread(&sa_no, sizeof(unsigned long), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(unsigned long);
 			
 			//for each string attribute
 			for (j = 0; j < sa_no; j++)
 			{
 				
 				//read the attribute name
-				static char sa_name[MAX_NAME+1];
-				static char * sa_name_p;
-				sa_name_p = sa_name;
-				i = 0;
-				do
-				{
-					if (!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupt");
-					*sa_name_p++ = t; i++;
-
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(sa_name) + 1;
+				string sa_name;
+				DeSerializeString(f, sa_name);
 
 				//get its id from the att_map 
 				static map<string, uniqueId_type>::iterator sa_i;
-				sa_i = att_map.find(string(sa_name));
-				if (sa_i == att_map.end()) throw udm_exception(string("Attribute: '") + string(sa_name) + string("' was not found for class ") + (string)type.name());
+				sa_i = att_map.find(sa_name);
+				if (sa_i == att_map.end()) throw udm_exception(string("Attribute: '") + sa_name + string("' was not found for class ") + (string)type.name());
 				
 				//read the attribute value
 
 				std::string sa_val;
-				sa_val.reserve(10*MAX_NAME);
-				do
-				{
-					if(!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupt");
-					sa_val.push_back(t);
-				} while (t != 0x00);
-				read += sa_val.length();
-				sa_val.erase(sa_val.end() - 1); // remove terminating nul
-
+				DeSerializeString(f, sa_val);
 
 				//add the attribute to the object
-			
 				
 				pair<uniqueId_type const, string> sa_item((*sa_i).second, sa_val );
 				
@@ -3077,7 +3010,6 @@ namespace UdmStatic
 				static bool desynched_val;
 				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*sa_i).second);
 
 
@@ -3087,37 +3019,24 @@ namespace UdmStatic
 			//read the boolean attributes
 			static unsigned long ba_no;
 			fread(&ba_no, sizeof(unsigned long), 1, f);
-			read+= sizeof(unsigned long);
 
 			//for each bool attribute
 			for (j = 0; j < ba_no; j++)
 			{
 			
 				//read the attribute name
-				static char ba_name[MAX_NAME+1];
-				static char * ba_name_p;
-				ba_name_p = ba_name;
-				i = 0;
-				do
-				{
-					if(!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupted");
-					*ba_name_p++ = t; i++;
+				string ba_name;
+				DeSerializeString(f, ba_name);
 
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(ba_name) + 1;
-
-				//get it's id from the att_map 
+				//get its id from the att_map 
 				static map<string, uniqueId_type>::iterator ba_i;
-				ba_i = att_map.find(string(ba_name));
-				if (ba_i == att_map.end()) throw udm_exception(string("Attribute: ") + string(ba_name) + string(" was not found for class ") + (string)type.name());
+				ba_i = att_map.find(ba_name);
+				if (ba_i == att_map.end()) throw udm_exception(string("Attribute: ") + ba_name + string(" was not found for class ") + (string)type.name());
 				
 				//read the attribute value
 				static bool ba_val;
 				if(!fread(&ba_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read += sizeof(bool);
 
 				// add the attribute to the object
 				//uniqueId_type ba_id = (*ba_i).second;
@@ -3137,7 +3056,6 @@ namespace UdmStatic
 				static bool desynched_val;
 				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ba_i).second);
 
 
@@ -3147,35 +3065,23 @@ namespace UdmStatic
 			static unsigned long ia_no;
 			if(!fread(&ia_no, sizeof(unsigned long), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(unsigned long);
 
 			//for each integer attribute
 			for (j = 0; j < ia_no; j++)
 			{
 			
 				//read the attribute name
-				static char ia_name[MAX_NAME+1];
-				static char * ia_name_p;
-				ia_name_p = ia_name;
-				i = 0;
-				do
-				{
-					fread(&t, sizeof(char), 1, f);
-					*ia_name_p++ = t; i++;
-
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(ia_name) + 1;
+				string ia_name;
+				DeSerializeString(f, ia_name);
 
 				//get it's id from the att_map 
 				static map<string, uniqueId_type>::iterator ia_i;
-				ia_i = att_map.find(string(ia_name));
-				if (ia_i == att_map.end()) throw udm_exception(string("Attribute: ") + string(ia_name) + string(" was not found for class ") + (string)type.name());
+				ia_i = att_map.find(ia_name);
+				if (ia_i == att_map.end()) throw udm_exception(string("Attribute: ") + ia_name + string(" was not found for class ") + (string)type.name());
 				
 				//read the attribute value
 				static __int64 ia_val;
 				fread(&ia_val, sizeof(__int64), 1, f);
-				read += sizeof(__int64);
 
 				// add the attribute to the object
 				//uniqueId_type ia_id = (*ia_i).second;
@@ -3193,7 +3099,6 @@ namespace UdmStatic
 				static bool desynched_val;
 				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ia_i).second);
 
 
@@ -3204,35 +3109,23 @@ namespace UdmStatic
 			static unsigned long ra_no;
 			if(!fread(&ra_no, sizeof(unsigned long), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(unsigned long);
 
 			//for each real attribute
 			for (j = 0; j < ra_no; j++)
 			{
 			
 				//read the attribute name
-				static char ra_name[MAX_NAME+1];
-				static char * ra_name_p;
-				ra_name_p = ra_name;
-				i = 0;
-				do
-				{
-					fread(&t, sizeof(char), 1, f);
-					*ra_name_p++ = t; i++;
-
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(ra_name) + 1;
+				string ra_name;
+				DeSerializeString(f, ra_name);
 
 				//get it's id from the att_map 
 				static map<string, uniqueId_type>::iterator ra_i;
-				ra_i = att_map.find(string(ra_name));
-				if (ra_i == att_map.end()) throw udm_exception	(string("Attribute: ") + string(ra_name) + string(" was not found for class ") + (string)type.name());
+				ra_i = att_map.find(ra_name);
+				if (ra_i == att_map.end()) throw udm_exception	(string("Attribute: ") + ra_name + string(" was not found for class ") + (string)type.name());
 				
 				//read the attribute value
 				static double ra_val;
 				fread(&ra_val, sizeof(double), 1, f);
-				read += sizeof(double);
 
 				// add the attribute to the object
 				//uniqueId_type ra_id = (*ra_i).second;
@@ -3251,7 +3144,6 @@ namespace UdmStatic
 				static bool desynched_val;
 				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ra_i).second);
 
 
@@ -3261,37 +3153,24 @@ namespace UdmStatic
 			static unsigned long sa_arr_no;
 			if (!fread(&sa_arr_no, sizeof(unsigned long), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(unsigned long);
 			
 			//for each string attribute
 			for (j = 0; j < sa_arr_no; j++)
 			{
 				
 				//read the attribute name
-				static char sa_arr_name[MAX_NAME+1];
-				static char * sa_arr_name_p;
-				sa_arr_name_p = sa_arr_name;
-				i = 0;
-				do
-				{
-					if (!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupted");
-					*sa_arr_name_p++ = t; i++;
-
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(sa_arr_name) + 1;
+				string sa_arr_name;
+				DeSerializeString(f, sa_arr_name);
 
 				//get it's id from the att_map 
 				static map<string, uniqueId_type>::iterator sa_arr_i;
-				sa_arr_i = att_map.find(string(sa_arr_name));
-				if (sa_arr_i == att_map.end()) throw udm_exception(string("Attribute: ") + string(sa_arr_name) + string(" was not found for class ") + (string)type.name());
+				sa_arr_i = att_map.find(sa_arr_name);
+				if (sa_arr_i == att_map.end()) throw udm_exception(string("Attribute: ") + sa_arr_name + string(" was not found for class ") + (string)type.name());
 				
 				//read the number of attributes
 				static unsigned long sa_arr_item_no;
 				if (!fread(&sa_arr_item_no, sizeof(unsigned long), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(unsigned long);
 			
 				static vector<string> sa_arr_value;
 				if (!sa_arr_value.empty()) sa_arr_value.erase(sa_arr_value.begin(), sa_arr_value.end());
@@ -3302,19 +3181,8 @@ namespace UdmStatic
 				for( sa_arr_item_count = 0; sa_arr_item_count < sa_arr_item_no; sa_arr_item_count++)
 				{
 					//read the attribute value
-					static char sa_val[10*MAX_NAME+1];
-					static char * sa_val_p;
-					sa_val_p = sa_val;
-					i = 0;
-					do
-					{
-						if(!fread(&t, sizeof(char), 1, f))
-							throw udm_exception("can't read from file, probably MEM file is corrupted");
-						*sa_val_p++ = t; i++;
-
-					} while ((t != 0x00 )&& (i < 10*MAX_NAME));
-					if (t != 0x00) throw udm_exception("MEM file corrupt!");
-					read += strlen(sa_val) + 1;
+					string sa_val;
+					DeSerializeString(f, sa_val);
 					sa_arr_value.push_back(sa_val);
 				}
 				//add the attribute to the object
@@ -3333,7 +3201,6 @@ namespace UdmStatic
 				static bool desynched_val;
 				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*sa_arr_i).second);
 
 
@@ -3343,37 +3210,24 @@ namespace UdmStatic
 			static unsigned long ba_arr_no;
 			if (!fread(&ba_arr_no, sizeof(unsigned long), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(unsigned long);
 			
 			//for each boolean array attribute
 			for (j = 0; j < ba_arr_no; j++)
 			{
 				
 				//read the attribute name
-				static char ba_arr_name[MAX_NAME+1];
-				static char * ba_arr_name_p;
-				ba_arr_name_p = ba_arr_name;
-				i = 0;
-				do
-				{
-					if (!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupted");
-					*ba_arr_name_p++ = t; i++;
-
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(ba_arr_name) + 1;
+				string ba_arr_name;
+				DeSerializeString(f, ba_arr_name);
 
 				//get it's id from the att_map 
 				static map<string, uniqueId_type>::iterator ba_arr_i;
-				ba_arr_i = att_map.find(string(ba_arr_name));
-				if (ba_arr_i == att_map.end()) throw udm_exception(string("Attribute: ") + string(ba_arr_name) + string(" was not found for class ") + (string)type.name());
+				ba_arr_i = att_map.find(ba_arr_name);
+				if (ba_arr_i == att_map.end()) throw udm_exception(string("Attribute: ") + ba_arr_name + string(" was not found for class ") + (string)type.name());
 				
 				//read the number of attributes
 				static unsigned long ba_arr_item_no;
 				if (!fread(&ba_arr_item_no, sizeof(unsigned long), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(unsigned long);
 			
 				static vector<bool> ba_arr_value;
 				if (!ba_arr_value.empty()) ba_arr_value.erase(ba_arr_value.begin(), ba_arr_value.end());
@@ -3387,7 +3241,6 @@ namespace UdmStatic
 				//read in the array from file
 				if(!fread(bool_val, sizeof(bool), ba_arr_item_no, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read += sizeof(bool) * ba_arr_item_no;
 	
 				//add to vector
 				for (ba_arr_item_count=0; ba_arr_item_count < ba_arr_item_no; ba_arr_item_count++)
@@ -3411,7 +3264,6 @@ namespace UdmStatic
 				static bool desynched_val;
 				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ba_arr_i).second);
 
 
@@ -3421,37 +3273,24 @@ namespace UdmStatic
 			static unsigned long ia_arr_no;
 			if (!fread(&ia_arr_no, sizeof(unsigned long), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(unsigned long);
 			
 			//for each boolean array attribute
 			for (j = 0; j < ia_arr_no; j++)
 			{
 				
 				//read the attribute name
-				static char ia_arr_name[MAX_NAME+1];
-				static char * ia_arr_name_p;
-				ia_arr_name_p = ia_arr_name;
-				i = 0;
-				do
-				{
-					if (!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupted");
-					*ia_arr_name_p++ = t; i++;
-
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(ia_arr_name) + 1;
+				string ia_arr_name;
+				DeSerializeString(f, ia_arr_name);
 
 				//get it's id from the att_map 
-				static map<string, uniqueId_type>::iterator ia_arr_i;
-				ia_arr_i = att_map.find(string(ia_arr_name));
-				if (ia_arr_i == att_map.end()) throw udm_exception(string("Attribute: ") + string(ia_arr_name) + string(" was not found for class ") + (string)type.name());
+				map<string, uniqueId_type>::iterator ia_arr_i;
+				ia_arr_i = att_map.find(ia_arr_name);
+				if (ia_arr_i == att_map.end()) throw udm_exception(string("Attribute: ") + ia_arr_name + string(" was not found for class ") + (string)type.name());
 				
 				//read the number of attributes
-				static unsigned long ia_arr_item_no;
+				unsigned long ia_arr_item_no;
 				if (!fread(&ia_arr_item_no, sizeof(unsigned long), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(unsigned long);
 			
 				static vector<__int64> ia_arr_value;
 				if (!ia_arr_value.empty()) ia_arr_value.erase(ia_arr_value.begin(), ia_arr_value.end());
@@ -3465,7 +3304,6 @@ namespace UdmStatic
 				//read in the array from file
 				if(!fread(long_val, sizeof(__int64), ia_arr_item_no, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read += sizeof(__int64) * ia_arr_item_no;
 	
 				//add to vector
 				for (ia_arr_item_count=0; ia_arr_item_count < ia_arr_item_no; ia_arr_item_count++)
@@ -3489,7 +3327,6 @@ namespace UdmStatic
 				static bool desynched_val;
 				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ia_arr_i).second);
 
 
@@ -3499,37 +3336,24 @@ namespace UdmStatic
 			static unsigned long ra_arr_no;
 			if (!fread(&ra_arr_no, sizeof(unsigned long), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read+= sizeof(unsigned long);
 			
 			//for each real array attribute
 			for (j = 0; j < ra_arr_no; j++)
 			{
 				
 				//read the attribute name
-				static char ra_arr_name[MAX_NAME+1];
-				static char * ra_arr_name_p;
-				ra_arr_name_p = ra_arr_name;
-				i = 0;
-				do
-				{
-					if (!fread(&t, sizeof(char), 1, f))
-						throw udm_exception("can't read from file, probably MEM file is corrupted");
-					*ra_arr_name_p++ = t; i++;
-
-				} while ((t != 0x00 )&& (i < MAX_NAME));
-				if (t != 0x00) throw udm_exception("MEM file corrupt!");
-				read += strlen(ra_arr_name) + 1;
+				string ra_arr_name;
+				DeSerializeString(f, ra_arr_name);
 
 				//get it's id from the att_map 
 				static map<string, uniqueId_type>::iterator ra_arr_i;
-				ra_arr_i = att_map.find(string(ra_arr_name));
-				if (ra_arr_i == att_map.end()) throw udm_exception(string("Attribute: ") + string(ra_arr_name) + string(" was not found for class ") + (string)type.name());
+				ra_arr_i = att_map.find(ra_arr_name);
+				if (ra_arr_i == att_map.end()) throw udm_exception(string("Attribute: ") + ra_arr_name + string(" was not found for class ") + (string)type.name());
 				
 				//read the number of attributes
 				static unsigned long ra_arr_item_no;
 				if (!fread(&ra_arr_item_no, sizeof(unsigned long), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(unsigned long);
 			
 				static vector<double> ra_arr_value;
 				if (!ra_arr_value.empty()) ra_arr_value.erase(ra_arr_value.begin(), ra_arr_value.end());
@@ -3543,7 +3367,6 @@ namespace UdmStatic
 				//read in the array from file
 				if(!fread(double_val, sizeof(double), ra_arr_item_no, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read += sizeof(double) * ra_arr_item_no;
 	
 				//add to vector
 				for (ra_arr_item_count=0; ra_arr_item_count < ra_arr_item_no; ra_arr_item_count++)
@@ -3567,7 +3390,6 @@ namespace UdmStatic
 				static bool desynched_val;
 				if (!fread(&desynched_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(bool);
 				if (desynched_val) so->desynched.insert((*ra_arr_i).second);
 
 
@@ -3577,13 +3399,11 @@ namespace UdmStatic
 			static unsigned char marker;
 			if (!fread(&marker, sizeof(unsigned char), 1, f))
 				throw udm_exception("can't read from file, probably MEM file is corrupted");
-			read += sizeof(const unsigned char);
 			if (marker == 0xFE) {
 				// library root flag and possible library name
 				static bool lib_root_val;
 				if (!fread(&lib_root_val, sizeof(bool), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read+= sizeof(bool);
 				so->lib_root = lib_root_val;
 
 				if (lib_root_val) {
@@ -3603,7 +3423,6 @@ namespace UdmStatic
 
 					} while ((t != 0x00 )&& (i < MAX_NAME));
 					if (t != 0x00) throw udm_exception("MEM file corrupt!");
-					read += strlen(tmp_lib_name) + 1;
 					so->lib_name = tmp_lib_name;
 
 					lib_roots.push_back(so);
@@ -3611,7 +3430,6 @@ namespace UdmStatic
 
 				if (!fread(&marker, sizeof(unsigned char), 1, f))
 					throw udm_exception("can't read from file, probably MEM file is corrupted");
-				read += sizeof(const unsigned char);
 			}
 
 
@@ -3652,7 +3470,7 @@ namespace UdmStatic
 		//since their key is ::Uml::Class, which won't be the same for other paradigms
 		type = &Udm::_null;
 
-		return read;
+		return ftell(f);
 
 	};
 
