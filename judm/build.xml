@@ -599,9 +599,6 @@
 		<antcall target="set_up_batch_file_win"/>
 		<antcall target="set_up_batch_file_linux"/>
 		
-		<!-- Delete intermediate files -->
-		<delete dir="${build.dir}/${dspackage}/classes" />
-		
 		
 		<!-- Generate API documentation -->
 		<antcall target="ds-apidoc">
@@ -707,7 +704,7 @@
 	</target>
 
 	<!-- Run unit test on the distribution packages -->
-	<target name="test" depends="compile" description="Run unit tests.">
+	<target name="test" depends="build" description="Run unit tests.">
 
 		<!-- Directory where junit reports go -->
 		<property name="build.reports.tests.dir" location="${build.dir}/report" />
