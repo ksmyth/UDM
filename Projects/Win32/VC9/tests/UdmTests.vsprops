@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="UdmTests"
+	OutputDirectory="..\..\..\..\..\Build\Win32\VC9\$(ConfigurationName)"
+	IntermediateDirectory="$(OutDir)\obj\tests\$(ProjectName)"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="..\..\..\..\..\include;&quot;$(OutDir)\Gen\tests\$(ProjectName)&quot;"
+		DebugInformationFormat="3"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		LinkIncremental="1"
+		AdditionalLibraryDirectories="$(OutDir)"
+		GenerateDebugInformation="true"
+		SubSystem="1"
+	/>
+</VisualStudioPropertySheet>

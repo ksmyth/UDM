@@ -1,0 +1,64 @@
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#include <xdebug>
+
+#include "Windows.h"
+
+#include <cppunit/extensions/HelperMacros.h>
+
+#define DEBUG_NEW new(_NORMAL_BLOCK ,__FILE__, __LINE__)
+#define new DEBUG_NEW
+
+
+namespace UdmTests
+{
+	class StaticLeaksTest : public CPPUNIT_NS::TestFixture
+	{
+		CPPUNIT_TEST_SUITE( StaticLeaksTest );
+		CPPUNIT_TEST( testStaticLeaks );
+		CPPUNIT_TEST_SUITE_END();
+
+	public:
+		void testStaticLeaks() {
+	CoInitialize(0);
+
+	typedef void (*init_t)(void*);
+	init_t init;
+	new int;
+	_CrtMemState initState;
+	//_CrtMemCheckpoint(&initState);
+
+	HMODULE test_staticleaksdll = LoadLibrary("test_staticleaksdll.dll");
+	init = (init_t)GetProcAddress(test_staticleaksdll , "?init@@YAXPAX@Z");
+	init(&initState);
+
+	typedef void (*terminate_t)();
+	HMODULE xerces = GetModuleHandle("XERCES-C_2_8D.DLL");
+	if (xerces) {
+		terminate_t terminate = (terminate_t)GetProcAddress(xerces, "?Terminate@XMLPlatformUtils@xercesc_2_8@@SAXXZ");
+		if (terminate) {
+			terminate();
+		}
+	}
+	FreeLibrary(test_staticleaksdll);
+
+	// To test leak detection:
+	// new int;
+	_CrtMemState finalState;
+	_CrtMemCheckpoint(&finalState);
+	_CrtMemBlockHeader * pHead;
+
+	_CrtMemDumpAllObjectsSince(&initState);
+	if (finalState.pBlockHeader != initState.pBlockHeader) {
+		// DebugBreak();
+		CPPUNIT_ASSERT_MESSAGE("Memory leak detected", 0);
+	}
+
+		}
+	};
+};
+
+// Registers the fixture into the 'registry'
+
+CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::StaticLeaksTest );
