@@ -1030,7 +1030,7 @@ namespace Uml
 			if (!m_ins_res.second) throw udm_exception("Could not insert new type in type_map!");
 
 			//insert in reference map
-			//with 1 as initial reference coutn value
+			//with 1 as initial reference count value
 			ref_map_t_item ref_item(new_type, 1);
 			ref_map_t_ires ref_res = ref_map.insert(ref_item);
 			if (!ref_res.second) throw udm_exception("Cound not insert new item in references map!");
@@ -1056,6 +1056,9 @@ namespace Uml
 
 	UDM_DLL void SafeTypeContainer::RemoveSafeType(const Class &a )
 	{
+		//if (!dynamic_cast<UdmStatic::StaticObject*>(a.__impl())) {
+			// FIXME: uniqueIds are not guaranteed to be unique across datanetworks
+		//}
 		//since we will invoke this in every static Object  destructor.
 		// it might happen the type of a StaticObect was not obtained
 		// through this class
@@ -1074,7 +1077,12 @@ namespace Uml
 
 				// now we have to find it in the other map too and delete from both
 				// we can't use pointer->uniqueId() here: if it's a closed Dom or Gme backend, uniqueId() will crash
-				type_map_t::iterator i = type_map.find(a.uniqueId());
+				type_map_t::iterator i;
+				for (i = type_map.begin(); i != type_map.end(); i++) {
+					if (i->second == pointer) {
+						break;
+					}
+				}
 				if (i == type_map.end())
 				{
 					//we can not throw exception here 
