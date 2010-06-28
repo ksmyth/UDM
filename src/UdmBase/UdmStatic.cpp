@@ -1198,7 +1198,7 @@ namespace UdmStatic
 					
 					if (moved_to_parents_ok.find(p_st_and_io) == moved_to_parents_ok.end())
 					{
-						Object newObject = p_st_and_io->createChild(ccr,type(), this, p_st_and_io->subtype, false);
+						Object newObject = p_st_and_io->createChild(ccr, Uml::SafeTypeContainer::GetSafeType(type()), this, p_st_and_io->subtype, false);
 					}
 				}
 			}
@@ -1547,7 +1547,7 @@ namespace UdmStatic
 				else
 				{
 					//we moved in a child to the block which was derived/instantiated
-					inside.push_back(st_and_i_o->createChild(meta, a_o->m_type, a_o, st_and_i_o->subtype, false));
+					inside.push_back(st_and_i_o->createChild(meta, Uml::SafeTypeContainer::GetSafeType(a_o->m_type), a_o, st_and_i_o->subtype, false));
 				}
 				
 				if (st_and_i_o->subtype)
@@ -1629,6 +1629,7 @@ namespace UdmStatic
 			throw udm_exception("Invalid child specified: " + casestr);
 		}
 
+		//caller must pass meta as a safe type
 		StaticObject *dep = new StaticObject(meta, 1, (StaticObject*)archetype, subtype, real_archetype);
 		//set the parent
 		dep->setParent(this, parentrole, false);
@@ -4143,6 +4144,7 @@ namespace UdmStatic
 
 	ObjectImpl * StaticObject::createLibRootChild(const ::Uml::Class &meta, const bool need_safetype)
 	{
+		//caller must pass meta as a safe type
 		StaticObject *dep = new StaticObject(meta, 1);
 
 		// equivalent to dep->setParent:

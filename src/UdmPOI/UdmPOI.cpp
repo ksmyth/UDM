@@ -1146,9 +1146,15 @@ bool UdmPseudoObject::CreateObject(const char * childType, const char * childTyp
 
 	if(compositionChildRole != 0) {
 		::Uml::CompositionChildRole ccr = GetCompositionChildRoleByName(upi_o.type(), compositionChildRole);
-		new_o = upi_o.Create(childKind, upi_o, ccr, 0, subtype);
+		if (upi_o.__impl()->__getdn()->IsTypeSafe())
+			new_o = upi_o.Create(childKind, upi_o, ccr, 0, subtype);
+		else
+			new_o = upi_o.Create(Uml::SafeTypeContainer::GetSafeType(childKind), upi_o, ccr, 0, subtype);
 	} else {
-		new_o = upi_o.CreateObject(childKind);
+		if (upi_o.__impl()->__getdn()->IsTypeSafe())
+			new_o = upi_o.CreateObject(childKind);
+		else
+			new_o = upi_o.CreateObject(Uml::SafeTypeContainer::GetSafeType(childKind));
 	}
 
 	newChild.dn_id = new_o.__impl()->__getdn()->uniqueId();

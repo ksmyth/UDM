@@ -832,7 +832,7 @@ namespace UDM_NAMESPACE
 
 		if (!create) return Udm::null;
 		//placeholder was not found ... create it
-		Object ph_object = root_object.CreateObject(ph_class);
+		Object ph_object = root_object.CreateObject(Uml::SafeTypeContainer::GetSafeType(ph_class));
 		if(!ph_object.SetIntValue("rem_id", o.__impl()->uniqueId()))
 			throw udm_exception("SetIntValue failed when setting attribute rem_id!");
 

@@ -475,8 +475,11 @@ namespace Uml
 		*/
 		typedef Udm::ObjectImpl::uniqueId_type uniquedId_type;
 		
-		typedef map<uniquedId_type, const Class *>			type_map_t;
-		typedef pair<uniquedId_type const, const Class *>	type_map_t_item;
+		// datanetwork uniqueId, object uniqueId
+		typedef pair<unsigned long, uniquedId_type>		type_ext_id_t;
+
+		typedef map<type_ext_id_t, const Class *>		type_map_t;
+		typedef pair<type_ext_id_t const, const Class *>	type_map_t_item;
 		typedef pair<type_map_t::iterator, bool>				type_map_t_ires;
 
 

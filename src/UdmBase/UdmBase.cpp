@@ -133,10 +133,16 @@ namespace UDM_NAMESPACE
 			if (archetype->type() != meta )
 				throw udm_exception("Type of archetype and type must be the same!");
 			
-			return parent.impl->createChild(role, meta, archetype, subtype) ;
+			if (parent.impl->__getdn()->IsTypeSafe())
+				return parent.impl->createChild(role, meta, archetype, subtype);
+			else
+				return parent.impl->createChild(role, Uml::SafeTypeContainer::GetSafeType(meta), archetype, subtype);
 		}
 		else
-		return parent.impl->createChild(role, meta);
+			if (parent.impl->__getdn()->IsTypeSafe())
+				return parent.impl->createChild(role, meta);
+			else
+				return parent.impl->createChild(role, Uml::SafeTypeContainer::GetSafeType(meta));
 	}
 
 	UDM_DLL Object Object::archetype() const
@@ -1251,7 +1257,11 @@ namespace UDM_NAMESPACE
 	{
 		ASSERT(lib_name.length() > 0);
 
-		ObjectImpl *lib_root = createLibRootChild(type());
+		ObjectImpl *lib_root;
+		if (__getdn()->IsTypeSafe())
+			lib_root = createLibRootChild(type());
+		else
+			lib_root = createLibRootChild(Uml::SafeTypeContainer::GetSafeType(type()));
 
 		UdmUtil::copy_assoc_map cam;
 		UdmUtil::CopyObjectHierarchy(lib_src, lib_root, lib_root->__getdn(), cam);

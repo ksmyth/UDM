@@ -1011,7 +1011,9 @@ namespace Uml
 	UDM_DLL const Class & SafeTypeContainer::GetSafeType(const Class &a)
 	{
 		//check if we already have a type equivalent with this
-		type_map_t::const_iterator i = type_map.find(a.uniqueId());
+		::Udm::DataNetwork *dn = a.__impl()->__getdn();
+		type_ext_id_t id(dn ? dn->uniqueId() : 0, a.uniqueId());
+		type_map_t::const_iterator i = type_map.find(id);
 		if (i == type_map.end())
 		{
 
@@ -1025,7 +1027,7 @@ namespace Uml
 
 			//insert in the type_map with it's unique ID as key,
 			//so we can find it next time
-			type_map_t_item map_item(a.uniqueId(), new_type);
+			type_map_t_item map_item(id, new_type);
 			type_map_t_ires m_ins_res = type_map.insert(map_item);
 			if (!m_ins_res.second) throw udm_exception("Could not insert new type in type_map!");
 
@@ -1064,7 +1066,7 @@ namespace Uml
 		// through this class
 
 		//we first check our reference map
-		//if it's found there, it means that this type was obtaind thru this class
+		//if it's found there, it means that this type was obtained through this class
 
 		const Class * pointer = &a;
 		ref_map_t::iterator ref_i = ref_map.find(pointer);
