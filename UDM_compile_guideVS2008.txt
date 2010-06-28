@@ -17,10 +17,15 @@ Step-by-step guide:
 
 	2. Get UDM 3rd party files from:
 		\\Atlantis\Project\Mobies\Udm\Udm_ns\3rdparty_vs2008_V1.zip
-	and unzip it onto your machine. 
+	and unzip it onto your machine.
+
+	3. Download Boost 1.36.0 from http://sourceforge.net/projects/boost/files/boost/1.36.0/
+	and unzip it  onto your machine. 
+		 
 
 	3. Set your build environment as follows:
 		(Note: either use Tools/Options/Projects and Solutions/VC++ Directories to make these settings or create a script called scripts/vc9-env-local.bat and set them there)
+	BOOST_PATH= your boost root folder (extracted from boost_1_36_0.zip)
 	UDM_3RDPARTY_PATH=
 		your UDM 3rdparty root folder (extracted from 3rdparty_vs2008_V1.zip)
 	JDK_PATH=
@@ -43,7 +48,7 @@ Step-by-step guide:
 		%UDM_3RDPARTY_PATH%\zlib;
 		%UDM_3RDPARTY_PATH%\zlib\contrib\minizip;
 		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\include;
-		%UDM_3RDPARTY_PATH%\boost_1_36_0;
+		%BOOST_PATH%\;
 		%JDK_PATH%\include\win32;
 		%JDK_PATH%\include;
 		%INCLUDE%
