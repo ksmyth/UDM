@@ -1037,7 +1037,7 @@ UDM_DLL set<Object> Object::GetChildObjects(const CompositionInfo& cmpType, cons
 	for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 					p_currClass!=ancestorClasses.end(); p_currClass++)
 	{
-		// Traversing the containtment hierarchy
+		// Traversing the containment hierarchy
 		set< ::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
 		for(set< ::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin();
 			p_currRole!=compParentRoles.end(); p_currRole++)
@@ -1049,15 +1049,15 @@ UDM_DLL set<Object> Object::GetChildObjects(const CompositionInfo& cmpType, cons
 			// Checking the role name
 			//ignore if supplied parentrole is empty
 			//because it can be either empty or not empty, for the same diagram
-			//when in the UML diagram is declared as empty, in the XML will be also empty and thus
+			//when empty in the UML diagram, it will also be empty in the XML and thus
 			//when working with dynamic meta, it will be empty
-			//when working with static meta, the code generator will generate automatically a rolename (and also an access method)
+			//when working with static meta, the code generator will generate a rolename automatically (and also an access method)
 			if ((cmpType.strParentRoleName != "") && (strParentRoleName!=cmpType.strParentRoleName)) continue;
 			if(strChildRoleName!=cmpType.strChildRoleName) continue;
 
 			
-			// If everithing is OK, get children
-			// we just pass clChildType to getChildren,
+			// If everything is OK, get children
+			// we just pass clsChildType to getChildren,
 			// which will take care and will return only the matching children types(same or derived from)
 			//
 			vector<ObjectImpl*>children=impl->getChildren(::Uml::theOther(*p_currRole),clsChildType);
