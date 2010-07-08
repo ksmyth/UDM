@@ -701,9 +701,9 @@ namespace UdmGme
 		string debug;
 
 		debug.append("Parent model of the connection: ");
-		debug.append( (char *)connection_par->GetName());
+		debug.append( (char *)connection_par->GetAbsPath());
 		debug.append(", name of peer: ");
-		debug.append((char*) peer->GetName());
+		debug.append((char*) peer->GetAbsPath());
 		
 
 
