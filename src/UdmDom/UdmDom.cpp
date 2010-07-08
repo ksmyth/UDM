@@ -4224,6 +4224,7 @@ namespace UdmDom
 					{
 						found = true;
 						ret = full_file_name;
+						delete [] full_file_name;
 						continue;
 					}
 					delete [] full_file_name;
