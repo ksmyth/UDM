@@ -796,7 +796,7 @@ namespace UdmUtil
 		do {
 			ASSERT(precision <= MAXIMAL_PRECISION);
 
-			sprintf(result, "%.*f", precision, val);
+			sprintf(result, "%.*e", precision, val);
 
 			double d;
 			if (sscanf(result, "%lf", &d) != 1) throw udm_exception("Internal error when converting from double to string");
