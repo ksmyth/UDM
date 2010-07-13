@@ -95,7 +95,7 @@
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
       <AdditionalIncludeDirectories>$(GME_ROOT)\GME\Mga\$(Configuration);$(GME_ROOT)\GME\Meta\$(Configuration);$(GME_ROOT)\GME\Gme\$(Configuration);$(GME_ROOT)\bin;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
