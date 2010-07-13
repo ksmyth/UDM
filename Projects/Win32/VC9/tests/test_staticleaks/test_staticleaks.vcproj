@@ -62,6 +62,7 @@
 				AdditionalDependencies="cppunitd.lib testrunnerd.lib "
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
+				RandomizedBaseAddress="1"
 				TargetMachine="1"
 			/>
 			<Tool
