@@ -796,7 +796,15 @@ namespace UdmUtil
 		do {
 			ASSERT(precision <= MAXIMAL_PRECISION);
 
-			sprintf(result, "%.*e", precision, val);
+#ifdef _WIN32
+			if (_snprintf_s(result, 64, "%.*g", precision, val) < 0) {
+				throw udm_exception("Internal error when converting from double to string");
+			}
+#else
+			if (snprintf(result, 64, "%.*g", precision, val) >= 64) {
+				throw udm_exception("Internal error when converting from double to string");
+			}
+#endif
 
 			double d;
 			if (sscanf(result, "%lf", &d) != 1) throw udm_exception("Internal error when converting from double to string");

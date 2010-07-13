@@ -516,22 +516,13 @@ namespace UDM_NAMESPACE
 		vals.reserve(a.size());
 
 		vector<double>::const_iterator a_ci = a.begin();
-		
-		char * lit_double = new char[(20+15+2)*2];			//first 20:before the decimal point
-															//second 15: precission
-															//2: decimal point + ending null
-															// *2: just to make sure ;-)
-			
+
 		while (a_ci != a.end())
 		{
+			vals.push_back(UdmUtil::doubleToString(*a_ci));
 
-			sprintf(lit_double, "%.15lf", *a_ci);		
-			vals.push_back(lit_double);
-			
-			a_ci++;									//go on 
+			a_ci++;
 		}
-		
-		delete [] lit_double;
 
 		//set the attribute as a string attribute
 		setStringAttr(meta, UdmUtil::vector_to_string(vals, ';'), direct);
