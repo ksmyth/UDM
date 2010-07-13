@@ -4,7 +4,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmBase", "UdmBase\UdmBase.vcproj", "{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Component", "UML GME\Interpreter\BONComponent.vcproj", "{207DA527-EC80-4A83-B5C2-B2A02281AFBA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UML2XML", "UML GME\Interpreter\BONComponent.vcproj", "{207DA527-EC80-4A83-B5C2-B2A02281AFBA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3CAE3DEE-065E-426C-9C3C-F1F59217C00B} = {3CAE3DEE-065E-426C-9C3C-F1F59217C00B}
 	EndProjectSection
