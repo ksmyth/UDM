@@ -156,16 +156,16 @@ namespace UdmStatic
 		unsigned long DeSerialize(FILE *f, map<unsigned long, const StaticObject*>& tr_map, Object& root_o);
 		Udm::DataNetwork * GetMetaDn(){ return meta_dn;};
 
+		friend void ::Uml::Initialize();
 	};
 
 	
 	//------------------------StaticObject
 
-	class id_map_t;
-
 	class StaticObject : public ObjectImpl
 	{
-		friend class id_map_t;					//id_map_t needs to alter the id_map_so_set_deleted flag
+		static void Cleanup();
+		friend class Udm::UdmStaticData; // needs to alter the id_map_so_set_deleted flag
 		friend unsigned long StaticDataNetwork::DeSerialize(FILE*, map<unsigned long, const StaticObject*>&, Object&);
 	private:
 		StaticDataNetwork * mydn;

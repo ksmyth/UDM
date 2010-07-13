@@ -27,11 +27,12 @@ namespace UdmTests
 	init_t init;
 	new int;
 	_CrtMemState initState;
-	//_CrtMemCheckpoint(&initState);
+	new double; _CrtMemCheckpoint(&initState);
+	_CrtMemState dllState;
 
 	HMODULE test_staticleaksdll = LoadLibrary("test_staticleaksdll.dll");
 	init = (init_t)GetProcAddress(test_staticleaksdll , "?init@@YAXPAX@Z");
-	init(&initState);
+	init(&dllState);
 
 	typedef void (*terminate_t)();
 	HMODULE xerces = GetModuleHandle("XERCES-C_2_8D.DLL");
@@ -54,6 +55,8 @@ namespace UdmTests
 		// DebugBreak();
 		CPPUNIT_ASSERT_MESSAGE("Memory leak detected", 0);
 	}
+	int flag = _CrtSetDbgFlag(0x21);
+	_CrtSetDbgFlag(flag | _CRTDBG_LEAK_CHECK_DF);
 
 		}
 	};

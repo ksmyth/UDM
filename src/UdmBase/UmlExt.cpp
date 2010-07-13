@@ -1013,8 +1013,8 @@ namespace Uml
 		//check if we already have a type equivalent with this
 		::Udm::DataNetwork *dn = a.__impl()->__getdn();
 		type_ext_id_t id(dn ? dn->uniqueId() : 0, a.uniqueId());
-		type_map_t::const_iterator i = type_map.find(id);
-		if (i == type_map.end())
+		type_map_t::const_iterator i = Udm::_UdmStaticData.type_map.find(id);
+		if (i == Udm::_UdmStaticData.type_map.end())
 		{
 
 			//we don't have an equivalent type, so we create one
@@ -1023,18 +1023,17 @@ namespace Uml
 
 
 			const Class * new_type = new Class(a.__impl()->clone());
-			if (!new_type) throw udm_exception(" new() failed in GetSafeType()");
 
 			//insert in the type_map with it's unique ID as key,
 			//so we can find it next time
 			type_map_t_item map_item(id, new_type);
-			type_map_t_ires m_ins_res = type_map.insert(map_item);
+			type_map_t_ires m_ins_res = Udm::_UdmStaticData.type_map.insert(map_item);
 			if (!m_ins_res.second) throw udm_exception("Could not insert new type in type_map!");
 
 			//insert in reference map
 			//with 1 as initial reference count value
 			ref_map_t_item ref_item(new_type, 1);
-			ref_map_t_ires ref_res = ref_map.insert(ref_item);
+			ref_map_t_ires ref_res = Udm::_UdmStaticData.ref_map.insert(ref_item);
 			if (!ref_res.second) throw udm_exception("Cound not insert new item in references map!");
 
 
@@ -1045,8 +1044,8 @@ namespace Uml
 		{
 			const Class * found = (*i).second;
 
-			ref_map_t::iterator ref_i = ref_map.find(found);
-			if (ref_i == ref_map.end())
+			ref_map_t::iterator ref_i = Udm::_UdmStaticData.ref_map.find(found);
+			if (ref_i == Udm::_UdmStaticData.ref_map.end())
 				throw udm_exception("Pointer found in st_map was not found in references map!");
 			(*ref_i).second++;
 
@@ -1069,8 +1068,8 @@ namespace Uml
 		//if it's found there, it means that this type was obtained through this class
 
 		const Class * pointer = &a;
-		ref_map_t::iterator ref_i = ref_map.find(pointer);
-		if (ref_i != ref_map.end())
+		ref_map_t::iterator ref_i = Udm::_UdmStaticData.ref_map.find(pointer);
+		if (ref_i != Udm::_UdmStaticData.ref_map.end())
 		{
 			(*ref_i).second--;			//decrement the counter
 
@@ -1080,20 +1079,20 @@ namespace Uml
 				// now we have to find it in the other map too and delete from both
 				// we can't use pointer->uniqueId() here: if it's a closed Dom or Gme backend, uniqueId() will crash
 				type_map_t::iterator i;
-				for (i = type_map.begin(); i != type_map.end(); i++) {
+				for (i = Udm::_UdmStaticData.type_map.begin(); i != Udm::_UdmStaticData.type_map.end(); i++) {
 					if (i->second == pointer) {
 						break;
 					}
 				}
-				if (i == type_map.end())
+				if (i == Udm::_UdmStaticData.type_map.end())
 				{
 					//we can not throw exception here 
 					//because it might be called on main()-s '}' 
 					//so we just complain about this
 					cout << " SafeTypeContainer: Fatal error, corrupt maps. Object found in reference map was not found in type map. Likely to crash from now on... " << endl;
 				} else
-					type_map.erase(i);
-				ref_map.erase(ref_i);
+					Udm::_UdmStaticData.type_map.erase(i);
+				Udm::_UdmStaticData.ref_map.erase(ref_i);
 				delete pointer;
 			}
 
@@ -1104,8 +1103,8 @@ namespace Uml
 	UDM_DLL bool SafeTypeContainer::IsSafeType(const Class &a)
 	{
 		const Class * pointer = &a;
-		ref_map_t::iterator ref_i = ref_map.find(pointer);
-		return  (ref_i != ref_map.end());
+		ref_map_t::iterator ref_i = Udm::_UdmStaticData.ref_map.find(pointer);
+		return  (ref_i != Udm::_UdmStaticData.ref_map.end());
 	}
 
 }

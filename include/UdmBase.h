@@ -237,6 +237,14 @@ namespace Uml
 	class UDM_DLL CompositionChildRole;
 	class UDM_DLL Constraint;
 	class UDM_DLL ConstraintDefinition;
+	UDM_DLL void Initialize();
+	class SafeTypeContainer;
+};
+
+namespace UdmStatic
+{
+	class StaticDataNetwork;
+	class StaticObject;
 };
 
 class UDM_DLL cint_string;
@@ -3041,7 +3049,6 @@ public:
 private: 
 	
 	static backendtabt *backendtab;
-	static map <const unsigned long, DataNetwork *> dntab;
 	static unsigned long dn_id_gen;
 	unsigned long dn_id;
 
@@ -3105,6 +3112,8 @@ public:
 	virtual UDM_DLL const string & Str();
 
 	virtual UDM_DLL set<Object> GetAllInstancesOf(const ::Uml::Class& meta);
+
+	friend void ::Uml::Initialize();
 };
 
 
@@ -3810,7 +3819,36 @@ public:
 		return nn;
 	}	
 
-}
+// Not part of the public API
+// All internal Udm static data is stored here to be able to control the order of cleanup code and destructors
+class UdmStaticData {
+private:
+	// DataNetwork id => DataNetwork
+	map <const unsigned long, DataNetwork *> dntab;
+
+	// UdmStatic
+	set<UdmStatic::StaticObject*> so_set;
+	list<UdmStatic::StaticDataNetwork*> SDNs;
+
+	// Uml SafeTypes
+	typedef pair<unsigned long, Udm::Object::uniqueId_type> type_ext_id_t;
+	typedef map<type_ext_id_t, const Uml::Class *> type_map_t;
+	typedef map<const Uml::Class *, long> ref_map_t;
+	// type's uniqueId => SafeType Class*
+	type_map_t type_map;
+	// reference counting for SafeTypes
+	ref_map_t ref_map;
+
+	friend class DataNetwork;
+	friend class UdmStatic::StaticDataNetwork;
+	friend class UdmStatic::StaticObject;
+	friend class Uml::SafeTypeContainer;
+
+public:
+	~UdmStaticData();
+};
+extern UdmStaticData _UdmStaticData;
+} // namespace UDM_NAMESPACE
 
 //static constants for UdmDom internal attributes
 namespace UdmDom

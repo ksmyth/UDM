@@ -11,9 +11,6 @@
 __declspec(dllexport) void init(void* data) {
 	_CrtMemState* state = (_CrtMemState*) data;
 
-	// Udm-60: this leaks the Udm objects
 	Uml::Initialize();
-	new double; // state needs to anchor to an allocation
-	_CrtMemCheckpoint(state);
 	RefPort::Initialize();
 }

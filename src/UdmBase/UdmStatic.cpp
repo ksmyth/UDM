@@ -174,7 +174,7 @@ CHANGELOG
 		     the object is only deleted when it becomes orphan. In this case the whole subtree 
 			 is deleted
 		  
-		  3. uniquedID(), objectbyID() now uses a number&map which is incremented instead of the 
+		  3. uniqueID(), objectbyID() now uses a number&map which is incremented instead of the 
 			 address of the object. 
 
 	04/09/02	-	endre
@@ -229,13 +229,9 @@ CHANGELOG
 
 
 #include <map>
-//#include <slist>
 #include <cstdlib>
 #include <cstring>
 
-//SafeTypeContainer Static class maps
-Uml::SafeTypeContainer::ref_map_t Uml::SafeTypeContainer::ref_map;
-Uml::SafeTypeContainer::type_map_t Uml::SafeTypeContainer::type_map;
 		
 
 namespace UdmStatic
@@ -253,48 +249,29 @@ namespace UdmStatic
 	
 	
 	class StaticDataNetwork;
-	typedef list<StaticDataNetwork *> sdnmap; 
+	typedef list<StaticDataNetwork *> SDNList; 
 
-	//static sdnmap SDNMap;
-	
-	static class id_map_t
-	{
-	public:
-		//these will be removed
-//		map<uniqueId_type, UdmStatic::StaticObject*> dir_map;
-//		map<UdmStatic::StaticObject*, uniqueId_type> rev_map;
-
-		//we just keep a set of pointers - performance is expected to be improved
-		set<UdmStatic::StaticObject*> so_set;
-
-		sdnmap SDNMap;
-
-		~id_map_t()
+	void StaticObject::Cleanup() {
+		//first remove Static Data Networks
+		//this should recursively delete all the user's objects
+		//and the new .cpp format -created meta objects as well.
+		set<UdmStatic::StaticObject*>& so_set = Udm::_UdmStaticData.so_set;
+		while (!so_set.empty())
 		{
-		
-			//first remove Static Data Networks
-			//this should recursively delete all the user's objects
-			//and the new .cpp format -created meta objects as well.
-			
-			while (!so_set.empty())
-			{
-				set<UdmStatic::StaticObject*>::iterator so_set_i = so_set.begin();
-				(*so_set_i)->id_map_so_set_deleted = true;
-				so_set.erase(so_set_i);
-			};
+			set<UdmStatic::StaticObject*>::iterator so_set_i = so_set.begin();
+			(*so_set_i)->id_map_so_set_deleted = true;
+			if ((*so_set_i)->m_type_is_safetype) {
+				Uml::SafeTypeContainer::RemoveSafeType((*so_set_i)->m_type);
+				(*so_set_i)->m_type_is_safetype = false;
+			}
 
-			SDNMap.clear();
+			so_set.erase(so_set_i);
 		};
-	
 
-	}id_map;
-
-
-
-	
-
-
-	
+		SDNList& SDNs = Udm::_UdmStaticData.SDNs;
+		while (!SDNs.empty())
+			delete *SDNs.begin();
+	}
 
 
 
@@ -320,7 +297,7 @@ namespace UdmStatic
 	//	GetIdForObject((StaticObject*)this);
 	//	InsertObject((StaticObject*)this);
 
-		pair<set<StaticObject*>::iterator, bool> ins_res  = id_map.so_set.insert(this);
+		pair<set<StaticObject*>::iterator, bool> ins_res  = Udm::_UdmStaticData.so_set.insert(this);
 		if (!ins_res.second)
 			throw udm_exception(" Corrupt set, pointer already exists in the map ?");
 
@@ -336,9 +313,9 @@ namespace UdmStatic
 
 		if (!id_map_so_set_deleted)
 		{
-			set<StaticObject*>::iterator i = id_map.so_set.find(this);
-			if (i != id_map.so_set.end())
-				id_map.so_set.erase(i);
+			set<StaticObject*>::iterator i = Udm::_UdmStaticData.so_set.find(this);
+			if (i != Udm::_UdmStaticData.so_set.end())
+				Udm::_UdmStaticData.so_set.erase(i);
 		}
 		//check if my type is obtained by SafeTypeContainer
 		//if so, release it.
@@ -365,26 +342,6 @@ namespace UdmStatic
 	{
 		if( --refCount == 0 )
 		{
-			//remove from the global maps
-			/*
-			//maps will be removed ...
-
-			map<StaticObject*, uniqueId_type>::iterator i =  id_map.rev_map.find(this);
-			if (i != id_map.rev_map.end())
-			{
-				
-				uniqueId_type this_id = (*i).second;
-				map<uniqueId_type, StaticObject*>::iterator j = id_map.dir_map.find(this_id);
-				if (j != id_map.dir_map.end()) 
-					id_map.dir_map.erase(j);
-				else
-					cout << "Warning, corrupt static maps! "<< endl;
-				id_map.rev_map.erase(i);
-			} 
-			*/
-
-			
-			//delete 
 			delete this;
 		}
 	}
@@ -425,7 +382,7 @@ namespace UdmStatic
 		{
 			StaticObject * p = this;
 			while (p->m_parent) p = p->m_parent;				
-			for(sdnmap::iterator ff = id_map.SDNMap.begin(); ff != id_map.SDNMap.end(); ff++) 
+			for(SDNList::iterator ff = Udm::_UdmStaticData.SDNs.begin(); ff != Udm::_UdmStaticData.SDNs.end(); ff++) 
 			{
 				Object root = (*ff)->GetRootObject();
 				if(root && static_cast<StaticObject *>(root.__impl())  == p) 
@@ -967,6 +924,7 @@ namespace UdmStatic
 			ObjectImpl * comp_o = role.__impl()->getParent(Udm::NULLPARENTROLE);
 			if (!comp_o) throw udm_exception("parent of type meta object is NULL");
 			vector<ObjectImpl*> vec = comp_o->getChildren(::Uml::Composition::meta_childRole, ::Uml::CompositionChildRole::meta); 			
+			comp_o->release();
 			if (vec.size() != 1) throw udm_exception("Meta Composition does not contain 1 and only 1 childRole!");
 			
 			ObjectImpl * ccr_o = *(vec.begin());
@@ -3505,7 +3463,7 @@ namespace UdmStatic
 		unsigned long archetype_to_wr = archetype ? archetype->uniqueId() : 0;
 		
 
-		//first, write the uniquedId of archetype
+		//first, write the uniqueId of archetype
 		fwrite(&archetype_to_wr, sizeof(unsigned long), 1, f);
 		length += sizeof(unsigned long);
 
@@ -4203,18 +4161,18 @@ namespace UdmStatic
 			rootobject =&Udm::_null;
 		}
 		
-		sdnmap::iterator ff;	
-		for(ff = id_map.SDNMap.begin(); ff != id_map.SDNMap.end(); ff++) 
-		if(*ff == this) break;
+		SDNList::iterator ff;	
+		for (ff = Udm::_UdmStaticData.SDNs.begin(); ff != Udm::_UdmStaticData.SDNs.end(); ff++) 
+		if (*ff == this) break;
 			
-		if(ff == id_map.SDNMap.end()) throw udm_exception("Corrupt Static DN map");
-		id_map.SDNMap.erase(ff);
+		if (ff == Udm::_UdmStaticData.SDNs.end()) throw udm_exception("Corrupt Static DN map");
+		Udm::_UdmStaticData.SDNs.erase(ff);
 	};
 
 	
 	UDM_DLL StaticDataNetwork::StaticDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* project) :	Udm::DataNetwork(metainfo, project)   
 	{
-		id_map.SDNMap.push_front(this);
+		Udm::_UdmStaticData.SDNs.push_front(this);
 		rootobject = NULL;
 		
 		/*
@@ -4332,8 +4290,8 @@ namespace UdmStatic
 		if (StaticDataNetwork::SafeObjectById)
 		{
 
-			set<StaticObject*>::iterator i = id_map.so_set.find(so_try);		
-			if (i == id_map.so_set.end())
+			set<StaticObject*>::iterator i = Udm::_UdmStaticData.so_set.find(so_try);		
+			if (i == Udm::_UdmStaticData.so_set.end())
 				throw udm_exception("Corrupt StaticObject set. Object by pointer is not in set!");	
 		}
 		
@@ -4371,7 +4329,7 @@ namespace UdmStatic
 
 		ASSERT( child->m_parent == NULL );
 
-		++(child->refCount);
+		child->refCount += 2;
 		child->m_parent = parent;
 		parent->m_children.insert(StaticObject::children_type::value_type(
 			childRole.uniqueId(), child));
@@ -4383,6 +4341,8 @@ namespace UdmStatic
 		// TODO: check the type
 		StaticObject *src = static_cast<StaticObject*>(s.__impl());
 		StaticObject *dst = static_cast<StaticObject*>(d.__impl());
+		++src->refCount;
+		++dst->refCount;
 
 		src->associations.insert(StaticObject::assoc_type::value_type(dstRole.uniqueId(), dst));
 		dst->associations.insert(StaticObject::assoc_type::value_type(srcRole.uniqueId(), src));

@@ -473,10 +473,10 @@ namespace Uml
 			are not freed until th referees
 
 		*/
-		typedef Udm::ObjectImpl::uniqueId_type uniquedId_type;
+		typedef Udm::ObjectImpl::uniqueId_type uniqueId_type;
 		
 		// datanetwork uniqueId, object uniqueId
-		typedef pair<unsigned long, uniquedId_type>		type_ext_id_t;
+		typedef pair<unsigned long, uniqueId_type>		type_ext_id_t;
 
 		typedef map<type_ext_id_t, const Class *>		type_map_t;
 		typedef pair<type_ext_id_t const, const Class *>	type_map_t_item;
@@ -488,8 +488,6 @@ namespace Uml
 		typedef pair<ref_map_t::iterator, bool>			ref_map_t_ires;
 
 		
-		static type_map_t type_map;				//this will hold a uniqueID->Class * mapping
-		static ref_map_t ref_map;				//this will hold the references for the types created in here
 
 
 		

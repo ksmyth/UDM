@@ -101,7 +101,7 @@ this software.
 
   03/15/04	-	endre
 	
-			changed the uniquedId() function, There was a minor bug which caused a crash when uniqueId()
+			changed the uniqueId() function, There was a minor bug which caused a crash when uniqueId()
 			was invoked on DomObject's without a data network
 
   24/02/04	-	endre

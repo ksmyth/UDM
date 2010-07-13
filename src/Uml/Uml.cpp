@@ -495,6 +495,10 @@ namespace Uml {
 		InitMetaLinks();
 
 		::Uml::InitDiagram(meta, "Uml", "2.04");
+		static UdmStatic::StaticDataNetwork* dn = new UdmStatic::StaticDataNetwork(diagram, 0);
+		dn->rootobject = meta;
+		dn->systemname = "Uml";
+		dn->sem = Udm::CHANGES_LOST_DEFAULT;
 
 
 		_SetXsdStorage();

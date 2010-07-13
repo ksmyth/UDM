@@ -92,6 +92,7 @@ CHANGELOG
 #include "UdmBase.h"
 #include "UmlExt.h"
 #include <UdmUtil.h>
+#include "UdmStatic.h"
 #include <string>
 #include <cstdlib>
 #include <cstring>
@@ -236,14 +237,17 @@ namespace UDM_NAMESPACE
 
 	//static member var initialization
 	unsigned long DataNetwork::dn_id_gen = 0;
-	map <const unsigned long, DataNetwork *> DataNetwork::dntab;
+	UdmStaticData _UdmStaticData;
+	UdmStaticData::~UdmStaticData() {
+		UdmStatic::StaticObject::Cleanup();
+	}
 
 	UDM_DLL DataNetwork::DataNetwork(const Udm::UdmDiagram &metainfo, UdmProject* project) : metaroot(metainfo), pr(project) 
 	{ 
 		metainfo.init();
 		dn_id = dn_id_gen++;
 		pair <const unsigned long, DataNetwork *> ins_item(dn_id, this);
-		pair <map <const unsigned long, DataNetwork *>::iterator, bool> ins_res = dntab.insert(ins_item);
+		pair <map <const unsigned long, DataNetwork *>::iterator, bool> ins_res = _UdmStaticData.dntab.insert(ins_item);
 		if (!ins_res.second)
 			throw udm_exception("Can not register data network!");
 
@@ -253,8 +257,8 @@ namespace UDM_NAMESPACE
 
 	UDM_DLL DataNetwork *DataNetwork::GetDnById(const unsigned long id)
 	{
-		map <const unsigned long, DataNetwork *>::iterator dntab_i = dntab.find(id);
-		if (dntab_i != dntab.end()) return dntab_i->second;
+		map <const unsigned long, DataNetwork *>::iterator dntab_i = _UdmStaticData.dntab.find(id);
+		if (dntab_i != _UdmStaticData.dntab.end()) return dntab_i->second;
 		return NULL;
 
 	}
@@ -326,7 +330,7 @@ namespace UDM_NAMESPACE
 
 	UDM_DLL DataNetwork::~DataNetwork()
 	{
-		dntab.erase(dn_id);
+		_UdmStaticData.dntab.erase(dn_id);
 
 		if (rootobject) throw udm_exception("Dirty abort!");
 	}
