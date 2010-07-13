@@ -2,6 +2,7 @@
 
 
 #include <UdmBase.h>
+#include <UdmUtil.h>
 #include <cint_string.h>
 #include "genericTest.h"
 #include "LampDiagram.h"
@@ -117,12 +118,14 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				b.push_back(2.4);
 				b.push_back(1.1);
 				b.push_back(3.141592653589793234);
+				b.push_back(9.9999999999999991e-005L);
 				doubleBulbLamp.ArrayReal() = b;
 
 				//the attribute is ordered array, the order is also checked
-				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[0] == 1.1);
-				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[1] == 2.4);
-				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[2] == 3.141592653589793234);
+				CPPUNIT_ASSERT_EQUAL((double)9.9999999999999991e-005L, (double)doubleBulbLamp.ArrayReal()[0]);
+				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[1] == 1.1);
+				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[2] == 2.4);
+				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[3] == 3.141592653589793234);
 				//getting non-existing items - they should be zero
 				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[4] == 0);
 			
@@ -131,9 +134,9 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				doubleBulbLamp.TempArrayReal() = b;			//assign
 				b = doubleBulbLamp.TempArrayReal();			//retrieve
 
-				CPPUNIT_ASSERT(b[0] == 1.1);
-				CPPUNIT_ASSERT(b[1] == 2.4);
-				CPPUNIT_ASSERT(b[2] == 3.141592653589793234);
+				CPPUNIT_ASSERT(b[1] == 1.1);
+				CPPUNIT_ASSERT(b[2] == 2.4);
+				CPPUNIT_ASSERT(b[3] == 3.141592653589793234);
 				
 				vector<bool> c;
 				c.push_back(true);
@@ -270,6 +273,12 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				bulb1.position() = "(100,150)";
 
 				// test that double precision is OK when converting to string inside DOM
+				bulb1.Voltage() = DBL_MAX;
+				CPPUNIT_ASSERT_EQUAL(DBL_MAX, (double)bulb1.Voltage());
+				bulb1.Voltage() = DBL_MIN;
+				CPPUNIT_ASSERT_EQUAL(DBL_MIN, (double)bulb1.Voltage());
+				bulb1.Voltage() = DBL_EPSILON + 1.0;
+				CPPUNIT_ASSERT_EQUAL(DBL_EPSILON + 1.0, (double)bulb1.Voltage());
 				bulb1.Voltage() = 219.987654321012345678;
 				CPPUNIT_ASSERT(bulb1.Voltage() == 219.987654321012345678);
 
