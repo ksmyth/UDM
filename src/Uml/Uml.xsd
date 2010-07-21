@@ -3,7 +3,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
  elementFormDefault="qualified" 
 >
-<!-- generated on Sun Feb 17 22:55:33 2008 -->
+<!-- generated on Wed Jan 20 14:11:09 2010 -->
 
 
 	<xsd:complexType name="CompositionChildRoleType">
@@ -12,24 +12,6 @@
 		<xsd:attribute name="isNavigable" type="xsd:boolean" default="true"/>
 		<xsd:attribute name="name" type="xsd:string"/>
 		<xsd:attribute name="target" type="xsd:IDREF" use="required"/>
-		<xsd:attribute name="_id" type="xsd:ID"/>
-		<xsd:attribute name="_archetype" type="xsd:IDREF"/>
-		<xsd:attribute name="_derived" type="xsd:IDREFS"/>
-		<xsd:attribute name="_instances" type="xsd:IDREFS"/>
-		<xsd:attribute name="_desynched_atts" type="xsd:string"/>
-		<xsd:attribute name="_real_archetype" type="xsd:boolean"/>
-		<xsd:attribute name="_subtype" type="xsd:boolean"/>
-	</xsd:complexType>
-
-	<xsd:complexType name="DiagramType">
-		<xsd:sequence>
-			<xsd:element name="Association" type="AssociationType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="Class" type="ClassType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="Composition" type="CompositionType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="Namespace" type="NamespaceType" minOccurs="0" maxOccurs="unbounded"/>
-		</xsd:sequence>
-		<xsd:attribute name="version" type="xsd:string"/>
-		<xsd:attribute name="name" type="xsd:string" use="required"/>
 		<xsd:attribute name="_id" type="xsd:ID"/>
 		<xsd:attribute name="_archetype" type="xsd:IDREF"/>
 		<xsd:attribute name="_derived" type="xsd:IDREFS"/>
@@ -68,14 +50,23 @@
 		<xsd:attribute name="_subtype" type="xsd:boolean"/>
 	</xsd:complexType>
 
-	<xsd:complexType name="AssociationType">
+	<xsd:complexType name="ClassType">
 		<xsd:sequence>
-			<xsd:element name="AssociationRole" type="AssociationRoleType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Attribute" type="AttributeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Constraint" type="ConstraintType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="ConstraintDefinition" type="ConstraintDefinitionType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="TaggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
-		<xsd:attribute name="nonpersistent" type="xsd:boolean" default="false"/>
-		<xsd:attribute name="name" type="xsd:string"/>
-		<xsd:attribute name="assocClass" type="xsd:IDREF"/>
+		<xsd:attribute name="isAbstract" type="xsd:boolean" use="required"/>
+		<xsd:attribute name="stereotype" type="xsd:string"/>
+		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="from" type="xsd:string"/>
+		<xsd:attribute name="childRoles" type="xsd:IDREFS"/>
+		<xsd:attribute name="parentRoles" type="xsd:IDREFS"/>
+		<xsd:attribute name="associationRoles" type="xsd:IDREFS"/>
+		<xsd:attribute name="association" type="xsd:IDREF"/>
+		<xsd:attribute name="subTypes" type="xsd:IDREFS"/>
+		<xsd:attribute name="baseTypes" type="xsd:IDREFS"/>
 		<xsd:attribute name="_id" type="xsd:ID"/>
 		<xsd:attribute name="_archetype" type="xsd:IDREF"/>
 		<xsd:attribute name="_derived" type="xsd:IDREFS"/>
@@ -85,9 +76,34 @@
 		<xsd:attribute name="_subtype" type="xsd:boolean"/>
 	</xsd:complexType>
 
-	<xsd:complexType name="TaggedValueType">
-		<xsd:attribute name="value" type="xsd:string"/>
+	<xsd:complexType name="DiagramType">
+		<xsd:sequence>
+			<xsd:element name="Association" type="AssociationType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Class" type="ClassType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Composition" type="CompositionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Namespace" type="NamespaceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Diagram" type="DiagramType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="version" type="xsd:string"/>
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="_id" type="xsd:ID"/>
+		<xsd:attribute name="_archetype" type="xsd:IDREF"/>
+		<xsd:attribute name="_derived" type="xsd:IDREFS"/>
+		<xsd:attribute name="_instances" type="xsd:IDREFS"/>
+		<xsd:attribute name="_desynched_atts" type="xsd:string"/>
+		<xsd:attribute name="_real_archetype" type="xsd:boolean"/>
+		<xsd:attribute name="_subtype" type="xsd:boolean"/>
+		<xsd:attribute name="_libname" type="xsd:string"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="AssociationType">
+		<xsd:sequence>
+			<xsd:element name="AssociationRole" type="AssociationRoleType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="TaggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="nonpersistent" type="xsd:boolean" default="false"/>
+		<xsd:attribute name="name" type="xsd:string"/>
+		<xsd:attribute name="assocClass" type="xsd:IDREF"/>
 		<xsd:attribute name="_id" type="xsd:ID"/>
 		<xsd:attribute name="_archetype" type="xsd:IDREF"/>
 		<xsd:attribute name="_derived" type="xsd:IDREFS"/>
@@ -130,23 +146,9 @@
 		<xsd:attribute name="_subtype" type="xsd:boolean"/>
 	</xsd:complexType>
 
-	<xsd:complexType name="ClassType">
-		<xsd:sequence>
-			<xsd:element name="Attribute" type="AttributeType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="Constraint" type="ConstraintType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="ConstraintDefinition" type="ConstraintDefinitionType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="TaggedValue" type="TaggedValueType" minOccurs="0" maxOccurs="unbounded"/>
-		</xsd:sequence>
-		<xsd:attribute name="isAbstract" type="xsd:boolean" use="required"/>
-		<xsd:attribute name="stereotype" type="xsd:string"/>
+	<xsd:complexType name="TaggedValueType">
+		<xsd:attribute name="value" type="xsd:string"/>
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
-		<xsd:attribute name="from" type="xsd:string"/>
-		<xsd:attribute name="childRoles" type="xsd:IDREFS"/>
-		<xsd:attribute name="parentRoles" type="xsd:IDREFS"/>
-		<xsd:attribute name="associationRoles" type="xsd:IDREFS"/>
-		<xsd:attribute name="association" type="xsd:IDREF"/>
-		<xsd:attribute name="subTypes" type="xsd:IDREFS"/>
-		<xsd:attribute name="baseTypes" type="xsd:IDREFS"/>
 		<xsd:attribute name="_id" type="xsd:ID"/>
 		<xsd:attribute name="_archetype" type="xsd:IDREF"/>
 		<xsd:attribute name="_derived" type="xsd:IDREFS"/>
@@ -156,10 +158,12 @@
 		<xsd:attribute name="_subtype" type="xsd:boolean"/>
 	</xsd:complexType>
 
-	<xsd:complexType name="ConstraintType">
-		<xsd:attribute name="description" type="xsd:string"/>
+	<xsd:complexType name="ConstraintDefinitionType">
+		<xsd:attribute name="stereotype" type="xsd:string" default="method"/>
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
+		<xsd:attribute name="parameterList" type="xsd:string"/>
 		<xsd:attribute name="expression" type="xsd:string" use="required"/>
+		<xsd:attribute name="returnType" type="xsd:string" use="required"/>
 		<xsd:attribute name="_id" type="xsd:ID"/>
 		<xsd:attribute name="_archetype" type="xsd:IDREF"/>
 		<xsd:attribute name="_derived" type="xsd:IDREFS"/>
@@ -188,12 +192,10 @@
 		<xsd:attribute name="_subtype" type="xsd:boolean"/>
 	</xsd:complexType>
 
-	<xsd:complexType name="ConstraintDefinitionType">
-		<xsd:attribute name="stereotype" type="xsd:string" default="method"/>
+	<xsd:complexType name="ConstraintType">
+		<xsd:attribute name="description" type="xsd:string"/>
 		<xsd:attribute name="name" type="xsd:string" use="required"/>
-		<xsd:attribute name="parameterList" type="xsd:string"/>
 		<xsd:attribute name="expression" type="xsd:string" use="required"/>
-		<xsd:attribute name="returnType" type="xsd:string" use="required"/>
 		<xsd:attribute name="_id" type="xsd:ID"/>
 		<xsd:attribute name="_archetype" type="xsd:IDREF"/>
 		<xsd:attribute name="_derived" type="xsd:IDREFS"/>

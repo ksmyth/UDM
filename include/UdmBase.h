@@ -2581,13 +2581,21 @@ namespace UDM_NAMESPACE
 		Object(ObjectImpl *i) : impl(i != NULL ? i : &_null) { ASSERT(impl != NULL); }
 		
 		Object(const Object &a) : impl(a.impl->clone()) { ASSERT(impl != NULL); }
+#ifdef UDM_RVALUE
+		Object(Object&& a) : impl(a.impl) { ASSERT(impl != NULL); a.impl = NULL; }
+#endif
 		~Object() 
 		{
+#ifdef UDM_RVALUE
+			if (impl)
+#endif
+			{
 			ASSERT(impl != NULL);
 			impl->release(); 
 #ifdef _DEBUG
 			impl = NULL;
 #endif
+			}
 		}
 
 		const Object &operator =(const Object &a)
@@ -2602,6 +2610,18 @@ namespace UDM_NAMESPACE
 			impl = t;
 			return a;
 		}
+
+#ifdef UDM_RVALUE
+		Object& operator=(Object&& a)
+		{
+			if (this != &a) {
+				impl->release();
+				impl = a.impl;
+				a.impl = NULL;
+			}
+			return *this;
+		}
+#endif
 
 		static Object Cast(const Object &a, const ::Uml::Class &meta) { return __Cast(a, meta); }
 		
@@ -2620,6 +2640,9 @@ namespace UDM_NAMESPACE
 
 	protected:
 		static ObjectImpl *__Cast(const Object &a, const ::Uml::Class &meta);
+#ifdef UDM_RVALUE
+		static ObjectImpl *__Cast(Object &&a, const ::Uml::Class &meta);
+#endif
 		static ObjectImpl *__Create(const ::Uml::Class &meta, const Object &parent,
 			const ::Uml::CompositionChildRole &role,
 			const ObjectImpl *  archetype = &_null,

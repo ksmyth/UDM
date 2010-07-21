@@ -45,6 +45,7 @@ namespace Udm = UDM_NAMESPACE;
 #else
 #define UDM_DLL_LIB "UdmDll_VS10.lib"
 #endif
+#define UDM_RVALUE
 #else
 #define UDM_NAMESPACE Udm
 #ifdef _DEBUG

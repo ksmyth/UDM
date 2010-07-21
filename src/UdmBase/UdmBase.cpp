@@ -126,6 +126,18 @@ namespace UDM_NAMESPACE
 		return a.impl->clone();
 	}
 
+#ifdef UDM_RVALUE
+	UDM_DLL ObjectImpl *Object::__Cast(Object &&a, const ::Uml::Class &meta)
+	{
+		if(a && !Uml::IsDerivedFrom(a.type(), meta) )
+			throw udm_exception("Invalid cast from type '" + UdmUtil::ExtractName(a.type()) + "' to type '" + UdmUtil::ExtractName(meta) + "'");
+
+		ObjectImpl *ret = a.impl;
+		a.impl = 0;
+		return ret;
+	}
+#endif
+
 	UDM_DLL ObjectImpl *Object::__Create(const ::Uml::Class &meta, const Object &parent, 
 		const ::Uml::CompositionChildRole &role, const ObjectImpl * archetype, const bool subtype )
 	{

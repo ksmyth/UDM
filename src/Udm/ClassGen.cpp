@@ -128,6 +128,18 @@ void ClassGen::Basic(const InheritanceSolver &is)
 	// C(const C &master) : init_list {}
 	ctor_defs.push_back( boost::format("%1%(const %1% &master) : %2% {}") % cl_name % is.getInitializers(c, "master") );
 
+	ctor_defs.push_back( boost::format("#ifdef UDM_RVALUE") );
+	// C(C &&master) : init_list {}
+	ctor_defs.push_back( boost::format("%1%(%1% &&master) : %2% {}") % cl_name % is.getInitializers(c, "master") );
+
+	// static C cast(Udm::Object &&a) { return __Cast(a, meta); }
+	meth_defs.push_back( boost::format("static %1% Cast(Udm::Object &&a) { return __Cast(a, meta); }") % cl_name );
+
+	// C& operator=(C &&a) { Udm::Object::operator =(a); return *this; }
+	meth_defs.push_back( boost::format("%1%& operator=(%1% &&a) { Udm::Object::operator =(a); return *this; }") % cl_name );
+
+	meth_defs.push_back( boost::format("#endif") );
+
 	// static C Cast(const Udm::Object &a) { return __Cast(a, meta); }
 	meth_defs.push_back( boost::format("static %1% Cast(const Udm::Object &a) { return __Cast(a, meta); }") % cl_name );
 
