@@ -117,31 +117,31 @@ namespace UdmStatic
 	
 		static bool SafeObjectById;
 		UDM_DLL StaticDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* project = NULL);
-		~StaticDataNetwork();
-		Object ObjectById(Object::uniqueId_type id);
+		UDM_DLL ~StaticDataNetwork();
+		UDM_DLL Object ObjectById(Object::uniqueId_type id);
 
 		
-		void CreateNew(const string &systemname, 
+		UDM_DLL void CreateNew(const string &systemname, 
 								const string &metalocator, const ::Uml::Class &rootclass, 
 								enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 		
 		
 
-		void OpenExisting(const string &systemname, 
+		UDM_DLL void OpenExisting(const string &systemname, 
 								const string &metalocator, 
 								enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
 
 		
-		void SaveAs(string systemname);
+		UDM_DLL void SaveAs(string systemname);
 		
-		void CloseWithUpdate()				{SaveAs(systemname);};
-		void CloseAs(string systemname)		{SaveAs(systemname);};		
-		void CommitEditSequence()			{SaveAs(systemname);};
+		UDM_DLL void CloseWithUpdate()				{SaveAs(systemname);};
+		UDM_DLL void CloseAs(string systemname)		{SaveAs(systemname);};		
+		UDM_DLL void CommitEditSequence()			{SaveAs(systemname);};
 		
 		//do nothing here
 
-		void AbortEditSequence()			{};
-		void CloseNoUpdate()				{};
+		UDM_DLL void AbortEditSequence()			{};
+		UDM_DLL void CloseNoUpdate()				{};
 		
 		bool isOpen()							
 		{
