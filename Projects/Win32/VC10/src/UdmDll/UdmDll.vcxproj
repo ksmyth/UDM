@@ -30,11 +30,9 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -136,7 +134,7 @@ copy "$(OutDir)"\UdmDll_VS10.lib "$(UDM_PATH)"\lib
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UdmBaseD.lib;UdmOclD.lib;UdmPOID.lib;UmlD.lib;UdmDomD.lib;UdmGmeD.lib;UdmXMID.lib;UdmUtilD.lib;Xalan-C_1D.lib;xerces-c_2D.lib;zlibD.lib;GOCLD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>UdmBaseD.lib;UdmOclD.lib;UdmPOID.lib;UmlD.lib;UdmDomD.lib;UdmGmeD.lib;UdmXMID.lib;UdmUtilD.lib;Xalan-C_1.lib;xerces-c_2.lib;zlibD.lib;GOCLD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
