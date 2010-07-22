@@ -254,13 +254,13 @@ exit 0
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(GenPath)" "%(FullPath)"
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenPath)\CD1.cpp; $(GenPath)\CD2.cpp; $(GenPath)\CD3.cpp; $(GenPath)\CL.cpp; $(GenPath)\CD1.h; $(GenPath)\CD2.h; $(GenPath)\CD3.h; $(GenPath)\CL.h; $(GenPath)\CD1.xsd; $(GenPath)\CD2.xsd; $(GenPath)\CD3.xsd; $(GenPath)\CL.xsd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenPath)\CD1.cpp;$(GenPath)\CD2.cpp;$(GenPath)\CD3.cpp;$(GenPath)\CL.cpp;$(GenPath)\CD1.h;$(GenPath)\CD2.h;$(GenPath)\CD3.h;$(GenPath)\CL.h;$(GenPath)\CD1.xsd;$(GenPath)\CD2.xsd;$(GenPath)\CD3.xsd;$(GenPath)\CL.xsd;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="$(ReleaseGenPath)\CL_udm.udm">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(GenPath)" "%(FullPath)"
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenPath)\CD1.cpp; $(GenPath)\CD2.cpp; $(GenPath)\CD3.cpp; $(GenPath)\CL.cpp; $(GenPath)\CD1.h; $(GenPath)\CD2.h; $(GenPath)\CD3.h; $(GenPath)\CL.h; $(GenPath)\CD1.xsd; $(GenPath)\CD2.xsd; $(GenPath)\CD3.xsd; $(GenPath)\CL.xsd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenPath)\CD1.cpp;$(GenPath)\CD2.cpp;$(GenPath)\CD3.cpp;$(GenPath)\CL.cpp;$(GenPath)\CD1.h;$(GenPath)\CD2.h;$(GenPath)\CD3.h;$(GenPath)\CL.h;$(GenPath)\CD1.xsd;$(GenPath)\CD2.xsd;$(GenPath)\CD3.xsd;$(GenPath)\CL.xsd;%(Outputs)</Outputs>
     </CustomBuild>
     <None Include="..\..\..\..\..\samples\cross_links\ReadMe.txt" />
   </ItemGroup>

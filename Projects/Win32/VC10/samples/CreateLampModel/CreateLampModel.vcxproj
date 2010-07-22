@@ -188,39 +188,14 @@ exit 0</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LampDiagram_udm.xml -&gt; C++ API</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(UDM_PATH)\bin\UdmD.exe" -o "$(GenPath)" "%(FullPath)" -v
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenPath)\LampDiagram.xsd;$(GenPath)\LampDiagram.cpp;$(GenPath)\LampDiagram.h;%(Outputs)</Outputs>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>
     <CustomBuild Include="$(ReleaseGenPath)\LampDiagram_udm.xml">
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LampDiagram_udm.xml -&gt; C++ API</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(UDM_PATH)\bin\Udm.exe" "%(FullPath)" -v -o "$(GenPath)"
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="$(SourceDir)\LampDiagramGME.xme">
-      <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Identity) -&gt; LampDiagram.xmp, Registering LampDiagram paradigm</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "%(RootDir)%(Directory)"
-"$(UDM_PATH)\etc\CreateMGA" "%(FileName).xme" "%(FileName).mga" MetaGME
-"$(UDM_PATH)\etc\CreateXmp" "%(FileName).mga"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)LampDiagram.xmp;%(RootDir)%(Directory)LampDiagram.xmp.log;%(RootDir)%(Directory)LampDiagram.mta;%(RootDir)%(Directory)%(FileName).mga;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Identity) -&gt; LampDiagram.xmp, Registering LampDiagram paradigm</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd "%(RootDir)%(Directory)"
-"$(UDM_PATH)\etc\CreateMGA" "%(FileName).xme" "%(FileName).mga" MetaGME
-"$(UDM_PATH)\etc\CreateXmp" "%(FileName).mga"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)LampDiagram.xmp;%(RootDir)%(Directory)LampDiagram.xmp.log;%(RootDir)%(Directory)LampDiagram.mta;%(RootDir)%(Directory)%(FileName).mga;%(Outputs)</Outputs>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\samples\CreateLampModel\LampDiagramGME.xme">
-      <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd "%(RootDir)%(Directory)"
-"$(UDM_PATH)\etc\CreateMga" "%(FileName).xme" "%(FileName).mga" MetaGME
-"$(UDM_PATH)\etc\CreateXmp" "%(FileName).mga"
-</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(FileName).xme -&gt; %(FileName).xmp, Registering paradigm</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)LampDiagram.mta;%(RootDir)%(Directory)LampDiagram.xmp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenPath)\LampDiagram.xsd;$(GenPath)\LampDiagram.cpp;$(GenPath)\LampDiagram.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

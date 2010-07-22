@@ -209,26 +209,26 @@ exit 0
 "$(UDM_PATH)\etc\CreateMGA" "%(FileName).xme" "%(FileName).mga" MetaGME
 "$(UDM_PATH)\etc\CreateXmp" "%(FileName).mga"
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\SignalFlow.xmp; %(RootDir)%(Directory)\SignalFlow.xmp.log; %(RootDir)%(Directory)\SignalFlow.mta; %(RootDir)%(Directory)\%(FileName).mga;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)\SignalFlow.xmp;%(RootDir)%(Directory)\SignalFlow.xmp.log;%(RootDir)%(Directory)\SignalFlow.mta;%(RootDir)%(Directory)\%(FileName).mga;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Signalflow_meta.xme -&gt; Signalflow_meta.xmp, Registering SignalFlow paradigm</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd "%(RootDir)%(Directory)"
 "$(UDM_PATH)\etc\CreateMGA" "%(FileName).xme" "%(FileName).mga" MetaGME
 "$(UDM_PATH)\etc\CreateXmp" "%(FileName).mga"
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\SignalFlow.xmp; %(RootDir)%(Directory)\SignalFlow.xmp.log; %(RootDir)%(Directory)\SignalFlow.mta; %(RootDir)%(Directory)\%(FileName).mga;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)\SignalFlow.xmp;%(RootDir)%(Directory)\SignalFlow.xmp.log;%(RootDir)%(Directory)\SignalFlow.mta;%(RootDir)%(Directory)\%(FileName).mga;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_assocInheritanceMGA\SignalFlow_udm.xml">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">SignaFlow_udm.xml -&gt; C++ API</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\test_assocInheritanceMGA" "%(FullPath)"
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.h; $(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp; $(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.h;$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp;$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_assocInheritanceMGA\SignalFlow_udm.xml">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SignaFlow_udm.xml -&gt; C++ API</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\test_assocInheritanceMGA" "%(FullPath)"
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.h; $(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp; $(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.h;$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp;$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\tests\test_assocInheritanceMGA\SignalFlow_uml.xme">

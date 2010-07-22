@@ -290,10 +290,10 @@ move UdmProject.cpp ..\..\..\..\..\..\src\UdmBase
     <CustomBuild Include="..\..\..\..\..\etc\UdmProject_udm.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">"$(OutDir)..\Debug\UdmD.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">$(OutDir)..\Gen\src\UdmBase\UdmProject.h; $(OutDir)..\Gen\src\UdmBase\UdmProject.cpp; $(OutDir)..\Gen\src\UdmBase\UdmProject.xsd; $(OutDir)..\Gen\src\UdmBase\UdmProject_xsd.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">$(OutDir)..\Gen\src\UdmBase\UdmProject.h;$(OutDir)..\Gen\src\UdmBase\UdmProject.cpp;$(OutDir)..\Gen\src\UdmBase\UdmProject.xsd;$(OutDir)..\Gen\src\UdmBase\UdmProject_xsd.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">"$(OutDir)..\Release\Udm.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">$(OutDir)..\Gen\src\UdmBase\UdmProject.h; $(OutDir)..\Gen\src\UdmBase\UdmProject.cpp; $(OutDir)..\Gen\src\UdmBase\UdmProject.xsd; $(OutDir)..\Gen\src\UdmBase\UdmProject_xsd.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">$(OutDir)..\Gen\src\UdmBase\UdmProject.h;$(OutDir)..\Gen\src\UdmBase\UdmProject.cpp;$(OutDir)..\Gen\src\UdmBase\UdmProject.xsd;$(OutDir)..\Gen\src\UdmBase\UdmProject_xsd.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

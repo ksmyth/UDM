@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="%24%28ReleaseGenPath%29\LampDiagram.cpp">
+    <ClCompile Include="$(SourceDir)\CreateLampModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="%24%28SourceDir%29\CreateLampModel.cpp">
+    <ClCompile Include="$(ReleaseGenPath)\LampDiagram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="%24%28SourceDir%29\CreateLampModel.rc">
+    <ResourceCompile Include="$(SourceDir)\CreateLampModel.rc">
       <Filter>Source Files</Filter>
     </ResourceCompile>
   </ItemGroup>
@@ -40,11 +40,8 @@
     <CustomBuild Include="$(ReleaseGenPath)\LampDiagram_udm.xml">
       <Filter>UML Diagrams</Filter>
     </CustomBuild>
-    <CustomBuild Include="$(SourceDir)\LampDiagramGME.xme">
-      <Filter>UML Diagrams</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\samples\CreateLampModel\LampDiagramGME.xme" />
     <CustomBuild Include="..\..\..\..\..\samples\CreateLampModel\LampDiagramUML.xme" />
+    <CustomBuild Include="..\..\..\..\..\samples\CreateLampModel\LampDiagramGME.xme" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(DebugGenPath)\LampDiagram.cpp">
