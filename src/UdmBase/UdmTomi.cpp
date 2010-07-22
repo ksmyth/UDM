@@ -277,7 +277,7 @@ UDM_DLL multiset<Object> Object::GetAdjacentObjects(const ::Uml::Class & clsDstT
 			if (assoc_cls == ::Uml::Class(NULL)) {
 				vector<ObjectImpl*> dstPeers = impl->getAssociation(oRole, Udm::TARGETFROMPEER);
 
-	                        for(vector<ObjectImpl*>::iterator p_currDstPeer=dstPeers.begin(); p_currDstPeer != dstPeers.end(); p_currDstPeer++)
+				for(vector<ObjectImpl*>::iterator p_currDstPeer=dstPeers.begin(); p_currDstPeer != dstPeers.end(); p_currDstPeer++)
 				{
 					Udm::Object dstObject(*p_currDstPeer);
 
