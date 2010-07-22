@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE paradigm SYSTEM "edf.dtd">
+
+<paradigm name="UdmPythonTestMeta" guid="{922FDD09-25E2-4F01-82F0-CF44DB2EFE12}" cdate="Wed Jul 21 11:48:42 2010" mdate="Wed Jul 21 11:48:42 2010" >
+
+	<comment></comment>
+
+	<author></author>
+
+	<folder name = "RootFolder" metaref = "1000"  rootobjects = "Container" >
+		<atom name = "AtomA" metaref = "1001" >
+				<regnode name = "namePosition" value ="4"></regnode>
+		</atom>
+		<atom name = "AtomB" metaref = "1002" >
+				<regnode name = "namePosition" value ="4"></regnode>
+		</atom>
+		<connection name = "Connection" metaref = "1003" >
+				<regnode name = "sName" value ="srcConnection"></regnode>
+				<regnode name = "dName" value ="dstConnection"></regnode>
+				<regnode name = "color" value ="0x000000"></regnode>
+				<regnode name = "dstStyle" value ="butt"></regnode>
+				<regnode name = "srcStyle" value ="butt"></regnode>
+				<regnode name = "lineType" value ="solid"></regnode>
+			<connjoint>
+				<pointerspec name = "src">
+					<pointeritem desc = "cmproleA"></pointeritem>
+					<pointeritem desc = "cmproleB"></pointeritem>
+				</pointerspec>
+				<pointerspec name = "dst">
+					<pointeritem desc = "cmproleA"></pointeritem>
+					<pointeritem desc = "cmproleB"></pointeritem>
+				</pointerspec>
+			</connjoint>
+		</connection>
+		<model name = "Container" metaref = "1004" >
+				<regnode name = "namePosition" value ="4"></regnode>
+				<regnode name = "isTypeInfoShown" value ="true"></regnode>
+			<role name = "AtomA" metaref = "1014" kind = "AtomA"></role>
+			<role name = "Connection" metaref = "1016" kind = "Connection"></role>
+			<role name = "Container" metaref = "1008" kind = "Container"></role>
+			<role name = "cmproleA" metaref = "1006" kind = "AtomB"></role>
+			<role name = "cmproleB" metaref = "1007" kind = "AtomB"></role>
+			<aspect name = "Aspect" metaref = "1009" >
+				<part metaref = "1015" role = "AtomA" primary = "yes" linked = "no"></part>
+				<part metaref = "1017" role = "Connection" primary = "yes" linked = "no"></part>
+				<part metaref = "1010" role = "Container" primary = "yes" linked = "no"></part>
+				<part metaref = "1012" role = "cmproleA" primary = "yes" linked = "no"></part>
+				<part metaref = "1013" role = "cmproleB" primary = "yes" linked = "no"></part>
+			</aspect>
+		</model>
+	</folder>
+</paradigm>
