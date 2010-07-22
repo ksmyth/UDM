@@ -46,7 +46,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\..\..\include"
-				PreprocessorDefinitions="_DEBUG;WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS;UDM_DYNAMIC_LINKING"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="true"
@@ -72,7 +72,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib"
 				OutputFile="$(OutDir)\UdmBackendDumpD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -139,7 +138,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\..\..\include"
-				PreprocessorDefinitions="NDEBUG;WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="NDEBUG;WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS;UDM_DYNAMIC_LINKING"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -168,7 +167,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib Xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGME.lib UdmUtil.lib zlib.lib"
 				OutputFile="$(OutDir)\UdmBackendDump.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
