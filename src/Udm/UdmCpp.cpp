@@ -22,6 +22,14 @@ this software.
 
 namespace UdmCPPGen {
 
+template<class T>
+struct name_less : binary_function <T, T, bool> {
+	bool operator() (const T& x, const T& y) const {
+		return static_cast<const std::string>(x.name()) < static_cast<const std::string>(y.name());
+	}
+};
+
+
 
 InheritanceSolver::InheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by_namespace)
 {
@@ -188,7 +196,9 @@ InheritanceSolver::InheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by
 string InheritanceSolver::getAncestorList(const ::Uml::Class &cl) const
 {
 	string ret;
-	set< ::Uml::Class> bases = cl.baseTypes();
+	typedef set< ::Uml::Class, name_less<Uml::Class> > SortedClasses;
+	name_less< ::Uml::Class> sort;
+	SortedClasses bases = cl.baseTypes_sorted<name_less<Uml::Class> >(sort);
 	if( bases.size() == 0) 
 	{
 		if (virtualbaseclasses.find(cl) != virtualbaseclasses.end()) ret+= " virtual ";
@@ -197,7 +207,7 @@ string InheritanceSolver::getAncestorList(const ::Uml::Class &cl) const
 	else 
 	{
 		string sep = "";
-		set< ::Uml::Class>::iterator h;
+		SortedClasses::iterator h;
 		for(h = bases.begin(); h != bases.end(); h++) 
 		{
 			cltoclsmap::const_iterator actmapi = virtualchildren.find(*h);
