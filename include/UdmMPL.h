@@ -28,7 +28,9 @@ this software.
 #include <boost/type_traits.hpp>
 #include <boost/version.hpp>
 
-namespace Udm
+#include "UdmBase.h"
+
+namespace UDM_NAMESPACE
 {
 	struct AtomMetaTag {};
 	struct ConnectionMetaTag {};
