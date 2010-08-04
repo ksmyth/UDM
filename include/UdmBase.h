@@ -2006,6 +2006,7 @@ namespace UDM_NAMESPACE
 
 		const CLASS &operator =(const CrossPointerAttr<CLASS> &a)
 		{
+			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
 		}
 	};
@@ -2049,6 +2050,7 @@ namespace UDM_NAMESPACE
 
 		const CLASS &operator =(const PointerAttr<CLASS> &a)
 		{
+			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
 		}
 	};
@@ -2072,6 +2074,7 @@ namespace UDM_NAMESPACE
 
 		const CLASS &operator =(const CrossAssocEndAttr<CLASS> &a)
 		{
+			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
 		}
 	};
@@ -2114,6 +2117,7 @@ namespace UDM_NAMESPACE
 
 		const CLASS &operator =(const AssocEndAttr<CLASS> &a)
 		{
+			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
 		}
 
@@ -2139,6 +2143,7 @@ namespace UDM_NAMESPACE
 
 		const CLASS &operator =(const AClassCrossPointerAttr<CLASS, TARGETCLASS> &a)
 		{
+			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
 		}
 
@@ -2181,6 +2186,7 @@ namespace UDM_NAMESPACE
 
 		const CLASS &operator =(const AClassPointerAttr<CLASS, TARGETCLASS> &a)
 		{
+			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
 		}
 
@@ -2478,6 +2484,7 @@ namespace UDM_NAMESPACE
 
 		const CLASS &operator =(const ParentAttr<CLASS> &a)
 		{
+			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
 		}
 	};
