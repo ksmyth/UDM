@@ -56,26 +56,72 @@ boost::python::list toList(colT collection) {
 	return ret;
 }
 
+Uml::Attribute getAttribute(Udm::Object& self, std::string& name) {
+	// Getting Attributes from meta
+	::Uml::Class cls = self.type();
+	set< ::Uml::Attribute> attrs = cls.attributes();	
+	
+	// Adding parent attributes
+	set< ::Uml::Attribute> aattrs = ::Uml::AncestorAttributes(cls);
+	attrs.insert(aattrs.begin(),aattrs.end());
+
+	
+	for(set< ::Uml::Attribute>::iterator attrsIt = attrs.begin(); attrsIt != attrs.end(); attrsIt++) {
+		string strCurrAttrName = attrsIt->name();
+		
+		if (strCurrAttrName == name) {
+			return *attrsIt;
+		}
+	}
+	return Uml::Attribute();
+}
+
 object Object_attr(Udm::Object& self, str _name) {
 	std::string name = extract<std::string>(_name);
-	__int64 intValue;
-	if (self.GetIntValue(name, intValue)) {
-		return object(intValue);
-	}
-	std::string stringValue;
-	if (self.GetStrValue(name, stringValue)) {
-		return object(stringValue);
-	}
-	double doubleValue;
-	if (self.GetRealValue(name, doubleValue)) {
-		return object(doubleValue);
-	}
-	bool boolValue;
-	if (self.GetBoolValue(name, boolValue)) {
-		return object(boolValue);
-	}
 
-	throw std::runtime_error(std::string("Unknown attribute '") + name + "' for class '" + static_cast<string>(self.type().name()) + "'");
+	Uml::Attribute attr = getAttribute(self, name);
+	if (!attr) {
+		throw std::runtime_error(std::string("Unknown attribute '") + name + "' for class '" + static_cast<string>(self.type().name()) + "'");
+	}
+	if (static_cast<string>(attr.type()) == "Integer") {
+		return object(self.getIntegerAttr(attr));
+	}
+	if (static_cast<string>(attr.type()) == "String" || static_cast<string>(attr.type()) == "Text") {
+		return object(self.getStringAttr(attr));
+	}
+	if (static_cast<string>(attr.type()) == "Real") {
+		return object(self.getRealAttr(attr));
+	}
+	if (static_cast<string>(attr.type()) == "Boolean") {
+		return object(self.getBooleanAttr(attr));
+	}
+	throw std::runtime_error(std::string("Unsupported attribute type '") + static_cast<string>(attr.type()) + "' for class '" + static_cast<string>(self.type().name()) + "'");
+}
+
+object Object_setattr(Udm::Object& self, str _name, object value) {
+	std::string name = extract<std::string>(_name);
+
+	Uml::Attribute attr = getAttribute(self, name);
+	if (!attr) {
+		throw std::runtime_error(std::string("Unknown attribute '") + name + "' for class '" + static_cast<string>(self.type().name()) + "'");
+	}
+	if (static_cast<string>(attr.type()) == "Integer") {
+		self.setIntegerAttr(attr, extract<__int64>(value));
+		return object();
+	}
+	if (static_cast<string>(attr.type()) == "String" || static_cast<string>(attr.type()) == "Text") {
+		self.setStringAttr(attr, extract<std::string>(value));
+		return object();
+	}
+	if (static_cast<string>(attr.type()) == "Real") {
+		self.setRealAttr(attr, extract<double>(value));
+		return object();
+	}
+	if (static_cast<string>(attr.type()) == "Boolean") {
+		self.setBooleanAttr(attr, extract<bool>(value));
+		return object();
+	}
+	throw std::runtime_error(std::string("Unsupported attribute type '") + static_cast<string>(attr.type()) + "' for class '" + static_cast<string>(self.type().name()) + "'");
 }
 
 object Object_children(Udm::Object& self, object child_role, object parent_role, object _child_type) {
@@ -104,27 +150,6 @@ object Object_children(Udm::Object& self, object child_role, object parent_role,
 
 Udm::Object Object_type(Udm::Object& self) {
 	return Udm::Object(self.type());
-}
-
-object Object_adjacent_orig(Udm::Object& self, object srcrolename, object dstrolename, object _associationClass) {
-	Uml::Class associationClass;
-	if (_associationClass != object()) {
-		associationClass = Uml::Class::Cast(extract<Udm::Object&>(_associationClass));
-	}
-
-	Udm::Object::AssociationInfo ascType(associationClass);
-	// KMS: is ascType str(Dst,Src)RoleName backwards?
-	if (srcrolename != object()) {
-		ascType.strDstRoleName = extract<std::string>(srcrolename);
-	}
-	if (dstrolename != object()) {
-		ascType.strSrcRoleName = extract<std::string>(dstrolename);
-	}
-
-	Uml::Class dstType;
-
-	// TODO: shouldn't be a list if cardinality is 0..1
-	return toList(self.GetAdjacentObjects(dstType, ascType));
 }
 
 object Object_adjacent_helper(Udm::Object& self, object srcrolename, object dstrolename, object _associationClass, bool& /*out*/ foundApplicableAssociation) {
@@ -290,16 +315,44 @@ std::string Object_getLibraryName(Udm::Object& self) {
 	return ret;
 }
 
+namespace {
+	class Object_access : Udm::Object {
+	public:
+		static Udm::ObjectImpl* Create(const ::Uml::Class& meta, const Udm::Object& parent,
+			const ::Uml::CompositionChildRole& role,
+			const Udm::ObjectImpl* archetype = &Udm::_null,
+			const bool subtype = false) {
+				return __Create(meta, parent, role, archetype, subtype);
+		}
+	};
+}
+
+Udm::Object Object_create(Udm::Object& meta, Udm::Object& parent /*,Udm::Object& role, Udm::Object& archetype, bool is_subtype*/) {
+	return Object_access::Create(Uml::Class::Cast(meta), parent, Udm::NULLCHILDROLE);
+}
+
+extern "C" {
+__declspec(dllexport) PyObject* __cdecl Object_Convert(Udm::Object udmObject) {
+	object o(udmObject);
+	PyObject* ret = o.ptr();
+	Py_INCREF(ret);
+	return ret;
+}
+}
+
 BOOST_PYTHON_MODULE(udm)
 {
 	class_<Udm::Object>("Object")
 		.add_property("type", Object_type)
 		.add_property("id", &Udm::Object::uniqueId)
 		.add_property("parent", &Udm::Object::GetParent, &Object_SetParent)
+		.def("create", Object_create)
+		.def("delete", &Udm::Object::DeleteObject)
 		.def("_children", Object_children)
 		.def("_adjacent", Object_adjacent)
 		.def("attr", &Object_attr)
 		.def("__getattr__", &Object_getattr)
+		.def("__setattr__", &Object_setattr)
 		.def(self == self)
 		.def(self != self)
 		.def("__hash__", &Udm::Object::uniqueId)
@@ -336,6 +389,19 @@ BOOST_PYTHON_MODULE(udm)
 		.add_property("root", &Udm::SmartDataNetwork::GetRootObject)
 	;
 	scope().attr("SmartDataNetwork").attr("__init__") = eval("lambda self, *args: None");
+	exec(
+"def map_uml_names(diagram):\n"
+"    class_meta = filter(lambda class_: class_.name == 'Class', udm.uml_diagram().children())[0]\n"
+"    namespace_meta = filter(lambda class_: class_.name == 'Namespace', udm.uml_diagram().children())[0]\n"
+"    class ClassMap(object):\n"
+"        def __init__(self, d):\n"
+"            self.__dict__.update(d)\n"
+"    def map_classes(container):\n"
+"        ret = map(lambda class_: (class_.name, class_), container.children(child_type=class_meta))\n"
+"        ret.extend(map(lambda namespace: (namespace.name, map_classes(namespace)), container.children(child_type=namespace_meta)))\n"
+"        return ClassMap(ret)\n"
+"    return map_classes(diagram)\n",
+		import("__main__").attr("__dict__"), scope().attr("__dict__"));
 
 	//def("UdmId2GmeId", UdmGme::UdmId2GmeId);
 	//Udm::Object::uniqueId_type (*GmeId2UdmId)(const char* gmeId) = &UdmGme::GmeId2UdmId;
