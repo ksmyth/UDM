@@ -2,6 +2,7 @@
 #include "UdmApp.h"
 #include "UdmConfig.h"
 #include "Uml.h"
+#include "UdmUtil.h"
 [!if META_LOADING_DYNAMIC && DYNAMIC_META_USER_SELECT]
 #include <afxdlgs.h> // For CFileDialog
 [!endif]
@@ -102,14 +103,14 @@ void CUdmApp::UdmMain(
 	// Displaying the name of the root object meta
 	Udm::Object rootObject=p_backend->GetRootObject();
 	string rootObjectName("Root Object's Class Name: ");
-	rootObjectName+=ExtractName(rootObject.type());
+	rootObjectName+=UdmUtil::ExtractName(rootObject.type());
 	AfxMessageBox(rootObjectName.c_str());
 
 	// Displaying the focus object
 	if(focusObject!=&Udm::_null)
 	{
 		string focusObjectName("Focus Object Name: ");
-		focusObjectName+=ExtractName(focusObject);
+		focusObjectName+=UdmUtil::ExtractName(focusObject);
 		AfxMessageBox(focusObjectName.c_str());
 	}
 
@@ -121,7 +122,7 @@ void CUdmApp::UdmMain(
 		for(set<Udm::Object>::iterator i=selectedObjects.begin();
 														i!=selectedObjects.end();i++)
 		{
-			selObjNames+=ExtractName(*i);
+			selObjNames+=UdmUtil::ExtractName(*i);
 			selObjNames+="\r\n";
 		}
 		AfxMessageBox(selObjNames.c_str());	
@@ -131,39 +132,3 @@ void CUdmApp::UdmMain(
 													
 }
 
-
-
-#ifdef _DEBUG
-/*****************************************************/
-/* Debug time helper function. If the object has an  */
-/* attribute called "name", this function retreives  */
-/* it to help you to find it in the model during the */
-/* application development.	Usually every GME Object */
-/* has a "name" attribute. If an object hapens not	 */
-/* to have it,function retreives <no name specified>.*/
-/*****************************************************/
-string CUdmApp::ExtractName(Udm::Object ob)
-{
-	Uml::Class cls= ob.type();				
-	set<Uml::Attribute> attrs=cls.attributes();		
-	
-	// Adding parent attributes
-	set<Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
-	attrs.insert(aattrs.begin(),aattrs.end());
-
-	for(set<Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
-	{
-		if(string(ai->type())=="String")
-		{
-			string str=ai->name();
-			if(str=="name")
-			{
-				string value=ob.getStringAttr(*ai);
-				if(value.empty())value="<empty string>";
-				return value;
-			}			
-		}				
-	}	
-	return string("<no name specified>");
-}
-#endif
