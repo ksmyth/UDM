@@ -80,6 +80,7 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)/cross_links.pdb"
 				SubSystem="1"
+				LargeAddressAware="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="1"
@@ -206,28 +207,6 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="$(ReleaseGenPath)\CD1.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="$(DebugGenPath)\CD1.cpp"
 				>
 				<FileConfiguration
@@ -251,7 +230,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(ReleaseGenPath)\CD2.cpp"
+				RelativePath="$(ReleaseGenPath)\CD1.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -292,6 +271,28 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="$(ReleaseGenPath)\CD2.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
 			</File>
@@ -341,28 +342,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(ReleaseGenPath)\CL.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="$(DebugGenPath)\CL.cpp"
 				>
 				<FileConfiguration
@@ -382,6 +361,28 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="$(ReleaseGenPath)\CL.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
 			</File>
@@ -416,18 +417,6 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="$(ReleaseGenPath)\CD1.h"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="$(DebugGenPath)\CD1.h"
 				>
 				<FileConfiguration
@@ -440,7 +429,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(ReleaseGenPath)\CD2.h"
+				RelativePath="$(ReleaseGenPath)\CD1.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -464,7 +453,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(ReleaseGenPath)\CD3.h"
+				RelativePath="$(ReleaseGenPath)\CD2.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -488,7 +477,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="$(ReleaseGenPath)\CL.h"
+				RelativePath="$(ReleaseGenPath)\CD3.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -504,6 +493,18 @@
 				>
 				<FileConfiguration
 					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="$(ReleaseGenPath)\CL.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -540,27 +541,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="$(DebugGenPath)\CL_udm.udm"
-			>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-					Outputs="$(GenPath)\CD1.cpp; $(GenPath)\CD2.cpp; $(GenPath)\CD3.cpp; $(GenPath)\CL.cpp; $(GenPath)\CD1.h; $(GenPath)\CD2.h; $(GenPath)\CD3.h; $(GenPath)\CL.h; $(GenPath)\CD1.xsd; $(GenPath)\CD2.xsd; $(GenPath)\CD3.xsd; $(GenPath)\CL.xsd"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCCustomBuildTool"
-				/>
-			</FileConfiguration>
-		</File>
-		<File
 			RelativePath="$(ReleaseGenPath)\CL_udm.udm"
 			>
 			<FileConfiguration
@@ -578,6 +558,27 @@
 					Name="VCCustomBuildTool"
 					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(GenPath)\CD1.cpp; $(GenPath)\CD2.cpp; $(GenPath)\CD3.cpp; $(GenPath)\CL.cpp; $(GenPath)\CD1.h; $(GenPath)\CD2.h; $(GenPath)\CD3.h; $(GenPath)\CL.h; $(GenPath)\CD1.xsd; $(GenPath)\CD2.xsd; $(GenPath)\CD3.xsd; $(GenPath)\CL.xsd"
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="$(DebugGenPath)\CL_udm.udm"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
+					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					Outputs="$(GenPath)\CD1.cpp; $(GenPath)\CD2.cpp; $(GenPath)\CD3.cpp; $(GenPath)\CL.cpp; $(GenPath)\CD1.h; $(GenPath)\CD2.h; $(GenPath)\CD3.h; $(GenPath)\CL.h; $(GenPath)\CD1.xsd; $(GenPath)\CD2.xsd; $(GenPath)\CD3.xsd; $(GenPath)\CL.xsd"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				ExcludedFromBuild="true"
+				>
+				<Tool
+					Name="VCCustomBuildTool"
 				/>
 			</FileConfiguration>
 		</File>

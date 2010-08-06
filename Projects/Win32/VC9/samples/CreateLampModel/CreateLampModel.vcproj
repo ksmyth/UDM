@@ -26,7 +26,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Create directory for generated files"
-				CommandLine="mkdir &quot;$(GenPath)&quot;&#x0D;&#x0A;exit 0"
+				CommandLine="mkdir &quot;$(GenPath)&quot;&#x0D;&#x0A;exit 0&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -83,6 +83,7 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)/CreateLampModel.pdb"
 				SubSystem="1"
+				LargeAddressAware="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="1"
@@ -120,7 +121,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="Create directory for generated files"
-				CommandLine="mkdir &quot;$(GenPath)&quot;&#x0D;&#x0A;exit 0"
+				CommandLine="mkdir &quot;$(GenPath)&quot;&#x0D;&#x0A;exit 0&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -238,6 +239,28 @@
 				>
 			</File>
 			<File
+				RelativePath="$(ReleaseGenPath)\LampDiagram.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="$(DebugGenPath)\LampDiagram.cpp"
 				>
 				<FileConfiguration
@@ -261,45 +284,11 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="$(ReleaseGenPath)\LampDiagram.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
-			<File
-				RelativePath="$(DebugGenPath)\LampDiagram.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
 			<File
 				RelativePath="$(ReleaseGenPath)\LampDiagram.h"
 				>
@@ -312,24 +301,9 @@
 					/>
 				</FileConfiguration>
 			</File>
-		</Filter>
-		<Filter
-			Name="UML Diagrams"
-			Filter="xml"
-			>
 			<File
-				RelativePath="$(DebugGenPath)\LampDiagram_udm.xml"
+				RelativePath="$(DebugGenPath)\LampDiagram.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="LampDiagram_udm.xml -&gt; C++ API"
-						CommandLine="&quot;$(UDM_PATH)\bin\UdmD.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
-						Outputs="$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h"
-					/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="true"
@@ -339,6 +313,11 @@
 					/>
 				</FileConfiguration>
 			</File>
+		</Filter>
+		<Filter
+			Name="UML Diagrams"
+			Filter="xml"
+			>
 			<File
 				RelativePath="$(ReleaseGenPath)\LampDiagram_udm.xml"
 				>
@@ -358,6 +337,28 @@
 						Description="LampDiagram_udm.xml -&gt; C++ API"
 						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
 						Outputs="$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="$(DebugGenPath)\LampDiagram_udm.xml"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="LampDiagram_udm.xml -&gt; C++ API"
+						CommandLine="&quot;$(UDM_PATH)\bin\UdmD.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
+						Outputs="$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
 			</File>

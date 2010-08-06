@@ -57,6 +57,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				GenerateDebugInformation="true"
+				LargeAddressAware="2"
 				RandomizedBaseAddress="1"
 				TargetMachine="1"
 			/>
