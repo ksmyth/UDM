@@ -4,6 +4,7 @@
 
 #include "UdmVizDump.h"
 #include "UmlExt.h"
+#include "UdmUtil.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -100,12 +101,11 @@ void UdmVizDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 	// Getting Attributes from meta
 	::Uml::Class cls= ob.type();
 	long ObjectID=ob.uniqueId();
-	//cout<<"Object '"<< ExtractName(ob)<<"["<<ObjectID<<"]"<<"("<<nDepthLevel<<")"<< "' of type '"<<string(cls.name())<<"' attributes:"<<endl;
 	
 	cout<<'\"'<<ObjectID<<'\"'<<"["<<endl;
 	
 	int i=0;
-	string name=ExtractName(ob);
+	string name=UdmUtil::ExtractName(ob);
 	string umlName=name+":"+(string)cls.name();
 	cout<<"label="<<"\"<"<<'f'<<i++<<">"<<umlName;
 
@@ -137,12 +137,12 @@ void UdmVizDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 		}
 		else if(string(ai->type())=="Boolean")
 		{
-			cout<<" | <"<<'f'<<i<<">"<<string(ai->name())<<": "<<ob.getIntegerAttr(*ai)<<ob.getBooleanAttr(*ai);
+			cout<<" | <"<<'f'<<i<<">"<<string(ai->name())<<": "<<ob.getBooleanAttr(*ai)<<ob.getBooleanAttr(*ai);
 
 		}
 		else if(string(ai->type())=="Real")
 		{
-			cout<<" | <"<<'f'<<i<<">"<<string(ai->name())<<": "<<ob.getIntegerAttr(*ai)<<ob.getRealAttr(*ai);
+			cout<<" | <"<<'f'<<i<<">"<<string(ai->name())<<": "<<ob.getRealAttr(*ai)<<ob.getRealAttr(*ai);
 			
 		}
 		i++;
@@ -151,34 +151,6 @@ void UdmVizDump::ExtractAttributes(Udm::Object ob, int nDepthLevel)
 	cout<<"shape = \"record\"\n];"<<endl;
 }
 
-
-
-string UdmVizDump::ExtractName(Udm::Object ob)
-{
-	::Uml::Class cls= ob.type();				
-	set< ::Uml::Attribute> attrs=cls.attributes();		
-	
-	// Adding parent attributes
-	set< ::Uml::Attribute> aattrs=Uml::AncestorAttributes(cls);
-	attrs.insert(aattrs.begin(),aattrs.end());
-
-	for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
-	{
-		if(string(ai->type())=="String")
-		{
-			string str=ai->name();
-			if(str=="name")
-			{
-				
-				string value=ob.getStringAttr(*ai);
-				if(value.empty())value="";
-				return value;
-			}			
-		}				
-	}
-	
-	return string("");
-}
 
 
 int UdmVizDump::VisitLinks(Udm::ObjectImpl* p_srcObjectImpl)

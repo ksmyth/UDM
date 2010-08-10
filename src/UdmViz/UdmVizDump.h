@@ -29,7 +29,6 @@ public:
 	void VisitObjects(Udm::Object ob, int nDepthLevel=0);
 	int  VisitLinks(Udm::ObjectImpl* p_objectImpl);
 	void ExtractAttributes(Udm::Object ob, int nDepthLevel);
-	string ExtractName(Udm::Object ob);
 
 
 	UdmVizDump();
