@@ -1259,8 +1259,8 @@ namespace UdmStatic
 			if (!deleted)
 			{
 				//release...
-				this->release();
 				deleted = true;
+				this->release();
 			}
 		}
 		
