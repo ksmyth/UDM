@@ -18,6 +18,20 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+			-	Release 3.2.5
+		-	UdmGme: export ID conversion routines UdmId2GmeId and GmeId2UdmId
+		-	Beta support for multiple inheritance in judm (UDM-61)
+		-	Fix Real attributes for DomDataNetwork and Real array attributes for DomDataNetwork and GmeDataNetwork (UDM-64)
+		-	Export more StaticDataNetwork functions
+		-	Udm.exe now generates superclasses in alphabetical order. Useful if you generate code from two sources that specify the same paradigm, e.g. a GReAT transform and standalone Uml model (UDM-65)
+		-	VS2010: move constructor and move assignment operator support
+		-	VS2010: Debug Udm Dll uses Release Xerces and Xalan so debug VS2008 runtime is not needed
+		-	Fix leaking of udm.exe-generated StaticDataNetworks (including Uml) (UDM-60)
+		-	Fix potential GetSafeType failure (UDM-58)
+		-	Support unlimited String attribute and attribute name length in StaticDataNetwork serialization (UDM-62)
+		-	Use UdmUtil::ExtractName in generated interpreters (UDM-59)
+
+
 04/6/10			-	Release 3.2.4
 		-	boost is no longer redistributed with Udm.
 		-	CHANGES_PERSIST_ALWAYS and CHANGES_PERSIST_DEFAULT are deprecated. If the DataNetwork is being destructed during a stack unwinding due to an exception and throws an exception, C++ guarantees that terminate() will be called. It is recommended to use CHANGES_PERSIST_ALWAYS and CloseWithUpdate. (UDM-54)
