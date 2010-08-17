@@ -8,7 +8,11 @@
 
   <Class _id="id3" baseTypes="id4" childRoles="idA id12" isAbstract="false" name="Container" parentRoles="id9 idB idD idF id11" stereotype="Model"/>
 
-  <Class _id="id5" baseTypes="id4" childRoles="id10" isAbstract="false" name="AtomA" stereotype="Atom"/>
+  <Class _id="id5" baseTypes="id4" childRoles="id10" isAbstract="false" name="AtomA" stereotype="Atom">
+    <Attribute defvalue="false;" max="1" min="1" name="boolattr" nonpersistent="false" ordered="false" registry="false" type="Boolean" visibility="public"/>
+    <Attribute max="1" min="1" name="stringattr" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="1" name="intattr" nonpersistent="false" ordered="false" registry="false" type="Integer" visibility="public"/>
+  </Class>
 
   <Class _id="id6" associationRoles="id18 id19" baseTypes="id4" childRoles="idC ide" isAbstract="false" name="AtomB" stereotype="Atom"/>
 

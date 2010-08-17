@@ -27,6 +27,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Copying $(TargetFileName) to bin\"
+				CommandLine="copy /y &quot;$(TargetPath)&quot;  &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy /y &quot;$(UDM_3RDPARTY_PATH)&quot;\boost_1_36_0\bin\boost_python-vc90-mt-1_36.dll &quot;$(UDM_PATH)&quot;\bin&#x0D;&#x0A;"
+				Outputs="$(UDM_PATH)\bin\$(TargetFileName)"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -40,7 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\..\include;&quot;$(UDM_3RDPARTY_PATH)/Python-2.6.5/Include&quot;;&quot;$(UDM_3RDPARTY_PATH)/Python-2.6.5/PC&quot;"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;C:\Python26\include"
 				PreprocessorDefinitions="UDM_DYNAMIC_LINKING"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -59,8 +62,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName).pyd"
-				AdditionalLibraryDirectories="&quot;$(UDM_3RDPARTY_PATH)/boost_1_36_0/lib/&quot;;&quot;$(UDM_3RDPARTY_PATH)/Python-2.6.5/PC/VS8.0&quot;;&quot;$(OutDir)&quot;"
+				OutputFile="$(OutDir)\udmd.pyd"
+				AdditionalLibraryDirectories="&quot;$(UDM_3RDPARTY_PATH)/boost_1_36_0/lib/&quot;;C:\Python26\libs;&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -99,7 +102,8 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				CommandLine="copy /y &quot;$(TargetPath)&quot;  &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy /y &quot;$(UDM_3RDPARTY_PATH)&quot;\boost_1_36_0\bin\boost_python-vc90-mt-1_36.dll &quot;$(UDM_PATH)&quot;\bin&#x0D;&#x0A;&#x0D;&#x0A;"
+				Description="Copying $(TargetFileName) to bin\"
+				CommandLine="copy /y &quot;$(TargetPath)&quot;  &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy /y &quot;$(UDM_3RDPARTY_PATH)&quot;\boost_1_36_0\bin\boost_python-vc90-mt-1_36.dll &quot;$(UDM_PATH)&quot;\bin&#x0D;&#x0A;"
 				Outputs="$(UDM_PATH)\bin\$(TargetFileName)"
 			/>
 			<Tool
