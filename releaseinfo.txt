@@ -18,7 +18,7 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
-			-	Release 3.2.5
+08/10/10		-	Release 3.2.5
 		-	UdmGme: export ID conversion routines UdmId2GmeId and GmeId2UdmId
 		-	Beta support for multiple inheritance in judm (UDM-61)
 		-	Fix Real attributes for DomDataNetwork and Real array attributes for DomDataNetwork and GmeDataNetwork (UDM-64)
@@ -1378,6 +1378,7 @@ Credits
 --------------------
 Contact and support
 --------------------
+Report bugs at http://escher.isis.vanderbilt.edu/JIRA/
 Contact Endre Magyari for support.
 Updates are posted to http://repo.isis.vanderbilt.edu/downloads/
 
@@ -1386,5 +1387,5 @@ Updates are posted to http://repo.isis.vanderbilt.edu/downloads/
 DOCUMENTATION
 -----------------
 
-Please see /Documents/UDMAPI.pdf for further documentation.
+Please see UDM/doc/UDMAPI.pdf for further documentation.
 

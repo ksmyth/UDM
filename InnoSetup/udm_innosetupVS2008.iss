@@ -42,7 +42,7 @@ AppUpdatesURL=http://www.escherinstitute.org/Plone/tools/suites/mic/udm
 DefaultDirName={pf}\ISIS\UDM
 DefaultGroupName=UDM
 LicenseFile={#UDMPATH}\license.txt
-InfoBeforeFile={#UDMPATH}\releaseinfoVS2008.txt
+InfoBeforeFile={#UDMPATH}\releaseinfo.txt
 OutputDir={#UDMPATH}\InnoSetup
 OutputBaseFilename={#OutputFileBase}
 Compression=lzma
@@ -67,7 +67,8 @@ Name: Full3rdParty; Description: Full 3rdParty Package; Types: Full
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 ;Udm Root folder
-Source: {#UDMPATH}\readme.txt; DestDir: {app}; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\releaseinfo.txt; DestDir: {app}; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\license.txt; DestDir: {app}; Components: Core
 ; Udm_3rdparty_files
 ;Source: {#UDM3rdPartyPath}\ant-1.6.2\*; DestDir: {app}\3rdparty\ant-1.6.2; Excludes: .svn; Components: Java Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
 ;Source: {#UDM3rdPartyPath}\antlr-2.7.7\*; DestDir: {app}\3rdparty\antlr-2.7.7; Excludes: .svn; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
