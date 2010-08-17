@@ -3303,7 +3303,7 @@ bbreak:			;
 		}
 
 		// For write
-		project->Preferences |= MGAPREF_IGNORECONNCHECKS;
+		project->Preferences |= MGAPREF_IGNORECONNCHECKS | MGAPREF_FREEINSTANCEREFS;
 
 
 		if (priv.terr)
@@ -3346,7 +3346,7 @@ bbreak:			;
 		COMTHROW(project->CreateTerritory(NULL, &priv.terr, NULL));
 
 	// BUGFIX:
-		project->Preferences |= MGAPREF_IGNORECONNCHECKS;
+		project->Preferences |= MGAPREF_IGNORECONNCHECKS | MGAPREF_FREEINSTANCEREFS;
 
 
 		COMTHROW(project->BeginTransaction(priv.terr, TRANSACTION_GENERAL));
@@ -3380,7 +3380,7 @@ bbreak:			;
 		}
 		COMTHROW(project->CreateTerritory(NULL, &priv.terr, NULL));
 
-		project->Preferences |= MGAPREF_IGNORECONNCHECKS;
+		project->Preferences |= MGAPREF_IGNORECONNCHECKS | MGAPREF_FREEINSTANCEREFS;
 		COMTHROW(project->BeginTransaction(priv.terr, TRANSACTION_GENERAL));
 		try {
 // get rootfolder & get name
