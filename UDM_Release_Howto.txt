@@ -1,0 +1,83 @@
+HOWTO make a Windows Udm release (for Udm maintainers only)
+Currently only Kevin Smyth <ksmyth@isis.vanderbilt.edu> makes Udm releases
+First see UDM_compile_guideVS2008.txt
+
+set JAVA_HOME=
+set UDM_PATH=
+set UDM_3RDPARTY_PATH=
+set GREAT_PATH=
+set GREAT_3RDPARTY_PATH=
+
+Update with new version, info:
+ /UDM/trunk/InnoSetup/udm_innosetupVS2008.iss
+ /UDM/trunk/Projects/Win32/VC10/src/UdmDll/UdmDll.rc
+ /UDM/trunk/Projects/Win32/VC9/src/UdmDll/UdmDll.rc
+ /UDM/trunk/include/UdmBase.h
+ /UDM/trunk/releaseinfoVS2008.txt
+ci -m 'Prepare for release 3.2.5'
+
+svn cp https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_5
+
+
+rem VS9 cmd prompt
+rem check that none of the commands fail
+
+set JDK_PATH=C:\Program Files\Java\jdk1.5.0_22
+
+set BUILD_SWITCH=/nologo /r
+
+vcbuild %BUILD_SWITCH% /u "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" "Debug|Win32"
+vcbuild %BUILD_SWITCH% /u "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" "Release|Win32"
+
+"%UDM_PATH%\scripts\vc9-env.bat"
+vcbuild %BUILD_SWITCH% /u "%UDM_PATH%\Projects\Win32\VC9\src\Udm.sln" "Debug|Win32"
+vcbuild %BUILD_SWITCH% /u "%UDM_PATH%\Projects\Win32\VC9\src\Udm.sln" "Release|Win32"
+pushd %UDM_PATH%\judm
+set Path=%UDM_3RDPARTY_PATH%\apache-ant-1.7.1\bin;%PATH%
+set ANT_HOME=
+set ANT_PATH=
+%UDM_3RDPARTY_PATH%\apache-ant-1.7.1\bin\ant
+
+rem ------------------------
+rem new VS9 cmd prompt
+rem Building GReAT is a requirement for a Udm release!
+"C:\Documents and Settings\kevin\My Documents\GReAT\set-paths-VC9.bat"
+vcbuild %BUILD_SWITCH% /u "%GREAT_PATH%\GReATVS2008.sln" "Debug|Win32"
+vcbuild %BUILD_SWITCH% /u "%GREAT_PATH%\GReATVS2008.sln" "Release|Win32"
+
+
+rem ------------------------
+rem VS10 cmd prompt
+
+set UDM_3RDPARTY_PATH=c:\Documents and Settings\kevin\My Documents\3rdparty\UDM_VS2010
+set JDK_PATH=C:\Program Files\Java\jdk1.5.0_22
+"%UDM_PATH%\scripts\vc9-env.bat"
+msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:UseEnv=true;Configuration=Debug
+msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:UseEnv=true;Configuration=Release
+
+
+svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_5 Udm_source_r3.2.5
+# run InnoSetup on %UDM_PATH%\InnoSetup\
+# rename InnoSetup output UDM_r3_2_5.exe
+# test installer http://kms1/svn/installs/ vm_installs_test.py secrets-installtest2.py
+# ------------------------
+# bash
+# zip Udm_source_r3.2.5/
+cp Udm_source_r3.2.5/releaseinfo.txt UDM_Release_Notes.txt 
+
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.5/
+scp UDM_Release_Notes.txt UDM_r3_2_5.exe Udm_source_r3.2.5.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.5/
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.5/
+
+# For GReAT release:
+# export
+# zip
+# cp GReAT_Release_Notes.txt
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GReAT/1.7.4
+scp GReAT_Release_Notes.txt GReAT_r1_7_4.exe GReAT_source_r1.7.4.zip  ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GReAT/1.7.4
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7.4
+
+# For Udm and GReAT
+# On http://repo add Folder 3.2.5; add Download UDM_Release_Notes.txt, UDM_r3_2_5.exe, Udm_source_r3.2.5.zip
+# JIRA: make release
+# email announcement
