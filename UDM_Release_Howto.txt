@@ -56,6 +56,9 @@ msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p
 msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:UseEnv=true;Configuration=Release
 
 
+"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%UDM_PATH%" /s \\kms1\symbols /t Udm /v "3.2.5"
+"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t UdmGReAT /v "3.2.5"
+
 svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_5 Udm_source_r3.2.5
 # run InnoSetup on %UDM_PATH%\InnoSetup\
 # rename InnoSetup output UDM_r3_2_5.exe
