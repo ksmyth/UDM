@@ -298,8 +298,6 @@ begin
 //		RegWriteStringValue(HKEY_CURRENT_USER, 'Environment', 'UDM_3RDPARTY_PATH', path+'3rdparty');
 		ModPath('PATH', path+'\bin');
 		ModPath('PATH', path+'\etc');
-		ModPath('PATH', path+'\3rdparty\xerces-c_2_8_0\bin');
-		ModPath('PATH', path+'\3rdparty\xalan-c_1_11_0\bin');
 		ModPath('CLASSPATH', '.');
 	end;
 end;
@@ -312,8 +310,6 @@ begin
 		path := ExpandConstant('{app}');
 		ModPath('PATH', path+'\bin');
 		ModPath('PATH', path+'\etc');
-		ModPath('PATH', path+'\3rdparty\xerces-c_2_8_0\bin');
-		ModPath('PATH', path+'\3rdparty\xalan-c_1_11_0\bin');
 		ModPath('CLASSPATH', '.');
 	end;
 end;
@@ -354,7 +350,7 @@ begin
   if CurPageID = wpSelectComponents then begin
     MyComponents := WizardSelectedComponents(false);
     MyCompLen := length(MyComponents);
-    if MyComponents[MyCompLen] = 'm' then begin
+    if Pos('system', MyComponents) <> 0 then begin
       InstallSystemWide := true;
     end else begin
       InstallSystemWide := false;
