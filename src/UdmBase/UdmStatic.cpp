@@ -4133,32 +4133,13 @@ namespace UdmStatic
 
 	StaticDataNetwork::~StaticDataNetwork()
 	{
-		if(rootobject) 
+		if(isOpen()) 
 		{
-		
 			//check whether we need to save the datanetwork
-
 		
-			if (sem != Udm::CHANGES_LOST_DEFAULT) SaveAs(systemname);
-		
-		
-
-			StaticObject* root_o = (StaticObject*)rootobject.__impl();
-			
-			//first detach all rootobject's children , recursively
-		
-/*
-			StaticObject::children_type::iterator children_i= root_o->m_children.begin();
-			for (; children_i != root_o->m_children.end(); children_i++)
-					(*children_i).second->detach();
-		
-*/			
-			//reset root object(it still has a valid pointer!)
-			//this will decrement root_o refcount!!!(release())
-
-			root_o->Destroy(true);
-		
-			rootobject =&Udm::_null;
+			if (sem != Udm::CHANGES_LOST_DEFAULT)
+				SaveAs(systemname);
+			CloseNoUpdate();
 		}
 		
 		SDNList::iterator ff;	
@@ -4167,6 +4148,25 @@ namespace UdmStatic
 			
 		if (ff == Udm::_UdmStaticData.SDNs.end()) throw udm_exception("Corrupt Static DN map");
 		Udm::_UdmStaticData.SDNs.erase(ff);
+	}
+		
+	void StaticDataNetwork::CloseNoUpdate() {
+		StaticObject* root_o = (StaticObject*)rootobject.__impl();
+		
+		//first detach all rootobject's children , recursively
+	
+/*
+		StaticObject::children_type::iterator children_i= root_o->m_children.begin();
+		for (; children_i != root_o->m_children.end(); children_i++)
+				(*children_i).second->detach();
+	
+*/			
+		//reset root object(it still has a valid pointer!)
+		//this will decrement root_o refcount!!!(release())
+
+		root_o->Destroy(true);
+	
+		rootobject =&Udm::_null;
 	};
 
 	

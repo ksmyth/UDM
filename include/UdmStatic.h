@@ -134,14 +134,14 @@ namespace UdmStatic
 		
 		UDM_DLL void SaveAs(string systemname);
 		
-		UDM_DLL void CloseWithUpdate()				{SaveAs(systemname);};
-		UDM_DLL void CloseAs(string systemname)		{SaveAs(systemname);};		
+		UDM_DLL void CloseWithUpdate()				{SaveAs(systemname); CloseNoUpdate();};
+		UDM_DLL void CloseAs(string systemname)		{SaveAs(systemname); CloseNoUpdate();};
 		UDM_DLL void CommitEditSequence()			{SaveAs(systemname);};
 		
 		//do nothing here
 
 		UDM_DLL void AbortEditSequence()			{};
-		UDM_DLL void CloseNoUpdate()				{};
+		UDM_DLL void CloseNoUpdate();
 		
 		bool isOpen()							
 		{
