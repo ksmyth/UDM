@@ -84,3 +84,5 @@ ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7
 # On http://repo add Folder 3.2.5; add Download UDM_Release_Notes.txt, UDM_r3_2_5.exe, Udm_source_r3.2.5.zip
 # JIRA: make release
 # email announcement
+# change https://svn.isis.vanderbilt.edu/isis-common/trunk/common-scripts/install_udm.cmd
+# upgrade on build machines
