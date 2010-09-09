@@ -10,8 +10,8 @@ ALL RIGHTS RESERVED
 2. GME 10, R10.2.9 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
-3. Visual Studio 9
-   (This version of UDM can also be used with Visual Studio 2008 Express Edition
+3. Visual Studio 9 or Visual Studio 10
+   (This version of UDM can also be used with Visual Studio 2008 Express Edition or Visual Studio 2010 Express Edition.
     Please visit http://www.microsoft.com/eXPress/download/#webInstall
     for instructions on how to download and install the free express edition)
 
