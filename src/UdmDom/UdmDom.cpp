@@ -3301,7 +3301,7 @@ namespace UdmDom
 			if (DomDataNetwork::DTDPath.empty())
 			{
 				HANDLE myProcId = GetCurrentProcess();
-				HMODULE lpModules[100];
+				HMODULE lpModules[200];
 				HMODULE resFound = NULL;
 				DWORD needed;
 
@@ -3317,17 +3317,21 @@ namespace UdmDom
 					fp fnctptr = (fp)GetProcAddress(psmod, "EnumProcessModules");
 					if (fnctptr)
 					{
-						if ((*fnctptr)(myProcId, lpModules, 100*sizeof(HMODULE), &needed))
+						if ((*fnctptr)(myProcId, lpModules, sizeof(lpModules), &needed))
 						{
 							DWORD module_index = 0;
-							while (!resource && (module_index < needed/sizeof(HMODULE)))
+							while (module_index < std::min((size_t)needed/sizeof(HMODULE), sizeof(lpModules)/sizeof(lpModules[0])))
 							{
 								resource = FindResource(lpModules[module_index], sysid.c_str(), "XSD");
-								if (resource) resFound = lpModules[module_index];
+								if (resource) {
+									resFound = lpModules[module_index];
+									break;
+								}
 								module_index++;
 							}
 						}
 					}
+					FreeLibrary(psmod);
 				}
 				else
 					resource = FindResource(NULL, sysid.c_str(), "XSD");
@@ -3338,31 +3342,8 @@ namespace UdmDom
 					HGLOBAL hResData = LoadResource(resFound, resource);
 					if (hResData)
 					{
-						//a static map which will prevent locking the same resource twice
-						static map<HGLOBAL, const unsigned char *> resBufferCache;
-						map<HGLOBAL, const unsigned char *>::iterator i = resBufferCache.find(hResData);
-						if (i != resBufferCache.end())
-							//there is a 4th parameter which could be set to true 
-							// - in that case the constructor would not adopt the buffer
-							// Unfortunatly that caused an asertion when running Udm.exe in debug
-							// mode at the point when the parser deleted the InputSource
-							// new object is created on the heap, but the parser is responsible 
-							//to clean up the returned object on the heap
-							return new MemBufInputSource(i->second, size, X("MBIS_RESOURCE_XSD_" + sysid)); 
-
-						//we assume 1byte/char encoding in the resource
-						//MSDN: buffer returned by LockResource will be freed when the process exits
-
 						const unsigned char * p = (const unsigned char *)LockResource(hResData);
-						pair<HGLOBAL, const unsigned char *> item(hResData,p);
-						resBufferCache.insert(item);
-
-						//there is a 4th parameter which could be set to true 
-						// - in that case the constructor would not adopt the buffer
-						// Unfortunatly that caused an asertion when running Udm.exe in debug
-						// mode at the point when the parser deleted the InputSource
-						// new object is created on the heap, but the parser is responsible 
-						//to clean up the returned object on the heap
+						// KMS n.b. if the dll this resource is in is unloaded, this memory becomes invalid
 						is =  new MemBufInputSource(p, size, X("MBIS_RESOURCE_XSD_" + sysid));
 					}
 				}
