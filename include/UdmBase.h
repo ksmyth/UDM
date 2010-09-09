@@ -683,11 +683,11 @@ namespace UDM_NAMESPACE
 
 		StringAttr &operator =(const StringAttr &a) { return operator =( string(a) ); }
 
-		bool operator==(const StringAttr &a) const { return string() == static_cast<string>(a); }
+		bool operator==(const StringAttr &a) const { return static_cast<string>(*this) == static_cast<string>(a); }
 
-		bool operator==(const string &a) const { return string() == a; }
+		bool operator==(const string &a) const { return static_cast<string>(*this) == a; }
 
-		bool operator==(const char* const a) const { return string() == a; }
+		bool operator==(const char* const a) const { return static_cast<string>(*this) == a; }
 	};
 
 // --------------------------- BooleanAttr
