@@ -29,6 +29,10 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Copying $(TargetFileName) and UdmDll.lib"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(OutDir)&quot;\UdmDll.lib &quot;$(UDM_PATH)&quot;\lib &amp;&amp; ^&#x0D;&#x0A;copy /y /b &quot;$(OutDir)&quot;\UdmDll.lib+,, &quot;$(OutDir)&quot;\UdmDll.lib&#x0D;&#x0A;"
+				AdditionalDependencies="$(ProjectPath)"
+				Outputs="&quot;$(OutDir)&quot;\UdmDll.lib"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -114,7 +118,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(OutDir)&quot;\UdmDll.lib &quot;$(UDM_PATH)&quot;\lib&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -131,6 +135,9 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Copying $(TargetFileName) and UdmDllD.lib"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(OutDir)&quot;\UdmDllD.lib &quot;$(UDM_PATH)&quot;\lib &amp;&amp; ^&#x0D;&#x0A;copy /y /b &quot;$(OutDir)&quot;\UdmDllD.lib+,, &quot;$(OutDir)&quot;\UdmDllD.lib&#x0D;&#x0A;"
+				Outputs="&quot;$(OutDir)&quot;\UdmDllD.lib"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -213,7 +220,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(OutDir)&quot;\UdmDllD.lib &quot;$(UDM_PATH)&quot;\lib&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
