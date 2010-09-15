@@ -30,9 +30,9 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying $(TargetFileName) and UdmDll.lib"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(OutDir)&quot;\UdmDll.lib &quot;$(UDM_PATH)&quot;\lib &amp;&amp; ^&#x0D;&#x0A;copy /y /b &quot;$(OutDir)&quot;\UdmDll.lib+,, &quot;$(OutDir)&quot;\UdmDll.lib&#x0D;&#x0A;"
-				AdditionalDependencies="$(ProjectPath)"
-				Outputs="&quot;$(OutDir)&quot;\UdmDll.lib"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;%UDM_PATH%\bin&quot; &amp;&amp; ^&#x0D;&#x0A;copy &quot;%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin\xerces-c_2_8.dll&quot; &quot;%UDM_PATH%\bin&quot; &amp;&amp; ^&#x0D;&#x0A;copy &quot;%UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin\Xalan-C_1_11.dll&quot; &quot;%UDM_PATH%\bin&quot; &amp;&amp; ^&#x0D;&#x0A;copy &quot;%UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin\XalanMessages_1_11.dll&quot; &quot;%UDM_PATH%\bin&quot; &amp;&amp; ^&#x0D;&#x0A;type &quot;$(OutDir)\UdmDll.lib&quot; &gt; &quot;%UDM_PATH%\lib\UdmDll.lib&quot;&#x0D;&#x0A;rem Can&apos;t copy UdmDll.lib or the timestamp is wrong and the Build Step runs always&#x0D;&#x0A;"
+				AdditionalDependencies=""
+				Outputs="$(UDM_PATH)\lib\UdmDll.lib"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -136,7 +136,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying $(TargetFileName) and UdmDllD.lib"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(OutDir)&quot;\UdmDllD.lib &quot;$(UDM_PATH)&quot;\lib &amp;&amp; ^&#x0D;&#x0A;copy /y /b &quot;$(OutDir)&quot;\UdmDllD.lib+,, &quot;$(OutDir)&quot;\UdmDllD.lib&#x0D;&#x0A;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(UDM_3RDPARTY_PATH)&quot;\xerces-c_2_8_0\bin\xerces-c_2_8D.dll &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(UDM_3RDPARTY_PATH)&quot;\xalan-c_1_11_0\bin\Xalan-C_1_11D.dll &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(UDM_3RDPARTY_PATH)&quot;\xalan-c_1_11_0\bin\XalanMessages_1_11D.dll &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;type &quot;$(OutDir)\UdmDllD.lib&quot; &gt; &quot;%UDM_PATH%\lib\UdmDllD.lib&quot;&#x0D;&#x0A;rem Can&apos;t copy UdmDllD.lib or the timestamp is wrong and the Build Step runs always&#x0D;&#x0A;"
 				Outputs="&quot;$(OutDir)&quot;\UdmDllD.lib"
 			/>
 			<Tool
