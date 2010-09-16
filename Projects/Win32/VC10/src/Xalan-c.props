@@ -13,5 +13,6 @@
     <Link>
       <AdditionalLibraryDirectories>$(UDM_3RDPARTY_PATH)\Xalan-C_1_11_0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+  </ItemDefinitionGroup>
   <ItemGroup />
 </Project>
