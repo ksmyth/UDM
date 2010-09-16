@@ -15,27 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="%24%28GME_ROOT%29\sdk\bon\common\Builder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="%24%28GME_ROOT%29\sdk\bon\common\ComHelp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="%24%28GME_ROOT%29\sdk\bon\common\ComponentDll.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="%24%28GME_ROOT%29\sdk\bon\common\ComponentObj.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="%24%28GME_ROOT%29\sdk\bon\common\Console.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="%24%28GME_ROOT%29\sdk\bon\common\Exceptions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="%24%28GME_ROOT%29\sdk\bon\common\Formatter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lattrib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -69,6 +48,27 @@
     <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Builder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\ComHelp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\ComponentDll.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\ComponentObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Exceptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Formatter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\src\UML GME\Interpreter\compicon.ico">
@@ -84,35 +84,11 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="%24%28GME_ROOT%29\sdk\bon\common\ComponentLib.idl">
+    <Midl Include="$(GME_ROOT)\sdk\bon\common\ComponentLib.idl">
       <Filter>Source Files</Filter>
     </Midl>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="%24%28GME_ROOT%29\sdk\bon\common\Builder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="%24%28GME_ROOT%29\sdk\bon\common\ComHelp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="%24%28GME_ROOT%29\sdk\bon\common\ComponentDll.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="%24%28GME_ROOT%29\sdk\bon\common\ComponentObj.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="%24%28GME_ROOT%29\sdk\bon\common\Console.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="%24%28GME_ROOT%29\sdk\bon\common\Formatter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="%24%28GME_ROOT%29\sdk\bon\common\GMECOM.H">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="%24%28GME_ROOT%29\sdk\bon\common\targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lattrib.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -150,6 +126,30 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\Builder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\ComHelp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\ComponentDll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\ComponentObj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\Console.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\Formatter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\GMECOM.H">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(GME_ROOT)\sdk\bon\common\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
