@@ -92,7 +92,8 @@
     </ClCompile>
     <Lib />
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\lib</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -108,7 +109,8 @@
     </ClCompile>
     <Lib />
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\lib</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">
