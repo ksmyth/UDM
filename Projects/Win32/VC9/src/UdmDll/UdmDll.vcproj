@@ -136,8 +136,8 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying $(TargetFileName) and UdmDllD.lib"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(UDM_3RDPARTY_PATH)&quot;\xerces-c_2_8_0\bin\xerces-c_2_8D.dll &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(UDM_3RDPARTY_PATH)&quot;\xalan-c_1_11_0\bin\Xalan-C_1_11D.dll &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;copy &quot;$(UDM_3RDPARTY_PATH)&quot;\xalan-c_1_11_0\bin\XalanMessages_1_11D.dll &quot;$(UDM_PATH)&quot;\bin &amp;&amp; ^&#x0D;&#x0A;type &quot;$(OutDir)\UdmDllD.lib&quot; &gt; &quot;%UDM_PATH%\lib\UdmDllD.lib&quot;&#x0D;&#x0A;rem Can&apos;t copy UdmDllD.lib or the timestamp is wrong and the Build Step runs always&#x0D;&#x0A;"
-				Outputs="&quot;$(OutDir)&quot;\UdmDllD.lib"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;%UDM_PATH%\bin&quot; &amp;&amp; ^&#x0D;&#x0A;copy &quot;%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin\xerces-c_2_8D.dll&quot; &quot;%UDM_PATH%\bin&quot; &amp;&amp; ^&#x0D;&#x0A;copy &quot;%UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin\Xalan-C_1_11D.dll&quot; &quot;%UDM_PATH%\bin&quot; &amp;&amp; ^&#x0D;&#x0A;copy &quot;%UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin\XalanMessages_1_11D.dll&quot; &quot;%UDM_PATH%\bin&quot; &amp;&amp; ^&#x0D;&#x0A;type &quot;$(OutDir)\UdmDllD.lib&quot; &gt; &quot;%UDM_PATH%\lib\UdmDllD.lib&quot;&#x0D;&#x0A;rem Can&apos;t copy UdmDllD.lib or the timestamp is wrong and the Build Step runs always&#x0D;&#x0A;"
+				Outputs="$(UDM_PATH)\lib\UdmDllD.lib"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
