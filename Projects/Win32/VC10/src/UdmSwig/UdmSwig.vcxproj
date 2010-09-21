@@ -30,9 +30,11 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="..\swig.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="..\swig.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -146,12 +148,12 @@
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(OutDir)..\Gen\src\UdmSwig"
 cd  "$(OutDir)..\Gen\src\UdmSwig"
-swig.exe -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\..\..\..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o %(FileName)_wrap.cpp "%(FullPath)"
+"$(SWIG_EXE)" -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\..\..\..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o %(FileName)_wrap.cpp "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UdmSwig\%(FileName)_wrap.cpp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(OutDir)..\Gen\src\UdmSwig"
 cd  "$(OutDir)..\Gen\src\UdmSwig"
-swig.exe -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\..\..\..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o %(FileName)_wrap.cpp "%(FullPath)"
+"$(SWIG_EXE)" -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\..\..\..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o %(FileName)_wrap.cpp "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)..\Gen\src\UdmSwig\%(FileName)_wrap.cpp;%(Outputs)</Outputs>
     </CustomBuild>
