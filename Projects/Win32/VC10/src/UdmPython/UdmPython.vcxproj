@@ -51,7 +51,7 @@
     <CustomBuildStep>
       <Message>Copying $(TargetFileName) to bin\</Message>
       <Command>copy /y "$(TargetPath)"  "$(UDM_PATH)"\bin &amp;&amp; ^
-copy /y "$(UDM_3RDPARTY_PATH)"\boost_1_44_0\bin\boost_python-vc100-mt-1_44.dll "$(UDM_PATH)"\bin
+copy /y "$(UDM_3RDPARTY_PATH)"\boost_1_44_0\bin\boost_python-vc100-mt-gd-1_44.dll "$(UDM_PATH)"\bin
 </Command>
       <Outputs>$(UDM_PATH)\bin\$(TargetFileName);%(Outputs)</Outputs>
     </CustomBuildStep>
