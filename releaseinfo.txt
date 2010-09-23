@@ -18,6 +18,14 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+09/23/10		-	Release 3.2.6
+		-	Fix StringAttr::operator== (UDM-69(
+		-	Fix UdmStaticDataNetwork::Close*: previous versions didn't actually close the DataNetwork (UDM-68)
+		-	Distribute VS2008 static .libs (use of UdmDll is required for VS2010; use UdmDll is preferred for VS2008) (UDM-70)
+		-	Fix system-wide install: environment variables weren't being set properly (UDM-67)
+		-	Fix Win32 exceptions in UdmDom::resolveEntity (UDM-66)
+
+
 08/10/10		-	Release 3.2.5
 		-	UdmGme: export ID conversion routines UdmId2GmeId and GmeId2UdmId
 		-	Beta support for multiple inheritance in judm (UDM-61)

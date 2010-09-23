@@ -5,7 +5,7 @@
 #pragma option -v+
 #pragma verboselevel 9
 
-#define GMEVER "10.2.9"
+#define GMEVER "10.8.18"
 
 #define UDMPATH GetEnv('UDM_PATH')
 #if UDMPATH == ""
@@ -27,7 +27,7 @@
 #define UDMDLLVS10 "UdmDll_3_2_VS10.dll"
 #define UDMDLLDVS10 "UdmDll_3_2_VS10D.dll"
 
-#define UDMVER "3.2.5"
+#define UDMVER "3.2.6"
 #define OutputFileBase "Udm_setup_VC9"
 
 [Setup]

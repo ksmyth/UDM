@@ -13,7 +13,7 @@ Update with new version, info:
  /UDM/trunk/Projects/Win32/VC10/src/UdmDll/UdmDll.rc
  /UDM/trunk/Projects/Win32/VC9/src/UdmDll/UdmDll.rc
  /UDM/trunk/include/UdmBase.h
- /UDM/trunk/releaseinfoVS2008.txt
+ /UDM/trunk/releaseinfo.txt
 ci -m 'Prepare for release 3.2.5'
 
 svn cp https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_5
