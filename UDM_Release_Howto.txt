@@ -30,7 +30,7 @@ vcbuild %BUILD_SWITCH% /u "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sl
 vcbuild %BUILD_SWITCH% /u "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" "Release|Win32"
 
 "%UDM_PATH%\scripts\vc9-env.bat"
-vcbuild %BUILD_SWITCH% /u "%UDM_PATH%\Projects\Win32\VC9\src\Udm.sln" "Debug|Win32"
+devenv /useenv /build debug /project UdmDll "%UDM_PATH%\Projects\Win32\vc9\src\Udm.sln"
 vcbuild %BUILD_SWITCH% /u "%UDM_PATH%\Projects\Win32\VC9\src\Udm.sln" "Release|Win32"
 pushd %UDM_PATH%\judm
 set Path=%UDM_3RDPARTY_PATH%\apache-ant-1.7.1\bin;%PATH%
@@ -42,8 +42,8 @@ rem ------------------------
 rem new VS9 cmd prompt
 rem Building GReAT is a requirement for a Udm release!
 "C:\Documents and Settings\kevin\My Documents\GReAT\set-paths-VC9.bat"
-vcbuild %BUILD_SWITCH% /u "%GREAT_PATH%\GReATVS2008.sln" "Debug|Win32"
-vcbuild %BUILD_SWITCH% /u "%GREAT_PATH%\GReATVS2008.sln" "Release|Win32"
+devenv /useenv /build debug   /project "MetaGME2UML Interpreters" "%GREAT_PATH%\GReATVS2008.sln"
+devenv /useenv /build release /project "MetaGME2UML Interpreters" "%GREAT_PATH%\GReATVS2008.sln"
 
 
 rem ------------------------
@@ -51,7 +51,6 @@ rem VS10 cmd prompt
 
 set UDM_3RDPARTY_PATH=c:\Documents and Settings\kevin\My Documents\3rdparty\UDM_VS2010
 set JDK_PATH=C:\Program Files\Java\jdk1.5.0_22
-"%UDM_PATH%\scripts\vc9-env.bat"
 msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:UseEnv=true;Configuration=Debug
 msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:UseEnv=true;Configuration=Release
 

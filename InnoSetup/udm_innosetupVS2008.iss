@@ -161,11 +161,9 @@ Source: {#UDMPATH}\Build\Win32\VC9\Debug\GOCLD.lib; DestDir: {app}\lib; Flags: i
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\UdmDllD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC10\Debug\UdmDll_VS10D.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\UdmXmiD.lib; DestDir: {app}\lib; Flags: ignoreversion
-Source: {#UDMPATH}\Build\Win32\VC9\Debug\File2CodeD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\UdmUtilD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\UmlD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\UdmPOID.lib; DestDir: {app}\lib; Flags: ignoreversion
-Source: {#UDMPATH}\Build\Win32\VC9\Debug\JavaAPIGenD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\UdmDomD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\UdmGmeD.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\UdmOclD.lib; DestDir: {app}\lib; Flags: ignoreversion
@@ -174,11 +172,9 @@ Source: {#UDMPATH}\Build\Win32\VC9\Release\GOCL.lib; DestDir: {app}\lib; Flags: 
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmDll.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmDll_VS10.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmXmi.lib; DestDir: {app}\lib; Flags: ignoreversion
-Source: {#UDMPATH}\Build\Win32\VC9\Release\File2Code.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmUtil.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\Uml.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmPOI.lib; DestDir: {app}\lib; Flags: ignoreversion
-Source: {#UDMPATH}\Build\Win32\VC9\Release\JavaAPIGen.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmDom.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmGme.lib; DestDir: {app}\lib; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmOcl.lib; DestDir: {app}\lib; Flags: ignoreversion
