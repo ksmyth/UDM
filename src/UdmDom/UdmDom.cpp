@@ -3146,7 +3146,7 @@ namespace UdmDom
 				cerr << "Warning " << description << endl;
 			else
 				throw udm_exception("Error " + description);
-
+			return true;
 		}
 	};
 
