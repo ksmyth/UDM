@@ -63,7 +63,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
-      <AdditionalIncludeDirectories>$(GME_ROOT)\GME\$(Configuration);$(GME_ROOT)\GME\Mga\$(Configuration);$(GME_ROOT)\GME\Meta\$(Configuration);$(GME_ROOT)\GME\Gme\$(Configuration);$(GME_ROOT)\bin;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\GME\$(Configuration);$(GME_ROOT)\GME\Mga\$(Configuration);$(GME_ROOT)\GME\Meta\$(Configuration);$(GME_ROOT)\GME\Gme\$(Configuration);$(GME_ROOT)\bin;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -96,7 +96,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
-      <AdditionalIncludeDirectories>$(GME_ROOT)\GME\$(Configuration);$(GME_ROOT)\GME\Mga\$(Configuration);$(GME_ROOT)\GME\Meta\$(Configuration);$(GME_ROOT)\GME\Gme\$(Configuration);$(GME_ROOT)\bin;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\GME\$(Configuration);$(GME_ROOT)\GME\Mga\$(Configuration);$(GME_ROOT)\GME\Meta\$(Configuration);$(GME_ROOT)\GME\Gme\$(Configuration);$(GME_ROOT)\bin;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
