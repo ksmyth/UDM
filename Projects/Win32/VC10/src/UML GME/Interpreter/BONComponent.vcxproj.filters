@@ -152,6 +152,9 @@
     <ClInclude Include="$(GME_ROOT)\sdk\bon\common\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\ComponentLib_h.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\..\..\..\src\UML GME\Interpreter\attribute.g" />

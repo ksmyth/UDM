@@ -44,7 +44,8 @@
 				Name="VCMIDLTool"
 				AdditionalOptions="/server none /client none /I &quot;$(GME_ROOT)\Interfaces&quot;"
 				PreprocessorDefinitions="_DEBUG"
-				AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\Interpreter"
+				AdditionalIncludeDirectories="&quot;$(GME_ROOT)\bin&quot;;&quot;$(GME_ROOT)\Gme\Debug&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;"
+				HeaderFileName="$(InputName).h"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -146,7 +147,8 @@
 				Name="VCMIDLTool"
 				AdditionalOptions="/server none /client none /I &quot;$(GME_ROOT)\Interfaces&quot;"
 				PreprocessorDefinitions="NDEBUG"
-				AdditionalIncludeDirectories="..\..\..\..\..\..\src\UML GME\Interpreter"
+				AdditionalIncludeDirectories="&quot;$(GME_ROOT)\bin&quot;;&quot;$(GME_ROOT)\Gme\Release&quot;;&quot;..\..\..\..\..\..\src\UML GME\Interpreter&quot;"
+				HeaderFileName="$(InputName).h"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -289,7 +291,6 @@
 						Name="VCMIDLTool"
 						TypeLibraryName="$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb"
 						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\Interpreter"
-						HeaderFileName="$(InputName)_h.h"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -299,7 +300,6 @@
 						Name="VCMIDLTool"
 						TypeLibraryName="$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb"
 						OutputDirectory="$(TargetDir)\..\Gen\src\UML GME\Interpreter"
-						HeaderFileName="$(InputName)_h.h"
 					/>
 				</FileConfiguration>
 			</File>

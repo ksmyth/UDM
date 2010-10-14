@@ -23,7 +23,6 @@
 #define GMECommon_h
 
 #include "StdAfx.h"
-#include "ComponentLib_h.h"
 #include "GMECOM.h"
 #include "OCLCommon.h"
 
