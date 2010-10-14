@@ -218,7 +218,15 @@ using namespace MGALib;
 #include "GmeObject.h"
 #include <UdmUtil.h>
 
-
+// Hack to detect VS10 GME: VS10 GME has ifdef guards in InterfaceVersion.h
+#define INTERFACEVERSION_INCLUDED
+#define cpp_quote(x) namespace { }
+#include "InterfaceVersion.h"
+#ifndef INTERFACE_VERSION
+#define GME_VS10
+#endif
+#undef INTERFACEVERSION_INCLUDED
+#undef INTERFACE_VERSION
 
 namespace UdmGme 
 {
@@ -3265,12 +3273,21 @@ bbreak:			;
 	}
 
 	void CheckVersion(IMgaProject *p) {
+		// IGMEVersionInfo and IMgaVersionInfo have the same GUID and vtable definition, so this works across versions
+#ifdef GME_VS10
+		CORELib::IGMEVersionInfoPtr vi = p;
+		CORELib::GMEInterfaceVersion_enum v = CORELib::GMEInterfaceVersion_None;
+		if (vi) COMTHROW(vi->get_version(&v));
+		CORELib::GMEInterfaceVersion_enum current = CORELib::GMEInterfaceVersion_Current;
+#else
 		GmeLib::IMgaVersionInfoPtr vi=p;
 		GmeLib::MgaInterfaceVersion_enum v = GmeLib::MgaInterfaceVersion_None;
 		if(vi) COMTHROW(vi->get_Version(&v));
-		if(v != GmeLib::MgaInterfaceVersion_Current) {
+		GmeLib::MgaInterfaceVersion_enum current = GmeLib::MgaInterfaceVersion_Current;
+#endif
+		if (v != current) {
 			char buf[200]; 
-			sprintf(buf, "Incompatible GME version GME:%X UDM:%X", v, GmeLib::MgaInterfaceVersion_Current);
+			sprintf(buf, "Incompatible GME version GME:%X UDM:%X", v, current);
 			throw udm_exception(buf);
 		}
 	}

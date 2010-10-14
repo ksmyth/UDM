@@ -23,6 +23,7 @@
 
 #import "Meta.dll" no_implementation
 #import "Mga.dll" no_implementation
+#import "Core.dll" no_implementation
 #import "Gme.exe" no_implementation
 
 //only this is needed from the UdmGme namespace.
