@@ -152,7 +152,7 @@ namespace UdmStatic
 			return new StaticDataNetwork(meta, project);}
 		//Static Data Network is _not_ a type safe data network
 		// because m_type in StaticObject is an UML::Class reference!
-		bool IsTypeSafe() { return false;};
+		UDM_DLL bool IsTypeSafe() { return false;};
 		unsigned long DeSerialize(FILE *f, map<unsigned long, const StaticObject*>& tr_map, Object& root_o);
 		Udm::DataNetwork * GetMetaDn(){ return meta_dn;};
 

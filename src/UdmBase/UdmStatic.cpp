@@ -4131,7 +4131,7 @@ namespace UdmStatic
 
 	// --------------------------- Static Data Network funcitons
 
-	StaticDataNetwork::~StaticDataNetwork()
+	UDM_DLL StaticDataNetwork::~StaticDataNetwork()
 	{
 		if(isOpen()) 
 		{
@@ -4194,7 +4194,7 @@ namespace UdmStatic
 
 
 	
-	void StaticDataNetwork::CreateNew(const string &systemname, const string &metalocator, 
+	UDM_DLL void StaticDataNetwork::CreateNew(const string &systemname, const string &metalocator, 
 		const ::Uml::Class &rootclass, enum Udm::BackendSemantics sem) 
 	{
 		rootobject = new StaticObject(rootclass, 1);
@@ -4203,7 +4203,7 @@ namespace UdmStatic
 		this->sem = sem;
 	};
 
-	void StaticDataNetwork::OpenExisting(const string &systemname, const string &metalocator, enum Udm::BackendSemantics sem )
+	UDM_DLL void StaticDataNetwork::OpenExisting(const string &systemname, const string &metalocator, enum Udm::BackendSemantics sem )
 	{
 		FILE * f = fopen(systemname.c_str(), "rb");
 		map<unsigned long, const StaticObject *> tr_map;
@@ -4258,7 +4258,7 @@ namespace UdmStatic
 
 		
 
-	void StaticDataNetwork::SaveAs(string systemname)	
+	UDM_DLL void StaticDataNetwork::SaveAs(string systemname)	
 	{
 		FILE * f = fopen(systemname.c_str(), "wb");
 		if (f)
@@ -4276,7 +4276,7 @@ namespace UdmStatic
 
 
 
-	Object StaticDataNetwork::ObjectById(Object::uniqueId_type id) 
+	UDM_DLL Object StaticDataNetwork::ObjectById(Object::uniqueId_type id) 
 	{ 
 		//id was a pointer to a Static Object
 		//this shouldn't fail...
