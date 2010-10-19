@@ -427,10 +427,17 @@ namespace UDM_NAMESPACE
 			const vector<ObjectImpl*> &a, 
 			int mode = TARGETFROMPEER,
 			const bool direct = true) = 0;	
-
 		//if direct is false, the link to be created is an inherited link
 		//that exists between the children of my parent's archetype
 		//and needs to be copied here 
+
+		// association with reference ports
+		virtual void connectTo(
+			const ::Uml::AssociationRole &meta,
+			const ObjectImpl* target,
+			const vector<ObjectImpl*> &refs = vector<ObjectImpl*>()) = 0;
+		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) = 0;
+		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const = 0;
 
 	//archetype/derived relationships
 		virtual vector<ObjectImpl*> getDerived() const = 0;
@@ -637,6 +644,13 @@ namespace UDM_NAMESPACE
 			const vector<ObjectImpl*> &a, 
 			int mode = TARGETFROMPEER, 
 			const bool direct = true) { throw e; }
+
+		virtual void connectTo(
+			const ::Uml::AssociationRole &meta,
+			const ObjectImpl* target,
+			const vector<ObjectImpl*> &refs = vector<ObjectImpl*>()) { throw e; }
+		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) { throw e; }
+		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const { throw e; }
 
 		virtual uniqueId_type uniqueId() const { return 0; }
 		
@@ -2558,6 +2572,83 @@ namespace UDM_NAMESPACE
 			};
 	};
 
+// --------------------------- AssocEndChainAttr
+
+	template<class CLASS, TYPENAME RESULTTYPE>
+	class AssocEndChainAttr
+	{
+	private:
+		ObjectImpl *impl;
+		const ::Uml::AssociationRole &meta;
+
+	public:
+		typedef CLASS dst;
+
+		AssocEndChainAttr(ObjectImpl *i, const ::Uml::AssociationRole &m) : impl(i), meta(m) { }
+
+		operator RESULTTYPE() const
+		{
+			vector<ObjectImpl*> a = impl->getAssociation(meta, TARGETFROMCLASS);
+			ASSERT( a.size() <= 1 );
+
+			if (!a.empty())
+			{
+				CLASS end = a.front();
+				vector<ObjectImpl*> chain = impl->getConnectingChain(meta, end.__impl());
+				TYPENAME RESULTTYPE::second_type v;
+				for (vector<ObjectImpl*>::const_iterator i = chain.begin(); i != chain.end(); i++)
+					v.push_back(*i);
+				return make_pair(end, v);
+			}
+
+			TYPENAME RESULTTYPE::second_type empty_v;
+			return make_pair(&_null, empty_v);
+		}
+
+		AssocEndChainAttr<CLASS, RESULTTYPE> &operator =(const RESULTTYPE &a)
+		{
+			vector<ObjectImpl *> chain;
+
+			TYPENAME RESULTTYPE::second_type::const_iterator i = a.second.begin();
+			while( i != a.second.end() )
+			{
+				chain.push_back((*i).__impl());
+				++i;
+			}
+
+			impl->connectTo(meta, a.first.__impl(), chain);
+
+			return *this;
+		}
+
+		AssocEndChainAttr<CLASS, RESULTTYPE> &operator =(const AssocEndChainAttr<CLASS, RESULTTYPE> &a)
+		{
+			RESULTTYPE b = a;
+			return operator =(b);
+		}
+
+		AssocEndChainAttr<CLASS, RESULTTYPE> &operator =(const CLASS &a)
+		{
+			typename RESULTTYPE::second_type empty_v;
+			RESULTTYPE b = make_pair(a, empty_v);
+			return operator =(b);
+		}
+
+		AssocEndChainAttr<CLASS, RESULTTYPE> &operator !()
+		{
+			vector<ObjectImpl*> a = impl->getAssociation(meta, TARGETFROMCLASS);
+			ASSERT( a.size() <= 1 );
+
+			if (!a.empty())
+			{
+				CLASS end = a.front();
+				impl->disconnectFrom(meta, end.__impl());
+			}
+
+			return *this;
+		}
+	};
+
 // --------------------------- BaseVisitor
 
 	class UDM_DLL BaseVisitor
@@ -2729,6 +2820,40 @@ namespace UDM_NAMESPACE
 			}
 
 			impl->setAssociation(meta, b, mode);
+		}
+
+		void connectTo(const ::Uml::AssociationRole &meta, const Object &target, const vector<Object> &refs = vector<Object>())
+		{
+			vector<ObjectImpl*> refs_impl;
+
+			vector<Object>::const_iterator i = refs.begin();
+			while ( i != refs.end() )
+			{
+				refs_impl.push_back((*i).impl);
+				++i;
+			}
+
+			impl->connectTo(meta, target.impl, refs_impl);
+		}
+
+		void disconnectFrom(const ::Uml::AssociationRole &meta, const Object &peer)
+		{
+			impl->disconnectFrom(meta, peer.impl);
+		}
+
+		vector<Object> getConnectingChain(const ::Uml::AssociationRole &meta, const Object &peer) const
+		{
+			vector<Object> ret;
+
+			vector<ObjectImpl*> a = impl->getConnectingChain(meta, peer.impl);
+			vector<ObjectImpl*>::const_iterator i = a.begin();
+			while( i != a.end() )
+			{
+				ret.push_back(*i);
+				++i;
+			}
+
+			return ret;
 		}
 
 	// --- type

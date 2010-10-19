@@ -81,7 +81,7 @@ namespace UdmGme
 	struct assocmapitem;
 
 	//type of the map which holds the mapping of associations to GME Meta Objects
-	typedef map< ::Uml::Association::uniqueId_type, assocmapitem> assocmap;
+	typedef map< ::Uml::Association::uniqueId_type, assocmapitem*> assocmap;
 	
 
 	class GmeDataNetwork : public Udm::DataNetwork 

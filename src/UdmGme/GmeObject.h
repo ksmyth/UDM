@@ -155,6 +155,10 @@ namespace UdmGme
 
 		virtual vector<ObjectImpl*> getAssociation(const ::Uml::AssociationRole &meta, int mode) const ;
 		virtual void setAssociation(const ::Uml::AssociationRole &meta, const vector<ObjectImpl*> &nvect, int mode, const bool direct = true);
+
+		virtual void connectTo(const ::Uml::AssociationRole &meta, const ObjectImpl* target, const vector<ObjectImpl*> &refs = vector<ObjectImpl*>());
+		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer);
+		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const;
 	// ---- archetype/derived/instances
 
 		virtual vector<ObjectImpl*> getDerived() const;
@@ -167,6 +171,7 @@ namespace UdmGme
 	
 	
 	// ---- connection through refport - hack
+		IMgaFCOsPtr FindReferencesChain(const IMgaFCOPtr& peer, bool reverse, const IMgaFCOsPtr& refs) const;
 		IMgaFCOsPtr FindReferencesToFCO(const IMgaFCOPtr& peer, const IMgaFCOPtr& preffered_ref = NULL) const;
 
 	// ---- library support

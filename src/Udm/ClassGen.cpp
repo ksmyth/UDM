@@ -904,6 +904,10 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 	::Uml::Association assoc = c.association();
 	if(assoc) 
 	{
+		bool generate_rphelper_chains = false;
+		if (gen.opts.assoc_wrphelper_names.find(assoc.getPath2("::", false)) != gen.opts.assoc_wrphelper_names.end())
+			generate_rphelper_chains = true;
+
 		set< ::Uml::AssociationRole> assocs = assoc.roles();
 
 		// connect to the association (by using the parent() of first association role)
@@ -935,6 +939,12 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 
 				// association_class::meta_OTHER_ROLE_end_ = OTHER_ROLE_target::meta_ROLE_rev = ROLE_target::meta_OTHER_ROLE
 				meta_init_links.push_back( boost::format("%1%::meta_%2%_end_ = %3%::meta_%4%_rev = %5%::meta_%6%") % cl_name % orel_name % UmlClassCPPName(the_other.target(), c.parent_ns()) % rel_name % UmlClassCPPName(tclass, c.parent_ns()) % orel_name );
+
+				if (generate_rphelper_chains)
+				{
+					typedefs.push_back( boost::format("typedef pair< %1%, vector<Udm::Object> > %2%_chain_t") % tclass_cpp_name % rel_name );
+					meth_defs.push_back( boost::format("Udm::AssocEndChainAttr< %1%> %2%_chain() const { return Udm::AssocEndChainAttr< %1%>(impl, meta_%2%_end_); }") % tclass_cpp_name % rel_name );
+				}
 
 				if (gen.opts.mode == UdmOpts::CXX_GENERIC)
 				{

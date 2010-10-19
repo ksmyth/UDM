@@ -2,6 +2,8 @@
 #include "RefPort.h"
 #include <iostream>
 
+#include <UdmUtil.h>
+
 // Registers the fixture into the 'registry'
 
 CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::refPortsTest );
@@ -18,12 +20,13 @@ void UdmTests::refPortsTest::testRefPorts()
 	RootFolder rf = RootFolder::Cast(dn.GetRootObject());
 	rf.name() = "RootFolder";
 
-
 	//creating root models
 	Root root = Root::Create(rf);
 	root.name() = "root";
 	Root root_refs = Root::Create(rf);
 	root_refs.name() = "root_refs";
+	Root root_refs2 = Root::Create(rf);
+	root_refs2.name() = "root_refs2";
 
 	APar apar = APar::Create(root);
 	apar.name() = "apar";
@@ -40,12 +43,16 @@ void UdmTests::refPortsTest::testRefPorts()
 	BRef bref = BRef::Create(root_refs);
 	bref.name() = "bref";
 
-	BRef bref2 = BRef::Create(root_refs);
+	BRef bref2 = BRef::Create(root_refs2);
 	bref2.name() = "bref2";
+
+	BRef bref3 = BRef::Create(root_refs);
+	bref3.name() = "bref3";
 
 	aref1.ref() = apar;
 	bref.ref() = bpar;
 	bref2.ref() = bpar2;
+	bref3.ref() = bref2;
 
 	A a = A::Create(apar);
 	a.name() = "a";
@@ -58,6 +65,7 @@ void UdmTests::refPortsTest::testRefPorts()
 
 	C c = C::Create(root_refs);
 	c.name() = "c";
+
 
 	c.a_end__rp_helper() = aref1;
 	c.b_end__rp_helper() = bref;
@@ -75,12 +83,99 @@ void UdmTests::refPortsTest::testRefPorts()
 
 	// we change the preference, but the visible one does not change since
 	// the port has not been changed
-	c.b_end__rp_helper() = bref2;
+	c.b_end__rp_helper() = bref3;
 	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_helper()) == bref);
 
 	// after port change, the preference becomes visible
 	c.b_end_end() = b2;
-	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_helper()) == bref2);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_helper()) == bref3);
+
+
+	{
+		C::b_end_chain_t r = c.b_end_chain();
+		C::b_end_chain_t::second_type v = r.second;
+		CPPUNIT_ASSERT(B::Cast(r.first) == b2);
+		cerr << "Connecting chain between c and b2: " << v.size() << endl;
+		for (vector<Udm::Object>::const_iterator i = v.begin(); i != v.end(); i++) {
+			cout << "chain item: " << UdmUtil::ExtractName(*i) << "[" << i->uniqueId() << "]" << endl;
+		}
+	}
+
+	{
+		vector<Udm::Object> r = b2.getConnectingChain(B::meta_a_end_rev, c);
+		cerr << "Connecting chain between b2 and c: " << r.size() << endl;
+		for (vector<Udm::Object>::const_iterator i = r.begin(); i != r.end(); i++) {
+			cout << "chain item: " << UdmUtil::ExtractName(*i) << "[" << i->uniqueId() << "]" << endl;
+		}
+	}
+
+	{
+		C::a_end_chain_t r = c.a_end_chain();
+		C::a_end_chain_t::second_type v = r.second;
+		cerr << "Connecting chain between c and a: " << v.size() << endl;
+		for (vector<Udm::Object>::const_iterator i = v.begin(); i != v.end(); i++) {
+			cout << "chain item: " << UdmUtil::ExtractName(*i) << "[" << i->uniqueId() << "]" << endl;
+		}
+	}
+
+	{
+		vector<Udm::Object> r = a.getConnectingChain(A::meta_b_end_rev, c);
+		cerr << "Connecting chain between a and c: " << r.size() << endl;
+		for (vector<Udm::Object>::const_iterator i = r.begin(); i != r.end(); i++) {
+			cout << "chain item: " << UdmUtil::ExtractName(*i) << "[" << i->uniqueId() << "]" << endl;
+		}
+	}
+
+	// disconnect src
+	!c.a_end_chain();
+	CPPUNIT_ASSERT(A::Cast(c.a_end_end()) == &Udm::_null);
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
+
+	// disconnect dst
+	b2.disconnectFrom(B::meta_a_end_rev, c);
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
+
+
+	c.a_end_end() = a;
+
+	// connect dst using references chain
+	vector<Udm::Object> v1_refs;
+	v1_refs.push_back(bref3);
+	v1_refs.push_back(bref2);
+	c.b_end_chain() = make_pair(b2, v1_refs);
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
+
+	// disconnect dst
+	!c.b_end_chain();
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
+
+	// connect another dst using references chain
+	v1_refs.clear();
+	v1_refs.push_back(bref);
+	c.b_end_chain() = make_pair(b, v1_refs);
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b);
+
+	// disconnect dst
+	!c.b_end_chain();
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
+
+
+	// connect dst using reference port helper
+	c.b_end__rp_helper() = bref;
+	//c.connectTo(C::meta_b_end_end_, b);
+	c.b_end_chain() = b;
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b);
+
+	// disconnect dst
+	!c.b_end_chain();
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
+
+
+	// connect another dst using reference port helper
+	c.b_end__rp_helper() = bref3;
+	//c.connectTo(C::meta_b_end_end_, b2);
+	c.b_end_chain() = b2;
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
 
 	dn.CloseWithUpdate();
 }

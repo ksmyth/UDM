@@ -205,7 +205,17 @@ CHANGELOG
 #include "CommonHeaders.h"
 #include <map>
 #include <iomanip>
+#include <algorithm>
 
+// Hack to detect VS10 GME: VS10 GME has ifdef guards in InterfaceVersion.h
+#define INTERFACEVERSION_INCLUDED
+#define cpp_quote(x) namespace { }
+#include "InterfaceVersion.h"
+#ifndef INTERFACE_VERSION
+#define GME_VS10
+#endif
+#undef INTERFACEVERSION_INCLUDED
+#undef INTERFACE_VERSION
 
 using namespace METALib;
 using namespace MGALib;
@@ -227,6 +237,7 @@ using namespace MGALib;
 #endif
 #undef INTERFACEVERSION_INCLUDED
 #undef INTERFACE_VERSION
+
 
 namespace UdmGme 
 {
@@ -255,10 +266,14 @@ namespace UdmGme
 		//and metaobj will be the MGA Meta Connection object
 		bool rp_helper;
 
+		// if this is a connection and there are rp_helper associations for it,
+		// then these members are the corresponding association roles of the rp_helper associations;
+		::Uml::AssociationRole src_rp_helper, dst_rp_helper;
+
 		// the target of primary is an abstract UML class
 		bool pt_abstract;
 
-		assocmapitem() : metaobjs_count(0),  metaobjs(NULL), rp_helper(false), pt_abstract(false) {};
+		assocmapitem() : metaobjs_count(0),  metaobjs(NULL), rp_helper(false), pt_abstract(false), src_rp_helper(&Udm::_null), dst_rp_helper(&Udm::_null) {};
 	};
 
 	
@@ -477,11 +492,11 @@ namespace UdmGme
 				SmartBSTR dst_role_name = conn->RegistryValue["dRefParent"];
 				try {
 					references = role_name.compare(dst_role_name) == 0 ? conn->GetDstReferences() : conn->GetSrcReferences();
-				} catch (udm_exception& e) {}
+				} catch (udm_exception&) {}
 			} else {
 				try {
 					references = role_name.compare(src_role_name) == 0 ? conn->GetSrcReferences() : conn->GetDstReferences();
-				} catch (udm_exception& e) {}
+				} catch (udm_exception&) {}
 			}
 
 			if (references != NULL && references->GetCount() > 0)
@@ -665,31 +680,31 @@ namespace UdmGme
 							
 				IMgaReferencePtr cp_ref_child(cp_child);
 							
-				IMgaFCOPtr reffered;//immediate reffered
-				COMTHROW(cp_ref_child->get_Referred(&reffered));
-				if (reffered==NULL) continue;//null reference
+				IMgaFCOPtr referred;//immediate referred
+				COMTHROW(cp_ref_child->get_Referred(&referred));
+				if (referred==NULL) continue;//null reference
 
-				IMgaFCOPtr final_reffered(reffered);//final reffered
+				IMgaFCOPtr final_referred(referred);//final referred
 			
 				references.CreateInstance("Mga.MgaFCOs");
 							
 				COMTHROW(references->Append(cp_ref_child));
 
-				while((reffered!=NULL) && reffered->GetObjType() == OBJTYPE_REFERENCE) 
+				while((referred!=NULL) && referred->GetObjType() == OBJTYPE_REFERENCE) 
 				{
 					//loop through references reffering references...
 								
-					IMgaReferencePtr new_reference(reffered);
-					COMTHROW(new_reference->get_Referred(&reffered));
-					if (reffered) 
+					IMgaReferencePtr new_reference(referred);
+					COMTHROW(new_reference->get_Referred(&referred));
+					if (referred) 
 					{
-						final_reffered = reffered;
+						final_referred = referred;
 						COMTHROW(references->Append(new_reference));
 					}
 				}
 
 								
-				if (final_reffered->GetIsEqual(peer_parent) == VARIANT_TRUE)
+				if (final_referred->GetIsEqual(peer_parent) == VARIANT_TRUE)
 				{	
 					found = true;
 					break;//ok, don't scan the other objects, we accomplished our objectives.
@@ -720,6 +735,63 @@ namespace UdmGme
 	}
 
 
+	IMgaFCOsPtr CompleteReferencesChainToFCO(const IMgaSimpleConnectionPtr& connection, const IMgaFCOPtr& peer, const IMgaFCOsPtr& start_refs) 
+	{
+
+		IMgaModelPtr connection_parent, peer_parent;
+		connection->get_ParentModel(&connection_parent);
+		peer->get_ParentModel(&peer_parent);
+
+		if (connection_parent != NULL && peer_parent != NULL)
+		{
+			IMgaFCOsPtr references;
+			references.CreateInstance("Mga.MgaFCOs");
+
+			MGACOLL_ITERATE(IMgaFCO, start_refs)
+			{
+				COMTHROW(references->Append(MGACOLL_ITER));
+			}
+			MGACOLL_ITERATE_END;
+
+			IMgaReferencePtr ref(start_refs->GetItem(start_refs->Count));
+							
+			IMgaFCOPtr referred;//immediate referred
+			COMTHROW(ref->get_Referred(&referred));
+
+			IMgaFCOPtr final_referred(referred);//final referred
+
+			while (referred != NULL && referred->GetObjType() == OBJTYPE_REFERENCE) 
+			{
+				//loop through references reffering references...
+				IMgaReferencePtr new_reference(referred);
+				COMTHROW(new_reference->get_Referred(&referred));
+				if (referred)
+				{
+					final_referred = referred;
+					COMTHROW(references->Append(new_reference));
+				}
+			}
+
+			if (final_referred != NULL && final_referred->GetIsEqual(peer_parent) == VARIANT_TRUE)
+				return references;
+
+			references.Release();
+		}
+
+		string debug;
+
+		debug.append("Parent model of the connection: ");
+		debug.append( (char *)connection_parent->GetAbsPath());
+		debug.append(", name of peer: ");
+		debug.append((char*) peer->GetAbsPath());
+		
+
+
+		throw udm_exception(string("Could not reach connecting port FCO through references to it's parent, starting from the given reference chain. Debug info:") + debug);
+		return NULL;
+	}
+
+
 	IMgaFCOsPtr GmeObject::FindReferencesToFCO(const IMgaFCOPtr& peer, const IMgaFCOPtr& preffered_ref ) const
 	{
 		if (self->GetObjType() != OBJTYPE_CONNECTION)
@@ -742,11 +814,11 @@ namespace UdmGme
 
 
 
-		assocmapitem nn =((UdmGme::GmeDataNetwork*) mydn)->amap.find(assoc.uniqueId())->second;
+		assocmapitem *nn = ((UdmGme::GmeDataNetwork*) mydn)->amap.find(assoc.uniqueId())->second;
 
-		bool reverse = (nn.primary == meta);
+		bool reverse = (nn->primary == meta);
 
-		if(nn.ot == OBJTYPE_MODEL) throw udm_exception("Setting Archetype/Derived relations is not supported");
+		if(nn->ot == OBJTYPE_MODEL) throw udm_exception("Setting Archetype/Derived relations is not supported");
 
 
 		vector<ObjectImpl*> kvect = nvect;						 // things to add
@@ -789,7 +861,7 @@ bbreak:			;
 
 
 		
-		if(nn.ot == OBJTYPE_CONNECTION) 
+		if(nn->ot == OBJTYPE_CONNECTION) 
 		{
 			// if reverse, get src 
 			if(mode == Udm::TARGETFROMCLASS) 
@@ -850,7 +922,7 @@ bbreak:			;
 				MGACOLL_ITERATE(IMgaConnPoint, conns) {
 					IMgaSimpleConnectionPtr conn = MGACOLL_ITER->Owner;
 					if(MGACOLL_ITER->ConnRole == SmartBSTR(reverse ? "dst" : "src") &&
-						conn->Meta == nn.metaobj) {
+						conn->Meta == nn->metaobj) {
 						conn->DestroyObject();
 					}									
 				}
@@ -923,7 +995,7 @@ bbreak:			;
 			}//if(mode == Udm::CLASSFROMTARGET) 
 			else 
 			{
-				if (nn.rp_helper )
+				if (nn->rp_helper )
 				{
 					
 
@@ -957,7 +1029,7 @@ bbreak:			;
 							RpHelperRemoveFromRegistry(connecting_object, self, oname);
 						}
 					};
-				}//if (nn.rp_helper)
+				}//if (nn->rp_helper)
 				else
 				{
 					IMgaConnPointsPtr conns = self->PartOfConns;
@@ -965,7 +1037,7 @@ bbreak:			;
 					MGACOLL_ITERATE(IMgaConnPoint, conns) 
 					{
 						IMgaSimpleConnectionPtr conn = MGACOLL_ITER->Owner;
-						if(conn->Meta == nn.metaobj) 
+						if(conn->Meta == nn->metaobj) 
 						{
 							IMgaFCOPtr peer = reverse ? conn->src : conn->dst;
 							for(i = pvect.begin(); i != pvect.end(); i++) 
@@ -989,13 +1061,13 @@ bbreak:			;
 					IMgaMetaRolesPtr roles, groles;
 					if(parent) 
 					{
-						roles = IMgaMetaModelPtr(parent->Meta)->LegalRoles(nn.metaobj);
+						roles = IMgaMetaModelPtr(parent->Meta)->LegalRoles(nn->metaobj);
 
 						gparent = parent->ParentModel;
 
 						if(gparent) 
 						{
-							groles = IMgaMetaModelPtr(gparent->Meta)->LegalRoles(nn.metaobj);
+							groles = IMgaMetaModelPtr(gparent->Meta)->LegalRoles(nn->metaobj);
 						}
 					}
 
@@ -1074,14 +1146,14 @@ bbreak:			;
 
 						if(hs != S_OK) throw udm_exception("Cannot create conn association " + getnameforassoc(assoc, true));
 					}//for i kvect
-				}//else if (nn.rp_helper)
+				}//else if (nn->rp_helper)
 			}//mode  TARGETFROMPEER		
-		}//if(nn.ot == OBJTYPE_CONNECTION) 
+		}//if(nn->ot == OBJTYPE_CONNECTION) 
 		else 
 		{
 		  if(!reverse) 
 		  {
-			switch(nn.ot) 
+			switch(nn->ot) 
 			{
 			case OBJTYPE_REFERENCE:
 							if(nvect.size() > 1) throw udm_exception("Attempt to set multiple values for a reference");
@@ -1121,7 +1193,7 @@ bbreak:			;
 		*/	}
 		  }
 		  else {
-			switch(nn.ot) {
+			switch(nn->ot) {
 			case OBJTYPE_REFERENCE:
 							{
 								vector<ObjectImpl*>::iterator i;
@@ -1157,6 +1229,181 @@ bbreak:			;
 							
 	};
 
+	// Given this association role, find the assocmapitem for the corresponding rp_helper association, if any
+	assocmapitem *getRPAssocMapItem(const ::Uml::AssociationRole &meta, const GmeDataNetwork *dn)
+	{
+		::Uml::Association assoc = meta.parent();
+		assocmapitem *nn = dn->amap.find(assoc.uniqueId())->second;
+
+		bool reverse = (nn->primary != meta);
+
+		::Uml::AssociationRole rp_helper_role = reverse ? nn->dst_rp_helper : nn->src_rp_helper;
+		if (!rp_helper_role) return NULL;
+
+		assocmapitem *nn_rp = dn->amap.find( ((::Uml::Association) rp_helper_role.parent()).uniqueId() )->second;
+		return nn_rp;
+	}
+
+	IMgaFCOsPtr GmeObject::FindReferencesChain(const IMgaFCOPtr& peer, bool reverse, const IMgaFCOsPtr& refs ) const
+	{
+		IMgaFCOsPtr ret;
+
+		if (refs->Count)
+			ret = CompleteReferencesChainToFCO(IMgaSimpleConnectionPtr(self), peer, refs);
+		else
+		{
+			IMgaFCOPtr pref_ref;
+			if (reverse)
+				pref_ref = getPrefferedDstRef(IMgaSimpleConnectionPtr(self), (GmeDataNetwork*)mydn);
+			else
+				pref_ref = getPrefferedSrcRef(IMgaSimpleConnectionPtr(self), (GmeDataNetwork*)mydn);
+
+			if (pref_ref)
+				ret = FindReferencesToFCO(peer, pref_ref);
+			else
+				ret = FindReferencesToFCO(peer);
+		}
+
+		return ret;
+	}
+
+	void GmeObject::connectTo(const ::Uml::AssociationRole &meta, const ObjectImpl* target, const vector<ObjectImpl*> &refs)
+	{
+		::Uml::Association assoc = meta.parent();
+		string rname = meta.name();
+
+		assocmapitem *nn = ((UdmGme::GmeDataNetwork*) mydn)->amap.find(assoc.uniqueId())->second;
+		if (nn->ot != OBJTYPE_CONNECTION)
+			throw udm_exception("Only connection types are supported");
+
+		bool reverse = (nn->primary != meta);
+
+		((GmeDataNetwork*)mydn)->CountWriteOps();
+
+		GmeObject *conn_go, *target_go;
+		if (self->GetObjType() == OBJTYPE_CONNECTION)
+		{
+			conn_go = this;
+			target_go = (GmeObject *) static_cast<const GmeObject *>(target);
+		}
+		else if (self->GetObjType() == OBJTYPE_ATOM)
+		{
+			throw udm_exception("Only setting the connection src/dst is supported");
+			conn_go = (GmeObject *) static_cast<const GmeObject *>(target);
+			target_go = this;
+		}
+
+		IMgaSimpleConnectionPtr conn(conn_go->self);
+
+		IMgaFCOsPtr pref_refs;
+		pref_refs.CreateInstance("Mga.MgaFCOs");
+		for (vector<Udm::ObjectImpl*>::const_iterator i = refs.begin(); i != refs.end(); i++)
+			COMTHROW(pref_refs->Append(static_cast<GmeObject *>(*i)->self));
+
+		IMgaFCOsPtr references = conn_go->FindReferencesChain(target_go->self, reverse, pref_refs);
+
+		if (reverse)
+			COMTHROW(conn->SetDst(references, target_go->self));
+		else
+			COMTHROW(conn->SetSrc(references, target_go->self));
+	}
+
+	void GmeObject::disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer)
+	{
+		::Uml::Association assoc = meta.parent();
+		assocmapitem *nn = ((UdmGme::GmeDataNetwork*) mydn)->amap.find(assoc.uniqueId())->second;
+
+		if (nn->ot != OBJTYPE_CONNECTION)
+			throw udm_exception("Only connection types are supported");
+
+		bool reverse = (nn->primary != meta);
+
+		((GmeDataNetwork*)mydn)->CountWriteOps();
+
+		// TODO: check if peer is really connected to us?
+
+		IMgaSimpleConnectionPtr conn;
+		if (self->GetObjType() == OBJTYPE_CONNECTION)
+			conn = self;
+		else if (self->GetObjType() == OBJTYPE_ATOM)
+			conn = static_cast<const GmeObject *>(peer)->self;
+
+		if (conn != NULL)
+			if (reverse)
+				conn->SetDst(NULL, NULL);
+			else
+				conn->SetSrc(NULL, NULL);
+	}
+
+	// chain of references to source or destination of the given connection
+	IMgaFCOsPtr RefsChain(const IMgaSimpleConnectionPtr &conn, const string &role_name)
+	{
+		IMgaFCOsPtr ret;
+		ret.CreateInstance("Mga.MgaFCOs");
+
+		IMgaFCOsPtr references;
+
+		SmartBSTR src_role_name = conn->RegistryValue["sRefParent"];
+		if (!src_role_name) {
+			SmartBSTR dst_role_name = conn->RegistryValue["dRefParent"];
+			try {
+				references = role_name.compare(dst_role_name) == 0 ? conn->GetDstReferences() : conn->GetSrcReferences();
+			} catch (udm_exception&) {}
+		} else {
+			try {
+				references = role_name.compare(src_role_name) == 0 ? conn->GetSrcReferences() : conn->GetDstReferences();
+			} catch (udm_exception&) {}
+		}
+
+		if (references != NULL)
+		{
+			MGACOLL_ITERATE(IMgaFCO, references)
+			{
+				COMTHROW(ret->Append(MGACOLL_ITER));
+			}
+			MGACOLL_ITERATE_END;
+		}
+
+		return ret;
+	}
+
+	vector<ObjectImpl*> GmeObject::getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const
+	{
+		vector<ObjectImpl*> ret;
+
+		assocmapitem *nn_rp = getRPAssocMapItem(meta, (GmeDataNetwork*) mydn);
+		if (!nn_rp) return ret;
+
+		string rname = Uml::MakeRoleName(nn_rp->primary);
+
+		if (nn_rp->ot == OBJTYPE_CONNECTION && nn_rp->rp_helper)
+		{
+			if (self->GetObjType() == OBJTYPE_CONNECTION)
+			{
+				IMgaFCOsPtr references = RefsChain(self, rname);
+				MGACOLL_ITERATE(IMgaFCO, references)
+				{
+					ret.push_back(new GmeObject(MGACOLL_ITER, mydn));
+				}
+				MGACOLL_ITERATE_END;
+			}
+			else if (self->GetObjType() == OBJTYPE_ATOM)
+			{
+				IMgaFCOsPtr references = RefsChain(static_cast<const GmeObject *>(peer)->self, rname);
+				MGACOLL_ITERATE(IMgaFCO, references)
+				{
+					ret.push_back(new GmeObject(MGACOLL_ITER, mydn));
+				}
+				MGACOLL_ITERATE_END;
+
+				std::reverse(ret.begin(), ret.end());
+			}
+		}
+
+		return ret;
+	}
+
+
 	//GmeObject member functions
 	vector<ObjectImpl*> GmeObject::getAssociation(const ::Uml::AssociationRole &meta, int mode) const 
 	{
@@ -1166,13 +1413,13 @@ bbreak:			;
 		
 			string rname = meta.name();
 
-			assocmapitem nn = ((GmeDataNetwork*)mydn)->amap.find(assoc.uniqueId())->second;
+			assocmapitem *nn = ((GmeDataNetwork*)mydn)->amap.find(assoc.uniqueId())->second;
 
-			bool reverse = (nn.primary == meta);
+			bool reverse = (nn->primary == meta);
 							
-			if(nn.ot == OBJTYPE_CONNECTION) 
+			if(nn->ot == OBJTYPE_CONNECTION) 
 			{
-				if (nn.rp_helper)
+				if (nn->rp_helper)
 				{
 					::Uml::AssociationRole orole = ::Uml::theOther(meta);
 					IMgaFCOsPtr fcos = RpHelperFindPeerFCOsFromModel(self,
@@ -1204,14 +1451,14 @@ bbreak:			;
 
 						char * debug_1_ch = (char *)debug_1;
 						bool debug_1_b = (MGACOLL_ITER->ConnRole == SmartBSTR(reverse ? "dst" : "src"));
-						bool debug_2_b = (conn->Meta->GetMetaRef() == nn.metaobj->GetMetaRef());
+						bool debug_2_b = (conn->Meta->GetMetaRef() == nn->metaobj->GetMetaRef());
 						BSTR connection_meta = conn->Meta->GetName();
-						BSTR ami_meta = nn.metaobj->GetName();
+						BSTR ami_meta = nn->metaobj->GetName();
 						*/
 
-						if (nn.metaobj)
+						if (nn->metaobj)
 						{
-							if(MGACOLL_ITER->ConnRole == SmartBSTR(reverse ? "dst" : "src") && 	conn->Meta->GetMetaRef() == nn.metaobj->GetMetaRef()) 
+							if(MGACOLL_ITER->ConnRole == SmartBSTR(reverse ? "dst" : "src") && 	conn->Meta->GetMetaRef() == nn->metaobj->GetMetaRef()) 
 							{
 								if(mode == Udm::CLASSFROMTARGET) 
 								{
@@ -1228,11 +1475,11 @@ bbreak:			;
 						}
 						else 
 						{
-							if (!nn.metaobjs_count) throw udm_exception("Expected >0 metaobjs_count!");
-							for  (int i = 0; i < nn.metaobjs_count; i++)
+							if (!nn->metaobjs_count) throw udm_exception("Expected >0 metaobjs_count!");
+							for  (int i = 0; i < nn->metaobjs_count; i++)
 							{
 								
-								IMgaMetaFCOPtr p = nn.metaobjs[i];
+								IMgaMetaFCOPtr p = nn->metaobjs[i];
 	/*
 								BSTR debug_1 = MGACOLL_ITER->ConnRole;
 								char * debug_1_ch = (char *)debug_1;
@@ -1266,7 +1513,7 @@ bbreak:			;
 			{
 				if(!reverse)
 				{
-					switch(nn.ot) 
+					switch(nn->ot) 
 					{
 					case OBJTYPE_REFERENCE:
 					{
@@ -1299,24 +1546,24 @@ bbreak:			;
 				}
 				else 
 				{
-					switch(nn.ot) 
+					switch(nn->ot) 
 					{
 					case OBJTYPE_REFERENCE:
 									{
 										IMgaFCOsPtr peers = self->ReferencedBy;
 										MGACOLL_ITERATE(IMgaFCO, peers) 
 										{
-											if (!nn.pt_abstract)
+											if (!nn->pt_abstract)
 											{
-												if(MGACOLL_ITER->Meta->GetMetaRef() != nn.metaobj->GetMetaRef()) continue;
+												if(MGACOLL_ITER->Meta->GetMetaRef() != nn->metaobj->GetMetaRef()) continue;
 												ret.push_back(new GmeObject( MGACOLL_ITER, mydn));
 											}
 											else
 											{
 												// return all instances of the descendants that are references to the target
-												for (int i = 0; i < nn.metaobjs_count; i++)
+												for (int i = 0; i < nn->metaobjs_count; i++)
 												{
-													if (MGACOLL_ITER->Meta->GetMetaRef() != nn.metaobjs[i]->GetMetaRef()) continue;
+													if (MGACOLL_ITER->Meta->GetMetaRef() != nn->metaobjs[i]->GetMetaRef()) continue;
 													ret.push_back(new GmeObject( MGACOLL_ITER, mydn ));
 												}
 											}
@@ -1329,7 +1576,7 @@ bbreak:			;
 										IMgaFCOsPtr peers = self->MemberOfSets;
 										MGACOLL_ITERATE(IMgaFCO, peers) 
 										{
-											if(MGACOLL_ITER->Meta->GetMetaRef() != nn.metaobj->GetMetaRef()) continue;
+											if(MGACOLL_ITER->Meta->GetMetaRef() != nn->metaobj->GetMetaRef()) continue;
 											ret.push_back(new GmeObject( MGACOLL_ITER, mydn));
 										}
 										MGACOLL_ITERATE_END;
@@ -1669,8 +1916,8 @@ bbreak:			;
 			{
 				string oar_name = ars_i->name();
 				::Uml::Association assoc = ars_i->parent();
-				assocmapitem nn = ((GmeDataNetwork *)__getdn())->amap.find(assoc.uniqueId())->second;
-				if (nn.ot == OBJTYPE_CONNECTION && nn.rp_helper)
+				assocmapitem *nn = ((GmeDataNetwork *)__getdn())->amap.find(assoc.uniqueId())->second;
+				if (nn->ot == OBJTYPE_CONNECTION && nn->rp_helper)
 				{
 					IMgaFCOsPtr fcos = RpHelperFindPeerFCOsFromRegistry(self,
 						oar_name, false,
@@ -2884,7 +3131,7 @@ bbreak:			;
 			//for each association in the meta 
 			::Uml::Association assoc = *i;
 			set< ::Uml::AssociationRole> roles = assoc.roles();
-			assocmapitem nn;
+			assocmapitem *nn = new assocmapitem();
 			objtype_enum expect = OBJTYPE_NULL;
 			bool reservednamesinUML = false;
 			string searchname = assoc.name();
@@ -2900,8 +3147,8 @@ bbreak:			;
 					/*
 					if(searchname.empty() && !aclass && (rolename == "archetype") && ((string)Uml::theOther(*j).name() == "derived")) 
 					{
-						nn.ot = OBJTYPE_MODEL;
-						nn.primary = *j;
+						nn->ot = OBJTYPE_MODEL;
+						nn->primary = *j;
 						goto archetype_ready;
 					}
 					*/
@@ -2910,10 +3157,10 @@ bbreak:			;
 					if(!aclass && (rolename == "ref" || rolename == "members")) 
 					{
 						::Uml::Class otarget = orole.target();
-						nn.metaobj = MetaObjLookup(metaproj, PATHGET(otarget));
+						nn->metaobj = MetaObjLookup(metaproj, PATHGET(otarget));
 
 						// the reference could be an abstract UML class
-						if (nn.metaobj == NULL && rolename == "ref")
+						if (nn->metaobj == NULL && rolename == "ref")
 						{
 							typedef map<string, IMgaMetaFCOPtr> role_to_MetaFCO_map;
 							role_to_MetaFCO_map role_map;
@@ -2941,30 +3188,30 @@ bbreak:			;
 							{
 								// the reference is a single non-abstract descendant because a descendant exists
 								// with the searched for rolename
-								nn.metaobj = i->second;
+								nn->metaobj = i->second;
 							}
 							else
 							{
 								// the reference is abstract because there is no descendant with the
 								// searched for rolename;
-								// add to nn.metaobjs all descendants; getAssociation on a refered instance
-								// will return all instances of nn.metaobjs that are a reference to that
+								// add to nn->metaobjs all descendants; getAssociation on a refered instance
+								// will return all instances of nn->metaobjs that are a reference to that
 								// refered instance
-								nn.metaobjs_count = role_map.size();
-								if (nn.metaobjs_count > 0)
+								nn->metaobjs_count = role_map.size();
+								if (nn->metaobjs_count > 0)
 								{
-									nn.metaobjs = new IMgaMetaFCOPtr[nn.metaobjs_count];
-									nn.pt_abstract = true;
+									nn->metaobjs = new IMgaMetaFCOPtr[nn->metaobjs_count];
+									nn->pt_abstract = true;
 									int j = 0;
 									for (i = role_map.begin(); i != role_map.end(); i++)
 									{
-										nn.metaobjs[j] = i->second;
+										nn->metaobjs[j] = i->second;
 										j++;
 									}
 								}
 							}
 						}
-						nn.primary = orole;
+						nn->primary = orole;
 						expect = rolename == "ref" ? OBJTYPE_REFERENCE : OBJTYPE_SET;
 						break;
 					}
@@ -2972,17 +3219,17 @@ bbreak:			;
 					if(rolename == "dst" && (!orole.isNavigable() || (string)orole.name() == "src")) 
 					{
 						set< ::Uml::Class> deriveds = Uml::DescendantClasses(aclass);
-						nn.primary = Uml::theOther(*j);
+						nn->primary = Uml::theOther(*j);
 						expect = OBJTYPE_CONNECTION;
 						
 						if (deriveds.size() <= 1)
 						{
-							nn.metaobj = MetaObjLookup(metaproj, getnameforassoc(assoc, false));	
+							nn->metaobj = MetaObjLookup(metaproj, getnameforassoc(assoc, false));	
 							break;
 						}
 						else
 						{
-							nn.metaobj = NULL;
+							nn->metaobj = NULL;
 							set< ::Uml::Class> descs = Uml::DescendantClasses(aclass);
 							if (descs.size())
 							{
@@ -2998,8 +3245,8 @@ bbreak:			;
 								};
 
 								//fill in the nn structure
-								nn.metaobjs_count = real_size;
-								nn.metaobjs = new IMgaMetaFCOPtr[real_size];
+								nn->metaobjs_count = real_size;
+								nn->metaobjs = new IMgaMetaFCOPtr[real_size];
 								int j = 0;
 
 								//copy the MgaMetaFCOPtrs to the allocated array in the nn structure
@@ -3008,7 +3255,7 @@ bbreak:			;
 									IMgaMetaFCOPtr p = MetaObjLookup(metaproj, PATHGET(*desc_ii));
 									if (p)
 									{
-										nn.metaobjs[j] = p;
+										nn->metaobjs[j] = p;
 										j++;
 									};
 								};
@@ -3022,7 +3269,7 @@ bbreak:			;
 
 				}
 			}
-			if((nn.metaobj != NULL) || (nn.metaobjs != NULL) )
+			if((nn->metaobj != NULL) || (nn->metaobjs != NULL) )
 			{	
 				//association already resolved - it's either a connection or a reference or a set-member relationship
 				reservednamesinUML = true;
@@ -3059,26 +3306,26 @@ bbreak:			;
 									case OBJTYPE_CONNECTION:
 											sRefParent = bt->RegistryValue["sRefParent"];
 											dRefParent = bt->RegistryValue["dRefParent"];
-											nn.rp_helper = true;//it's an rp_helper connection
+											nn->rp_helper = true;//it's an rp_helper connection
 											break;
 									default:
 										continue;
 								}//switch(bt->GetObjType()) 
-								if (nn.rp_helper)
+								if (nn->rp_helper)
 								{
 									if ( (sRefParent == SmartBSTR(Uml::MakeRoleName(orole).c_str())) || (dRefParent == SmartBSTR(Uml::MakeRoleName(orole).c_str())) )
 									{
-										nn.primary = orole;
-										nn.metaobj = bt;
+										nn->primary = orole;
+										nn->metaobj = bt;
 										expect = bt->GetObjType();
 									}
 									break;
 
-								};//	if (nn.rp_helper)
+								};//	if (nn->rp_helper)
 								if( orole.isNavigable() && therename == SmartBSTR(Uml::MakeRoleName(orole).c_str()) && 	(!j->isNavigable() || herename == SmartBSTR(Uml::MakeRoleName(*j).c_str())) ) 
 								{
-									nn.primary = *j;
-									nn.metaobj = bt;
+									nn->primary = *j;
+									nn->metaobj = bt;
 									expect = bt->GetObjType();
 									break;
 								}
@@ -3096,16 +3343,16 @@ bbreak:			;
 							// XXX what namespace?
 							if(searchname == NAMEGET((::Uml::Class)j->target()) && Uml::theOther(*j).isNavigable()) 
 							{
-								nn.primary = *j;
-								nn.metaobj = MetaObjLookup(metaproj, PATHGET((::Uml::Class)j->target()));
-								expect = nn.metaobj->GetObjType();
+								nn->primary = *j;
+								nn->metaobj = MetaObjLookup(metaproj, PATHGET((::Uml::Class)j->target()));
+								expect = nn->metaobj->GetObjType();
 								break;
 							}
 						}
 						if(j == roles.end()) 
 						{  
 							// otherwise it is a connection
-							nn.metaobj = MetaObjLookup(metaproj, searchname); // XXX what namespace?
+							nn->metaobj = MetaObjLookup(metaproj, searchname); // XXX what namespace?
 							expect = OBJTYPE_CONNECTION;
 						}
 					}//else if(searchname.empty()) 
@@ -3119,7 +3366,7 @@ bbreak:			;
 					set< ::Uml::Class> descs = Uml::DescendantClasses(aclass);
 					if (descs.size() <= 1)
 					{
-						nn.metaobj = MetaObjLookup(metaproj, PATHGET(aclass));
+						nn->metaobj = MetaObjLookup(metaproj, PATHGET(aclass));
 					}
 					else
 					{
@@ -3136,8 +3383,8 @@ bbreak:			;
 						};
 
 						//fill in the nn structure
-						nn.metaobjs_count = real_size;
-						nn.metaobjs = new IMgaMetaFCOPtr[real_size];
+						nn->metaobjs_count = real_size;
+						nn->metaobjs = new IMgaMetaFCOPtr[real_size];
 						int j = 0;
 
 						//copy the MgaMetaFCOPtrs to the allocated array in the nn structure
@@ -3146,15 +3393,15 @@ bbreak:			;
 							IMgaMetaFCOPtr p = MetaObjLookup(metaproj, PATHGET(*desc_ii));
 							if (p)
 							{
-								nn.metaobjs[j] = p;
+								nn->metaobjs[j] = p;
 								j++;
 							};
 						};
 							
 					} //if (descs.size() <= 1)
-				} //if (nn.metaobj == NULL)
-			}//if (nn.metaobj == NULL)
-			if(nn.metaobj == NULL && !nn.metaobjs_count) {
+				} //if (nn->metaobj == NULL)
+			}//if (nn->metaobj == NULL)
+			if(nn->metaobj == NULL && !nn->metaobjs_count) {
 				string rolenames;
 				std::set<Uml::AssociationRole> roles = assoc.AssociationRole_kind_children();
 				std::set<Uml::AssociationRole>::iterator rolesIt = roles.begin();
@@ -3168,33 +3415,33 @@ bbreak:			;
 
 			{
 				SmartBSTR herename, therename;
-				if (nn.metaobj)
+				if (nn->metaobj)
 				{
 					//normal cases, without an association class or the association class could be mapped
 					//directly to a IMgaMetaFCOPtr
-					nn.ot = nn.metaobj->ObjType;
-					if(nn.ot != expect) goto typeerr;
-					switch(nn.ot) 
+					nn->ot = nn->metaobj->ObjType;
+					if(nn->ot != expect) goto typeerr;
+					switch(nn->ot) 
 					{
 						case OBJTYPE_REFERENCE:
-							herename = nn.metaobj->RegistryValue["rrName"];
-							therename = nn.metaobj->RegistryValue["rName"];
+							herename = nn->metaobj->RegistryValue["rrName"];
+							therename = nn->metaobj->RegistryValue["rName"];
 							break;
 						case OBJTYPE_SET:
-							herename = nn.metaobj->RegistryValue["sName"];
-							therename = nn.metaobj->RegistryValue["mName"];
+							herename = nn->metaobj->RegistryValue["sName"];
+							therename = nn->metaobj->RegistryValue["mName"];
 							break;
 						case OBJTYPE_CONNECTION:
-							if (nn.rp_helper) break;
+							if (nn->rp_helper) break;
 							
-							herename = nn.metaobj->RegistryValue["sName"];
-							therename = nn.metaobj->RegistryValue["dName"];
+							herename = nn->metaobj->RegistryValue["sName"];
+							therename = nn->metaobj->RegistryValue["dName"];
 							{
 								for(set< ::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
 								{
 									if(therename == SmartBSTR(Uml::MakeRoleName(Uml::theOther(*j)).c_str()) && 	(!j->isNavigable() || herename == SmartBSTR(Uml::MakeRoleName(*j).c_str())) ) 
 									{
-										nn.primary = *j;
+										nn->primary = *j;
 										break;
 									}
 								}
@@ -3204,9 +3451,9 @@ bbreak:			;
 							break;
 						default:
 		typeerr:
-							throw udm_exception("Association resolves to invalid object type: " +  (string)nn.metaobj->Name);
+							throw udm_exception("Association resolves to invalid object type: " +  (string)nn->metaobj->Name);
 					}
-				}//if (nn.metaobj)
+				}//if (nn->metaobj)
 				else
 				{
 					//the association class is an abstract supertype 
@@ -3214,13 +3461,13 @@ bbreak:			;
 					//it can be mapped to more GME connection metaobjects
 					
 					
-					for (int i = 0; i < nn.metaobjs_count; i++)
+					for (int i = 0; i < nn->metaobjs_count; i++)
 					{
-						IMgaMetaFCOPtr p = nn.metaobjs[i];
+						IMgaMetaFCOPtr p = nn->metaobjs[i];
 
 						//we expect that all the metaobjects are the same and equal to the one expected, OBJTYPE_CONNECTION
-						nn.ot = p->ObjType;
-						if(nn.ot != expect) throw udm_exception("Association resolves to invalid object type: " +  (string)p->Name);
+						nn->ot = p->ObjType;
+						if(nn->ot != expect) throw udm_exception("Association resolves to invalid object type: " +  (string)p->Name);
 				
 						//compute which one is the primary role name
 						herename = p->RegistryValue["sName"];
@@ -3230,12 +3477,12 @@ bbreak:			;
 							{
 								if(therename == SmartBSTR(Uml::MakeRoleName(Uml::theOther(*j)).c_str()) && 	(!j->isNavigable() || herename == SmartBSTR(Uml::MakeRoleName(*j).c_str())) ) 
 								{
-									if (!nn.primary) 
-										nn.primary = *j;
+									if (!nn->primary) 
+										nn->primary = *j;
 									else
 									{
 										//it should be the same for all the metaobjects!
-										if (nn.primary != *j)
+										if (nn->primary != *j)
 											throw udm_exception("amapInitialize: Different primary rolenames found in descendant connection meta objects of the same connection supertype!");
 									}
 									break;
@@ -3244,35 +3491,72 @@ bbreak:			;
 						}
 						//break;
 					};
-				};//else if (nn.metaobj)
+				};//else if (nn->metaobj)
 
-				if(!nn.primary)
+				if(!nn->primary)
 				{
-					if (nn.metaobj)
-						throw udm_exception("Association resolves to invalid object type: " +  (string)nn.metaobj->Name);
+					if (nn->metaobj)
+						throw udm_exception("Association resolves to invalid object type: " +  (string)nn->metaobj->Name);
 					else 
 					{
 						string descr = "amapInitialize: Incosistency between UML rolenames and sName/dName specifications for these related connections :";
-						for (int i = 0; i < nn.metaobjs_count; i++)
+						for (int i = 0; i < nn->metaobjs_count; i++)
 						{
 							if (i) descr += ",";
-							IMgaMetaFCOPtr p = nn.metaobjs[i];
+							IMgaMetaFCOPtr p = nn->metaobjs[i];
 							descr += p->Name; 
 						};
 						throw udm_exception(descr);
 					};
 				}
-				if((!nn.rp_helper) &&(!reservednamesinUML) && (therename != SmartBSTR(Uml::MakeRoleName(Uml::theOther(nn.primary)).c_str()) || (nn.primary.isNavigable() && herename != SmartBSTR(Uml::MakeRoleName(nn.primary).c_str()))) ) 
+				if((!nn->rp_helper) &&(!reservednamesinUML) && (therename != SmartBSTR(Uml::MakeRoleName(Uml::theOther(nn->primary)).c_str()) || (nn->primary.isNavigable() && herename != SmartBSTR(Uml::MakeRoleName(nn->primary).c_str()))) ) 
 				{
-					throw udm_exception("Association end names mismatch: " +  (string)nn.metaobj->Name);
+					throw udm_exception("Association end names mismatch: " +  (string)nn->metaobj->Name);
 				}
 			}
 //archetype_ready:
 			amap.insert(assocmap::value_type(assoc.uniqueId(), nn));
 		}
+
+		// TODO: handle the case when metaobj is NULL and metaobjs_count > 0
+		for (assocmap::const_iterator i = amap.begin(); i != amap.end(); i++) {
+
+			assocmapitem *nn = i->second;
+			if ( !nn->metaobj ) continue;
+
+			SmartBSTR sRefParent = nn->metaobj->RegistryValue["sRefParent"];
+			SmartBSTR dRefParent = nn->metaobj->RegistryValue["dRefParent"];
+			SmartBSTR herename = nn->metaobj->RegistryValue["sName"];
+			SmartBSTR therename = nn->metaobj->RegistryValue["dName"];
+
+			if ( nn->ot != OBJTYPE_CONNECTION || nn->rp_helper || !sRefParent || !dRefParent ) continue;
+
+			if ( ( !nn->primary.isNavigable() || herename == SmartBSTR(Uml::MakeRoleName(nn->primary).c_str()) )
+				&& therename == SmartBSTR(Uml::MakeRoleName(Uml::theOther(nn->primary)).c_str()) ) {
+
+				for (assocmap::const_iterator j = amap.begin(); j != amap.end(); j++) {
+
+					assocmapitem *sec = j->second;
+					if (!sec->rp_helper || sec->metaobj != nn->metaobj) continue;
+
+					if ( sRefParent == SmartBSTR(Uml::MakeRoleName(sec->primary).c_str()) )
+						nn->src_rp_helper = sec->primary;
+					else
+						nn->dst_rp_helper = sec->primary;
+				}
+			}
+		}
+
 	}
 
-	void CheckVersion(IMgaProject *p) {
+	void amapClear(assocmap &amap)
+	{
+		for (assocmap::const_iterator i = amap.begin(); i != amap.end(); i++)
+			delete i->second;
+		amap.clear();
+	}
+
+		void CheckVersion(IMgaProject *p) {
 		// IGMEVersionInfo and IMgaVersionInfo have the same GUID and vtable definition, so this works across versions
 #ifdef GME_VS10
 		CORELib::IGMEVersionInfoPtr vi = p;
@@ -3291,6 +3575,7 @@ bbreak:			;
 			throw udm_exception(buf);
 		}
 	}
+	
 	
 	SmartBSTR createGMEconnstr(string sn) {
 		if(!_strnicmp(sn.c_str(),"GME:", 4))	sn.erase(0,4);
@@ -3332,6 +3617,7 @@ bbreak:			;
 			rootobject = new GmeObject( project->RootFolder, this);
 		}
 		catch(gme_exc &s) { 
+			amapClear(amap);
 			if (priv.terr) {
 				COMTHROW(project->AbortTransaction());
 				COMTHROW(priv.terr->Destroy());
@@ -3373,6 +3659,7 @@ bbreak:			;
 			rootobject = new GmeObject( project->RootFolder, this );
 		}
 		catch(gme_exc &s) { 
+			amapClear(amap);
 			COMTHROW(project->AbortTransaction());
 			COMTHROW(priv.terr->Destroy());
 			COMTHROW(project->Close(VARIANT_TRUE));
@@ -3412,6 +3699,7 @@ bbreak:			;
 			rootobject = bb;
 		}
 		catch(gme_exc &s) { 
+			amapClear(amap);
 			COMTHROW(project->AbortTransaction());
 			COMTHROW(priv.terr->Destroy());
 			COMTHROW(project->Close(VARIANT_TRUE));
@@ -3464,7 +3752,7 @@ bbreak:			;
 			// only if this is the lastdata network closed.
 			//if (GDNMap.size() == 1 && *(GDNMap.begin()) == this)
 			//since the last change, amap is local to the datanetwork, and has to be cleaned each time.
-			amap.clear();
+			amapClear(amap);
 			
 			if (priv.terr) {
 				COMTHROW(priv.project->CommitTransaction());
@@ -3483,7 +3771,7 @@ bbreak:			;
 			// only if this is the lastdata network closed.
 			//if (GDNMap.size() == 1 && *(GDNMap.begin()) == this)
 			//since the last change, amap is local to the datanetwork, and has to be cleaned each time.
-			amap.clear();
+			amapClear(amap);
 			
 			if (priv.terr) {
 				COMTHROW(priv.project->AbortTransaction());

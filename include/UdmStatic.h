@@ -332,7 +332,23 @@ namespace UdmStatic
 			const vector<ObjectImpl*> &nvect, 
 			int mode = Udm::TARGETFROMPEER,
 			const bool direct = true);
-	// --- persistency
+	
+		void connectTo(const ::Uml::AssociationRole &meta, const ObjectImpl* target, const vector<ObjectImpl*> &refs = vector<ObjectImpl*>())
+		{
+			throw udm_exception("Unsupported yet method");
+		}
+
+		void disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer)
+		{
+			throw udm_exception("Unsupported yet method");
+		}
+
+		vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const
+		{
+			throw udm_exception("Unsupported yet method");
+		}
+
+		// --- persistency
 		unsigned long Serialize(FILE * f);											// return the length of the object
 		void ValidatePointers(map<unsigned long, const StaticObject *>& tr_map);	// changing the associations and the children to the new pointers
 

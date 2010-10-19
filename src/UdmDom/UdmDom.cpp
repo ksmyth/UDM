@@ -2863,6 +2863,20 @@ namespace UdmDom
 				delete do_parent;
 			}		
 		}
+		void connectTo(const ::Uml::AssociationRole &meta, const ObjectImpl* target, const vector<ObjectImpl*> &refs = vector<ObjectImpl*>())
+		{
+			throw udm_exception("Unsupported yet method");
+		}
+
+		void disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer)
+		{
+			throw udm_exception("Unsupported yet method");
+		}
+
+		vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const
+		{
+			throw udm_exception("Unsupported yet method");
+		}
 
 		vector<ObjectImpl*> getDerived() const
 		{
