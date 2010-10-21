@@ -127,7 +127,7 @@ void UdmTests::refPortsTest::testRefPorts()
 	}
 
 	// disconnect src
-	!c.a_end_chain();
+	c.a_end_chain().disconnect();
 	CPPUNIT_ASSERT(A::Cast(c.a_end_end()) == &Udm::_null);
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
 
@@ -146,7 +146,7 @@ void UdmTests::refPortsTest::testRefPorts()
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
 
 	// disconnect dst
-	!c.b_end_chain();
+	c.b_end_chain().disconnect();
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
 
 	// connect another dst using references chain
@@ -156,7 +156,7 @@ void UdmTests::refPortsTest::testRefPorts()
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b);
 
 	// disconnect dst
-	!c.b_end_chain();
+	c.b_end_chain().disconnect();
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
 
 
@@ -167,7 +167,7 @@ void UdmTests::refPortsTest::testRefPorts()
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b);
 
 	// disconnect dst
-	!c.b_end_chain();
+	c.b_end_chain().disconnect();
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
 
 

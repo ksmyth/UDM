@@ -2634,7 +2634,7 @@ namespace UDM_NAMESPACE
 			return operator =(b);
 		}
 
-		AssocEndChainAttr<CLASS, RESULTTYPE> &operator !()
+		AssocEndChainAttr<CLASS, RESULTTYPE> &disconnect()
 		{
 			vector<ObjectImpl*> a = impl->getAssociation(meta, TARGETFROMCLASS);
 			ASSERT( a.size() <= 1 );
