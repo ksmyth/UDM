@@ -84,6 +84,11 @@ namespace UdmDom
 
 		UDM_DLL DomDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* pr = NULL);
 		UDM_DLL ~DomDataNetwork();
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable:4995) // Disable CHANGES_PERSIST_ALWAYS deprecated warning
+#endif
+
 		UDM_DLL void CreateNew(const string &systemname, 
 									const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
@@ -99,6 +104,9 @@ namespace UdmDom
 		UDM_DLL void OpenExistingFromString(string &str, 
 									const string &metalocator, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+#ifdef _WIN32
+#pragma warning(pop)
+#endif
 		
 		UDM_DLL void MapExistingIDs(const DOMNode &d);
 		UDM_DLL void SaveAs(string systemname); 

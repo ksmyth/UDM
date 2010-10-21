@@ -120,7 +120,10 @@ namespace UdmStatic
 		UDM_DLL ~StaticDataNetwork();
 		UDM_DLL Object ObjectById(Object::uniqueId_type id);
 
-		
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable:4995) // Disable CHANGES_PERSIST_ALWAYS deprecated warning
+#endif
 		UDM_DLL void CreateNew(const string &systemname, 
 								const string &metalocator, const ::Uml::Class &rootclass, 
 								enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
@@ -130,6 +133,9 @@ namespace UdmStatic
 		UDM_DLL void OpenExisting(const string &systemname, 
 								const string &metalocator, 
 								enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+#ifdef _WIN32
+#pragma warning(pop)
+#endif
 
 		
 		UDM_DLL void SaveAs(string systemname);

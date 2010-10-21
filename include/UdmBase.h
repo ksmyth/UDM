@@ -3502,7 +3502,14 @@ public:
 	class UDM_DLL DynamicMetaSpecifier
 	{
 	public:
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable:4251) // Disable 'needs to have dll-interface' warning
+#endif
 		const string metalocator;
+#ifdef _WIN32
+#pragma warning(pop)
+#endif
 		const Udm::UdmDiagram& dgr;
 		DynamicMetaSpecifier(const string& ml, const UdmDiagram& d) : metalocator(ml), dgr(d) {};
 	};

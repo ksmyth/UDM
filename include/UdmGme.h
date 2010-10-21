@@ -107,6 +107,11 @@ namespace UdmGme
 		
 		UDM_DLL GmeDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* project = NULL);
 		UDM_DLL ~GmeDataNetwork();
+
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable:4995) // Disable CHANGES_PERSIST_ALWAYS deprecated warning
+#endif
 		UDM_DLL void CreateNew(const string &systemname, 
 			const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
@@ -121,6 +126,9 @@ namespace UdmGme
 		UDM_DLL void OpenExisting(const string &systemname, 
 									const string &metalocator, 
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS);
+#ifdef _WIN32
+#pragma warning(pop)
+#endif
 		UDM_DLL void CloseWithUpdate();
 		UDM_DLL void CloseNoUpdate();
 		UDM_DLL void SaveAs(string systemname); 
