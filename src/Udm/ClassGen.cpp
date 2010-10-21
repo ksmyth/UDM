@@ -943,7 +943,7 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 				if (generate_rphelper_chains)
 				{
 					typedefs.push_back( boost::format("typedef pair< %1%, vector<Udm::Object> > %2%_chain_t") % tclass_cpp_name % rel_name );
-					meth_defs.push_back( boost::format("Udm::AssocEndChainAttr< %1%> %2%_chain() const { return Udm::AssocEndChainAttr< %1%>(impl, meta_%2%_end_); }") % tclass_cpp_name % rel_name );
+					meth_defs.push_back( boost::format("Udm::AssocEndChainAttr< %1%, %2%_chain_t > %2%_chain() const { return Udm::AssocEndChainAttr< %1%, %2%_chain_t >(impl, meta_%2%_end_); }") % tclass_cpp_name % rel_name );
 				}
 
 				if (gen.opts.mode == UdmOpts::CXX_GENERIC)
