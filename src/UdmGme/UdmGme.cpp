@@ -3559,10 +3559,10 @@ bbreak:			;
 		void CheckVersion(IMgaProject *p) {
 		// IGMEVersionInfo and IMgaVersionInfo have the same GUID and vtable definition, so this works across versions
 #ifdef GME_VS10
-		CORELib::IGMEVersionInfoPtr vi = p;
-		CORELib::GMEInterfaceVersion_enum v = CORELib::GMEInterfaceVersion_None;
+		CoreLib::IGMEVersionInfoPtr vi = p;
+		CoreLib::GMEInterfaceVersion_enum v = CoreLib::GMEInterfaceVersion_None;
 		if (vi) COMTHROW(vi->get_version(&v));
-		CORELib::GMEInterfaceVersion_enum current = CORELib::GMEInterfaceVersion_Current;
+		CoreLib::GMEInterfaceVersion_enum current = CoreLib::GMEInterfaceVersion_Current;
 #else
 		GmeLib::IMgaVersionInfoPtr vi=p;
 		GmeLib::MgaInterfaceVersion_enum v = GmeLib::MgaInterfaceVersion_None;
