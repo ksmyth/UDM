@@ -433,7 +433,6 @@ void AttributeObject::BuildUML(::Uml::Class &uml_cls)
 	{
 		std::vector<std::string> defval_tmp;
 		defval_tmp.reserve(defval_real.size());
-		char buf[128];
 		for(std::vector<double>::iterator i = defval_real.begin(); i != defval_real.end(); i++)
 		{
 			defval_tmp.push_back(UdmUtil::doubleToString(*i));

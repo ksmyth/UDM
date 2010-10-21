@@ -185,8 +185,14 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\int_exception.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lattrib.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lcardin.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pattrib.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pcardin.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pattrib.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pcardin.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">Create</PrecompiledHeader>
