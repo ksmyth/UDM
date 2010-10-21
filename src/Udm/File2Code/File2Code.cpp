@@ -19,7 +19,7 @@ File2Code::File2Code(
   m_infname (infname),
   m_mode(mode),
   m_packageName(pn),
-  m_linenum(1000) // mondjon egy nagy valószínuséget: 2
+  m_linenum(1000) // mondjon egy nagy valószínuséget: 2 (Give me a high probability)
 {
 }
 
@@ -226,6 +226,9 @@ void  File2Code::generateMap(std::istream& in, StrStrVecMap& map)
       {
         std::stringstream out;
         std::getline(in, str);
+        if (str.find("<!-- generated on ") != std::string::npos) {
+          out << "//"; 
+        }
         out << "\t\t\tstr +=";   
         out << "\"";   
 
