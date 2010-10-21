@@ -431,14 +431,6 @@ namespace UDM_NAMESPACE
 		//that exists between the children of my parent's archetype
 		//and needs to be copied here 
 
-		// association with reference ports
-		virtual void connectTo(
-			const ::Uml::AssociationRole &meta,
-			const ObjectImpl* target,
-			const vector<ObjectImpl*> &refs = vector<ObjectImpl*>()) = 0;
-		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) = 0;
-		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const = 0;
-
 	//archetype/derived relationships
 		virtual vector<ObjectImpl*> getDerived() const = 0;
 		virtual vector<ObjectImpl*> getInstances() const = 0;
@@ -502,6 +494,14 @@ namespace UDM_NAMESPACE
 		virtual vector<ObjectImpl*> getLibRoots() const = 0;
 
 		
+		// association with reference ports
+		virtual void connectTo(
+			const ::Uml::AssociationRole &meta,
+			const ObjectImpl* target,
+			const vector<ObjectImpl*> &refs = vector<ObjectImpl*>()) = 0;
+		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) = 0;
+		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const = 0;
+
 	};
 
 
