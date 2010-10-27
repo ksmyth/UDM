@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}</ProjectGuid>
+    <RootNamespace>UdmCliBridge</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="UdmCliBridgeProps.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="UdmCliBridgeProps.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <CustomBuildStep>
+      <Message>Compile CSharp%3b Move dlls to bin</Message>
+      <Command>copy /y "$(TargetPath)" "$(UDM_PATH)"\bin\
+</Command>
+      <Outputs>UdmCli.dll;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>UdmDllD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(OutDir)$(ProjectName)D.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <CustomBuildStep>
+      <Message>Compile CSharp%3b Move dlls to bin</Message>
+      <Command>copy /y "$(TargetPath)" "$(UDM_PATH)"\bin\
+</Command>
+      <Outputs>UdmCli.dll;%(Outputs)</Outputs>
+    </CustomBuildStep>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>UdmDll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImportLibrary>$(OutDir)$(ProjectName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(CliBridgeCppDir)\Udm_wrap.cpp" />
+    <ClCompile Include="$(CliBridgeCppDir)\UdmDom_wrap.cpp" />
+    <ClCompile Include="$(CliBridgeCppDir)\UdmGme_wrap.cpp" />
+    <ClCompile Include="$(CliBridgeCppDir)\UdmStatic_wrap.cpp" />
+    <ClCompile Include="$(CliBridgeCppDir)\Uml_wrap.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\..\..\include\Udm.i">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">swig %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
+cd  "$(CliBridgeCppDir)"
+mkdir "$(CliBridgeCsDir)\%(Filename)"
+"swig.exe" ^
+-csharp ^
+-namespace "Udm.Native" ^
+-dllimport "$(TargetFileName)" ^
+-outdir "$(CliBridgeCsDir)\%(Filename)"  ^
+-c++ ^
+-o "%(Filename)"_wrap.cpp ^
+"%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(CliBridgeCppDir)"
+cd  "$(CliBridgeCppDir)"
+mkdir "$(CliBridgeCsDir)\%(Filename)"
+"swig.exe" ^
+-csharp ^
+-namespace "Udm.Native" ^
+-dllimport "$(TargetFileName)" ^
+-outdir "$(CliBridgeCsDir)\%(Filename)"  ^
+-c++ ^
+-o "%(Filename)"_wrap.cpp ^
+"%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <None Include="..\..\..\..\..\include\UdmCli.i" />
+    <CustomBuild Include="..\..\..\..\..\include\UdmDom.i">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">swig %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
+cd  "$(CliBridgeCppDir)"
+mkdir "$(CliBridgeCsDir)\%(Filename)"
+"swig.exe" ^
+-csharp ^
+-namespace "Udm.Native.%(Filename)" ^
+-dllimport "$(TargetFileName)" ^
+-outdir "$(CliBridgeCsDir)\%(Filename)"  ^
+-c++ ^
+-o "%(Filename)"_wrap.cpp ^
+"%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(CliBridgeCppDir)"
+cd  "$(CliBridgeCppDir)"
+mkdir "$(CliBridgeCsDir)\%(Filename)"
+"swig.exe" ^
+-csharp ^
+-namespace "Udm.Native.%(Filename)" ^
+-dllimport "$(TargetFileName)" ^
+-outdir "$(CliBridgeCsDir)\%(Filename)"  ^
+-c++ ^
+-o "%(Filename)"_wrap.cpp ^
+"%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <None Include="..\..\..\..\..\include\UdmException.i" />
+    <CustomBuild Include="..\..\..\..\..\include\UdmGme.i">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">swig %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
+cd  "$(CliBridgeCppDir)"
+mkdir "$(CliBridgeCsDir)\%(Filename)"
+"swig.exe" ^
+-csharp ^
+-namespace "Udm.Native.%(Filename)" ^
+-dllimport "$(TargetFileName)" ^
+-outdir "$(CliBridgeCsDir)\%(Filename)"  ^
+-c++ ^
+-o "%(Filename)"_wrap.cpp ^
+"%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(CliBridgeCppDir)"
+cd  "$(CliBridgeCppDir)"
+mkdir "$(CliBridgeCsDir)\%(Filename)"
+"swig.exe" ^
+-csharp ^
+-namespace "Udm.Native.%(Filename)" ^
+-dllimport "$(TargetFileName)" ^
+-outdir "$(CliBridgeCsDir)\%(Filename)"  ^
+-c++ ^
+-o "%(Filename)"_wrap.cpp ^
+"%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\..\..\include\UdmStatic.i">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">swig %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
+cd  "$(CliBridgeCppDir)"
+mkdir "$(CliBridgeCsDir)\%(Filename)"
+"swig.exe" ^
+-csharp ^
+-namespace "Udm.Native.%(Filename)" ^
+-dllimport "$(TargetFileName)" ^
+-outdir "$(CliBridgeCsDir)\%(Filename)"  ^
+-c++ ^
+-o "%(Filename)"_wrap.cpp ^
+"%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(CliBridgeCppDir)"
+cd  "$(CliBridgeCppDir)"
+mkdir "$(CliBridgeCsDir)\%(Filename)"
+"swig.exe" ^
+-csharp ^
+-namespace "Udm.Native.%(Filename)" ^
+-dllimport "$(TargetFileName)" ^
+-outdir "$(CliBridgeCsDir)\%(Filename)"  ^
+-c++ ^
+-o "%(Filename)"_wrap.cpp ^
+"%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\..\..\include\Uml.i">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">swig %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
+cd  "$(CliBridgeCppDir)"
+mkdir "$(CliBridgeCsDir)\%(Filename)"
+"swig.exe" ^
+-csharp ^
+-namespace "Udm.Native.%(Filename)" ^
+-dllimport "$(TargetFileName)" ^
+-outdir "$(CliBridgeCsDir)\%(Filename)"  ^
+-c++ ^
+-o "%(Filename)"_wrap.cpp ^
+"%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swig %(Filename)%(Extension)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(CliBridgeCppDir)"
+cd  "$(CliBridgeCppDir)"
+mkdir "$(CliBridgeCsDir)\%(Filename)"
+"swig.exe" ^
+-csharp ^
+-namespace "Udm.Native.%(Filename)" ^
+-dllimport "$(TargetFileName)" ^
+-outdir "$(CliBridgeCsDir)\%(Filename)"  ^
+-c++ ^
+-o "%(Filename)"_wrap.cpp ^
+"%(FullPath)"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UdmDll\UdmDll.vcxproj">
+      <Project>{3cae3dee-065e-426c-9c3c-f1f59217c00b}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
