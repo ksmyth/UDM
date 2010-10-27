@@ -68,7 +68,7 @@ CSHARP_NAMESPACE3(Udm, Udm.Native, UdmProject)
 CSHARP_NAMESPACE3(std, Udm.Native, vector<bool>)
 CSHARP_NAMESPACE3(std, Udm.Native, vector<double>)
 CSHARP_NAMESPACE3(std, Udm.Native, vector<std::string>)
-CSHARP_NAMESPACE3(std, Udm.Native, vector<__Int64>)
+CSHARP_NAMESPACE3(std, Udm.Native, vector<__int64>)
 
 
 
@@ -230,7 +230,7 @@ namespace UDM_NAMESPACE {
 
 %include "UdmBase.h"
 
-//%template(ObjectParentAttr) UDM_NAMESPACE::ParentAttr<UDM_NAMESPACE::Object>;
+%template(ObjectParentAttr) UDM_NAMESPACE::ParentAttr<UDM_NAMESPACE::Object>;
 %template(Object_set) std::set<UDM_NAMESPACE::Object>;
 %template(ObjectImpl_vector) std::vector<UDM_NAMESPACE::ObjectImpl*>;
 %template(DataNetworkSpecifier_vector) std::vector<UDM_NAMESPACE::DataNetworkSpecifier>;
