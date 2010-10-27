@@ -1,6 +1,10 @@
 #ifndef _UdmException_i_
 #define _UdmException_i_
 
+// swig can get confused with namespace x = y;
+// it doesn't matter if we lie to swig at this point
+#define UDM_NAMESPACE Udm
+
 // #define __int64 long long
 %apply long long { __int64 };
 
@@ -145,7 +149,7 @@ CSHARP_NAMESPACE3(NAMESPACE, NAMESPACE, SWIGTYPE)
 CSHARP_NAMESPACE3(::NAMESPACE, NAMESPACE, SWIGTYPE)
 %enddef
 
-%typemap(cscode) Udm::Object %{
+%typemap(cscode) UDM_NAMESPACE::Object %{
   public static readonly Object GlobalLock = new Object();
 %}
 

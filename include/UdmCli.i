@@ -29,16 +29,16 @@ using global::Udm.Native;
 %}
 
 %define %udm_class(Namespace, Class)
-  %template(Class ## _ArchetypeAttr) Udm::ArchetypeAttr<Namespace::Class>;
-  %template(Class ## _AssocAttr) Udm::AssocAttr<Namespace::Class>;
-  %template(Class ## _AssocEndAttr) Udm::AssocEndAttr<Namespace::Class>;
-  %template(Class ## _CrossAssocAttr) Udm::CrossAssocAttr<Namespace::Class>;
-  %template(Class ## _ChildAttr) Udm::ChildAttr<Namespace::Class>;
-  %template(Class ## _ChildrenAttr) Udm::ChildrenAttr<Namespace::Class>;
-  %template(Class ## _DerivedAttr) Udm::DerivedAttr<Namespace::Class>;
-  %template(Class ## _InstantiatedAttr) Udm::InstantiatedAttr<Namespace::Class>;
-  %template(Class ## _ParentAttr) Udm::ParentAttr<Namespace::Class>;
-  %template(Class ## _PointerAttr) Udm::PointerAttr<Namespace::Class>;
+  %template(Class ## _ArchetypeAttr) UDM_NAMESPACE::ArchetypeAttr<Namespace::Class>;
+  %template(Class ## _AssocAttr) UDM_NAMESPACE::AssocAttr<Namespace::Class>;
+  %template(Class ## _AssocEndAttr) UDM_NAMESPACE::AssocEndAttr<Namespace::Class>;
+  %template(Class ## _CrossAssocAttr) UDM_NAMESPACE::CrossAssocAttr<Namespace::Class>;
+  %template(Class ## _ChildAttr) UDM_NAMESPACE::ChildAttr<Namespace::Class>;
+  %template(Class ## _ChildrenAttr) UDM_NAMESPACE::ChildrenAttr<Namespace::Class>;
+  %template(Class ## _DerivedAttr) UDM_NAMESPACE::DerivedAttr<Namespace::Class>;
+  %template(Class ## _InstantiatedAttr) UDM_NAMESPACE::InstantiatedAttr<Namespace::Class>;
+  %template(Class ## _ParentAttr) UDM_NAMESPACE::ParentAttr<Namespace::Class>;
+  %template(Class ## _PointerAttr) UDM_NAMESPACE::PointerAttr<Namespace::Class>;
 
   %template(Class ## _vector) std::vector<Namespace::Class>;
   %template(Class ## _set) std::set<Namespace::Class>;

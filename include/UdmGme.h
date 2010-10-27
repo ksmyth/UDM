@@ -155,7 +155,9 @@ namespace UdmGme
 	UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const wchar_t* gmeId);
 	UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const char* gmeId);
 
+#ifndef SWIG_VERSION
 	UDM_USE_MGA
+#endif
 }
 
 #endif//MOBIES_UDMGME_H

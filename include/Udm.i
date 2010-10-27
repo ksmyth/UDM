@@ -40,8 +40,8 @@ CSHARP_NAMESPACE3(Udm, Udm.Native, MetaDepository)
 CSHARP_NAMESPACE3(Udm, Udm.Native, NullObject)
 CSHARP_NAMESPACE3(Udm, Udm.Native, Object)
 CSHARP_NAMESPACE3(Udm, Udm.Native, ObjectImpl)
-CSHARP_NAMESPACE3(Udm, Udm.Native, std::set<Udm::Object>);
-CSHARP_NAMESPACE3(Udm, Udm.Native, ParentAttr<Udm::Object>)
+CSHARP_NAMESPACE3(Udm, Udm.Native, std::set<UDM_NAMESPACE::Object>);
+CSHARP_NAMESPACE3(Udm, Udm.Native, ParentAttr<UDM_NAMESPACE::Object>)
 CSHARP_NAMESPACE3(Udm, Udm.Native, RealArrAttrItem)
 CSHARP_NAMESPACE3(Udm, Udm.Native, RealAttr)
 CSHARP_NAMESPACE3(Udm, Udm.Native, RealAttrArr)
@@ -76,7 +76,7 @@ CSHARP_NAMESPACE3(std, Udm.Native, vector<__Int64>)
 using namespace std;
 
 // Some strings aren't marked const
-// %apply const std::string& { Udm::string& };
+// %apply const std::string& { UDM_NAMESPACE::string& };
 %apply const std::string& { std::string& };
 %apply const std::string& { string& };
 %apply const std::string& { const string& };
@@ -97,107 +97,109 @@ public class UdmException : System.ApplicationException {
 
 // These are not dllexport'ed
 %ignore Uml::theOther1;
-%ignore Udm::UdmProject::GetRealObject;
-%ignore Udm::UdmProject::GetPlaceHolder;
-%ignore Udm::NullObject::e;
+%ignore UDM_NAMESPACE::UdmStaticData;
+%ignore UDM_NAMESPACE::_UdmStaticData;
+%ignore UDM_NAMESPACE::UdmProject::GetRealObject;
+%ignore UDM_NAMESPACE::UdmProject::GetPlaceHolder;
+%ignore UDM_NAMESPACE::NullObject::e;
 
 // Defined in Uml.i
 %ignore Uml::IsDerivedFrom;
 
 // TODO: support these
-%ignore Udm::DynamicMetaSpecifier::metalocator;
-%ignore Udm::udmvariant::strval;
+%ignore UDM_NAMESPACE::DynamicMetaSpecifier::metalocator;
+%ignore UDM_NAMESPACE::udmvariant::strval;
 
 %{
 #include "UdmBase.h"
 #include "UdmUtil.h"
-typedef Udm::Object::AssociationInfo AssociationInfo;
-typedef Udm::Object::CompositionInfo CompositionInfo;
-namespace Udm {
-typedef Udm::DataNetwork::backendtabt DataNetwork_backendtabt;
+typedef UDM_NAMESPACE::Object::AssociationInfo AssociationInfo;
+typedef UDM_NAMESPACE::Object::CompositionInfo CompositionInfo;
+namespace UDM_NAMESPACE {
+typedef UDM_NAMESPACE::DataNetwork::backendtabt DataNetwork_backendtabt;
 udm_exception NullObject::e("Object handle is null");
 }
 #include "Uml.h"
 %}
 
-%rename(Equals) Udm::ArrAttrItem::operator==;
-%rename(Set) Udm::TempStringAttr::operator=;
-%rename(Get) Udm::TempStringAttr::operator string;
-%rename(Get) Udm::TempStringAttrArr::operator [];
+%rename(Equals) UDM_NAMESPACE::ArrAttrItem::operator==;
+%rename(Set) UDM_NAMESPACE::TempStringAttr::operator=;
+%rename(Get) UDM_NAMESPACE::TempStringAttr::operator string;
+%rename(Get) UDM_NAMESPACE::TempStringAttrArr::operator [];
 // TempStringAttrArr::operator vector<string> ?
-%rename(Set) Udm::TempIntegerAttr::operator=;
-%rename(Get) Udm::TempIntegerAttr::operator __int64;
-%rename(Get) Udm::TempIntegerAttrArr::operator [];
-%rename(AsVector) Udm::TempIntegerAttrArr::operator vector<__int64> const;
-%rename(Set) Udm::TempRealAttr::operator =;
-%rename(Get) Udm::TempRealAttr::operator double;
-%rename(Get) Udm::TempRealAttrArr::operator [];
-%rename(AsVector) Udm::TempRealAttrArr::operator vector<double>() const;
-%rename(Set) Udm::TempBooleanAttr::operator =;
-%rename(Get) Udm::TempBooleanAttr::operator bool;
-%rename(Get) Udm::TempBooleanAttrArr::operator [];
-%rename(AsVector) Udm::TempBooleanAttrArr::operator vector<bool>() const;
-%rename(Set) Udm::StringAttr::operator=;
-%rename(Get) Udm::StringAttr::operator string;
-%rename(Get) Udm::StringAttrArr::operator [];
-%rename(AsVector) Udm::StringAttrArr::operator vector<string>() const ;
-%rename(Set) Udm::IntegerAttr::operator=;
-%rename(Get) Udm::IntegerAttr::operator __int64;
-%rename(Get) Udm::IntegerAttrArr::operator [];
-%rename(Set) Udm::RealAttr::operator =;
-%rename(Get) Udm::RealAttr::operator double;
-%rename(Get) Udm::RealAttrArr::operator [];
-%rename(AsVector) Udm::RealAttrArr::operator vector<bool>() const;
-%rename(Set) Udm::BooleanAttr::operator =;
-%rename(Get) Udm::BooleanAttr::operator bool;
-%rename(Get) Udm::BooleanAttrArr::operator [];
+%rename(Set) UDM_NAMESPACE::TempIntegerAttr::operator=;
+%rename(Get) UDM_NAMESPACE::TempIntegerAttr::operator __int64;
+%rename(Get) UDM_NAMESPACE::TempIntegerAttrArr::operator [];
+%rename(AsVector) UDM_NAMESPACE::TempIntegerAttrArr::operator vector<__int64> const;
+%rename(Set) UDM_NAMESPACE::TempRealAttr::operator =;
+%rename(Get) UDM_NAMESPACE::TempRealAttr::operator double;
+%rename(Get) UDM_NAMESPACE::TempRealAttrArr::operator [];
+%rename(AsVector) UDM_NAMESPACE::TempRealAttrArr::operator vector<double>() const;
+%rename(Set) UDM_NAMESPACE::TempBooleanAttr::operator =;
+%rename(Get) UDM_NAMESPACE::TempBooleanAttr::operator bool;
+%rename(Get) UDM_NAMESPACE::TempBooleanAttrArr::operator [];
+%rename(AsVector) UDM_NAMESPACE::TempBooleanAttrArr::operator vector<bool>() const;
+%rename(Set) UDM_NAMESPACE::StringAttr::operator=;
+%rename(Get) UDM_NAMESPACE::StringAttr::operator string;
+%rename(Get) UDM_NAMESPACE::StringAttrArr::operator [];
+%rename(AsVector) UDM_NAMESPACE::StringAttrArr::operator vector<string>() const ;
+%rename(Set) UDM_NAMESPACE::IntegerAttr::operator=;
+%rename(Get) UDM_NAMESPACE::IntegerAttr::operator __int64;
+%rename(Get) UDM_NAMESPACE::IntegerAttrArr::operator [];
+%rename(Set) UDM_NAMESPACE::RealAttr::operator =;
+%rename(Get) UDM_NAMESPACE::RealAttr::operator double;
+%rename(Get) UDM_NAMESPACE::RealAttrArr::operator [];
+%rename(AsVector) UDM_NAMESPACE::RealAttrArr::operator vector<bool>() const;
+%rename(Set) UDM_NAMESPACE::BooleanAttr::operator =;
+%rename(Get) UDM_NAMESPACE::BooleanAttr::operator bool;
+%rename(Get) UDM_NAMESPACE::BooleanAttrArr::operator [];
 
-%rename(Equals) Udm::Object::operator==;
-%rename(IsNull) Udm::Object::operator bool;
+%rename(Equals) UDM_NAMESPACE::Object::operator==;
+%rename(IsNull) UDM_NAMESPACE::Object::operator bool;
 
-%rename(AsSet) Udm::AssocAttr::operator set<CLASS,Pred >() const;
-%rename(AsSet) Udm::AClassCrossAssocAttr::operator set<CLASS,Pred >() const;
-%rename(AsSet) Udm::AClassAssocAttr::operator set<CLASS,Pred >() const;
-%rename(AsSet) Udm::ChildrenAttr::operator set<CLASS,Pred >() const;
-%rename(AsSet) Udm::DerivedAttr::operator set<CLASS,Pred >() const;
-%rename(AsSet) Udm::InstantiatedAttr::operator set<CLASS,Pred >() const;
-%rename(AsSet) Udm::CrossAssocAttr::operator set<CLASS,Pred >() const;
+%rename(AsSet) UDM_NAMESPACE::AssocAttr::operator set<CLASS,Pred >() const;
+%rename(AsSet) UDM_NAMESPACE::AClassCrossAssocAttr::operator set<CLASS,Pred >() const;
+%rename(AsSet) UDM_NAMESPACE::AClassAssocAttr::operator set<CLASS,Pred >() const;
+%rename(AsSet) UDM_NAMESPACE::ChildrenAttr::operator set<CLASS,Pred >() const;
+%rename(AsSet) UDM_NAMESPACE::DerivedAttr::operator set<CLASS,Pred >() const;
+%rename(AsSet) UDM_NAMESPACE::InstantiatedAttr::operator set<CLASS,Pred >() const;
+%rename(AsSet) UDM_NAMESPACE::CrossAssocAttr::operator set<CLASS,Pred >() const;
 
-%rename(AsVector) Udm::ChildrenAttr::operator vector<CLASS >() const;
+%rename(AsVector) UDM_NAMESPACE::ChildrenAttr::operator vector<CLASS >() const;
 
-%rename(DeRef) Udm::ArrAttrItem::operator CLASS() const;
-%rename(DeRef) Udm::CrossPointerAttr::operator CLASS() const;
-%rename(DeRef) Udm::PointerAttr::operator CLASS() const;
-%rename(DeRef) Udm::CrossAssocEndAttr::operator CLASS() const;
-%rename(DeRef) Udm::AssocEndAttr::operator CLASS() const;
-%rename(DeRef) Udm::AClassCrossPointerAttr::operator CLASS() const;
-%rename(DeRef) Udm::AClassPointerAttr::operator CLASS() const;
-%rename(DeRef) Udm::ChildAttr::operator CLASS() const;
-%rename(DeRef) Udm::ParentAttr::operator CLASS() const;
-%rename(DeRef) Udm::ArchetypeAttr::operator CLASS() const;
+%rename(DeRef) UDM_NAMESPACE::ArrAttrItem::operator CLASS() const;
+%rename(DeRef) UDM_NAMESPACE::CrossPointerAttr::operator CLASS() const;
+%rename(DeRef) UDM_NAMESPACE::PointerAttr::operator CLASS() const;
+%rename(DeRef) UDM_NAMESPACE::CrossAssocEndAttr::operator CLASS() const;
+%rename(DeRef) UDM_NAMESPACE::AssocEndAttr::operator CLASS() const;
+%rename(DeRef) UDM_NAMESPACE::AClassCrossPointerAttr::operator CLASS() const;
+%rename(DeRef) UDM_NAMESPACE::AClassPointerAttr::operator CLASS() const;
+%rename(DeRef) UDM_NAMESPACE::ChildAttr::operator CLASS() const;
+%rename(DeRef) UDM_NAMESPACE::ParentAttr::operator CLASS() const;
+%rename(DeRef) UDM_NAMESPACE::ArchetypeAttr::operator CLASS() const;
 
 %rename(Set) *::operator =;
 %rename(RemoveMember) *::operator -=;
 %rename(AddMember) *::operator +=;
 
 // Don't get confused with System.Object
-%rename(UdmObject) Udm::Object;
+%rename(UdmObject) UDM_NAMESPACE::Object;
 
 %include "UdmBase.h"
 
 //TODO: do we need these?
-//%template(BoolArrAttrItem) Udm::ArrAttrItem<bool>;
-//%template(StringArrAttrItem) Udm::ArrAttrItem<string>;
-//%template(StringAdditiveArrAttrItem) Udm::AdditiveArrAttrItem< string >;
-//%template(DoubleArrAttrItem) Udm::ArrAttrItem<double>;
-//%template(DoubleAdditiveArrAttrItem) Udm::AdditiveArrAttrItem< double >;
-//%template(IntArrAttrItem) Udm::ArrAttrItem<__int64>;
-//%template(IntAdditiveArrAttrItem) Udm::AdditiveArrAttrItem< __int64 >;
+//%template(BoolArrAttrItem) UDM_NAMESPACE::ArrAttrItem<bool>;
+//%template(StringArrAttrItem) UDM_NAMESPACE::ArrAttrItem<string>;
+//%template(StringAdditiveArrAttrItem) UDM_NAMESPACE::AdditiveArrAttrItem< string >;
+//%template(DoubleArrAttrItem) UDM_NAMESPACE::ArrAttrItem<double>;
+//%template(DoubleAdditiveArrAttrItem) UDM_NAMESPACE::AdditiveArrAttrItem< double >;
+//%template(IntArrAttrItem) UDM_NAMESPACE::ArrAttrItem<__int64>;
+//%template(IntAdditiveArrAttrItem) UDM_NAMESPACE::AdditiveArrAttrItem< __int64 >;
 
-namespace Udm {
+namespace UDM_NAMESPACE {
   %extend ChildrenAttr {
-    %typemap(csinterfaces) Udm::ChildrenAttr "IDisposable, System.Collections.Generic.IEnumerable<$typemap(cstype, CLASS)>";
-	%typemap(cscode) Udm::ChildrenAttr <CLASS, Pred > %{
+    %typemap(csinterfaces) UDM_NAMESPACE::ChildrenAttr "IDisposable, System.Collections.Generic.IEnumerable<$typemap(cstype, CLASS)>";
+	%typemap(cscode) UDM_NAMESPACE::ChildrenAttr <CLASS, Pred > %{
       public System.Collections.Generic.IEnumerator<$typemap(cstype, CLASS)> GetEnumerator()
       {
         return AsVector().GetEnumerator();
@@ -210,7 +212,7 @@ namespace Udm {
   };
   
   %extend StringAttr {
-    %typemap(cscode) Udm::StringAttr %{
+    %typemap(cscode) UDM_NAMESPACE::StringAttr %{
       public override String ToString()
       {
         return Get();
@@ -226,12 +228,13 @@ namespace Udm {
 // DerivedAttr
 // InstantiatedAttr
 
+%include "UdmBase.h"
 
-%template(ObjectParentAttr) Udm::ParentAttr<Udm::Object>;
-%template(Object_set) std::set<Udm::Object>;
-%template(ObjectImpl_vector) std::vector<Udm::ObjectImpl*>;
-%template(DataNetworkSpecifier_vector) std::vector<Udm::DataNetworkSpecifier>;
-%template(StaticDataNetworkSpecifier_vector) std::vector<Udm::StaticDataNetworkSpecifier>;
+//%template(ObjectParentAttr) UDM_NAMESPACE::ParentAttr<UDM_NAMESPACE::Object>;
+%template(Object_set) std::set<UDM_NAMESPACE::Object>;
+%template(ObjectImpl_vector) std::vector<UDM_NAMESPACE::ObjectImpl*>;
+%template(DataNetworkSpecifier_vector) std::vector<UDM_NAMESPACE::DataNetworkSpecifier>;
+%template(StaticDataNetworkSpecifier_vector) std::vector<UDM_NAMESPACE::StaticDataNetworkSpecifier>;
 %template(bool_vector) std::vector<bool>;
 %template(double_vector) std::vector<double>;
 %template(string_vector) std::vector<std::string>;
@@ -241,26 +244,26 @@ namespace Udm {
 
 %{
 static void udmdiagram_dummy() {}
-Udm::UdmDiagram UdmDiagram_Wrap(Uml::Diagram* umld) {
-	Udm::UdmDiagram ret;
+UDM_NAMESPACE::UdmDiagram UdmDiagram_Wrap(Uml::Diagram* umld) {
+	UDM_NAMESPACE::UdmDiagram ret;
 	ret.dgr = umld;
 	ret.init = udmdiagram_dummy;
 	return ret;
 }
 class SDN_Wrapper {
    Uml::Diagram uml_diagram;
-   Udm::UdmDiagram diagram;
+   UDM_NAMESPACE::UdmDiagram diagram;
    public:
-   Udm::SmartDataNetwork dn;
+   UDM_NAMESPACE::SmartDataNetwork dn;
    SDN_Wrapper(Uml::Diagram d) : uml_diagram(d), diagram(UdmDiagram_Wrap(&uml_diagram)), dn(diagram) { }
 };
 %}
 
 class SDN_Wrapper {
    Uml::Diagram uml_diagram;
-   Udm::UdmDiagram diagram;
+   UDM_NAMESPACE::UdmDiagram diagram;
    public:
-   Udm::SmartDataNetwork dn;
+   UDM_NAMESPACE::SmartDataNetwork dn;
    SDN_Wrapper(Uml::Diagram d) : uml_diagram(d), diagram(UdmDiagram_Wrap(&uml_diagram)), dn(diagram) { }
 };
 
