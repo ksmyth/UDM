@@ -214,6 +214,10 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\..\..\..\..\include\UdmCintSwig.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\..\..\src\UdmSwig\UdmSwig.i"
 			>
 			<FileConfiguration

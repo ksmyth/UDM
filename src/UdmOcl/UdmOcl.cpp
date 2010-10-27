@@ -440,7 +440,7 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 		context.AddVariable( "dn", TypeSeq( 1, "udm::DataNetwork" ) );
 		eState = Check( context );
 		if ( eState != Ocl::Constraint::CS_CHECK_SUCCEEDED ) {
-			std::string strErr = LARGE_DELIMITER + "SEMANTICAL ERROR >> " + PrintCompilationErrors();
+			std::string strErr = LARGE_DELIMITER + "SEMANTIC ERROR >> " + PrintCompilationErrors();
 			if ( sEN.bStdOutEnabled )
 				cout << strErr << endl;
 			if ( sEN.eExceptionKind != ENT_NONE )

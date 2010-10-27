@@ -1,69 +1,32 @@
 UDM_compile_guide.txt
 Software requirements and a step-by-step guide to compile UDM source files
-on Windows with Visual Studio 2008 (or later)
+on Windows with Visual Studio 2008 or 2010
 -----------------------------------------------------------------------------------------------------------------------------------------------
 
 Requirements:
 -------------------
-	- Visual Studio 2008 (or later)
-	- J2RE 1.4.2 (or later), Java Runtime Environment 	
-	- Java SDK 1.4.2 (or later) 
-		- must have JDK installed for compiling C++ Udm!
+	- Visual Studio 2008 or 2010
+	- J2SE 1.5 (or later) JDK
 
 Step-by-step guide:
 -------------------------
-	1. Download the UDM sources from the SVN repository:
+	1. Check out the UDM sources from the SVN repository:
 		https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/
 
-	2. Get UDM 3rd party files from:
-		\\Atlantis\Project\Mobies\Udm\Udm_ns\3rdparty_vs2008_V1.zip
-	and unzip it onto your machine.
-
-	3. Download Boost 1.36.0 from http://sourceforge.net/projects/boost/files/boost/1.36.0/
-	and unzip it  onto your machine. 
-		 
+	2. Check out UDM 3rd party files from:
+		https://svn.isis.vanderbilt.edu/isis-common/trunk/3rdparty/
 
 	3. Set your build environment as follows:
-		(Note: either use Tools/Options/Projects and Solutions/VC++ Directories to make these settings or create a script called scripts/vc9-env-local.bat and set them there)
-	BOOST_PATH= your boost root folder (extracted from boost_1_36_0.zip)
-	UDM_3RDPARTY_PATH=
-		your UDM 3rdparty root folder (extracted from 3rdparty_vs2008_V1.zip)
-	JDK_PATH=
-		your Java 1.4.2 (or later) SDK path, e.g. c:\Program Files\Java\jdk1.6.0_16
-		(Note: Once the above variables are set, you may use scripts/vc9-env.bat to set following)
-	UDM_PATH=
-		your UDM SVN root folder (where /MoBIES/UDM/trunk/ is checked out)
-	PATH=
-		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin;
-		%UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin;
-		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\bin;
-		%UDM_3RDPARTY_PATH%\info-zip;
-		%UDM_3RDPARTY_PATH%\sed;
-		%UDM_3RDPARTY_PATH%\swigwin-1.3.36;
-		%PATH%
-	INCLUDE=
-		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\include;
-		%UDM_3RDPARTY_PATH%\Xalan-C_1_11_0\include;
-		%UDM_3RDPARTY_PATH%\antlr-2.7.7\lib\cpp;
-		%UDM_3RDPARTY_PATH%\zlib;
-		%UDM_3RDPARTY_PATH%\zlib\contrib\minizip;
-		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\include;
-		%BOOST_PATH%\;
-		%JDK_PATH%\include\win32;
-		%JDK_PATH%\include;
-		%INCLUDE%
-	LIB=
-		%UDM_3RDPARTY_PATH%\Xalan-C_1_11_0\lib;
-		%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\lib;
-		%UDM_3RDPARTY_PATH%\zlib;
-		%UDM_3RDPARTY_PATH%\antlr-2.7.7\lib;
-		%UDM_3RDPARTY_PATH%\cppunit-1.12.1\lib;
-		%JDK_PATH%\lib
-		%LIB%
-	CLASSPATH=
-		%UDM_3RDPARTY_PATH%\antlr-2.7.7\antlr.jar;
-		%CLASSPATH%
+	For VS2008, add $(LIB) and $(INCLUDE) to Tools/Options/Projects and Solutions/VC++ Directories or use devenv's command-line switch /useenv
+	For VS2010, add $(LIB) and $(INCLUDE) to Microsoft.Cpp.Win32.user property sheet or use devenv's command-line switch /useenv
 
-	4. Open Udm.sln in VS 2008, and (re)build solution with the following configurations: 
-			'Win32 Debug' and 
-			'Win32 Release' 
+	(Note: you may create a script called scripts/vc9-env-local.bat to set the following)
+	UDM_PATH=
+		your https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ working copy
+	UDM_3RDPARTY_PATH=
+		the UDM_VS2008 or UDM_VS2010 subdirectory of your https://svn.isis.vanderbilt.edu/isis-common/trunk/3rdparty/ working copy
+	JDK_PATH=
+		your Java 1.5 (or later) JDK path, e.g. c:\Program Files\Java\jdk1.6.0_16
+	Then run scripts/vc9-env.bat
+
+	4. Use Projects/Win32/VC9/src/Udm.sln for VS2008 or Projects/Win32/VC10/src/Udm.sln for VS2010
