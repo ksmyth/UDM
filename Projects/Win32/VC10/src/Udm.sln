@@ -52,6 +52,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MPCGen", "MPCGen\MPCGen.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmCliBridge", "UdmCliBridge\UdmCliBridge.vcxproj", "{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdmCli", "UdmCli\UdmCli.csproj", "{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BootUdmCompile Debug|Win32 = BootUdmCompile Debug|Win32
@@ -267,6 +269,13 @@ Global
 		{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}.Release MinDependency|Win32.Build.0 = Release|Win32
 		{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}.Release|Win32.ActiveCfg = Release|Win32
 		{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}.Release|Win32.Build.0 = Release|Win32
+		{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}.BootUdmCompile Debug|Win32.ActiveCfg = Debug|Any CPU
+		{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}.BootUdmCompile Release|Win32.ActiveCfg = Release|Any CPU
+		{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}.Debug|Win32.Build.0 = Debug|Any CPU
+		{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}.Release MinDependency|Win32.ActiveCfg = Release|Any CPU
+		{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}.Release|Win32.ActiveCfg = Release|Any CPU
+		{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}.Release|Win32.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
