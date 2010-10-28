@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <SWIG_EXE>$(UDM_3RDPARTY_PATH)\swigwin-1.3.36\swig.exe</SWIG_EXE>
+    <SWIG_EXE>$(UDM_3RDPARTY_PATH)\swigwin-2.0.0\swig.exe</SWIG_EXE>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
