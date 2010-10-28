@@ -30,10 +30,14 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="UdmCliBridgeProps.props" />
+    <Import Project="..\swig.props" />
+    <Import Project="..\Xerces-c.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="UdmCliBridgeProps.props" />
+    <Import Project="..\swig.props" />
+    <Import Project="..\Xerces-c.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -101,7 +105,7 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
-"swig.exe" ^
+"$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native" ^
 -dllimport "$(TargetFileName)" ^
@@ -115,7 +119,7 @@ mkdir "$(CliBridgeCsDir)\%(Filename)"
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
-"swig.exe" ^
+"$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native" ^
 -dllimport "$(TargetFileName)" ^
@@ -132,7 +136,7 @@ mkdir "$(CliBridgeCsDir)\%(Filename)"
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
-"swig.exe" ^
+"$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
 -dllimport "$(TargetFileName)" ^
@@ -146,7 +150,7 @@ mkdir "$(CliBridgeCsDir)\%(Filename)"
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
-"swig.exe" ^
+"$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
 -dllimport "$(TargetFileName)" ^
@@ -163,7 +167,7 @@ mkdir "$(CliBridgeCsDir)\%(Filename)"
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
-"swig.exe" ^
+"$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
 -dllimport "$(TargetFileName)" ^
@@ -177,7 +181,7 @@ mkdir "$(CliBridgeCsDir)\%(Filename)"
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
-"swig.exe" ^
+"$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
 -dllimport "$(TargetFileName)" ^
@@ -193,7 +197,7 @@ mkdir "$(CliBridgeCsDir)\%(Filename)"
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
-"swig.exe" ^
+"$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
 -dllimport "$(TargetFileName)" ^
@@ -207,7 +211,7 @@ mkdir "$(CliBridgeCsDir)\%(Filename)"
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
-"swig.exe" ^
+"$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
 -dllimport "$(TargetFileName)" ^
@@ -223,7 +227,7 @@ mkdir "$(CliBridgeCsDir)\%(Filename)"
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
-"swig.exe" ^
+"$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
 -dllimport "$(TargetFileName)" ^
@@ -237,7 +241,7 @@ mkdir "$(CliBridgeCsDir)\%(Filename)"
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
-"swig.exe" ^
+"$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
 -dllimport "$(TargetFileName)" ^
@@ -258,4 +262,8 @@ mkdir "$(CliBridgeCsDir)\%(Filename)"
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <Target Name="BeforeCppClean">
+    <Message Importance="high" Text="Deleting $(CliBridgeCppDir) and $(CliBridgeCsDir)" />
+    <RemoveDir Directories="$(CliBridgeCppDir);$(CliBridgeCsDir)" />
+  </Target>
 </Project>
