@@ -206,14 +206,14 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <CustomBuild Include="..\..\..\..\..\..\src\UML GME\Interpreter\attribute.g">
       <FileType>Document</FileType>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating code from attribute.g</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">Generating code from attribute.g</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">mkdir "$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.cpp;%(Outputs)</Outputs>
@@ -221,14 +221,14 @@ java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
     <CustomBuild Include="..\..\..\..\..\..\src\UML GME\Interpreter\cardinality.g">
       <FileType>Document</FileType>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating code from cardinality.g</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">Generating code from cardinality.g</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">mkdir "$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.cpp;%(Outputs)</Outputs>
