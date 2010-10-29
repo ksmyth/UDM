@@ -69,6 +69,7 @@ copy /y "$(UDM_3RDPARTY_PATH)"\boost_1_44_0\bin\boost_python-vc100-mt-gd-1_44.dl
       <AdditionalLibraryDirectories>C:\Python26\libs;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd.pdb</ProgramDatabaseFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -97,6 +98,7 @@ copy /y "$(UDM_3RDPARTY_PATH)"\boost_1_44_0\bin\boost_python-vc100-mt-1_44.dll "
       <BaseAddress>0x13000000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd.pdb</ProgramDatabaseFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
