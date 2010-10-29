@@ -104,6 +104,8 @@ class TestUdmPython(unittest.TestCase):
         self.assertTrue(test_meta.AtomA.__hash__() > 0)
         self.assertTrue(test_meta.AtomA)
 
+        #KMS: BUG: childRole_role_children should return a singleton, not a list
+        self.assertEquals(test_meta.AtomA.childRoles[0].parent.childRole_role_children[0].target, test_meta.AtomA)
 
         dn.close_no_update()
         test_meta_dn.close_no_update()

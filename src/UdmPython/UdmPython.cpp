@@ -140,6 +140,7 @@ object Object_children(Udm::Object& self, object child_role, object parent_role,
 		roles_none = false;
 	}
 	if (!roles_none) {
+		// FIXME: might need to be a singleton if child_role is specified
 		return toList(self.GetChildObjects(comp_info, child_type));
 	} else if (child_type) {
 		return toList(self.GetChildObjects(child_type));
@@ -403,9 +404,9 @@ BOOST_PYTHON_MODULE(udm)
 "    return map_classes(diagram)\n",
 		import("__main__").attr("__dict__"), scope().attr("__dict__"));
 
-	//def("UdmId2GmeId", UdmGme::UdmId2GmeId);
-	//Udm::Object::uniqueId_type (*GmeId2UdmId)(const char* gmeId) = &UdmGme::GmeId2UdmId;
-	//def("GmeId2UdmId", GmeId2UdmId);
-	//UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const char* gmeId);
+	def("UdmId2GmeId", UdmGme::UdmId2GmeId);
+	Udm::Object::uniqueId_type (*GmeId2UdmId)(const char* gmeId) = &UdmGme::GmeId2UdmId;
+	def("GmeId2UdmId", GmeId2UdmId);
+	UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const char* gmeId);
 
 }
