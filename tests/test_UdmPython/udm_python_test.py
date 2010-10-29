@@ -4,20 +4,8 @@ import unittest
 
 sys.path.append(r"C:\Program Files\ISIS\Udm\bin")
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../bin/"))
-# copy udm.pyd to C:\Program Files\ISIS\Udm\bin
 import udm
-
-def map_class_names(diagram):
-    class_meta = filter(lambda class_: class_.name == "Class", udm.uml_diagram().children())[0]
-    namespace_meta = filter(lambda class_: class_.name == "Namespace", udm.uml_diagram().children())[0]
-    class ClassMap(object):
-        def __init__(self, d):
-            self.__dict__.update(d)
-    def map_classes(container):
-        ret = map(lambda class_: (class_.name, class_), container.children(child_type=class_meta))
-        ret.extend(map(lambda namespace: (namespace.name, map_classes(namespace)), container.children(child_type=namespace_meta)))
-        return ClassMap(ret)
-    return map_classes(diagram)
+# import udmd as udm
 
 def get_names(col):
     names = map(lambda x: x.name, col)
@@ -34,7 +22,7 @@ class TestUdmPython(unittest.TestCase):
         test_meta_dn= udm.SmartDataNetwork(udm.uml_diagram())
         test_meta_dn.open(r"UdmPythonTestMeta.xml", "")
         self.assertEquals(test_meta_dn.root.name, "UdmPythonTestMeta")
-        test_meta = map_class_names(test_meta_dn.root)
+        test_meta = udm.map_uml_names(test_meta_dn.root)
 
         dn = udm.SmartDataNetwork(test_meta_dn.root)
         dn.open(r"UdmPythonTestModel.mga", "")
@@ -75,7 +63,7 @@ class TestUdmPython(unittest.TestCase):
         else:
             self.fail("Expected an exception")
 
-        uml = map_class_names(udm.uml_diagram())
+        uml = udm.map_uml_names(udm.uml_diagram())
         for o in udm.uml_diagram().children():
             if get_names(o.children(child_type=uml.CompositionChildRole)) == ['namespaces'] and get_names(o.children(child_type=uml.CompositionParentRole)) == ['parent']:
                 break
