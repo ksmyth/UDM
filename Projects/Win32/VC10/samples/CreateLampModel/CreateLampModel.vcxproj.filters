@@ -41,7 +41,6 @@
       <Filter>UML Diagrams</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\samples\CreateLampModel\LampDiagramUML.xme" />
-    <CustomBuild Include="..\..\..\..\..\samples\CreateLampModel\LampDiagramGME.xme" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(DebugGenPath)\LampDiagram.cpp">
