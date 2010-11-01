@@ -5,8 +5,8 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release MinDependency|Win32">
-      <Configuration>Release MinDependency</Configuration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -17,7 +17,7 @@
     <Keyword>AtlProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>Dynamic</UseOfMfc>
     <UseOfAtl>Static</UseOfAtl>
@@ -31,7 +31,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\..\antlr.props" />
     <Import Project="..\..\Xalan-c.props" />
@@ -49,9 +49,9 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\..\..\Build\Win32\VC10\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)obj\src\UML GME\Interpreter\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">..\..\..\..\..\..\Build\Win32\VC10\Release\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(OutDir)obj\src\UML GME\Interpreter\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\..\..\Build\Win32\VC10\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)obj\src\UML GME\Interpreter\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -111,7 +111,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <CustomBuildStep>
       <Message>Performing registration</Message>
       <Command>regsvr32 /s /c "$(TargetPath)" &amp;&amp; ^
@@ -187,16 +187,16 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lcardin.cpp" />
     <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pattrib.cpp">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pcardin.cpp">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.cpp" />
   </ItemGroup>
@@ -211,12 +211,12 @@ cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.cpp;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">Generating code from attribute.g</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating code from attribute.g</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
 cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\..\src\UML GME\Interpreter\cardinality.g">
       <FileType>Document</FileType>
@@ -226,28 +226,28 @@ cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.cpp;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">Generating code from cardinality.g</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating code from cardinality.g</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
 cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.cpp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.cpp;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\Component.rc">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="$(GME_ROOT)\sdk\bon\common\ComponentLib.idl">
       <TypeLibraryName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb</TypeLibraryName>
       <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(TargetDir)\..\Gen\src\UML GME\Interpreter</OutputDirectory>
-      <TypeLibraryName Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb</TypeLibraryName>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release MinDependency|Win32'">$(TargetDir)\..\Gen\src\UML GME\Interpreter</OutputDirectory>
+      <TypeLibraryName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(TargetDir)\obj\src\UML GME\Interpreter\ComponentLib.tlb</TypeLibraryName>
+      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(TargetDir)\..\Gen\src\UML GME\Interpreter</OutputDirectory>
     </Midl>
   </ItemGroup>
   <ItemGroup>
