@@ -54,6 +54,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmCliBridge", "UdmCliBridg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UdmCli", "UdmCli\UdmCli.csproj", "{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmPython", "UdmPython\UdmPython.vcxproj", "{55409968-F077-4A87-87D5-F28DB28181C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BootUdmCompile Debug|Win32 = BootUdmCompile Debug|Win32
@@ -260,9 +262,7 @@ Global
 		{7E5263AA-49FA-4EA3-89D8-427F40C5B0BC}.Release|Win32.ActiveCfg = Release|Win32
 		{7E5263AA-49FA-4EA3-89D8-427F40C5B0BC}.Release|Win32.Build.0 = Release|Win32
 		{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}.BootUdmCompile Debug|Win32.ActiveCfg = Debug|Win32
-		{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}.BootUdmCompile Debug|Win32.Build.0 = Debug|Win32
 		{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}.BootUdmCompile Release|Win32.ActiveCfg = Release|Win32
-		{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}.BootUdmCompile Release|Win32.Build.0 = Release|Win32
 		{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}.Debug|Win32.ActiveCfg = Debug|Win32
 		{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}.Debug|Win32.Build.0 = Debug|Win32
 		{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}.Release MinDependency|Win32.ActiveCfg = Release|Win32
@@ -276,6 +276,14 @@ Global
 		{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}.Release MinDependency|Win32.ActiveCfg = Release|Any CPU
 		{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}.Release|Win32.ActiveCfg = Release|Any CPU
 		{91CDC0D9-813C-4CED-91E9-94E61DFFB6CB}.Release|Win32.Build.0 = Release|Any CPU
+		{55409968-F077-4A87-87D5-F28DB28181C2}.BootUdmCompile Debug|Win32.ActiveCfg = Debug|Win32
+		{55409968-F077-4A87-87D5-F28DB28181C2}.BootUdmCompile Release|Win32.ActiveCfg = Release|Win32
+		{55409968-F077-4A87-87D5-F28DB28181C2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{55409968-F077-4A87-87D5-F28DB28181C2}.Debug|Win32.Build.0 = Debug|Win32
+		{55409968-F077-4A87-87D5-F28DB28181C2}.Release MinDependency|Win32.ActiveCfg = Release|Win32
+		{55409968-F077-4A87-87D5-F28DB28181C2}.Release MinDependency|Win32.Build.0 = Release|Win32
+		{55409968-F077-4A87-87D5-F28DB28181C2}.Release|Win32.ActiveCfg = Release|Win32
+		{55409968-F077-4A87-87D5-F28DB28181C2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
