@@ -86,9 +86,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\src\UdmPOI\UdmPOI.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\..\src\UdmPOI\ReadMe.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
