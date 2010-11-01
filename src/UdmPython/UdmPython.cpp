@@ -407,6 +407,5 @@ BOOST_PYTHON_MODULE(udm)
 	def("UdmId2GmeId", UdmGme::UdmId2GmeId);
 	Udm::Object::uniqueId_type (*GmeId2UdmId)(const char* gmeId) = &UdmGme::GmeId2UdmId;
 	def("GmeId2UdmId", GmeId2UdmId);
-	UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const char* gmeId);
 
 }
