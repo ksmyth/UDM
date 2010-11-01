@@ -45,10 +45,10 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <CustomBuildStep>
-      <Message>Compile CSharp%3b Move dlls to bin</Message>
+      <Message>Move dlls to bin</Message>
       <Command>copy /y "$(TargetPath)" "$(UDM_PATH)"\bin\
 </Command>
-      <Outputs>UdmCli.dll;%(Outputs)</Outputs>
+      <Outputs>$(UDM_PATH)\bin\$(TargetFileName);%(Outputs)</Outputs>
     </CustomBuildStep>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -68,10 +68,10 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <CustomBuildStep>
-      <Message>Compile CSharp%3b Move dlls to bin</Message>
+      <Message>Move dlls to bin</Message>
       <Command>copy /y "$(TargetPath)" "$(UDM_PATH)"\bin\
 </Command>
-      <Outputs>UdmCli.dll;%(Outputs)</Outputs>
+      <Outputs>$(UDM_PATH)\bin\$(TargetFileName);%(Outputs)</Outputs>
     </CustomBuildStep>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
