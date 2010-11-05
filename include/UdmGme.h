@@ -68,7 +68,7 @@ CHANGELOG
 // IMgaMetaProject is only used in UdmGme.cpp. This union IMgaMetaProject isn't defined anywhere.
 // This works because the member function that uses IMgaMetaProject is private, so it isn't referenced outside of UdmGme.cpp
 #ifndef UDM_IMGAMETAPROJECT
-#define UDM_IMGAMETAPROJECT union IMgaMetaProject
+#define UDM_IMGAMETAPROJECT union _unusedIMgaMetaProject
 UDM_IMGAMETAPROJECT;
 #endif
 
