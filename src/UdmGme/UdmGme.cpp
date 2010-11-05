@@ -207,7 +207,7 @@ CHANGELOG
 #include <iomanip>
 #include <algorithm>
 
-// Hack to detect VS10 GME: VS10 GME has ifdef guards in InterfaceVersion.h
+// Hack to detect VS2010 GME: VS2010 GME has ifdef guards in InterfaceVersion.h
 #define INTERFACEVERSION_INCLUDED
 #define cpp_quote(x) namespace { }
 #include "InterfaceVersion.h"
@@ -217,6 +217,15 @@ CHANGELOG
 #undef INTERFACEVERSION_INCLUDED
 #undef INTERFACE_VERSION
 
+// KMS: GME VS2010 renamed METALib to MGAMetaLib
+// Need to declare this for GME VS2008
+namespace MGAMetaLib { }
+namespace METALib
+{
+	using namespace MGAMetaLib;
+}
+// UDM_IMGAMETAPROJECT is used in UdmGme.h
+#define UDM_IMGAMETAPROJECT METALib::IMgaMetaProject
 using namespace METALib;
 using namespace MGALib;
 
@@ -3115,7 +3124,7 @@ bbreak:			;
 		return NULL;
 	}
 
-	IMgaMetaFCOPtr MetaObjLookup(IMgaMetaProject *metap, string name) {
+	IMgaMetaFCOPtr MetaObjLookup(METALib::IMgaMetaProject *metap, string name) {
 		return MetaObjLookup(metap->RootFolder, SmartBSTR(name.c_str()));
 	}
 	
@@ -3559,10 +3568,10 @@ bbreak:			;
 		void CheckVersion(IMgaProject *p) {
 		// IGMEVersionInfo and IMgaVersionInfo have the same GUID and vtable definition, so this works across versions
 #ifdef GME_VS10
-		CoreLib::IGMEVersionInfoPtr vi = p;
-		CoreLib::GMEInterfaceVersion_enum v = CoreLib::GMEInterfaceVersion_None;
+		MGACoreLib::IGMEVersionInfoPtr vi = p;
+		MGACoreLib::GMEInterfaceVersion_enum v = MGACoreLib::GMEInterfaceVersion_None;
 		if (vi) COMTHROW(vi->get_version(&v));
-		CoreLib::GMEInterfaceVersion_enum current = CoreLib::GMEInterfaceVersion_Current;
+		MGACoreLib::GMEInterfaceVersion_enum current = MGACoreLib::GMEInterfaceVersion_Current;
 #else
 		GmeLib::IMgaVersionInfoPtr vi=p;
 		GmeLib::MgaInterfaceVersion_enum v = GmeLib::MgaInterfaceVersion_None;

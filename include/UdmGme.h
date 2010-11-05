@@ -64,13 +64,14 @@ CHANGELOG
 			for such containment, and that role.target() is compatible with kind.
 */
 
-//we need to forward declare some COM structs in order to keep this .f file indepdent 
-//from the COM header files: METALib::IMgaMetaProject, UdmGme::assocmapitem, UdmGme::privdata
-namespace METALib
-{
-	//this is defined in Meta.dll and will be imported in UdmGme.cpp through commonheaders.h
-	struct IMgaMetaProject;
-};
+// we need to forward declare some COM structs in order to keep this .h file independent 
+// IMgaMetaProject is only used in UdmGme.cpp. This union IMgaMetaProject isn't defined anywhere.
+// This works because the member function that uses IMgaMetaProject is private, so it isn't referenced outside of UdmGme.cpp
+#ifndef UDM_IMGAMETAPROJECT
+#define UDM_IMGAMETAPROJECT union IMgaMetaProject
+UDM_IMGAMETAPROJECT;
+#endif
+
 
 namespace UdmGme
 {
@@ -90,11 +91,11 @@ namespace UdmGme
 		Udm::BackendSemantics semantics;
 		
 		//map the Udm Composition Child Role to the corresponding set of MGA CompositionRole(MetaRole)s.
-		typedef set<string> string_set;			//the compiler doesn't like when templates are nested
+		typedef set<string> string_set;
 		map< ::Uml::CompositionChildRole, string_set> meta_role_filter_cache;
 	
 	
-		void amapInitialize(const ::Uml::Diagram &dgr, METALib::IMgaMetaProject *metaproj);
+		void amapInitialize(const ::Uml::Diagram &dgr, UDM_IMGAMETAPROJECT *metaproj);
 	
 	
 		
