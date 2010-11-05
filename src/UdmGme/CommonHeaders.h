@@ -21,10 +21,12 @@
 			- removed  the UdmGme.h #include directive, and added the only function which is needed from that namespace
 */
 
-#import "Meta.dll" no_implementation
-#import "Mga.dll" no_implementation
-#import "Core.dll" no_implementation
-#import "Gme.exe" no_implementation
+#import "progid:Mga.MgaMetaFolder" version("1.0") no_implementation
+#import "progid:Mga.MgaFolders" version("1.0") no_implementation
+#import "progid:Mga.CoreBinFile" version("1.0") no_implementation
+// GMELib
+#import "libid:0ADEEC71-D83A-11D3-B36B-005004CC8592" no_implementation
+
 
 //only this is needed from the UdmGme namespace.
 namespace UdmGme
