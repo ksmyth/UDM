@@ -67,28 +67,34 @@ void UdmTests::refPortsTest::testRefPorts()
 	c.name() = "c";
 
 
-	c.a_end__rp_helper() = aref1;
-	c.b_end__rp_helper() = bref;
+	c.a_rp_container() = aref1;
+	c.b_rp_container() = bref;
 
-	// the preferences are not visible until the port is connected
-	CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_helper()) == Udm::null);
-	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_helper()) == Udm::null);
+	// the refport containers are not visible until the port is connected
+	CPPUNIT_ASSERT(ARef1::Cast(c.a_rp_container()) == Udm::null);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_rp_container()) == Udm::null);
 
 	c.a_end_end() = a;
 	c.b_end_end() = b;
 	
 	// the preferences are now visible
-	CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_helper()) == aref1);
-	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_helper()) == bref);
+	CPPUNIT_ASSERT(ARef1::Cast(c.a_rp_container()) == aref1);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_rp_container()) == bref);
+
+	ARef1 aref1_ = ARef1::Cast(c.a_rp_container());
+	std::set<C> conns = aref1_.a_rp_container_rev();
+	CPPUNIT_ASSERT_EQUAL((size_t)1, conns.size());
+	cout << conns.begin()->name();
+	CPPUNIT_ASSERT_EQUAL(c, *conns.begin());
 
 	// we change the preference, but the visible one does not change since
 	// the port has not been changed
-	c.b_end__rp_helper() = bref3;
-	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_helper()) == bref);
+	c.b_rp_container() = bref3;
+	CPPUNIT_ASSERT(BRef::Cast(c.b_rp_container()) == bref);
 
 	// after port change, the preference becomes visible
 	c.b_end_end() = b2;
-	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_helper()) == bref3);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_rp_container()) == bref3);
 
 
 	{
@@ -161,7 +167,7 @@ void UdmTests::refPortsTest::testRefPorts()
 
 
 	// connect dst using reference port helper
-	c.b_end__rp_helper() = bref;
+	c.b_rp_container() = bref;
 	//c.connectTo(C::meta_b_end_end_, b);
 	c.b_end_chain() = b;
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b);
@@ -170,12 +176,11 @@ void UdmTests::refPortsTest::testRefPorts()
 	c.b_end_chain().disconnect();
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
 
-
 	// connect another dst using reference port helper
-	c.b_end__rp_helper() = bref3;
+	c.b_rp_container() = bref3;
 	//c.connectTo(C::meta_b_end_end_, b2);
 	c.b_end_chain() = b2;
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
-
+	 
 	dn.CloseWithUpdate();
 }

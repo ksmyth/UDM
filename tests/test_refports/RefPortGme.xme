@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project SYSTEM "mga.dtd">
 
-<project guid="{F085269A-80FB-455A-9CE6-3F52846BA281}" cdate="Tue Mar 02 13:08:38 2010" mdate="Tue Mar 02 13:08:38 2010" version="" metaguid="{9D3F9884-FE60-409C-8FC1-45789193989B}" metaversion="" metaname="MetaGME">
+<project guid="{EA41276C-0612-4678-A926-B2A2F57F5C34}" cdate="Mon Nov 01 10:04:16 2010" mdate="Mon Nov 01 10:04:16 2010" version="" metaguid="{9D3F9884-FE60-409C-8FC1-45789193989B}" metaversion="" metaname="MetaGME">
 	<name>RefPort</name>
 	<comment></comment>
 	<author></author>
@@ -25,6 +25,24 @@
 							<value>1020</value>
 						</regnode>
 					</regnode>
+				</regnode>
+			</regnode>
+		</regnode>
+		<regnode name="MetaGME_Options" status="undefined">
+			<value></value>
+			<regnode name="GeneratedConstraints" isopaque="yes">
+				<value>skip_dialog</value>
+				<regnode name="ConnectionEndEventMask" isopaque="yes">
+					<value>0x00000000</value>
+				</regnode>
+				<regnode name="FolderContainmentEventMask" isopaque="yes">
+					<value>0x00000000</value>
+				</regnode>
+				<regnode name="Priority" isopaque="yes">
+					<value>1</value>
+				</regnode>
+				<regnode name="RegularContainmentEventMask" isopaque="yes">
+					<value>0x00000000</value>
 				</regnode>
 			</regnode>
 		</regnode>
@@ -298,7 +316,7 @@
 				</regnode>
 			</regnode>
 		</regnode>
-		<model id="id-0065-00000001" kind="ParadigmSheet" guid="{bfde3f52-e593-47e3-a967-c61dc4858058}" relid="0x1" childrelidcntr="0x21">
+		<model id="id-0065-00000001" kind="ParadigmSheet" guid="{bfde3f52-e593-47e3-a967-c61dc4858058}" relid="0x1" childrelidcntr="0x22">
 			<name>RefPortSheet</name>
 			<atom id="id-0066-00000001" kind="Model" role="Model" guid="{c735563e-1d6f-4465-87c3-3a96c100081a}" relid="0x1">
 				<name>BPar</name>
@@ -701,9 +719,8 @@
 				<attribute kind="GeneralPreferences">
 					<value>sName=a_end
 dName=b_end
-sRefParent = a_end__rp_helper
-dRefParent = b_end__rp_helper
-</value>
+sRefParent = a_rp_container
+dRefParent = b_rp_container</value>
 				</attribute>
 				<attribute kind="InRootFolder" status="meta">
 					<value>false</value>
@@ -879,8 +896,10 @@ dRefParent = b_end__rp_helper
 				<attribute kind="DisplayedName" status="meta">
 					<value></value>
 				</attribute>
-				<attribute kind="GeneralPreferences" status="meta">
-					<value></value>
+				<attribute kind="GeneralPreferences">
+					<value>
+rName = ref
+rrName = referedbyBRef</value>
 				</attribute>
 				<attribute kind="GradientFillColor" status="meta">
 					<value></value>
@@ -987,8 +1006,10 @@ dRefParent = b_end__rp_helper
 				<attribute kind="DisplayedName" status="meta">
 					<value></value>
 				</attribute>
-				<attribute kind="GeneralPreferences" status="meta">
-					<value></value>
+				<attribute kind="GeneralPreferences">
+					<value>
+rName = ref
+rrName = referedbyARef1</value>
 				</attribute>
 				<attribute kind="GradientFillColor" status="meta">
 					<value></value>
@@ -1095,8 +1116,10 @@ dRefParent = b_end__rp_helper
 				<attribute kind="DisplayedName" status="meta">
 					<value></value>
 				</attribute>
-				<attribute kind="GeneralPreferences" status="meta">
-					<value></value>
+				<attribute kind="GeneralPreferences">
+					<value>
+rName = ref
+rrName = referedbyARef2</value>
 				</attribute>
 				<attribute kind="GradientFillColor" status="meta">
 					<value></value>
@@ -1448,20 +1471,10 @@ dRefParent = b_end__rp_helper
 				<connpoint role="src" target="id-0066-00000001"/>
 				<connpoint role="dst" target="id-0066-0000000a"/>
 			</connection>
-			<connection id="id-0068-00000012" kind="ReferTo" role="ReferTo" guid="{c4f66b5a-0f60-417c-98c6-60fc81ed99b6}" relid="0x1f">
+			<connection id="id-0068-00000015" kind="ReferTo" role="ReferTo" guid="{90dca7c6-f3ab-4a55-834f-ff71ffc53297}" relid="0x22">
 				<name>ReferTo</name>
-				<connpoint role="src" target="id-0066-00000008"/>
-				<connpoint role="dst" target="id-0066-00000008"/>
-			</connection>
-			<connection id="id-0068-00000013" kind="ReferTo" role="ReferTo" guid="{967ac274-fe19-4d86-b952-fc1eff12c502}" relid="0x20">
-				<name>ReferTo</name>
-				<connpoint role="src" target="id-0066-00000009"/>
-				<connpoint role="dst" target="id-0066-00000009"/>
-			</connection>
-			<connection id="id-0068-00000014" kind="ReferTo" role="ReferTo" guid="{849573ea-3942-4e7c-9073-dfe1d2431662}" relid="0x21">
-				<name>ReferTo</name>
-				<connpoint role="src" target="id-0066-00000007"/>
 				<connpoint role="dst" target="id-0066-00000007"/>
+				<connpoint role="src" target="id-0066-00000007"/>
 			</connection>
 			<set id="id-0069-00000001" kind="Aspect" role="Aspect" guid="{90d29510-eb1b-4701-a52f-9a9eefed6a38}" relid="0x19" members="id-0066-00000001 id-0066-00000002 id-0066-00000003 id-0066-00000005 id-0066-00000006 id-0066-00000007 id-0066-00000008 id-0066-00000009">
 				<name>Aspect</name>
