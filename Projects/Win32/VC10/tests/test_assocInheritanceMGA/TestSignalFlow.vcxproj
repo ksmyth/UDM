@@ -141,6 +141,7 @@ exit 0
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
       <Command>cd "$(OutDir)Gen\tests\test_assocInheritanceMGA"
