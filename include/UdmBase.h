@@ -2667,7 +2667,7 @@ namespace UDM_NAMESPACE
 		friend void Terminate();
 		
 	protected:
-		ObjectImpl *impl;	// this is never a NULL pointer
+		ObjectImpl *impl;	// this is a NULL pointer only after being std::move()d (or being destructed under _DEBUG)
 
 	public:
 		ObjectImpl *__impl() const { return impl; }
