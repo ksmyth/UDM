@@ -18,7 +18,6 @@ Step-by-step guide:
 
 	3. Set your build environment as follows:
 	For VS2008, add $(LIB) and $(INCLUDE) to Tools/Options/Projects and Solutions/VC++ Directories or use devenv's command-line switch /useenv
-	For VS2010, add $(LIB) and $(INCLUDE) to Microsoft.Cpp.Win32.user property sheet or use devenv's command-line switch /useenv
 
 	(Note: you may create a script called scripts/vc9-env-local.bat to set the following)
 	UDM_PATH=
