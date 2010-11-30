@@ -87,7 +87,7 @@ Source: {#UDM3rdPartyPath}\mpc\templates\*; DestDir: {app}\3rdparty\mpc\template
 Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\*; DestDir: {app}\3rdparty\xalan-c_1_11_0\bin; Excludes: ".svn,*.pdb"; Components: Core; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\include\*; DestDir: {app}\3rdparty\xalan-c_1_11_0\include; Excludes: .svn; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\lib\*; DestDir: {app}\3rdparty\xalan-c_1_11_0\lib; Excludes: .svn; Components: Core; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\bin\*; DestDir: {app}\3rdparty\xerces-c_2_8_0\bin; Excludes: .svn; Components: Core; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\bin\*; DestDir: {app}\3rdparty\xerces-c_2_8_0\bin; Excludes: ".svn,*.pdb"; Components: Core; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\include\*; DestDir: {app}\3rdparty\xerces-c_2_8_0\include; Excludes: .svn; Components: Full3rdParty; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\lib\*; DestDir: {app}\3rdparty\xerces-c_2_8_0\lib; Excludes: .svn; Components: Core; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\zlib\license.txt; DestDir: {app}\3rdparty\zlib; Components: Core; Flags: ignoreversion
@@ -104,7 +104,7 @@ Source: {#UDMPATH}\Build\Win32\VC9\Release\{#UDMDLL}; DestDir: {app}\bin; Compon
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\{#UDMDLLD}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\GmeOclExprChecker.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UML2XML.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
-Source: {#GREATPATH}\bin\MetaGME2Uml.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
+Source: {#GREATPATH}\bin_vs9\MetaGME2Uml.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
 Source: {#UDMPATH}\Build\Win32\VC9\Release\Udm.exe; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmBackendDump.exe; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmCopy.exe; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
@@ -120,8 +120,8 @@ Source: {#UDMPATH}\Build\Win32\VC10\Debug\{#UDMDLLDVS10}; DestDir: {app}\bin; Co
 ;Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCliBridge.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC10\Release\udm.pyd; DestDir: {app}\bin; Components: Python; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC10\Debug\udmd.pyd; DestDir: {app}\bin; Components: Python; Flags: ignoreversion
-; c:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild /t:Build /p:Configuration=Release27 Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj
 Source: {#UDMPATH}\Build\Win32\VC10\Release27\udm27.pyd; DestDir: {app}\bin; Components: Python; Flags: ignoreversion
+Source: {#UDMPATH}\bin\boost_python-vc100-mt-1_44.dll; DestDir: {app}\bin; Components: Python; Flags: ignoreversion
 Source: {#UDMPATH}\judm\build\build_win\judm\judm.jar; DestDir: {app}\bin; Components: Java; Flags: ignoreversion
 ;Udm Doc folder
 Source: {#UDMPATH}\doc\UDMAPI.pdf; DestDir: {app}\doc; Flags: ignoreversion; Components: Core

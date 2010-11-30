@@ -36,13 +36,13 @@ pushd %UDM_PATH%\judm
 set Path=%UDM_3RDPARTY_PATH%\apache-ant-1.7.1\bin;%PATH%
 set ANT_HOME=
 set ANT_PATH=
-%UDM_3RDPARTY_PATH%\apache-ant-1.7.1\bin\ant
+"%UDM_3RDPARTY_PATH%"\apache-ant-1.7.1\bin\ant
 
 rem ------------------------
-rem new VS9 cmd prompt
-rem Building GReAT is a requirement for a Udm release!
-devenv /build DebugVS9   /project "MetaGME2UML Interpreter" "%GREAT_PATH%\GReATVS2010.sln"
-devenv /build ReleaseVS9 /project "MetaGME2UML Interpreter" "%GREAT_PATH%\GReATVS2010.sln"
+rem new VS10 cmd prompt
+rem Building MetaGME2UML is a requirement for a Udm release
+set PATH=%UDM_PATH%\bin;%PATH%
+msbuild "%GREAT_PATH%\Tools\MetaGME2UMX\MetaGME2UMX Interpreters\MetaGME2UML_interpreterVS2010.vcxproj" /t:Rebuild /p:Configuration=ReleaseVS9
 
 
 rem ------------------------
@@ -52,23 +52,25 @@ set UDM_3RDPARTY_PATH=c:\Documents and Settings\kevin\My Documents\3rdparty\UDM_
 set JDK_PATH=C:\Program Files\Java\jdk1.5.0_22
 msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:Configuration=Debug
 msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:Configuration=Release
+msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" /t:Rebuild /p:Configuration=Release27 
+msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" /t:Rebuild /p:Configuration=Debug
+msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" /t:Rebuild /p:Configuration=Release
 
+"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%UDM_PATH%" /s \\kms1\symbols /t Udm /v "3.2.7"
+"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t UdmGReAT /v "3.2.7"
 
-"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%UDM_PATH%" /s \\kms1\symbols /t Udm /v "3.2.5"
-"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t UdmGReAT /v "3.2.5"
-
-svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_5 Udm_source_r3.2.5
+svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_7 Udm_source_r3.2.7
 # run InnoSetup on %UDM_PATH%\InnoSetup\
 # rename InnoSetup output UDM_r3_2_5.exe
 # test installer http://kms1/svn/installs/ vm_installs_test.py secrets-installtest2.py
 # ------------------------
 # bash
-# zip Udm_source_r3.2.5/
-cp Udm_source_r3.2.5/releaseinfo.txt UDM_Release_Notes.txt 
+/c/Program\ Files/7-Zip/7z.exe a -r Udm_source_r3.2.7.zip Udm_source_r3.2.7/
+cp Udm_source_r3.2.7/releaseinfo.txt UDM_Release_Notes.txt 
 
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.5/
-scp UDM_Release_Notes.txt UDM_r3_2_5.exe Udm_source_r3.2.5.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.5/
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.5/
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.7/
+scp UDM_Release_Notes.txt UDM_r3_2_7.exe Udm_source_r3.2.7.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.7/
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.7/
 
 # For GReAT release:
 # export
