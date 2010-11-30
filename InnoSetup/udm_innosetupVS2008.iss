@@ -61,6 +61,7 @@ Name: Typical; Description: Typical(C++)
 Name: Core; Description: Core UDM; Types: Typical Full; Flags: fixed
 Name: C; Description: C++ UDM; Types: Typical Full; Flags: fixed
 Name: Java; Description: Java UDM; Types: Full; Flags: fixed
+Name: Python; Description: Python UDM; Types: Full; Flags: fixed
 Name: System; Description: Register Environment Variables System-Wide (recommended); Types: Typical Full
 Name: Full3rdParty; Description: Full 3rdParty Package; Types: Full
 
@@ -115,6 +116,12 @@ Source: {#UDMPATH}\Build\Win32\VC9\Release\XmiToUdm.exe; DestDir: {app}\bin; Com
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmSwig.dll; DestDir: {app}\bin; Components: Java; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC10\Release\{#UDMDLLVS10}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC10\Debug\{#UDMDLLDVS10}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
+;Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCli.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
+;Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCliBridge.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
+Source: {#UDMPATH}\Build\Win32\VC10\Release\udm.pyd; DestDir: {app}\bin; Components: Python; Flags: ignoreversion
+Source: {#UDMPATH}\Build\Win32\VC10\Debug\udmd.pyd; DestDir: {app}\bin; Components: Python; Flags: ignoreversion
+; c:\Windows\Microsoft.NET\Framework\v4.0.30319\msbuild /t:Build /p:Configuration=Release27 Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj
+Source: {#UDMPATH}\Build\Win32\VC10\Release27\udm27.pyd; DestDir: {app}\bin; Components: Python; Flags: ignoreversion
 Source: {#UDMPATH}\judm\build\build_win\judm\judm.jar; DestDir: {app}\bin; Components: Java; Flags: ignoreversion
 ;Udm Doc folder
 Source: {#UDMPATH}\doc\UDMAPI.pdf; DestDir: {app}\doc; Flags: ignoreversion; Components: Core
@@ -195,6 +202,12 @@ Source: {#UDMPATH}\samples\cross_links\CL.xme; DestDir: {app}\samples\C++\cross_
 Source: {#UDMPATH}\judm\build\build_win\GeneTF\*; DestDir: {app}\samples\java\GeneTF; Components: Java; Flags: recursesubdirs createallsubdirs ignoreversion
 Source: {#UDMPATH}\judm\build\build_win\GeneTRE\*; DestDir: {app}\samples\java\GeneTRE; Components: Java; Flags: recursesubdirs createallsubdirs ignoreversion
 Source: {#UDMPATH}\judm\build\build_win\SBML2Ex\*; DestDir: {app}\samples\java\SBML2Ex; Components: Java; Flags: recursesubdirs createallsubdirs ignoreversion
+; Python samples
+Source: {#UDMPATH}\tests\test_UdmPython\UdmPythonTestMeta.xme; DestDir: {app}\samples\python\UdmPythonTest; Components: Python
+Source: {#UDMPATH}\tests\test_UdmPython\UdmPythonTestMeta.xml; DestDir: {app}\samples\python\UdmPythonTest; Components: Python
+Source: {#UDMPATH}\tests\test_UdmPython\UdmPythonTestMeta.xmp; DestDir: {app}\samples\python\UdmPythonTest; Components: Python
+Source: {#UDMPATH}\tests\test_UdmPython\UdmPythonTestModel.xme; DestDir: {app}\samples\python\UdmPythonTest; Components: Python
+Source: {#UDMPATH}\tests\test_UdmPython\udm_python_test.py; DestDir: {app}\samples\python\UdmPythonTest; Components: Python
 
 [Dirs]
 Name: {app}\include; Components: C
