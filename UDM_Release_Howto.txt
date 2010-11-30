@@ -51,8 +51,8 @@ rem VS10 cmd prompt
 
 set UDM_3RDPARTY_PATH=c:\Documents and Settings\kevin\My Documents\3rdparty\UDM_VS2010
 set JDK_PATH=C:\Program Files\Java\jdk1.5.0_22
-msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:UseEnv=true;Configuration=Debug
-msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:UseEnv=true;Configuration=Release
+msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:Configuration=Debug
+msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:Configuration=Release
 
 
 "\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%UDM_PATH%" /s \\kms1\symbols /t Udm /v "3.2.5"
