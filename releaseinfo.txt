@@ -7,7 +7,7 @@ ALL RIGHTS RESERVED
 
 1. Windows Operating system (XP, Vista, 7)
 
-2. GME 10, R10.2.9 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 10, R10.8.18 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 9 or Visual Studio 10
@@ -18,8 +18,14 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+11/30/10		-	Release 3.2.7
+		-	MetaGME2UML now generates refport container associations when dRefParent or sRefParent are specified in MetaGME under the Connection's General Preferences
+				With these associations, it is possible to navigate from a connection to refport parent and vice versa.
+				rdRefParent or rsRefParent optionally specify the reverse rolename (UDM-49)
+		-	Beta read-only Python interface. See Udm\samples\python for an example
+
 09/23/10		-	Release 3.2.6
-		-	Fix StringAttr::operator== (UDM-69(
+		-	Fix StringAttr::operator== (UDM-69)
 		-	Fix UdmStaticDataNetwork::Close*: previous versions didn't actually close the DataNetwork (UDM-68)
 		-	Distribute VS2008 static .libs (use of UdmDll is required for VS2010; use UdmDll is preferred for VS2008) (UDM-70)
 		-	Fix system-wide install: environment variables weren't being set properly (UDM-67)
