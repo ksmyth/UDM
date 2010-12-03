@@ -15,14 +15,14 @@ cross_links_LDADD	= ../../lib/libudm.la
 CLEANFILES	= $(BUILT_SOURCES) sources-stamp sample.udm sm1.xml sm2.xml sm3.xml
 
 samplesdir		= $(UDM_SAMPLES_PATH)/cross_links
-samples_DATA		= $(cross_links_SOURCES) CL_udm.udm Makefile.sample
+samples_DATA		= $(cross_links_SOURCES) ../CL_udm.udm Makefile.sample
 
 install-data-hook:
 	mv -f $(DESTDIR)$(samplesdir)/Makefile.sample \
 		$(DESTDIR)$(samplesdir)/Makefile
 
 
-sources-stamp: CL_udm.udm ../../bin/Udm Makefile
+sources-stamp: ../CL_udm.udm ../../bin/Udm Makefile
 	@rm -f sources-temp
 	@touch sources-temp
 	../../bin/Udm $< -d ../../etc -T

@@ -17,7 +17,7 @@ test_CrossLinks_LDADD	= ../../lib/libudm.la $(CPPUNITLIBS)
 CLEANFILES		= $(BUILT_SOURCES) sources-stamp
 
 
-sources-stamp: testdata/CL_udm.udm ../../bin/Udm Makefile
+sources-stamp: CL_udm.udm ../../bin/Udm Makefile
 	@rm -f sources-temp
 	@touch sources-temp
 	../../bin/Udm $< -d ../../etc -T
