@@ -56,3 +56,15 @@ Building:
 - to build the binary and source rpms launch the following command in
   the top build directory:
   make rpms
+
+Building (Ubuntu):
+----------------------------------------------
+# Install Build-Deps:
+sudo apt-get install ccache libcppunit-dev libxalan110-dev ant junit libxerces-c2-dev sun-java6-jdk ant-optional pccts libboost1.40-dev zlib1g-dev swig
+# Configure alternatives to use java-6-sun
+sudo update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
+sudo update-java-alternatives -s java-6-sun
+# Copy model-files.zip as above or:
+wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
+# Build binary debs
+fakeroot debian/rules binary
