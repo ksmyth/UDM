@@ -215,23 +215,6 @@ namespace Uml
 		if(cs.begin() != cs.end()) {
 			set<Class>::const_iterator ci = cs.begin();
 			ret = AncestorClasses(*ci);
-/*
-#ifdef  ERASE_RETURNS_ITERATOR
-			while(++ci != cs.end()) {
-				for(set<Class>::iterator ri = ret.begin(); ri != ret.end();) {
-					if(!::Uml::IsDerivedFrom(*ci, *ri)) ri = ret.erase(ri);
-					else ++ri;
-				}
-			}
-			for(set<Class>::iterator ri = ret.begin(); ri != ret.end();) {
-				for(set<Class>::iterator ri2 = ret.begin(); ri2 != ret.end(); ri2++) {
-					if(ri != ri2 && ::Uml::IsDerivedFrom(*ri, *ri2)) break;
-				}
-				if(ri2 == ret.end()) ri = ret.erase(ri);
-				else ++ri;
-			}
-#else
-*/
 			while(++ci != cs.end()) {
 				for(set<Class>::iterator ri = ret.begin(); ri != ret.end();) {
 					set<Class>::iterator riact = ri++;
@@ -243,13 +226,12 @@ namespace Uml
 			for(set<Class>::iterator ri = ret.begin(); ri != ret.end();) {
 				set<Class>::iterator riact = ri++;
 				for(set<Class>::iterator ri2 = ret.begin(); ri2 != ret.end(); ri2++) {
-					if(riact != ri2 && ::Uml::IsDerivedFrom(*riact, *ri2)) {
+					if(riact != ri2 && ::Uml::IsDerivedFrom(*ri2, *riact)) {
 						ret.erase(riact);
 						break;
 					}
 				}
 			}
-//#endif
 		}
 
 		return ret;
@@ -581,26 +563,21 @@ namespace Uml
 
 	UDM_DLL Composition matchChildToParent(Class c, Class p) 
 	{
-			   Composition comp;
-			   set<Class> pancs = AncestorClasses(p);
-			   set<Class> cancs = AncestorClasses(c);
-			   for(set<Class>::iterator j = cancs.begin(); j != cancs.end(); j++) {
-					set<CompositionChildRole> cr = (*j).childRoles();
-					for(set<CompositionChildRole>::iterator i = cr.begin(); i != cr.end(); i++) {
-						if(pancs.find(theOther(*i).target()) != pancs.end()) {
-							if(comp) {
-								return NULL;
-							}
-							comp = (*i).parent();
-						}
+		Composition comp;
+		set<Class> pancs = AncestorClasses(p);
+		set<Class> cancs = AncestorClasses(c);
+		for(set<Class>::iterator j = cancs.begin(); j != cancs.end(); j++) {
+			set<CompositionChildRole> cr = (*j).childRoles();
+			for(set<CompositionChildRole>::iterator i = cr.begin(); i != cr.end(); i++) {
+				if(pancs.find(theOther(*i).target()) != pancs.end()) {
+					if(comp) {
+						return NULL;
 					}
-			   }
-#ifdef DEBUG
-			   if(!comp) {
-				   return NULL;
-			   }
-#endif
-			   return comp;
+					comp = (*i).parent();
+				}
+			}
+		}
+		return comp;
 	}
 
 	UDM_DLL bool IsAssocClass(const Class &cl) 
