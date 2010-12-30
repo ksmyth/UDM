@@ -79,7 +79,7 @@ public:
 			// from source object to standalone library object
 			Udm::SmartDataNetwork libDN(m_meta);
 			const ::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(p_srcChild->type());
-			libDN.CreateNew(new_lib_name, m_metaloc, safe_type, Udm::CHANGES_PERSIST_ALWAYS);
+			libDN.CreateNew(new_lib_name, m_metaloc, safe_type, Udm::CHANGES_LOST_DEFAULT);
 			Object p_root = libDN.GetRootObject();
 			ObjectImpl *p_libRoot = p_root.__impl();
 
@@ -178,7 +178,7 @@ int main(int argc, char **argv) {
 			fromDN.OpenExisting(argv[1],"", Udm::CHANGES_LOST_DEFAULT);
 			
 			const ::Uml::Class & safe_type = ::Uml::SafeTypeContainer::GetSafeType(fromDN.GetRootObject().type());
-			toDN.CreateNew(argv[2], metaloc, safe_type, Udm::CHANGES_PERSIST_DEFAULT);
+			toDN.CreateNew(argv[2], metaloc, safe_type, Udm::CHANGES_LOST_DEFAULT);
 
 			string toDN_name = argv[2];
 			string toDN_ext = toDN_name.substr(toDN_name.length() - 3, 3);
@@ -187,6 +187,8 @@ int main(int argc, char **argv) {
 
 			UdmUtil::copy_assoc_map dummy;
 			cp.Copy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN, dummy);
+
+			toDN.CloseWithUpdate();
 
 		}
 
