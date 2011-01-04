@@ -3,7 +3,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
  elementFormDefault="qualified" 
 >
-<!-- generated on Wed Jan 20 14:11:09 2010 -->
+<!-- generated on Fri Dec 31 08:14:17 2010 -->
 
 
 	<xsd:complexType name="CompositionChildRoleType">
@@ -40,6 +40,8 @@
 		<xsd:attribute name="max" type="xsd:long" use="required"/>
 		<xsd:attribute name="min" type="xsd:long" use="required"/>
 		<xsd:attribute name="isPrimary" type="xsd:boolean" default="false"/>
+		<xsd:attribute name="rp_helper_user" type="xsd:IDREF"/>
+		<xsd:attribute name="rp_helper" type="xsd:IDREF"/>
 		<xsd:attribute name="target" type="xsd:IDREF" use="required"/>
 		<xsd:attribute name="_id" type="xsd:ID"/>
 		<xsd:attribute name="_archetype" type="xsd:IDREF"/>

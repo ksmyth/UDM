@@ -1,6 +1,6 @@
 // cpp (meta datanetwork format) source file Uml.cpp
 // generated from diagram Uml
-// generated on Wed Jan 20 14:11:09 2010
+// generated on Fri Dec 31 08:14:18 2010
 
 #include "Uml.h"
 #include <UmlExt.h>
@@ -29,6 +29,8 @@ namespace Uml {
 	::Uml::Attribute AssociationRole::meta_max;
 	::Uml::Attribute AssociationRole::meta_min;
 	::Uml::Attribute AssociationRole::meta_isPrimary;
+	::Uml::AssociationRole AssociationRole::meta_rp_helper;
+	::Uml::AssociationRole AssociationRole::meta_rp_helper_user;
 	::Uml::AssociationRole AssociationRole::meta_target;
 	::Uml::CompositionParentRole AssociationRole::meta_parent;
 
@@ -187,6 +189,8 @@ namespace Uml {
 		Class::meta_childRoles = ::Uml::CreateAssociationRole();
 		CompositionParentRole::meta_target = ::Uml::CreateAssociationRole();
 		Class::meta_parentRoles = ::Uml::CreateAssociationRole();
+		AssociationRole::meta_rp_helper = ::Uml::CreateAssociationRole();
+		AssociationRole::meta_rp_helper_user = ::Uml::CreateAssociationRole();
 		AssociationRole::meta_target = ::Uml::CreateAssociationRole();
 		Class::meta_associationRoles = ::Uml::CreateAssociationRole();
 		Association::meta_assocClass = ::Uml::CreateAssociationRole();
@@ -332,6 +336,13 @@ namespace Uml {
 			::Uml::InitAssociation(ass, meta, "Association");
 			::Uml::InitAssociationRole(CompositionParentRole::meta_target, ass, "target", true, false, 1, 1, Class::meta);
 			::Uml::InitAssociationRole(Class::meta_parentRoles, ass, "parentRoles", true, false, 0, -1, CompositionParentRole::meta);
+
+		}
+		{
+			::Uml::Association ass = ::Uml::CreateAssociation();
+			::Uml::InitAssociation(ass, meta, "Association");
+			::Uml::InitAssociationRole(AssociationRole::meta_rp_helper, ass, "rp_helper", true, false, 0, 1, AssociationRole::meta);
+			::Uml::InitAssociationRole(AssociationRole::meta_rp_helper_user, ass, "rp_helper_user", true, false, 0, 1, AssociationRole::meta);
 
 		}
 		{
@@ -495,10 +506,6 @@ namespace Uml {
 		InitMetaLinks();
 
 		::Uml::InitDiagram(meta, "Uml", "2.04");
-		UdmStatic::StaticDataNetwork* dn = new UdmStatic::StaticDataNetwork(diagram, 0);
-		dn->rootobject = meta;
-		dn->systemname = "Uml";
-		dn->sem = Udm::CHANGES_LOST_DEFAULT;
 
 
 		_SetXsdStorage();

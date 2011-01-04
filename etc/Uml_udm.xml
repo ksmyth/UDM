@@ -1,150 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <Diagram name="Uml" version="2.04" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Uml.xsd">
-	<Association name="Association" nonpersistent="false">
-		<AssociationRole _id="id30" max="-1" min="0" name="childRoles" target="id3" isPrimary="false" isNavigable="true"/>
-		<AssociationRole _id="id31" max="1" min="1" name="target" target="id7" isPrimary="false" isNavigable="true"/>
-	</Association>
-	<Association name="Association" nonpersistent="false">
-		<AssociationRole _id="id32" max="-1" min="0" name="parentRoles" target="id5" isPrimary="false" isNavigable="true"/>
-		<AssociationRole _id="id33" max="1" min="1" name="target" target="id7" isPrimary="false" isNavigable="true"/>
-	</Association>
-	<Association name="Association" nonpersistent="false">
-		<AssociationRole _id="id34" max="-1" min="0" name="associationRoles" target="id6" isPrimary="false" isNavigable="true"/>
-		<AssociationRole _id="id35" max="1" min="1" name="target" target="id7" isPrimary="false" isNavigable="true"/>
-	</Association>
-	<Association name="Association" nonpersistent="false">
-		<AssociationRole _id="id36" max="1" min="0" name="association" target="idb" isPrimary="false" isNavigable="true"/>
-		<AssociationRole _id="id37" max="1" min="0" name="assocClass" target="id7" isPrimary="false" isNavigable="true"/>
-	</Association>
-	<Association name="Association" nonpersistent="false">
-		<AssociationRole _id="id38" max="-1" min="0" name="subTypes" target="id7" isPrimary="false" isNavigable="true"/>
-		<AssociationRole _id="id39" max="-1" min="0" name="baseTypes" target="id7" isPrimary="false" isNavigable="true"/>
-	</Association>
-	<Class _id="id9" name="Diagram" isAbstract="false" parentRoles="ida idd id10 id13">
-		<Attribute max="1" min="1" name="name" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="version" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="id3" name="CompositionChildRole" baseTypes="id4" childRoles="id1b" isAbstract="false" associationRoles="id30">
-		<Attribute max="1" min="1" name="min" type="Integer" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="max" type="Integer" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="id5" name="CompositionParentRole" baseTypes="id4" childRoles="id19" isAbstract="false" associationRoles="id32"/>
-	<Class _id="id6" name="AssociationRole" baseTypes="id4" childRoles="id14" isAbstract="false" associationRoles="id34">
-		<Attribute max="1" min="1" name="min" type="Integer" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="max" type="Integer" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="isPrimary" type="Boolean" ordered="false" defvalue="false;" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="idb" name="Association" childRoles="idc id23" isAbstract="false" parentRoles="id15 id18" associationRoles="id36">
-		<Attribute max="1" min="0" name="name" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="nonpersistent" type="Boolean" ordered="false" defvalue="false;" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="id16" name="TaggedValue" childRoles="id17 id2e" isAbstract="false">
-		<Attribute max="1" min="1" name="name" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="value" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="ide" name="Composition" childRoles="idf id21" isAbstract="false" parentRoles="id1a id1c">
-		<Attribute max="1" min="0" name="name" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="nonpersistent" type="Boolean" ordered="false" defvalue="false;" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="id11" name="Namespace" childRoles="id12 id1d" isAbstract="false" parentRoles="id1e id20 id22 id24">
-		<Attribute max="1" min="1" name="name" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="id7" name="Class" childRoles="id8 id1f" isAbstract="false" parentRoles="id27 id2a id2d id2f" associationRoles="id31 id33 id35 id37 id38 id39">
-		<Attribute max="1" min="0" name="stereotype" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="isAbstract" type="Boolean" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="name" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="from" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="id2b" name="Constraint" childRoles="id2c" isAbstract="false">
-		<Attribute max="1" min="1" name="name" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="description" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="expression" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="id4" name="GenericRole" subTypes="id3 id5 id6" isAbstract="true">
-		<Attribute max="1" min="0" name="name" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="isNavigable" type="Boolean" ordered="false" defvalue="true;" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="id28" name="Attribute" childRoles="id29" isAbstract="false">
-		<Attribute max="1" min="1" name="type" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="name" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="-1" min="0" name="defvalue" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="min" type="Integer" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="max" type="Integer" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="visibility" type="String" ordered="false" defvalue="public;" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="ordered" type="Boolean" ordered="false" defvalue="false;" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="nonpersistent" type="Boolean" ordered="false" defvalue="false;" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="registry" type="Boolean" ordered="false" defvalue="false;" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Class _id="id25" name="ConstraintDefinition" childRoles="id26" isAbstract="false">
-		<Attribute max="1" min="1" name="name" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="stereotype" type="String" ordered="false" defvalue="method;" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="0" name="parameterList" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="expression" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-		<Attribute max="1" min="1" name="returnType" type="String" ordered="false" registry="false" visibility="public" nonpersistent="false"/>
-	</Class>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id8" max="-1" min="0" name="classes" target="id7" isNavigable="true"/>
-		<CompositionParentRole _id="ida" name="parent" target="id9" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="idc" max="-1" min="0" name="associations" target="idb" isNavigable="true"/>
-		<CompositionParentRole _id="idd" name="parent" target="id9" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="idf" max="-1" min="0" name="compositions" target="ide" isNavigable="true"/>
-		<CompositionParentRole _id="id10" name="parent" target="id9" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id12" max="-1" min="0" name="namespaces" target="id11" isNavigable="true"/>
-		<CompositionParentRole _id="id13" name="parent" target="id9" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id14" max="-1" min="0" name="roles" target="id6" isNavigable="true"/>
-		<CompositionParentRole _id="id15" name="parent" target="idb" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id17" max="-1" min="0" name="tagValues" target="id16" isNavigable="true"/>
-		<CompositionParentRole _id="id18" name="assocParent" target="idb" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id19" max="1" min="1" name="parentRole" target="id5" isNavigable="true"/>
-		<CompositionParentRole _id="id1a" name="parent" target="ide" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id1b" max="1" min="1" name="childRole" target="id3" isNavigable="true"/>
-		<CompositionParentRole _id="id1c" name="parent" target="ide" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id1d" max="-1" min="0" name="namespaces" target="id11" isNavigable="true"/>
-		<CompositionParentRole _id="id1e" name="parent_ns" target="id11" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id1f" max="-1" min="0" name="classes" target="id7" isNavigable="true"/>
-		<CompositionParentRole _id="id20" name="parent_ns" target="id11" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id21" max="-1" min="0" name="compositions" target="ide" isNavigable="true"/>
-		<CompositionParentRole _id="id22" name="parent_ns" target="id11" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id23" max="-1" min="0" name="associations" target="idb" isNavigable="true"/>
-		<CompositionParentRole _id="id24" name="parent_ns" target="id11" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id26" max="-1" min="0" name="definitions" target="id25" isNavigable="true"/>
-		<CompositionParentRole _id="id27" name="parent" target="id7" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id29" max="-1" min="0" name="attributes" target="id28" isNavigable="true"/>
-		<CompositionParentRole _id="id2a" name="parent" target="id7" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id2c" max="-1" min="0" name="constraints" target="id2b" isNavigable="true"/>
-		<CompositionParentRole _id="id2d" name="parent" target="id7" isNavigable="true"/>
-	</Composition>
-	<Composition name="Composition" nonpersistent="false">
-		<CompositionChildRole _id="id2e" max="-1" min="0" name="tagValues" target="id16" isNavigable="true"/>
-		<CompositionParentRole _id="id2f" name="classParent" target="id7" isNavigable="true"/>
-	</Composition>
+
+  <Association name="Association" nonpersistent="false">
+    <AssociationRole _id="id30" isNavigable="true" isPrimary="false" max="-1" min="0" name="childRoles" target="id3"/>
+    <AssociationRole _id="id31" isNavigable="true" isPrimary="false" max="1" min="1" name="target" target="id7"/>
+  </Association>
+
+  <Association name="Association" nonpersistent="false">
+    <AssociationRole _id="id32" isNavigable="true" isPrimary="false" max="-1" min="0" name="parentRoles" target="id5"/>
+    <AssociationRole _id="id33" isNavigable="true" isPrimary="false" max="1" min="1" name="target" target="id7"/>
+  </Association>
+
+  <Association name="Association" nonpersistent="false">
+    <AssociationRole _id="id34" isNavigable="true" isPrimary="false" max="1" min="0" name="rp_helper_user" target="id6"/>
+    <AssociationRole _id="id35" isNavigable="true" isPrimary="false" max="1" min="0" name="rp_helper" target="id6"/>
+  </Association>
+
+  <Association name="Association" nonpersistent="false">
+    <AssociationRole _id="id36" isNavigable="true" isPrimary="false" max="-1" min="0" name="associationRoles" target="id6"/>
+    <AssociationRole _id="id37" isNavigable="true" isPrimary="false" max="1" min="1" name="target" target="id7"/>
+  </Association>
+
+  <Association name="Association" nonpersistent="false">
+    <AssociationRole _id="id38" isNavigable="true" isPrimary="false" max="1" min="0" name="association" target="idB"/>
+    <AssociationRole _id="id39" isNavigable="true" isPrimary="false" max="1" min="0" name="assocClass" target="id7"/>
+  </Association>
+
+  <Association name="Association" nonpersistent="false">
+    <AssociationRole _id="id3A" isNavigable="true" isPrimary="false" max="-1" min="0" name="subTypes" target="id7"/>
+    <AssociationRole _id="id3B" isNavigable="true" isPrimary="false" max="-1" min="0" name="baseTypes" target="id7"/>
+  </Association>
+
+  <Class _id="id9" isAbstract="false" name="Diagram" parentRoles="idA idD id10 id13">
+    <Attribute max="1" min="1" name="name" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="0" name="version" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+  </Class>
+
+  <Class _id="id3" associationRoles="id30" baseTypes="id4" childRoles="id1B" isAbstract="false" name="CompositionChildRole">
+    <Attribute max="1" min="1" name="min" nonpersistent="false" ordered="false" registry="false" type="Integer" visibility="public"/>
+    <Attribute max="1" min="1" name="max" nonpersistent="false" ordered="false" registry="false" type="Integer" visibility="public"/>
+  </Class>
+
+  <Class _id="id5" associationRoles="id32" baseTypes="id4" childRoles="id19" isAbstract="false" name="CompositionParentRole"/>
+
+  <Class _id="id6" associationRoles="id34 id35 id36" baseTypes="id4" childRoles="id14" isAbstract="false" name="AssociationRole">
+    <Attribute max="1" min="1" name="min" nonpersistent="false" ordered="false" registry="false" type="Integer" visibility="public"/>
+    <Attribute max="1" min="1" name="max" nonpersistent="false" ordered="false" registry="false" type="Integer" visibility="public"/>
+    <Attribute defvalue="false;" max="1" min="0" name="isPrimary" nonpersistent="false" ordered="false" registry="false" type="Boolean" visibility="public"/>
+  </Class>
+
+  <Class _id="idB" associationRoles="id38" childRoles="idC id23" isAbstract="false" name="Association" parentRoles="id15 id18">
+    <Attribute max="1" min="0" name="name" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute defvalue="false;" max="1" min="0" name="nonpersistent" nonpersistent="false" ordered="false" registry="false" type="Boolean" visibility="public"/>
+  </Class>
+
+  <Class _id="id16" childRoles="id17 id2e" isAbstract="false" name="TaggedValue">
+    <Attribute max="1" min="1" name="name" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="0" name="value" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+  </Class>
+
+  <Class _id="ide" childRoles="idF id21" isAbstract="false" name="Composition" parentRoles="id1A id1C">
+    <Attribute max="1" min="0" name="name" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute defvalue="false;" max="1" min="0" name="nonpersistent" nonpersistent="false" ordered="false" registry="false" type="Boolean" visibility="public"/>
+  </Class>
+
+  <Class _id="id11" childRoles="id12 id1D" isAbstract="false" name="Namespace" parentRoles="id1e id20 id22 id24">
+    <Attribute max="1" min="1" name="name" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+  </Class>
+
+  <Class _id="id7" associationRoles="id31 id33 id37 id39 id3A id3B" childRoles="id8 id1F" isAbstract="false" name="Class" parentRoles="id27 id2A id2D id2F">
+    <Attribute max="1" min="0" name="stereotype" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="1" name="isAbstract" nonpersistent="false" ordered="false" registry="false" type="Boolean" visibility="public"/>
+    <Attribute max="1" min="1" name="name" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="0" name="from" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+  </Class>
+
+  <Class _id="id2B" childRoles="id2C" isAbstract="false" name="Constraint">
+    <Attribute max="1" min="1" name="name" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="0" name="description" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="1" name="expression" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+  </Class>
+
+  <Class _id="id4" isAbstract="true" name="GenericRole" subTypes="id3 id5 id6">
+    <Attribute max="1" min="0" name="name" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute defvalue="true;" max="1" min="0" name="isNavigable" nonpersistent="false" ordered="false" registry="false" type="Boolean" visibility="public"/>
+  </Class>
+
+  <Class _id="id28" childRoles="id29" isAbstract="false" name="Attribute">
+    <Attribute max="1" min="1" name="type" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="1" name="name" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="-1" min="0" name="defvalue" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="1" name="min" nonpersistent="false" ordered="false" registry="false" type="Integer" visibility="public"/>
+    <Attribute max="1" min="1" name="max" nonpersistent="false" ordered="false" registry="false" type="Integer" visibility="public"/>
+    <Attribute defvalue="public;" max="1" min="0" name="visibility" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute defvalue="false;" max="1" min="0" name="ordered" nonpersistent="false" ordered="false" registry="false" type="Boolean" visibility="public"/>
+    <Attribute defvalue="false;" max="1" min="0" name="nonpersistent" nonpersistent="false" ordered="false" registry="false" type="Boolean" visibility="public"/>
+    <Attribute defvalue="false;" max="1" min="0" name="registry" nonpersistent="false" ordered="false" registry="false" type="Boolean" visibility="public"/>
+  </Class>
+
+  <Class _id="id25" childRoles="id26" isAbstract="false" name="ConstraintDefinition">
+    <Attribute max="1" min="1" name="name" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute defvalue="method;" max="1" min="1" name="stereotype" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="0" name="parameterList" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="1" name="expression" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+    <Attribute max="1" min="1" name="returnType" nonpersistent="false" ordered="false" registry="false" type="String" visibility="public"/>
+  </Class>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id8" isNavigable="true" max="-1" min="0" name="classes" target="id7"/>
+    <CompositionParentRole _id="idA" isNavigable="true" name="parent" target="id9"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="idC" isNavigable="true" max="-1" min="0" name="associations" target="idB"/>
+    <CompositionParentRole _id="idD" isNavigable="true" name="parent" target="id9"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="idF" isNavigable="true" max="-1" min="0" name="compositions" target="ide"/>
+    <CompositionParentRole _id="id10" isNavigable="true" name="parent" target="id9"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id12" isNavigable="true" max="-1" min="0" name="namespaces" target="id11"/>
+    <CompositionParentRole _id="id13" isNavigable="true" name="parent" target="id9"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id14" isNavigable="true" max="-1" min="0" name="roles" target="id6"/>
+    <CompositionParentRole _id="id15" isNavigable="true" name="parent" target="idB"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id17" isNavigable="true" max="-1" min="0" name="tagValues" target="id16"/>
+    <CompositionParentRole _id="id18" isNavigable="true" name="assocParent" target="idB"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id19" isNavigable="true" max="1" min="1" name="parentRole" target="id5"/>
+    <CompositionParentRole _id="id1A" isNavigable="true" name="parent" target="ide"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id1B" isNavigable="true" max="1" min="1" name="childRole" target="id3"/>
+    <CompositionParentRole _id="id1C" isNavigable="true" name="parent" target="ide"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id1D" isNavigable="true" max="-1" min="0" name="namespaces" target="id11"/>
+    <CompositionParentRole _id="id1e" isNavigable="true" name="parent_ns" target="id11"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id1F" isNavigable="true" max="-1" min="0" name="classes" target="id7"/>
+    <CompositionParentRole _id="id20" isNavigable="true" name="parent_ns" target="id11"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id21" isNavigable="true" max="-1" min="0" name="compositions" target="ide"/>
+    <CompositionParentRole _id="id22" isNavigable="true" name="parent_ns" target="id11"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id23" isNavigable="true" max="-1" min="0" name="associations" target="idB"/>
+    <CompositionParentRole _id="id24" isNavigable="true" name="parent_ns" target="id11"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id26" isNavigable="true" max="-1" min="0" name="definitions" target="id25"/>
+    <CompositionParentRole _id="id27" isNavigable="true" name="parent" target="id7"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id29" isNavigable="true" max="-1" min="0" name="attributes" target="id28"/>
+    <CompositionParentRole _id="id2A" isNavigable="true" name="parent" target="id7"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id2C" isNavigable="true" max="-1" min="0" name="constraints" target="id2B"/>
+    <CompositionParentRole _id="id2D" isNavigable="true" name="parent" target="id7"/>
+  </Composition>
+
+  <Composition name="Composition" nonpersistent="false">
+    <CompositionChildRole _id="id2e" isNavigable="true" max="-1" min="0" name="tagValues" target="id16"/>
+    <CompositionParentRole _id="id2F" isNavigable="true" name="classParent" target="id7"/>
+  </Composition>
+
 </Diagram>
-
-

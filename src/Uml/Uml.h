@@ -2,17 +2,20 @@
 #define MOBIES_UML_H
 
 // header file Uml.h generated from diagram Uml
-// generated with Udm version 3.24 on Wed Jan 20 14:11:09 2010
+// generated with Udm version 3.27 on Fri Dec 31 08:14:18 2010
 
 #include <UdmBase.h>
 
 #if !defined(UDM_VERSION_MAJOR) || !defined(UDM_VERSION_MINOR)
 #    error "Udm headers too old, they do not define UDM_VERSION"
 #elif UDM_VERSION_MAJOR < 3
-#    error "Udm headers too old, minimum version required 3.0"
-#elif UDM_VERSION_MAJOR == 3 && UDM_VERSION_MINOR < 0
-#    error "Udm headers too old, minimum version required 3.0"
+#    error "Udm headers too old, minimum version required 3.27"
+#elif UDM_VERSION_MAJOR == 3 && UDM_VERSION_MINOR < 27
+#    error "Udm headers too old, minimum version required 3.27"
 #endif
+
+#include <Uml.h>
+
 
 #ifdef min
 #undef min
@@ -160,6 +163,8 @@ namespace Uml {
 		Udm::IntegerAttr max() const { return Udm::IntegerAttr(impl, meta_max); }
 		Udm::IntegerAttr min() const { return Udm::IntegerAttr(impl, meta_min); }
 		Udm::BooleanAttr isPrimary() const { return Udm::BooleanAttr(impl, meta_isPrimary); }
+		Udm::PointerAttr< AssociationRole> rp_helper() const { return Udm::PointerAttr< AssociationRole>(impl, meta_rp_helper); }
+		Udm::PointerAttr< AssociationRole> rp_helper_user() const { return Udm::PointerAttr< AssociationRole>(impl, meta_rp_helper_user); }
 		Udm::PointerAttr< Class> target() const { return Udm::PointerAttr< Class>(impl, meta_target); }
 		Udm::ParentAttr< ::Uml::Association> parent() const { return Udm::ParentAttr< ::Uml::Association>(impl, meta_parent); }
 
@@ -167,6 +172,8 @@ namespace Uml {
 		static ::Uml::Attribute meta_max;
 		static ::Uml::Attribute meta_min;
 		static ::Uml::Attribute meta_isPrimary;
+		static ::Uml::AssociationRole meta_rp_helper;
+		static ::Uml::AssociationRole meta_rp_helper_user;
 		static ::Uml::AssociationRole meta_target;
 		static ::Uml::CompositionParentRole meta_parent;
 

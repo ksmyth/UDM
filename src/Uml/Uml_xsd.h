@@ -15,7 +15,7 @@ const std::string& getString()
 			str +="<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n";
 			str +=" elementFormDefault=\"qualified\" \n";
 			str +=">\n";
-			str +="<!-- generated on Wed Jan 20 14:11:09 2010 -->\n";
+//			str +="<!-- generated on Fri Dec 31 08:14:17 2010 -->\n";
 			str +="\n";
 			str +="\n";
 			str +="	<xsd:complexType name=\"CompositionChildRoleType\">\n";
@@ -52,6 +52,8 @@ const std::string& getString()
 			str +="		<xsd:attribute name=\"max\" type=\"xsd:long\" use=\"required\"/>\n";
 			str +="		<xsd:attribute name=\"min\" type=\"xsd:long\" use=\"required\"/>\n";
 			str +="		<xsd:attribute name=\"isPrimary\" type=\"xsd:boolean\" default=\"false\"/>\n";
+			str +="		<xsd:attribute name=\"rp_helper_user\" type=\"xsd:IDREF\"/>\n";
+			str +="		<xsd:attribute name=\"rp_helper\" type=\"xsd:IDREF\"/>\n";
 			str +="		<xsd:attribute name=\"target\" type=\"xsd:IDREF\" use=\"required\"/>\n";
 			str +="		<xsd:attribute name=\"_id\" type=\"xsd:ID\"/>\n";
 			str +="		<xsd:attribute name=\"_archetype\" type=\"xsd:IDREF\"/>\n";
