@@ -497,10 +497,10 @@ namespace UDM_NAMESPACE
 		// association with reference ports
 		virtual void connectTo(
 			const ::Uml::AssociationRole &meta,
-			const ObjectImpl* target,
-			const vector<ObjectImpl*> &refs = vector<ObjectImpl*>()) = 0;
-		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) = 0;
-		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const = 0;
+			ObjectImpl* target,
+			const vector<ObjectImpl*> &refs = vector<ObjectImpl*>());
+		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, ObjectImpl* peer);
+		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const;
 
 	};
 
@@ -647,9 +647,9 @@ namespace UDM_NAMESPACE
 
 		virtual void connectTo(
 			const ::Uml::AssociationRole &meta,
-			const ObjectImpl* target,
+			ObjectImpl* target,
 			const vector<ObjectImpl*> &refs = vector<ObjectImpl*>()) { throw e; }
-		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) { throw e; }
+		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, ObjectImpl* peer) { throw e; }
 		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const { throw e; }
 
 		virtual uniqueId_type uniqueId() const { return 0; }

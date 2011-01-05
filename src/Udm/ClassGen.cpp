@@ -933,6 +933,12 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 				// association_class::meta_OTHER_ROLE_end_ = OTHER_ROLE_target::meta_ROLE_rev = ROLE_target::meta_OTHER_ROLE
 				meta_init_links.push_back( boost::format("%1%::meta_%2%_end_ = %3%::meta_%4%_rev = %5%::meta_%6%") % cl_name % orel_name % UmlClassCPPName(the_other.target(), c.parent_ns()) % rel_name % UmlClassCPPName(tclass, c.parent_ns()) % orel_name );
 
+				::Uml::AssociationRole orp_helper = the_other.rp_helper();
+				if (orp_helper) {
+					string orp_helper_name = ::Uml::MakeRoleName(orp_helper);
+					meta_init_links.push_back( boost::format("%1%::meta_%2%_end_.rp_helper() = %1%::meta_%3%") % cl_name % orel_name % orp_helper_name );
+				}
+
 				if (generate_rphelper_chains)
 				{
 					typedefs.push_back( boost::format("typedef pair< %1%, vector<Udm::Object> > %2%_chain_t") % tclass_cpp_name % rel_name );

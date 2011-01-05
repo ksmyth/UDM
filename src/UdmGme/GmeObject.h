@@ -156,8 +156,8 @@ namespace UdmGme
 		virtual vector<ObjectImpl*> getAssociation(const ::Uml::AssociationRole &meta, int mode) const ;
 		virtual void setAssociation(const ::Uml::AssociationRole &meta, const vector<ObjectImpl*> &nvect, int mode, const bool direct = true);
 
-		virtual void connectTo(const ::Uml::AssociationRole &meta, const ObjectImpl* target, const vector<ObjectImpl*> &refs = vector<ObjectImpl*>());
-		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer);
+		virtual void connectTo(const ::Uml::AssociationRole &meta, ObjectImpl* target, const vector<ObjectImpl*> &refs = vector<ObjectImpl*>());
+		virtual void disconnectFrom(const ::Uml::AssociationRole &meta, ObjectImpl* peer);
 		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const;
 	// ---- archetype/derived/instances
 

@@ -1276,7 +1276,7 @@ bbreak:			;
 		return ret;
 	}
 
-	void GmeObject::connectTo(const ::Uml::AssociationRole &meta, const ObjectImpl* target, const vector<ObjectImpl*> &refs)
+	void GmeObject::connectTo(const ::Uml::AssociationRole &meta, ObjectImpl* target, const vector<ObjectImpl*> &refs)
 	{
 		::Uml::Association assoc = meta.parent();
 		string rname = meta.name();
@@ -1317,7 +1317,7 @@ bbreak:			;
 			COMTHROW(conn->SetSrc(references, target_go->self));
 	}
 
-	void GmeObject::disconnectFrom(const ::Uml::AssociationRole &meta, const ObjectImpl* peer)
+	void GmeObject::disconnectFrom(const ::Uml::AssociationRole &meta, ObjectImpl* peer)
 	{
 		::Uml::Association assoc = meta.parent();
 		assocmapitem *nn = ((UdmGme::GmeDataNetwork*) mydn)->amap.find(assoc.uniqueId())->second;

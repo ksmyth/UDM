@@ -93,6 +93,7 @@ CHANGELOG
 #include "UmlExt.h"
 #include <UdmUtil.h>
 #include "UdmStatic.h"
+#include <algorithm>
 #include <string>
 #include <cstdlib>
 #include <cstring>
@@ -1687,6 +1688,169 @@ namespace UDM_NAMESPACE
 			CopyAttributesFrom(archetype, false);
 			archetype->release();
 		};
+
+
+		bool canCompleteRefsChain(const ObjectImpl* target, const vector<ObjectImpl*> &refs)
+		{
+			ASSERT(refs.size());
+
+			ObjectImpl* ref = refs.back();
+
+			// exit loop when reaching the parent of the reference port
+			const ObjectImpl *target_parent = target->getParent(NULLPARENTROLE);
+
+			while (ref != &_null) {
+
+				Object referred = Object(ref->clone()).getReferencedObject();
+				if (referred.uniqueId() == target_parent->uniqueId())
+					break;
+
+				ref = referred.__impl()->clone();
+			}
+
+			return ref != &_null;
+		}
+
+		UDM_DLL void ObjectImpl::connectTo(const ::Uml::AssociationRole &meta, ObjectImpl* target, const vector<ObjectImpl*> &refs)
+		{
+			if ((string)type().stereotype() != "Connection")
+				throw udm_exception("Only setting the connection src/dst is supported");
+
+			::Uml::AssociationRole rp_helper = meta.rp_helper();
+			ObjectImpl* rp_helper_ref = &_null;
+			if (rp_helper) {
+				vector<ObjectImpl*> v = getAssociation(rp_helper);
+				if (v.size())
+					rp_helper_ref = v.front();
+			}
+
+			if (refs.size()) {
+				if (!canCompleteRefsChain(target, refs))
+					throw udm_exception("Could not reach target " + UdmUtil::ExtractName(target) + " starting with the given chain of references");
+				
+				// change rp_helper because the user is requesting a specific chain
+				if (rp_helper_ref != &_null && rp_helper_ref != refs.front()) {
+					vector<ObjectImpl*> v;
+					v.push_back(refs.front());
+					setAssociation(rp_helper, v);
+				}
+			} else {
+				if (rp_helper_ref != &_null) {
+					// if a reference port helper is set then check if it can be used to reach the target
+					// is there a reference port helper set for this connection?
+					vector<ObjectImpl*> v;
+					v.push_back(rp_helper_ref);
+					if (!canCompleteRefsChain(target, v))
+						throw udm_exception("Could not reach target " + UdmUtil::ExtractName(target) + " starting with the reference port helper set in the model");
+				} else {
+					ObjectImpl* parent = getParent(NULLPARENTROLE);
+					if (parent != target->getParent(NULLPARENTROLE)) {
+						vector<ObjectImpl*> children = parent->getChildren(NULL, NULL);
+						vector<ObjectImpl*>::const_iterator i = children.begin();
+						for (; i != children.end(); i++) {
+							ObjectImpl *child = *i;
+							vector<ObjectImpl*> v;
+							v.push_back(child);
+							if (child->type().stereotype() == "Reference" && canCompleteRefsChain(target, v)) {
+								// found a child that can be used to reach the target
+								setAssociation(rp_helper, v);
+								break;
+							}
+						}
+						if (i == children.end())
+							throw udm_exception("Could not reach target " + UdmUtil::ExtractName(target) + " from any reference found in the parent of connection");
+					}
+				}
+			}
+
+			vector<ObjectImpl*> v;
+			v.push_back(target);
+			setAssociation(meta, v, TARGETFROMCLASS);
+		}
+
+		UDM_DLL void ObjectImpl::disconnectFrom(const ::Uml::AssociationRole &meta, ObjectImpl* peer)
+		{
+			bool peer_is_conn = peer->type().stereotype() == "Connection";
+
+			vector<ObjectImpl*> empty_v;
+
+#if 0
+			// Don't disconnect the references, they may have been set explicitly by user.
+			// Maybe this method should accept a boolean parameter telling us whether to
+			// disconnect the references or not?
+			::Uml::AssociationRole rp_helper = meta.rp_helper();
+			if (rp_helper) {
+
+				// unset references from reference port helper to reference port parent
+				vector<ObjectImpl*> chain = getConnectingChain(meta, peer);
+
+				if (peer_is_conn)
+					std::reverse(chain.begin(), chain.end());
+
+				for (vector<ObjectImpl*>::const_reverse_iterator i = chain.rbegin(); i != chain.rend(); i++) {
+					ObjectImpl *ref = *i;
+					set< ::Uml::AssociationRole> aroles = Uml::AncestorAssociationTargetRoles(ref->type());
+					for (set< ::Uml::AssociationRole>::const_iterator aroles_i = aroles.begin(); aroles_i != aroles.end(); aroles_i++) {
+						::Uml::AssociationRole arole = *aroles_i;
+						if ((string)arole.name() == "ref") {
+							ref->setAssociation(arole, empty_v);
+							break;
+						}
+					}
+				}
+			}
+#endif
+
+			if (peer_is_conn)
+				peer->setAssociation(meta, empty_v, TARGETFROMCLASS);
+			else
+				setAssociation(meta, empty_v, TARGETFROMCLASS);
+		}
+
+		UDM_DLL vector<ObjectImpl*> ObjectImpl::getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const
+		{
+			vector<ObjectImpl*> ret;
+
+			::Uml::AssociationRole rp_helper = meta.rp_helper();
+			if (!rp_helper) return ret;
+
+			const ObjectImpl *conn, *target;
+			if (this->type().stereotype() == "Connection") {
+				conn = this;
+				target = peer;
+			} else if (peer->type().stereotype() == "Connection") {
+				conn = peer;
+				target = this;
+			} else
+				throw udm_exception("Neither this object nor its peer seems to be a type of connection");
+
+			vector<ObjectImpl*> v = conn->getAssociation(rp_helper);
+			if (v.size()) {
+				ObjectImpl* ref = v[0];
+
+				// exit loop when reaching the parent of the reference port
+				const ObjectImpl *target_parent = target->getParent(NULLPARENTROLE);
+
+				do {
+					ret.push_back(ref);
+
+					Object referred = Object(ref->clone()).getReferencedObject();
+					if (referred.uniqueId() == target_parent->uniqueId())
+						break;
+
+					ref = referred.__impl()->clone();
+				} while (ref != &_null);
+
+				if (ref == &_null)
+					// the chain of references does not reach the reference port parent
+					ret.clear();
+			}
+
+			if (conn == peer)
+				std::reverse(ret.begin(), ret.end());
+
+			return ret;
+		}
 
 
 		//the map for static metadepository
