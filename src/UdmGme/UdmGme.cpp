@@ -1440,6 +1440,16 @@ bbreak:			;
 						ret.push_back(new GmeObject(MGACOLL_ITER, mydn));
 					}
 					MGACOLL_ITERATE_END;
+
+					// if nothing in the model, make visible the registry setting
+					if (!ret.size()) {
+						fcos = RpHelperFindPeerFCOsFromRegistry(self, rname, meta.isNavigable(), (GmeDataNetwork *)mydn);
+						MGACOLL_ITERATE(IMgaFCO, fcos)
+						{
+							ret.push_back(new GmeObject(MGACOLL_ITER, mydn));
+						}
+						MGACOLL_ITERATE_END;
+					}
 				}
 				else if(mode == Udm::TARGETFROMCLASS) 
 				{
