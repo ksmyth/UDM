@@ -144,6 +144,7 @@ AC_CONFIG_FILES([Makefile
 	tests/test_libs/Makefile
 	tests/test_ns/Makefile
 	tests/testOCL/Makefile
+	tests/test_refports/Makefile
 	tests/test_simpleudmops/Makefile
 	tests/testUdmCint/Makefile
 ])
