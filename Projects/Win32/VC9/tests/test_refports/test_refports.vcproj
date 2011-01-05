@@ -273,7 +273,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Generating UDM API files"
-					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_refports&quot; &quot;$(InputPath)&quot; --assoc-wrphelper C&#x0D;&#x0A;"
+					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_refports&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\Gen\tests\test_refports\RefPort.h;$(OutDir)\Gen\tests\test_refports\RefPort.cpp;$(OutDir)\Gen\tests\test_refports\RefPort.xsd"
 				/>
 			</FileConfiguration>
@@ -303,7 +303,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Generating UDM API files"
-					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_refports&quot; &quot;$(InputPath)&quot; --assoc-wrphelper C&#x0D;&#x0A;"
+					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_refports&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\Gen\tests\test_refports\RefPort.h;$(OutDir)\Gen\tests\test_refports\RefPort.cpp;$(OutDir)\Gen\tests\test_refports\RefPort.xsd"
 				/>
 			</FileConfiguration>

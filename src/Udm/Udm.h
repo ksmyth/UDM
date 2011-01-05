@@ -74,8 +74,6 @@ struct UdmOpts {
 
 	// Output directory
 	string out_dir;
-
-	set<string> assoc_wrphelper_names;
 };
 
 // not cross-link approved

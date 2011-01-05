@@ -56,7 +56,6 @@ static const char* udm_usage =
 "             d: All classes from a diagram and its sub-namespaces into a single .cpp\n"
 "             n: All classes from a namespace into a single .cpp\n"
 "  -o <Output directory>\n"
-"  --assoc-wrphelper <Association name> Name of association with reference port helper associations\n"
 "\n"
 "C++ options:\n"
 "  -v Support for C++ visitor pattern\n"
@@ -151,14 +150,6 @@ int main(int argc, char **argv) {
 					if (!string("leesa").compare(argv[argn] + 2))
 					{
 						opts.mode = UdmOpts::CXX_GENERIC;
-						continue;
-					}
-					if (!string("assoc-wrphelper").compare(argv[argn] + 2))
-					{
-						if(++argn >= argc)
-							throw udm_exception(udm_usage);
-						string assoc_name = argv[argn];
-						opts.assoc_wrphelper_names.insert(assoc_name);
 						continue;
 					}
 				}

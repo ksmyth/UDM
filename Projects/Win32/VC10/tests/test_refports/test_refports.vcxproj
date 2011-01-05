@@ -132,13 +132,13 @@ exit 0
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_refports\RefPort_udm.xml">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating UDM API files</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\test_refports" "%(FullPath)" --assoc-wrphelper C
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\test_refports" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\test_refports\RefPort.h;$(OutDir)Gen\tests\test_refports\RefPort.cpp;$(OutDir)Gen\tests\test_refports\RefPort.xsd;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_refports\RefPort_udm.xml">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating UDM API files</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\test_refports" "%(FullPath)" --assoc-wrphelper C
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\test_refports" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\test_refports\RefPort.h;$(OutDir)Gen\tests\test_refports\RefPort.cpp;$(OutDir)Gen\tests\test_refports\RefPort.xsd;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
