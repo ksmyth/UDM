@@ -1408,6 +1408,27 @@ void CAssociationBase::_BuildUML(::Uml::Association &ass, bool is_cross)
 	orole.max() = dest.maxc;
 	orole.target() = is_cross ? dest.cls->GetCrossUmlClass() : dest.cls->GetUmlClass();
 	orole.isNavigable() = dst_isnavig;
+
+	// set reference port helper relations by looking for simple associations of
+	// the association class that have roles ending in "__rp_helper" or "__rp_container"
+	if (associationClass) {
+		POSITION cpos = associationClass->srcAssociations.GetHeadPosition();
+		while (cpos) {
+			CAssociationBase *assoc = dynamic_cast<CAssociationBase *>(associationClass->srcAssociations.GetNext(cpos));
+			ASSERT(assoc);
+			::Uml::Association uml_ass = assoc->GetUmlAssociation();
+			set< ::Uml::AssociationRole> aroles = uml_ass.roles();
+			for (set< ::Uml::AssociationRole>::const_iterator i = aroles.begin(); i != aroles.end(); i++) {
+				string role_name = ::Uml::MakeRoleName(*i);
+				if (role_name == string(srcName) + "__rp_helper" || role_name == string(srcName) + "__rp_container") {
+					role.rp_helper() = *i;
+				}
+				if (role_name == string(dstName) + "__rp_helper" || role_name == string(dstName) + "__rp_container") {
+					orole.rp_helper() = *i;
+				}
+			}
+		}
+	}
 }
 
 
