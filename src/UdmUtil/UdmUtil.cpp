@@ -74,9 +74,9 @@ namespace UdmUtil
 
 
 
-	UDM_DLL string ExtractName(const Udm::Object &ob,  const string &att_name )
+	UDM_DLL string ExtractName(const Udm::ObjectImpl *impl,  const string &att_name )
 	{
-		::Uml::Class cls= ob.type();				
+		::Uml::Class cls = impl->type();
 		set< ::Uml::Attribute> attrs=cls.attributes();		
 		
 		// Adding parent attributes
@@ -91,7 +91,7 @@ namespace UdmUtil
 				if(str==att_name)
 				{
 					
-					string value=ob.getStringAttr(*ai);
+					string value=impl->getStringAttr(*ai);
 					if(value.empty())value="<empty string>";
 					return value;
 				}			
@@ -99,6 +99,11 @@ namespace UdmUtil
 		}
 		
 		return string("<no name specified>");
+	}
+
+	UDM_DLL string ExtractName(const Udm::Object &ob, const string &att_name)
+	{
+		return ExtractName(ob.__impl(), att_name);
 	}
 
 
