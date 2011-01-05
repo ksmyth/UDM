@@ -719,8 +719,8 @@
 				<attribute kind="GeneralPreferences">
 					<value>sName=a_end
 dName=b_end
-sRefParent = a_rp_container
-dRefParent = b_rp_container</value>
+sRefParent = a_end__rp_container
+dRefParent = b_end__rp_container</value>
 				</attribute>
 				<attribute kind="InRootFolder" status="meta">
 					<value>false</value>

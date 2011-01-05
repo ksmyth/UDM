@@ -11,10 +11,30 @@ CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::refPortsTest );
 using namespace RefPort;
 using namespace Udm;
 
-void UdmTests::refPortsTest::testRefPorts()
+void UdmTests::refPortsTest::testDOM()
+{
+	cout << endl << "Reference ports on DOM" << endl;
+	testRefPorts("RefPortInst.xml");
+}
+
+void UdmTests::refPortsTest::testMEM()
+{
+	cout << endl << "Reference ports on MEM" << endl;
+	testRefPorts("RefPortInst.mem");
+}
+
+#ifdef _WIN32
+void UdmTests::refPortsTest::testMGA()
+{
+	cout << endl << "Reference ports on MGA" << endl;
+	testRefPorts("RefPortInst.mga");
+}
+#endif
+
+void UdmTests::refPortsTest::testRefPorts(const string &file)
 {
 	Udm::SmartDataNetwork dn(RefPort::diagram);
-	dn.CreateNew("RefPortInst.mga", "RefPort", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
+	dn.CreateNew(file, "RefPort", RootFolder::meta, Udm::CHANGES_LOST_DEFAULT);
 
 	//creating root folder
 	RootFolder rf = RootFolder::Cast(dn.GetRootObject());
@@ -28,6 +48,7 @@ void UdmTests::refPortsTest::testRefPorts()
 	Root root_refs2 = Root::Create(rf);
 	root_refs2.name() = "root_refs2";
 
+	// create reference port parents
 	APar apar = APar::Create(root);
 	apar.name() = "apar";
 
@@ -37,6 +58,7 @@ void UdmTests::refPortsTest::testRefPorts()
 	BPar bpar2 = BPar::Create(root);
 	bpar2.name() = "bpar2";
 
+	// create references
 	ARef1 aref1 = ARef1::Create(root_refs);
 	aref1.name() = "aref1";
 
@@ -54,6 +76,7 @@ void UdmTests::refPortsTest::testRefPorts()
 	bref2.ref() = bpar2;
 	bref3.ref() = bref2;
 
+	// create ports
 	A a = A::Create(apar);
 	a.name() = "a";
 
@@ -67,41 +90,52 @@ void UdmTests::refPortsTest::testRefPorts()
 	c.name() = "c";
 
 
-	c.a_rp_container() = aref1;
-	c.b_rp_container() = bref;
+	// set the refport container preferences
+	c.a_end__rp_container() = aref1;
+	c.b_end__rp_container() = bref;
 
-	// the refport containers are not visible until the port is connected
-	CPPUNIT_ASSERT(ARef1::Cast(c.a_rp_container()) == Udm::null);
-	CPPUNIT_ASSERT(BRef::Cast(c.b_rp_container()) == Udm::null);
+	CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_container()) == aref1);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref);
 
+	ARef1 aref1_ = ARef1::Cast(c.a_end__rp_container());
+	std::set<C> conns = aref1_.a_end__rp_container_rev();
+	CPPUNIT_ASSERT_EQUAL((size_t)1, conns.size());
+	CPPUNIT_ASSERT_EQUAL(c, *conns.begin());
+
+	// connect src and dst
 	c.a_end_end() = a;
 	c.b_end_end() = b;
 	
-	// the preferences are now visible
-	CPPUNIT_ASSERT(ARef1::Cast(c.a_rp_container()) == aref1);
-	CPPUNIT_ASSERT(BRef::Cast(c.b_rp_container()) == bref);
 
-	ARef1 aref1_ = ARef1::Cast(c.a_rp_container());
-	std::set<C> conns = aref1_.a_rp_container_rev();
-	CPPUNIT_ASSERT_EQUAL((size_t)1, conns.size());
-	cout << conns.begin()->name();
-	CPPUNIT_ASSERT_EQUAL(c, *conns.begin());
+#if 0
+	// what should happen when the reference port is connected and the
+	// user changes the reference port container preference?
+	// - reconnect with the new container?
+	// - throw an exception?
 
-	// we change the preference, but the visible one does not change since
-	// the port has not been changed
-	c.b_rp_container() = bref3;
-	CPPUNIT_ASSERT(BRef::Cast(c.b_rp_container()) == bref);
+	// the problem is caused by the dual nature of reference port container
+	// in MGA: either a registry preference or a real thing existing in the model
 
+	// if the original support for refports will be dropped, then we
+	// could probably reconnect with the new container...
+
+	c.b_end__rp_container() = bref3;
+	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref);
 	// after port change, the preference becomes visible
 	c.b_end_end() = b2;
-	CPPUNIT_ASSERT(BRef::Cast(c.b_rp_container()) == bref3);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref3);
+#endif
 
+	// connect to another refport using another refport container
+	c.b_end__rp_container() = bref3;
+	c.b_end_end() = b2;
 
+	// show connecting chains
 	{
 		C::b_end_chain_t r = c.b_end_chain();
 		C::b_end_chain_t::second_type v = r.second;
 		CPPUNIT_ASSERT(B::Cast(r.first) == b2);
-		cerr << "Connecting chain between c and b2: " << v.size() << endl;
+		cout << "Connecting chain between c and b2: " << v.size() << endl;
 		for (vector<Udm::Object>::const_iterator i = v.begin(); i != v.end(); i++) {
 			cout << "chain item: " << UdmUtil::ExtractName(*i) << "[" << i->uniqueId() << "]" << endl;
 		}
@@ -109,7 +143,7 @@ void UdmTests::refPortsTest::testRefPorts()
 
 	{
 		vector<Udm::Object> r = b2.getConnectingChain(B::meta_a_end_rev, c);
-		cerr << "Connecting chain between b2 and c: " << r.size() << endl;
+		cout << "Connecting chain between b2 and c: " << r.size() << endl;
 		for (vector<Udm::Object>::const_iterator i = r.begin(); i != r.end(); i++) {
 			cout << "chain item: " << UdmUtil::ExtractName(*i) << "[" << i->uniqueId() << "]" << endl;
 		}
@@ -118,7 +152,7 @@ void UdmTests::refPortsTest::testRefPorts()
 	{
 		C::a_end_chain_t r = c.a_end_chain();
 		C::a_end_chain_t::second_type v = r.second;
-		cerr << "Connecting chain between c and a: " << v.size() << endl;
+		cout << "Connecting chain between c and a: " << v.size() << endl;
 		for (vector<Udm::Object>::const_iterator i = v.begin(); i != v.end(); i++) {
 			cout << "chain item: " << UdmUtil::ExtractName(*i) << "[" << i->uniqueId() << "]" << endl;
 		}
@@ -126,7 +160,7 @@ void UdmTests::refPortsTest::testRefPorts()
 
 	{
 		vector<Udm::Object> r = a.getConnectingChain(A::meta_b_end_rev, c);
-		cerr << "Connecting chain between a and c: " << r.size() << endl;
+		cout << "Connecting chain between a and c: " << r.size() << endl;
 		for (vector<Udm::Object>::const_iterator i = r.begin(); i != r.end(); i++) {
 			cout << "chain item: " << UdmUtil::ExtractName(*i) << "[" << i->uniqueId() << "]" << endl;
 		}
@@ -134,12 +168,17 @@ void UdmTests::refPortsTest::testRefPorts()
 
 	// disconnect src
 	c.a_end_chain().disconnect();
-	CPPUNIT_ASSERT(A::Cast(c.a_end_end()) == &Udm::_null);
+	CPPUNIT_ASSERT(A::Cast(c.a_end_end()) == Udm::null);
+	CPPUNIT_ASSERT(APar::Cast(aref1.ref()) == apar);
+	CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_container()) == aref1);
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
 
 	// disconnect dst
 	b2.disconnectFrom(B::meta_a_end_rev, c);
-	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == Udm::null);
+	CPPUNIT_ASSERT(BPar::Cast(bref2.ref()) == bpar2);
+	CPPUNIT_ASSERT(BRef::Cast(bref3.ref()) == bref2);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref3);
 
 
 	c.a_end_end() = a;
@@ -150,37 +189,47 @@ void UdmTests::refPortsTest::testRefPorts()
 	v1_refs.push_back(bref2);
 	c.b_end_chain() = make_pair(b2, v1_refs);
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref3);
 
 	// disconnect dst
 	c.b_end_chain().disconnect();
-	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == Udm::null);
 
 	// connect another dst using references chain
 	v1_refs.clear();
 	v1_refs.push_back(bref);
 	c.b_end_chain() = make_pair(b, v1_refs);
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref);
 
 	// disconnect dst
 	c.b_end_chain().disconnect();
-	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == Udm::null);
 
 
 	// connect dst using reference port helper
-	c.b_rp_container() = bref;
-	//c.connectTo(C::meta_b_end_end_, b);
+	c.b_end__rp_container() = bref;
 	c.b_end_chain() = b;
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b);
 
 	// disconnect dst
 	c.b_end_chain().disconnect();
-	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == &Udm::_null);
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == Udm::null);
 
 	// connect another dst using reference port helper
-	c.b_rp_container() = bref3;
-	//c.connectTo(C::meta_b_end_end_, b2);
+	c.b_end__rp_container() = bref3;
 	c.b_end_chain() = b2;
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
-	 
-	dn.CloseWithUpdate();
+
+	// disconnect dst
+	c.b_end_chain().disconnect();
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == Udm::null);
+
+	// connect without a reference port helper set
+	c.b_end__rp_container() = NULL;
+	c.b_end_chain() = b2;
+	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) != Udm::null);
+
+	dn.CloseNoUpdate();
 }

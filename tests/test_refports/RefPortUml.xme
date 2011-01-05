@@ -829,13 +829,13 @@ position : String[0..1]
 						<value>0..1</value>
 					</attribute>
 					<attribute kind="dstRolename">
-						<value>b_rp_container</value>
+						<value>b_end__rp_container</value>
 					</attribute>
 					<attribute kind="srcCardinality">
 						<value>0..*</value>
 					</attribute>
 					<attribute kind="srcRolename">
-						<value>b_rp_container_rev</value>
+						<value>b_end__rp_container_rev</value>
 					</attribute>
 					<connpoint role="src" target="id-0066-00000008"/>
 					<connpoint role="dst" target="id-0066-00000009"/>
@@ -1106,13 +1106,13 @@ position : String[0..1]
 						<value>0..1</value>
 					</attribute>
 					<attribute kind="dstRolename">
-						<value>a_rp_container</value>
+						<value>a_end__rp_container</value>
 					</attribute>
 					<attribute kind="srcCardinality">
 						<value>0..*</value>
 					</attribute>
 					<attribute kind="srcRolename">
-						<value>a_rp_container_rev</value>
+						<value>a_end__rp_container_rev</value>
 					</attribute>
 					<connpoint role="dst" target="id-0066-00000010"/>
 					<connpoint role="src" target="id-0067-00000005"/>
