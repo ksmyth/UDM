@@ -15,15 +15,15 @@ const std::string& getString()
 			str +="<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n";
 			str +=" elementFormDefault=\"qualified\" \n";
 			str +=">\n";
-			str +="<!-- generated on Sun Feb 17 22:55:39 2008 -->\n";
+//			str +="<!-- generated on Fri Dec 31 08:14:15 2010 -->\n";
 			str +="\n";
 			str +="\n";
 			str +="	<xsd:complexType name=\"DatanetworkType\">\n";
 			str +="		<xsd:attribute name=\"__child_as\">\n";
 			str +="			<xsd:simpleType>\n";
 			str +="				<xsd:restriction base=\"xsd:string\">\n";
-			str +="					<xsd:enumeration value=\"instances\"/>\n";
 			str +="					<xsd:enumeration value=\"cross_associations\"/>\n";
+			str +="					<xsd:enumeration value=\"instances\"/>\n";
 			str +="					<xsd:enumeration value=\"crosslinks\"/>\n";
 			str +="				</xsd:restriction>\n";
 			str +="			</xsd:simpleType>\n";
@@ -43,6 +43,7 @@ const std::string& getString()
 			str +="	<xsd:complexType name=\"ProjectType\">\n";
 			str +="		<xsd:sequence>\n";
 			str +="			<xsd:element name=\"Datanetwork\" type=\"DatanetworkType\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n";
+			str +="			<xsd:element name=\"Project\" type=\"ProjectType\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n";
 			str +="		</xsd:sequence>\n";
 			str +="		<xsd:attribute name=\"name\" type=\"xsd:string\" use=\"required\"/>\n";
 			str +="		<xsd:attribute name=\"_id\" type=\"xsd:ID\"/>\n";
@@ -52,6 +53,7 @@ const std::string& getString()
 			str +="		<xsd:attribute name=\"_desynched_atts\" type=\"xsd:string\"/>\n";
 			str +="		<xsd:attribute name=\"_real_archetype\" type=\"xsd:boolean\"/>\n";
 			str +="		<xsd:attribute name=\"_subtype\" type=\"xsd:boolean\"/>\n";
+			str +="		<xsd:attribute name=\"_libname\" type=\"xsd:string\"/>\n";
 			str +="	</xsd:complexType>\n";
 			str +="\n";
 			str +=" <xsd:element name=\"Project\" type=\"ProjectType\"/>\n";
