@@ -8,27 +8,19 @@
 #define GMEVER "10.8.18"
 
 #define UDMPATH GetEnv('UDM_PATH')
-#if UDMPATH == ""
-#define UDMPATH "C:\Projects\UDM"
-#endif
-
 #define UDM3rdPartyPATH GetEnv('UDM_3RDPARTY_PATH')
-#if UDM3rdPartyPATH == ""
-#define UDM3rdPartyPATH "C:\Projects\udm_ns_3rdparty"
-#endif
-
 #define GREATPATH GetEnv('GREAT_PATH')
-#if GREATPATH == ""
-#define GREATPATH "C:\Projects\GReAT"
-#endif
 
 #define UDMDLL "UdmDll_3_2.dll"
 #define UDMDLLD "UdmDll_3_2D.dll"
 #define UDMDLLVS10 "UdmDll_3_2_VS10.dll"
 #define UDMDLLDVS10 "UdmDll_3_2_VS10D.dll"
 
+#define UDMVER GetEnv('UDM_VERSION')
+#if UDMVER == ""
 #define UDMVER "3.2.7"
-#define OutputFileBase "Udm_setup_VC9"
+#endif
+#define OutputFileBase "Udm_setup"
 
 [Setup]
 AppID=ISIS UDM
