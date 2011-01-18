@@ -17,9 +17,9 @@
   <Target Name="BuildVS10">
     <MSBuild Projects="Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" Targets="Build" Properties="Configuration=Debug" />
     <MSBuild Projects="Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" Targets="Build" Properties="Configuration=Release" />
-    <MSBuild Projects="trunk\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Debug" />
-    <MSBuild Projects="trunk\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Release" />
-    <MSBuild Projects="trunk\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Release27" />
+    <MSBuild Projects="Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Debug" />
+    <MSBuild Projects="Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Release" />
+    <MSBuild Projects="Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Release27" />
   </Target>
 
   <PropertyGroup>
