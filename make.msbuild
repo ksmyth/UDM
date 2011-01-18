@@ -11,7 +11,10 @@
   </ItemGroup>
 
   <Target Name="BuildVS9">
-    <!-- TODO -->
+    <MSBuild Projects="Projects\Win32\VC9\src\Udm.sln" Targets="Build" Properties="Configuration=Debug" />
+    <MSBuild Projects="Projects\Win32\VC9\src\Udm.sln" Targets="Build" Properties="Configuration=Release" />
+    <MSBuild Projects="Projects\Win32\VC9\tests\UdmTests.sln" Targets="Build" Properties="Configuration=Debug" />
+    <MSBuild Projects="Projects\Win32\VC9\tests\UdmTests.sln" Targets="Build" Properties="Configuration=Release" />
   </Target>
   
   <Target Name="BuildVS10">
