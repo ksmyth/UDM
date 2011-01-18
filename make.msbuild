@@ -1,0 +1,32 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <Import Project="common-scripts\common.msbuild"/>
+
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)'==''">Release</Configuration>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectToBuild Include="Projects\Win32\VC10\src\Udm.sln"/>
+    <ProjectToBuild Include="Projects\Win32\VC10\tests\UdmTests.sln"/>
+  </ItemGroup>
+
+  <Target Name="BuildVS9">
+    <!-- TODO -->
+  </Target>
+  
+  <Target Name="BuildVS10">
+    <MSBuild Projects="Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" Targets="Build" Properties="Configuration=Debug" />
+    <MSBuild Projects="Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" Targets="Build" Properties="Configuration=Release" />
+    <MSBuild Projects="trunk\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Debug" />
+    <MSBuild Projects="trunk\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Release" />
+    <MSBuild Projects="trunk\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Release27" />
+  </Target>
+
+  <PropertyGroup>
+    <ISS>InnoSetup\udm_innosetupVS2008.iss</ISS>
+  </PropertyGroup>
+  <Target Name="Installer">
+    <!-- Must BuildVS9, BuildVS10, and `ant generate test` first-->
+    <CallTarget Targets="ISCC"/>
+  </Target>
+</Project>
