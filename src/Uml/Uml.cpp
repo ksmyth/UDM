@@ -1,6 +1,6 @@
 // cpp (meta datanetwork format) source file Uml.cpp
 // generated from diagram Uml
-// generated on Fri Dec 31 08:14:18 2010
+// generated on Sun Jan 23 02:22:28 2011
 
 #include "Uml.h"
 #include <UmlExt.h>
@@ -506,10 +506,6 @@ namespace Uml {
 		InitMetaLinks();
 
 		::Uml::InitDiagram(meta, "Uml", "2.04");
-		UdmStatic::StaticDataNetwork* dn = new UdmStatic::StaticDataNetwork(diagram, 0);
-		dn->rootobject = meta;
-		dn->systemname = "Uml";
-		dn->sem = Udm::CHANGES_LOST_DEFAULT;
 
 
 		_SetXsdStorage();

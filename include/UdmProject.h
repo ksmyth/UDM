@@ -2,7 +2,7 @@
 #define MOBIES_UDMPROJECT_H
 
 // header file UdmProject.h generated from diagram UdmProject
-// generated with Udm version 3.27 on Fri Dec 31 08:14:15 2010
+// generated with Udm version 3.27 on Sun Jan 23 02:22:25 2011
 
 #include <UdmBase.h>
 
@@ -43,8 +43,8 @@ namespace UdmProject {
 		#ifdef UDM_RVALUE
 		Datanetwork(Datanetwork &&master) : UDM_OBJECT(master) {}
 
-		static Datanetwork Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		Datanetwork& operator=(Datanetwork &&a) { Udm::Object::operator =(a); return *this; }
+		static Datanetwork Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		Datanetwork& operator=(Datanetwork &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static Datanetwork Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static Datanetwork Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -81,8 +81,8 @@ namespace UdmProject {
 		#ifdef UDM_RVALUE
 		Project(Project &&master) : UDM_OBJECT(master) {}
 
-		static Project Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		Project& operator=(Project &&a) { Udm::Object::operator =(a); return *this; }
+		static Project Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		Project& operator=(Project &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static Project Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static Project Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }

@@ -2,7 +2,7 @@
 #define MOBIES_UML_H
 
 // header file Uml.h generated from diagram Uml
-// generated with Udm version 3.27 on Fri Dec 31 08:14:18 2010
+// generated with Udm version 3.27 on Sun Jan 23 02:22:28 2011
 
 #include <UdmBase.h>
 
@@ -56,8 +56,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		GenericRole(GenericRole &&master) : UDM_OBJECT(master) {}
 
-		static GenericRole Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		GenericRole& operator=(GenericRole &&a) { Udm::Object::operator =(a); return *this; }
+		static GenericRole Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		GenericRole& operator=(GenericRole &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static GenericRole Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static GenericRole Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -86,8 +86,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		CompositionChildRole(CompositionChildRole &&master) : GenericRole(master) {}
 
-		static CompositionChildRole Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		CompositionChildRole& operator=(CompositionChildRole &&a) { Udm::Object::operator =(a); return *this; }
+		static CompositionChildRole Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		CompositionChildRole& operator=(CompositionChildRole &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static CompositionChildRole Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static CompositionChildRole Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -119,8 +119,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		CompositionParentRole(CompositionParentRole &&master) : GenericRole(master) {}
 
-		static CompositionParentRole Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		CompositionParentRole& operator=(CompositionParentRole &&a) { Udm::Object::operator =(a); return *this; }
+		static CompositionParentRole Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		CompositionParentRole& operator=(CompositionParentRole &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static CompositionParentRole Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static CompositionParentRole Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -148,8 +148,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		AssociationRole(AssociationRole &&master) : GenericRole(master) {}
 
-		static AssociationRole Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		AssociationRole& operator=(AssociationRole &&a) { Udm::Object::operator =(a); return *this; }
+		static AssociationRole Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		AssociationRole& operator=(AssociationRole &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static AssociationRole Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static AssociationRole Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -187,8 +187,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		Class(Class &&master) : UDM_OBJECT(master) {}
 
-		static Class Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		Class& operator=(Class &&a) { Udm::Object::operator =(a); return *this; }
+		static Class Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		Class& operator=(Class &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static Class Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static Class Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -261,8 +261,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		Diagram(Diagram &&master) : UDM_OBJECT(master) {}
 
-		static Diagram Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		Diagram& operator=(Diagram &&a) { Udm::Object::operator =(a); return *this; }
+		static Diagram Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		Diagram& operator=(Diagram &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static Diagram Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static Diagram Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -311,8 +311,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		Association(Association &&master) : UDM_OBJECT(master) {}
 
-		static Association Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		Association& operator=(Association &&a) { Udm::Object::operator =(a); return *this; }
+		static Association Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		Association& operator=(Association &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static Association Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static Association Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -358,8 +358,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		Composition(Composition &&master) : UDM_OBJECT(master) {}
 
-		static Composition Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		Composition& operator=(Composition &&a) { Udm::Object::operator =(a); return *this; }
+		static Composition Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		Composition& operator=(Composition &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static Composition Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static Composition Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -401,8 +401,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		Namespace(Namespace &&master) : UDM_OBJECT(master) {}
 
-		static Namespace Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		Namespace& operator=(Namespace &&a) { Udm::Object::operator =(a); return *this; }
+		static Namespace Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		Namespace& operator=(Namespace &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static Namespace Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static Namespace Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -452,8 +452,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		TaggedValue(TaggedValue &&master) : UDM_OBJECT(master) {}
 
-		static TaggedValue Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		TaggedValue& operator=(TaggedValue &&a) { Udm::Object::operator =(a); return *this; }
+		static TaggedValue Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		TaggedValue& operator=(TaggedValue &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static TaggedValue Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static TaggedValue Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -486,8 +486,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		ConstraintDefinition(ConstraintDefinition &&master) : UDM_OBJECT(master) {}
 
-		static ConstraintDefinition Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		ConstraintDefinition& operator=(ConstraintDefinition &&a) { Udm::Object::operator =(a); return *this; }
+		static ConstraintDefinition Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		ConstraintDefinition& operator=(ConstraintDefinition &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static ConstraintDefinition Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static ConstraintDefinition Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -523,8 +523,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		Attribute(Attribute &&master) : UDM_OBJECT(master) {}
 
-		static Attribute Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		Attribute& operator=(Attribute &&a) { Udm::Object::operator =(a); return *this; }
+		static Attribute Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		Attribute& operator=(Attribute &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static Attribute Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static Attribute Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
@@ -568,8 +568,8 @@ namespace Uml {
 		#ifdef UDM_RVALUE
 		Constraint(Constraint &&master) : UDM_OBJECT(master) {}
 
-		static Constraint Cast(Udm::Object &&a) { return __Cast(a, meta); }
-		Constraint& operator=(Constraint &&a) { Udm::Object::operator =(a); return *this; }
+		static Constraint Cast(Udm::Object &&a) { return __Cast(std::move(a), meta); }
+		Constraint& operator=(Constraint &&a) { Udm::Object::operator =(std::move(a)); return *this; }
 		#endif
 		static Constraint Cast(const Udm::Object &a) { return __Cast(a, meta); }
 		static Constraint Create(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role); }
