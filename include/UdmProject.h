@@ -2,7 +2,7 @@
 #define MOBIES_UDMPROJECT_H
 
 // header file UdmProject.h generated from diagram UdmProject
-// generated with Udm version 3.27 on Sun Jan 23 02:22:25 2011
+// generated with Udm version 3.27 on Mon Jan 24 23:17:28 2011
 
 #include <UdmBase.h>
 

@@ -938,7 +938,6 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 					meta_init_links.push_back( boost::format("%1%::meta_%2%_end_.rp_helper() = %1%::meta_%3%") % cl_name % orel_name % orp_helper_name );
 				}
 
-				
 				if (gen.opts.mode == UdmOpts::CXX_GENERIC)
 				{
 					aclass_tlhlp.roles2type.push_back( boost::format("class ACE_%1% {}") % rel_name );

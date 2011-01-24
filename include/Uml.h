@@ -2,7 +2,7 @@
 #define MOBIES_UML_H
 
 // header file Uml.h generated from diagram Uml
-// generated with Udm version 3.27 on Sun Jan 23 02:22:28 2011
+// generated with Udm version 3.27 on Mon Jan 24 23:17:31 2011
 
 #include <UdmBase.h>
 
