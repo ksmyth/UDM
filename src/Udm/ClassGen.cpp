@@ -867,7 +867,20 @@ void ClassGen::Parents()
 	
 	if(!parent_defined) 
 	{
-		set< ::Uml::Class> ans = Uml::CommonAncestorClasses(Uml::AncestorContainerClasses(c));
+		// see also UDM-72
+		set< ::Uml::Class> ancestors = Uml::AncestorClasses(c);
+		set< ::Uml::Class> descendants = Uml::DescendantClasses(c);
+		set< ::Uml::Class> ancestorsAndDescendants = ancestors;
+		ancestorsAndDescendants.insert(descendants.begin(), descendants.end());
+		set< ::Uml::Class> containers;
+		for (set< ::Uml::Class>::iterator classIt = ancestorsAndDescendants.begin(); 
+			classIt != ancestorsAndDescendants.end(); classIt++)
+		{
+			set< ::Uml::Class> containerClasses = Uml::ContainerClasses(*classIt);
+			containers.insert(containerClasses.begin(), containerClasses.end());
+		}
+
+		set< ::Uml::Class> ans = Uml::CommonAncestorClasses(containers);
 		if (ans.size() == 1)
 		{
 			::Uml::Class ans_class = (::Uml::Class)(*ans.begin());
