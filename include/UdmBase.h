@@ -2713,7 +2713,8 @@ namespace UDM_NAMESPACE
 		Object& operator=(Object&& a)
 		{
 			if (this != &a) {
-				impl->release();
+				if (impl != NULL)
+					impl->release();
 				impl = a.impl;
 				a.impl = NULL;
 			}
