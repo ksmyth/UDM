@@ -82,6 +82,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_staticleaks", "test_st
 		{4F3BF916-A9BC-44BA-B867-BA14BE2EE074} = {4F3BF916-A9BC-44BA-B867-BA14BE2EE074}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A2F36369-A019-4B5E-AD5B-3A5AA425069C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -169,5 +171,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7B2D07A4-E108-45B1-860B-43084AAB9192} = {A2F36369-A019-4B5E-AD5B-3A5AA425069C}
+		{4CA139A6-D338-4C6D-B9AD-86B65B8E5129} = {A2F36369-A019-4B5E-AD5B-3A5AA425069C}
 	EndGlobalSection
 EndGlobal

@@ -21,6 +21,7 @@
 			OutputDirectory="..\..\..\..\..\Build\Win32\VC9\Debug"
 			IntermediateDirectory="$(OutDir)\obj\src\$(ProjectName)"
 			ConfigurationType="4"
+			InheritedPropertySheets="..\Udm.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>
@@ -88,6 +89,7 @@
 			OutputDirectory="..\..\..\..\..\Build\Win32\VC9\Release"
 			IntermediateDirectory="$(OutDir)\obj\src\$(ProjectName)"
 			ConfigurationType="4"
+			InheritedPropertySheets="..\Udm.vsprops"
 			UseOfMFC="0"
 			CharacterSet="2"
 			>

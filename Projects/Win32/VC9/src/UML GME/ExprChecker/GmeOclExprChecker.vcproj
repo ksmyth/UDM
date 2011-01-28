@@ -21,6 +21,7 @@
 			OutputDirectory="..\..\..\..\..\..\Build\Win32\VC9\Debug"
 			IntermediateDirectory="$(OutDir)\obj\src\UML GME\ExprChecker"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\Udm.vsprops"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -120,6 +121,7 @@
 			OutputDirectory="..\..\..\..\..\..\Build\Win32\VC9\Release"
 			IntermediateDirectory="$(OutDir)\obj\src\UML GME\ExprChecker"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\..\Udm.vsprops"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -450,11 +452,11 @@
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\compicon.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\compicon.ico"
+				RelativePath="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico"
 				>
 			</File>
 			<File

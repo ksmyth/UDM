@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\samples-paths.vsprops"
+			InheritedPropertySheets="..\samples-paths.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -47,7 +47,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;UDM_DYNAMIC_LINKING"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				PrecompiledHeaderFile="$(IntDir)/cross_links.pch"
@@ -72,7 +72,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib zlibD.lib"
 				OutputFile="$(OutDir)\cross_linksD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -110,7 +109,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\samples-paths.vsprops"
+			InheritedPropertySheets="..\samples-paths.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -140,7 +139,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;UDM_DYNAMIC_LINKING"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -165,7 +164,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib UdmBase.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
 				OutputFile="$(OutDir)\cross_links.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

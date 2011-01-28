@@ -18,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\samples-paths.vsprops"
+			InheritedPropertySheets="..\samples-paths.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -45,8 +45,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;UDM_DYNAMIC_LINKING"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
@@ -75,7 +75,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib"
 				OutputFile="$(OutDir)\CreateLampModelD.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -113,7 +112,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops;..\samples-paths.vsprops"
+			InheritedPropertySheets="..\samples-paths.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -141,8 +140,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;UDM_DYNAMIC_LINKING"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -169,7 +168,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib Xerces-c_2.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib zlib.lib"
 				OutputFile="$(OutDir)\CreateLampModel.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

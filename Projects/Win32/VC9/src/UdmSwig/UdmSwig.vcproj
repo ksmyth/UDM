@@ -20,6 +20,7 @@
 			OutputDirectory="..\..\..\..\..\Build\Win32\VC9\Debug"
 			IntermediateDirectory="$(OutDir)\obj\src\$(ProjectName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\Udm.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -116,6 +117,7 @@
 			OutputDirectory="..\..\..\..\..\Build\Win32\VC9\Release"
 			IntermediateDirectory="$(OutDir)\obj\src\$(ProjectName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\Udm.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
@@ -225,7 +227,7 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;&#x0D;&#x0A;cd  &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;&#x0D;&#x0A;swig.exe -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\..\..\..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o $(InputName)_wrap.cpp &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;&#x0D;&#x0A;cd  &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;&#x0D;&#x0A;&quot;$(SWIG_EXE)&quot; -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\..\..\..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o $(InputName)_wrap.cpp &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\..\Gen\src\UdmSwig\$(InputName)_wrap.cpp"
 				/>
 			</FileConfiguration>
@@ -234,7 +236,7 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;&#x0D;&#x0A;cd  &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;&#x0D;&#x0A;swig.exe -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\..\..\..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o $(InputName)_wrap.cpp &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;&#x0D;&#x0A;cd  &quot;$(OutDir)\..\Gen\src\UdmSwig&quot;&#x0D;&#x0A;&quot;$(SWIG_EXE)&quot; -java -package edu.vanderbilt.isis.udm.swig -outdir ..\..\..\..\..\..\judm\src\UdmSwig\edu\vanderbilt\isis\udm\swig -v -c++ -o $(InputName)_wrap.cpp &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\..\Gen\src\UdmSwig\$(InputName)_wrap.cpp"
 				/>
 			</FileConfiguration>
