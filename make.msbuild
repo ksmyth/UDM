@@ -5,6 +5,10 @@
     <Configuration Condition="'$(Configuration)'==''">Release</Configuration>
   </PropertyGroup>
 
+  <Target Name="CheckEnv" DependsOnTargets="CheckEnvGme;CheckEnvUdm">
+    <Error Text="JDK_PATH='$(JDK_PATH)' doesn't exist" Condition="!Exists('$(JDK_PATH)')"/>
+  </Target>
+
   <ItemGroup>
     <ProjectToBuild Include="Projects\Win32\VC10\src\Udm.sln"/>
     <ProjectToBuild Include="Projects\Win32\VC10\tests\UdmTests.sln"/>
@@ -16,8 +20,8 @@
     <MSBuild Projects="Projects\Win32\VC9\tests\UdmTests.sln" Targets="Build" Properties="Configuration=Debug;UseEnv=true" />
     <MSBuild Projects="Projects\Win32\VC9\tests\UdmTests.sln" Targets="Build" Properties="Configuration=Release;UseEnv=true" />
   </Target>
-  
-  <Target Name="BuildVS10">
+
+  <Target Name="BuildVS10" DependsOnTargets="CheckEnv">
     <MSBuild Projects="Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" Targets="Build" Properties="Configuration=Debug" />
     <MSBuild Projects="Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" Targets="Build" Properties="Configuration=Release" />
     <MSBuild Projects="Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Debug" />
