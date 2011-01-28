@@ -7,7 +7,7 @@
 // COM UUID-s, names and progID
 
 #define TYPELIB_UUID "002B5FA9-C403-487D-8699-43CD7F7403BE"
-#define TYPELIB_NAME "MGA AddOn TypeLibr\ary (UMLOCLExpressionChecker)"
+#define TYPELIB_NAME "MGA AddOn TypeLibrary (UMLOCLExpressionChecker)"
 #define COCLASS_UUID "8FA738DE-767C-4765-8C0C-06365835D90A"
 #define COCLASS_NAME "MGA AddOn CoClass (UMLOCLExpressionChecker)"
 #define COCLASS_PROGID "MGA.AddOn.UMLOCLExpressionChecker"
@@ -25,16 +25,9 @@
 // for this paradigm. Separate the names of paradigms by commas.
 #define PARADIGMS "UML"
 
-
-// This is the location of the GME2000 interfaces file (Mga.idl, Meta.idl, etc)
-#define GME_BASE C:\Program Files\GME\
-
-
 #define BON_ICON_SUPPORT
+#define REGISTER_SYSTEMWIDE
 
-// not defined: #define BON_CUSTOM_TRANSACTIONS
-
-// Just to please the whims of those Microsoft jerks:
 #define COCLASS_UUID_EXPLODED1 0x8FA738DE
 #define COCLASS_UUID_EXPLODED2  0x767C
 #define COCLASS_UUID_EXPLODED3  0x4765

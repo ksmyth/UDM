@@ -26,10 +26,8 @@
 #define PARADIGMS "UML,UMLModelTransformer"
 
 #define BON_ICON_SUPPORT
+#define REGISTER_SYSTEMWIDE
 
-// not defined: #define BON_ICON_SUPPORT
-
-// Just to please the whims of those Microsoft jerks:
 #define COCLASS_UUID_EXPLODED1 0xB05E71F0
 #define COCLASS_UUID_EXPLODED2  0x2A71
 #define COCLASS_UUID_EXPLODED3  0x4646
