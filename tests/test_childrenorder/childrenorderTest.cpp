@@ -28,12 +28,12 @@ using namespace LampDiagram;
 char * UdmTests::childrenorderTest::getRndFileName()
 {
 #ifdef WIN32
-		char * def_tmp_dir = "c:\\";
+		const char * def_tmp_dir = "c:\\";
 #else
-		char * def_tmp_dir = "/tmp/";
+		const char * def_tmp_dir = "/tmp/";
 #endif
 		
-		char * tmp_dir = NULL;
+		const char * tmp_dir = NULL;
 		tmp_dir = getenv(WIN_TEMP_ENV);
 		if (!tmp_dir)
 			tmp_dir = getenv(WIN_TMP_ENV);
