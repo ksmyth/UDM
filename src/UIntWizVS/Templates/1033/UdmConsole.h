@@ -28,7 +28,8 @@ namespace GMEConsole
 			if(S_OK != gmeoleapp->ConsoleClear())
 				throw udm_exception("Could not clear GME console.");
 				*/
-			gmeoleapp->put_ConsoleContents(L"");
+			CComBSTR empty(L"");
+			gmeoleapp->put_ConsoleContents(empty);
 		}
 
 		static void setContents(const std::string& contents)
