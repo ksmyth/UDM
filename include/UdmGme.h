@@ -153,6 +153,10 @@ namespace UdmGme
 
 	// Id conversion routines
 	UDM_DLL string UdmId2GmeId(Udm::Object::uniqueId_type udmId);
+
+	// PInvoke Syntax
+	// [DllImport("UdmDll_3_2_VS10.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "?GmeId2UdmId@UdmGme@@YAJPB_W@Z")]
+	// static extern Int32 GmeId2UdmId([MarshalAs(UnmanagedType.BStr)] string gmeId);
 	UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const wchar_t* gmeId);
 	UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const char* gmeId);
 
