@@ -8,7 +8,7 @@
       <AdditionalIncludeDirectories>$(UDM_3RDPARTY_PATH)\cppunit-1.12.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(UDM_3RDPARTY_PATH)\cppunit-1.12.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(UDM_3RDPARTY_PATH)\cppunit-1.12.1\lib_v100;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
