@@ -28,7 +28,7 @@ set PATH=%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin;^
 
 set JAVA_HOME=%JDK_PATH%
 
-set _CLASSPATH=$(UDM_3RDPARTY_PATH)\junit\junit.jar;$(UDM_3RDPARTY_PATH)\antlr-2.7.7\antlr.jar
+set _CLASSPATH=%UDM_3RDPARTY_PATH%\junit\junit.jar;%UDM_3RDPARTY_PATH%\antlr-2.7.7\antlr.jar
 if defined CLASSPATH (set CLASSPATH=%_CLASSPATH%;%CLASSPATH%) else (set CLASSPATH=%_CLASSPATH%)
 
 set ANT_HOME=%UDM_3RDPARTY_PATH%\ant-1.6.2
