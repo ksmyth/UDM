@@ -45,6 +45,7 @@ namespace UdmGme
 	static gdnmap GDNMap;
 
 
+	void com_exception(HRESULT a, IErrorInfo *errorinfo);
 	void com_exception(HRESULT a, IUnknown *b, REFIID c);
 	string getnameforassoc(const ::Uml::Association &ass, bool generate_name);
 

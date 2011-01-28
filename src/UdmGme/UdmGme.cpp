@@ -237,6 +237,8 @@ using namespace MGALib;
 #include "GmeObject.h"
 #include <UdmUtil.h>
 
+#include <sstream>
+
 // Hack to detect VS10 GME: VS10 GME has ifdef guards in InterfaceVersion.h
 #define INTERFACEVERSION_INCLUDED
 #define cpp_quote(x) namespace { }
@@ -292,27 +294,52 @@ namespace UdmGme
 		IMgaTerritoryPtr terr;
 	};
 
-	void com_exception(HRESULT a, IUnknown *b, REFIID c) 
-	{
-		char s[100];
-		ISupportErrorInfoPtr pp = b;
+	void com_exception(HRESULT a, IErrorInfo* errorinfo) {
+		std::stringstream error_message;
 		SmartBSTR str;
-		if(pp) 
-		{
-			if(pp->InterfaceSupportsErrorInfo(c) == S_OK) 
-			{
-				IErrorInfoPtr ee;
-				GetErrorInfo(0, &ee);
-				BSTR bbstr;
-				ee->GetDescription(&bbstr);
-				str = bbstr;
-				SysFreeString(bbstr);
+		if (errorinfo != 0) {
+			BSTR bbstr;
+			if (SUCCEEDED(errorinfo->GetDescription(&bbstr))) {
+				str.Attach(bbstr);
 			}
 		}
-		if(!!str) sprintf(s, "Com exception: %S\n", (BSTR)str);
-		else sprintf(s, "Com exception: #%08X\n", a);
+		if (!str) {
+			LPTSTR errorText = NULL;
+			FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
+				NULL, a, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+				(LPTSTR)&errorText, 0, NULL);
+			if (errorText != NULL) {
+				str = errorText;
+				LocalFree(errorText);
+			}
+		}
+		error_message << "Com exception: ";
+		if (!!str) {
+			error_message << static_cast<const char*>(str);
+			error_message << " (0x" << std::hex << setw(8) << (unsigned long)a << ")";
+		} else {
+			error_message << "0x" << std::hex << setw(8) << (unsigned long)a;
+		}
 
-		throw udm_exception(s);
+		throw udm_exception(error_message.str());
+	}
+
+	void com_exception(HRESULT a, IUnknown *b, REFIID c) 
+	{
+		if (b) {
+			ISupportErrorInfoPtr pp = b;
+			if(pp) 
+			{
+				if(pp->InterfaceSupportsErrorInfo(c) == S_OK) 
+				{
+					IErrorInfoPtr ee;
+					if (SUCCEEDED(GetErrorInfo(0, &ee))) {
+						com_exception(a, ee);
+					}
+				}
+			}
+		}
+		com_exception(a, NULL);
 	}
 
 	SmartBSTR createGMEconnstr(string sn);
@@ -847,6 +874,7 @@ namespace UdmGme
 				Argh! COM pointers to the same object ain't the same!
 				if(static_cast<GmeObject *>(*i)->self == static_cast<GmeObject *>(*j)->self) 
 				*/
+				// FIXME: this will crash if i or j are from the wrong DataNetwork and are not GmeObjects
 				IMgaFCOPtr n21 = static_cast<GmeObject *>(*i)->self;
 				IMgaFCOPtr n22 = static_cast<GmeObject *>(*j)->self;
 				VARIANT_BOOL n = n21->GetIsEqual(n22);
@@ -2640,6 +2668,7 @@ bbreak:			;
 		mydn = dn;
 #ifdef _DEBUG
 		name = (const char*)obj->GetName();
+		uniqueId();
 #endif
 	};
 
@@ -2651,6 +2680,7 @@ bbreak:			;
 		m_type = findClass();
 #ifdef _DEBUG
 		name = (const char*)obj->GetName();
+		uniqueId();
 #endif
 		if (!mydn) throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
 	};
@@ -2661,6 +2691,7 @@ bbreak:			;
 		mydn = dn;
 #ifdef _DEBUG
 		name = (const char*)obj->GetName();
+		uniqueId();
 #endif
 		if (!mydn) throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
 	};
@@ -2673,6 +2704,7 @@ bbreak:			;
 		m_type = findClass();
 #ifdef _DEBUG
 		name = (const char*)obj->GetName();
+		uniqueId();
 #endif
 		if (!mydn) throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
 	};
@@ -3875,15 +3907,18 @@ bbreak:			;
 		return MetaRoleFilter;
 	}
 
-
-
+	__declspec(noreturn) static void __stdcall _udmgme_com_raise_error(HRESULT hr, IErrorInfo* errorinfo) {
+		com_exception(hr, errorinfo);
+	}
 	static class reg {
 		public:
 		reg() {
 			GmeDataNetwork::RegisterBackend("GME", "mga", &GmeDataNetwork::factory);
+			_set_com_error_handler(_udmgme_com_raise_error);
 		}	
 		~reg() {
 			GmeDataNetwork::UnRegisterBackends();
+			_set_com_error_handler(_com_raise_error);
 		}
 	} _reg_unused;
 
