@@ -51,7 +51,6 @@ endif
 	CWD=$(shell pwd)
 	./configure $(CROSS) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs,-L$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/minizip/" CPPFLAGS="-I/usr/lib/jvm/java-6-sun/include/ -I/usr/lib/jvm/java-6-sun/include/linux/ -I$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"  CXXFLAGS="-I/usr/lib/jvm/java-6-sun/include/ -I/usr/lib/jvm/java-6-sun/include/linux/ -I$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"
 
-
 build: build-stamp
 build-stamp:  config.status 
 	dh_testdir
@@ -59,6 +58,7 @@ build-stamp:  config.status
 	# Add here commands to compile the package.
 	cd debian/zlib-1.2.3.3.dfsg/contrib/minizip && make libminizip
 	#cp -a ../model-files.zip .
+	wget -O model-files.zip http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip
 	$(MAKE)
 
 	touch $@
