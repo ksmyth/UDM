@@ -6,7 +6,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\include&quot;;&quot;$(UDM_3RDPARTY_PATH)\Xalan-C_1_11_0\include&quot;;&quot;$(UDM_3RDPARTY_PATH)\antlr-2.7.7\lib\cpp&quot;;&quot;$(UDM_3RDPARTY_PATH)\zlib&quot;;&quot;$(UDM_3RDPARTY_PATH)\zlib\contrib\minizip&quot;;&quot;$(UDM_3RDPARTY_PATH)\cppunit-1.12.1\include&quot;;&quot;$(UDM_3RDPARTY_PATH)\boost_1_36_0&quot;;&quot;$(JDK_PATH)\include\win32&quot;;&quot;$(JDK_PATH)\include&quot;;&quot;$(GME_ROOT)\Interfaces&quot;;&quot;$(GME_ROOT)\Gme\Interfaces&quot;"
+		AdditionalIncludeDirectories="&quot;$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\include&quot;;&quot;$(UDM_3RDPARTY_PATH)\Xalan-C_1_11_0\include&quot;;&quot;$(UDM_3RDPARTY_PATH)\antlr-2.7.7\cpp&quot;;&quot;$(UDM_3RDPARTY_PATH)\zlib&quot;;&quot;$(UDM_3RDPARTY_PATH)\zlib\contrib\minizip&quot;;&quot;$(UDM_3RDPARTY_PATH)\cppunit-1.12.1\include&quot;;&quot;$(UDM_3RDPARTY_PATH)\boost_1_36_0&quot;;&quot;$(JDK_PATH)\include\win32&quot;;&quot;$(JDK_PATH)\include&quot;;&quot;$(GME_ROOT)\Interfaces&quot;;&quot;$(GME_ROOT)\Gme\Interfaces&quot;"
 	/>
 	<Tool
 		Name="VCLinkerTool"
