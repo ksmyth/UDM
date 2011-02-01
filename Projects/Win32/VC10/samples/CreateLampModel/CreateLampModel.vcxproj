@@ -61,7 +61,7 @@ exit 0</Command>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;UDM_DYNAMIC_LINKING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -84,7 +84,7 @@ exit 0</Command>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UmlD.lib;UdmBaseD.lib;UdmDomD.lib;UdmGmeD.lib;UdmUtilD.lib;Xerces-c_2D.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)CreateLampModelD.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -193,7 +193,6 @@ exit 0</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(UDM_PATH)\bin\UdmD.exe" -o "$(GenPath)" "%(FullPath)" -v
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenPath)\LampDiagram.xsd;$(GenPath)\LampDiagram.cpp;$(GenPath)\LampDiagram.h;%(Outputs)</Outputs>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>
     <CustomBuild Include="$(ReleaseGenPath)\LampDiagram_udm.xml">
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LampDiagram_udm.xml -&gt; C++ API</Message>
@@ -209,6 +208,10 @@ exit 0</Command>
 "$(UDM_PATH)\etc\xme2udmxml" "%(FullPath)" "%(FileName).mga"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenPath)\%(FileName).mga</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(GenPath)"
+"$(UDM_PATH)\etc\xme2udmxml" "%(FullPath)" "%(FileName).mga"
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenPath)\%(FileName).mga</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
