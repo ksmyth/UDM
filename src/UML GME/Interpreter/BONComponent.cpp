@@ -1348,7 +1348,7 @@ bool CAssociationBase::IsEquivalent(CAssociationBase *ass)
 
 void CAssociationBase::BuildUML()
 {
-	if (!IsCrossPackage())
+	if (uml_ass == Udm::null && !IsCrossPackage())
 	{
 		CNamespaceBuilder *ns = GetNamespace();
 		if(ns)
@@ -1417,6 +1417,10 @@ void CAssociationBase::_BuildUML(::Uml::Association &ass, bool is_cross)
 			CAssociationBase *assoc = dynamic_cast<CAssociationBase *>(associationClass->srcAssociations.GetNext(cpos));
 			ASSERT(assoc);
 			::Uml::Association uml_ass = assoc->GetUmlAssociation();
+			if (uml_ass == Udm::null) {
+				assoc->BuildUML();
+				uml_ass = assoc->GetUmlAssociation();
+			}
 			set< ::Uml::AssociationRole> aroles = uml_ass.roles();
 			for (set< ::Uml::AssociationRole>::const_iterator i = aroles.begin(); i != aroles.end(); i++) {
 				string role_name = ::Uml::MakeRoleName(*i);
