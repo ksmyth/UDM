@@ -322,9 +322,7 @@ void DiagramGen::OutIsDescendantPairs(ostream &out)
 		return;
 
 	out << boost::format("\
-#ifndef PARADIGM_HAS_DESCENDANT_PAIRS\n\
-#define PARADIGM_HAS_DESCENDANT_PAIRS\n\
-#endif // PARADIGM_HAS_DESCENDANT_PAIRS\n\
+#ifdef PARADIGM_HAS_DESCENDANT_PAIRS\n\
 \n\
 \tstruct _False_ { enum { value = 0 }; };\n\
 \tstruct _True_  { enum { value = 1 }; };\n\
@@ -335,6 +333,11 @@ void DiagramGen::OutIsDescendantPairs(ostream &out)
 
 	for (vector<boost::format>::const_iterator i = is_descendant_pairs.begin(); i != is_descendant_pairs.end(); i++)
 		out << "\t" << *i << endl;
+
+	out << boost::format("\
+\n\
+#endif // PARADIGM_HAS_DESCENDANT_PAIRS\n\
+\n");
 
 	out << endl;
 }
