@@ -3102,6 +3102,10 @@ namespace UDM_NAMESPACE
 		Object getInstantiatedObjectInPrimarilyDerivedBlock(const Udm::Object &where) const;
 
 
+		//checks if the object is a reference object. 
+		//if so, and it's not an empty reference, returns the referred object
+		//Note: References in UDM does not really exist, it's merely an MGA concept.
+		//in UDM references are emulated with associations with rolename "ref" at the referenced object
 		Object getReferencedObject(const string refrole = "ref") const;
 
 

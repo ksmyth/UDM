@@ -1860,7 +1860,7 @@ UDM_DLL Object Object::getInstantiatedObjectInPrimarilyDerivedBlock(const Udm::O
 	return getInstantiatedObjectInTree(derived_block);
 };
 
-//checks if the objects is a reference object. 
+//checks if the object is a reference object. 
 //if so, and it's not an empty reference, returns the referred object
 //Note: References in UDM does not really exist, it's merely an MGA concept.
 //in UDM references are emulated with associations with rolename "ref" at the referenced object
