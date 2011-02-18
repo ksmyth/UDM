@@ -62,6 +62,10 @@ namespace Udm = UDM_NAMESPACE;
 #define UDM_NAMESPACE Udm
 #endif /* _WIN32 */
 
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#define UDM_RVALUE
+#endif
+
 class udm_exception : public exception
 {
 public:
