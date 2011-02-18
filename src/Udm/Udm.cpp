@@ -67,6 +67,7 @@ int main(int argc, char **argv) {
 	{
 
 		UdmOpts opts;
+		opts.mode = UdmOpts::CXX_DEFAULT;
 		opts.meta_init = UdmOpts::DYNAMIC_INIT;
 		opts.visitor_sup = false;
 		opts.cxx_source_unit = UdmOpts::UNIT_DIAGRAM;
