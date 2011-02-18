@@ -224,6 +224,12 @@ this software.
 
 XERCES_CPP_NAMESPACE_USE
 
+#if _XERCES_VERSION < 30000
+#define SET_ID_ATTR(dom_element, attr) dom_element->setIdAttribute(attr)
+#else
+#define SET_ID_ATTR(dom_element, attr) dom_element->setIdAttribute(attr, true)
+#endif
+
 #define UDM_DOM_URI_PREFIX "http://www.isis.vanderbilt.edu/2004/schemas/"
 
 static const XMLCh gXML__id[] =
@@ -832,7 +838,7 @@ namespace UdmDom
 
 				//assign it
 				dom_element->setAttribute(gXML__id, buf);
-				dom_element->setIdAttribute(gXML__id);
+				SET_ID_ATTR(dom_element, gXML__id);
 
 				a = dom_element->getAttribute(gXML__id);
 				
@@ -884,7 +890,7 @@ namespace UdmDom
 						id  = reinterpret_cast<uniqueId_type>(p);	
 						XMLString::binToText(id, buf + 2, 18, 16);
 						dom_element->setAttribute(gXML__id, buf);
-						dom_element->setIdAttribute(gXML__id);
+						SET_ID_ATTR(dom_element, gXML__id);
 					}
 				};
 			};
@@ -3438,33 +3444,85 @@ namespace UdmDom
 		delete *parser;
 	}
 
-	static DOMWriter* createDOMWriterForDocument(const XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument &doc)
+	class MySerializer {
+#if _XERCES_VERSION < 30000
+		DOMWriter *serializer;
+#else
+		DOMLSSerializer *serializer;
+#endif
+	public:
+		MySerializer(const XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc);
+		~MySerializer();
+
+		void serializeTo(const XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc, XMLFormatTarget *target) const;
+	};
+
+#if _XERCES_VERSION < 30000
+
+	MySerializer::MySerializer(const XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc)
 	{
 		DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(X("LS"));
-		DOMWriter *writer = ((DOMImplementationLS*)impl)->createDOMWriter();
+		serializer = ((DOMImplementationLS*)impl)->createDOMWriter();
 
-		const XMLCh *doc_encoding = doc.getEncoding();
+		const XMLCh *doc_encoding = doc->getEncoding();
 		if (doc_encoding)
-			writer->setEncoding(doc_encoding);
+			serializer->setEncoding(doc_encoding);
 		else
-			writer->setEncoding(gXML_UTF_8);
+			serializer->setEncoding(gXML_UTF_8);
 
-		if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true))
-			writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+		if (serializer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true))
+			serializer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
 
-		writer->setErrorHandler(new MobiesDOMErrorHandler());
-
-		return writer;
+		serializer->setErrorHandler(new MobiesDOMErrorHandler());
 	}
 
-	static void releaseDOMWriter(DOMWriter **writer)
+	MySerializer::~MySerializer()
 	{
-	  DOMErrorHandler *err_handler = (*writer)->getErrorHandler();
+		DOMErrorHandler *err_handler = serializer->getErrorHandler();
 		delete err_handler;
 
-		delete *writer;
-		*writer = NULL;
+		delete serializer;
 	}
+
+	void MySerializer::serializeTo(const XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc, XMLFormatTarget *target) const
+	{
+		serializer->writeNode(target, *doc);
+	}
+
+#else //_XERCES_VERSION < 30000
+
+	MySerializer::MySerializer(const XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc)
+	{
+		DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(X("LS"));
+		serializer = ((DOMImplementationLS*)impl)->createLSSerializer();
+
+		DOMConfiguration *conf = serializer->getDomConfig();
+		if (conf->canSetParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true))
+			conf->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+
+		conf->setParameter(XMLUni::fgDOMErrorHandler, new MobiesDOMErrorHandler());
+	}
+
+	MySerializer::~MySerializer()
+	{
+		DOMErrorHandler *err_handler = (DOMErrorHandler*) serializer->getDomConfig()->getParameter(XMLUni::fgDOMErrorHandler);
+		delete err_handler;
+
+		serializer->release();
+	}
+
+	void MySerializer::serializeTo(const XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc, XMLFormatTarget *target) const
+	{
+		DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(X("LS"));
+		DOMLSOutput *output = ((DOMImplementationLS*)impl)->createLSOutput();
+		output->setByteStream(target);
+		output->setEncoding(gXML_UTF_8);
+
+		serializer->write(doc, output);
+		output->release();
+	}
+
+#endif //_XERCES_VERSION < 30000
 
 
 	void DomDataNetwork::AddToMetaClassesCache(const set< ::Uml::Class> &meta_classes)
@@ -3566,7 +3624,7 @@ namespace UdmDom
 				if (!EmptyVal(a))
 				{
 					// attribute "id" is of type ID
-					dd->setIdAttribute(gXML__id);
+					SET_ID_ATTR(dd, gXML__id);
 
 					//convert to long
 					long id = GetLongID(a);
@@ -4096,7 +4154,7 @@ namespace UdmDom
 			XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = de->getOwnerDocument();
 			ASSERT( doc != NULL);
 
-			DOMWriter *writer = createDOMWriterForDocument(*doc);
+			MySerializer serializer(doc);
 
 			if (str_based) 
 			{
@@ -4104,19 +4162,19 @@ namespace UdmDom
 
 				// XXX: this needs rethinking, we're putting bytes
 				// into a string of characters
-				MemBufFormatTarget *out = new MemBufFormatTarget();
-				writer->writeNode(out, *doc);
-				str = string((const char *) out->getRawBuffer(), out->getLen());
-				delete out;
+				MemBufFormatTarget *mem_target = new MemBufFormatTarget();
+				serializer.serializeTo(doc, mem_target);
+				str = string((const char *) mem_target->getRawBuffer(), mem_target->getLen());
+
+				delete mem_target;
 			}
 			else
 			{
-				XMLFormatTarget *out = new LocalFileFormatTarget(X(savesystemname));
-				writer->writeNode(out, *doc);
-				delete out;
+				XMLFormatTarget *file_target = new LocalFileFormatTarget(X(savesystemname));
+				serializer.serializeTo(doc, file_target);
+				delete file_target;
 			}
 
-			releaseDOMWriter(&writer);
 
 			if (parser->getDocument() == NULL) {
 				delete doc;
@@ -4135,13 +4193,10 @@ namespace UdmDom
 			XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = de->getOwnerDocument();
 			ASSERT( doc != NULL);
 
-			DOMWriter *writer = createDOMWriterForDocument(*doc);
-			XMLFormatTarget *out = new LocalFileFormatTarget(X(systemname));
-
-			writer->writeNode(out, *doc);
-
-			releaseDOMWriter(&writer);
-			delete out;
+			MySerializer serializer(doc);
+			XMLFormatTarget *file_target = new LocalFileFormatTarget(X(systemname));
+			serializer.serializeTo(doc, file_target);
+			delete file_target;
 		
 		CATCH_XML_EXCEPTION("DomDataNetwork::SaveAs()") 
 	}; 
