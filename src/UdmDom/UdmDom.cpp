@@ -3939,6 +3939,8 @@ namespace UdmDom
 		TRY_XML_EXCEPTION
 
 
+			parser->reset();
+
 			bool force_dtd = false; //default is xsd
 			if (metalocator.size() > 4)
 			{
@@ -4133,11 +4135,12 @@ namespace UdmDom
 	UDM_DLL void DomDataNetwork::CloseNoUpdate() 
 	{
 		TRY_XML_EXCEPTION
+
 			// We must delete doc if the dn was created via CreateNew
 			if (parser->getDocument() == NULL) {
 				DOMElement *de = static_cast<DomObject *>(GetRootObject().__impl())->dom_element;
 				XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = de->getOwnerDocument();
-				delete doc;
+				doc->release();
 			}
 			rootobject = NULL;
 
@@ -4177,7 +4180,7 @@ namespace UdmDom
 
 
 			if (parser->getDocument() == NULL) {
-				delete doc;
+				doc->release();
 			}
 			rootobject = NULL;
 		
