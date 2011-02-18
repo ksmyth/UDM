@@ -175,12 +175,18 @@ namespace UDM_NAMESPACE
 
 		while(unz_res == UNZ_OK)
 		{
-			unz_file_info ufi;
-			if (unzGetCurrentFileInfo(zf, &ufi, NULL, 0, NULL, 0, NULL, 0) != UNZ_OK)
-				throw udm_exception("Unknown UNZ error occurred!");
+			long filename_length;
+#ifdef WIN32
+			filename_length = _MAX_PATH;
+#else
+			filename_length = pathconf(temp_path.c_str(), _PC_PATH_MAX);
+			if (filename_length == -1) filename_length = 4096;
+#endif
+			filename_length -= temp_path.length() + strlen(PATHDELIM);
+			char * filename = new char[filename_length];
 
-			char * filename = new char[ufi.size_filename + 1];
-			if (unzGetCurrentFileInfo(zf, NULL, filename, ufi.size_filename + 1, NULL,0,NULL,0) != UNZ_OK)
+			unz_file_info ufi;
+			if (unzGetCurrentFileInfo(zf, &ufi, filename, filename_length, NULL, 0, NULL, 0) != UNZ_OK)
 				throw udm_exception("Unknown UNZ error occurred!");
 
 			string tempfilename = temp_path + PATHDELIM + filename;
