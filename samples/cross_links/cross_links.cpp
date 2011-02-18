@@ -61,10 +61,7 @@ int main_static(int argc, char * argv[])
 		set<CD1::M1> a; a.insert(m1);
 		m3.src() = a;
 
-
-		sm1.CloseWithUpdate();
-		sm2.CloseWithUpdate();
-		sm3.CloseWithUpdate();
+		sup.Close();
 	}
 	catch (udm_exception &e)
 	{
