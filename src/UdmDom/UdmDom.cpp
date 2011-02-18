@@ -735,13 +735,12 @@ namespace UdmDom
 			return XMLString::patternMatch(where, what);
 		};
 
-		// NOTE: DSAppend use new[], but DSAppendTo uses XMLPlatformUtils::fgMemoryManager->allocate.
-		// This should probably be fixed
 		static XMLCh* DSAppend(const XMLCh *src, const string &data)
 		{
 			ASSERT(src != NULL);
 
-			XMLCh *retval = new XMLCh[ XMLString::stringLen(src) + 1 + data.length() + 1 ];
+			int ret_length = XMLString::stringLen(src) + 1 + data.length() + 1;
+			XMLCh *retval = (XMLCh*) XMLPlatformUtils::fgMemoryManager->allocate(ret_length * sizeof(XMLCh));
 			XMLString::copyString(retval, src);
 			XMLString::catString(retval, gXML_space);
 
@@ -757,7 +756,8 @@ namespace UdmDom
 		{
 			ASSERT(src != NULL);
 
-			XMLCh *retval = new XMLCh[ XMLString::stringLen(src) + 1 + XMLString::stringLen(data) + 1 ];
+			int ret_length = XMLString::stringLen(src) + 1 + XMLString::stringLen(data) + 1;
+			XMLCh *retval = (XMLCh*) XMLPlatformUtils::fgMemoryManager->allocate(ret_length * sizeof(XMLCh));
 			XMLString::copyString(retval, src);
 			XMLString::catString(retval, gXML_space);
 			XMLString::catString(retval, data);
@@ -778,9 +778,7 @@ namespace UdmDom
 				new_target = XMLString::replicate(data);
 			else {
 				int new_length = XMLString::stringLen(*target) + XMLString::stringLen(data) + 1;
-				// FIXME: this depends on XMLString::release internals (it and fgArrayMemoryManager use delete[]/new[])
-				new_target = (XMLCh*) XMLPlatformUtils::fgArrayMemoryManager->allocate(new_length * sizeof(XMLCh));
-
+				new_target = (XMLCh*) XMLPlatformUtils::fgMemoryManager->allocate(new_length * sizeof(XMLCh));
 				XMLString::copyString(new_target, *target);
 				XMLString::catString(new_target, data);
 			}
@@ -907,7 +905,7 @@ namespace UdmDom
 					XMLCh *pa_new = DSAppend(pa, myname_buf);
 					//dom_element.setAttribute(DOMString("desynched_atts"), pa);
 					dom_element->setAttribute(gXML__desynched_atts, pa_new);
-					delete [] pa_new;
+					XMLString::release(&pa_new);
 				}
 			}
 
@@ -1681,9 +1679,9 @@ namespace UdmDom
 					{
 						if(DSFind(chas,ncomp) < 0) 
 						{
-							const XMLCh *chas_new = DSAppend(chas, ncomp_buf);
+							XMLCh *chas_new = DSAppend(chas, ncomp_buf);
 							dom_element->setAttribute(gXML___child_as, chas_new);
-							delete [] chas_new;
+							XMLString::release(&chas_new);
 						}
 					}
 					else dom_element->setAttribute(gXML___child_as, ncomp_buf);
@@ -2256,9 +2254,9 @@ namespace UdmDom
 						peer.dom_element->setAttribute(oname, myid);
 					else 
 					{
-						const XMLCh *pa_new = DSAppend(pa, myid);
+						XMLCh *pa_new = DSAppend(pa, myid);
 						peer.dom_element->setAttribute(oname, pa_new);
-						delete [] pa_new;
+						XMLString::release(&pa_new);
 					}	
 					dep->CopyAttributesFromArchetype();
 
@@ -2654,9 +2652,9 @@ namespace UdmDom
 				}
 				else 
 				{
-					const XMLCh *pa_new = DSAppend(pa, myid);
+					XMLCh *pa_new = DSAppend(pa, myid);
 					peer.dom_element->setAttribute(oname_buf, pa_new);
-					delete [] pa_new;
+					XMLString::release(&pa_new);
 				}
 			}
 
