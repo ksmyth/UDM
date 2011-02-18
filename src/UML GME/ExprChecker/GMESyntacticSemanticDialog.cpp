@@ -283,7 +283,7 @@ void CSyntacticSemanticDialog::OnClickConstraintsColumn( NMHDR* pNMHDR, LRESULT*
 	{
 		int iDefinitions = m_vecConstraintDefinitions.size();
 		std::string strDName = ( iPos >= iDefinitions ) ? m_vecConstraints[ iPos - iDefinitions ]->GetDefinedName() : m_vecConstraintDefinitions[ iPos ]->GetDefinedName();
-		int iColonPos = strDName.rfind( "::" );
+		std::string::size_type iColonPos = strDName.rfind( "::" );
 
 		if ( iColonPos == std::string::npos ) {
 			strContext = "?";

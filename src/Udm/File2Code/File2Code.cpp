@@ -241,7 +241,7 @@ void  File2Code::generateMap(std::istream& in, StrStrVecMap& map)
         std::string tmp1;
         replace(tmp1, tmp, "\\n", "\\\\n");*/
 
-        int b_eol = tmp1.find_last_not_of("\r\n");
+	std::string::size_type b_eol = tmp1.find_last_not_of("\r\n");
         if (b_eol != std::string::npos)
           tmp1.erase(b_eol + 1);
         if (!tmp1.empty() && (tmp1.at(0) == '\r' || tmp1.at(0) == '\n'))

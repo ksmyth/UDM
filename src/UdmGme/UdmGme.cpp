@@ -399,7 +399,7 @@ namespace UdmGme
 	{
 		RpHelperIDs ret;
 
-		int begin, end;
+		string::size_type begin, end;
 		begin = src.find_first_not_of(' ');
 		if (begin != string::npos)
 		{
@@ -2324,7 +2324,7 @@ bbreak:			;
 			return ret;
 		};
 		
-		int newpos, prevpos = 0;
+		string::size_type newpos, prevpos = 0;
 		
 
 		while ((newpos = input.find(';', prevpos)) != string::npos)
@@ -2332,7 +2332,7 @@ bbreak:			;
 			string posstring = input.substr(prevpos, newpos-prevpos);
 			prevpos = newpos + 1;
 
-			int asppos = posstring.find('(', 0);
+			string::size_type asppos = posstring.find('(', 0);
 			
 			string asp = posstring.substr(0, asppos);//the name of the aspect
 			string position = posstring.substr(asppos);//the two coordinates

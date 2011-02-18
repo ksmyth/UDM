@@ -74,8 +74,8 @@ namespace Ocl
 
 void inReplace( std::string& str, const std::string& str1, const std::string& str2 )
 {
-	int iPos = 0;
-	int iPosFrom = 0;
+	std::string::size_type iPos = 0;
+	std::string::size_type iPosFrom = 0;
 	while ( ( iPos = str.find( str1, iPosFrom ) ) != std::string::npos ) {
 		str = str.substr( iPosFrom, iPos ) + str2 + str.substr( iPos + str1.length() );
 		iPosFrom = iPos + str1.length();

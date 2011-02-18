@@ -632,8 +632,8 @@ namespace UmlOcl
 
 		if (bIsQualified) 
 		{
-			unsigned int loc1 = strName.find("::");
-			unsigned int loc2 = strName.rfind("::");
+			std::string::size_type loc1 = strName.find("::");
+			std::string::size_type loc2 = strName.rfind("::");
 			if (loc1 != loc2)
 			{
 				strDgrName = strName.substr(0, loc1);

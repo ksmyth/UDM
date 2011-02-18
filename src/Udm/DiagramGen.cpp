@@ -22,7 +22,7 @@ static string GetDgrfromFromStr(const string& fromstr)
 
 static string GetNsfromFromStr(const string& fromstr )
 {
-	unsigned int i = fromstr.find(':');
+	string::size_type i = fromstr.find(':');
 	if (i == string::npos)
 		return "";
 	return fromstr.substr(i +1, string::npos);

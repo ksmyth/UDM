@@ -691,7 +691,7 @@ namespace DTDGen
 	void AddUMLContainerNameToURIMapping(const char *optp, map<string, string> &ns_map)
 	{
 		string opt(optp);
-		int loc = opt.find('=');
+		string::size_type loc = opt.find('=');
 		if (loc != string::npos) {
 			string uml_ns_path = opt.substr(0, loc);
 			string uri = opt.substr(loc + 1);

@@ -1328,7 +1328,7 @@ namespace UDM_NAMESPACE
 	UDM_DLL DataNetwork *DataNetwork::CreateBackend(string bid, const UdmDiagram &metainfo, UdmProject* project) 
 	{
 		backendtabt *p = backendtab;
-		unsigned int l;
+		string::size_type l;
 		/*l = bid.find(':');
 		if(l >= 3) {
 			bid.erase(l);
