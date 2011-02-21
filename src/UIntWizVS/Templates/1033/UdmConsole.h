@@ -6,15 +6,17 @@
 #include "UdmFormatter.h"
 #include <string>
 
+#include "Gme.h"
+
 namespace GMEConsole
 {
 	class Console
 	{
 	friend class RawComponent;
 
-		static CComPtr<IGMEOLEApp> gmeoleapp;
-		static void setupConsole(CComPtr<IMgaProject> project); 
 	public:
+		static void SetupConsole(CComPtr<IMgaProject> project); 
+		static CComPtr<IGMEOLEApp> gmeoleapp;
 
 		static void writeLine(const std::string& message, msgtype_enum type)
 		{
