@@ -2,7 +2,7 @@
 #define MOBIES_UDMPROJECT_H
 
 // header file UdmProject.h generated from diagram UdmProject
-// generated with Udm version 3.27 on Mon Jan 24 23:17:28 2011
+// generated with Udm version 3.27 on Mon Mar 07 10:31:53 2011
 
 #include <UdmBase.h>
 
@@ -51,7 +51,7 @@ namespace UdmProject {
 		Datanetwork CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<Datanetwork> Instances() { return Udm::InstantiatedAttr<Datanetwork>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<Datanetwork, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<Datanetwork, Pred>(impl); }
-		Datanetwork CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		Datanetwork CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<Datanetwork> Derived() { return Udm::DerivedAttr<Datanetwork>(impl); }
 		template <class Pred> Udm::DerivedAttr<Datanetwork, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<Datanetwork, Pred>(impl); }
 		Udm::ArchetypeAttr<Datanetwork> Archetype() const { return Udm::ArchetypeAttr<Datanetwork>(impl); }
@@ -89,7 +89,7 @@ namespace UdmProject {
 		Project CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<Project> Instances() { return Udm::InstantiatedAttr<Project>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<Project, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<Project, Pred>(impl); }
-		Project CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		Project CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<Project> Derived() { return Udm::DerivedAttr<Project>(impl); }
 		template <class Pred> Udm::DerivedAttr<Project, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<Project, Pred>(impl); }
 		Udm::ArchetypeAttr<Project> Archetype() const { return Udm::ArchetypeAttr<Project>(impl); }

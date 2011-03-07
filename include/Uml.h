@@ -2,7 +2,7 @@
 #define MOBIES_UML_H
 
 // header file Uml.h generated from diagram Uml
-// generated with Udm version 3.27 on Mon Jan 24 23:17:31 2011
+// generated with Udm version 3.27 on Mon Mar 07 10:31:53 2011
 
 #include <UdmBase.h>
 
@@ -64,7 +64,7 @@ namespace Uml {
 		GenericRole CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<GenericRole> Instances() { return Udm::InstantiatedAttr<GenericRole>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<GenericRole, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<GenericRole, Pred>(impl); }
-		GenericRole CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		GenericRole CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<GenericRole> Derived() { return Udm::DerivedAttr<GenericRole>(impl); }
 		template <class Pred> Udm::DerivedAttr<GenericRole, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<GenericRole, Pred>(impl); }
 		Udm::ArchetypeAttr<GenericRole> Archetype() const { return Udm::ArchetypeAttr<GenericRole>(impl); }
@@ -94,7 +94,7 @@ namespace Uml {
 		CompositionChildRole CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<CompositionChildRole> Instances() { return Udm::InstantiatedAttr<CompositionChildRole>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<CompositionChildRole, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<CompositionChildRole, Pred>(impl); }
-		CompositionChildRole CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		CompositionChildRole CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<CompositionChildRole> Derived() { return Udm::DerivedAttr<CompositionChildRole>(impl); }
 		template <class Pred> Udm::DerivedAttr<CompositionChildRole, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<CompositionChildRole, Pred>(impl); }
 		Udm::ArchetypeAttr<CompositionChildRole> Archetype() const { return Udm::ArchetypeAttr<CompositionChildRole>(impl); }
@@ -127,7 +127,7 @@ namespace Uml {
 		CompositionParentRole CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<CompositionParentRole> Instances() { return Udm::InstantiatedAttr<CompositionParentRole>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<CompositionParentRole, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<CompositionParentRole, Pred>(impl); }
-		CompositionParentRole CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		CompositionParentRole CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<CompositionParentRole> Derived() { return Udm::DerivedAttr<CompositionParentRole>(impl); }
 		template <class Pred> Udm::DerivedAttr<CompositionParentRole, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<CompositionParentRole, Pred>(impl); }
 		Udm::ArchetypeAttr<CompositionParentRole> Archetype() const { return Udm::ArchetypeAttr<CompositionParentRole>(impl); }
@@ -156,7 +156,7 @@ namespace Uml {
 		AssociationRole CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<AssociationRole> Instances() { return Udm::InstantiatedAttr<AssociationRole>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<AssociationRole, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<AssociationRole, Pred>(impl); }
-		AssociationRole CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		AssociationRole CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<AssociationRole> Derived() { return Udm::DerivedAttr<AssociationRole>(impl); }
 		template <class Pred> Udm::DerivedAttr<AssociationRole, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<AssociationRole, Pred>(impl); }
 		Udm::ArchetypeAttr<AssociationRole> Archetype() const { return Udm::ArchetypeAttr<AssociationRole>(impl); }
@@ -195,7 +195,7 @@ namespace Uml {
 		Class CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<Class> Instances() { return Udm::InstantiatedAttr<Class>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<Class, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<Class, Pred>(impl); }
-		Class CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		Class CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<Class> Derived() { return Udm::DerivedAttr<Class>(impl); }
 		template <class Pred> Udm::DerivedAttr<Class, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<Class, Pred>(impl); }
 		Udm::ArchetypeAttr<Class> Archetype() const { return Udm::ArchetypeAttr<Class>(impl); }
@@ -269,7 +269,7 @@ namespace Uml {
 		Diagram CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<Diagram> Instances() { return Udm::InstantiatedAttr<Diagram>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<Diagram, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<Diagram, Pred>(impl); }
-		Diagram CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		Diagram CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<Diagram> Derived() { return Udm::DerivedAttr<Diagram>(impl); }
 		template <class Pred> Udm::DerivedAttr<Diagram, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<Diagram, Pred>(impl); }
 		Udm::ArchetypeAttr<Diagram> Archetype() const { return Udm::ArchetypeAttr<Diagram>(impl); }
@@ -319,7 +319,7 @@ namespace Uml {
 		Association CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<Association> Instances() { return Udm::InstantiatedAttr<Association>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<Association, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<Association, Pred>(impl); }
-		Association CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		Association CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<Association> Derived() { return Udm::DerivedAttr<Association>(impl); }
 		template <class Pred> Udm::DerivedAttr<Association, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<Association, Pred>(impl); }
 		Udm::ArchetypeAttr<Association> Archetype() const { return Udm::ArchetypeAttr<Association>(impl); }
@@ -366,7 +366,7 @@ namespace Uml {
 		Composition CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<Composition> Instances() { return Udm::InstantiatedAttr<Composition>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<Composition, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<Composition, Pred>(impl); }
-		Composition CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		Composition CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<Composition> Derived() { return Udm::DerivedAttr<Composition>(impl); }
 		template <class Pred> Udm::DerivedAttr<Composition, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<Composition, Pred>(impl); }
 		Udm::ArchetypeAttr<Composition> Archetype() const { return Udm::ArchetypeAttr<Composition>(impl); }
@@ -409,7 +409,7 @@ namespace Uml {
 		Namespace CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<Namespace> Instances() { return Udm::InstantiatedAttr<Namespace>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<Namespace, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<Namespace, Pred>(impl); }
-		Namespace CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		Namespace CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<Namespace> Derived() { return Udm::DerivedAttr<Namespace>(impl); }
 		template <class Pred> Udm::DerivedAttr<Namespace, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<Namespace, Pred>(impl); }
 		Udm::ArchetypeAttr<Namespace> Archetype() const { return Udm::ArchetypeAttr<Namespace>(impl); }
@@ -460,7 +460,7 @@ namespace Uml {
 		TaggedValue CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<TaggedValue> Instances() { return Udm::InstantiatedAttr<TaggedValue>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<TaggedValue, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<TaggedValue, Pred>(impl); }
-		TaggedValue CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		TaggedValue CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<TaggedValue> Derived() { return Udm::DerivedAttr<TaggedValue>(impl); }
 		template <class Pred> Udm::DerivedAttr<TaggedValue, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<TaggedValue, Pred>(impl); }
 		Udm::ArchetypeAttr<TaggedValue> Archetype() const { return Udm::ArchetypeAttr<TaggedValue>(impl); }
@@ -494,7 +494,7 @@ namespace Uml {
 		ConstraintDefinition CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<ConstraintDefinition> Instances() { return Udm::InstantiatedAttr<ConstraintDefinition>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<ConstraintDefinition, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<ConstraintDefinition, Pred>(impl); }
-		ConstraintDefinition CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		ConstraintDefinition CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<ConstraintDefinition> Derived() { return Udm::DerivedAttr<ConstraintDefinition>(impl); }
 		template <class Pred> Udm::DerivedAttr<ConstraintDefinition, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<ConstraintDefinition, Pred>(impl); }
 		Udm::ArchetypeAttr<ConstraintDefinition> Archetype() const { return Udm::ArchetypeAttr<ConstraintDefinition>(impl); }
@@ -531,7 +531,7 @@ namespace Uml {
 		Attribute CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<Attribute> Instances() { return Udm::InstantiatedAttr<Attribute>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<Attribute, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<Attribute, Pred>(impl); }
-		Attribute CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		Attribute CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<Attribute> Derived() { return Udm::DerivedAttr<Attribute>(impl); }
 		template <class Pred> Udm::DerivedAttr<Attribute, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<Attribute, Pred>(impl); }
 		Udm::ArchetypeAttr<Attribute> Archetype() const { return Udm::ArchetypeAttr<Attribute>(impl); }
@@ -576,7 +576,7 @@ namespace Uml {
 		Constraint CreateInstance(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
 		Udm::InstantiatedAttr<Constraint> Instances() { return Udm::InstantiatedAttr<Constraint>(impl); }
 		template <class Pred> Udm::InstantiatedAttr<Constraint, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<Constraint, Pred>(impl); }
-		Constraint CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
+		Constraint CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
 		Udm::DerivedAttr<Constraint> Derived() { return Udm::DerivedAttr<Constraint>(impl); }
 		template <class Pred> Udm::DerivedAttr<Constraint, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<Constraint, Pred>(impl); }
 		Udm::ArchetypeAttr<Constraint> Archetype() const { return Udm::ArchetypeAttr<Constraint>(impl); }

@@ -155,8 +155,8 @@ void ClassGen::Basic(const InheritanceSolver &is)
 	// template <class Pred> Udm::InstantiatedAttr<C, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<C, Pred>(impl); }
 	meth_defs.push_back( boost::format("template <class Pred> Udm::InstantiatedAttr<%1%, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<%1%, Pred>(impl); }") % cl_name );
 
-	// C CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }
-	meth_defs.push_back( boost::format("%1% CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }") % cl_name );
+	// C CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }
+	meth_defs.push_back( boost::format("%1% CreateDerived(const Udm::Object &parent, const ::Uml::CompositionChildRole &role = Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }") % cl_name );
 
 	// Udm::DerivedAttr<C> Derived() { return Udm::DerivedAttr<C>(impl); }
 	meth_defs.push_back( boost::format("Udm::DerivedAttr<%1%> Derived() { return Udm::DerivedAttr<%1%>(impl); }") % cl_name );
