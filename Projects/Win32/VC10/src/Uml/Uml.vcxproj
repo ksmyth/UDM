@@ -199,6 +199,7 @@ move Uml_xsd.h ..\..\..\..\..\..\src\Uml
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">Udm.exe %(Filename)%(Extension)</Message>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\etc\UmlInUml.xme">
       <FileType>Document</FileType>
