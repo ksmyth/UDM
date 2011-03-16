@@ -93,7 +93,7 @@ function main()
 			}
 			catch(e)
 			{
-				WScript.Echo("ERROR: Cannot find where Visual Studio 2008 is installed.");
+				WScript.Echo("Cannot find where Visual Studio 2008 is installed. UdmInterpreter wizard will be unavailable.");
 				return;
 			}
 			WScript.Echo("Visual Studio Express doesn't support Wizards. UdmInterpreter Wizard will be unavailable.");
