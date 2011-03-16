@@ -4,9 +4,6 @@
 // swig can get confused with namespace x = y;
 // it doesn't matter if we lie to swig at this point
 #define UDM_NAMESPACE Udm
-%{
-#define UDM_NAMESPACE Udm
-%}
 
 // #define __int64 long long
 %apply long long { __int64 };
