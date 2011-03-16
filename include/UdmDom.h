@@ -34,7 +34,6 @@ CHANGELOG:
 #include <UdmBase.h>
 #endif
 
-//#include "C:\Work\3rdparty\xerces-c_2_8_0\include\xercesc\util\PlatformUtils.hpp"
 #include "xercesc/util/PlatformUtils.hpp"
 
 //these predefinitions are needed for typedefs
