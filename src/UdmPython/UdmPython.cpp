@@ -270,6 +270,21 @@ object Object_adjacent_helper(Udm::Object& self, object srcrolename, object dstr
 	set<::Uml::Class>::iterator ancestorClassesIt = ancestorClasses.begin();
 
 	for(; ancestorClassesIt != ancestorClasses.end(); ancestorClassesIt++) {
+		::Uml::Association association = static_cast<::Uml::Association>(ancestorClassesIt->association());
+		if (association && dstrolename != object()) {
+			std::set<::Uml::AssociationRole> roles = association.AssociationRole_kind_children();
+			for (auto roleIt = roles.begin(); roleIt != roles.end(); roleIt++) {
+				::Uml::AssociationRole role = *roleIt;
+				if (static_cast<std::string>(role.name()) == 
+						static_cast<const char*>(extract<const char*>(dstrolename))) {
+					using namespace Udm;
+					vector<ObjectImpl*> dstPeers = self.__impl()->getAssociation(role, Udm::TARGETFROMCLASS);
+					vector<ObjectImpl*>::iterator dstPeersIt = dstPeers.begin();
+					foundApplicableAssociation = true;
+					return object(Udm::Object(*dstPeersIt));
+				}
+			}
+		}
 		// Getting the association roles and iterating through them
 		set<::Uml::AssociationRole> assocRoles = ancestorClassesIt->associationRoles();
 		set<::Uml::AssociationRole>::iterator assocRolesIt = assocRoles.begin();
