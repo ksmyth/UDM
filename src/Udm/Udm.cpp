@@ -450,7 +450,7 @@ int main(int argc, char **argv) {
 	}
 	catch(const udm_exception &e)
 	{
-		cout << "Exception: " << e.what() << endl;
+		cerr << "Exception: " << e.what() << endl;
 		return(-1);
 
 	}
