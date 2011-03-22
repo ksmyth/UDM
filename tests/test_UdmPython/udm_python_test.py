@@ -1,8 +1,12 @@
 import sys
+import os
 import os.path
 import unittest
 
 sys.path.append(r"C:\Program Files\ISIS\Udm\bin")
+if os.environ.has_key("UDM_PATH"):
+    sys.path.append(os.path.join(os.environ["UDM_PATH"], "bin"))
+
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../bin/"))
 import udm
 # import udmd as udm
