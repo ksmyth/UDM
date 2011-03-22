@@ -22,6 +22,7 @@ if __name__ == "__main__":
         # TODO: close this
     else:
         output = sys.stdout
+    output.write("#pragma warning disable 0108\n");
     if options.impl_namespace:
         common.impl_namespace = options.impl_namespace + "."
     
