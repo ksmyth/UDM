@@ -244,8 +244,8 @@ namespace UDM_NAMESPACE {
 
 %{
 static void udmdiagram_dummy() {}
-UDM_NAMESPACE::UdmDiagram UdmDiagram_Wrap(Uml::Diagram* umld) {
-	UDM_NAMESPACE::UdmDiagram ret;
+Udm::UdmDiagram UdmDiagram_Wrap(Uml::Diagram* umld) {
+	Udm::UdmDiagram ret;
 	ret.dgr = umld;
 	ret.init = udmdiagram_dummy;
 	return ret;
