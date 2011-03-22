@@ -3816,7 +3816,8 @@ bbreak:			;
 
 	UDM_DLL void GmeDataNetwork::CloseNoUpdate()			
 	{  
-		if(rootobject) {
+		// Use dynamic_cast here instead of UdmObject::operator bool since for .NET we may no longer be in a transaction (e.g. GC)
+		if (dynamic_cast<GmeObject*>(rootobject.__impl())) {
 			rootobject = NULL;
 			
 			// only if this is the lastdata network closed.
