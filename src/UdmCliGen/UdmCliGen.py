@@ -13,6 +13,7 @@ if __name__ == "__main__":
     parser = OptionParser(usage="usage: %prog [options] input-uml.xml")
     parser.add_option("-o", "--output", dest="output")
     parser.add_option("--impl_namespace", dest="impl_namespace")
+    parser.add_option("--interface_namespace", dest="interface_namespace")
     (options, args) = parser.parse_args()
     if len(args) != 1:
         print parser.print_help()
@@ -25,6 +26,8 @@ if __name__ == "__main__":
     output.write("#pragma warning disable 0108\n");
     if options.impl_namespace:
         common.impl_namespace = options.impl_namespace + "."
+    if options.interface_namespace:
+        common.interface_namespace = options.interface_namespace + "."
     
     uml = udm.map_uml_names(udm.uml_diagram())
     dn = udm.SmartDataNetwork(udm.uml_diagram())
@@ -41,7 +44,7 @@ if __name__ == "__main__":
         classes.extend(namespace.children(child_type=uml.Class))
     
     for child in classes:
-        searchList = {'c': child, 'namespace': common.get_path(child.parent), 'uml': uml, 'diagram_name': dn.root.name}
+        searchList = {'c': child, 'namespace': common.interface_namespace + common.get_path(child.parent), 'uml': uml, 'diagram_name': dn.root.name}
         t = Template(file="Interface.tmpl", searchList=[searchList])
         output.write(str(t))
 
@@ -51,7 +54,4 @@ if __name__ == "__main__":
 
     searchList = {'root': dn.root}
     t = Template(file="Initialize.tmpl", searchList=[searchList])
-    output.write(str(t))
-
-    t = Template(file="Base.tmpl", searchList=[{ 'diagram_name': dn.root.name }])
     output.write(str(t))

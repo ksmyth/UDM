@@ -6,7 +6,7 @@ namespace $namespace
 #if $c.baseTypes
         : ${", ".join([fq_iname(b) for b in $c.baseTypes])}
 #else
-        : global::${diagram_name}.IUdmCliObject
+        : global::Udm.IUdmObject
 #end if
     {
 

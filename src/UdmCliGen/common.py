@@ -1,5 +1,6 @@
 
-impl_namespace = "UdmImpl."
+impl_namespace = "Udm.Impl."
+interface_namespace = ""
 
 attr_typemap = { 'String': 'string',
     'Boolean': 'bool',
@@ -12,7 +13,7 @@ def fq_iname(c):
     while parent.id != 0:
         ret = parent.name + "." + ret
         parent = parent.parent
-    return "global::" + ret
+    return "global::" + interface_namespace + ret
 
 def iter_parents(o, include_self=True):
     if include_self:

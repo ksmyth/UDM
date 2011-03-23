@@ -7,7 +7,7 @@ namespace $namespace
 #if $c.baseTypes
         $fq_name($c.baseTypes[0])
 #else
-        global::${impl_namespace}${diagram_name}.UdmCliObject
+        global::Udm.Native.UdmCliObject
 #end if
         , ${fq_iname($c)}
     {
@@ -17,16 +17,16 @@ namespace $namespace
 
 ## TODO: should be refactored into a factory class
         public static ${c.name} Cast(global::Udm.Native.UdmObject o) {
-            global::${impl_namespace}${diagram_name}.UdmCliObject.CheckCast(o, meta);
+            global::Udm.Native.UdmCliObject.CheckCast(o, meta);
             return new ${c.name}(o);
         }
 
-        public static ${c.name} Cast(global::${impl_namespace}${diagram_name}.UdmCliObject o) {
+        public static ${c.name} Cast(global::Udm.Native.UdmCliObject o) {
             return Cast(o.backing);
         }
 
-        public static ${c.name} Cast(global::${diagram_name}.IUdmCliObject o) {
-            return Cast(((global::${impl_namespace}${diagram_name}.UdmCliObject)o).backing);
+        public static ${c.name} Cast(global::Udm.IUdmObject o) {
+            return Cast(((global::Udm.Native.UdmCliObject)o).backing);
         }
 
         public global::System.Collections.Generic.IEnumerable<${fq_iname($c)}> instances
@@ -76,6 +76,7 @@ namespace $namespace
 #set meta_name = $fq_name($c) + "." + role_metaname(attr)
         public $type $attr.name
         {
+## FIXME: need to handle arrays, access modifiers
 #if $type == "string"
             get { return backing.getStringAttr($meta_name); }
             set { backing.setStringAttr($meta_name, value); }

@@ -1,41 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Udm.Native;
+using Udm.Native.Uml;
 
-namespace Udm.Cli
+namespace Udm.Native
 {
-    public class UdmCliObject : IUdmCliObject
+    public class UdmCliObject : IUdmObject
     {
-        public Udm.Native.UdmObject backing;
+        public UdmObject backing;
 
-        public UdmCliObject(Udm.Native.UdmObject o)
+        public UdmCliObject(UdmObject o)
         {
             backing = o;
         }
-        public UdmCliObject(Udm.Native.ObjectImpl o)
+        public UdmCliObject(ObjectImpl o)
         {
-            backing = new Udm.Native.UdmObject(o);
+            backing = new UdmObject(o);
         }
-        public static void CheckCast(Udm.Native.UdmObject a, Udm.Native.Uml.Class meta)
+        public static void CheckCast(UdmObject a, Uml.Class meta)
         {
-            if (!Udm.Native.Udm.IsDerivedFrom(a.type(), meta))
+            if (!Udm.IsDerivedFrom(a.type(), meta))
             {
-                throw new Udm.Native.UdmException("Invalid cast from type '" + a.type().name().Get() + "' to type '" + meta.name().Get() + "'");
+                throw new UdmException("Invalid cast from type '" + a.type().name().Get() + "' to type '" + meta.name().Get() + "'");
             }
         }
         public int id
         {
             get { return backing.uniqueId(); }
         }
+        public bool Equals(UdmCliObject that)
+        {
+            return this.id == that.id;
+        }
+        public override bool Equals(object that)
+        {
+            if (that as UdmCliObject != null)
+            {
+                return Equals((UdmCliObject)that);
+            }
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return id;
+        }
         public string type_name
         {
             get { return backing.type().name().Get(); }
         }
-        public Udm.Native.Uml.Class type
+        public Uml.Class type
         {
             get { return backing.type(); }
         }
-        public IUdmCliObject parent
+        public IUdmObject parent
         {
             get { return new UdmCliObject(backing.GetParent()); }
         }
@@ -47,45 +65,48 @@ namespace Udm.Cli
         {
             get { return backing.isSubtype(); }
         }
-        public IUdmCliObject archetype
+        public IUdmObject archetype
         {
             get
             {
-                Udm.Native.UdmObject o = backing.archetype();
+                UdmObject o = backing.archetype();
                 if (o.uniqueId() == 0) return null;
                 return new UdmCliObject(o);
             }
         }
-        public System.Collections.Generic.IEnumerable<IUdmCliObject> instances
+        public System.Collections.Generic.IEnumerable<IUdmObject> instances
         {
             get
             {
                 return System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select<Udm.Native.UdmObject, IUdmCliObject>
+                    System.Linq.Enumerable.Select<UdmObject, IUdmObject>
                     (backing.instances(), o => new UdmCliObject(o)));
             }
         }
-        public System.Collections.Generic.IEnumerable<IUdmCliObject> derived
+        public System.Collections.Generic.IEnumerable<IUdmObject> derived
         {
             get
             {
                 return System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select<Udm.Native.UdmObject, IUdmCliObject>
+                    System.Linq.Enumerable.Select<UdmObject, IUdmObject>
                     (backing.derived(), o => new UdmCliObject(o)));
             }
         }
     }
-    public interface IUdmCliObject
+}
+namespace Udm
+{
+public interface IUdmObject
     {
         int id { get; }
-        // TODO: should be Class inherited from IUdmCliObject
+        // TODO: should be Class inherited from IUdmObject
         Udm.Native.Uml.Class type { get; }
-        IUdmCliObject parent { get; }
+        IUdmObject parent { get; }
 
         bool isInstance { get; }
         bool isSubtype { get; }
-        IUdmCliObject archetype { get; }
-        System.Collections.Generic.IEnumerable<IUdmCliObject> instances { get; }
-        System.Collections.Generic.IEnumerable<IUdmCliObject> derived { get; }
+        IUdmObject archetype { get; }
+        System.Collections.Generic.IEnumerable<IUdmObject> instances { get; }
+        System.Collections.Generic.IEnumerable<IUdmObject> derived { get; }
     }
 }
