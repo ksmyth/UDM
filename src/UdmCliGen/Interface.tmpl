@@ -33,12 +33,29 @@ namespace $namespace
 // Association ends
 #for $arole in $c.associationRoles
 #set orole = ($arole.parent.children()[1] if $arole != $arole.parent.children()[1] else $arole.parent.children()[0])
+#if not $orole.parent.assocClass
 #if $orole.max == 1
         $fq_iname(orole.target) @$orole.name { get; set; }
 #else
         global::System.Collections.Generic.IEnumerable<$fq_iname(orole.target)> @$orole.name { get; set; }
 #end if
+#else
+#if $orole.max == 1
+        $fq_iname(orole.parent.assocClass) @$orole.name { get; set; }
+## FIXME: possible name clash
+        $fq_iname(orole.target) @${orole.name}_target { get; set; }
+#else
+        global::System.Collections.Generic.IEnumerable<$fq_iname(orole.parent.assocClass)> @$orole.name { get; set; }
+        global::System.Collections.Generic.IEnumerable<$fq_iname(orole.target)> @${orole.name}_targets { get; set; }
+#end if
+#end if
 #end for
-##TODO: something for $c.association ?
+// Association role
+#if $c.association
+#for $role in $c.association.children()
+## TODO: set
+        $fq_iname($role.target) @$role.name { get; }
+#end for
+#end if
     }
 }

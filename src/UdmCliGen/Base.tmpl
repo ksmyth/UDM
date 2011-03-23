@@ -25,6 +25,22 @@ namespace $impl_namespace$diagram_name
         {
             get { return backing.uniqueId(); }
         }
+        public bool Equals(UdmCliObject that)
+        {
+            return this.id == that.id;
+        }
+        public override bool Equals(object that)
+        {
+            if (that as UdmCliObject != null)
+            {
+                return Equals((UdmCliObject)that);
+            }
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return id;
+        }
         public string type_name
         {
             get { return backing.type().name().Get(); }

@@ -153,14 +153,15 @@ namespace $namespace
 #for $arole in $c.associationRoles
 #set orole = ($arole.parent.children()[1] if $arole != $arole.parent.children()[1] else $arole.parent.children()[0])
 #set meta_name = $fq_name($c) + "." + role_metaname(orole)
+#def arolegen($propname, $retclass, $getAssocMode, $orole)
 #if $orole.max == 1
-        public $fq_iname(orole.target) @$orole.name
+        public $fq_iname($retclass) @$propname
         { 
             get
             {
-                foreach (global::Udm.Native.UdmObject o in backing.getAssociation($meta_name))
+                foreach (global::Udm.Native.UdmObject o in backing.getAssociation($meta_name, $getAssocMode))
                 {
-                    return new $fq_name(orole.target)(o);
+                    return new $fq_name($retclass)(o);
                 }
                 return null;
             }
@@ -168,33 +169,56 @@ namespace $namespace
             set
             {
                 Udm.Native.Object_set set = new Udm.Native.Object_set();
-                set.Add((($fq_name(orole.target))value).backing);
-                backing.setAssociation($meta_name, set);
+                set.Add((($fq_name($retclass))value).backing);
+                backing.setAssociation($meta_name, set, $getAssocMode);
             }
         }
 #else
-        public global::System.Collections.Generic.IEnumerable<$fq_iname(orole.target)> @$orole.name
+        public global::System.Collections.Generic.IEnumerable<$fq_iname($retclass)> @$propname
         { 
             get
             {
                 return global::System.Linq.Enumerable.ToList(
-                    global::System.Linq.Enumerable.Select<global::Udm.Native.UdmObject, $fq_iname(orole.target)>
-                    (backing.getAssociation($meta_name), o => new $fq_name(orole.target)(o)));
+                    global::System.Linq.Enumerable.Select<global::Udm.Native.UdmObject, $fq_iname($retclass)>
+                    (backing.getAssociation($meta_name, $getAssocMode), o => new $fq_name($retclass)(o)));
             }
 ## TODO: test this
             set
             {
                 Udm.Native.Object_set set = new Udm.Native.Object_set();
-                foreach ($fq_iname(orole.target) o in value)
+                foreach ($fq_iname($retclass) o in value)
                 {
-                    set.Add((($fq_name(orole.target))o).backing);
+                    set.Add((($fq_name($retclass))o).backing);
                 }
-                backing.setAssociation($meta_name, set);
+                backing.setAssociation($meta_name, set, $getAssocMode);
             }
         }
 #end if
+#end def
+#if not $arole.parent.assocClass
+$arolegen($orole.name, $orole.target, "Udm.Native.Udm.TARGETFROMPEER", $orole)
+#else
+$arolegen($orole.name, $orole.parent.assocClass, "Udm.Native.Udm.CLASSFROMTARGET", $orole)
+$arolegen($orole.name + ("_target" if $orole.max == 1 else "_targets"), $orole.target, "Udm.Native.Udm.TARGETFROMPEER", $orole)
+
+#end if
 #end for
-##TODO: something for $c.association ?
+#if $c.association
+#for $role in $c.association.children()
+#set orole = ($role.parent.children()[1] if $role != $role.parent.children()[1] else $role.parent.children()[0])
+#set meta_name = $fq_name($orole.target) + "." + role_metaname($role)
+        public $fq_iname($role.target) @$role.name {
+            get
+            {
+                foreach (global::Udm.Native.UdmObject o in backing.getAssociation($meta_name, Udm.Native.Udm.TARGETFROMCLASS))
+                {
+                    return new $fq_name($role.target)(o);
+                }
+                return null;
+            }
+        }
+#end for
+#end if
 #end def
 ##
 $accessors($c)
