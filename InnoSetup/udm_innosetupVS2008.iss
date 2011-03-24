@@ -191,9 +191,9 @@ Source: {#UDMPATH}\Projects\Win32\VC9\samples\cross_links\cross_links.vcproj; De
 Source: {#UDMPATH}\samples\cross_links\cross_links.cpp; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\samples\cross_links\CL.xme; DestDir: {app}\samples\C++\cross_links; Components: C; Flags: ignoreversion
 ;Udm Samples folder/java
-Source: {#UDMPATH}\judm\build\build_win\GeneTF\*; DestDir: {app}\samples\java\GeneTF; Components: Java; Flags: recursesubdirs createallsubdirs ignoreversion
-Source: {#UDMPATH}\judm\build\build_win\GeneTRE\*; DestDir: {app}\samples\java\GeneTRE; Components: Java; Flags: recursesubdirs createallsubdirs ignoreversion
-Source: {#UDMPATH}\judm\build\build_win\SBML2Ex\*; DestDir: {app}\samples\java\SBML2Ex; Components: Java; Flags: recursesubdirs createallsubdirs ignoreversion
+Source: {#UDMPATH}\judm\build\build_win\GeneTF\*; DestDir: {app}\samples\java\GeneTF; Excludes: "\apidoc\*,\classes\*,"; Components: Java; Flags: recursesubdirs createallsubdirs ignoreversion
+Source: {#UDMPATH}\judm\build\build_win\GeneTRE\*; DestDir: {app}\samples\java\GeneTRE; Excludes: "\apidoc\*,\classes\*,"; Components: Java; Flags: recursesubdirs createallsubdirs ignoreversion
+Source: {#UDMPATH}\judm\build\build_win\SBML2Ex\*; DestDir: {app}\samples\java\SBML2Ex; Excludes: "\apidoc\*,\classes\*,"; Components: Java; Flags: recursesubdirs createallsubdirs ignoreversion
 ; Python samples
 Source: {#UDMPATH}\tests\test_UdmPython\UdmPythonTestMeta.xme; DestDir: {app}\samples\python\UdmPythonTest; Components: Python
 Source: {#UDMPATH}\tests\test_UdmPython\UdmPythonTestMeta.xml; DestDir: {app}\samples\python\UdmPythonTest; Components: Python

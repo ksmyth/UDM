@@ -493,7 +493,7 @@
 	</target>
 
 	<!-- Update the jUdm build -->
-	<target name="judm-build" description="Update the jUdm build">
+	<target name="judm-build" description="Update the jUdm build" depends="init">
 		
 		<!-- Copy the jUnit to the build directory -->
 		<antcall target="judm-build-windows-junit" />
@@ -505,6 +505,9 @@
 		<!-- Create judm.jar in the build directory -->
 		<jar destfile="${judm.dir}/judm.jar" manifest="${srcdir}/etc/MANIFEST.MF">
 			<fileset dir="${judm.classes.dir}"/>
+			<fileset dir="${util.src.dir}" includes="**/*.java"/>
+			<fileset dir="${udmswig.src.dir}" includes="**/*.java"/>
+			<fileset dir="${udmswiglight.src.dir}" includes="**/*.java"/>
 		</jar>
 		
 		<!-- Copy the Uml.xsd to the build directory -->
@@ -524,6 +527,7 @@
 	<target name="ds-test-jar-windows" if="isWindows">
 		<jar destfile="${build.dir}/${dspackage}/${dspackage}-test.jar">
 			<fileset dir="${build.dir}/${dspackage}/classes/test" />
+			<fileset dir="${srcdir}/samples/${dspackage}/src/test" includes="**/*.java" />
 			<manifest>
 				<attribute name="Main-Class" value="edu.vanderbilt.isis.${dspackagelower}.test.AllTests" />
 				<attribute name="Class-Path" value="../judm/judm.jar ../judm/junit.jar ${dspackage}.jar" />
@@ -575,25 +579,12 @@
 		<!-- Create domain specific jar file -->
 		<jar destfile="${build.dir}/${dspackage}/${dspackage}.jar" manifest="${srcdir}/samples/${dspackage}/ETC/MANIFEST.MF">
 			<fileset dir="${build.dir}/${dspackage}/classes/main" />
+			<fileset dir="${srcdir}/samples/${dspackage}/src/main" includes="**/*.java" />
 		</jar>
 		
 		<!-- Create domain specific test jar file -->
 		<antcall target="ds-test-jar-windows"/>
 		<antcall target="ds-test-jar-linux"/>
-		
-		<!-- Copy the domain specific source  -->
-		<mkdir dir="${build.dir}/${dspackage}/src/main/edu" />
-		<copy todir="${build.dir}/${dspackage}/src/main/edu">
-			<fileset dir="samples/${dspackage}/src/main/edu"/>
-		</copy>
-		
-		<mkdir dir="${build.dir}/${dspackage}/src/test" />
-		<copy todir="${build.dir}/${dspackage}/src/test">
-			<fileset dir="${srcdir}/samples/${dspackage}/src/test">
-				<include name="**/*.java" />
-				<include name="**/*.html" />
-			</fileset>
-		</copy>
 		
 		<!-- Copy the appropriate batch file in the build  -->
 		<antcall target="set_up_batch_file_win"/>
@@ -681,8 +672,8 @@
 
 		<!-- Generate a domain-specific API documentation --> 
 		<javadoc failonerror="yes" classpathref="compile.classpath" defaultexcludes="yes" useexternalfile="yes" verbose="no" destdir="${build.dir}/${dspackage}/apidoc" windowtitle="${dspackage} API">
-			<fileset dir="${build.dir}/${dspackage}/src/main" defaultexcludes="yes"/>
-			<fileset dir="${build.dir}/${dspackage}/src/test" defaultexcludes="yes"/>
+			<fileset dir="${srcdir}/samples/${dspackage}/src/main" defaultexcludes="yes"/>
+			<fileset dir="${srcdir}/samples/${dspackage}/src/test" defaultexcludes="yes"/>
 		    <doctitle><![CDATA[<h1>${dspackage} API</h1>]]></doctitle>
 		    <bottom><![CDATA[<i>Copyright &#169; Vanderbilt University, 2000-2005. All Rights Reserved.</i>]]></bottom>
 		</javadoc> 
