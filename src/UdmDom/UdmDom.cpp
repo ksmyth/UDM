@@ -3181,14 +3181,17 @@ namespace UdmDom
 				<?udm interface="UdmProject" version="1.00"?>
 			*/
 
-			XercesDOMParser *parser = new XercesDOMParser();
+			XercesDOMParser parser;
 
-			parser->setValidationScheme(XercesDOMParser::Val_Never);
-			setDomParserExternalSchemaLocation(*parser);
+			parser.setValidationScheme(XercesDOMParser::Val_Never);
+			setDomParserExternalSchemaLocation(parser);
+
+			MobiesErrorHandler errorHandler;
+			parser.setErrorHandler(&errorHandler);
 
 			try 
 			{
-				parser->parse(*is);
+				parser.parse(*is);
 			}
 
 			catch(const udm_exception& toCatch)
@@ -3198,13 +3201,10 @@ namespace UdmDom
 				description += "'. Exception message is: ";
 				description += toCatch.what();
 
-				delete parser;
-
 				throw udm_exception(description);
-
 			}
 
-			XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *pDoc = parser->getDocument();
+			XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *pDoc = parser.getDocument();
 			DOMNode *pNode = pDoc->getFirstChild();
 			while(pNode != 0)
 			{
@@ -3227,7 +3227,6 @@ namespace UdmDom
 						
 						if (name.size() && version.size()) vinfo = true;
 
-						delete parser;
 						return true;
 
 					}
@@ -3235,7 +3234,6 @@ namespace UdmDom
 				pNode=pNode->getNextSibling();
 			}
 
-			delete parser;
 			return false;
 		};
 	public:
