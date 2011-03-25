@@ -1,5 +1,5 @@
-# Script to generate .exe file for gme.py
-# /c/Program\ Files/Python26/python UdmCliGen-setup.py py2exe && mv dist/UdmCliGen.exe UdmCliGen.exe
+# Script to generate .exe file for UdmCliGen.py
+# /c/Python26/python UdmCliGen-setup.py py2exe
 
 from distutils.core import setup
 import py2exe
@@ -26,7 +26,8 @@ class Target:
 
 setup(console=[Target(script = "UdmCliGen.py")], zipfile=None,
 options={"py2exe":{
-                        "dll_excludes": ['w9xpopen.exe'],
+                        "dll_excludes": ['w9xpopen.exe', 'UdmDll_3_2_VS10.dll', 'boost_python-vc100-mt-1_44.dll', 'xerces-c_2_8.dll'],
+                        "excludes": ['udm'],
                         "bundle_files": 1,
                         "includes": ["Cheetah.DummyTransaction"] + templates,
                 }
