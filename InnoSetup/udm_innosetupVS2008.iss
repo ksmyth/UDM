@@ -52,7 +52,7 @@ Name: Typical; Description: Typical
 [Components]
 Name: Core; Description: Core UDM; Types: Typical Full; Flags: fixed
 Name: C; Description: C++ UDM; Types: Typical Full; Flags: fixed
-Name: Clibs; Descriptions: C++ UDM Static Libraries (deprecated); Types: Typical Full
+Name: Clibs; Description: C++ UDM Static Libraries (deprecated); Types: Typical Full
 Name: Java; Description: Java UDM; Types: Full Typical
 Name: Python; Description: Python UDM; Types: Full Typical
 Name: CS; Description: C# UDM; Types: Full Typical
