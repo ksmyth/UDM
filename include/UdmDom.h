@@ -34,7 +34,15 @@ CHANGELOG:
 #include <UdmBase.h>
 #endif
 
+#if defined(_WIN32) && !defined(XERCES_CPP_NAMESPACE_BEGIN)
+// These defines allow us to not distribute xerces-c headers
+#define XERCES_CPP_NAMESPACE_BEGIN namespace xercesc_2_8 {
+#define XERCES_CPP_NAMESPACE_END }
+#define XERCES_CPP_NAMESPACE_USE using namespace xercesc_2_8;
+typedef wchar_t  XMLCh;
+#else
 #include "xercesc/util/PlatformUtils.hpp"
+#endif
 
 //these predefinitions are needed for typedefs
 

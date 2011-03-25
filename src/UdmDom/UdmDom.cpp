@@ -192,7 +192,6 @@ this software.
 #include <fstream>
 
 
-#include "UdmDom.h"
 #include "Uml.h"
 #include "UmlExt.h"
 #include "UdmUtil.h"
@@ -216,7 +215,9 @@ this software.
 #include <xercesc/framework/MemBufInputSource.hpp>
 #include <xercesc/framework/MemBufFormatTarget.hpp>
 #include <xercesc/sax/HandlerBase.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
 
+#include "UdmDom.h"
 
 #ifdef max
 #undef max
