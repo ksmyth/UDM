@@ -27,7 +27,7 @@ class Target:
 setup(console=[Target(script = "UdmCliGen.py")], zipfile=None,
 options={"py2exe":{
                         "dll_excludes": ['w9xpopen.exe'],
-                        #"bundle_files": 1,
+                        "bundle_files": 1,
                         "includes": ["Cheetah.DummyTransaction"] + templates,
                 }
         },
