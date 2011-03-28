@@ -152,6 +152,21 @@ CSHARP_NAMESPACE3(::NAMESPACE, NAMESPACE, SWIGTYPE)
 
 %typemap(cscode) UDM_NAMESPACE::Object %{
   public static readonly Object GlobalLock = new Object();
+      public override bool Equals(object that)
+      {
+        if (that is UdmObject)
+		{
+		  return this.Equals((UdmObject)that);
+		}
+		else
+		{
+		  return false;
+		}
+      }
+	  public override int GetHashCode()
+	  {
+	    return uniqueId();
+	  }
 %}
 
 // based on csharp.swg
