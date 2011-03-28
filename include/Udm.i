@@ -70,6 +70,23 @@ CSHARP_NAMESPACE3(std, Udm.Native, vector<double>)
 CSHARP_NAMESPACE3(std, Udm.Native, vector<std::string>)
 CSHARP_NAMESPACE3(std, Udm.Native, vector<__int64>)
 
+namespace Udm {
+%typemap(csdestruct_derived, methodname="Dispose", methodmodifiers="public") SmartDataNetwork {
+    lock(global::Udm.Native.UdmObject.GlobalLock) {
+      if (swigCPtr.Handle != IntPtr.Zero) {
+        if (swigCMemOwn) {
+          swigCMemOwn = false;
+          $imcall;
+        }
+        swigCPtr = new HandleRef(null, IntPtr.Zero);
+      }
+      GC.SuppressFinalize(this);
+      base.Dispose();
+	  // this serves a dual purpose: Disposing the wrapper, and preventing the wrapper from being GCed before now
+	  if (wrapper != null) wrapper.Dispose(); // this is the only modified line
+    }
+  }
+}
 
 
 // Only part of ErrHand.h in Udm.i:
@@ -250,23 +267,36 @@ Udm::UdmDiagram UdmDiagram_Wrap(Uml::Diagram* umld) {
 	ret.init = udmdiagram_dummy;
 	return ret;
 }
-class SDN_Wrapper {
+struct UdmDiagram_Wrapper {
    Uml::Diagram uml_diagram;
    UDM_NAMESPACE::UdmDiagram diagram;
-   public:
-   UDM_NAMESPACE::SmartDataNetwork dn;
-   SDN_Wrapper(Uml::Diagram d) : uml_diagram(d), diagram(UdmDiagram_Wrap(&uml_diagram)), dn(diagram) { }
+   UdmDiagram_Wrapper(Uml::Diagram d) : uml_diagram(d), diagram(UdmDiagram_Wrap(&uml_diagram)) { }
 };
 %}
 
-class SDN_Wrapper {
+struct UdmDiagram_Wrapper {
    Uml::Diagram uml_diagram;
    UDM_NAMESPACE::UdmDiagram diagram;
-   public:
-   UDM_NAMESPACE::SmartDataNetwork dn;
-   SDN_Wrapper(Uml::Diagram d) : uml_diagram(d), diagram(UdmDiagram_Wrap(&uml_diagram)), dn(diagram) { }
+   UdmDiagram_Wrapper(Uml::Diagram d) : uml_diagram(d), diagram(UdmDiagram_Wrap(&uml_diagram)) { }
 };
 
+namespace UDM_NAMESPACE {
+%extend SmartDataNetwork {
+%typemap(cscode) UDM_NAMESPACE::SmartDataNetwork %{
+    UdmDiagram_Wrapper wrapper;
+    public SmartDataNetwork(UdmDiagram_Wrapper wrapper) : this(wrapper.diagram)
+	{
+	    this.wrapper = wrapper;
+	}
+    public SmartDataNetwork(global::Udm.Native.SmartDataNetwork meta) : this(new global::Udm.Native.UdmDiagram_Wrapper(global::Udm.Native.Uml.Diagram.Cast(meta.GetRootObject())))
+	{
+	}
+    public SmartDataNetwork(global::Udm.Native.Uml.Diagram meta) : this(new global::Udm.Native.UdmDiagram_Wrapper(meta))
+	{
+	}
+%}
+}
+}
 
 %import "Uml.i"
 
