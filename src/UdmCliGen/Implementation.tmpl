@@ -47,6 +47,18 @@ namespace $namespace
                     (backing.derived(), o => new ${c.name}(o)));
             }
         }
+        public ${fq_iname($c)} this_downcasted
+        {
+            get
+            {
+                $impl_namespace${root.name}Initialize.castDelegate<Udm.Native.UdmCliObject> cast;
+                if ($impl_namespace${root.name}Initialize.downcasts.TryGetValue(type, out cast))
+                {
+                    return (${fq_iname($c)})cast(this);
+                }
+                return null;
+            }
+        }
 
 
         public static global::Udm.Native.Uml.Class meta;

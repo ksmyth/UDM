@@ -65,7 +65,7 @@ if __name__ == "__main__":
         t = get_template("Interface", searchList=[searchList])
         output.write(str(t))
 
-        searchList = {'c': child, 'namespace': common.impl_namespace + common.get_path(child.parent), 'uml': uml, 'diagram_name': dn.root.name}
+        searchList = {'c': child, 'namespace': common.impl_namespace + common.get_path(child.parent), 'uml': uml, 'diagram_name': dn.root.name, 'root': dn.root}
         t = get_template("Implementation", searchList=[searchList])
         output.write(str(t))
 
