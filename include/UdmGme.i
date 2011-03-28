@@ -20,6 +20,21 @@ CSHARP_NAMESPACE3(UdmGme, Udm.Native.UdmGme, GmeDataNetwork)
 
 %include "UdmGme.h"
 
+%define %cs_custom_cast(TYPE, CSTYPE)
+%typemap(ctype) TYPE, TYPE& "void*"
+%typemap(in) TYPE  %{ $1 = (TYPE)$input; %} 
+%typemap(in) TYPE& %{ $1 = (TYPE*)&$input; %} 
+%typemap(imtype, out="CSTYPE") TYPE, TYPE& "CSTYPE" 
+%typemap(cstype, out="CSTYPE") TYPE, TYPE& "CSTYPE" 
+%typemap(csin) TYPE, TYPE& "$csinput"
+%typemap(csdirectorin) TYPE, TYPE& "$iminput"
+%enddef
+
+struct IUnknown;
+typedef IUnknown *LPUNKNOWN;
+%cs_custom_cast(LPUNKNOWN, IntPtr)
+
+
 %{
 Udm::UdmDiagram UdmDiagram_Wrap(Uml::Diagram* umld);
 namespace UdmGme {
@@ -28,8 +43,8 @@ class GmeDN_Wrapper {
    Udm::UdmDiagram diagram;
    public:
    GmeDataNetwork dn;
-   GmeDN_Wrapper(Uml::Diagram d, int pUnknownProject, bool customTransactions) : uml_diagram(d), diagram(UdmDiagram_Wrap(&uml_diagram)), dn(diagram) {
-      dn.OpenExisting((LPUNKNOWN) pUnknownProject, Udm::CHANGES_LOST_DEFAULT, customTransactions);
+   GmeDN_Wrapper(Uml::Diagram d, LPUNKNOWN pUnknownProject, bool customTransactions) : uml_diagram(d), diagram(UdmDiagram_Wrap(&uml_diagram)), dn(diagram) {
+      dn.OpenExisting(pUnknownProject, Udm::CHANGES_LOST_DEFAULT, customTransactions);
    }
    GmeDataNetwork& _getDN() { return dn; }
 };
@@ -41,8 +56,8 @@ class GmeDN_Wrapper {
    Udm::UdmDiagram diagram;
    GmeDataNetwork& dn;
    public:
-   GmeDN_Wrapper(Uml::Diagram d, int pUnknownProject, bool customTransactions) : uml_diagram(d), diagram(UdmDiagram_Wrap(&uml_diagram)), dn(diagram) {
-      dn.OpenExisting((LPUNKNOWN) pUnknownProject, Udm::CHANGES_LOST_DEFAULT, customTransactions);
+   GmeDN_Wrapper(Uml::Diagram d, LPUNKNOWN pUnknownProject, bool customTransactions) : uml_diagram(d), diagram(UdmDiagram_Wrap(&uml_diagram)), dn(diagram) {
+      dn.OpenExisting(pUnknownProject, Udm::CHANGES_LOST_DEFAULT, customTransactions);
    }
    GmeDataNetwork& _getDN() { return dn; }
 };
