@@ -748,7 +748,7 @@
 			</classpath>
 			<formatter type="xml" />
 			<batchtest fork="yes" todir="${build.reports.tests.dir}/xml">
-				<fileset dir="${build.dir}/${dspackage}/src/test">
+				<fileset dir="${srcdir}/samples/${dspackage}/src/test">
 					<include name="**/*Test.java" />
 				</fileset>
 			</batchtest>
