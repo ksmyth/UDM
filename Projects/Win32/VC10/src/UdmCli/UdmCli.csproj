@@ -53,12 +53,6 @@
     <Compile Include="$(CliBridgeCsDir)\*\*.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UdmCliBridge\UdmCliBridge.vcxproj">
-      <Project>{23D887FD-5A09-4F84-A8B1-DC67A4A632F0}</Project>
-      <Name>UdmCliBridge</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Udm.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

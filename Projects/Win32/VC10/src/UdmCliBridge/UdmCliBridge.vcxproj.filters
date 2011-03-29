@@ -22,15 +22,4 @@
       <Filter>Generated</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\..\include\UdmCli.i" />
-    <None Include="..\..\..\..\..\include\UdmException.i" />
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\include\Udm.i" />
-    <CustomBuild Include="..\..\..\..\..\include\UdmDom.i" />
-    <CustomBuild Include="..\..\..\..\..\include\UdmGme.i" />
-    <CustomBuild Include="..\..\..\..\..\include\UdmStatic.i" />
-    <CustomBuild Include="..\..\..\..\..\include\Uml.i" />
-  </ItemGroup>
 </Project>
