@@ -206,7 +206,6 @@ Root: HKCU; Subkey: Environment; ValueType: string; ValueName: UDM_PATH; ValueDa
 Root: HKCU; Subkey: Environment; ValueType: string; ValueName: UDM_3RDPARTY_PATH; ValueData: {app}\3rdparty; Flags: uninsdeletevalue deletevalue; Components: not System
 Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: UDM_PATH; ValueData: {app}; Flags: uninsdeletevalue deletevalue; Components: System
 Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: UDM_3RDPARTY_PATH; ValueData: {app}\3rdparty; Flags: uninsdeletevalue deletevalue; Components: System
-Root: HKLM; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\UdmCli; ValueType: string; ValueData: "C:\Windows\assembly\GAC_32\UdmCli\3.2.7.0__9b61694741cb5693"; Flags: uninsdeletevalue deletevalue
 
 
 [Run]
