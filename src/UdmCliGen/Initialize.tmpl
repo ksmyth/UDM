@@ -13,10 +13,11 @@ public ${root.name}(string metaFilename) {
 
 
 public delegate T castDelegate<T>(Udm.Native.UdmCliObject o) where T : Udm.Native.UdmCliObject;
-public static System.Collections.Generic.Dictionary<Udm.Native.Uml.Class, castDelegate<Udm.Native.UdmCliObject>> downcasts = new System.Collections.Generic.Dictionary<Udm.Native.Uml.Class, castDelegate<Udm.Native.UdmCliObject>>();
+public static System.Collections.Generic.Dictionary<Udm.Native.Uml.Class, castDelegate<Udm.Native.UdmCliObject>> downcasts;
 
 public static void Initialize(Udm.Native.DataNetwork meta)
 {
+downcasts = new System.Collections.Generic.Dictionary<Udm.Native.Uml.Class, castDelegate<Udm.Native.UdmCliObject>>();
 System.Collections.Generic.Dictionary<string, Udm.Native.Uml.Class> classes = new System.Collections.Generic.Dictionary<string,Udm.Native.Uml.Class>();
 foreach (Udm.Native.UdmObject o in meta.GetAllInstancesOf(Udm.Native.Uml.Class.meta)) {
     classes.Add(o.getPath2("/"), Udm.Native.Uml.Class.Cast(o));
@@ -58,7 +59,7 @@ Udm.Native.Uml.Uml.SetParentRole(${fq_name(crole.target)}.$role_metaname(prole),
 
 public static void Uninitialize()
 {
-downcasts.Clear();
+downcasts = null;
 
 #for $o in get_descendants($root)
 #if $o.type.name == "Class"
