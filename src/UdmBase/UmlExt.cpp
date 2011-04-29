@@ -1084,4 +1084,32 @@ namespace Uml
 		return  (ref_i != Udm::_UdmStaticData.ref_map.end());
 	}
 
+
+	UDM_DLL std::string GetClassPath(Uml::Class& c, std::string separator) {
+		std::vector<std::string> names;
+		{
+			Udm::Object o = c;
+			while (o != Udm::null) {
+				if (o.type() == Uml::Namespace::meta) {
+					names.push_back(o.__impl()->getStringAttr(Uml::Namespace::meta_name));
+				//} else if (o.type() == Uml::Diagram::meta) {
+				//	names.push_back(o.__impl()->getStringAttr(Uml::Namespace::meta_name));
+				} else if (o.type() == Uml::Class::meta) {
+					names.push_back(o.__impl()->getStringAttr(Uml::Class::meta_name));
+				}
+				o = o.GetParent();
+			}
+		}
+		std::string ret = "";
+		std::vector<std::string>::reverse_iterator nameIt = names.rbegin();
+		std::vector<std::string>::reverse_iterator end = names.rend();
+		if (nameIt < end) {
+			ret += *nameIt;
+			nameIt++;
+		}
+		while (nameIt < end) {
+			ret += separator + *nameIt++;
+		}
+		return ret;
+	}
 }

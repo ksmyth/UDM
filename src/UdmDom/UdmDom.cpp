@@ -1621,7 +1621,7 @@ namespace UdmDom
 			   
 				if(!aa.dom_element->isSameNode(currentparent)) 
 				{
-					string my_type_name = m_type.getPath2("::", false);
+					string my_type_name = Uml::GetClassPath(m_type);
 
 					bool inserted = false;
 					DOMElement *insert_point = NULL;
@@ -1640,7 +1640,7 @@ namespace UdmDom
 								break;
 							}
 
-							string curr_child_name = findClass(*e).getPath2("::", false);
+							string curr_child_name = Uml::GetClassPath(findClass(*e));
 
 							if (my_type_name.compare(curr_child_name) < 0)
 							{
@@ -2199,7 +2199,7 @@ namespace UdmDom
 				::Uml::CompositionChildRole role = childrole;
 			    if(!role) {
 					::Uml::Composition comp = Uml::matchChildToParent(meta, m_type);
-					if(!comp) throw  udm_exception("Role must be specified for " + casestr);
+					if(!comp) throw  udm_exception("Role must be specified for " + casestr); // OR this cannot contain an object of type meta
 					role = comp.childRole();
 				}
 				if(!Uml::IsDerivedFrom(m_type, Uml::theOther(role).target())) {

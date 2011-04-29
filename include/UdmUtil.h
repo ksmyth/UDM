@@ -53,6 +53,15 @@ namespace UdmUtil
 	UDM_DLL string ExtractName(const Udm::ObjectImpl *impl, const string &att_name = "name");
 	UDM_DLL string ExtractName(const Udm::Object &ob, const string &att_name = "name");
 
+	namespace {
+		std::string SimpleExtractName(const Udm::Object& o) { return UdmUtil::ExtractName(o); };
+	}
+	template <class Container>
+	std::vector<std::string> ExtractNames(const Container& c) {
+		vector<std::string> ret;
+		std::transform(c.begin(), c.end(), back_inserter(ret), std::ptr_fun(SimpleExtractName));
+		return ret;
+	}
 
 	//note: escape_char is not escaped unless it is contained in to_escape_chars
 	UDM_DLL string escape_chars(const string &src, const char escape_char, const string &to_escape_chars);

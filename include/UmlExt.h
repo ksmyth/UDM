@@ -590,6 +590,8 @@ void AddCORBAInheritance(const Class &baseType, const Class &subType);
 	UDM_DLL void SetChildRole(CompositionChildRole &what, Class &what_target_class, Class &what_theo_target_class, const char *role_name, const char * orole_name);
 	UDM_DLL void SetParentRole(CompositionParentRole &what, Class &what_target_class, Class &what_theo_target_class, const char *role_name, const char * orole_name);
 	UDM_DLL void SetAssocRole(AssociationRole &what, Class &what_target_class, Class &what_theo_target_class, const char *target_name);
+
+	UDM_DLL std::string GetClassPath(Uml::Class& c, std::string separator = "::");
 }
 
 #endif//MOBIES_UMLEXT_H
