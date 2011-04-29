@@ -3,6 +3,7 @@
 #include "Uml.h"
 #include "UmlExt.h"
 #include "UdmGme.h"
+#include "UdmUtil.h"
 
 #include "boost/python.hpp"
 #include "boost/python/slice.hpp"
@@ -453,6 +454,11 @@ std::string Object_getLibraryName(Udm::Object& self) {
 	return ret;
 }
 
+void CopyObjectHierarchy_(Udm::Object src, Udm::Object dst) {
+	UdmUtil::copy_assoc_map map;
+	UdmUtil::CopyObjectHierarchy(src.__impl(), dst.__impl(), dst.__impl()->__getdn(), map);
+}
+
 namespace {
 	class Object_access : Udm::Object {
 	public:
@@ -528,6 +534,9 @@ BOOST_PYTHON_MODULE(udm)
 		;
 
 	def("uml_diagram", Uml_Diagram);
+
+	def("CopyObjectHierarchy", &CopyObjectHierarchy_);
+
 
 	class_<Udm::SmartDataNetwork>("SmartDataNetwork", no_init) //, init<const Udm::UdmDiagram &>())
 		.def("__new__", SDN_New, with_custodian_and_ward_postcall<2, 0>())
