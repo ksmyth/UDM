@@ -150,6 +150,7 @@ namespace UdmGme
 		bool hasOpened;
 	};
 
+	UDM_DLL LPUNKNOWN Udm2Gme(const Udm::Object& o);
 
 	// Id conversion routines
 	UDM_DLL string UdmId2GmeId(Udm::Object::uniqueId_type udmId);

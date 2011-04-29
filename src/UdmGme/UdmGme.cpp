@@ -3775,6 +3775,22 @@ bbreak:			;
 
 	}
 
+	UDM_DLL LPUNKNOWN Udm2Gme(const Udm::Object& o)
+	{
+		GmeObject* gmeObject = dynamic_cast<GmeObject*>(o.__impl());
+		if (gmeObject == NULL)
+		{
+			return NULL;
+		}
+		if (gmeObject->self) {
+			gmeObject->self.AddRef();
+			return gmeObject->self;
+		} else {
+			gmeObject->folderself.AddRef();
+			return gmeObject->folderself;
+		}
+	}
+
 
 	UDM_DLL Object GmeDataNetwork::ObjectById(Object::uniqueId_type id) 
 	{ 
