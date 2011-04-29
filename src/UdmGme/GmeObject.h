@@ -56,6 +56,7 @@ namespace UdmGme
 		friend void GmeDataNetwork::CreateNew(const string &systemname, 
 			const string &metalocator, const ::Uml::Class &rootclass, 
 									enum Udm::BackendSemantics sem);
+		friend LPUNKNOWN Udm2Gme(const Udm::Object& o);
 		IMgaFCOPtr self;
 		IMgaFolderPtr folderself;
 		::Uml::Class m_type;
