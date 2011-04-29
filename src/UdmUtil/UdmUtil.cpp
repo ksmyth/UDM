@@ -799,7 +799,7 @@ namespace UdmUtil
 		int precision_is_good;
 
 		do {
-			ASSERT(precision <= MAXIMAL_PRECISION);
+			UDM_ASSERT(precision <= MAXIMAL_PRECISION);
 
 #ifdef _WIN32
 			if (_snprintf_s(result, 64, "%.*g", precision, val) < 0) {

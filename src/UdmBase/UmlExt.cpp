@@ -57,7 +57,7 @@ namespace Uml
 		Association assoc = role.parent();
 
 		set<AssociationRole> roles = assoc.roles();
-		ASSERT( roles.size() == 2 );
+		UDM_ASSERT( roles.size() == 2 );
 
 		set<AssociationRole>::iterator i = roles.begin();
 		if( *i == role )
@@ -433,7 +433,7 @@ namespace Uml
 	UDM_DLL bool IsCrossNSAssociation(const Association &a)
 	{
 		set<AssociationRole> roles = a.roles();
-		ASSERT( roles.size() == 2 );
+		UDM_ASSERT( roles.size() == 2 );
 
 		set<AssociationRole>::iterator i = roles.begin();
 		Class tg1 = i->target();
@@ -967,7 +967,7 @@ namespace Uml
 		while (!dgr) {
 			dgr = p_ns.parent();
 			p_ns = p_ns.parent_ns();
-			ASSERT(dgr || p_ns);
+			UDM_ASSERT(dgr || p_ns);
 		}
 		return dgr;
 	}

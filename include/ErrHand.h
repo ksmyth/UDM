@@ -24,9 +24,7 @@ this software.
 #endif
 #endif
 
-#ifndef ASSERT
-#define ASSERT assert
-#endif
+#define UDM_ASSERT(x) assert(x)
 
 #include <exception>
 #include <string>

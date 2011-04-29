@@ -1263,7 +1263,7 @@ namespace UDM_NAMESPACE
 
 	UDM_DLL ObjectImpl* ObjectImpl::AttachLibrary(ObjectImpl *lib_src, const string &lib_name, t_lib_to_copy_impl_map *copy_map)
 	{
-		ASSERT(lib_name.length() > 0);
+		UDM_ASSERT(lib_name.length() > 0);
 
 		ObjectImpl *lib_root;
 		if (__getdn()->IsTypeSafe())
@@ -1692,7 +1692,7 @@ namespace UDM_NAMESPACE
 
 		bool canCompleteRefsChain(const ObjectImpl* target, const vector<ObjectImpl*> &refs)
 		{
-			ASSERT(refs.size());
+			UDM_ASSERT(refs.size());
 
 			ObjectImpl* ref = refs.back();
 

@@ -919,7 +919,7 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 		for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
 		{
 			string rel_name = ::Uml::MakeRoleName(*i);
-			ASSERT(rel_name.size() > 0);
+			UDM_ASSERT(rel_name.size() > 0);
 
 			::Uml::AssociationRole the_other = ::Uml::theOther(*i);
 			string orel_name = ::Uml::MakeRoleName(the_other);

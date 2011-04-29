@@ -202,6 +202,7 @@ CHANGELOG
 
 
 #pragma warning( disable : 4786 )	// this is the stupid warning with truncating identifiers to 255 chars
+#define ASSERT assert
 #include "CommonHeaders.h"
 #include <map>
 #include <iomanip>
@@ -2387,7 +2388,7 @@ bbreak:			;
 			{
 				//position in main aspect will be set
 				IMgaPartPtr part = parts->Item[1];
-				COMTHROW(part->SetGmeAttrs(NULLBSTR, poss.begin()->second.first,poss.begin()->second.second ));
+				COMTHROW(part->SetGmeAttrs(_bstr_t(), poss.begin()->second.first,poss.begin()->second.second ));
 			}
 			else
 			{
@@ -2399,7 +2400,7 @@ bbreak:			;
 					part_position::const_iterator poss_i = poss.find(aspect);
 
 					if ( poss_i != poss.end())
-						COMTHROW(MGACOLL_ITER->SetGmeAttrs(NULLBSTR, poss_i->second.first,poss_i->second.second));
+						COMTHROW(MGACOLL_ITER->SetGmeAttrs(_bstr_t(), poss_i->second.first,poss_i->second.second));
 					
 					
 				} MGACOLL_ITERATE_END;

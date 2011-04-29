@@ -359,14 +359,14 @@ namespace UdmDom
 		if (!a || !XMLString::stringLen(a)) return 0;
 		//this assertation failes
 		//we should take a look why is this invoked with empty string
-		//ASSERT (a != 0);
+		//UDM_ASSERT (a != 0);
 		
 		char *buf = XMLString::transcode(a);
 
 		char *endptr;
 		// start parsing after the "id" prefix
 		unsigned long retval = strtoul(buf + 2, &endptr, 16);
-		ASSERT(*endptr == '\0');
+		UDM_ASSERT(*endptr == '\0');
 
 		XMLString::release(&buf);
 
@@ -751,7 +751,7 @@ namespace UdmDom
 
 		static XMLCh* DSAppend(const XMLCh *src, const string &data)
 		{
-			ASSERT(src != NULL);
+			UDM_ASSERT(src != NULL);
 
 			int ret_length = XMLString::stringLen(src) + 1 + data.length() + 1;
 			XMLCh *retval = (XMLCh*) XMLPlatformUtils::fgMemoryManager->allocate(ret_length * sizeof(XMLCh));
@@ -768,7 +768,7 @@ namespace UdmDom
 
 		static XMLCh* DSAppend(const XMLCh *src, const XMLCh *data)
 		{
-			ASSERT(src != NULL);
+			UDM_ASSERT(src != NULL);
 
 			int ret_length = XMLString::stringLen(src) + 1 + XMLString::stringLen(data) + 1;
 			XMLCh *retval = (XMLCh*) XMLPlatformUtils::fgMemoryManager->allocate(ret_length * sizeof(XMLCh));
@@ -781,7 +781,7 @@ namespace UdmDom
 
 		static XMLCh *DSAppendTo(XMLCh **target, const XMLCh *data, bool releaseTarget = true)
 		{
-			ASSERT(target != NULL);
+			UDM_ASSERT(target != NULL);
 
 			if (data == NULL)
 				return *target;
@@ -807,11 +807,11 @@ namespace UdmDom
 		// remove from target the substring given by the parameters
 		static void DSRemoveSubstr(XMLCh *target, int startIndex, int count)
 		{
-			ASSERT(target != NULL);
+			UDM_ASSERT(target != NULL);
 
 			int length = XMLString::stringLen(target);
-			ASSERT(startIndex >= 0 && startIndex < length);
-			ASSERT(count >= 0);
+			UDM_ASSERT(startIndex >= 0 && startIndex < length);
+			UDM_ASSERT(count >= 0);
 
 			if (startIndex + count >= length)
 				*(target + startIndex) = chNull;
@@ -1411,7 +1411,7 @@ namespace UdmDom
 				if(e == NULL) e = ((DomDataNetwork*)mydn)->Search(p);
 
 				// the ID must exists
-				ASSERT( e != NULL );
+				UDM_ASSERT( e != NULL );
 
 				const XMLCh *cpa = e->getAttribute(oname_buf);
 				if (EmptyVal(cpa))
@@ -1801,13 +1801,13 @@ namespace UdmDom
 							}
 
 							XMLCh *ncomp_buf = XMLString::transcode(ncomp.c_str());
-							ASSERT( XMLString::compareString(chas, ncomp_buf) == 0);
+							UDM_ASSERT( XMLString::compareString(chas, ncomp_buf) == 0);
 							XMLString::release(&ncomp_buf);
 						}
 						else 
 						{ 
 							// Only a single compositionrole matches these two kinds
-							ASSERT(comp == role.parent());
+							UDM_ASSERT(comp == role.parent());
 						}
 //#endif
 					}
@@ -2407,7 +2407,7 @@ namespace UdmDom
 				DOMElement *e = ((DomDataNetwork*)mydn)->Search(p);
 
 				// the ID must exists
-				ASSERT( e != NULL );
+				UDM_ASSERT( e != NULL );
 
 				if (followattr.length() > 0) {
 					const XMLCh *a = getAttrValue(*e, followattr);
@@ -2418,7 +2418,7 @@ namespace UdmDom
 					e = ee;
 				}
 				// the ID must exists
-				ASSERT( e != NULL );
+				UDM_ASSERT( e != NULL );
 
 				// create the object
 				ret.push_back( new DomObject(/*m_type.parent(), */ e, mydn) );
@@ -2689,7 +2689,7 @@ namespace UdmDom
 					DOMElement *e = ((DomDataNetwork*)mydn)->Search(p);
 
 					// the ID must exists
-					ASSERT( e != NULL );
+					UDM_ASSERT( e != NULL );
 
 					const XMLCh *cpa = e->getAttribute(oname_buf);
 					if (EmptyVal(cpa))
@@ -2893,7 +2893,7 @@ namespace UdmDom
 				DOMElement *e = ((DomDataNetwork*)mydn)->Search(p);
 
 				// the ID must exists
-				ASSERT( e != NULL );
+				UDM_ASSERT( e != NULL );
 
 				// create the object
 				ret.push_back( new DomObject(/*m_type.parent(), */e, mydn) );
@@ -2920,7 +2920,7 @@ namespace UdmDom
 				DOMElement *e = ((DomDataNetwork*)mydn)->Search(p);
 
 				// the ID must exists
-				ASSERT( e != NULL );
+				UDM_ASSERT( e != NULL );
 
 				// create the object
 				ret.push_back( new DomObject(/*m_type.parent(), */e, mydn) );
@@ -2947,7 +2947,7 @@ namespace UdmDom
 			DOMElement *e = ((DomDataNetwork*)mydn)->Search(a);
 
 			// the ID must exists
-			ASSERT( e != NULL );
+			UDM_ASSERT( e != NULL );
 
 			// create the object
 			return new DomObject(/*m_type.parent(), */e, mydn);
@@ -3565,7 +3565,7 @@ namespace UdmDom
 			IdToDomElementMapItem item_to_store(id, e);
 			pair<IdToDomElementMap::iterator, bool> ins_res;
 			ins_res = DomElements.insert(item_to_store);
-			ASSERT( (!force) || (force && ins_res.second) );
+			UDM_ASSERT( (!force) || (force && ins_res.second) );
 
 	};
 
@@ -3642,7 +3642,7 @@ namespace UdmDom
 						pair<IdToDomElementMap::iterator, bool> ins_res;
 						ins_res = DomElements.insert(item_to_store);
 						//check for uniqueness
-						ASSERT(ins_res.second);
+						UDM_ASSERT(ins_res.second);
 
 						//set uniqueId to id
 						dd->setUserData(gXML__id, (void*) id, NULL);
@@ -3709,7 +3709,7 @@ namespace UdmDom
 
 		str_based = true;
 
-		ASSERT( str.length());
+		UDM_ASSERT( str.length());
 
 		parser->reset();
 
@@ -3759,7 +3759,7 @@ namespace UdmDom
 
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = parser->getDocument();
 		DOMElement *root = doc->getDocumentElement();
-		ASSERT( root != NULL );
+		UDM_ASSERT( root != NULL );
 
 		//parser.getDocument().setUserData((void *)pp.load(systemname.c_str()));
 
@@ -3812,7 +3812,7 @@ namespace UdmDom
 
 		TRY_XML_EXCEPTION
 
-		ASSERT( systemname.length());
+		UDM_ASSERT( systemname.length());
 
 		parser->reset();
 
@@ -3864,7 +3864,7 @@ namespace UdmDom
 
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = parser->getDocument();
 		DOMElement *root = doc->getDocumentElement();
-		ASSERT( root != NULL );
+		UDM_ASSERT( root != NULL );
 
 		//doc->setUserData((void *)pp.load(systemname.c_str()));
 
@@ -3951,7 +3951,7 @@ namespace UdmDom
 			}
 			
 
-			ASSERT( metalocator.length());
+			UDM_ASSERT( metalocator.length());
 			savesystemname = systemname;
 			if(!strnicmp(savesystemname.c_str(),"DOM:", 4)) savesystemname.erase(0,4);
 
@@ -4050,7 +4050,7 @@ namespace UdmDom
 			
 
 			DOMElement *rootElem = doc->getDocumentElement();
-			ASSERT( rootElem != NULL );
+			UDM_ASSERT( rootElem != NULL );
 
 			rootobject = new DomObject(/*GetRootMeta(),*/ rootElem, this);
 			
@@ -4154,7 +4154,7 @@ namespace UdmDom
 
 			DOMElement *de = static_cast<DomObject *>(GetRootObject().__impl())->dom_element;
 			XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = de->getOwnerDocument();
-			ASSERT( doc != NULL);
+			UDM_ASSERT( doc != NULL);
 
 			MySerializer serializer(doc);
 
@@ -4193,7 +4193,7 @@ namespace UdmDom
 
 			DOMElement *de = static_cast<DomObject *>(GetRootObject().__impl())->dom_element;
 			XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = de->getOwnerDocument();
-			ASSERT( doc != NULL);
+			UDM_ASSERT( doc != NULL);
 
 			MySerializer serializer(doc);
 			XMLFormatTarget *file_target = new LocalFileFormatTarget(X(systemname));
@@ -4316,7 +4316,7 @@ namespace UdmDom
 		
 		TRY_XML_EXCEPTION
 
-		ASSERT( systemname.length());
+		UDM_ASSERT( systemname.length());
 
 /*		savesystemname = systemname;
 		if(!strnicmp(savesystemname.c_str(),"DOM:", 4)) savesystemname.erase(0,4);*/

@@ -558,8 +558,8 @@ namespace DTDGen
 
 				__int64 min = j->min();
 				__int64 max = j->max();
-				ASSERT( 0 <= min );
-				ASSERT( max == -1 || min <= max );
+				UDM_ASSERT( 0 <= min );
+				UDM_ASSERT( max == -1 || min <= max );
 
 				if( min == 1 && max == 1 )
 					output << "IDREF\t#REQUIRED" << endl;
@@ -880,8 +880,8 @@ namespace DTDGen
 
 			__int64 min = j->min();
 			__int64 max = j->max();
-			ASSERT( 0 <= min );
-			ASSERT( max == -1 || min <= max );
+			UDM_ASSERT( 0 <= min );
+			UDM_ASSERT( max == -1 || min <= max );
 
 			if( min == 1 && max == 1 )
 				output << " type=\"xsd:IDREF\" use=\"required\"/>" << endl;

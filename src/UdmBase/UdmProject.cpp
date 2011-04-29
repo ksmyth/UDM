@@ -97,7 +97,7 @@ namespace UdmProject {
 		::Uml::Initialize();
 
 	
-		ASSERT( meta == Udm::null );
+		UDM_ASSERT( meta == Udm::null );
 
 		meta = ::Uml::CreateDiagram();
 

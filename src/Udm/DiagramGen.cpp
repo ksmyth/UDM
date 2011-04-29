@@ -108,7 +108,7 @@ void CGen< ::Uml::Diagram>::CustomProcess(const ::Uml::Diagram &cross_diagram, c
 		meth_defs.push_back( boost::format("\t%1%::Initialize();") % (string) cross_diagram.name() );
 
 	meth_defs.push_back( boost::format("\n\
-\t\tASSERT( meta == Udm::null );\n\
+\t\tUDM_ASSERT( meta == Udm::null );\n\
 ")
 				);
 
@@ -193,7 +193,7 @@ void CGen< ::Uml::Diagram>::CustomProcess(const ::Uml::Diagram &cross_diagram, c
 \t}\n\
 ")
 					% gen.opts.macro
-					% (cross_diagram && (cross_diagram != c) ? "ASSERT(::" + (string) cross_diagram.name() + "::meta != Udm::null);" : "")
+					% (cross_diagram && (cross_diagram != c) ? "UDM_ASSERT(::" + (string) cross_diagram.name() + "::meta != Udm::null);" : "")
 					% (uri_mapping_stmts.size() ? "_SetURIMapping();" : "")
 					% (xsd_storage_stmts.size() ? "_SetXsdStorage();" : "")
 				     );

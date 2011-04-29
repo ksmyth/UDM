@@ -673,7 +673,7 @@ namespace UDM_NAMESPACE
 
 	extern UDM_DLL NullObject _null;
 
-	inline NullObject::NullObject() { ASSERT(this == &_null); } 
+	inline NullObject::NullObject() { UDM_ASSERT(this == &_null); } 
 
 	extern UDM_DLL const ::Uml::CompositionChildRole NULLCHILDROLE;
 	extern UDM_DLL const ::Uml::CompositionParentRole NULLPARENTROLE;
@@ -2044,7 +2044,7 @@ namespace UDM_NAMESPACE
 		operator CLASS() const 
 		{
 			vector<ObjectImpl*> a = impl->getAssociation(meta);
-			ASSERT( a.size() <= 1 );
+			UDM_ASSERT( a.size() <= 1 );
 
 			// TODO: assert the type of the object
 			return a.empty() ? &_null : a.front();
@@ -2111,7 +2111,7 @@ namespace UDM_NAMESPACE
 		operator CLASS() const 
 		{
 			vector<ObjectImpl*> a = impl->getAssociation(meta, TARGETFROMCLASS);
-			ASSERT( a.size() <= 1 );
+			UDM_ASSERT( a.size() <= 1 );
 
 			// TODO: assert the type of the object
 			return a.empty() ? &_null : a.front();
@@ -2180,7 +2180,7 @@ namespace UDM_NAMESPACE
 		operator CLASS() const 
 		{
 			vector<ObjectImpl*> a = impl->getAssociation(peermeta, CLASSFROMTARGET);
-			ASSERT( a.size() <= 1 );
+			UDM_ASSERT( a.size() <= 1 );
 
 			// TODO: assert the type of the object
 			return a.empty() ? &_null : a.front();
@@ -2443,7 +2443,7 @@ namespace UDM_NAMESPACE
 		operator CLASS() const 
 		{
 			vector<ObjectImpl*> a = impl->getChildren(meta, CLASS::meta);
-			ASSERT( a.size() <= 1 );
+			UDM_ASSERT( a.size() <= 1 );
 
 			// TODO: assert the type of the object
 			return a.empty() ? &_null : a.front();
@@ -2489,7 +2489,7 @@ namespace UDM_NAMESPACE
 		const CLASS &operator =(const CLASS &a)
 		{
 // CYT4 - to allow the effective removal of node by setting parent to null
-//			ASSERT( a != null );
+//			UDM_ASSERT( a != null );
 
 			impl->setParent(a.__impl(), meta);
 
@@ -2589,7 +2589,7 @@ namespace UDM_NAMESPACE
 		operator RESULTTYPE() const
 		{
 			vector<ObjectImpl*> a = impl->getAssociation(meta, TARGETFROMCLASS);
-			ASSERT( a.size() <= 1 );
+			UDM_ASSERT( a.size() <= 1 );
 
 			if (!a.empty())
 			{
@@ -2637,7 +2637,7 @@ namespace UDM_NAMESPACE
 		AssocEndChainAttr<CLASS, RESULTTYPE> &disconnect()
 		{
 			vector<ObjectImpl*> a = impl->getAssociation(meta, TARGETFROMCLASS);
-			ASSERT( a.size() <= 1 );
+			UDM_ASSERT( a.size() <= 1 );
 
 			if (!a.empty())
 			{
@@ -2675,12 +2675,12 @@ namespace UDM_NAMESPACE
 	// --- construction
 
 	public:
-		Object() : impl(&_null) { ASSERT(impl != NULL); }
-		Object(ObjectImpl *i) : impl(i != NULL ? i : &_null) { ASSERT(impl != NULL); }
+		Object() : impl(&_null) { UDM_ASSERT(impl != NULL); }
+		Object(ObjectImpl *i) : impl(i != NULL ? i : &_null) { UDM_ASSERT(impl != NULL); }
 		
-		Object(const Object &a) : impl(a.impl->clone()) { ASSERT(impl != NULL); }
+		Object(const Object &a) : impl(a.impl->clone()) { UDM_ASSERT(impl != NULL); }
 #ifdef UDM_RVALUE
-		Object(Object&& a) : impl(a.impl) { ASSERT(impl != NULL); a.impl = NULL; }
+		Object(Object&& a) : impl(a.impl) { UDM_ASSERT(impl != NULL); a.impl = NULL; }
 #endif
 		~Object() 
 		{
@@ -2688,7 +2688,7 @@ namespace UDM_NAMESPACE
 			if (impl)
 #endif
 			{
-			ASSERT(impl != NULL);
+			UDM_ASSERT(impl != NULL);
 			impl->release(); 
 #ifdef _DEBUG
 			impl = NULL;
@@ -2699,10 +2699,10 @@ namespace UDM_NAMESPACE
 		const Object &operator =(const Object &a)
 		{
 
-			ASSERT(a.impl != NULL);
+			UDM_ASSERT(a.impl != NULL);
 			ObjectImpl *t = a.impl->clone();
 
-			ASSERT(impl != NULL);
+			UDM_ASSERT(impl != NULL);
 			impl->release();
 
 			impl = t;

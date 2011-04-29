@@ -4327,7 +4327,7 @@ namespace UdmStatic
 		StaticObject *parent = static_cast<StaticObject*>(p.__impl());
 		StaticObject *child = static_cast<StaticObject*>(c.__impl());
 
-		ASSERT( child->m_parent == NULL );
+		UDM_ASSERT( child->m_parent == NULL );
 
 		child->refCount += 2;
 		child->m_parent = parent;

@@ -3,9 +3,6 @@
 #define MOBIES_MGA_DEFS_H
 
 #define SmartBSTR _bstr_t
-const SmartBSTR NULLBSTR;
-
-
 
 
 //MGA macros
@@ -35,7 +32,7 @@ const SmartBSTR NULLBSTR;
 
 //so-called error handling 
 
-void SetErrorInfo(long,unsigned short *) { ASSERT("NotYet Implemented"); }
+void SetErrorInfo(long,unsigned short *) { UDM_ASSERT("NotYet Implemented"); }
 void comthrow(HRESULT res, char *e, int l);
 #define COMTHROW(expr) comthrow(expr, #expr, __LINE__)
 #define CASSERT(x) if(!(x)) COMTHROW( ((x), -1))

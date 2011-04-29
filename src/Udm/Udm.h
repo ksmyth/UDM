@@ -451,7 +451,7 @@ public:
 				corba_init.push_back( boost::format("::Uml::InitCORBAAssociation(ass, meta, \"%1%\")") % (string) a.name() );
 
 				set< ::Uml::AssociationRole> roles = a.roles();
-				ASSERT(roles.size() == 2);
+				UDM_ASSERT(roles.size() == 2);
 
 				if (aclass)
 				{
