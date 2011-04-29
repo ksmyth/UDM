@@ -27,6 +27,7 @@ this software.
 #ifndef MOBIES_UDMUTIL_H
 #define MOBIES_UDMUTIL_H
 
+#include <algorithm>
 
 namespace UdmUtil
 {
