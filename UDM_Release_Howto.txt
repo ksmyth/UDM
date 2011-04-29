@@ -44,10 +44,6 @@ rem Building MetaGME2UML is a requirement for a Udm release
 set PATH=%UDM_PATH%\bin;%PATH%
 msbuild "%GREAT_PATH%\Tools\MetaGME2UMX\MetaGME2UMX Interpreters\MetaGME2UML_interpreterVS2010.vcxproj" /t:Rebuild /p:Configuration=ReleaseVS9
 
-
-rem ------------------------
-rem VS10 cmd prompt
-
 set UDM_3RDPARTY_PATH=c:\Documents and Settings\kevin\My Documents\3rdparty\UDM_VS2010
 set JDK_PATH=C:\Program Files\Java\jdk1.5.0_22
 msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:Configuration=Debug
@@ -73,12 +69,13 @@ scp UDM_Release_Notes.txt UDM_r3_2_7.exe Udm_source_r3.2.7.zip ksmyth@repo.isis.
 ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.7/
 
 # For GReAT release:
-# export
-# zip
-# cp GReAT_Release_Notes.txt
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GReAT/1.7.4
-scp GReAT_Release_Notes.txt GReAT_r1_7_4.exe GReAT_source_r1.7.4.zip  ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GReAT/1.7.4
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7.4
+"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t GReAT /v "1.7.5"
+svn export https://svn.isis.vanderbilt.edu/MoBIES/GReAT/tags/A1_7_5 GReAT_source_r1.7.5
+/c/Program\ Files/7-Zip/7z.exe a -r GReAT_source_r1.7.5{.zip,}
+cp GReAT_source_r1.7.5/releaseinfo.txt  GReAT_Release_Notes.txt
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GReAT/1.7.5
+scp GReAT_Release_Notes.txt GReAT_r1_7_5.exe GReAT_source_r1.7.5.zip  ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GReAT/1.7.5
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7.5
 
 # For Udm and GReAT
 # On http://repo add Folder 3.2.5; add Download UDM_Release_Notes.txt, UDM_r3_2_5.exe, Udm_source_r3.2.5.zip
@@ -86,3 +83,11 @@ ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7
 # email announcement
 # change http://kms1/svn/installs/install.py sync to installs/install.exe, https://svn.isis.vanderbilt.edu/isis-common/trunk/common-scripts/install.exe
 # upgrade on build machines
+
+
+# GME Release
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GME/11.3.23/
+scp README.txt GME-11.3.23.msi GME-11_3_23_src.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GME/11.3.23/
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GME/11.3.23/
+
+
