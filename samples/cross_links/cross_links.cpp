@@ -14,6 +14,8 @@
 
 UDM_USE_DOM
 
+using namespace std;
+
 int main_static(int argc, char * argv[])
 {
 	try
