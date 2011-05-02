@@ -2,6 +2,7 @@
 #include "UdmFormatter.h"
 #include <sstream>
 #include <iomanip>
+#include "UdmGme.h"
 
 using namespace std;
 
@@ -9,12 +10,7 @@ namespace GMEConsole
 {
 	std::string Formatter::MakeObjectHyperlink(const std::string & text, const Udm::Object& object)
 	{
-		// Number magic, see uniqueId_type GmeObject::uniqueId() const 
-		unsigned long id = object.uniqueId(), c, p;
-		p=id%100000000;
-		c=id/100000000;
-		c+=100;
-		ostringstream ostr; ostr <<"<a href=\"mga:id-" << hex << setfill('0')<<setw(4) << c <<'-'<< setw(8)<< p << "\">" << text << "</a>";
+		ostr << "<a href=\"mga:" << UdmGme::UdmId2GmeId(object.uniqueId()) << "\">" << text << "</a>";
 		return ostr.str();
 	}
 
