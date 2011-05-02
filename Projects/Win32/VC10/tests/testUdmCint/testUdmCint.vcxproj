@@ -176,6 +176,7 @@ cd "$(OutDir)\Gen\tests\testUdmCint"
 "$(OutDir)StrResGen.exe" GeneTF.xsd GeneTF_xsd
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\testUdmCint\GeneTF.cpp;$(OutDir)Gen\tests\testUdmCint\GeneTF.h;$(OutDir)Gen\tests\testUdmCint\GeneTF.xsd;$(OutDir)Gen\tests\testUdmCint\GeneTF.dtd;$(OutDir)Gen\tests\testUdmCint\GeneTF_GeneTF.xsd;$(OutDir)Gen\tests\testUdmCint\GeneTF_GeneTF.dtd;$(OutDir)Gen\tests\testUdmCint\GeneTF_xsd.h;$(OutDir)Gen\tests\testUdmCint\GeneTF_GeneTF_xsd.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Udm.exe</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Udm %(FileName)</Message>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testUdmCint\GeneTF_udm.xml">
@@ -184,6 +185,7 @@ cd "$(OutDir)Gen\tests\testUdmCint"
 "..\..\$(OutDir)StrResGenD.exe" GeneTF_GeneTF.xsd GeneTF_GeneTF_xsd
 "..\..\$(OutDir)StrResGenD.exe" GeneTF.xsd GeneTF_xsd
 </Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe"</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\testUdmCint\GeneTF.cpp;$(OutDir)Gen\tests\testUdmCint\GeneTF.h;$(OutDir)Gen\tests\testUdmCint\GeneTF.xsd;$(OutDir)Gen\tests\testUdmCint\GeneTF.dtd;$(OutDir)Gen\tests\testUdmCint\GeneTF_GeneTF.xsd;$(OutDir)Gen\tests\testUdmCint\GeneTF_GeneTF.dtd;$(OutDir)Gen\tests\testUdmCint\GeneTF_xsd.h;$(OutDir)Gen\tests\testUdmCint\GeneTF_GeneTF_xsd.h;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>

@@ -141,10 +141,12 @@ exit 0
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\test_ns" "%(FullPath)" -t -v
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\test_ns\test_ns.cpp;$(OutDir)Gen\tests\test_ns\test_ns.h;$(OutDir)Gen\tests\test_ns\test_ns.dtd;$(OutDir)Gen\tests\test_ns\test_ns.xsd;$(OutDir)Gen\tests\test_ns\test_ns_A.dtd;$(OutDir)Gen\tests\test_ns\test_ns_A.xsd;$(OutDir)Gen\tests\test_ns\test_ns_B.dtd;$(OutDir)Gen\tests\test_ns\test_ns_B.xsd;$(OutDir)Gen\tests\test_ns\test_ns_AB.dtd;$(OutDir)Gen\tests\test_ns\test_ns_AB.xsd;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Udm.exe</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_ns\test_ns_udm.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\test_ns" %(FullPath) -t -v
 </Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe"</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\test_ns\test_ns.cpp;$(OutDir)Gen\tests\test_ns\test_ns.h;$(OutDir)Gen\tests\test_ns\test_ns.dtd;$(OutDir)Gen\tests\test_ns\test_ns.xsd;$(OutDir)Gen\tests\test_ns\test_ns_A.dtd;$(OutDir)Gen\tests\test_ns\test_ns_A.xsd;$(OutDir)Gen\tests\test_ns\test_ns_B.dtd;$(OutDir)Gen\tests\test_ns\test_ns_B.xsd;$(OutDir)Gen\tests\test_ns\test_ns_AB.dtd;$(OutDir)Gen\tests\test_ns\test_ns_AB.xsd;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>

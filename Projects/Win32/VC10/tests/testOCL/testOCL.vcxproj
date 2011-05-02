@@ -145,11 +145,13 @@ exit 0
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\testOCL" "%(FullPath)" -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\testOCL\SBML2.cpp;$(OutDir)Gen\tests\testOCL\SBML2.h;$(OutDir)Gen\tests\testOCL\SBML2.dtd;$(OutDir)Gen\tests\testOCL\SBML2.xsd;$(OutDir)Gen\tests\testOCL\SBML2_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_math.dtd;$(OutDir)Gen\tests\testOCL\SBML2_math.xsd;$(OutDir)Gen\tests\testOCL\SBML2_math_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_sbml.dtd;$(OutDir)Gen\tests\testOCL\SBML2_sbml.xsd;$(OutDir)Gen\tests\testOCL\SBML2_sbml_xsd.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Udm.exe</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testOCL\SBML2_udm.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\testOCL" %(FullPath) -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\testOCL\SBML2.cpp;$(OutDir)Gen\tests\testOCL\SBML2.h;$(OutDir)Gen\tests\testOCL\SBML2.dtd;$(OutDir)Gen\tests\testOCL\SBML2.xsd;$(OutDir)Gen\tests\testOCL\SBML2_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_math.dtd;$(OutDir)Gen\tests\testOCL\SBML2_math.xsd;$(OutDir)Gen\tests\testOCL\SBML2_math_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_sbml.dtd;$(OutDir)Gen\tests\testOCL\SBML2_sbml.xsd;$(OutDir)Gen\tests\testOCL\SBML2_sbml_xsd.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe"</AdditionalInputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\tests\testOCL\SBML2_uml.xme">

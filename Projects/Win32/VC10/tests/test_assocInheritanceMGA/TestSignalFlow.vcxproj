@@ -226,11 +226,13 @@ exit 0
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\test_assocInheritanceMGA" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.h;$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp;$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Udm.exe</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_assocInheritanceMGA\SignalFlow_udm.xml">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SignaFlow_udm.xml -&gt; C++ API</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\test_assocInheritanceMGA" "%(FullPath)"
 </Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe"</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.h;$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp;$(OutDir)Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>

@@ -135,6 +135,7 @@ exit 0
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\test_refports" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\test_refports\RefPort.h;$(OutDir)Gen\tests\test_refports\RefPort.cpp;$(OutDir)Gen\tests\test_refports\RefPort.xsd;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Udm.exe</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_refports\RefPort_udm.xml">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating UDM API files</Message>
@@ -142,6 +143,7 @@ exit 0
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\test_refports\RefPort.h;$(OutDir)Gen\tests\test_refports\RefPort.cpp;$(OutDir)Gen\tests\test_refports\RefPort.xsd;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe"</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\tests\test_refports\RefPortGme.xme">
       <FileType>Document</FileType>
