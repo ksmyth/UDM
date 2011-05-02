@@ -71,10 +71,12 @@ ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.7
 # For GReAT release:
 "\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t GReAT /v "1.7.5"
 svn export https://svn.isis.vanderbilt.edu/MoBIES/GReAT/tags/A1_7_5 GReAT_source_r1.7.5
+svn export https://svn.isis.vanderbilt.edu/isis-common/trunk/3rdparty/GReAT_VS2010 GReAT_3rdparty_compile-deps
 /c/Program\ Files/7-Zip/7z.exe a -r GReAT_source_r1.7.5{.zip,}
+/c/Program\ Files/7-Zip/7z.exe a -r GReAT_3rdparty_compile-deps{.zip,}
 cp GReAT_source_r1.7.5/releaseinfo.txt  GReAT_Release_Notes.txt
 ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GReAT/1.7.5
-scp GReAT_Release_Notes.txt GReAT_r1_7_5.exe GReAT_source_r1.7.5.zip  ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GReAT/1.7.5
+scp GReAT_Release_Notes.txt GReAT_r1_7_5.exe GReAT_source_r1.7.5.zip GReAT_3rdparty_compile-deps.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GReAT/1.7.5
 ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7.5
 
 # For Udm and GReAT
