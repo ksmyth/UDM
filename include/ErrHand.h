@@ -29,8 +29,6 @@ this software.
 #include <exception>
 #include <string>
 
-//std:: namespace qualifier required by STL v3.3
-using namespace std;
 
 
 #ifdef _WIN32
@@ -64,12 +62,12 @@ namespace Udm = UDM_NAMESPACE;
 #define UDM_RVALUE
 #endif
 
-class udm_exception : public exception
+class udm_exception : public std::exception
 {
 public:
 	udm_exception() throw();
 	udm_exception(const udm_exception &a) throw() : description(a.description) { }
-	udm_exception(const string &d) throw() : description(d) { }
+	udm_exception(const std::string &d) throw() : description(d) { }
 	udm_exception(const char *d) throw() : description(d) { }
 	const udm_exception &operator =(const udm_exception &a) throw()
 		{ description = a.description; return *this; }
@@ -77,7 +75,7 @@ public:
 	virtual const char *what() const throw() { return description.c_str(); }
 
 protected:
-	string description;
+	std::string description;
 };
 // int64
 

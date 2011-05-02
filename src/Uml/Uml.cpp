@@ -1,6 +1,6 @@
 // cpp (meta datanetwork format) source file Uml.cpp
 // generated from diagram Uml
-// generated on Mon Mar 07 10:31:53 2011
+// generated on Mon May 02 10:02:54 2011
 
 #include "Uml.h"
 #include <UmlExt.h>
@@ -8,6 +8,7 @@
 
 #include <UdmDom.h>
 #include "Uml_xsd.h"
+using namespace std;
 
 namespace Uml {
 

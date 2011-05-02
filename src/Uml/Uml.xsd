@@ -3,7 +3,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
  elementFormDefault="qualified" 
 >
-<!-- generated on Mon Mar 07 10:31:53 2011 -->
+<!-- generated on Mon May 02 10:02:54 2011 -->
 
 
 	<xsd:complexType name="CompositionChildRoleType">

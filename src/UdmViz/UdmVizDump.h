@@ -34,7 +34,7 @@ public:
 	UdmVizDump();
 	virtual ~UdmVizDump();
 
-	set<long> objectIDSet;
+	std::set<long> objectIDSet;
 
 	bool bAggregate;
 	bool bLinks;

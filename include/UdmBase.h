@@ -251,6 +251,7 @@ class UDM_DLL cint_string;
 
 namespace UDM_NAMESPACE
 {
+	using namespace std;
 // --------------------------- ObjectImpl
 
 	// NOTE: All returned ObjectImpl pointers are refCounted (if not NULL),
@@ -4033,12 +4034,12 @@ namespace UdmDom
 //the biggest i64 integer is 20 characters long in decimal format.
 #ifdef _WIN32
 #if (_MSC_VER == 1200)
-inline UDM_DLL ostream & operator<< (ostream &o, __int64 i) { char k[30];sprintf(k,"%I64d", i);	o << k; return o;};
+inline UDM_DLL std::ostream & operator<< (ostream &o, __int64 i) { char k[30];sprintf(k,"%I64d", i);	o << k; return o;};
 #endif
 #endif
 
 
-inline UDM_DLL ostream & operator<< (ostream &o, Udm::StringAttr c) { o << (string)c; return o; };
+inline UDM_DLL std::ostream & operator<< (std::ostream &o, Udm::StringAttr c) { o << (std::string)c; return o; };
 
 //defines for using backends
 #ifdef _WIN32

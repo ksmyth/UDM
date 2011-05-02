@@ -75,6 +75,7 @@ UDM_IMGAMETAPROJECT;
 
 namespace UdmGme
 {
+	using namespace std;
 	typedef Udm::Object Object;
 
 	//these structs are defined in UdmGme.cpp

@@ -89,8 +89,10 @@ namespace Udm {
 }
 
 
-// Only part of ErrHand.h in Udm.i:
 using namespace std;
+%{
+using namespace std;
+%}
 
 // Some strings aren't marked const
 // %apply const std::string& { UDM_NAMESPACE::string& };

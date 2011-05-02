@@ -15,7 +15,7 @@ const std::string& getString()
 			str +="<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\n";
 			str +=" elementFormDefault=\"qualified\" \n";
 			str +=">\n";
-//			str +="<!-- generated on Mon Mar 07 10:31:53 2011 -->\n";
+//			str +="<!-- generated on Mon May 02 10:02:54 2011 -->\n";
 			str +="\n";
 			str +="\n";
 			str +="	<xsd:complexType name=\"CompositionChildRoleType\">\n";

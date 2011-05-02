@@ -401,6 +401,7 @@ vector<boost::format> UdmGen::CPPPreamble(const string &fname, const ::Uml::Diag
 	if (!opts.ns_map.empty() && !opts.integrate_xsd)
 		r.push_back( boost::format("#include <UdmDom.h>") );
 
+	r.push_back( boost::format("using namespace std;") );
 	r.push_back( boost::format("") );
 
 	if (cross_dgr && cross_dgr != diagram)

@@ -126,13 +126,8 @@
 char* GetRelativeFilename(const char *currentDirectory,const char *absoluteFilename);
 
 CComponent *CComponent::theInstance = 0;
-#ifdef _DEBUG
-#define DLL_NAME "UML2XMLD.dll"
-#else
-#define DLL_NAME "UML2XML.dll"
-#endif
 
-
+using namespace std;
 
 
 //////////////////////////////// CComponent //////////////////////////////////

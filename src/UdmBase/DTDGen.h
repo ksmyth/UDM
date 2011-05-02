@@ -13,6 +13,7 @@ CHANGELOG
 
 namespace DTDGen
 {
+	using namespace std;
 	typedef pair<__int64, __int64> card_prod;			//cardinality specification: min, max
 	typedef pair< ::Uml::Class, card_prod> class_w_cp;		//class with cardinality prod
 	typedef vector<class_w_cp> cwcp_order;				//list of classes with cardinality info

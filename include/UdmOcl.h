@@ -31,6 +31,7 @@
 
 namespace Ocl
 {
+	using namespace std;
 
 	//class UDM_DLL Evaluator;
 

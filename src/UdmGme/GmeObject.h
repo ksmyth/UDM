@@ -30,7 +30,7 @@
 #ifndef MOBIES_GME_OBJECT_H
 #define MOBIES_GME_OBJECT_H
 
-
+using namespace std;
 
 namespace UdmGme 
 {

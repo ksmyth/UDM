@@ -61,16 +61,16 @@ CHANGELOG
 */
 
 template <class T, class Z>
-class udm_multimap : public multimap<T, Z>
+class udm_multimap : public std::multimap<T, Z>
 {
 	//no private members, others than those in multimap
 public:
 
-	udm_multimap<T,Z>() : multimap<T,Z>(){};
-	pair<typename multimap<T, Z>::iterator, bool> safe_insert(typename multimap<T,Z>::value_type& item)
+	udm_multimap<T,Z>() : std::multimap<T,Z>(){};
+	std::pair<typename std::multimap<T, Z>::iterator, bool> safe_insert(typename std::multimap<T,Z>::value_type& item)
 	{
-		pair<TYPENAME multimap<T, Z>::iterator, TYPENAME multimap<T, Z>::iterator> it_pair = this->equal_range(item.first);
-		TYPENAME multimap<T, Z>::iterator i = it_pair.first;
+		pair<TYPENAME std::multimap<T, Z>::iterator, TYPENAME multimap<T, Z>::iterator> it_pair = this->equal_range(item.first);
+		TYPENAME std::multimap<T, Z>::iterator i = it_pair.first;
 		bool found = false;
 		while (i != it_pair.second && !found)
 		{
@@ -80,15 +80,16 @@ public:
 		
 		if (!found)
 		{
-			TYPENAME multimap<T, Z>::iterator inserted_at = insert(item);
-			return pair<TYPENAME multimap<T, Z>::iterator,bool> (inserted_at, true);
+			TYPENAME std::multimap<T, Z>::iterator inserted_at = insert(item);
+			return std::pair<TYPENAME multimap<T, Z>::iterator,bool> (inserted_at, true);
 		}
-		return pair<TYPENAME multimap<T, Z>::iterator,bool>(this->end(), false);
+		return std::pair<TYPENAME multimap<T, Z>::iterator,bool>(this->end(), false);
 	}
 };
 
 namespace UdmStatic
 {
+	using namespace std;
 	typedef Udm::Object Object;
 	typedef Udm::ObjectImpl ObjectImpl;
 	typedef ObjectImpl::uniqueId_type  uniqueId_type;

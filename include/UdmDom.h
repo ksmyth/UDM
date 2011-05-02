@@ -54,12 +54,13 @@ XERCES_CPP_NAMESPACE_BEGIN
 XERCES_CPP_NAMESPACE_END
 XERCES_CPP_NAMESPACE_USE
 
-typedef map<unsigned long, DOMElement*> IdToDomElementMap;
-typedef pair<const unsigned long, DOMElement*> IdToDomElementMapItem;
+typedef std::map<unsigned long, DOMElement*> IdToDomElementMap;
+typedef std::pair<const unsigned long, DOMElement*> IdToDomElementMapItem;
 
 	
 namespace UdmDom
 {
+	using namespace std;
 	typedef Udm::Object Object;
 
 	//check if an input XML is in UDM UML or XMI UML format

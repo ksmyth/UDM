@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 {
 	if(argc!=3) 
 	{
-		cout<<"UdmBackendDump <backend_file.mga>|<backend_file.xml> <backend_meta_file.xml>"<<endl;
+		std::cout<<"UdmBackendDump <backend_file.mga>|<backend_file.xml> <backend_meta_file.xml>"<<std::endl;
 		return -1;
 	}
 
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 
 		// Dump to string - for Windows GUI Applications
 		{
-			stringstream strout;
+			std::stringstream strout;
 			CBackendDump dmp(&strout);
 			dmp.Dump(&sdnBackend);
 			//strout.rdbuf()->freeze(0);

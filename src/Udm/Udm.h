@@ -20,6 +20,7 @@ this software.
 #include <UdmDom.h>
 #include <UmlExt.h>
 
+using namespace std;
 
 struct UdmOpts {
 	// output mode

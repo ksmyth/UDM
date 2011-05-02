@@ -31,7 +31,8 @@ this software.
 
 namespace UdmUtil
 {
-	typedef map<Udm::Object, Udm::Object> copy_assoc_map;
+	using std::string;
+	typedef std::map<Udm::Object, Udm::Object> copy_assoc_map;
 
 	struct CopyOpts {
 		// a data network copy has been started
@@ -68,8 +69,8 @@ namespace UdmUtil
 	UDM_DLL string escape_chars(const string &src, const char escape_char, const string &to_escape_chars);
 
 	//convert array of strings to string and back; used by backends that store array attributes as strings
-	UDM_DLL string vector_to_string(const vector<string> &v, const char separator, bool add_sep_at_end = false, bool unquote_strings = false);
-	UDM_DLL vector<string> string_to_vector(const string &src, const char separator);
+	UDM_DLL string vector_to_string(const std::vector<string> &v, const char separator, bool add_sep_at_end = false, bool unquote_strings = false);
+	UDM_DLL std::vector<string> string_to_vector(const string &src, const char separator);
 
 	UDM_DLL string replace_delimiter(const string &s, const string &old_d, const string &new_d);
 

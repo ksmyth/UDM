@@ -42,7 +42,7 @@ class gme_exc : public udm_exception
 { 
 	char excbuf[20];
 public:
-	gme_exc(long l) : udm_exception(string("GME error: ")+ _ltoa(l, excbuf, 16)) { ; }
+	gme_exc(long l) : udm_exception(std::string("GME error: ")+ _ltoa(l, excbuf, 16)) { ; }
 };
 
 

@@ -80,6 +80,7 @@ CHANGELOG
 
 namespace Uml
 {
+	using namespace std;
 // Get the other end of two-legged Uml classes 
 	UDM_DLL const AssociationRole theOther(const AssociationRole &role);
 	UDM_DLL const CompositionChildRole theOther(const CompositionParentRole &role);

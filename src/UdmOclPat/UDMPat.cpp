@@ -12,6 +12,8 @@ UDM_USE_DOM
 UDM_USE_MGA
 #endif
 
+using namespace std;
+
 void dummy(void) {; }
 
 int main(int argc, char **argv) {

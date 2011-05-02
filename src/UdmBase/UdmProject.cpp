@@ -1,6 +1,6 @@
 // cpp (meta datanetwork format) source file UdmProject.cpp
 // generated from diagram UdmProject
-// generated on Mon Mar 07 10:31:53 2011
+// generated on Mon May 02 10:02:17 2011
 
 #include "UdmProject.h"
 #include <UmlExt.h>
@@ -8,6 +8,7 @@
 
 #include <UdmDom.h>
 #include "UdmProject_xsd.h"
+using namespace std;
 
 namespace UdmProject {
 

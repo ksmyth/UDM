@@ -26,7 +26,7 @@ CHANGELOG
 #include "StringBuffer.h"
 
 
-
+using namespace std;
 
 bool isTypeSpec(const std::string str)
 {

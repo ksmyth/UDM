@@ -23,10 +23,10 @@
 class CBackendDump  
 {
 
-ostream* dump;
+std::ostream* dump;
 public:
-	CBackendDump(){dump=&cout;};
-	CBackendDump(ostream*);
+	CBackendDump(){dump=&std::cout;};
+	CBackendDump(std::ostream*);
 	virtual ~CBackendDump();
 
 

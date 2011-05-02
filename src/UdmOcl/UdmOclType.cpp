@@ -38,6 +38,8 @@
 #include "UmlExt.h"
 #include "UdmOcl.h"
 
+using namespace std;
+
 namespace UmlOcl
 {
 

@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 {
 	if(argc!=3 && argc!=4) 
 	{
-		cout<<"UdmViz <backend_file> <backend_meta_file> [-<a>|<l><al>]"<<endl;
+		std::cout<<"UdmViz <backend_file> <backend_meta_file> [-<a>|<l><al>]"<<std::endl;
 		return -1;
 	}
 
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 	}
 	catch(udm_exception &exc) 
 	{
-		cout<<"Exception occurred: "<<exc.what()<<endl;
+		std::cerr<<"Exception occurred: "<<exc.what()<<std::endl;
 	}
 
 	return 0;

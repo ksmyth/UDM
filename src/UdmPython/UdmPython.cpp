@@ -13,6 +13,7 @@
 #undef max
 
 using namespace boost::python;
+using namespace std;
 
 void SDN_OpenExisting(Udm::SmartDataNetwork& self, const string &systemname, const string& metalocator) {
 	self.OpenExisting(systemname, metalocator, Udm::CHANGES_LOST_DEFAULT);
