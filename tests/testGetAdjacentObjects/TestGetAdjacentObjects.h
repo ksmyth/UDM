@@ -7,6 +7,8 @@
 #include "PackageA.h"
 #include "PackageB.h"
 
+using namespace std;
+
 UDM_USE_DOM
 
 namespace UdmTests

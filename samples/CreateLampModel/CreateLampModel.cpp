@@ -19,6 +19,7 @@ UDM_USE_MGA
 #include <UdmDom.h>
 
 using namespace LampDiagram;
+using namespace std;
 
 int main_dom_string (int argc, char * argv[])
 {

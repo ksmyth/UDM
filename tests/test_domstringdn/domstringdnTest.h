@@ -4,6 +4,8 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
+using namespace std;
+
 namespace UdmTests
 {
 	class domstringdnTest : public CPPUNIT_NS::TestFixture

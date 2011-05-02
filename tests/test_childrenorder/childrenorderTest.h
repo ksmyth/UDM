@@ -4,6 +4,8 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
+using namespace std;
+
 namespace UdmTests
 {
 	class childrenorderTest : public CPPUNIT_NS::TestFixture

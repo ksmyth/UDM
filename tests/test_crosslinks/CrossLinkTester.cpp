@@ -8,6 +8,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( UdmTests::CrossLinkTester );
 
 using namespace Package1;
 using namespace Package2;
+using namespace std;
 
 void UdmTests::CrossLinkTester::test()
 {

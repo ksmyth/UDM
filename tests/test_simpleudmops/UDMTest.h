@@ -17,6 +17,8 @@
 
 #include "UdmStatic.h"
 
+using namespace std;
+
 class CUDMTest   : public CppUnit::TestFixture  
 {
 CPPUNIT_TEST_SUITE( CUDMTest );

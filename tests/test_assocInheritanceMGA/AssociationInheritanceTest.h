@@ -19,6 +19,7 @@
 
 #include "SignalFlow.h"
 
+using namespace std;
 
 class CAssociationInheritanceTest  : public CppUnit::TestFixture
 {
