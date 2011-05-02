@@ -69,7 +69,7 @@ public:
 	udm_multimap<T,Z>() : std::multimap<T,Z>(){};
 	std::pair<typename std::multimap<T, Z>::iterator, bool> safe_insert(typename std::multimap<T,Z>::value_type& item)
 	{
-		std::pair<TYPENAME std::multimap<T, Z>::iterator, TYPENAME std::multimap<T, Z>::iterator> it_pair = this->equal_range(item.first);
+		TYPENAME std::pair<TYPENAME std::multimap<T, Z>::iterator, TYPENAME std::multimap<T, Z>::iterator> it_pair = this->equal_range(item.first);
 		TYPENAME std::multimap<T, Z>::iterator i = it_pair.first;
 		bool found = false;
 		while (i != it_pair.second && !found)
@@ -81,9 +81,9 @@ public:
 		if (!found)
 		{
 			TYPENAME std::multimap<T, Z>::iterator inserted_at = insert(item);
-			return std::pair<TYPENAME multimap<T, Z>::iterator,bool> (inserted_at, true);
+			return TYPENAME std::pair<TYPENAME std::multimap<T, Z>::iterator,bool> (inserted_at, true);
 		}
-		return std::pair<TYPENAME multimap<T, Z>::iterator,bool>(this->end(), false);
+		return TYPENAME std::pair<TYPENAME std::multimap<T, Z>::iterator,bool>(this->end(), false);
 	}
 };
 

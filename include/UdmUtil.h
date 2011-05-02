@@ -60,7 +60,7 @@ namespace UdmUtil
 	}
 	template <class Container>
 	std::vector<std::string> ExtractNames(const Container& c) {
-		vector<std::string> ret;
+	        std::vector<std::string> ret;
 		std::transform(c.begin(), c.end(), back_inserter(ret), std::ptr_fun(SimpleExtractName));
 		return ret;
 	}
