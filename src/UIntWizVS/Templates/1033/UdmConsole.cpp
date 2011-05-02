@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "UdmConsole.h"
-#include "udmbase.h"
+#include "UdmBase.h"
 
 
 namespace GMEConsole

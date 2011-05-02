@@ -27,13 +27,7 @@ class CUdmApp
 
 public:
 	static int Initialize();
-	static void UdmMain(Udm::DataNetwork* p_backend,Udm::Object currentObject, set<Udm::Object> selectedObjects, long param);
-
-#ifdef _DEBUG
-	static string ExtractName(Udm::Object ob);
-#endif
-
-	
+	static void UdmMain(Udm::DataNetwork* p_backend, Udm::Object currentObject, std::set<Udm::Object> selectedObjects, long param);
 };
 
 #endif // !defined(AFX_UDMAPP_H__296A93EB_6DB6_4179_AA0B_A3D799FB3A1C__INCLUDED_)

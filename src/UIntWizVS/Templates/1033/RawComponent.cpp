@@ -78,7 +78,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 	{
 [!if USE_CONSOLE]	  
 		// Setting up the console
-		GMEConsole::Console::setupConsole(ccpProject);
+		GMEConsole::Console::SetupConsole(ccpProject);
 [!endif]
 
 	  if(interactive)
@@ -123,7 +123,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 			udmDataDiagram.init = dummy;
 
 	#else
-			ASSERT((0,"Neither _DYNAMIC_META_DOM or _DYNAMIC_META_STATIC defined for dynamic loading"));
+			#error "Neither _DYNAMIC_META_DOM or _DYNAMIC_META_STATIC defined for dynamic loading"
 	#endif
 			// Loading the project
 			UdmGme::GmeDataNetwork dngBackend(udmDataDiagram);
@@ -148,7 +148,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 				currentObject=dngBackend.Gme2Udm(ccpFocus);
 			}
 
-			set<Udm::Object> selectedObjects;
+			std::set<Udm::Object> selectedObjects;
 
 			CComPtr<IMgaFCOs> ccpSelObject(selectedobjs);
 
@@ -177,17 +177,17 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 			UdmUtil::copy_assoc_map copyAssocMap;
 			copyAssocMap[currentObject]=nullObject; // currentObject may be null object
 
-			set<Udm::Object>::iterator p_CurrSelObject;
+			std::set<Udm::Object>::iterator p_CurrSelObject;
 			for(p_CurrSelObject=selectedObjects.begin();
 				p_CurrSelObject!=selectedObjects.end();p_CurrSelObject++)
 			{
-					pair<Udm::Object const, Udm::Object> item(*p_CurrSelObject, nullObject);
+					std::pair<Udm::Object const, Udm::Object> item(*p_CurrSelObject, nullObject);
 
-					pair<UdmUtil::copy_assoc_map::iterator, bool> insRes = copyAssocMap.insert(item);
+					std::pair<UdmUtil::copy_assoc_map::iterator, bool> insRes = copyAssocMap.insert(item);
 
 					if (!insRes.second)
 					{
-						ASSERT(NULL);
+						assert(false);
 					}
 
 			}
@@ -209,7 +209,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 
 
 			// Searching for selected objects
-			set<Udm::Object> selectedObjectsCache;
+			std::set<Udm::Object> selectedObjectsCache;
 
 			for( p_CurrSelObject=selectedObjects.begin();
 				p_CurrSelObject!=selectedObjects.end();p_CurrSelObject++)

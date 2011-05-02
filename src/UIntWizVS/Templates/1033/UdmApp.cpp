@@ -7,6 +7,8 @@
 #include <afxdlgs.h> // For CFileDialog
 [!endif]
 
+using namespace std;
+
 /*********************************************************************************/
 /* Initialization function. The framework calls it before preparing the backend. */
 /* Initialize here the settings in the config global object.					 */
