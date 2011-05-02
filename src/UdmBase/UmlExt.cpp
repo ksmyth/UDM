@@ -1085,7 +1085,7 @@ namespace Uml
 	}
 
 
-	UDM_DLL std::string GetClassPath(Uml::Class& c, std::string separator) {
+	UDM_DLL std::string GetClassPath(const Uml::Class& c, std::string separator) {
 		std::vector<std::string> names;
 		{
 			Udm::Object o = c;
