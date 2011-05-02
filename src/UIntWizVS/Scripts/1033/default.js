@@ -198,12 +198,13 @@ function AddConfig(proj, strProjectName)
 		    MIDLTool.MkTypLibCompatible="false";
 		    MIDLTool.ValidateParameters="true";
 		    MIDLTool.TypeLibraryName = ".\\ComponentLib.tlb";
-		    MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces";
+		    MIDLTool.HeaderFileName = "$(InputName).h"
+		    MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces;$(GME_ROOT)/bin;$(GME_ROOT)/Gme/Release;$(GME_ROOT)/Gme/Debug";
             
             // DEBUG COMPILER SETTINGS
 		    var CLTool = config.Tools('VCCLCompilerTool');
 		    CLTool.Optimization = optimizeOption.optimizeDisabled;
-		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include";
+		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces";
 		    CLTool.PreprocessorDefinitions = "WIN32;_DEBUG;_WINDOWS;_USRDLL";
 		    CLTool.BasicRuntimeChecks = basicRuntimeCheckOption.runtimeBasicCheckAll;
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDebugDLL;
@@ -238,7 +239,6 @@ function AddConfig(proj, strProjectName)
             if(wizard.FindSymbol("UDM_LINKING_DYNAMIC"))
             {
                 CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING";
-                LinkTool.AdditionalDependencies = "UdmDlld.lib";
                 LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
                 LinkTool.OutputFile = "$(OutDir)/$(ProjectName)d.dll"                   
             }	    
@@ -266,12 +266,13 @@ function AddConfig(proj, strProjectName)
 		    MIDLTool.MkTypLibCompatible = "false";
 		    MIDLTool.ValidateParameters = "true";
 		    MIDLTool.TypeLibraryName = ".\\ComponentLib.tlb";
-		    MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces";
+		    MIDLTool.HeaderFileName = "$(InputName).h"
+		    MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces;$(GME_ROOT)/bin;$(GME_ROOT)/Gme/Release;$(GME_ROOT)/Gme/Debug";
     		
 		    // RELEASE COMPILER SETTINGS
 		    var CLTool = config.Tools('VCCLCompilerTool');
 		    CLTool.Optimization = optimizeOption.optimizeMaxSpeed;
-		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include";
+		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces";
 		    CLTool.PreprocessorDefinitions = "WIN32;NDEBUG;_WINDOWS;_USRDLL";
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDLL;
 		    CLTool.TreatWChar_tAsBuiltInType = "true";
@@ -306,7 +307,6 @@ function AddConfig(proj, strProjectName)
             {
                    // RELEASE UDM SETTINGS
                 CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING";
-                LinkTool.AdditionalDependencies = "UdmDll.lib";
                 LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
                 LinkTool.OutputFile = "$(OutDir)/$(ProjectName).dll"                   
             }	    

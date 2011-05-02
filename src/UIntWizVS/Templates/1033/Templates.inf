@@ -10,8 +10,6 @@ UdmFormatter.h
 [!endif]
 RawComponent.cpp
 RawComponent.h
-ComponentObj.h
-ComponentObj.cpp
 CompIcon.ico
 Component.def
 Component.rc
