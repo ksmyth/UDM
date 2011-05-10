@@ -99,6 +99,10 @@ long long _atoi64(const char *x);
 #define UDM_OBJECT Udm::Object
 #endif
 
+#ifndef UDM_NO_USING_STD
+using namespace std;
+#endif
+
 #include <cassert>
 #include <string>
 #include <iostream>
