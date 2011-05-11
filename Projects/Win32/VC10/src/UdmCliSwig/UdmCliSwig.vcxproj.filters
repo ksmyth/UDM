@@ -3,11 +3,6 @@
   <ItemGroup>
     <None Include="..\..\..\..\..\include\UdmCli.i" />
     <None Include="..\..\..\..\..\include\UdmException.i" />
-    <None Include="$(CliBridgeCsDir)\Udm\Udm.cs" />
-    <None Include="$(CliBridgeCsDir)\Uml\Uml.cs" />
-    <None Include="$(CliBridgeCsDir)\UdmGme\UdmGme.cs" />
-    <None Include="$(CliBridgeCsDir)\UdmDom\UdmDom.cs" />
-    <None Include="$(CliBridgeCsDir)\UdmStatic\UdmStatic.cs" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\..\..\include\Udm.i" />
@@ -15,5 +10,10 @@
     <CustomBuild Include="..\..\..\..\..\include\UdmGme.i" />
     <CustomBuild Include="..\..\..\..\..\include\UdmStatic.i" />
     <CustomBuild Include="..\..\..\..\..\include\Uml.i" />
+    <CustomBuild Include="$(CliBridgeCsDir)\Udm\Udm.cs" />
+    <CustomBuild Include="$(CliBridgeCsDir)\Uml\Uml.cs" />
+    <CustomBuild Include="$(CliBridgeCsDir)\UdmGme\UdmGme.cs" />
+    <CustomBuild Include="$(CliBridgeCsDir)\UdmDom\UdmDom.cs" />
+    <CustomBuild Include="$(CliBridgeCsDir)\UdmStatic\UdmStatic.cs" />
   </ItemGroup>
 </Project>

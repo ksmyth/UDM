@@ -3,6 +3,7 @@
   <PropertyGroup Label="UserMacros">
     <CliBridgeCppDir>$(MSBuildThisFileDirectory)\..\..\..\..\..\Build\Win32\VC10\Gen\src\UdmCliBridge\cpp</CliBridgeCppDir>
     <CliBridgeCsDir>$(MSBuildThisFileDirectory)\..\..\..\..\..\Build\Win32\VC10\Gen\src\UdmCliBridge\cs</CliBridgeCsDir>
+    <UdmCliBridgeDll>UdmCliBridge.dll</UdmCliBridgeDll>
   </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
@@ -24,6 +25,10 @@
     </BuildMacro>
     <BuildMacro Include="CliBridgeCsDir">
       <Value>$(CliBridgeCsDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="UdmCliBridgeDll">
+      <Value>$(UdmCliBridgeDll)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>
 </Project>

@@ -81,7 +81,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 "$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native" ^
--dllimport "$(TargetFileName)" ^
+-dllimport "$(UdmCliBridgeDll)" ^
 -outdir "$(CliBridgeCsDir)\%(Filename)"  ^
 -c++ ^
 -o "%(Filename)"_wrap.cpp ^
@@ -94,7 +94,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 "$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native" ^
--dllimport "$(TargetFileName)" ^
+-dllimport "$(UdmCliBridgeDll)" ^
 -outdir "$(CliBridgeCsDir)\%(Filename)"  ^
 -c++ ^
 -o "%(Filename)"_wrap.cpp ^
@@ -119,7 +119,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 "$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
--dllimport "$(TargetFileName)" ^
+-dllimport "$(UdmCliBridgeDll)" ^
 -outdir "$(CliBridgeCsDir)\%(Filename)"  ^
 -c++ ^
 -o "%(Filename)"_wrap.cpp ^
@@ -132,7 +132,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 "$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
--dllimport "$(TargetFileName)" ^
+-dllimport "$(UdmCliBridgeDll)" ^
 -outdir "$(CliBridgeCsDir)\%(Filename)"  ^
 -c++ ^
 -o "%(Filename)"_wrap.cpp ^
@@ -152,7 +152,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 "$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
--dllimport "$(TargetFileName)" ^
+-dllimport "$(UdmCliBridgeDll)" ^
 -outdir "$(CliBridgeCsDir)\%(Filename)"  ^
 -c++ ^
 -o "%(Filename)"_wrap.cpp ^
@@ -165,7 +165,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 "$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
--dllimport "$(TargetFileName)" ^
+-dllimport "$(UdmCliBridgeDll)" ^
 -outdir "$(CliBridgeCsDir)\%(Filename)"  ^
 -c++ ^
 -o "%(Filename)"_wrap.cpp ^
@@ -184,7 +184,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 "$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
--dllimport "$(TargetFileName)" ^
+-dllimport "$(UdmCliBridgeDll)" ^
 -outdir "$(CliBridgeCsDir)\%(Filename)"  ^
 -c++ ^
 -o "%(Filename)"_wrap.cpp ^
@@ -197,7 +197,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 "$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
--dllimport "$(TargetFileName)" ^
+-dllimport "$(UdmCliBridgeDll)" ^
 -outdir "$(CliBridgeCsDir)\%(Filename)"  ^
 -c++ ^
 -o "%(Filename)"_wrap.cpp ^
@@ -216,7 +216,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 "$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
--dllimport "$(TargetFileName)" ^
+-dllimport "$(UdmCliBridgeDll)" ^
 -outdir "$(CliBridgeCsDir)\%(Filename)"  ^
 -c++ ^
 -o "%(Filename)"_wrap.cpp ^
@@ -229,7 +229,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 "$(SWIG_EXE)" ^
 -csharp ^
 -namespace "Udm.Native.%(Filename)" ^
--dllimport "$(TargetFileName)" ^
+-dllimport "$(UdmCliBridgeDll)" ^
 -outdir "$(CliBridgeCsDir)\%(Filename)"  ^
 -c++ ^
 -o "%(Filename)"_wrap.cpp ^
@@ -255,5 +255,7 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
   <Target Name="BuildUdmCli">
     <Message Importance="high" Text="Building UdmCli $(Configuration)" />
     <MSBuild Projects="$(MSBuildThisFileDirectory)\..\UdmCli\UdmCli.csproj" Properties="Configuration=$(Configuration);Platform=AnyCpu" />
+    <Exec Command="gacutil /i &quot;$(OutDir)\UdmCli.dll&quot; /f /nologo" StandardErrorImportance="High"/>
+    <Exec Command="gacutil /l UdmCli /nologo" StandardErrorImportance="High" StandardOutputImportance="High"/>
   </Target>
 </Project>
