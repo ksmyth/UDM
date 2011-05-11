@@ -1,13 +1,13 @@
-Copyright (c) Vanderbilt University, 2001-2010
+Copyright (c) Vanderbilt University, 2001-2011
 ALL RIGHTS RESERVED
 
 ** UDM : Universal Data Model **
 
-** Software Requirement**
+** Software Requirements **
 
 1. Windows Operating system (XP, Vista, 7)
 
-2. GME 10, R10.8.18 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 10, r11.3.23 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 9 or Visual Studio 10
@@ -18,6 +18,11 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+05/11/11		-	Release 3.2.8
+		-	ASSERT is no longer #defined, since it may conflict with other libraries (e.g. MFC)
+		-	Fix generated CreateDerived methods
+		-	Add UdmGme::Udm2Gme to convert from a Udm::Object instance to an IUnknown*. Returns NULL if the Udm::Object::impl isn't from a UdmGme backend
+
 11/30/10		-	Release 3.2.7
 		-	MetaGME2UML now generates refport container associations when dRefParent or sRefParent are specified in MetaGME under the Connection's General Preferences
 				With these associations, it is possible to navigate from a connection to refport parent and vice versa.
