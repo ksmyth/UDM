@@ -18,8 +18,6 @@ CSHARP_NAMESPACE3(UdmGme, Udm.Native.UdmGme, GmeDataNetwork)
 #include "UdmGme.h"
 %}
 
-%include "UdmGme.h"
-
 %define %cs_custom_cast(TYPE, CSTYPE)
 %typemap(ctype) TYPE, TYPE& "void*"
 %typemap(in) TYPE  %{ $1 = (TYPE)$input; %} 
@@ -28,11 +26,19 @@ CSHARP_NAMESPACE3(UdmGme, Udm.Native.UdmGme, GmeDataNetwork)
 %typemap(cstype, out="CSTYPE") TYPE, TYPE& "CSTYPE" 
 %typemap(csin) TYPE, TYPE& "$csinput"
 %typemap(csdirectorin) TYPE, TYPE& "$iminput"
+%typemap(csout, excode=SWIGEXCODE) TYPE {
+      IntPtr ret = $imcall;$excode
+      return ret;
+    }
+ 
 %enddef
 
 struct IUnknown;
-typedef IUnknown *LPUNKNOWN;
+typedef IUnknown* LPUNKNOWN;
 %cs_custom_cast(LPUNKNOWN, IntPtr)
+%cs_custom_cast(IUnknown*, IntPtr)
+
+%include "UdmGme.h"
 
 
 %{
@@ -64,6 +70,30 @@ class GmeDN_Wrapper {
   %extend GmeDN_Wrapper {
     %typemap(cscode) UdmGme::GmeDN_Wrapper %{
       public global::Udm.Native.UdmGme.GmeDataNetwork dn { get { return _getDN(); } }
+	  public global::Udm.Native.UdmObject Gme2Udm(object mgaObject)
+	  {
+		IntPtr punkMgaObject = global::System.Runtime.InteropServices.Marshal.GetIUnknownForObject(mgaObject);
+		try
+        {
+          return dn.Gme2Udm(punkMgaObject);
+        }
+        finally
+        {
+		  global::System.Runtime.InteropServices.Marshal.Release(punkMgaObject);
+        }
+	  }
+	  public static GmeDN_Wrapper Create(global::Udm.Native.Uml.Diagram meta, object mgaProject, bool customTransactions)
+	  {
+	    IntPtr punkMgaProject = global::System.Runtime.InteropServices.Marshal.GetIUnknownForObject(mgaProject);
+		try
+        {
+          return new GmeDN_Wrapper(meta, punkMgaProject, customTransactions);
+        }
+        finally
+        {
+		  global::System.Runtime.InteropServices.Marshal.Release(punkMgaProject);
+        }
+	  }
     %}
   }
 }
