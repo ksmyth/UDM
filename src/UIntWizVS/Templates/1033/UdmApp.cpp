@@ -91,7 +91,7 @@ Remarks to CUdmApp::UdmMain(...):
 void CUdmApp::UdmMain(
 					 Udm::DataNetwork* p_backend,		// Backend pointer(already open!)
 					 Udm::Object focusObject,			// Focus object
-					 set<Udm::Object> selectedObjects,	// Selected objects
+					 std::set<Udm::Object> selectedObjects,	// Selected objects
 					 long param)						// Parameters
 {	
 
@@ -104,14 +104,14 @@ void CUdmApp::UdmMain(
 #ifdef _DEBUG
 	// Displaying the name of the root object meta
 	Udm::Object rootObject=p_backend->GetRootObject();
-	string rootObjectName("Root Object's Class Name: ");
+	std::string rootObjectName("Root Object's Class Name: ");
 	rootObjectName+=UdmUtil::ExtractName(rootObject.type());
 	AfxMessageBox(rootObjectName.c_str());
 
 	// Displaying the focus object
 	if(focusObject!=&Udm::_null)
 	{
-		string focusObjectName("Focus Object Name: ");
+		std::string focusObjectName("Focus Object Name: ");
 		focusObjectName+=UdmUtil::ExtractName(focusObject);
 		AfxMessageBox(focusObjectName.c_str());
 	}
@@ -119,9 +119,9 @@ void CUdmApp::UdmMain(
 	// Displaying selected objects
 	if(!selectedObjects.empty())
 	{
-		string selObjNames("Selected Objects:\r\n");
+		std::string selObjNames("Selected Objects:\r\n");
 		// Iterate set
-		for(set<Udm::Object>::iterator i=selectedObjects.begin();
+		for(std::set<Udm::Object>::iterator i=selectedObjects.begin();
 														i!=selectedObjects.end();i++)
 		{
 			selObjNames+=UdmUtil::ExtractName(*i);
