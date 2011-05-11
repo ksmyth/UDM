@@ -15,7 +15,7 @@ def get_template(name, **kwargs):
         __import__(name)
         return getattr(sys.modules[name], name)(**kwargs)
     else:
-        return Template(file=name+'.tmpl', **kwargs)
+        return Template(file=os.path.join(os.path.dirname(os.path.realpath(__file__ )), name+'.tmpl'), **kwargs)
    
 
 if __name__ == "__main__":
