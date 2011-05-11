@@ -3,13 +3,13 @@
 namespace ${impl_namespace[0:-1]} {
 class ${root.name}Initialize {
 
-public ${root.name}(string metaFilename) {
-    Udm.Native.Udm.Initialize();
-    // Open MSL meta
-    Udm.Native.SmartDataNetwork meta = new Udm.Native.SmartDataNetwork(Udm.Native.Uml.Uml.diagram);
-    meta.OpenExisting(metaFilename);
-    Udm.Impl.MSLInitialize.Initialize(meta);
-}
+##public void ${root.name}(string metaFilename) {
+##    Udm.Native.Udm.Initialize();
+##    // Open MSL meta
+##    Udm.Native.SmartDataNetwork meta = new Udm.Native.SmartDataNetwork(Udm.Native.Uml.Uml.diagram);
+##    meta.OpenExisting(metaFilename);
+##    Udm.Impl.MSLInitialize.Initialize(meta);
+##}
 
 
 public delegate T castDelegate<T>(Udm.Native.UdmCliObject o) where T : Udm.Native.UdmCliObject;
