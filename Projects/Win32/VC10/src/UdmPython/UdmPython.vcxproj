@@ -83,6 +83,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd.pdb</ProgramDatabaseFile>
+      <ImportLibrary>$(TargetName)python.lib</ImportLibrary>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -109,6 +110,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd.pdb</ProgramDatabaseFile>
+      <ImportLibrary>$(TargetName)python.lib</ImportLibrary>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
@@ -136,6 +138,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd.pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\Release\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>$(TargetName)python.lib</ImportLibrary>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
