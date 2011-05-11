@@ -42,16 +42,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">BuildLink</CustomBuildAfterTargets>
-    <CustomBuildAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">BuildLink</CustomBuildAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <CustomBuildStep>
-      <Message>Move dlls to bin</Message>
-      <Command>copy /y "$(TargetPath)" "$(UDM_PATH)"\bin\
-</Command>
-      <Outputs>$(UDM_PATH)\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>true</MinimalRebuild>
@@ -68,12 +60,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <CustomBuildStep>
-      <Message>Move dlls to bin</Message>
-      <Command>copy /y "$(TargetPath)" "$(UDM_PATH)"\bin\
-</Command>
-      <Outputs>$(UDM_PATH)\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -111,4 +97,14 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      CopyToBin;
+    </BuildDependsOn>
+  </PropertyGroup>
+  <Target Name="CopyToBin">
+    <Message Importance="high" Text="Copying $(TargetPath) to bin" Condition="'$(Configuration)'=='Release'"/>
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(MSBuildThisFileDirectory)\..\..\..\..\..\bin" Condition="'$(Configuration)'=='Release'" />
+  </Target>
 </Project>
