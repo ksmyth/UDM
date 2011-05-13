@@ -525,6 +525,7 @@ BOOST_PYTHON_MODULE(udm)
 	scope().attr("Object").attr("children") = eval("lambda self, child_role=None, parent_role=None, child_type=None: self._children(child_role, parent_role, child_type)");
 	scope().attr("Object").attr("set_adjacent") = eval("lambda self, targets, src_role=None, dst_role=None, association_class=None: self._set_adjacent(targets, src_role, dst_role, association_class)");
 	scope().attr("Object").attr("__repr__") = eval("lambda self: \"udm.null\" if self.id==0 else (\"<udm.Object id\" + str(self.id) + \">\")");
+	scope().attr("Object").attr("__nonzero__") = eval("lambda self: self.id != 0");
 
 	scope().attr("null") = Udm::null;
 
