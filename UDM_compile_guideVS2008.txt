@@ -7,6 +7,7 @@ Requirements:
 -------------------
 	- Visual Studio 2008 or 2010
 	- J2SE 1.5 (or later) JDK
+	- (For UdmCliGen.exe) Python 2.6 with py2exe
 
 Step-by-step guide:
 -------------------------
@@ -17,15 +18,11 @@ Step-by-step guide:
 		https://svn.isis.vanderbilt.edu/isis-common/trunk/3rdparty/
 
 	3. Set your build environment as follows:
-	For VS2008, add $(LIB) and $(INCLUDE) to Tools/Options/Projects and Solutions/VC++ Directories or use devenv's command-line switch /useenv
-
-	(Note: you may create a script called scripts/vc9-env-local.bat to set the following)
 	UDM_PATH=
 		your https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ working copy
 	UDM_3RDPARTY_PATH=
-		the UDM_VS2008 or UDM_VS2010 subdirectory of your https://svn.isis.vanderbilt.edu/isis-common/trunk/3rdparty/ working copy
+		the UDM_VS2010 subdirectory of your https://svn.isis.vanderbilt.edu/isis-common/trunk/3rdparty/ working copy
 	JDK_PATH=
 		your Java 1.5 (or later) JDK path, e.g. c:\Program Files\Java\jdk1.6.0_16
-	Then run scripts/vc9-env.bat
 
 	4. Use Projects/Win32/VC9/src/Udm.sln for VS2008 or Projects/Win32/VC10/src/Udm.sln for VS2010

@@ -2,71 +2,65 @@ HOWTO make a Windows Udm release (for Udm maintainers only)
 Currently only Kevin Smyth <ksmyth@isis.vanderbilt.edu> makes Udm releases
 First see UDM_compile_guideVS2008.txt
 
-set JAVA_HOME=
+set JAVA_HOME=C:\Program Files\Java\jdk1.5.0_22
+set JDK_PATH=C:\Program Files\Java\jdk1.5.0_22
 set UDM_PATH=
 set UDM_3RDPARTY_PATH=
 set GREAT_PATH=
 set GREAT_3RDPARTY_PATH=
 
 Update with new version, info:
- /UDM/trunk/InnoSetup/udm_innosetupVS2008.iss
+ /UDM/trunk/InnoSetup/udm_innosetupVS2008.iss (x3+GME version)
  /UDM/trunk/Projects/Win32/VC10/src/UdmDll/UdmDll.rc
  /UDM/trunk/Projects/Win32/VC9/src/UdmDll/UdmDll.rc
  /UDM/trunk/include/UdmBase.h
  /UDM/trunk/releaseinfo.txt
-ci -m 'Prepare for release 3.2.5'
+ /UDM/trunk/Projects/Win32/VC10/src/UdmCli/Properties/AssemblyInfo.cs
+ci -m 'Prepare for release 3.2.8'
 
-svn cp https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_5
+svn cp https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_8
+svn co https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_8 Udm
 
+rem VS10 cmd prompt
+rem Building MetaGME2UML is a requirement for a Udm release
+set PATH=%UDM_PATH%\bin;%PATH%
+msbuild "%GREAT_PATH%\Tools\MetaGME2UMX\MetaGME2UMX Interpreters\MetaGME2UML_interpreterVS2010.vcxproj" /t:Rebuild /p:Configuration=ReleaseVS9
 
-rem VS9 cmd prompt
-rem check that none of the commands fail
+msbuild "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" /p:Configuration=Debug /t:Rebuild
+msbuild "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" /p:Configuration=Release /t:Rebuild
 
-set JDK_PATH=C:\Program Files\Java\jdk1.5.0_22
+set PATH=%UDM_PATH%\bin;%PATH%
+c:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild "%UDM_PATH%"\make.msbuild /t:BuildVS9;BuildVS10;UdmCliGen
 
-set BUILD_SWITCH=/nologo /r
-
-vcbuild %BUILD_SWITCH% /u "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" "Debug|Win32"
-vcbuild %BUILD_SWITCH% /u "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" "Release|Win32"
-
-"%UDM_PATH%\scripts\vc9-env.bat"
-devenv /useenv /build debug /project UdmDll "%UDM_PATH%\Projects\Win32\vc9\src\Udm.sln"
-vcbuild %BUILD_SWITCH% /u "%UDM_PATH%\Projects\Win32\VC9\src\Udm.sln" "Release|Win32"
 pushd %UDM_PATH%\judm
+"%UDM_PATH%\scripts\vc9-env.bat"
 set Path=%UDM_3RDPARTY_PATH%\apache-ant-1.7.1\bin;%PATH%
 set ANT_HOME=
 set ANT_PATH=
 "%UDM_3RDPARTY_PATH%"\apache-ant-1.7.1\bin\ant
 
-rem ------------------------
-rem new VS10 cmd prompt
-rem Building MetaGME2UML is a requirement for a Udm release
-set PATH=%UDM_PATH%\bin;%PATH%
-msbuild "%GREAT_PATH%\Tools\MetaGME2UMX\MetaGME2UMX Interpreters\MetaGME2UML_interpreterVS2010.vcxproj" /t:Rebuild /p:Configuration=ReleaseVS9
-
-set UDM_3RDPARTY_PATH=c:\Documents and Settings\kevin\My Documents\3rdparty\UDM_VS2010
-set JDK_PATH=C:\Program Files\Java\jdk1.5.0_22
-msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:Configuration=Debug
-msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" /t:Rebuild /p:Configuration=Release
-msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" /t:Rebuild /p:Configuration=Release27 
-msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" /t:Rebuild /p:Configuration=Debug
-msbuild "%UDM_PATH%\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" /t:Rebuild /p:Configuration=Release
-
-"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%UDM_PATH%" /s \\kms1\symbols /t Udm /v "3.2.7"
-"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t UdmGReAT /v "3.2.7"
-
-svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_7 Udm_source_r3.2.7
-# run InnoSetup on %UDM_PATH%\InnoSetup\
-# rename InnoSetup output UDM_r3_2_5.exe
+msbuild "%UDM_PATH%"\make.msbuild /t:Installer
+# rename InnoSetup output UDM_r3_2_8.exe
 # test installer http://kms1/svn/installs/ vm_installs_test.py secrets-installtest2.py
+
+export JOB_NAME=Udm
+export BUILD_NUMBER=3.2.8
+pushd %UDM_PATH%
+"%GREAT_PATH%"\common-scripts\hudson_archive_pdbs.cmd
+pushd %GREAT_PATH%
+"%GREAT_PATH%"\common-scripts\hudson_archive_pdbs.cmd
+"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%UDM_PATH%" /s \\kms1\symbols /t Udm /v "3.2.8"
+"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t UdmGReAT /v "3.2.8"
+
 # ------------------------
 # bash
-/c/Program\ Files/7-Zip/7z.exe a -r Udm_source_r3.2.7.zip Udm_source_r3.2.7/
-cp Udm_source_r3.2.7/releaseinfo.txt UDM_Release_Notes.txt 
+svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_8 Udm_source_r3.2.8
+/c/Program\ Files/7-Zip/7z.exe a -r Udm_source_r3.2.8.zip Udm_source_r3.2.8/
+cp Udm_source_r3.2.8/releaseinfo.txt UDM_Release_Notes.txt 
 
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.7/
-scp UDM_Release_Notes.txt UDM_r3_2_7.exe Udm_source_r3.2.7.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.7/
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.7/
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.8/
+scp UDM_Release_Notes.txt UDM_r3_2_8.exe Udm_source_r3.2.8.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.8/
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.8/
 
 # For GReAT release:
 "\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t GReAT /v "1.7.5"
@@ -80,7 +74,7 @@ scp GReAT_Release_Notes.txt GReAT_r1_7_5.exe GReAT_source_r1.7.5.zip GReAT_3rdpa
 ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7.5
 
 # For Udm and GReAT
-# On http://repo add Folder 3.2.5; add Download UDM_Release_Notes.txt, UDM_r3_2_5.exe, Udm_source_r3.2.5.zip
+# On http://repo add Folder 3.2.8; add Download UDM_Release_Notes.txt, UDM_r3_2_8.exe, Udm_source_r3.2.8.zip
 # JIRA: make release
 # email announcement
 # change http://kms1/svn/installs/install.py sync to installs/install.exe, https://svn.isis.vanderbilt.edu/isis-common/trunk/common-scripts/install.exe
