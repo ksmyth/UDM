@@ -57,6 +57,15 @@ namespace Udm.Native
         {
             get { return new UdmCliObject(backing.GetParent()); }
         }
+        public System.Collections.Generic.IEnumerable<IUdmObject> children
+        {
+            get
+            {
+                return System.Linq.Enumerable.ToList(
+                    System.Linq.Enumerable.Select<UdmObject, IUdmObject>
+                    (backing.GetChildObjects(), o => new UdmCliObject(o)));
+            }
+        }
         public bool isInstance
         {
             get { return backing.isInstance(); }
@@ -102,6 +111,7 @@ public interface IUdmObject
         // TODO: should be Class inherited from IUdmObject
         Udm.Native.Uml.Class type { get; }
         IUdmObject parent { get; }
+        System.Collections.Generic.IEnumerable<IUdmObject> children { get; }
 
         bool isInstance { get; }
         bool isSubtype { get; }
