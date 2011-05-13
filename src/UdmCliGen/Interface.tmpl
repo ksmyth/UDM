@@ -9,6 +9,10 @@ namespace $namespace
         : global::Udm.IUdmObject
 #end if
     {
+        I$c.name archetype { get; }
+        System.Collections.Generic.IEnumerable<I$c.name> instances { get; }
+        System.Collections.Generic.IEnumerable<I$c.name> derived { get; }
+
 
 #for $attr in $c.children(child_type=$uml.Attribute)
         $attr_typemap[$attr.attr('type')] @$attr.name { get; set; }

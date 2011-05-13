@@ -30,7 +30,7 @@ foreach (Udm.Native.UdmObject o in meta.GetAllInstancesOf(Udm.Native.Uml.Attribu
 #for $o in get_descendants($root)
 #if $o.type.name == "Class"
 ${fq_name($o)}.meta = classes["${get_path($o, "/")}"];
-downcasts.Add(${fq_name($o)}.meta, x=>${fq_name($o)}.Cast(x));
+downcasts.Add(${fq_name($o)}.meta, ${fq_name($o)}.Cast);
 #else if $o.type.name == "Attribute"
 ${fq_name($o.parent)}.$role_metaname($o) = attributes["${get_path($o, "/")}"];
 #end if

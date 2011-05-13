@@ -29,24 +29,32 @@ namespace $namespace
             return Cast(((global::Udm.Native.UdmCliObject)o).backing);
         }
 
-        public global::System.Collections.Generic.IEnumerable<${fq_iname($c)}> instances
-        {
-            get
-            {
-                return global::System.Linq.Enumerable.ToList(
-                    global::System.Linq.Enumerable.Select<global::Udm.Native.UdmObject, ${fq_iname($c)}>
-                    (backing.instances(), o => new ${c.name}(o)));
-            }
+        public static ${fq_iname($c)} ICast(global::Udm.IUdmObject o) {
+            return Cast(((global::Udm.Native.UdmCliObject)o).backing);
         }
-        public global::System.Collections.Generic.IEnumerable<${fq_iname($c)}> derived
+
+        public static ${c.name} Create(global::Udm.IUdmObject parent, global::Udm.Native.Uml.CompositionChildRole role = null)
         {
-            get
+            if (role == null)
             {
-                return global::System.Linq.Enumerable.ToList(
-                    global::System.Linq.Enumerable.Select<global::Udm.Native.UdmObject, ${fq_iname($c)}>
-                    (backing.derived(), o => new ${c.name}(o)));
+                role = global::Udm.Native.Udm.NULLCHILDROLE;
             }
+            global::Udm.Native.UdmObject o = global::Udm.Native.UdmObject.Create(meta, ((global::Udm.Native.UdmCliObject)parent).backing, role);
+            return new ${c.name}(o);
         }
+
+#for $suffix, $isderived in (('Instance', 'false'), ('Derived', 'true'))
+        public ${c.name} Create${suffix}(global::Udm.IUdmObject parent, global::Udm.Native.Uml.CompositionChildRole role = null)
+        {
+            if (role == null)
+            {
+                role = global::Udm.Native.Udm.NULLCHILDROLE;
+            }
+            global::Udm.Native.UdmObject o = global::Udm.Native.UdmObject.Create(meta, (global::Udm.Native.UdmObject)parent, role, this.backing.__impl(), $isderived);
+            return new ${c.name}(o);
+        }
+#end for
+
         public ${fq_iname($c)} this_downcasted
         {
             get
@@ -83,6 +91,34 @@ namespace $namespace
 #end for
 
 #def accessors($c)
+        ${fq_iname($c)} ${fq_iname($c)}.archetype
+        {
+            get
+            {
+                global::Udm.Native.UdmObject o = backing.archetype();
+                if (o.uniqueId() == 0) return null;
+                return new ${c.name}(o);
+            }
+        }
+        global::System.Collections.Generic.IEnumerable<${fq_iname($c)}> ${fq_iname($c)}.instances
+        {
+            get
+            {
+                return global::System.Linq.Enumerable.ToList(
+                    global::System.Linq.Enumerable.Select<global::Udm.Native.UdmObject, ${fq_iname($c)}>
+                    (backing.instances(), o => new ${c.name}(o)));
+            }
+        }
+        global::System.Collections.Generic.IEnumerable<${fq_iname($c)}> ${fq_iname($c)}.derived
+        {
+            get
+            {
+                return global::System.Linq.Enumerable.ToList(
+                    global::System.Linq.Enumerable.Select<global::Udm.Native.UdmObject, ${fq_iname($c)}>
+                    (backing.derived(), o => new ${c.name}(o)));
+            }
+        }
+
 #for $attr in $c.children(child_type=$uml.Attribute)
 #set type = $attr_typemap[$attr.attr('type')]
 #set meta_name = $fq_name($c) + "." + role_metaname(attr)
