@@ -48,6 +48,8 @@ CHANGELOG
 
     #include "Uml.h"
 
+#include "Comdef.h"
+
     class CClassDiagramBuilder;
     
     class CClassBuilder;
@@ -101,6 +103,7 @@ CHANGELOG
 		//CBuilderFolderList packageList;
 		CPackageBuilderList packageList;
 		::Uml::Diagram cross_uml_dgr;
+		_bstr_t m_strConnection;
 
     public:
     	static CComponent *theInstance;

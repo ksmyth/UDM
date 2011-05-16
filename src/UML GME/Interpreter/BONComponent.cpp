@@ -153,6 +153,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 	{
 		CBuilderFolder *root = builder.GetRootFolder();
 		IMgaProject *proj = builder.GetProject();
+		COMVERIFY(proj->get_ProjectConnStr(m_strConnection.GetAddress()));
 		CComPtr<IMgaMetaProject> mproj;
 		COMVERIFY( proj->get_RootMeta(&mproj));
 		CBstr pn;
@@ -1667,6 +1668,16 @@ CString CComponent::GetFilePath(CBuilder &builder, CBuilderObject *focus, char *
 	{	//static char UDM_FILTER[] = "XML files (*.xml)|*.xml";
 		CFileDialog cfdlg(false, FILE_EXT, root->GetName(), OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, UDM_FILTER);	
 		cfdlg.m_ofn.lpstrTitle = "UDM Meta File Location";
+		TCHAR currentMgaPath[MAX_PATH];
+		if (m_strConnection.length() > 4 && wcsnicmp(static_cast<const wchar_t*>(m_strConnection), L"MGA=", 4) == 0) {
+			std::string zsConn = static_cast<const char*>(m_strConnection);
+			TCHAR* filename;
+			if (!GetFullPathName(zsConn.c_str() + 4 /* skip MGA= */, MAX_PATH, currentMgaPath, &filename) || filename == 0) {
+			} else {
+				*filename = _T('\0');
+				cfdlg.GetOFN().lpstrInitialDir = currentMgaPath;
+			}
+		}
 		if (cfdlg.DoModal() != IDOK) 
 		{	throw int_exception("");
 		}
