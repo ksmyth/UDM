@@ -1990,11 +1990,13 @@ namespace UDM_NAMESPACE
 		}
 
 		const set<CLASS,Pred> operator +=(const CLASS &a) {
+			UDM_ASSERT(a);
 			set<CLASS,Pred> xx(*this);
 			xx.insert(a);
 			return *this = xx;
 		}
 		const set<CLASS,Pred> operator -=(const CLASS &a) {
+			UDM_ASSERT(a);
 			set<CLASS,Pred> xx(*this);
 			xx.erase(a);
 			return *this = xx;
