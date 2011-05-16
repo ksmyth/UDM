@@ -145,6 +145,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\src\UdmPython\UdmPython.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UdmDll\UdmDll.vcxproj">
+      <Project>{3cae3dee-065e-426c-9c3c-f1f59217c00b}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
