@@ -71,6 +71,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="dbghelp.lib"
 				OutputFile="$(OutDir)\UdmUtilD.lib"
 				SuppressStartupBanner="true"
 			/>
@@ -149,6 +150,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalDependencies="dbghelp.lib"
 				OutputFile="$(OutDir)\UdmUtil.lib"
 				SuppressStartupBanner="true"
 			/>

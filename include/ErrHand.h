@@ -67,20 +67,35 @@ namespace Udm = UDM_NAMESPACE;
 #define UDM_RVALUE
 #endif
 
+namespace UdmUtil {
+	UDM_DLL std::string stacktrace();
+}
+
 class udm_exception : public std::exception
 {
 public:
-	udm_exception() throw();
-	udm_exception(const udm_exception &a) throw() : description(a.description) { }
-	udm_exception(const std::string &d) throw() : description(d) { }
-	udm_exception(const char *d) throw() : description(d) { }
+	udm_exception() throw() : stacktrace(UdmUtil::stacktrace()) { _init(); }
+	udm_exception(const udm_exception &a) throw() : description(a.description), stacktrace(UdmUtil::stacktrace()) { _init(); }
+	udm_exception(const std::string &d) throw() : description(d), stacktrace(UdmUtil::stacktrace()) { _init(); }
+	udm_exception(const char *d) throw() : description(d), stacktrace(UdmUtil::stacktrace()) { _init(); }
 	const udm_exception &operator =(const udm_exception &a) throw()
-		{ description = a.description; return *this; }
+		{ description = a.description; stacktrace = UdmUtil::stacktrace(); _init(); return *this; }
 	virtual ~udm_exception() throw() { }
-	virtual const char *what() const throw() { return description.c_str(); }
+	virtual const char *what() const throw() { return descr_wstack.c_str(); }
+	virtual const char *where() const throw() { return stacktrace.c_str(); }
+
 
 protected:
 	std::string description;
+	std::string descr_wstack;
+	std::string stacktrace;
+
+	void _init() {
+		descr_wstack = description;
+		descr_wstack += "\n";
+		descr_wstack += stacktrace;
+	}
+
 };
 // int64
 

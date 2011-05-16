@@ -3,6 +3,25 @@
 #include <UdmStatic.h>
 #include <UdmUtil.h>
 
+#if defined(HAVE_EXECINFO_H)
+#include <execinfo.h>
+#endif
+
+#if defined(HAVE_DLFCN_H)
+#include <dlfcn.h>
+#endif
+
+#if defined(HAVE_CXXABI_H)
+#include <cxxabi.h>
+#endif
+
+#if defined(_WIN32)
+#include <windows.h>
+#include <dbghelp.h>
+#endif
+
+#include <sstream>
+
 
 
 using namespace Uml;
@@ -823,4 +842,187 @@ namespace UdmUtil
 		return result;
 	}
 
+
+
+	#if defined(HAVE_EXECINFO_H)
+
+	string demangled_symbol(const char *str)
+	{
+		ostringstream sym;
+
+#if defined(HAVE_CXXABI_H)
+		int status = 0;
+
+		char *demangled = abi::__cxa_demangle(str, 0, 0, &status);
+		if (demangled) {
+			sym << demangled;
+			free(demangled);
+		} else
+			sym << str;
+#else
+		sym << str;
+#endif
+
+		return sym.str();
+	}
+
+#if defined(HAVE_DLFCN_H)
+
+	vector<string> get_symbols(void * const *addresses, int stack_depth)
+	{
+		vector<string> res;
+		res.reserve(stack_depth - 1);
+
+		for (size_t i = 1; i < stack_depth; i++) {
+			ostringstream sym;
+
+			if (addresses[i]) {
+				Dl_info info = { 0 };
+				if (dladdr(addresses[i], &info) == 0)
+					sym << "???";
+				else {
+					if (info.dli_sname)
+						sym << demangled_symbol(info.dli_sname);
+					else
+						sym << "???";
+
+					unsigned offset = (char *)addresses[i] - (char *)info.dli_saddr;
+					sym << hex << " + 0x" << offset;
+
+					sym << " [" << addresses[i] << "]";
+				}
+			}
+
+			res.push_back(sym.str());
+		}
+
+		return res;
+	}
+
+#else // if defined(HAVE_DLFCN_H)
+
+	vector<string> get_symbols(void * const *addresses, int stack_depth)
+	{
+		vector<string> res;
+		res.reserve(stack_depth - 1);
+
+		char **symbols = backtrace_symbols(addresses, stack_depth);
+		if (symbols == NULL)
+			return res;
+
+		for (size_t i = 1; i < stack_depth; i++) {
+			ostringstream sym;
+
+			if (symbols[i]) {
+				char *str;
+				// look for the string starting after the first '(' and ended by the following ')' or '+'
+				if (1 == sscanf(symbols[i], "%*[^(](%a[^)+]", &str)) {
+					sym << demangled_symbol(str);
+					free(str);
+
+					// look for the offset between '+' and ')'
+					if (1 == sscanf(symbols[i], "%*[^(]%*[^+]+%a[^)]", &str)) {
+						sym << " + " << str;
+						free(str);
+					}
+				} else
+					sym << symbols[i];
+
+				sym << " [" << addresses[i] << "]";
+			}
+
+			res.push_back(sym.str());
+		}
+
+		free(symbols);
+
+		return res;
+	}
+
+#endif // if defined(HAVE_DLFCN_H)
+
+	#else // if defined(HAVE_EXECINFO_H)
+
+	vector<string> get_symbols()
+	{
+		vector<string> res;
+
+		static HANDLE hProcess = 0;
+		static bool syms_ready = false;
+
+		// initialization of Symbol Handler
+		if (hProcess == 0) {
+			hProcess = GetCurrentProcess();
+
+			SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES);
+			if (SymInitialize(hProcess, NULL, TRUE))
+				syms_ready = true;
+		}
+
+		if (!syms_ready)
+			return res;
+
+		void *addresses[62];
+		size_t stack_depth = RtlCaptureStackBackTrace(1, 62, addresses, NULL);
+		res.reserve(stack_depth);
+
+		for (size_t i = 1; i < stack_depth; i++) {
+			ostringstream sym;
+
+			if (addresses[i]) {
+				DWORD64 dwAddress = (DWORD64)addresses[i];
+
+				// get source file info
+				{
+					DWORD dwDisplacement;
+					IMAGEHLP_LINE64 line;
+
+					line.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
+					if (SymGetLineFromAddr64(hProcess, dwAddress, &dwDisplacement, &line))
+						sym << line.FileName << ":" << line.LineNumber << " ";
+				}
+
+				// get symbol info
+				vector<char> buffer(sizeof(SYMBOL_INFO) + MAX_SYM_NAME);
+				PSYMBOL_INFO pSymbol = (PSYMBOL_INFO)&buffer.front();
+
+				pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+				pSymbol->MaxNameLen = MAX_SYM_NAME;
+
+				DWORD64 dwDisplacement = 0;
+				if (SymFromAddr(hProcess, dwAddress, &dwDisplacement, pSymbol))
+					sym << pSymbol->Name << hex << " + 0x" << dwDisplacement;
+                else
+					sym << "???";
+			}
+
+			res.push_back(sym.str());
+		}
+
+		return res;
+	}
+
+	#endif // if defined(HAVE_EXECINFO_H)
+
+	UDM_DLL string stacktrace()
+	{
+		string trace = "Call stack:\n";
+
+#if defined(HAVE_EXECINFO_H)
+
+		// limit stack depth to 64 frames
+		void *stack_addrs[64];
+		size_t stack_depth = backtrace(stack_addrs, 64);
+
+		vector<string> v = get_symbols(stack_addrs, stack_depth);
+
+#elif defined(_WIN32)
+		vector<string> v = get_symbols();
+#endif // defined(HAVE_EXECINFO_H)
+
+		for (size_t i = 0; i < v.size(); i++)
+			trace += "    " + v[i] + "\n";
+
+		return trace;
+	};
 };

@@ -53,6 +53,7 @@ fi
 
 # Checks for libraries.
 CPPUNITLIBS="-lcppunit -ldl"
+DLOPENLIBS=""
 MINIZIPLIBS="-lz -lminizip"
 XALANLIBS="-lxalan-c"
 XERCESLIBS="-lxerces-c"
@@ -69,6 +70,13 @@ AC_CHECK_HEADER([boost/format.hpp], [],
 	[AC_MSG_ERROR([boost/format.hpp header is needed; please install Boost])])
 AC_CHECK_HEADER([boost/mpl/vector.hpp], [],
 	[AC_MSG_ERROR([boost/mpl/vector.hpp header is needed; please install Boost])])
+
+# For stack traces
+AC_CHECK_HEADERS([execinfo.h dlfcn.h cxxabi.h])
+
+if test "x$ac_cv_header_dlfcn_h" = "xyes"; then
+   DLOPENLIBS="-ldl"
+fi
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -89,6 +97,7 @@ AC_SUBST([UDM_SAMPLES_PATH])
 AC_SUBST([antlr])
 AC_SUBST([swig])
 AC_SUBST([CPPUNITLIBS])
+AC_SUBST([DLOPENLIBS])
 AC_SUBST([MINIZIPLIBS])
 AC_SUBST([XALANLIBS])
 AC_SUBST([XERCESLIBS])

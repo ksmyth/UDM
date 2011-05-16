@@ -12,7 +12,7 @@ libudm_la_LIBADD	= \
 	../src/UdmXmi/libudmxmi.la \
 	../src/UdmOcl/libudmocl.la \
 	../src/UdmOclPat/GOCL/src/libgocl.la \
-	$(XERCESLIBS) $(XALANLIBS) $(MINIZIPLIBS)
+	$(XERCESLIBS) $(XALANLIBS) $(MINIZIPLIBS) $(DLOPENLIBS)
 libudm_la_LDFLAGS	= -version-info 3:1:3
 # Force C++ linking
 nodist_EXTRA_libudm_la_SOURCES	= dummy.cxx
