@@ -2622,6 +2622,8 @@ namespace UdmDom
 			XMLCh *aa = NULL;
 			for(vector<ObjectImpl* >::const_iterator i = nvect.begin(); i != nvect.end(); i++) 
 			{
+				UDM_ASSERT(dynamic_cast<DomObject*>(*i));
+				UDM_ASSERT(static_cast<DomObject *>(*i)->__getdn() == __getdn());
 				DomObject peer = *static_cast<DomObject *>(*i);
 
 				const XMLCh *peerid = peer.GetID();
