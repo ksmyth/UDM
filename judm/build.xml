@@ -579,7 +579,7 @@
 		<!-- Create domain specific jar file -->
 		<jar destfile="${build.dir}/${dspackage}/${dspackage}.jar" manifest="${srcdir}/samples/${dspackage}/ETC/MANIFEST.MF">
 			<fileset dir="${build.dir}/${dspackage}/classes/main" />
-			<fileset dir="${srcdir}/samples/${dspackage}/src/main" includes="**/*.java" />
+			<fileset dir="samples/${dspackage}/src/main" includes="**/*.java" />
 		</jar>
 		
 		<!-- Create domain specific test jar file -->
@@ -672,7 +672,7 @@
 
 		<!-- Generate a domain-specific API documentation --> 
 		<javadoc failonerror="yes" classpathref="compile.classpath" defaultexcludes="yes" useexternalfile="yes" verbose="no" destdir="${build.dir}/${dspackage}/apidoc" windowtitle="${dspackage} API">
-			<fileset dir="${srcdir}/samples/${dspackage}/src/main" defaultexcludes="yes"/>
+			<fileset dir="samples/${dspackage}/src/main" defaultexcludes="yes"/>
 			<fileset dir="${srcdir}/samples/${dspackage}/src/test" defaultexcludes="yes"/>
 		    <doctitle><![CDATA[<h1>${dspackage} API</h1>]]></doctitle>
 		    <bottom><![CDATA[<i>Copyright &#169; Vanderbilt University, 2000-2005. All Rights Reserved.</i>]]></bottom>
