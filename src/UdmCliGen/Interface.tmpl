@@ -57,8 +57,7 @@ namespace $namespace
 // Association role
 #if $c.association
 #for $role in $c.association.children()
-## TODO: set
-        $fq_iname($role.target) @$role.name { get; }
+        $fq_iname($role.target) @$role.name { get; set; }
 #end for
 #end if
     }

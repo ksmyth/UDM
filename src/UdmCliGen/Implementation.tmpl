@@ -265,6 +265,13 @@ $arolegen($orole.name + ("_target" if $orole.max == 1 else "_targets"), $orole.t
                 }
                 return null;
             }
+            set
+            {
+                using (Udm.Native.Object_set set = new Udm.Native.Object_set()) {
+                    set.Add(((global::Udm.Native.UdmCliObject)value).backing);
+                    backing.setAssociation($meta_name, set, Udm.Native.Udm.TARGETFROMCLASS);
+                }
+            }
         }
 #end for
 #end if
