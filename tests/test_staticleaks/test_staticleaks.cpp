@@ -54,6 +54,7 @@ namespace UdmTests
 	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE);
 	_CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
 	_CrtMemDumpAllObjectsSince(&initState);
+	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 
 	_CrtMemState diff;
 	if (_CrtMemDifference(&diff, &initState, &finalState)) {
