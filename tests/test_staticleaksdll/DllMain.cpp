@@ -13,4 +13,5 @@ __declspec(dllexport) void init(void* data) {
 
 	Uml::Initialize();
 	RefPort::Initialize();
+	UdmUtil::stacktrace();
 }

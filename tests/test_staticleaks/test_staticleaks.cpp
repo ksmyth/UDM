@@ -46,13 +46,17 @@ namespace UdmTests
 
 	// To test leak detection:
 	// new int;
+	//_malloc_dbg(13, _CLIENT_BLOCK, __FILE__, __LINE__);
+	//_malloc_dbg(14, _NORMAL_BLOCK, __FILE__, __LINE__);
 	_CrtMemState finalState;
 	_CrtMemCheckpoint(&finalState);
-	_CrtMemBlockHeader * pHead;
 
+	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE);
+	_CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
 	_CrtMemDumpAllObjectsSince(&initState);
-	if (finalState.pBlockHeader != initState.pBlockHeader) {
-		// DebugBreak();
+
+	_CrtMemState diff;
+	if (_CrtMemDifference(&diff, &initState, &finalState)) {
 		CPPUNIT_ASSERT_MESSAGE("Memory leak detected", 0);
 	}
 	int flag = _CrtSetDbgFlag(0x21);
