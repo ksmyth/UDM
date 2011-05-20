@@ -55,6 +55,7 @@ namespace $namespace
         }
 #end for
 
+## some debugging support
         public ${fq_iname($c)} this_downcasted
         {
             get
@@ -91,6 +92,11 @@ namespace $namespace
 #end for
 
 #def accessors($c)
+## "MgaObject" from GReAT's MetaGME2UML
+#if $c.name == "MgaObject"
+        public string GmeId { get { return global::Udm.Native.UdmGme.UdmGme.UdmId2GmeId(this.id); } }
+#end if
+
         ${fq_iname($c)} ${fq_iname($c)}.archetype
         {
             get
@@ -159,7 +165,7 @@ namespace $namespace
             set
             {
                 if (value == null) backing.__impl().setParent(Udm.Native.Udm._null.__impl(), $meta_name);
-                else backing.__impl().setParent((($fq_name($prole.target))value).backing.__impl(), $meta_name);
+                else backing.__impl().setParent((value as global::Udm.Native.UdmCliObject).backing.__impl(), $meta_name);
             }
         }
 
@@ -218,7 +224,7 @@ namespace $namespace
             set
             {
                 Udm.Native.Object_set set = new Udm.Native.Object_set();
-                set.Add((($fq_name($retclass))value).backing);
+                set.Add((value as global::Udm.Native.UdmCliObject).backing);
                 backing.setAssociation($meta_name, set, $getAssocMode);
             }
         }
@@ -237,7 +243,7 @@ namespace $namespace
                 Udm.Native.Object_set set = new Udm.Native.Object_set();
                 foreach ($fq_iname($retclass) o in value)
                 {
-                    set.Add((($fq_name($retclass))o).backing);
+                    set.Add((o as global::Udm.Native.UdmCliObject).backing);
                 }
                 backing.setAssociation($meta_name, set, $getAssocMode);
             }
@@ -268,7 +274,7 @@ $arolegen($orole.name + ("_target" if $orole.max == 1 else "_targets"), $orole.t
             set
             {
                 using (Udm.Native.Object_set set = new Udm.Native.Object_set()) {
-                    set.Add(((global::Udm.Native.UdmCliObject)value).backing);
+                    set.Add((value as global::Udm.Native.UdmCliObject).backing);
                     backing.setAssociation($meta_name, set, Udm.Native.Udm.TARGETFROMCLASS);
                 }
             }
