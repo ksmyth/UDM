@@ -68,7 +68,7 @@ Remarks to CUdmApp::UdmMain(...):
 
 1.	Focus is the currently open model.
 
-2.	The possible values for param (from GME DecoratorLib.h component_startmode_enum):
+2.	The possible values for param (from GME Mga.idl component_startmode_enum):
 	GME_MAIN_START			=   0,
 	GME_BROWSER_START		=   1,
 	GME_CONTEXT_START		=   2,
