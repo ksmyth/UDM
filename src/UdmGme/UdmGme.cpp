@@ -2370,6 +2370,9 @@ bbreak:			;
 		else if(rname == "name")
 		{
 			objself->Name = SmartBSTR(a.c_str()); 
+			if (folderself && folderself->Project->RootFolder == folderself) {
+				folderself->Project->Name = SmartBSTR(a.c_str());
+			}
 #ifdef _DEBUG
 			name = a; 
 #endif
