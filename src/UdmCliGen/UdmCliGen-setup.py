@@ -28,7 +28,7 @@ setup(console=[Target(script = "UdmCliGen.py")], zipfile=None,
 options={"py2exe":{
                         "dll_excludes": ['w9xpopen.exe', 'UdmDll_3_2_VS10.dll', 'boost_python-vc100-mt-1_44.dll', 'xerces-c_2_8.dll'],
                         "excludes": ['udm'],
-                        "bundle_files": 1,
+                        "bundle_files": 2,
                         "includes": ["Cheetah.DummyTransaction"] + templates,
                 }
         },
