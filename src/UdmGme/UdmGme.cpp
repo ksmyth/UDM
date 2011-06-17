@@ -3177,6 +3177,15 @@ bbreak:			;
 
 	void GmeDataNetwork::amapInitialize(const ::Uml::Diagram &dgr, IMgaMetaProject *metaproj) 
 	{
+		std::string errPrefix;
+		{
+		IMgaMetaProjectPtr pmetaproj = metaproj;
+		errPrefix = "Could not initiliaze Udm Uml Diagram '";
+		errPrefix += static_cast<std::string>(dgr.name()) + "' from GME paradigm: '";
+		errPrefix += static_cast<const char*>(pmetaproj->Name);
+		errPrefix += "': ";
+		}
+
 		::Uml::DiagramAssociations assocs(dgr);
 		for(::Uml::DiagramAssociations::iterator i = assocs.begin(); i != assocs.end(); i++) 
 		{
@@ -3460,7 +3469,7 @@ bbreak:			;
 				for (; rolesIt != roles.end(); rolesIt++) {
 					rolenames += string("'") + string(rolesIt->name()) + "' ";
 				}
-				throw udm_exception(string("Cannot resolve association '") + getnameforassoc(assoc, true) + 
+				throw udm_exception(errPrefix + "Cannot resolve association '" + getnameforassoc(assoc, true) + 
 					"' with rolenames " + rolenames + "\n");
 			}
 
@@ -3503,7 +3512,7 @@ bbreak:			;
 							break;
 						default:
 		typeerr:
-							throw udm_exception("Association resolves to invalid object type: " +  (string)nn->metaobj->Name);
+							throw udm_exception(errPrefix + "Association resolves to invalid object type: " +  (string)nn->metaobj->Name);
 					}
 				}//if (nn->metaobj)
 				else
@@ -3519,7 +3528,7 @@ bbreak:			;
 
 						//we expect that all the metaobjects are the same and equal to the one expected, OBJTYPE_CONNECTION
 						nn->ot = p->ObjType;
-						if(nn->ot != expect) throw udm_exception("Association resolves to invalid object type: " +  (string)p->Name);
+						if(nn->ot != expect) throw udm_exception(errPrefix + "Association resolves to invalid object type: " +  (string)p->Name);
 				
 						//compute which one is the primary role name
 						herename = p->RegistryValue["sName"];
@@ -3535,7 +3544,7 @@ bbreak:			;
 									{
 										//it should be the same for all the metaobjects!
 										if (nn->primary != *j)
-											throw udm_exception("amapInitialize: Different primary rolenames found in descendant connection meta objects of the same connection supertype!");
+											throw udm_exception(errPrefix + "amapInitialize: Different primary rolenames found in descendant connection meta objects of the same connection supertype!");
 									}
 									break;
 								}
@@ -3548,7 +3557,7 @@ bbreak:			;
 				if(!nn->primary)
 				{
 					if (nn->metaobj)
-						throw udm_exception("Association resolves to invalid object type: " +  (string)nn->metaobj->Name);
+						throw udm_exception(errPrefix + "Association resolves to invalid object type: " +  (string)nn->metaobj->Name);
 					else 
 					{
 						string descr = "amapInitialize: Incosistency between UML rolenames and sName/dName specifications for these related connections :";
@@ -3558,12 +3567,12 @@ bbreak:			;
 							IMgaMetaFCOPtr p = nn->metaobjs[i];
 							descr += p->Name; 
 						};
-						throw udm_exception(descr);
+						throw udm_exception(errPrefix + descr);
 					};
 				}
 				if((!nn->rp_helper) &&(!reservednamesinUML) && (therename != SmartBSTR(Uml::MakeRoleName(Uml::theOther(nn->primary)).c_str()) || (nn->primary.isNavigable() && herename != SmartBSTR(Uml::MakeRoleName(nn->primary).c_str()))) ) 
 				{
-					throw udm_exception("Association end names mismatch: " +  (string)nn->metaobj->Name);
+					throw udm_exception(errPrefix + "Association end names mismatch: " +  (string)nn->metaobj->Name);
 				}
 			}
 //archetype_ready:
