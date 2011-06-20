@@ -21,8 +21,9 @@
 			- removed  the UdmGme.h #include directive, and added the only function which is needed from that namespace
 */
 
-#import "progid:Mga.MgaMetaFolder" version("1.0") no_implementation
-#import "progid:Mga.MgaFolders" version("1.0") no_implementation
+// KMS: these renames are for GME r1365 (Work around "MIDL changes the case of identifier in generated type library" http://support.microsoft.com/kb/q220137/)
+#import "progid:Mga.MgaMetaFolder" version("1.0") no_implementation rename("Kind", "kind")
+#import "progid:Mga.MgaFolders" version("1.0") no_implementation rename("Dst", "dst") rename("Src", "src") rename("Kind", "kind")
 #import "progid:Mga.CoreBinFile" version("1.0") no_implementation
 // GMELib
 #import "libid:0ADEEC71-D83A-11D3-B36B-005004CC8592" no_implementation
