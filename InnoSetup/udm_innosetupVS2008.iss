@@ -314,16 +314,14 @@ end;
 
 function CheckVersions(): Boolean;
 var
-  gme_path : String;
   oGME :  Variant;
 begin
   Result := True;
 #ifdef GMEVER
-  gme_path := GetEnv('GME_ROOT');
   /////////////////////////////////////////////////////////
   // CASE #1: No GME installed
   /////////////////////////////////////////////////////////
-  if gme_path = '' then begin
+  if not RegKeyExists(HKEY_LOCAL_MACHINE, 'Software\GME') then begin
     MsgBox('Unable to locate GME r{#GMEVER}.  Please install GME r{#GMEVER} first.', mbError, MB_OK);
     Result := False;
   /////////////////////////////////////////////////////////
