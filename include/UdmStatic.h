@@ -174,6 +174,8 @@ namespace UdmStatic
 		static void Cleanup();
 		friend class Udm::UdmStaticData; // needs to alter the id_map_so_set_deleted flag
 		friend unsigned long StaticDataNetwork::DeSerialize(FILE*, map<unsigned long, const StaticObject*>&, Object&);
+		friend void CreateComposition(const Object &, const ::Uml::CompositionChildRole &, const Object &, const ::Uml::CompositionParentRole &);
+		friend void Uml::Initialize();
 	private:
 		StaticDataNetwork * mydn;
 
@@ -205,6 +207,9 @@ namespace UdmStatic
 		bool lib_object;
 		bool lib_root;
 
+		// initialization needed from constructors
+		void init();
+
 	public:
 
 		StaticObject(const ::Uml::Class &meta, 
@@ -212,6 +217,9 @@ namespace UdmStatic
 					StaticObject * archetype = NULL, 
 					const bool subtype = false,
 					const bool real_archetype = true);
+		StaticObject(const ::Uml::Class &meta,
+					StaticDataNetwork *dn,
+					int ref);
 		void Destroy(bool root);		//destroy the object network
 										// this deletes all the objects explicitly,
 										// to be used only when the data network is going away ..
@@ -230,7 +238,7 @@ namespace UdmStatic
 
 		ObjectImpl *clone();
 		void release();
-		Udm::DataNetwork *__getdn();
+		Udm::DataNetwork *__getdn() const;
 		const ::Uml::Class &m_type;
 		bool m_type_is_safetype;
 	

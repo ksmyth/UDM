@@ -79,7 +79,7 @@ namespace UdmGme
 
 		virtual ObjectImpl *clone();
 		virtual void release();
-		virtual Udm::DataNetwork *__getdn();
+		virtual Udm::DataNetwork *__getdn() const;
 
 	// --- lookup
 

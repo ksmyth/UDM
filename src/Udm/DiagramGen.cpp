@@ -134,6 +134,18 @@ void CGen< ::Uml::Diagram>::CustomProcess(const ::Uml::Diagram &cross_diagram, c
 ")
 					);
 
+	// create a static DN for Uml meta
+	if (gen.opts.meta_init == UdmOpts::STATIC_INIT && dgr_name == "Uml")
+		meth_defs.push_back( boost::format("\tUdmStatic::StaticDataNetwork* dn = new UdmStatic::StaticDataNetwork(diagram);\n\
+\t\tdn->rootobject = meta;\n\
+\t\tstatic_cast<UdmStatic::StaticObject*>(dn->rootobject.__impl())->mydn = dn;\n\
+\t\tdn->systemname = \"%1%\";\n\
+\t\tdn->sem = Udm::CHANGES_LOST_DEFAULT;\n\
+\n\
+")
+					% dgr_name
+					);
+
 	meth_defs.push_back( boost::format("\tCreateMeta();\n\
 \t\tInitMeta();\n\
 \t\tInitMetaLinks();\n\
@@ -141,7 +153,6 @@ void CGen< ::Uml::Diagram>::CustomProcess(const ::Uml::Diagram &cross_diagram, c
 				);
 
 	if (gen.opts.meta_init == UdmOpts::STATIC_INIT)
-	{
 		meth_defs.push_back( boost::format("\t::Uml::InitDiagram(meta, \"%1%\", \"%2%\");\n\
 \n\
 ")
@@ -149,17 +160,6 @@ void CGen< ::Uml::Diagram>::CustomProcess(const ::Uml::Diagram &cross_diagram, c
 					% (string) c.version()
 					);
 
-		// create a static DN for Uml meta
-		if (dgr_name == "Uml") 
-			meth_defs.push_back( boost::format("\tUdmStatic::StaticDataNetwork* dn = new UdmStatic::StaticDataNetwork(diagram);\n\
-\t\tdn->rootobject = meta;\n\
-\t\tdn->systemname = \"%1%\";\n\
-\t\tdn->sem = Udm::CHANGES_LOST_DEFAULT;\n\
-\n\
-")
-						% dgr_name
-						);
-	}
 	else if (gen.opts.meta_init == UdmOpts::CORBA_INIT)
 		meth_defs.push_back( boost::format("\t::Uml::InitCORBADiagram(meta, \"%1%\", \"%2%\");\n\
 \n\

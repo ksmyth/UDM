@@ -290,21 +290,40 @@ namespace UdmStatic
 	m_type(meta), 
 	id_map_so_set_deleted(false),
 	m_parent(NULL),
+	mydn(NULL),
 	lib_object(false),
 	lib_root(false),
 	lib_name("")
 	{ 
-	//	GetIdForObject((StaticObject*)this);
-	//	InsertObject((StaticObject*)this);
+		init();
+	}
 
+	StaticObject::StaticObject(const ::Uml::Class &meta, StaticDataNetwork *dn, int ref) :
+	deleted(false), 
+	archetype(NULL), 
+	subtype(false),  
+	real_archetype(true), 
+	refCount(ref),
+	m_type(meta), 
+	id_map_so_set_deleted(false),
+	m_parent(NULL),
+	mydn(dn),
+	lib_object(false),
+	lib_root(false),
+	lib_name("")
+	{
+		init();
+	}
+
+	void StaticObject::init()
+	{
 		pair<set<StaticObject*>::iterator, bool> ins_res  = Udm::_UdmStaticData.so_set.insert(this);
 		if (!ins_res.second)
 			throw udm_exception(" Corrupt set, pointer already exists in the map ?");
 
-		mydn = NULL;
 		m_type_is_safetype = Uml::SafeTypeContainer::IsSafeType(m_type);
 	}
-	
+
 	StaticObject::~StaticObject()
 	{
 
@@ -375,25 +394,29 @@ namespace UdmStatic
 	}
 
 
-	Udm::DataNetwork * StaticObject::__getdn() 
+	Udm::DataNetwork * StaticObject::__getdn() const
 	{ 
-
+#ifdef _DEBUG
 		if (!mydn)
 		{
-			StaticObject * p = this;
+			// Check if the object belongs to a DN but its mydn member is not set
+			const StaticObject * p = this;
 			while (p->m_parent) p = p->m_parent;				
 			for(SDNList::iterator ff = Udm::_UdmStaticData.SDNs.begin(); ff != Udm::_UdmStaticData.SDNs.end(); ff++) 
 			{
 				Object root = (*ff)->GetRootObject();
-				if(root && static_cast<StaticObject *>(root.__impl())  == p) 
-				{
-					mydn = *ff;			//*ff is a StaticDataNetwork
-					return *ff;			//*ff is casted to Udm::DataNetwork
+				if ( static_cast<StaticObject *>(root.__impl()) == p ) {
+					const StaticObject *p = this;
+					while (p->m_parent) {
+						StaticObject *p2 = p->m_parent;
+						p = p->m_parent;
+					}
 				}
+				UDM_ASSERT( static_cast<StaticObject *>(root.__impl()) != p );
 			}
-			return NULL;
-				
-		} else return mydn;
+		}
+#endif
+		return mydn;
 
 	}
 
@@ -1069,6 +1092,7 @@ namespace UdmStatic
 								children_type::iterator j = ii++;
 								st_and_i_o->m_parent->m_children.erase(j);
 								st_and_i_o->refCount--;//we don't release it, it might be reused. if not, it will be deleted
+								st_and_i_o->mydn = NULL;
 								cntt++;
 								
 							} else ii++;
@@ -1113,11 +1137,13 @@ namespace UdmStatic
 							pair<uniqueId_type const, StaticObject *> child(ccr.uniqueId(), (StaticObject*)(st_and_i_o->clone()));
 							/*children_type::iterator ins_res = */cp_impl->m_children.insert(child);
 							st_and_i_o->m_parent = cp_impl;
+							st_and_i_o->mydn = static_cast<StaticDataNetwork*>(cp_impl->__getdn());
 							moved_to_parents_ok.insert(cp_impl);
 						}
 						else
 						{
 							st_and_i_o->m_parent = NULL; //refcount is already decremented because of this
+							st_and_i_o->mydn = NULL;
 							st_and_i_o->setParent(NULL, NULL, false);
 						}
 						
@@ -1126,6 +1152,7 @@ namespace UdmStatic
 				}
 			}
 			m_parent = NULL;
+			mydn = NULL;
 		};
 
 		//end of removal from children of my parent
@@ -1141,6 +1168,9 @@ namespace UdmStatic
 			pair<uniqueId_type const, StaticObject *> child(ccr.uniqueId(), (StaticObject*)(this->clone()));
 			/*children_type::iterator ins_res = */aa.m_children.insert(child);
 			m_parent =(UdmStatic::StaticObject*)a;
+
+			// set our dn
+			mydn = static_cast<StaticDataNetwork*>(a->__getdn());
 
 			//in the situation which the new parent has derived/instantiated objects
 			//and the new child is not coming from the archetype block
@@ -2640,11 +2670,13 @@ namespace UdmStatic
 			
 			//create the `so` object with the meta information
 			StaticObject * so = new StaticObject(safe_type, 1, reinterpret_cast<StaticObject *>(archetype_id), subtype_val, real_archetype_val );
+			so->mydn = this;
 			read_list.push_front(so);		//add to the list of read objects
 
 			//if this is the first call, then assign the first StaticObject to rootobject
 			if(is_first)
 			{
+				so->mydn = this;
 				root_o = so;
 				is_first = false;
 			}
@@ -4012,6 +4044,7 @@ namespace UdmStatic
 			
 			//now it's a real object, set it's parent to so
 			((*so_ch_i).second)->m_parent = this;
+			((*so_ch_i).second)->mydn = static_cast<StaticDataNetwork *>(__getdn());
 			((*so_ch_i).second)->clone();		//because it's in my children map
 			
 		}
@@ -4107,6 +4140,7 @@ namespace UdmStatic
 		pair<uniqueId_type const, StaticObject *> child(0, (StaticObject *) (dep->clone()));
 		m_children.insert(child);
 		dep->m_parent = this;
+		dep->mydn = mydn;
 
 		dep->setDefaultAttributes(false);
 
@@ -4166,14 +4200,14 @@ namespace UdmStatic
 
 		root_o->Destroy(true);
 	
-		rootobject =&Udm::_null;
+		rootobject = Udm::null;
 	};
 
 	
 	UDM_DLL StaticDataNetwork::StaticDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* project) :	Udm::DataNetwork(metainfo, project)   
 	{
 		Udm::_UdmStaticData.SDNs.push_front(this);
-		rootobject = NULL;
+		rootobject = Udm::null;
 		
 		/*
 			a meta-data network is needed for getting the meta-objects(attributes, childroles, associationroles) by their IDs.
@@ -4182,7 +4216,8 @@ namespace UdmStatic
 			line above would be NULL. In this cases, knowning that StaticDataNetwork::ObjectById() will work fine for _all_ StaticObjects, we
 			use our Datanetwork's StaticDataNetwork to map back ids to objects.
 		*/
-		meta_dn = metainfo.dgr->__impl()->__getdn();
+		if (metainfo.dgr->__impl() != &Udm::_null)
+			meta_dn = metainfo.dgr->__impl()->__getdn();
 		if (!meta_dn) meta_dn = this;
 
 	};
@@ -4197,7 +4232,7 @@ namespace UdmStatic
 	UDM_DLL void StaticDataNetwork::CreateNew(const string &systemname, const string &metalocator, 
 		const ::Uml::Class &rootclass, enum Udm::BackendSemantics sem) 
 	{
-		rootobject = new StaticObject(rootclass, 1);
+		rootobject = new StaticObject(rootclass, this, 1);
 	//	rootobject.__impl()->setDefaultAttributes();
 		this->systemname = systemname;
 		this->sem = sem;
@@ -4331,6 +4366,7 @@ namespace UdmStatic
 
 		child->refCount += 2;
 		child->m_parent = parent;
+		child->mydn = static_cast<StaticDataNetwork *>(parent->__getdn());
 		parent->m_children.insert(StaticObject::children_type::value_type(
 			childRole.uniqueId(), child));
 	}

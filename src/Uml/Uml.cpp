@@ -501,18 +501,17 @@ namespace Uml {
 
 		meta = ::Uml::CreateDiagram();
 
+		UdmStatic::StaticDataNetwork* dn = new UdmStatic::StaticDataNetwork(diagram);
+		dn->rootobject = meta;
+		static_cast<UdmStatic::StaticObject*>(dn->rootobject.__impl())->mydn = dn;
+		dn->systemname = "Uml";
+		dn->sem = Udm::CHANGES_LOST_DEFAULT;
 
 		CreateMeta();
 		InitMeta();
 		InitMetaLinks();
 
 		::Uml::InitDiagram(meta, "Uml", "2.04");
-
-
-		UdmStatic::StaticDataNetwork* dn = new UdmStatic::StaticDataNetwork(diagram);
-		dn->rootobject = meta;
-		dn->systemname = "Uml";
-		dn->sem = Udm::CHANGES_LOST_DEFAULT;
 
 
 		_SetXsdStorage();
