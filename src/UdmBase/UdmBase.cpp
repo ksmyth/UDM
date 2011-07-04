@@ -1852,6 +1852,30 @@ namespace UDM_NAMESPACE
 			return ret;
 		}
 
+		UDM_DLL string ObjectImpl::getPath(const string &strDelimiter, bool bNeedRootFolder) const
+		{
+			DataNetwork *dn = __getdn();
+			ObjectImpl *parent = getParent(NULLPARENTROLE);
+
+			if ( (dn && this == dn->GetRootObject().__impl()) || parent == NULL)
+			{
+				if (bNeedRootFolder)
+					return UdmUtil::ExtractName(this, "name");
+				else
+					return "";
+			}
+			else
+			{
+				string path = parent->getPath(strDelimiter, bNeedRootFolder);
+				if (path.length())
+					path += strDelimiter;	// parent could be the root folder, if bNeedRootFolder is
+								// false then path to parent is empty and delimiter must not be added
+
+				path += UdmUtil::ExtractName(this, "name");
+				return path;
+			}
+		}
+
 
 		//the map for static metadepository
 		map<string, const UdmDiagram*>* MetaDepository::meta_dep = NULL;

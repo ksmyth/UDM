@@ -23,7 +23,6 @@
 #include <sstream>
 
 
-
 using namespace Uml;
 using namespace Udm;
 
@@ -95,6 +94,9 @@ namespace UdmUtil
 
 	UDM_DLL string ExtractName(const Udm::ObjectImpl *impl,  const string &att_name )
 	{
+		if (impl->type().__impl() == NULL)
+			return string("<not discoverable>");
+
 		::Uml::Class cls = impl->type();
 		set< ::Uml::Attribute> attrs=cls.attributes();		
 		
@@ -843,8 +845,7 @@ namespace UdmUtil
 	}
 
 
-
-	#if defined(HAVE_EXECINFO_H)
+#if defined(HAVE_EXECINFO_H)
 
 	string demangled_symbol(const char *str)
 	{
@@ -941,7 +942,7 @@ namespace UdmUtil
 
 #endif // if defined(HAVE_DLFCN_H)
 
-	#else // if defined(HAVE_EXECINFO_H)
+#else // if defined(HAVE_EXECINFO_H)
 
 	vector<string> get_symbols()
 	{
@@ -1002,7 +1003,7 @@ namespace UdmUtil
 		return res;
 	}
 
-	#endif // if defined(HAVE_EXECINFO_H)
+#endif // if defined(HAVE_EXECINFO_H)
 
 	UDM_DLL string stacktrace()
 	{
@@ -1024,5 +1025,5 @@ namespace UdmUtil
 			trace += "    " + v[i] + "\n";
 
 		return trace;
-	};
+	}
 };
