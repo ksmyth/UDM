@@ -504,6 +504,7 @@ namespace UDM_NAMESPACE
 		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const;
 
 		// utilities
+		virtual string toString() const;
 		// root folder is added by default, no reverse order suport, delimiter is never added to the front
 		virtual string getPath( const string &strDelimiter = "/", bool bNeedRootFolder = true ) const;
 	};
@@ -597,6 +598,7 @@ namespace UDM_NAMESPACE
 		virtual ObjectImpl *clone() { return this; }
 		virtual void release() { } 
 		virtual DataNetwork *__getdn() const { throw e; }
+		virtual string toString() const { return "NullObject"; }
 
 		virtual const ::Uml::Class &type() const { throw e; }
 
@@ -3128,6 +3130,8 @@ namespace UDM_NAMESPACE
 		string getPath2( const std::string& strDelimiter = "./.", bool bNeedRootFolder = true ) const;
 		// distance from root; root is at level zero
 		int depth_level() const;
+
+		string toString() const;
 
 		// libraries
 		virtual bool isLibObject() const;

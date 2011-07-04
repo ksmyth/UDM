@@ -97,6 +97,7 @@ CHANGELOG
 #include <string>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 
 #ifndef _WIN32
 long long _atoi64(const char *x)  { long long i; sscanf(x,"%lld",&i);return i;};
@@ -236,6 +237,14 @@ namespace UDM_NAMESPACE
 		}
 
 		return Object(lib_root);
+	}
+
+	UDM_DLL string Object::toString() const
+	{
+		if (impl != &Udm::_null)
+			return impl->toString();
+
+		return "NULL impl";
 	}
 
 
@@ -1857,7 +1866,7 @@ namespace UDM_NAMESPACE
 			DataNetwork *dn = __getdn();
 			ObjectImpl *parent = getParent(NULLPARENTROLE);
 
-			if ( (dn && this == dn->GetRootObject().__impl()) || parent == NULL)
+			if ( (dn && this == dn->GetRootObject().__impl()) || parent == &Udm::_null)
 			{
 				if (bNeedRootFolder)
 					return UdmUtil::ExtractName(this, "name");
@@ -1874,6 +1883,30 @@ namespace UDM_NAMESPACE
 				path += UdmUtil::ExtractName(this, "name");
 				return path;
 			}
+		}
+
+		UDM_DLL string ObjectImpl::toString() const
+		{
+			ostringstream ret;
+
+			// path or name
+			ret << getPath("/");
+
+			// unique Id
+			ret << " [" << uniqueId() << "]";
+
+			if (type().__impl() != &Udm::_null) {
+				ret << " of type " << type().getPath2("::");
+			} else
+				ret << " of unknown type";
+
+			DataNetwork *dn = __getdn();
+			if (dn) {
+				ret << ", in DN " << dn->uniqueId();
+			} else
+				ret << ", not in a DN";
+
+			return ret.str();
 		}
 
 
