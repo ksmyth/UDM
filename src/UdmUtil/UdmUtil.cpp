@@ -23,6 +23,7 @@
 #include <sstream>
 
 
+
 using namespace Uml;
 using namespace Udm;
 
@@ -845,7 +846,8 @@ namespace UdmUtil
 	}
 
 
-#if defined(HAVE_EXECINFO_H)
+
+	#if defined(HAVE_EXECINFO_H)
 
 	string demangled_symbol(const char *str)
 	{
@@ -942,7 +944,7 @@ namespace UdmUtil
 
 #endif // if defined(HAVE_DLFCN_H)
 
-#else // if defined(HAVE_EXECINFO_H)
+	#else // if defined(HAVE_EXECINFO_H)
 
 	vector<string> get_symbols()
 	{
@@ -1003,7 +1005,7 @@ namespace UdmUtil
 		return res;
 	}
 
-#endif // if defined(HAVE_EXECINFO_H)
+	#endif // if defined(HAVE_EXECINFO_H)
 
 	UDM_DLL string stacktrace()
 	{
@@ -1025,5 +1027,5 @@ namespace UdmUtil
 			trace += "    " + v[i] + "\n";
 
 		return trace;
-	}
+	};
 };
