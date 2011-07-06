@@ -296,7 +296,7 @@ namespace UDM_NAMESPACE
 	public:
 		virtual ObjectImpl *clone() = 0;
 		virtual void release() = 0;
-		virtual DataNetwork *__getdn() const = 0;
+		virtual DataNetwork *__getdn() = 0;
 
 	// --- type
 
@@ -597,7 +597,7 @@ namespace UDM_NAMESPACE
 		// in Object::Object(...) we assume this refererence counting behaviour
 		virtual ObjectImpl *clone() { return this; }
 		virtual void release() { } 
-		virtual DataNetwork *__getdn() const { throw e; }
+		virtual DataNetwork *__getdn() { throw e; }
 		virtual string toString() const { return "NullObject"; }
 
 		virtual const ::Uml::Class &type() const { throw e; }

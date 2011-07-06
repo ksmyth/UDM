@@ -238,7 +238,7 @@ namespace UdmStatic
 
 		ObjectImpl *clone();
 		void release();
-		Udm::DataNetwork *__getdn() const;
+		Udm::DataNetwork *__getdn();
 		const ::Uml::Class &m_type;
 		bool m_type_is_safetype;
 	

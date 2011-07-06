@@ -394,7 +394,7 @@ namespace UdmStatic
 	}
 
 
-	Udm::DataNetwork * StaticObject::__getdn() const
+	Udm::DataNetwork * StaticObject::__getdn() 
 	{ 
 #ifdef _DEBUG
 		if (!mydn)

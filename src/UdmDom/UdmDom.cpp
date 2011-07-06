@@ -691,7 +691,7 @@ namespace UdmDom
 			return !isSubtype();
 		}
 
-		Udm::DataNetwork *__getdn() const
+		Udm::DataNetwork *__getdn() 
 		{
 			return const_cast<Udm::DataNetwork*>(mydn);
 		}//eo __getdn();

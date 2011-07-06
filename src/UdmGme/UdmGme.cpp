@@ -2804,7 +2804,7 @@ bbreak:			;
 	
 
 
-	Udm::DataNetwork * GmeObject::__getdn() const
+	Udm::DataNetwork * GmeObject::__getdn()
 	{ 
 		if (mydn) return const_cast<Udm::DataNetwork*>(mydn);
 		throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
