@@ -3134,11 +3134,11 @@ namespace UDM_NAMESPACE
 		string toString() const;
 
 		// libraries
-		bool isLibObject() const;
-		bool isLibRoot() const;
-		bool getLibraryName(string &name) const;
-		void setLibraryName(const char *name);
-		Object AttachLibrary(const Object &lib_src, const string &lib_name, t_lib_to_copy_map *copy_map = NULL);
+		virtual bool isLibObject() const;
+		virtual bool isLibRoot() const;
+		virtual bool getLibraryName(string &name) const;
+		virtual void setLibraryName(const char *name);
+		virtual Object AttachLibrary(const Object &lib_src, const string &lib_name, t_lib_to_copy_map *copy_map = NULL);
 
 
 	};
