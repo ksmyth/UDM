@@ -1863,7 +1863,7 @@ namespace UDM_NAMESPACE
 
 		UDM_DLL string ObjectImpl::getPath(const string &strDelimiter, bool bNeedRootFolder) const
 		{
-			DataNetwork *dn = __getdn();
+			DataNetwork *dn = const_cast<ObjectImpl*>(this)->__getdn();
 			ObjectImpl *parent = getParent(NULLPARENTROLE);
 
 			if ( (dn && this == dn->GetRootObject().__impl()) || parent == &Udm::_null)
@@ -1900,7 +1900,7 @@ namespace UDM_NAMESPACE
 			} else
 				ret << " of unknown type";
 
-			DataNetwork *dn = __getdn();
+			DataNetwork *dn = const_cast<ObjectImpl*>(this)->__getdn();
 			if (dn) {
 				ret << ", in DN " << dn->uniqueId();
 			} else
