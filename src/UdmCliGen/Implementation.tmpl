@@ -154,7 +154,7 @@ namespace $namespace
 #for $crole in $c.childRoles
 #set prole = crole.parent.parentRole_role_children[0]
 #set meta_name = $fq_name($c) + "." + role_metaname(prole)
-        public $fq_iname(prole.target) @$role_name(prole)
+        $fq_iname(prole.target) $fq_iname($c).@$role_name(prole)
         {
             get
             {
@@ -176,7 +176,7 @@ namespace $namespace
 #set crole = prole.parent.childRole_role_children[0]
 #set meta_name = $fq_name($c) + "." + role_metaname(crole)
 #if crole.max == 1
-        public $fq_iname(crole.target) @$role_name(crole) {
+        $fq_iname(crole.target) $fq_iname($c).@$role_name(crole) {
             get
             {
                 global::Udm.Native.ObjectImpl_vector v = backing.__impl().getChildren($meta_name, ${fq_name(crole.target)}.meta);
@@ -190,7 +190,7 @@ namespace $namespace
             set {}
         }
 #else
-        public global::System.Collections.Generic.IEnumerable<$fq_iname(crole.target)> @$role_name(crole) {
+        global::System.Collections.Generic.IEnumerable<$fq_iname(crole.target)> $fq_iname($c).@$role_name(crole) {
             get
             {
                 return global::System.Linq.Enumerable.ToList(

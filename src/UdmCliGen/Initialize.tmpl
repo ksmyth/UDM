@@ -32,6 +32,7 @@ foreach (Udm.Native.UdmObject o in meta.GetAllInstancesOf(Udm.Native.Uml.Attribu
 ${fq_name($o)}.meta = classes["${get_path($o, "/")}"];
 downcasts.Add(${fq_name($o)}.meta, ${fq_name($o)}.Cast);
 #else if $o.type.name == "Attribute"
+// FIXME: if not found, say what
 ${fq_name($o.parent)}.$role_metaname($o) = attributes["${get_path($o, "/")}"];
 #end if
 #end for
