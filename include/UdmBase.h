@@ -504,9 +504,9 @@ namespace UDM_NAMESPACE
 		virtual vector<ObjectImpl*> getConnectingChain(const ::Uml::AssociationRole &meta, const ObjectImpl* peer) const;
 
 		// utilities
-		virtual string toString() const;
 		// root folder is added by default, no reverse order suport, delimiter is never added to the front
 		virtual string getPath( const string &strDelimiter = "/", bool bNeedRootFolder = true ) const;
+		virtual string toString() const;
 	};
 
 
