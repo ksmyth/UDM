@@ -314,7 +314,7 @@ namespace UdmGme
 				LocalFree(errorText);
 			}
 		}
-		error_message << "Com exception: ";
+		error_message << "COM exception: ";
 		if (!!str) {
 			error_message << static_cast<const char*>(str);
 			error_message << " (0x" << std::hex << setw(8) << (unsigned long)a << ")";
@@ -767,7 +767,7 @@ namespace UdmGme
 		
 
 
-		throw udm_exception(string("Could not reach connecting port FCO through references to it's parent, starting from the connection object. Debug info:") + debug);
+		throw udm_exception(string("Could not reach connecting port FCO through references to its parent, starting from the connection object. Debug info:") + debug);
 		return NULL;
 	}
 
@@ -824,7 +824,7 @@ namespace UdmGme
 		
 
 
-		throw udm_exception(string("Could not reach connecting port FCO through references to it's parent, starting from the given reference chain. Debug info:") + debug);
+		throw udm_exception(string("Could not reach connecting port FCO through references to its parent, starting from the given reference chain. Debug info:") + debug);
 		return NULL;
 	}
 
@@ -3084,8 +3084,8 @@ bbreak:			;
 		{ 
 			// Modification: Tihamer Levendovszky - for Udm Interpreter //////////////////
 			HRESULT res=CoInitializeEx(NULL,COINIT_APARTMENTTHREADED );
-			if(res!=S_FALSE) // If a library has been initialized we are happy with that
-				COMTHROW(res);
+			if(FAILED(res)) // If COM has been initialized we are happy with that
+				com_exception(res, NULL);
 			//////////////////////////////////////////////////////////////////////////////
 			first = false; 
 		}
