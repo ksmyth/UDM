@@ -31,13 +31,11 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="UdmCliBridgeProps.props" />
     <Import Project="..\swig.props" />
-    <Import Project="..\Xerces-c.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="UdmCliBridgeProps.props" />
     <Import Project="..\swig.props" />
-    <Import Project="..\Xerces-c.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -104,7 +102,7 @@
     </BuildDependsOn>
   </PropertyGroup>
   <Target Name="CopyToBin">
-    <Message Importance="high" Text="Copying $(TargetPath) to bin" Condition="'$(Configuration)'=='Release'"/>
+    <Message Importance="high" Text="Copying $(TargetPath) to bin" Condition="'$(Configuration)'=='Release'" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(MSBuildThisFileDirectory)\..\..\..\..\..\bin" Condition="'$(Configuration)'=='Release'" />
   </Target>
 </Project>
