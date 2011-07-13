@@ -212,7 +212,7 @@ Root: HKLM; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersE
 
 
 [Run]
-Filename: {app}\UdmIntWizard\setup90.bat; Flags: skipifdoesntexist postinstall runhidden; Description: Install Udm-based Interpreter project wizard for visual studio 2008; Components: C
+Filename: {app}\UdmIntWizard\setup90.bat; Flags: skipifdoesntexist postinstall runhidden nowait; Description: Install Udm-based Interpreter project wizard for visual studio 2008; Components: C
 
 [Code]
 var
