@@ -122,6 +122,9 @@ public class UdmException : System.ApplicationException {
 %ignore UDM_NAMESPACE::UdmProject::GetPlaceHolder;
 %ignore UDM_NAMESPACE::NullObject::e;
 
+%ignore UdmUtil::stacktrace;
+%ignore UDM_NAMESPACE::ObjectImpl::getPath;
+
 // Defined in Uml.i
 %ignore Uml::IsDerivedFrom;
 
@@ -299,6 +302,16 @@ namespace UDM_NAMESPACE {
 %}
 }
 }
+
+// FIXM: KMS: this should be moved into UdmUtil.h
+static int CopyObjectHierarchy(Udm::Object srcRoot, Udm::Object dstRoot) {
+    return UdmUtil::CopyObjectHierarchy(srcRoot.__impl(), dstRoot.__impl(), dstRoot.__impl()->__getdn(), copy_assoc_map());
+}
+%{
+static int CopyObjectHierarchy(Udm::Object srcRoot, Udm::Object dstRoot) {
+    return UdmUtil::CopyObjectHierarchy(srcRoot.__impl(), dstRoot.__impl(), dstRoot.__impl()->__getdn(), copy_assoc_map());
+}
+%}
 
 %import "Uml.i"
 

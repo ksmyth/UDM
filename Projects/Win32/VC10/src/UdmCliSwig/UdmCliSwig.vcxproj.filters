@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <None Include="..\..\..\..\..\include\UdmCli.i" />
-    <None Include="..\..\..\..\..\include\UdmException.i" />
+    <None Include="..\..\..\..\..\src\UdmCliSwig\UdmCli.i" />
+    <None Include="..\..\..\..\..\src\UdmCliSwig\UdmException.i" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\include\Udm.i" />
-    <CustomBuild Include="..\..\..\..\..\include\UdmDom.i" />
-    <CustomBuild Include="..\..\..\..\..\include\UdmGme.i" />
-    <CustomBuild Include="..\..\..\..\..\include\UdmStatic.i" />
-    <CustomBuild Include="..\..\..\..\..\include\Uml.i" />
+    <CustomBuild Include="..\..\..\..\..\src\UdmCliSwig\Udm.i" />
+    <CustomBuild Include="..\..\..\..\..\src\UdmCliSwig\UdmDom.i" />
+    <CustomBuild Include="..\..\..\..\..\src\UdmCliSwig\UdmGme.i" />
+    <CustomBuild Include="..\..\..\..\..\src\UdmCliSwig\UdmStatic.i" />
+    <CustomBuild Include="..\..\..\..\..\src\UdmCliSwig\Uml.i" />
     <CustomBuild Include="$(CliBridgeCsDir)\Udm\Udm.cs" />
     <CustomBuild Include="$(CliBridgeCsDir)\Uml\Uml.cs" />
     <CustomBuild Include="$(CliBridgeCsDir)\UdmGme\UdmGme.cs" />
