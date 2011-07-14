@@ -305,11 +305,11 @@ namespace UDM_NAMESPACE {
 
 // FIXM: KMS: this should be moved into UdmUtil.h
 static int CopyObjectHierarchy(Udm::Object srcRoot, Udm::Object dstRoot) {
-    return UdmUtil::CopyObjectHierarchy(srcRoot.__impl(), dstRoot.__impl(), dstRoot.__impl()->__getdn(), copy_assoc_map());
+    return UdmUtil::CopyObjectHierarchy(srcRoot.__impl(), dstRoot.__impl(), dstRoot.__impl()->__getdn(), UdmUtil::copy_assoc_map());
 }
 %{
 static int CopyObjectHierarchy(Udm::Object srcRoot, Udm::Object dstRoot) {
-    return UdmUtil::CopyObjectHierarchy(srcRoot.__impl(), dstRoot.__impl(), dstRoot.__impl()->__getdn(), copy_assoc_map());
+    return UdmUtil::CopyObjectHierarchy(srcRoot.__impl(), dstRoot.__impl(), dstRoot.__impl()->__getdn(), UdmUtil::copy_assoc_map());
 }
 %}
 
