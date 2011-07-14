@@ -51,7 +51,6 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImportLibrary>$(OutDir)$(ProjectName)D.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
@@ -68,12 +67,12 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <ImportLibrary>$(OutDir)$(ProjectName).lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <BaseAddress>0x1200200000</BaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -86,10 +85,6 @@
   <ItemGroup>
     <ProjectReference Include="..\UdmCliSwig\UdmCliSwig.vcxproj">
       <Project>{e96f4873-d47d-4513-97b6-d0a2869434bc}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\UdmDll\UdmDll.vcxproj">
-      <Project>{3cae3dee-065e-426c-9c3c-f1f59217c00b}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
