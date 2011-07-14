@@ -72,7 +72,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <ImportLibrary>$(OutDir)$(ProjectName).lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
-      <BaseAddress>0x1200200000</BaseAddress>
+      <BaseAddress>0x12002000</BaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
