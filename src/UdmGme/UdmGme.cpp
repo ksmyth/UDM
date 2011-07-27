@@ -447,9 +447,9 @@ namespace UdmGme
 					i++;
 			}
 			if (ids.size())
-				COMTHROW(fco->put_RegistryValue(SmartBSTR(role_name.c_str()), SmartBSTR(ListToString(ids).c_str())));
+				fco->PutRegistryValue(SmartBSTR(role_name.c_str()), SmartBSTR(ListToString(ids).c_str()));
 			else
-				COMTHROW(fco->put_RegistryValue(SmartBSTR(role_name.c_str()), NULL));
+				fco->PutRegistryValue(SmartBSTR(role_name.c_str()), SmartBSTR());
 		}
 	}
 
@@ -472,7 +472,7 @@ namespace UdmGme
 		if (!already_exists)
 		{
 			ids.push_back( RpHelperID(role_isNavigable, string(peer_toAdd->GetID())) );
-			COMTHROW(fco->put_RegistryValue(SmartBSTR(role_name.c_str()), SmartBSTR(ListToString(ids).c_str())));
+			fco->PutRegistryValue(SmartBSTR(role_name.c_str()), SmartBSTR(ListToString(ids).c_str()));
 		}
 	}
 
@@ -717,8 +717,7 @@ namespace UdmGme
 							
 				IMgaReferencePtr cp_ref_child(cp_child);
 							
-				IMgaFCOPtr referred;//immediate referred
-				COMTHROW(cp_ref_child->get_Referred(&referred));
+				IMgaFCOPtr referred = cp_ref_child->Referred;//immediate referred
 				if (referred==NULL) continue;//null reference
 
 				IMgaFCOPtr final_referred(referred);//final referred
@@ -732,7 +731,7 @@ namespace UdmGme
 					//loop through references reffering references...
 								
 					IMgaReferencePtr new_reference(referred);
-					COMTHROW(new_reference->get_Referred(&referred));
+					referred = new_reference->Referred;
 					if (referred) 
 					{
 						final_referred = referred;
@@ -792,8 +791,7 @@ namespace UdmGme
 
 			IMgaReferencePtr ref(start_refs->GetItem(start_refs->Count));
 							
-			IMgaFCOPtr referred;//immediate referred
-			COMTHROW(ref->get_Referred(&referred));
+			IMgaFCOPtr referred = ref->Referred;//immediate referred
 
 			IMgaFCOPtr final_referred(referred);//final referred
 
@@ -801,7 +799,7 @@ namespace UdmGme
 			{
 				//loop through references reffering references...
 				IMgaReferencePtr new_reference(referred);
-				COMTHROW(new_reference->get_Referred(&referred));
+				referred = new_reference->Referred;
 				if (referred)
 				{
 					final_referred = referred;
@@ -1707,7 +1705,9 @@ bbreak:			;
 
 		IMgaModelPtr m = self;
 		IMgaMetaModelPtr pmeta = Meta();
-		if(m == NULL || pmeta == NULL) COMTHROW(("Not a model", 1));
+		if(m == NULL || pmeta == NULL) 
+			// throw udm_exception("Not a model");
+			COMTHROW(("Not a model", 1));
 		IMgaMetaRolePtr rr;
 		if(role) 
 		{
@@ -3835,11 +3835,11 @@ bbreak:			;
 			amapClear(amap);
 			
 			if (priv.terr) {
-				COMTHROW(priv.project->CommitTransaction());
+				priv.project->CommitTransaction();
 				priv.terr = NULL;
 			}
 			if(!hasOpened)
-				COMTHROW(priv.project->Close(VARIANT_FALSE));
+				priv.project->Close(VARIANT_FALSE);
 		}
 	}
 
@@ -3855,11 +3855,12 @@ bbreak:			;
 			amapClear(amap);
 			
 			if (priv.terr) {
-				COMTHROW(priv.project->AbortTransaction());
+				// Don't throw an exception here, since this may be called by the destructor under CHANGES_LOST_DEFAULT
+				priv.project->raw_AbortTransaction();
 				priv.terr = NULL;
 			}
 			if(!hasOpened)
-				COMTHROW(priv.project->Close(VARIANT_TRUE));
+				priv.project->raw_Close(VARIANT_TRUE);
 		}
 	}
 	
