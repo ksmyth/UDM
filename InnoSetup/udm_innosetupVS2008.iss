@@ -60,6 +60,9 @@ Name: CS; Description: C# UDM; Types: Full Typical
 Name: System; Description: Register Environment Variables System-Wide (recommended); Types: Typical Full
 Name: Full3rdParty; Description: Full 3rdParty Package (deprecated); Types: Full
 
+[InstallDelete]
+Type: files; Name: "{app}\bin\udm.pyd"
+
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 ;Udm Root folder
@@ -84,11 +87,11 @@ Source: {#UDM3rdPartyPath}\zlib\zlib.lib; DestDir: {app}\3rdparty\zlib; Componen
 Source: {#UDM3rdPartyPath}\zlib\zlibD.lib; DestDir: {app}\3rdparty\zlib; Components: Full3rdParty; Flags: ignoreversion
 ;Udm bin folder
 Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\bin\xerces-c_2_8.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\bin\xerces-c_2_8D.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\xerces-c_2_8_0\bin\xerces-c_2_8D.dll; DestDir: {app}\bin; Components: Full3rdParty; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\Xalan-C_1_11.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\Xalan-C_1_11D.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\Xalan-C_1_11D.dll; DestDir: {app}\bin; Components: Full3rdParty; Flags: ignoreversion
 Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\XalanMessages_1_11.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
-Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\XalanMessages_1_11D.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
+Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\XalanMessages_1_11D.dll; DestDir: {app}\bin; Components: Full3rdParty; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\{#UDMDLL}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\{#UDMDLLD}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\GmeOclExprChecker.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver

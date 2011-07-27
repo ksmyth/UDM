@@ -68,11 +68,7 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <CustomBuildStep>
-      <Message>Copying $(TargetFileName) to bin\</Message>
-      <Command>copy /y "$(TargetPath)"  "$(UDM_PATH)"\bin</Command>
-      <Outputs>$(UDM_PATH)\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>UDM_DYNAMIC_LINKING;UDM_PY_MODULE_NAME=$(TargetName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -92,11 +88,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <CustomBuildStep>
-      <Message>Copying $(TargetFileName) to bin\</Message>
-      <Command>copy /y "$(TargetPath)"  "$(UDM_PATH)"\bin</Command>
-      <Outputs>$(UDM_PATH)\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -120,11 +112,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release27|Win32'">
-    <CustomBuildStep>
-      <Message>Copying $(TargetFileName) to bin\</Message>
-      <Command>copy /y "$(TargetPath)"  "$(UDM_PATH)"\bin</Command>
-      <Outputs>$(UDM_PATH)\bin\$(TargetFileName);%(Outputs)</Outputs>
-    </CustomBuildStep>
+    <CustomBuildStep />
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
