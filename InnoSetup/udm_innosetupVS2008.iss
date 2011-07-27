@@ -109,10 +109,11 @@ Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCli.dll; DestDir: {app}\bin; Stro
 Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCliBridge.dll; DestDir: {app}\bin; Components: CS; Flags: ignoreversion
 Source: {#UDMPATH}\src\UdmCliGen\dist\UdmCliGen.exe; DestDir: {app}\bin; Components: CS; Flags: ignoreversion
 Source: {#UDMPATH}\src\UdmCliGen\dist\python26.dll; DestDir: {app}\bin; Components: Python CS; Flags: ignoreversion
-Source: {#UDMPATH}\Build\Win32\VC10\Release\udm.pyd; DestDir: {app}\bin; Components: Python CS; Flags: ignoreversion
-Source: {#UDMPATH}\Build\Win32\VC10\Debug\udmd.pyd; DestDir: {app}\bin; Components: Python; Flags: ignoreversion
-Source: {#UDMPATH}\Build\Win32\VC10\Release27\udm27.pyd; DestDir: {app}\bin; Components: Python; Flags: ignoreversion
-Source: {#UDMPATH}\bin\boost_python-vc100-mt-1_44.dll; DestDir: {app}\bin; Components: Python CS; Flags: ignoreversion
+Source: {#UDMPATH}\bin\Python26\udm.pyd; DestDir: {app}\bin\Python26; Components: Python CS; Flags: ignoreversion
+Source: {#UDMPATH}\bin\Python27\udm.pyd; DestDir: {app}\bin\Python27; Components: Python; Flags: ignoreversion
+Source: {#UDMPATH}\bin\udm.py; DestDir: {app}\bin; Components: Python CS; Flags: ignoreversion
+Source: {#UDMPATH}\bin\Python26\boost_python-vc100-mt-1_44.dll; DestDir: {app}\bin\Python26; Components: Python CS; Flags: ignoreversion
+Source: {#UDMPATH}\bin\Python27\boost_python-vc100-mt-1_44.dll; DestDir: {app}\bin\Python27; Components: Python CS; Flags: ignoreversion
 Source: {#UDMPATH}\judm\build\build_win\judm\judm.jar; DestDir: {app}\bin; Components: Java; Flags: ignoreversion
 ;Udm Doc folder
 Source: {#UDMPATH}\doc\UDMAPI.pdf; DestDir: {app}\doc; Flags: ignoreversion; Components: Core
