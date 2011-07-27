@@ -486,11 +486,7 @@ __declspec(dllexport) PyObject* __cdecl Object_Convert(Udm::Object udmObject) {
 }
 }
 
-#ifdef _DEBUG
-BOOST_PYTHON_MODULE(udmd)
-#else
-BOOST_PYTHON_MODULE(udm)
-#endif
+BOOST_PYTHON_MODULE(UDM_PY_MODULE_NAME)
 {
 	class_<Udm::Object>("Object")
 		.add_property("type", Object_type)
