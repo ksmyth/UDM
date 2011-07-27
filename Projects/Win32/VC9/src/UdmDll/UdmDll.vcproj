@@ -187,7 +187,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmBaseD.lib UdmOclD.lib UdmPOID.lib UmlD.lib UdmDomD.lib UdmGmeD.lib UdmXMID.lib UdmUtilD.lib Xalan-C_1D.lib xerces-c_2D.lib zlibD.lib GOCLD.lib dbghelp.lib"
+				AdditionalDependencies="UdmBaseD.lib UdmOclD.lib UdmPOID.lib UmlD.lib UdmDomD.lib UdmGmeD.lib UdmXMID.lib UdmUtilD.lib Xalan-C_1.lib xerces-c_2.lib zlibD.lib GOCLD.lib dbghelp.lib"
 				OutputFile="$(OutDir)\UdmDll_3_2D.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
