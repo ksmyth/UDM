@@ -35,7 +35,7 @@ namespace Udm.Native
         }
         public override bool Equals(object that)
         {
-            if (that as UdmCliObject != null)
+            if (that is UdmCliObject)
             {
                 return Equals((UdmCliObject)that);
             }
@@ -119,4 +119,17 @@ public interface IUdmObject
         System.Collections.Generic.IEnumerable<IUdmObject> instances { get; }
         System.Collections.Generic.IEnumerable<IUdmObject> derived { get; }
     }
+
+
+public interface ClassFactory<T> where T : IUdmObject {
+
+    global::Udm.Native.Uml.Class meta { get; }
+
+    global::System.Func<global::Udm.IUdmObject, T> ICast { get; }
+
+    global::System.Func<global::Udm.IUdmObject, T> ICreate { get; }
+
+    global::System.Func<global::Udm.IUdmObject, global::Udm.Native.Uml.CompositionChildRole, T> ICreateWithRole { get; }
+
+}
 }
