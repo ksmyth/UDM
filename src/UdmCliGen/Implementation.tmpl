@@ -33,7 +33,22 @@ namespace $namespace
             return Cast(((global::Udm.Native.UdmCliObject)o).backing);
         }
 
-        public static ${c.name} Create(global::Udm.IUdmObject parent, global::Udm.Native.Uml.CompositionChildRole role = null)
+        public static ${fq_iname($c)} ICreate(global::Udm.IUdmObject parent)
+        {
+            return Create(parent);
+        }
+
+        public static ${fq_iname($c)} ICreate(global::Udm.IUdmObject parent, global::Udm.Native.Uml.CompositionChildRole role)
+        {
+            return Create(parent, role);
+        }
+
+        public static ${c.name} Create(global::Udm.IUdmObject parent)
+        {
+            return Create(parent, null);
+        }
+
+        public static ${c.name} Create(global::Udm.IUdmObject parent, global::Udm.Native.Uml.CompositionChildRole role)
         {
             if (role == null)
             {
@@ -54,6 +69,16 @@ namespace $namespace
             return new ${c.name}(o);
         }
 #end for
+
+        public struct Factory : global::Udm.ClassFactory<${fq_iname($c)}> {
+            public global::Udm.Native.Uml.Class meta { get { return ${fq_name($c)}.meta; } }
+
+            public global::System.Func<global::Udm.IUdmObject, ${fq_iname($c)}> ICast { get { return ${fq_name($c)}.ICast; } }
+
+            public global::System.Func<global::Udm.IUdmObject, ${fq_iname($c)}> ICreate { get { return ${fq_name($c)}.ICreate; } }
+
+            public global::System.Func<global::Udm.IUdmObject, global::Udm.Native.Uml.CompositionChildRole, ${fq_iname($c)}> ICreateWithRole { get { return ${fq_name($c)}.Create; } }
+        }
 
 ## some debugging support
         public ${fq_iname($c)} this_downcasted
