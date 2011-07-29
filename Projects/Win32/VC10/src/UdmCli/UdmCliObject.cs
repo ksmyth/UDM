@@ -56,14 +56,36 @@ namespace Udm.Native
         public IUdmObject parent
         {
             get { return new UdmCliObject(backing.GetParent()); }
+            set
+            {
+                if (value == null)
+                    backing.__impl().setParent(Udm._null.__impl(), Udm.NULLPARENTROLE);
+                else
+                    backing.__impl().setParent((value as UdmCliObject).backing.__impl(), Udm.NULLPARENTROLE);
+            }
         }
         public System.Collections.Generic.IEnumerable<IUdmObject> children
         {
             get
             {
-                return System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select<UdmObject, IUdmObject>
-                    (backing.GetChildObjects(), o => new UdmCliObject(o)));
+                using (Object_set children = backing.GetChildObjects())
+                {
+                    return System.Linq.Enumerable.ToList(
+                        System.Linq.Enumerable.Select<UdmObject, IUdmObject>
+                        (children, o => new UdmCliObject(o)));
+                }
+            }
+
+            set
+            {
+                using (ObjectImpl_vector children = new ObjectImpl_vector())
+                {
+                    foreach (IUdmObject child in value)
+                    {
+                        children.Add((child as UdmCliObject).backing.__impl());
+                    }
+                    backing.__impl().setChildren(Udm.NULLCHILDROLE, children);
+                }
             }
         }
         public bool isInstance
@@ -87,31 +109,37 @@ namespace Udm.Native
         {
             get
             {
-                return System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select<UdmObject, IUdmObject>
-                    (backing.instances(), o => new UdmCliObject(o)));
+                using (Object_set instances = backing.instances())
+                {
+                    return System.Linq.Enumerable.ToList(
+                        System.Linq.Enumerable.Select<UdmObject, IUdmObject>
+                        (instances, o => new UdmCliObject(o)));
+                }
             }
         }
         public System.Collections.Generic.IEnumerable<IUdmObject> derived
         {
             get
             {
-                return System.Linq.Enumerable.ToList(
-                    System.Linq.Enumerable.Select<UdmObject, IUdmObject>
-                    (backing.derived(), o => new UdmCliObject(o)));
+                using (Object_set derived = backing.derived())
+                {
+                    return System.Linq.Enumerable.ToList(
+                        System.Linq.Enumerable.Select<UdmObject, IUdmObject>
+                        (derived, o => new UdmCliObject(o)));
+                }
             }
         }
     }
 }
 namespace Udm
 {
-public interface IUdmObject
+    public interface IUdmObject
     {
         int id { get; }
         // TODO: should be Class inherited from IUdmObject
         Udm.Native.Uml.Class type { get; }
-        IUdmObject parent { get; }
-        System.Collections.Generic.IEnumerable<IUdmObject> children { get; }
+        IUdmObject parent { get; set; }
+        System.Collections.Generic.IEnumerable<IUdmObject> children { get; set; }
 
         bool isInstance { get; }
         bool isSubtype { get; }
@@ -121,15 +149,16 @@ public interface IUdmObject
     }
 
 
-public interface ClassFactory<T> where T : IUdmObject {
+    public interface ClassFactory<T> where T : IUdmObject
+    {
 
-    global::Udm.Native.Uml.Class meta { get; }
+        global::Udm.Native.Uml.Class meta { get; }
 
-    global::System.Func<global::Udm.IUdmObject, T> ICast { get; }
+        global::System.Func<global::Udm.IUdmObject, T> ICast { get; }
 
-    global::System.Func<global::Udm.IUdmObject, T> ICreate { get; }
+        global::System.Func<global::Udm.IUdmObject, T> ICreate { get; }
 
-    global::System.Func<global::Udm.IUdmObject, global::Udm.Native.Uml.CompositionChildRole, T> ICreateWithRole { get; }
+        global::System.Func<global::Udm.IUdmObject, global::Udm.Native.Uml.CompositionChildRole, T> ICreateWithRole { get; }
 
-}
+    }
 }
