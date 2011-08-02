@@ -82,8 +82,21 @@ ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7
 
 
 # GME Release
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GME/11.3.23/
-scp README.txt GME-11.3.23.msi GME-11_3_23_src.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GME/11.3.23/
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GME/11.3.23/
+# VS 2010 command prompt
+svn co https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_11.8.1
+set GME_ROOT=%CD%
+set JAVA_HOME=c:\Program Files\Java\jdk1.5.0_22
+Install\Build\build.py -s 1 -e 13 -v
+set DBGTOOLS=%ProgramFiles%\Debugging Tools for Windows (x86)
+Install\symbols_source_server.cmd
+"%DBGTOOLS%\symstore" add /r /f "%CD%" /s \\kms1.isis.vanderbilt.edu\symbols /t "GME" /v "11.8.1"
+
+svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_11.8.1 GME-11_8_1_src &&
+/c/Program\ Files/7-Zip/7z.exe a -r GME-11_8_1_src.zip GME-11_8_1_src/
+
+
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GME/11.8.1/
+scp README.txt GME-11.8.1.msi GME-11_8_1_src.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GME/11.8.1/
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GME/11.8.1/
 
 
