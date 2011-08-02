@@ -24,7 +24,7 @@ svn co https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_8 Udm
 rem VS10 cmd prompt
 rem Building MetaGME2UML is a requirement for a Udm release
 set PATH=%UDM_PATH%\bin;%PATH%
-msbuild "%GREAT_PATH%\Tools\MetaGME2UMX\MetaGME2UMX Interpreters\MetaGME2UML_interpreterVS2010.vcxproj" /t:Rebuild /p:Configuration=ReleaseVS9
+msbuild "%GREAT_PATH%\Tools\MetaGME2UMX\MetaGME2UMX Interpreters\MetaGME2UML_interpreterVS2010.vcxproj" /t:Rebuild /p:Configuration=Release
 
 msbuild "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" /p:Configuration=Debug /t:Rebuild
 msbuild "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" /p:Configuration=Release /t:Rebuild

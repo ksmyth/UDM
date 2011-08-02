@@ -96,7 +96,7 @@ Source: {#UDMPATH}\Build\Win32\VC9\Release\{#UDMDLL}; DestDir: {app}\bin; Compon
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\{#UDMDLLD}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\GmeOclExprChecker.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UML2XML.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
-Source: {#GREATPATH}\bin_vs9\MetaGME2Uml.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
+Source: {#GREATPATH}\bin\MetaGME2Uml.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
 Source: {#UDMPATH}\Build\Win32\VC9\Release\Udm.exe; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmBackendDump.exe; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmCopy.exe; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
