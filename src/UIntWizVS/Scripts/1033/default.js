@@ -1,5 +1,62 @@
-
 function OnFinish(selProj, selObj)
+{
+    try
+    {
+        if (dte.Version == '10.0') {
+		    OnFinish100(selProj, selObj);
+		}
+		else {
+		    OnFinish90(selProj, selObj);
+		}
+    }
+    catch(e)
+	{
+		if (e.description.length != 0)
+			SetErrorInfo(e);
+		return e.number
+	}
+}
+
+function OnFinish100(selProj, selObj)
+{
+	try
+	{
+		var strProjectPath = wizard.FindSymbol("PROJECT_PATH");
+		var strProjectName = wizard.FindSymbol("PROJECT_NAME");
+		
+		CreateCoClassUUIDExploded();
+        CreateNamespaceAndHeaderName();
+        CreateDynamicLoadingMetaPath();
+		selProj = CreateProject(strProjectName, strProjectPath);
+
+		//AddCommonConfig(selProj, strProjectName);
+		AddConfig90(selProj, strProjectName);
+
+		SetupFilters(selProj);
+
+        var InfFile = CreateCustomInfFile('Templates.inf');
+		AddFilesToCustomProj(selProj, strProjectName, strProjectPath, InfFile);
+		InfFile = CreateCustomInfFile('Common.inf');
+		AddCommonFilesToCustomProj(selProj, InfFile);
+
+		AddMetaFilesToCustomProj(selProj, strProjectName, strProjectPath, wizard.FindSymbol('HEADER_FILE'));
+	    AddMetaFilesToCustomProj(selProj, strProjectName, strProjectPath, wizard.FindSymbol('CPP_FILE'));
+
+		PchSettings(selProj);
+		InfFile.Delete();
+
+		selProj.Object.Save();
+		
+	}
+	catch(e)
+	{
+		if (e.description.length != 0)
+			SetErrorInfo(e);
+		return e.number
+	}
+}
+
+function OnFinish90(selProj, selObj)
 {
 	try
 	{
@@ -10,9 +67,9 @@ function OnFinish(selProj, selObj)
         CreateNamespaceAndHeaderName();
         CreateDynamicLoadingMetaPath();
         
-		selProj = CreateCustomProject(strProjectName, strProjectPath);
-		AddConfig(selProj, strProjectName);
-		AddFilters(selProj);
+		selProj = CreateCustomProject90(strProjectName, strProjectPath);
+		AddConfig90(selProj, strProjectName);
+		AddFilters90(selProj);
 
 		var InfFile = CreateCustomInfFile('Templates.inf');
 		AddFilesToCustomProj(selProj, strProjectName, strProjectPath, InfFile);
@@ -102,7 +159,7 @@ function CreateDynamicLoadingMetaPath()
     wizard.AddSymbol('VALID_META_PATH', valid_path);	
 }
 
-function CreateCustomProject(strProjectName, strProjectPath)
+function CreateCustomProject90(strProjectName, strProjectPath)
 {
 	try
 	{
@@ -152,7 +209,7 @@ function CreateCustomProject(strProjectName, strProjectPath)
 	}
 }
 
-function AddFilters(proj)
+function AddFilters90(proj)
 {
 	try
 	{
@@ -172,7 +229,7 @@ function AddFilters(proj)
 	}
 }
 
-function AddConfig(proj, strProjectName)
+function AddConfig90(proj, strProjectName)
 {
 	try
 	{
@@ -180,26 +237,25 @@ function AddConfig(proj, strProjectName)
     	
 	        // DEBUG GENERAL SETTINGS
 		    var config = proj.Object.Configurations('Debug');
-		    config.IntermediateDirectory = '$(ConfigurationName)';
-		    config.OutputDirectory = '$(ConfigurationName)';
 		    config.ConfigurationType = ConfigurationTypes.typeDynamicLibrary;
             config.useOfMfc = useOfMfc.useMfcDynamic;
             config.CharacterSet = charSet.charSetMBCS;
+		    if (dte.Version == '10.0') {
+		    	var rule = config.Rules.Item("ConfigurationGeneral");
+		    	rule.SetPropertyValue("TargetName", "$(ProjectName)D");
+		    }
             
-            // DEBUG CUSTOM BUILD SETTINGS
-            var CBTool = config.Tools('VCCustomBuildTool');
-            CBTool.Description = "Performing registration (requires elevated priviledges on Windows Vista)...";
-		    CBTool.CommandLine = "regsvr32 /s /c \"$(TargetPath)\"\necho regsvr32 exec. time > \"$(OutDir)\\regsvr32.trg\"\n";
-		    CBTool.Outputs = "$(OutDir)\\regsvr32.trg";
-    		
 		    // DEBUG MIDL SETTINGS
 		    var MIDLTool = config.Tools('VCMIDLTool');
 		    MIDLTool.PreprocessorDefinitions="_DEBUG";
 		    MIDLTool.MkTypLibCompatible="false";
 		    MIDLTool.ValidateParameters="true";
 		    MIDLTool.TypeLibraryName = ".\\ComponentLib.tlb";
-		    MIDLTool.HeaderFileName = "$(InputName).h"
-		    MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces;$(GME_ROOT)/bin;$(GME_ROOT)/Gme/Release;$(GME_ROOT)/Gme/Debug";
+		    if (dte.Version == '10.0')
+		    	MIDLTool.HeaderFileName = "%(Filename).h";
+		    else
+		    	MIDLTool.HeaderFileName = "$(InputName).h";
+		    MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)\\Interfaces;$(GME_ROOT)\\Gme\\Interfaces;$(GME_ROOT)\\bin;$(GME_ROOT)\\Gme\\Release;$(GME_ROOT)\\Gme\\Debug";
             
             // DEBUG COMPILER SETTINGS
 		    var CLTool = config.Tools('VCCLCompilerTool');
@@ -226,21 +282,19 @@ function AddConfig(proj, strProjectName)
 		    LinkTool.SubSystem = subSystemOption.subSystemWindows;
 		    LinkTool.TargetMachine = machineTypeOption.machineX86;
 		    LinkTool.ModuleDefinitionFile = 'Component.def';
-		    
-		    if(wizard.FindSymbol("UDM_LINKING_STATIC"))
+			LinkTool.RegisterOutput = true;
+		    if (dte.Version != '10.0')
+		    	LinkTool.OutputFile = "$(OutDir)/$(ProjectName)D.dll"
+            LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)\\lib";
+
+            if(wizard.FindSymbol("UDM_LINKING_STATIC"))
             {
-                   // DEBUG UDM SETTINGS
                   LinkTool.AdditionalDependencies = "UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib";
-                  LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
-                  LinkTool.OutputFile = "$(OutDir)/$(ProjectName)d.dll"
             }
-            
             
             if(wizard.FindSymbol("UDM_LINKING_DYNAMIC"))
             {
                 CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING";
-                LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
-                LinkTool.OutputFile = "$(OutDir)/$(ProjectName)d.dll"                   
             }	    
 
     		
@@ -248,26 +302,22 @@ function AddConfig(proj, strProjectName)
             
             // RELEASE GENERAL SETTINGS
 		    config = proj.Object.Configurations('Release');
-		    config.IntermediateDirectory = '$(ConfigurationName)';
-		    config.OutputDirectory = '$(ConfigurationName)';
 	        config.ConfigurationType = ConfigurationTypes.typeDynamicLibrary;
 	        config.useOfMfc  = useOfMfc.useMfcDynamic;
 	        config.CharacterSet = charSet.charSetMBCS;
     	    
-	        // RELEASE CUSTOM BUILD SETTINGS
-	        var CBTool = config.Tools('VCCustomBuildTool');
-            CBTool.Description = "Performing registration (requires elevated priviledges on Windows Vista)...";
-		    CBTool.CommandLine = "regsvr32 /s /c \"$(TargetPath)\"\necho regsvr32 exec. time > \"$(OutDir)\\regsvr32.trg\"\n";
-		    CBTool.Outputs = "$(OutDir)\\regsvr32.trg";
-
             // RELEASE MIDL SETTINGS
             var MIDLTool = config.Tools('VCMIDLTool');
             MIDLTool.PreprocessorDefinitions = "NDEBUG";
 		    MIDLTool.MkTypLibCompatible = "false";
 		    MIDLTool.ValidateParameters = "true";
 		    MIDLTool.TypeLibraryName = ".\\ComponentLib.tlb";
-		    MIDLTool.HeaderFileName = "$(InputName).h"
-		    MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces;$(GME_ROOT)/bin;$(GME_ROOT)/Gme/Release;$(GME_ROOT)/Gme/Debug";
+		    if (dte.Version == '10.0')
+		    	MIDLTool.HeaderFileName = "%(Filename).h";
+		    else
+		    	MIDLTool.HeaderFileName = "$(InputName).h";
+		    MIDLTool.PreprocessorDefinitions="_DEBUG";
+		    MIDLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)\\Interfaces;$(GME_ROOT)\\Gme\\Interfaces;$(GME_ROOT)\\bin;$(GME_ROOT)\\Gme\\Release;$(GME_ROOT)\\Gme\\Debug";
     		
 		    // RELEASE COMPILER SETTINGS
 		    var CLTool = config.Tools('VCCLCompilerTool');
@@ -293,22 +343,19 @@ function AddConfig(proj, strProjectName)
 		    LinkTool.SubSystem = subSystemOption.subSystemWindows;
 		    LinkTool.TargetMachine = machineTypeOption.machineX86;
 		    LinkTool.ModuleDefinitionFile = 'Component.def';
+			LinkTool.RegisterOutput = true;
+		    if (dte.Version != '10.0')
+		    	LinkTool.OutputFile = "$(OutDir)/$(ProjectName).dll"
+            LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)\\lib";
 
             if(wizard.FindSymbol("UDM_LINKING_STATIC"))
             {
-                   // RELEASE UDM SETTINGS
-                  LinkTool.AdditionalDependencies = "Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib Xerces-c_2.lib zlib.lib";
-                  LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
-                  LinkTool.OutputFile = "$(OutDir)/$(ProjectName).dll"
+                LinkTool.AdditionalDependencies = "Uml.lib UdmBase.lib UdmDom.lib UdmGme.lib UdmUtil.lib Xerces-c_2.lib zlib.lib";
             }
-            
             
             if(wizard.FindSymbol("UDM_LINKING_DYNAMIC"))
             {
-                   // RELEASE UDM SETTINGS
                 CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING";
-                LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)/lib";
-                LinkTool.OutputFile = "$(OutDir)/$(ProjectName).dll"                   
             }	    
  
 
@@ -388,8 +435,6 @@ function GetTargetName(strName, strProjectName)
 
 function AddMetaFilesToCustomProj(proj, strProjectName, strProjectPath, strPath)
 {
-
-    
     if(strPath=='') 
     {   
         return;
@@ -397,7 +442,6 @@ function AddMetaFilesToCustomProj(proj, strProjectName, strProjectPath, strPath)
         
     var fileNamePos = strPath.lastIndexOf("\\");
     var fileNameNoPath = '';
-  
 
     if(fileNamePos == -1)
     {
@@ -407,13 +451,10 @@ function AddMetaFilesToCustomProj(proj, strProjectName, strProjectPath, strPath)
     {         
         fileNameNoPath =  strPath.substr(fileNamePos+1);
     }
-
     
     var strFile = strProjectPath + '\\' + fileNameNoPath;
     if(strPath!= fileNameNoPath)
     {
-        
-
 	    try
 	    {
 		    var projItems = proj.ProjectItems
@@ -483,8 +524,10 @@ function AddCommonFilesToCustomProj(proj, InfFile)
 				var strFile = '$(GME_ROOT)\\SDK\\BON\\Common\\' + strTpl;
 				vcfile = proj.Object.AddFile(strFile);
 				
-				// This is needed to remove the '.' from the beginning of the relative path (added by default)
-				vcfile.RelativePath = '$(GME_ROOT)\\SDK\\BON\\Common\\' + strTpl;
+				if (dte.Version != '10.0') {
+				    // This is needed to remove the '.' from the beginning of the relative path (added by default)
+				    vcfile.RelativePath = '$(GME_ROOT)\\SDK\\BON\\Common\\' + strTpl;
+				}
 			}
 		}
 		strTextStream.Close();
