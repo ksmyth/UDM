@@ -182,7 +182,7 @@ Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmGme.lib; DestDir: {app}\lib; Flags
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmOcl.lib; DestDir: {app}\lib; Flags: ignoreversion; Components: CLibs
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmBase.lib; DestDir: {app}\lib; Flags: ignoreversion; Components: CLibs
 ;Udm Interpreter Wizard Script folder
-Source: {#UDMPATH}\src\UIntWizVS\*; DestDir: {app}\UdmIntWizard; Excludes: setup80.*,*.ncb,*.suo,*.user,.svn; Flags: ignoreversion recursesubdirs createallsubdirs; Components: C
+Source: {#UDMPATH}\src\UIntWizVS\*; DestDir: {app}\UdmIntWizard; Excludes: .svn; Flags: ignoreversion recursesubdirs createallsubdirs; Components: C
 ;Udm Samples folder/C++
 Source: {#UDMPATH}\Projects\Win32\VC9\samples\samples-paths-installer.vsprops; DestDir: {app}\samples\C++; DestName: "samples-paths.vsprops"; Components: C; Flags: ignoreversion
 Source: {#UDMPATH}\Projects\Win32\VC9\samples\CreateLampModel\CreateLampModel.vcproj; DestDir: {app}\samples\C++\CreateLampModel; Components: C; Flags: ignoreversion
@@ -216,7 +216,8 @@ Root: HKLM; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersE
 
 
 [Run]
-Filename: {app}\UdmIntWizard\setup90.bat; Flags: skipifdoesntexist postinstall runhidden nowait; Description: Install Udm-based Interpreter project wizard for visual studio 2008; Components: C
+Filename: wscript; Parameters: """{app}\UdmIntWizard\setup90.js""";  Flags: postinstall runhidden nowait; Description: Install Udm-based Interpreter project wizard for Visual Studio 2008; Check: HasVC9;  Components: C
+Filename: wscript; Parameters: """{app}\UdmIntWizard\setup100.js"""; Flags: postinstall runhidden nowait; Description: Install Udm-based Interpreter project wizard for Visual Studio 2010; Check: HasVC10; Components: C
 
 [Code]
 var
@@ -377,6 +378,25 @@ begin
     result := success and (install = 1) and (serviceCount >= service);
 end;
 
+function HasVC9(): Boolean;
+var
+  vs_path : String;
+begin
+  result := false;
+  RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\MicroSoft\VisualStudio\9.0', 'InstallDir', vs_path);
+  if vs_path <> '' then
+    Result := true;
+end;
+
+function HasVC10(): Boolean;
+var
+  vs_path : String;
+begin
+  result := false;
+  RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\MicroSoft\VisualStudio\10.0', 'InstallDir', vs_path);
+  if vs_path <> '' then
+    Result := true;
+end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
