@@ -257,13 +257,24 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 		}
 	  }
 	}
+	catch (udm_exception& e)
+	{
+		ccpProject->AbortTransaction();
+		GMEConsole::Console::gmeoleapp = 0;
+		std::string msg = "Udm exception: ";
+		msg += e.what();
+		AfxMessageBox(msg.c_str());
+		return E_FAIL;
+	}
 	catch(...)
 	{
 		ccpProject->AbortTransaction();
+		GMEConsole::Console::gmeoleapp = 0;
 		// This can be a problem with the GME Console, so we display it in a message box
 		AfxMessageBox("An unexpected error has occurred during the interpretation process.");
-		return E_UNEXPECTED;
+		return E_FAIL;
 	}
+	GMEConsole::Console::gmeoleapp = 0;
 	return S_OK;
 
 }
