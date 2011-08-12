@@ -1832,7 +1832,7 @@ namespace UdmStatic
 			//(meta-meta, meta, instance)
 
 			//i believe this next line is free of inheritence issues ... 
-			::Uml::Class assClass = ((::Uml::Association) meta.parent()).assocClass();	
+			::Uml::Class assClass = Uml::Association(meta.__impl()->getParent(Udm::NULLPARENTROLE)).assocClass();
 			set< ::Uml::Class> assClassDsc_s;
 			if (assClass)
 			{
