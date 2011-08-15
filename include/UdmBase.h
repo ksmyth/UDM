@@ -2576,7 +2576,11 @@ namespace UDM_NAMESPACE
 			ArchetypeAttr(ObjectImpl *i) : impl(i) {}
 			operator CLASS() const
 			{
+#ifdef _DEBUG
 				return CLASS::Cast(impl->getArchetype());
+#else
+				return CLASS(impl->getArchetype());
+#endif
 			};
 	};
 
