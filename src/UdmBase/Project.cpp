@@ -838,7 +838,27 @@ namespace UDM_NAMESPACE
 
 		if (!create) return Udm::null;
 		//placeholder was not found ... create it
-		Object ph_object = root_object.CreateObject(Uml::SafeTypeContainer::GetSafeType(ph_class));
+		// Due to inheritance, an object may have multiple roles. CreateObject will fail if it is ambiguous.
+		// So just get any valid child role
+		Udm::Object::CompositionInfo compInfo;
+		{
+			// like matchChildToParent, but dups are fine
+			using namespace Uml;
+			set<Class> pancs = AncestorClasses(root_object.type());
+			set<Class> cancs = AncestorClasses(ph_class);
+			for (set<Class>::iterator j = cancs.begin(); j != cancs.end(); j++) {
+				set<CompositionChildRole> cr = (*j).childRoles();
+				for (set<CompositionChildRole>::iterator i = cr.begin(); i != cr.end(); i++) {
+					if (pancs.find(theOther(*i).target()) != pancs.end()) {
+						Uml::Composition comp;
+						comp = (*i).parent();
+						compInfo.strChildRoleName = i->name();
+						compInfo.strParentRoleName = theOther(*i).name();
+					}
+				}
+			}
+		}
+		Object ph_object = root_object.CreateObject(Uml::SafeTypeContainer::GetSafeType(ph_class), compInfo);
 		if(!ph_object.SetIntValue("rem_id", o.__impl()->uniqueId()))
 			throw udm_exception("SetIntValue failed when setting attribute rem_id!");
 

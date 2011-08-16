@@ -1600,7 +1600,8 @@ namespace UdmStatic
 		if(!role) 
 		{
  			::Uml::Composition comp = Uml::matchChildToParent(meta, m_type);
-			if(!comp) throw  udm_exception("Role must be specified for " + casestr);
+			if(!comp)
+				throw udm_exception("Role must be specified for " + casestr);
 			role = comp.childRole();
 		}
 

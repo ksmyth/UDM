@@ -848,9 +848,11 @@ void CCompositeClass::BuildCrossUMLCompositions()
 	crole.target() = cross_uml_cls;
 	crole.min() = 0;
 	crole.max() = -1;
+	crole.name() = static_cast<std::string>(cross_uml_cls.name()) + "_childrole";
 
 	::Uml::CompositionParentRole prole = ::Uml::CompositionParentRole::Create(comp);
 	prole.target() = cont_class;
+	prole.name() = static_cast<std::string>(cross_uml_cls.name()) + "_parentrole";
 }
 
 CString CCompositeClass::GetName()
