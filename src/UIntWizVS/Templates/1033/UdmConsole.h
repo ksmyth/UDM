@@ -3,10 +3,12 @@
 #include "ComHelp.h"
 #include "GMECOM.h"
 #include "UdmBase.h"
-#include "UdmFormatter.h"
 #include <string>
+#include "GMEVersion.h"
 
+#if GME_VERSION_MAJOR >= 11
 #include "Gme.h"
+#endif
 
 namespace GMEConsole
 {
@@ -14,24 +16,47 @@ namespace GMEConsole
 	{
 	friend class RawComponent;
 
+#if GME_VERSION_MAJOR <= 10 && GME_VERSION_MINOR <= 2
+	private:
+#else
 	public:
-		static void SetupConsole(CComPtr<IMgaProject> project); 
+#endif
 		static CComPtr<IGMEOLEApp> gmeoleapp;
+	public:
+		static void setupConsole(CComPtr<IMgaProject> project);
+		static void freeConsole()
+		{
+			if(gmeoleapp!=0)
+			{
+				gmeoleapp.Release();
+				gmeoleapp=0;
+			}
+		}
+		static void SetupConsole(CComPtr<IMgaProject> project) { setupConsole(project); }
 
 		static void writeLine(const std::string& message, msgtype_enum type)
 		{
-			if(S_OK != gmeoleapp->ConsoleMessage( CComBSTR(message.length(),message.c_str()),type))
-				throw udm_exception("Could not write GME console.");
+			if (gmeoleapp == 0) {
+				switch (type) {
+				case MSG_NORMAL:
+				case MSG_INFO:
+				case MSG_WARNING:
+					_tprintf("%s", message.c_str());
+					break;
+				case MSG_ERROR:
+					_ftprintf(stderr, "%s", message.c_str());
+					break;
+				}
+			} else {
+				if(S_OK != gmeoleapp->ConsoleMessage( CComBSTR(message.length(),message.c_str()),type))
+					throw udm_exception("Could not write GME console.");
+			}
 		}
 
 		static void clear()
 		{
-			/* Does not work:
-			if(S_OK != gmeoleapp->ConsoleClear())
-				throw udm_exception("Could not clear GME console.");
-				*/
-			CComBSTR empty(L"");
-			gmeoleapp->put_ConsoleContents(empty);
+			if(gmeoleapp!=0)
+				gmeoleapp->put_ConsoleContents(NULL);
 		}
 
 		static void setContents(const std::string& contents)

@@ -7,7 +7,7 @@ namespace GMEConsole
 {
 	CComPtr<IGMEOLEApp> Console::gmeoleapp=0;
 
-	void Console::SetupConsole(CComPtr<IMgaProject> project)
+	void Console::setupConsole(CComPtr<IMgaProject> project)
 	{
 		CComPtr<IMgaClient> client;	
 		CComQIPtr<IDispatch> pDispatch;

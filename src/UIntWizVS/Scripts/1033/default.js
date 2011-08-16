@@ -260,7 +260,7 @@ function AddConfig90(proj, strProjectName)
             // DEBUG COMPILER SETTINGS
 		    var CLTool = config.Tools('VCCLCompilerTool');
 		    CLTool.Optimization = optimizeOption.optimizeDisabled;
-		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces";
+		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces;$(GME_ROOT)\\GME\\Gme";
 		    CLTool.PreprocessorDefinitions = "WIN32;_DEBUG;_WINDOWS;_USRDLL";
 		    CLTool.BasicRuntimeChecks = basicRuntimeCheckOption.runtimeBasicCheckAll;
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDebugDLL;
@@ -322,7 +322,7 @@ function AddConfig90(proj, strProjectName)
 		    // RELEASE COMPILER SETTINGS
 		    var CLTool = config.Tools('VCCLCompilerTool');
 		    CLTool.Optimization = optimizeOption.optimizeMaxSpeed;
-		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces";
+		    CLTool.AdditionalIncludeDirectories = ".;$(GME_ROOT)/SDK/BON/Common;$(UDM_PATH)/include;$(GME_ROOT)/Interfaces;$(GME_ROOT)/Gme/Interfaces;$(GME_ROOT)\\GME\\Gme";
 		    CLTool.PreprocessorDefinitions = "WIN32;NDEBUG;_WINDOWS;_USRDLL";
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDLL;
 		    CLTool.TreatWChar_tAsBuiltInType = "true";
