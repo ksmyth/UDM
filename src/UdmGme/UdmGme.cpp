@@ -1673,7 +1673,8 @@ bbreak:			;
 			
 			if(mf) 
 			{
-				if(mfco) CASSERT("Multiple child kinds match");
+				if(mfco)
+					throw udm_exception("Multiple child kinds match");
 				IMgaFolderPtr nf;
 				nf = folderself->CreateFolder(mf);
 				GmeObject * retval = new GmeObject( nf, mydn);
@@ -1706,8 +1707,7 @@ bbreak:			;
 		IMgaModelPtr m = self;
 		IMgaMetaModelPtr pmeta = Meta();
 		if(m == NULL || pmeta == NULL) 
-			// throw udm_exception("Not a model");
-			COMTHROW(("Not a model", 1));
+			throw udm_exception("Not a model");
 		IMgaMetaRolePtr rr;
 		if(role) 
 		{
@@ -1783,7 +1783,8 @@ bbreak:			;
 		((GmeDataNetwork*)mydn)->CountWriteOps();
 
 		IMgaModelPtr parent = self;
-		if(parent == NULL) COMTHROW(("No parent or non-model parent specified", 1));
+		if(parent == NULL) 
+			throw udm_exception("No parent or non-model parent specified");
 		
 		vector<ObjectImpl*> aa = a;
 		IMgaMetaRolePtr rr;
@@ -2011,13 +2012,15 @@ bbreak:			;
 			return;
 		}
 		parent = static_cast<GmeObject *>(a)->self;
-		if(parent == NULL) COMTHROW(("No parent or non-model parent specified", 1));
+		if(parent == NULL)
+			throw udm_exception("No parent or non-model parent specified");
 
 		IMgaMetaRolePtr rr;
 		if(role)  
 		{
 			rr = GetMetaRoleForChildRole(Uml::theOther(role), parent->Meta);
-			if(CompareKindToClass(rr->kind, m_type)) CASSERT("Role-Kindname mismatch");
+			if(CompareKindToClass(rr->kind, m_type))
+				throw udm_exception("Role-Kindname mismatch");
 		}
 #ifndef DEDUCE_NULLROLES
 		else 
@@ -2041,7 +2044,8 @@ bbreak:			;
 				}
 			} 
 			MGACOLL_ITERATE_END;
-			if(rr == NULL) CASSERT("Parent cannot have this child");
+			if(rr == NULL)
+				throw udm_exception("Parent cannot have this child");
 		}
 #endif
 		IMgaFCOsPtr fcos;
@@ -2593,7 +2597,7 @@ bbreak:			;
 		if(swscanf(gmeId, OLESTR("id-%04lx-%08lx"), &c, &p) != 2 ||
 			(c-=100) > OBJTYPE_FOLDER || c < OBJTYPE_MODEL || p > 100000000) 
 		{
-			COMTHROW(("OBJID too big or invalid", 1));
+			throw udm_exception("OBJID too big or invalid");
 		}
 		return 100000000 * c + p;
 	}
@@ -2603,7 +2607,7 @@ bbreak:			;
 		if(sscanf(gmeId, "id-%04lx-%08lx", &c, &p) != 2 ||
 			(c-=100) > OBJTYPE_FOLDER || c < OBJTYPE_MODEL || p > 100000000) 
 		{
-			COMTHROW(("OBJID too big or invalid", 1));
+			throw udm_exception("OBJID too big or invalid");
 		}
 		return 100000000 * c + p;
 	}
@@ -3660,12 +3664,12 @@ bbreak:			;
 		semantics = sem;
 		hasOpened=true;
 		IMgaProjectPtr  &project = priv.project;
-		project.Attach((IMgaProject *)pUnknown, true);
+		project = pUnknown;
 
 		if (customtransactions) {
 			priv.terr = 0;
 		} else {
-			COMTHROW(project->CreateTerritory(NULL, &priv.terr, NULL));
+			project->CreateTerritory(NULL, &priv.terr, NULL);
 		}
 
 		// For write
@@ -3673,20 +3677,20 @@ bbreak:			;
 
 
 		if (priv.terr)
-			COMTHROW(project->BeginTransaction(priv.terr, TRANSACTION_GENERAL));
+			project->BeginTransaction(priv.terr, TRANSACTION_GENERAL);
 		try {
 			amapInitialize(GetRootMeta(), project->RootMeta);
 // get rootfolder & get name
 
 			rootobject = new GmeObject( project->RootFolder, this);
 		}
-		catch(gme_exc &s) { 
+		catch(udm_exception &s) { 
 			amapClear(amap);
 			if (priv.terr) {
-				COMTHROW(project->AbortTransaction());
-				COMTHROW(priv.terr->Destroy());
+				project->AbortTransaction();
+				priv.terr->Destroy();
 			}
-			COMTHROW(project->Close(VARIANT_TRUE));
+			project->Close(VARIANT_TRUE);
 			throw s;
 		}
 
@@ -3722,7 +3726,7 @@ bbreak:			;
 // get rootfolder & get name
 			rootobject = new GmeObject( project->RootFolder, this );
 		}
-		catch(gme_exc &s) { 
+		catch(udm_exception &s) { 
 			amapClear(amap);
 			COMTHROW(project->AbortTransaction());
 			COMTHROW(priv.terr->Destroy());
@@ -3757,12 +3761,12 @@ bbreak:			;
 			if(bb->m_type != rootclass) 
 			{
 				delete bb;
-				CASSERT("Cannot create this object as root");
+				throw udm_exception("Cannot create this object as root");
 			}
 
 			rootobject = bb;
 		}
-		catch(gme_exc &s) { 
+		catch(udm_exception &s) { 
 			amapClear(amap);
 			COMTHROW(project->AbortTransaction());
 			COMTHROW(priv.terr->Destroy());

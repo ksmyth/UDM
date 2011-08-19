@@ -32,11 +32,8 @@
 
 //so-called error handling 
 
-void SetErrorInfo(long,unsigned short *) { UDM_ASSERT("NotYet Implemented"); }
 void comthrow(HRESULT res, char *e, int l);
 #define COMTHROW(expr) comthrow(expr, #expr, __LINE__)
-#define CASSERT(x) if(!(x)) COMTHROW( ((x), -1))
-
 
 class gme_exc : public udm_exception 
 { 
@@ -48,12 +45,13 @@ public:
 
 static void comthrow(HRESULT res, char *e, int l) 
 {
-	if ((res) != S_OK) throw gme_exc(res);
+	if (FAILED(res))
+		UdmGme::com_exception(res, NULL);
 }
 
 //GmeObject class helper macros
 #define objself (folderself? (IMgaObject *) folderself : (IMgaObject *)self)
-#define testself (self ? self : (COMTHROW(("Invalid method on folders", -1)), NULL))
+#define testself (self ? self : (throw udm_exception("Invalid method on folders"), NULL))
 #define NAMEGET(x) (((string)((x).name())).c_str())
 #define PATHGET(x) (((x).getPath2("::", false)).c_str())
 #define foldiffold (folderself ? folderself : self)

@@ -33,6 +33,7 @@
 namespace UdmGme
 {
 	void com_exception(HRESULT a, IUnknown *b, REFIID c);
+	void com_exception(HRESULT a, IErrorInfo *errorinfo);
 };
 
 
