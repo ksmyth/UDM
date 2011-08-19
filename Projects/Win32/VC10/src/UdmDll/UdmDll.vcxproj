@@ -101,11 +101,15 @@
       <TargetMachine>MachineX86</TargetMachine>
       <ForceSymbolReferences>?UnInitialize@Ocl@@YAXXZ</ForceSymbolReferences>
     </Link>
-    <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin
+    <PostBuildEvent />
+    <CustomBuildStep>
+      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin &amp;&amp; ^
 copy "$(OutDir)"\UdmDll_VS10.lib "$(UDM_PATH)"\lib
 </Command>
-    </PostBuildEvent>
+      <Message>Copy $(TargetName) to bin</Message>
+      <Outputs>$(UDM_PATH)\bin\$(TargetName)</Outputs>
+      <Inputs>$(TargetPath)</Inputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -154,11 +158,15 @@ copy "$(OutDir)"\UdmDll_VS10.lib "$(UDM_PATH)"\lib
       <TargetMachine>MachineX86</TargetMachine>
       <ForceSymbolReferences>?UnInitialize@Ocl@@YAXXZ</ForceSymbolReferences>
     </Link>
-    <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin
+    <PostBuildEvent />
+    <CustomBuildStep>
+      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin &amp;&amp; ^
 copy "$(OutDir)"\UdmDll_VS10D.lib "$(UDM_PATH)"\lib
 </Command>
-    </PostBuildEvent>
+      <Message>Copy $(TargetName) to bin</Message>
+      <Outputs>$(UDM_PATH)\bin\$(TargetName)</Outputs>
+      <Inputs>$(TargetPath)</Inputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\src\UdmDll\UdmDll.cpp">
