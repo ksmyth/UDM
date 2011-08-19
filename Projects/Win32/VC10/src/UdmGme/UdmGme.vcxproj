@@ -126,10 +126,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\src\UdmGme\CommonError.h" />
     <ClInclude Include="..\..\..\..\..\src\UdmGme\CommonHeaders.h" />
-    <ClInclude Include="..\..\..\..\..\src\UdmGme\CommonSmart.h" />
-    <ClInclude Include="..\..\..\..\..\src\UdmGme\CoreCollection.h" />
     <ClInclude Include="..\..\..\..\..\src\UdmGme\GmeObject.h" />
     <ClInclude Include="..\..\..\..\..\src\UdmGme\MgaDefs.h" />
     <ClInclude Include="..\..\..\..\..\include\UdmGme.h" />

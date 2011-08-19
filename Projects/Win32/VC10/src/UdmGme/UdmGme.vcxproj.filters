@@ -22,16 +22,7 @@
     <ClInclude Include="..\..\..\..\..\include\UdmGme.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\src\UdmGme\CommonError.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\src\UdmGme\CommonHeaders.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\src\UdmGme\CommonSmart.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\src\UdmGme\CoreCollection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\src\UdmGme\GmeObject.h">
