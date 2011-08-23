@@ -239,6 +239,7 @@ using namespace MGALib;
 #include <UdmUtil.h>
 
 #include <sstream>
+#include <iterator>
 
 // Hack to detect VS10 GME: VS10 GME has ifdef guards in InterfaceVersion.h
 #define INTERFACEVERSION_INCLUDED
@@ -293,6 +294,9 @@ namespace UdmGme
 	{
 		IMgaProjectPtr project;
 		IMgaTerritoryPtr terr;
+		std::map<Udm::Object::uniqueId_type, std::vector<Udm::Object::uniqueId_type> > derived_map;
+
+		bool IsDerivedFrom(const Uml::Class& derived, const Uml::Class& kind);
 	};
 
 	void com_exception(HRESULT a, IErrorInfo* errorinfo) {
@@ -1714,18 +1718,9 @@ bbreak:			;
 			
 			if(kind) 
 			{
-				/*
 				if (((::Uml::Class)role.target()) != kind)
 				{
-					if (!Uml::IsDerivedFrom(kind, role.target()))
-						throw udm_exception("GmeObject::CreateChild(): Role-Kindname mismatch");
-					rr = GetMetaRoleForKind(kind, pmeta);
-				}
-				else rr = GetMetaRoleForChildRole(role, pmeta);
-				*/
-				if (((::Uml::Class)role.target()) != kind)
-				{
-					if (!Uml::IsDerivedFrom(kind, role.target()))
+					if (static_cast<GmeDataNetwork*>(const_cast<GmeObject*>(this)->__getdn())->priv.IsDerivedFrom(kind, role.target()))
 						throw udm_exception("GmeObject::CreateChild(): Role-Kindname mismatch");
 				}
 				
@@ -1832,6 +1827,32 @@ bbreak:			;
 		}
 	};
 
+	bool privdata::IsDerivedFrom(const Uml::Class& derived, const Uml::Class& kind) {
+		std::map<Udm::Object::uniqueId_type, std::vector<Udm::Object::uniqueId_type> >::iterator cache = derived_map.find(kind);
+		if (kind && cache == derived_map.end())
+		{
+			std::vector<Udm::Object::uniqueId_type> cacheEntries;
+
+			std::deque<Uml::Class> q;
+			q.push_back(kind);
+			while (!q.empty())
+			{
+				Uml::Class kind = q.front();
+				q.pop_front();
+				cacheEntries.push_back(kind.uniqueId());
+				std::set<Uml::Class> baseTypes = kind.subTypes();
+				std::copy(baseTypes.begin(), baseTypes.end(), std::back_inserter(q));
+			}
+			std::sort(cacheEntries.begin(), cacheEntries.end());
+			cacheEntries.erase(std::unique(cacheEntries.begin(), cacheEntries.end()), cacheEntries.end());
+			derived_map.insert(std::pair<Udm::Object::uniqueId_type, std::vector<Udm::Object::uniqueId_type> >(kind.uniqueId(), cacheEntries));
+			cache = derived_map.find(kind.uniqueId());
+		}
+		bool ret = std::binary_search(cache->second.begin(), cache->second.end(), derived.uniqueId());
+		ASSERT((Uml::IsDerivedFrom(derived, kind) ^ ret));
+		return ret;
+	}
+
 
 	vector<ObjectImpl*> GmeObject::getChildren(const ::Uml::CompositionChildRole &role, const ::Uml::Class &kind) const 
 	{
@@ -1853,7 +1874,7 @@ bbreak:			;
 			MGACOLL_ITERATE(IMgaFolder, fchds) 
 			{
 				GmeObject *p = new GmeObject( MGACOLL_ITER, mydn);
-				if(!kind || Uml::IsDerivedFrom(p->m_type, kind))
+				if (!kind || static_cast<GmeDataNetwork*>(const_cast<GmeObject*>(this)->__getdn())->priv.IsDerivedFrom(p->m_type, kind))
 					ret.push_back(p);
 				else delete p;
 			} MGACOLL_ITERATE_END;
@@ -1862,7 +1883,7 @@ bbreak:			;
 			MGACOLL_ITERATE(IMgaFCO, chds) 
 			{
 				GmeObject *p = new GmeObject( MGACOLL_ITER, mydn);
-				if(!kind || Uml::IsDerivedFrom(p->m_type, kind))
+				if (!kind || static_cast<GmeDataNetwork*>(const_cast<GmeObject*>(this)->__getdn())->priv.IsDerivedFrom(p->m_type, kind))
 					ret.push_back(p);
 				else delete p;
 			} MGACOLL_ITERATE_END;
@@ -1928,7 +1949,7 @@ bbreak:			;
 			try 
 			{
 				GmeObject *p = new GmeObject( MGACOLL_ITER, mydn);
-				if(!kind || Uml::IsDerivedFrom(p->m_type, kind))	
+				if (!kind || static_cast<GmeDataNetwork*>(const_cast<GmeObject*>(this)->__getdn())->priv.IsDerivedFrom(p->m_type, kind))
 					ret.push_back(p);
 				else delete p;
 			} catch(udm_exception &) 
