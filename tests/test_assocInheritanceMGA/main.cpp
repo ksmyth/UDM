@@ -3,8 +3,35 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#ifdef _WIN32
+#include <crtdbg.h>
+#include <signal.h>
+#include <windows.h>
+
+int __cdecl CrtReportHook(int reportType, char *message, int *returnValue)
+{
+	if (reportType == _CRT_ASSERT) {
+		DebugBreak();
+		return TRUE;
+	}
+	return FALSE;
+}
+
+void __cdecl AbrtHandler(int)
+{
+	DebugBreak();
+}
+#endif
+
 int main(int argc, char* argv[])
 {
+#ifdef _WIN32
+	signal(SIGABRT, &AbrtHandler);
+	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
+	_set_abort_behavior(0, _WRITE_ABORT_MSG);
+	_CrtSetReportHook(&CrtReportHook);
+#endif
+
 	CPPUNIT_NS::Test *suite = CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest();
 
 	// Adds the test to the list of test to run
