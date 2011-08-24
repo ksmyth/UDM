@@ -1720,7 +1720,7 @@ bbreak:			;
 			{
 				if (((::Uml::Class)role.target()) != kind)
 				{
-					if (static_cast<GmeDataNetwork*>(const_cast<GmeObject*>(this)->__getdn())->priv.IsDerivedFrom(kind, role.target()))
+					if (!static_cast<GmeDataNetwork*>(const_cast<GmeObject*>(this)->__getdn())->priv.IsDerivedFrom(kind, role.target()))
 						throw udm_exception("GmeObject::CreateChild(): Role-Kindname mismatch");
 				}
 				
