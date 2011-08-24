@@ -1849,7 +1849,7 @@ bbreak:			;
 			cache = derived_map.find(kind.uniqueId());
 		}
 		bool ret = std::binary_search(cache->second.begin(), cache->second.end(), derived.uniqueId());
-		ASSERT((Uml::IsDerivedFrom(derived, kind) ^ ret));
+		ASSERT((Uml::IsDerivedFrom(derived, kind) == ret));
 		return ret;
 	}
 
