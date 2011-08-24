@@ -2,6 +2,7 @@
 
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include "LibsTest.h"
 
 #ifdef _WIN32
 #include <crtdbg.h>
