@@ -10,6 +10,9 @@
       <AdditionalIncludeDirectories>..\..\..\..\..\samples\CreateLampModel;$(UDM_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>UDM_DYNAMIC_LINKING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <udm>
+      <AdditionalDependencies>$(UDM_EXE)</AdditionalDependencies>
+    </udm>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

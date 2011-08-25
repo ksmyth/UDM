@@ -45,6 +45,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)obj\tests\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectName)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -66,8 +67,6 @@ exit 0
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>UdmDllD.lib;xerces-c_2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)test_nsD.exe</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)test_ns.pdb</ProgramDatabaseFile>
@@ -76,12 +75,21 @@ exit 0
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>cppunitd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>cd "$(OutDir)Gen\tests\test_ns"
 "$(TargetPath)"
 </Command>
-    </PostBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>NONE</Outputs>
+      <Message>Running $(TargetName)</Message>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
@@ -113,10 +121,18 @@ exit 0
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>cd "$(OutDir)Gen\tests\test_ns"
 "$(TargetPath)"
 </Command>
-    </PostBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>NONE</Outputs>
+      <Message>Running $(TargetName)</Message>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\tests\test_ns\main.cpp" />

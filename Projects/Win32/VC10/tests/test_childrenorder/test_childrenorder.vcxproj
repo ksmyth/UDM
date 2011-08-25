@@ -91,9 +91,15 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>cd "$(OutDir)Gen\samples"
 "$(TargetPath)"</Command>
-    </PostBuildEvent>
+      <Message>Running $(TargetName)</Message>
+      <Outputs>None</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -139,9 +145,15 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>cd "$(OutDir)Gen\samples"
 "$(TargetPath)"</Command>
-    </PostBuildEvent>
+      <Message>Running $(TargetName)</Message>
+      <Outputs>None</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\tests\test_childrenorder\childrenorderTest.cpp">

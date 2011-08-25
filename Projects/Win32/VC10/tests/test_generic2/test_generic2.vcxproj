@@ -93,14 +93,24 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>cd "$(OutDir)Gen\tests\test_generic2"
-"$(TargetPath)"
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>
       </Command>
     </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>cd "$(OutDir)Gen\tests\test_generic2"
+"$(TargetPath)"
+</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Running $(TargetName)</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>None</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -144,10 +154,20 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>cd "$(OutDir)Gen\tests\test_generic2"
 "$(TargetPath)"
 </Command>
-    </PostBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Running $(TargetName)</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>None</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\tests\test_generic2\genericTest.cpp">

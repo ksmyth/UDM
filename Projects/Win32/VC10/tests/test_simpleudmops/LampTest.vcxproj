@@ -94,6 +94,21 @@
 "$(TargetPath)"
 </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>cd "$(OutDir)Gen\samples"
+"$(TargetPath)"
+</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Running $(TargetName)</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>NONE</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -137,10 +152,20 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>cd "$(OutDir)Gen\samples"
 "$(TargetPath)"
 </Command>
-    </PostBuildEvent>
+      <Message>Running $(TargetName)</Message>
+      <Outputs>NONE</Outputs>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\tests\test_simpleudmops\LampTest.cpp">

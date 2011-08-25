@@ -68,10 +68,20 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>cd "$(OutDir)Gen\samples"
 "$(TargetPath)"
 </Command>
-    </PostBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Running $(TargetName)</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>NONE</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -94,15 +104,25 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>cd "$(OutDir)Gen\samples"
-"$(TargetPath)"
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>mkdir "$(OutDir)Gen\tests\test_libs"
 exit 0
 </Command>
     </PreBuildEvent>
+    <CustomBuildStep>
+      <Command>cd "$(OutDir)Gen\samples"
+"$(TargetPath)"
+</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Running $(TargetName)</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>NONE</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\tests\test_libs\LibsTest.cpp" />
