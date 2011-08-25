@@ -73,10 +73,20 @@ exit 0
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>cd "$(OutDir)Gen\tests\test_refports"
 "$(TargetPath)"
 </Command>
-    </PostBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Running $(TargetPath)</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>NONE</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
@@ -104,10 +114,20 @@ exit 0
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
       <Command>cd "$(OutDir)Gen\tests\test_refports"
 "$(TargetPath)"
 </Command>
-    </PostBuildEvent>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Running $(TargetPath)</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>NONE</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_refports\RefPort.h">
