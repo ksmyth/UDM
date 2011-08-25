@@ -35,6 +35,7 @@
     <Import Project="..\..\src\Xalan-c.props" />
     <Import Project="..\..\src\Xerces-c.props" />
     <Import Project="..\..\src\zlib.props" />
+    <Import Project="..\UdmTests.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
@@ -42,6 +43,7 @@
     <Import Project="..\..\src\Xalan-c.props" />
     <Import Project="..\..\src\Xerces-c.props" />
     <Import Project="..\..\src\zlib.props" />
+    <Import Project="..\UdmTests.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -53,6 +55,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)obj\tests\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectName)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -86,8 +89,7 @@ exit 0
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UmlD.lib;UdmOcld.lib;GOCLd.lib;cppunitd.lib;testrunnerd.lib;UdmPOID.lib;Xalan-C_1d.lib;xerces-c_2d.lib;UdmBaseD.lib;UdmDomD.lib;UdmUtilD.lib;zlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)testUdmCintD.exe</OutputFile>
+      <AdditionalDependencies>UdmPOID.lib;cppunitd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -137,7 +139,7 @@ exit 0
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Uml.lib;UdmOcl.lib;GOCL.lib;cppunit.lib;UdmPOI.lib;Xalan-C_1.lib;xerces-c_2.lib;UdmBase.lib;UdmDom.lib;UdmGme.lib;UdmUtil.lib;zlib.lib</AdditionalDependencies>
+      <AdditionalDependencies>UdmPOI.lib;cppunit.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>$(IntDir)testUdmCint.pdb</ProgramDatabaseFile>
