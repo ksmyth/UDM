@@ -24,8 +24,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testUdmCint", "testUdmCint\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmTestsAll", "UdmTestsAll.vcxproj", "{8A9883C4-7A99-49AF-9938-06856A1FF410}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_generic2", "test_generic2\test_generic2.vcxproj", "{14B2F64E-0AD5-4AB3-B349-B175B4D4154A}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_libs", "test_libs\test_libs.vcxproj", "{AB116304-9B33-45FE-BA7C-08F3A56844DE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_refports", "test_refports\test_refports.vcxproj", "{95B70B72-F65E-44F1-AF18-FCE1ED1B4FC7}"
@@ -86,10 +84,6 @@ Global
 		{8A9883C4-7A99-49AF-9938-06856A1FF410}.Debug|Win32.Build.0 = Debug|Win32
 		{8A9883C4-7A99-49AF-9938-06856A1FF410}.Release|Win32.ActiveCfg = Release|Win32
 		{8A9883C4-7A99-49AF-9938-06856A1FF410}.Release|Win32.Build.0 = Release|Win32
-		{14B2F64E-0AD5-4AB3-B349-B175B4D4154A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{14B2F64E-0AD5-4AB3-B349-B175B4D4154A}.Debug|Win32.Build.0 = Debug|Win32
-		{14B2F64E-0AD5-4AB3-B349-B175B4D4154A}.Release|Win32.ActiveCfg = Release|Win32
-		{14B2F64E-0AD5-4AB3-B349-B175B4D4154A}.Release|Win32.Build.0 = Release|Win32
 		{AB116304-9B33-45FE-BA7C-08F3A56844DE}.Debug|Win32.ActiveCfg = Debug|Win32
 		{AB116304-9B33-45FE-BA7C-08F3A56844DE}.Debug|Win32.Build.0 = Debug|Win32
 		{AB116304-9B33-45FE-BA7C-08F3A56844DE}.Release|Win32.ActiveCfg = Release|Win32
