@@ -85,10 +85,6 @@
       <Project>{d38d6a95-8faa-4437-88b5-be24c6cb591a}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="test_generic2\test_generic2.vcxproj">
-      <Project>{14b2f64e-0ad5-4ab3-b349-b175b4d4154a}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="test_generic\test_generic.vcxproj">
       <Project>{ccb8b735-7ebb-4a60-a7e7-b8eaf1b11232}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
