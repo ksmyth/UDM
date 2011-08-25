@@ -57,14 +57,6 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\samples\CreateLampModel\CreateLampModel.vcxproj">
-      <Project>{7b2d07a4-e108-45b1-860b-43084aab9192}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\samples\cross_links\cross_links.vcxproj">
-      <Project>{4ca139a6-d338-4c6d-b9ad-86b65b8e5129}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="testGetAdjacentObjects\testGetAdjacentObjects.vcxproj">
       <Project>{9fba3bbe-2fad-4e8a-b766-7067ec217617}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -87,10 +79,6 @@
     </ProjectReference>
     <ProjectReference Include="test_cintstring\test_cintstring.vcxproj">
       <Project>{c4c77f9b-540f-4d02-a6e0-90f25740ca6c}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="test_crosslinks\Test_CrossLinks.vcxproj">
-      <Project>{4ab81545-a658-4d58-af09-c060dbcb4f7f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="test_domstringdn\test_domstringdn.vcxproj">

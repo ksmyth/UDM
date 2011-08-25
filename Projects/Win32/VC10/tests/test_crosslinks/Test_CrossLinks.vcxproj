@@ -265,7 +265,7 @@ exit 0
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating UDM API files from %(FullPath)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\test_crosslinks" "%(FullPath)" -d "%UDM_PATH%\etc"
 </Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe"</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)UdmD.exe</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\test_crosslinks\Package1.h;$(OutDir)Gen\tests\test_crosslinks\Package1.cpp;$(OutDir)Gen\tests\test_crosslinks\Package1.xsd;$(OutDir)Gen\tests\test_crosslinks\Package2.h;$(OutDir)Gen\tests\test_crosslinks\Package2.cpp;$(OutDir)Gen\tests\test_crosslinks\Package2.xsd;$(OutDir)Gen\tests\test_crosslinks\CL.cpp;$(OutDir)Gen\tests\test_crosslinks\CL.h;$(OutDir)Gen\tests\test_crosslinks\CL.xsd;$(OutDir)Gen\tests\test_crosslinks\CLPackage.cpp;$(OutDir)Gen\tests\test_crosslinks\CLPackage.h;$(OutDir)Gen\tests\test_crosslinks\CLPackage.xsd;$(OutDir)Gen\tests\test_crosslinks\Package2_NSp.xsd;$(OutDir)Gen\tests\test_crosslinks\Package2_NSp_NSc.xsd;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>

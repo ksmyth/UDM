@@ -11,12 +11,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\samples\LampDiagram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\samples\LampDiagram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\tests\test_simpleudmops\LampTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -28,13 +22,5 @@
     <ClInclude Include="..\..\..\..\..\tests\test_simpleudmops\UDMTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\samples\LampDiagram.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\samples\LampDiagram.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
   </ItemGroup>
 </Project>

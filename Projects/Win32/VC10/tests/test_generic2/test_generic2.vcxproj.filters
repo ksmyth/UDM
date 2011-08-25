@@ -9,18 +9,8 @@
       <UniqueIdentifier>{39f8b096-acae-44ef-b427-2978631d669c}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
-    <Filter Include="UML Diagrams">
-      <UniqueIdentifier>{c7c3867c-cc68-4c8a-9586-f56e950c47b8}</UniqueIdentifier>
-      <Extensions>xml</Extensions>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_generic2\LampDiagram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_generic2\LampDiagram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\tests\test_generic2\genericTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -40,19 +30,5 @@
     <ClInclude Include="..\..\..\..\..\tests\test_generic2\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\samples\LampDiagram_udm.xml">
-      <Filter>UML Diagrams</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_generic2\LampDiagram.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\samples\LampDiagram_udm.xml">
-      <Filter>UML Diagrams</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_generic2\LampDiagram.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
   </ItemGroup>
 </Project>

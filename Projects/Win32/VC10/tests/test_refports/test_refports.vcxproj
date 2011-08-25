@@ -143,7 +143,7 @@ exit 0
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\test_refports\RefPort.h;$(OutDir)Gen\tests\test_refports\RefPort.cpp;$(OutDir)Gen\tests\test_refports\RefPort.xsd;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe"</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)UdmD.exe</AdditionalInputs>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\tests\test_refports\RefPortGme.xme">
       <FileType>Document</FileType>
