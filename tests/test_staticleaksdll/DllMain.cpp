@@ -9,6 +9,8 @@
 #include "UdmStatic.h"
 #include "Uml.h"
 
+int main(int argc, char* argv[]);
+
 __declspec(dllexport) void init(void* data) {
 	_CrtMemState* state = (_CrtMemState*) data;
 
@@ -16,4 +18,7 @@ __declspec(dllexport) void init(void* data) {
 	//RefPort::Initialize();
 	LampDiagram::Initialize();
 	UdmUtil::stacktrace();
+#if defined(_M_IX86)
+	main(0, nullptr);
+#endif
 }
