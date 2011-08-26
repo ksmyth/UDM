@@ -41,10 +41,13 @@
       <LargeAddressAware>true</LargeAddressAware>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>cppunitd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\tests\test_childrenorder\childrenorderTest.cpp" />
     <ClCompile Include="..\..\..\..\..\tests\test_staticleaksdll\DllMain.cpp" />
+    <ClCompile Include="..\..\..\..\..\tests\test_staticleaks\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CreateLampDiagram\CreateLampDiagram.vcxproj">

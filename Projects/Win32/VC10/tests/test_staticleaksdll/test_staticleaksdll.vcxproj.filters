@@ -14,5 +14,11 @@
     <ClCompile Include="..\..\..\..\..\tests\test_staticleaksdll\DllMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\test_childrenorder\childrenorderTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\test_staticleaks\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
