@@ -44,11 +44,6 @@ this software.
 using namespace Udm;
 using namespace Uml;
 
-namespace Uml_xsd
-{
- const std::string& getString();
-}
-
 static string last_error;			//static string to store the last error
 static bool was_error = false;		//static bool to indicate an error after the last
 
@@ -1735,11 +1730,7 @@ map<string,const UPO_metainfo *> UPO_metainfo::upo_metamap;
 //===========================
 void StoreUmlXsd()
 {
-  std::string nn("Uml.xsd");
-  UdmDom::str_xsd_storage::str_str_map::const_iterator it  = UdmDom::str_xsd_storage::static_xsd_container.find(nn);
-  if (it == UdmDom::str_xsd_storage::static_xsd_container.end())
-    UdmDom::str_xsd_storage::StoreXsd(nn,Uml_xsd::getString().c_str());
-
+	Uml::Initialize();
 }
 
 bool  UPO_LoadDiagram(const char * xml_meta_file, UdmPseudoObject & diagram)
