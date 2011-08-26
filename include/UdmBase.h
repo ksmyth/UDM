@@ -4056,12 +4056,12 @@ inline UDM_DLL std::ostream & operator<< (std::ostream &o, Udm::StringAttr c) { 
 
 //defines for using backends
 #ifdef _WIN32
-#if !defined(UDM_DYNAMIC_LINKING) || defined(UDM_DLL_EXPORT)
+#if !defined(UDM_DYNAMIC_LINKING)
 #define UDM_USE_DOM __pragma(comment(linker, "/include:?DummyFL@UdmDom@@3HA"))
 #define UDM_USE_MGA __pragma(comment(linker, "/include:?DummyFL@UdmGme@@3HA"))
 #else
-#define UDM_USE_DOM __pragma(comment(linker, "/include:__imp_?DummyFL@UdmDom@@3HA"))
-#define UDM_USE_MGA __pragma(comment(linker, "/include:__imp_?DummyFL@UdmGme@@3HA"))
+#define UDM_USE_DOM 
+#define UDM_USE_MGA 
 #endif
 #else
 #define UDM_USE_DOM namespace UdmDom{extern UDM_DLL int DummyFL;static int *Dummy_For_Linker = &DummyFL; static struct _use_var{_use_var(){Dummy_For_Linker++;}} __unused;};
