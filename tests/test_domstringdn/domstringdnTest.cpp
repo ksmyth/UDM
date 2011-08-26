@@ -223,7 +223,9 @@ string xml_verify_str =
 \n\
 </RootFolder>\n";
 
-
+	LampDiagram::Initialize();
+	// may already be there due to udm.exe -g
+	UdmDom::str_xsd_storage::RemoveXsd("LampDiagram.xsd");
 	UdmDom::str_xsd_storage::StoreXsd("LampDiagram.xsd", xml_xsd);
 	
 
