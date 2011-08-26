@@ -74,7 +74,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_refports", "test_refpo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_staticleaksdll", "test_staticleaksdll\test_staticleaksdll.vcproj", "{4F3BF916-A9BC-44BA-B867-BA14BE2EE074}"
 	ProjectSection(ProjectDependencies) = postProject
-		{95B70B72-F65E-44F1-AF18-FCE1ED1B4FC7} = {95B70B72-F65E-44F1-AF18-FCE1ED1B4FC7}
+		{7B2D07A4-E108-45B1-860B-43084AAB9192} = {7B2D07A4-E108-45B1-860B-43084AAB9192}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_staticleaks", "test_staticleaks\test_staticleaks.vcproj", "{A4DE0E8A-C59B-4B1F-9A2A-775C547DFF39}"
@@ -173,7 +173,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7B2D07A4-E108-45B1-860B-43084AAB9192} = {A2F36369-A019-4B5E-AD5B-3A5AA425069C}
 		{4CA139A6-D338-4C6D-B9AD-86B65B8E5129} = {A2F36369-A019-4B5E-AD5B-3A5AA425069C}
+		{7B2D07A4-E108-45B1-860B-43084AAB9192} = {A2F36369-A019-4B5E-AD5B-3A5AA425069C}
 	EndGlobalSection
 EndGlobal
