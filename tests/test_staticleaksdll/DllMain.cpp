@@ -19,6 +19,6 @@ __declspec(dllexport) void init(void* data) {
 	LampDiagram::Initialize();
 	UdmUtil::stacktrace();
 #if defined(_M_IX86)
-	main(0, nullptr);
+	main(0, NULL);
 #endif
 }
