@@ -5,13 +5,25 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release27|Win32">
       <Configuration>Release27</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release27|x64">
+      <Configuration>Release27</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -24,12 +36,26 @@
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release27|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release27|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -42,7 +68,19 @@
     <Import Project="..\Udm.props" />
     <Import Project="..\Python26.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\boost.props" />
+    <Import Project="..\Udm.props" />
+    <Import Project="..\Python26.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release27|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\boost.props" />
+    <Import Project="..\Udm.props" />
+    <Import Project="..\Python27.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release27|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\boost.props" />
     <Import Project="..\Udm.props" />
@@ -54,18 +92,33 @@
     <Import Project="..\Udm.props" />
     <Import Project="..\Python26.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\boost.props" />
+    <Import Project="..\Udm.props" />
+    <Import Project="..\Python26.props" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">udmd</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">udmd</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.pyd</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.pyd</TargetExt>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">udm</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">udm</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release27|Win32'">udm</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release27|x64'">udm</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.pyd</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.pyd</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release27|Win32'">.pyd</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release27|x64'">.pyd</TargetExt>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release27|Win32'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release27|x64'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <CustomBuildStep />
@@ -81,6 +134,24 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd$(PYTHON_VERSION).pdb</ProgramDatabaseFile>
+      <ImportLibrary>$(TargetName)python.lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\$(Configuration)\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <CustomBuildStep />
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>UDM_DYNAMIC_LINKING;UDM_PY_MODULE_NAME=$(TargetName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd$(PYTHON_VERSION).pdb</ProgramDatabaseFile>
       <ImportLibrary>$(TargetName)python.lib</ImportLibrary>
       <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\$(Configuration)\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -111,6 +182,29 @@
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <CustomBuildStep />
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>UDM_DYNAMIC_LINKING;UDM_PY_MODULE_NAME=$(TargetName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <BaseAddress>0x13000000</BaseAddress>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd$(PYTHON_VERSION).pdb</ProgramDatabaseFile>
+      <ImportLibrary>$(TargetName)python.lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\$(Configuration)\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release27|Win32'">
     <CustomBuildStep />
     <ClCompile>
@@ -129,6 +223,29 @@
       <BaseAddress>0x13000000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd$(PYTHON_VERSION).pdb</ProgramDatabaseFile>
+      <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\Release\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImportLibrary>$(TargetName)python.lib</ImportLibrary>
+    </Link>
+    <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release27|x64'">
+    <CustomBuildStep />
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>UDM_DYNAMIC_LINKING;UDM_PY_MODULE_NAME=$(TargetName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <BaseAddress>0x13000000</BaseAddress>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd$(PYTHON_VERSION).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\Release\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>$(TargetName)python.lib</ImportLibrary>

@@ -11,7 +11,7 @@
       <AdditionalLibraryDirectories>$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <Link>
-      <AdditionalLibraryDirectories>$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib$(Platform);$(UDM_3RDPARTY_PATH)\xerces-c_2_8_0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

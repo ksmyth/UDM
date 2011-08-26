@@ -5,17 +5,33 @@
       <Configuration>BootUdmCompile Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="BootUdmCompile Debug|x64">
+      <Configuration>BootUdmCompile Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="BootUdmCompile Release|Win32">
       <Configuration>BootUdmCompile Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="BootUdmCompile Release|x64">
+      <Configuration>BootUdmCompile Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -29,7 +45,17 @@
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
@@ -39,7 +65,17 @@
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
@@ -51,7 +87,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\Xerces-c.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="..\Xerces-c.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="..\Xerces-c.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\Xerces-c.props" />
   </ImportGroup>
@@ -59,9 +103,19 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\Xerces-c.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="..\Xerces-c.props" />
+    <Import Project="..\..\..\..\..\Udm_x64.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\Xerces-c.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+    <Import Project="..\Xerces-c.props" />
+    <Import Project="..\..\..\..\..\Udm_x64.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -71,10 +125,15 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\..\Build\Win32\VC10\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)obj\src\$(ProjectName)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">..\..\..\..\..\Build\Win32\VC10\BootUdmCompileRelease\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'">..\..\..\..\..\Build\Win32\VC10\BootUdmCompileRelease\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">$(OutDir)obj\src\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'">$(OutDir)obj\src\$(ProjectName)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">..\..\..\..\..\Build\Win32\VC10\BootUdmCompileDebug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'">..\..\..\..\..\Build\Win32\VC10\BootUdmCompileDebug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">$(OutDir)obj\src\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'">$(OutDir)obj\src\$(ProjectName)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)D</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -82,6 +141,25 @@
       <AdditionalIncludeDirectories>..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib />
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -113,7 +191,54 @@
       </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;UDM_DLL_EXPORT;UDM_DYNAMIC_LINKING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib />
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">
+    <PreBuildEvent>
+      <Command>if exist ..\..\..\..\..\etc\Uml_udm.xml attrib -r ..\..\..\..\..\etc\Uml_udm.xml
+if exist ..\..\..\..\..\src\Uml\*.cpp attrib -r ..\..\..\..\..\src\Uml\*.cpp
+if exist ..\..\..\..\..\src\Uml\*.h attrib -r ..\..\..\..\..\src\Uml\*.h
+if exist ..\..\..\..\..\src\Uml\*.xsd attrib -r ..\..\..\..\..\src\Uml\*.xsd
+if exist ..\..\..\..\..\include\Uml.h  attrib -r  ..\..\..\..\..\include\Uml.h
+mkdir "$(OutDir)..\Gen\src\$(ProjectName)"
+exit 0
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;UDM_DLL_EXPORT;UDM_DYNAMIC_LINKING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib />
+    <PostBuildEvent>
+      <Command>cd "$(OutDir)..\Gen\src\$(ProjectName)"
+copy Uml.h ..\..\..\..\..\..\include
+move Uml.* ..\..\..\..\..\..\src\Uml
+move Uml_export.h ..\..\..\..\..\..\src\Uml
+move Uml_xsd.h ..\..\..\..\..\..\src\Uml
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'">
     <PreBuildEvent>
       <Command>if exist ..\..\..\..\..\etc\Uml_udm.xml attrib -r ..\..\..\..\..\etc\Uml_udm.xml
 if exist ..\..\..\..\..\src\Uml\*.cpp attrib -r ..\..\..\..\..\src\Uml\*.cpp
@@ -176,10 +301,44 @@ move Uml_xsd.h ..\..\..\..\..\..\src\Uml
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'">
+    <PreBuildEvent>
+      <Command>if exist ..\..\..\..\..\etc\Uml_udm.xml attrib -r ..\..\..\..\..\etc\Uml_udm.xml
+if exist ..\..\..\..\..\src\Uml\*.cpp attrib -r ..\..\..\..\..\src\Uml\*.cpp
+if exist ..\..\..\..\..\src\Uml\*.h attrib -r ..\..\..\..\..\src\Uml\*.h
+if exist ..\..\..\..\..\src\Uml\*.xsd attrib -r ..\..\..\..\..\src\Uml\*.xsd
+if exist ..\..\..\..\..\include\Uml.h  attrib -r  ..\..\..\..\..\include\Uml.h
+mkdir "$(OutDir)..\Gen\src\$(ProjectName)"
+exit 0
+</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;UDM_DYNAMIC_LINKING;UDM_DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib />
+    <PostBuildEvent>
+      <Command>cd "$(OutDir)..\Gen\src\$(ProjectName)"
+copy Uml.h ..\..\..\..\..\..\include
+move Uml.* ..\..\..\..\..\..\src\Uml
+move Uml_export.h ..\..\..\..\..\..\src\Uml
+move Uml_xsd.h ..\..\..\..\..\..\src\Uml
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\src\Uml\Uml.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -189,34 +348,61 @@ move Uml_xsd.h ..\..\..\..\..\..\src\Uml
     <CustomBuild Include="..\..\..\..\..\etc\Uml_udm.xml">
       <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">"$(OutDir)..\Debug\UdmD.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m  -l UDM_DLL
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'">"$(OutDir)..\Debug\UdmD.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m  -l UDM_DLL
+</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">$(OutDir)..\Gen\src\$(ProjectName)\Uml.cpp;$(OutDir)..\Gen\src\$(ProjectName)\Uml.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml_export.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml.xsd;$(OutDir)..\Gen\src\$(ProjectName)\Uml_xsd.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'">$(OutDir)..\Gen\src\$(ProjectName)\Uml.cpp;$(OutDir)..\Gen\src\$(ProjectName)\Uml.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml_export.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml.xsd;$(OutDir)..\Gen\src\$(ProjectName)\Uml_xsd.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">"$(OutDir)..\Release\Udm.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m  -l UDM_DLL
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'">"$(OutDir)..\Release\Udm.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m  -l UDM_DLL
+</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">$(OutDir)..\Gen\src\$(ProjectName)\Uml.cpp;$(OutDir)..\Gen\src\$(ProjectName)\Uml.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml_export.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml.xsd;$(OutDir)..\Gen\src\$(ProjectName)\Uml_xsd.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'">$(OutDir)..\Gen\src\$(ProjectName)\Uml.cpp;$(OutDir)..\Gen\src\$(ProjectName)\Uml.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml_export.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml.xsd;$(OutDir)..\Gen\src\$(ProjectName)\Uml_xsd.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">Udm.exe %(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'">Udm.exe %(Filename)%(Extension)</Message>
     </CustomBuild>
     <CustomBuild Include="..\..\..\..\..\etc\UmlInUml.xme">
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">cd "%(RootDir)%(Directory)"
 "$(UDM_PATH)\etc\xme2udmxml" "%(FileName).xme" "%(FileName).mga"
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'">cd "%(RootDir)%(Directory)"
+"$(UDM_PATH)\etc\xme2udmxml" "%(FileName).xme" "%(FileName).mga"
+</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">%(RootDir)%(Directory)%(FileName).mga;%(RootDir)%(Directory)Uml_udm.xml;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'">%(RootDir)%(Directory)%(FileName).mga;%(RootDir)%(Directory)Uml_udm.xml;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">cd "%(RootDir)%(Directory)"
 "$(UDM_PATH)\etc\xme2udmxml" "%(FileName).xme" "%(FileName).mga"
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'">cd "%(RootDir)%(Directory)"
+"$(UDM_PATH)\etc\xme2udmxml" "%(FileName).xme" "%(FileName).mga"
+</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">%(RootDir)%(Directory)%(FileName).mga;%(RootDir)%(Directory)Uml_udm.xml;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'">%(RootDir)%(Directory)%(FileName).mga;%(RootDir)%(Directory)Uml_udm.xml;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
       </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

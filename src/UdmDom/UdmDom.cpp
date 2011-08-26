@@ -753,7 +753,7 @@ namespace UdmDom
 		{
 			UDM_ASSERT(src != NULL);
 
-			int ret_length = XMLString::stringLen(src) + 1 + data.length() + 1;
+			size_t ret_length = XMLString::stringLen(src) + 1 + data.length() + 1;
 			XMLCh *retval = (XMLCh*) XMLPlatformUtils::fgMemoryManager->allocate(ret_length * sizeof(XMLCh));
 			XMLString::copyString(retval, src);
 			XMLString::catString(retval, gXML_space);
