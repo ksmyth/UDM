@@ -5,6 +5,7 @@
  */
 package edu.vanderbilt.isis.sbml2ex.test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -101,8 +102,9 @@ public class ReadStringTest extends TestCase {
      * Prints the content of the specified input stream to the output.
      * @param is
      * @throws UdmException
+     * @throws IOException 
      */
-    protected void printInputStream(InputStream is) throws UdmException {
+    protected void printInputStream(InputStream is) throws UdmException, IOException {
         java.io.DataInputStream din = new java.io.DataInputStream(is);
         String xml = new String("");
         try {
@@ -110,8 +112,6 @@ public class ReadStringTest extends TestCase {
             while ((line = din.readLine()) != null) {
                 xml += (line + "\n");
             }
-        } catch (IOException ex) {
-            System.out.println("Error reading from stream: " + ex.getMessage());
         } finally {
             //  close stream
             try {
@@ -152,8 +152,9 @@ public class ReadStringTest extends TestCase {
     /**
      * Opens an existing data network from a file.
      * @throws UdmException
+     * @throws IOException 
      */
-    public void testOpenExistingFromString() throws UdmException {
+    public void testOpenExistingFromString() throws UdmException, IOException {
         System.out.println("\n-----------------------------------");
         System.out.println("\tOpenExistingFromString");
         System.out.println("-----------------------------------");
@@ -215,21 +216,19 @@ public class ReadStringTest extends TestCase {
     /**
       * Opens an existing data network from a file.
       * @throws UdmException
+     * @throws IOException 
       */
-    public void readStringTest(String fileName) throws UdmException {
+    public void readStringTest(String fileName) throws UdmException, IOException {
         long time1 = System.currentTimeMillis();
         sbmlStringFactory gtf = FactoryRepository.getsbmlsbmlStringFactory();
 
         StringBuffer xmlString = new StringBuffer();
-        try {
             RandomAccessFile ra = new RandomAccessFile(fileName, "r");
             String line = "";
             while ((line = ra.readLine()) != null) {
                 xmlString.append(line);
                 xmlString.append("\n");
             }
-        } catch (IOException iEx) {
-        }
 
         sbml root = gtf.open(xmlString.toString());
 

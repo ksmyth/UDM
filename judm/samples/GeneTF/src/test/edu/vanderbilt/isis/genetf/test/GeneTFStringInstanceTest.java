@@ -7,6 +7,7 @@ package edu.vanderbilt.isis.genetf.test;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -99,7 +100,7 @@ public class GeneTFStringInstanceTest extends TestCase {
      * @param is
      * @throws UdmException
      */
-    protected void printInputStream(InputStream is) throws UdmException {
+    protected void printInputStream(InputStream is) throws UdmException, IOException {
         java.io.DataInputStream din = new java.io.DataInputStream(is);
         String xml = new String("");
         try {
@@ -107,8 +108,6 @@ public class GeneTFStringInstanceTest extends TestCase {
             while ((line = din.readLine()) != null) {
                 xml += (line + "\n");
             }
-        } catch (IOException ex) {
-            System.out.println("Error reading from stream: " + ex.getMessage());
         } finally {
             //  close stream
             try {
@@ -136,9 +135,8 @@ public class GeneTFStringInstanceTest extends TestCase {
      * Opens an existing data network from a string.
      * @throws UdmException
      */
-    public void testOpenExistingFromString() throws UdmException {
+    public void testOpenExistingFromString() throws UdmException, IOException {
         String xml = new String("");
-        try {
             RandomAccessFile raf = new RandomAccessFile(BM_FILE_IN, "r");
             String line = null;
 
@@ -146,8 +144,6 @@ public class GeneTFStringInstanceTest extends TestCase {
                 xml += (line + "\n");
             }
             raf.close();
-        } catch (IOException e) {
-        }
 
         ContainerStringFactory gtf = FactoryRepository.getgenetfContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
@@ -167,10 +163,9 @@ public class GeneTFStringInstanceTest extends TestCase {
      * Opens an existing data network from a string and saves as a stream.
      * @throws UdmException
      */
-    public void testOpenExistingFromStringSaveToStream()
-        throws UdmException {
+    public void testOpenExistingFromStringSaveToStream() throws IOException
+        , UdmException {
         String xml = new String("");
-        try {
             RandomAccessFile raf = new RandomAccessFile(BM_FILE_IN, "r");
             String line = null;
 
@@ -178,8 +173,6 @@ public class GeneTFStringInstanceTest extends TestCase {
                 xml += (line + "\n");
             }
             raf.close();
-        } catch (IOException e) {
-        }
 
         ContainerStringFactory gtf = FactoryRepository.getgenetfContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
@@ -212,13 +205,11 @@ public class GeneTFStringInstanceTest extends TestCase {
     /**
      * Opens an existing data network from a stream.
      * @throws UdmException
+     * @throws FileNotFoundException 
      */
-    public void testOpenExistingFromStream() throws UdmException {
+    public void testOpenExistingFromStream() throws UdmException, FileNotFoundException {
         InputStream xml = null;
-        try {
             xml = new FileInputStream(BM_FILE_IN);
-        } catch (IOException e) {
-        }
 
         ContainerStringFactory gtf = FactoryRepository.getgenetfContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
@@ -237,14 +228,12 @@ public class GeneTFStringInstanceTest extends TestCase {
     /**
      * Opens an existing data network from a stream and saves in a string.
      * @throws UdmException
+     * @throws FileNotFoundException 
      */
     public void testOpenExistingFromStreamSaveToString()
-        throws UdmException {
+        throws UdmException, FileNotFoundException {
         InputStream xml = null;
-        try {
             xml = new FileInputStream(BM_FILE_IN);
-        } catch (IOException e) {
-        }
 
         ContainerStringFactory gtf = FactoryRepository.getgenetfContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);

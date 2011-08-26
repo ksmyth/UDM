@@ -125,7 +125,7 @@ public class GeneTFFileInstanceTest extends TestCase {
      * @param is
      * @throws UdmException
      */
-    protected void printInputStream(InputStream is) throws UdmException {
+    protected void printInputStream(InputStream is) throws UdmException, IOException {
         java.io.DataInputStream din = new java.io.DataInputStream(is);
         String xml = new String("");
         try {
@@ -133,8 +133,6 @@ public class GeneTFFileInstanceTest extends TestCase {
             while ((line = din.readLine()) != null) {
                 xml += (line + "\n");
             }
-        } catch (IOException ex) {
-            System.out.println("Error reading from stream: " + ex.getMessage());
         } finally {
             //  close stream
             try {
@@ -181,9 +179,10 @@ public class GeneTFFileInstanceTest extends TestCase {
     /**
      * Opens an existing data network from a file and saves in a stream.
      * @throws UdmException
+     * @throws IOException 
      */
     public void testOpenExistingFromFileSaveToStream()
-        throws UdmException {
+        throws UdmException, IOException {
         ContainerFileFactory gtf = FactoryRepository.getgenetfContainerFileFactory();
         Container con = gtf.open(NEW_INSTANCE_FILE);
 
@@ -196,13 +195,10 @@ public class GeneTFFileInstanceTest extends TestCase {
      * Opens an existing data network from a stream and saves in a file.
      * @throws UdmException
      */
-    public void testOpenExistingFromStreamSaveToFile()
-        throws UdmException {
+    public void testOpenExistingFromStreamSaveToFile() throws IOException
+        , UdmException {
         InputStream xml = null;
-        try {
-            xml = new FileInputStream(BM_FILE_IN);
-        } catch (IOException e) {
-        }
+        xml = new FileInputStream(BM_FILE_IN);
 
         if (xml == null) {
             System.out.println(

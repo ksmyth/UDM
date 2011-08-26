@@ -7,6 +7,7 @@ package edu.vanderbilt.isis.genetre.test;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
 import java.io.IOException;
 import java.io.InputStream;
@@ -152,8 +153,9 @@ public class GeneTREStringInstanceTest extends TestCase {
      * Prints the content of the specified input stream to the output.
      * @param is
      * @throws UdmException
+     * @throws IOException 
      */
-    protected void printInputStream(InputStream is) throws UdmException {
+    protected void printInputStream(InputStream is) throws UdmException, IOException {
         java.io.DataInputStream din = new java.io.DataInputStream(is);
         String xml = new String("");
         try {
@@ -161,8 +163,6 @@ public class GeneTREStringInstanceTest extends TestCase {
             while ((line = din.readLine()) != null) {
                 xml += (line + "\n");
             }
-        } catch (IOException ex) {
-            System.out.println("Error reading from stream: " + ex.getMessage());
         } finally {
             //  close stream
             try {
@@ -189,10 +189,10 @@ public class GeneTREStringInstanceTest extends TestCase {
     /**
      * Opens an existing data network from a string.
      * @throws UdmException
+     * @throws IOException 
      */
-    public void testOpenExistingFromString() throws UdmException {
+    public void testOpenExistingFromString() throws UdmException, IOException {
         String xml = new String("");
-        try {
             RandomAccessFile raf = new RandomAccessFile(BM_FILE_IN, "r");
             String line = null;
 
@@ -200,8 +200,6 @@ public class GeneTREStringInstanceTest extends TestCase {
                 xml += (line + "\n");
             }
             raf.close();
-        } catch (IOException e) {
-        }
 
         ContainerStringFactory gtf = FactoryRepository.getgenetreContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
@@ -220,9 +218,10 @@ public class GeneTREStringInstanceTest extends TestCase {
     /**
      * Opens an existing data network from a string and saves as a stream.
      * @throws UdmException
+     * @throws IOException 
      */
     public void testOpenExistingFromStringSaveToStream()
-        throws UdmException {
+        throws UdmException, IOException {
         String xml = new String("");
         try {
             RandomAccessFile raf = new RandomAccessFile(BM_FILE_IN, "r");
@@ -266,13 +265,11 @@ public class GeneTREStringInstanceTest extends TestCase {
     /**
      * Opens an existing data network from a stream.
      * @throws UdmException
+     * @throws FileNotFoundException 
      */
-    public void testOpenExistingFromStream() throws UdmException {
+    public void testOpenExistingFromStream() throws UdmException, FileNotFoundException {
         InputStream xml = null;
-        try {
             xml = new FileInputStream(BM_FILE_IN);
-        } catch (IOException e) {
-        }
 
         ContainerStringFactory gtf = FactoryRepository.getgenetreContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);
@@ -291,14 +288,12 @@ public class GeneTREStringInstanceTest extends TestCase {
     /**
      * Opens an existing data network from a stream and saves in a string.
      * @throws UdmException
+     * @throws FileNotFoundException 
      */
     public void testOpenExistingFromStreamSaveToString()
-        throws UdmException {
+        throws UdmException, FileNotFoundException {
         InputStream xml = null;
-        try {
             xml = new FileInputStream(BM_FILE_IN);
-        } catch (IOException e) {
-        }
 
         ContainerStringFactory gtf = FactoryRepository.getgenetreContainerStringFactory();
         UdmPseudoObject rootUPO = gtf.open(xml);

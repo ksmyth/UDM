@@ -17,6 +17,7 @@ import edu.vanderbilt.isis.udm.UdmException;
 import junit.framework.TestCase;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -95,8 +96,9 @@ public class TimeSeriesFileInstanceTest extends TestCase {
      * Prints the content of the specified input stream to the output.
      * @param is
      * @throws UdmException
+     * @throws IOException 
      */
-    protected void printInputStream(InputStream is) throws UdmException {
+    protected void printInputStream(InputStream is) throws UdmException, IOException {
         java.io.DataInputStream din = new java.io.DataInputStream(is);
         String xml = new String("");
 
@@ -106,8 +108,6 @@ public class TimeSeriesFileInstanceTest extends TestCase {
             while ((line = din.readLine()) != null) {
                 xml += (line + "\n");
             }
-        } catch (IOException ex) {
-            System.out.println("Error reading from stream: " + ex.getMessage());
         } finally {
             //  close stream
             try {
@@ -153,9 +153,10 @@ public class TimeSeriesFileInstanceTest extends TestCase {
     /**
      * Opens an existing data network from a file and saves in a stream.
      * @throws UdmException
+     * @throws IOException 
      */
     public void testOpenExistingFromFileSaveToStream()
-        throws UdmException {
+        throws UdmException, IOException {
         ContainerFileFactory gtf = FactoryRepository.getTimeSeriesContainerFileFactory();
         Container con = gtf.open(NEW_INSTANCE_FILE);
 
@@ -167,15 +168,13 @@ public class TimeSeriesFileInstanceTest extends TestCase {
     /**
      * Opens an existing data network from a stream and saves in a file.
      * @throws UdmException
+     * @throws FileNotFoundException 
      */
     public void _testOpenExistingFromStreamSaveToFile()
-        throws UdmException {
+        throws UdmException, FileNotFoundException {
         InputStream xml = null;
 
-        try {
             xml = new FileInputStream(BM_FILE_IN);
-        } catch (IOException e) {
-        }
 
         if (xml == null) {
             System.out.println(

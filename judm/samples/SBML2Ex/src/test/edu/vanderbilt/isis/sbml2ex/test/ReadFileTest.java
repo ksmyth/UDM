@@ -101,8 +101,9 @@ public class ReadFileTest extends TestCase {
      * Prints the content of the specified input stream to the output.
      * @param is
      * @throws UdmException
+     * @throws IOException 
      */
-    protected void printInputStream(InputStream is) throws UdmException {
+    protected void printInputStream(InputStream is) throws UdmException, IOException {
         java.io.DataInputStream din = new java.io.DataInputStream(is);
         String xml = new String("");
 
@@ -112,8 +113,6 @@ public class ReadFileTest extends TestCase {
             while ((line = din.readLine()) != null) {
                 xml += (line + "\n");
             }
-        } catch (IOException ex) {
-            System.out.println("Error reading from stream: " + ex.getMessage());
         } finally {
             //  close stream
             try {
