@@ -162,7 +162,7 @@ namespace UdmGme
 	UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const wchar_t* gmeId);
 	UDM_DLL Udm::Object::uniqueId_type GmeId2UdmId(const char* gmeId);
 
-#ifndef SWIG_VERSION
+#if !defined(SWIG_VERSION) && !defined(UDM_DYNAMIC_LINKING)
 	UDM_USE_MGA
 #endif
 }
