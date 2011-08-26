@@ -41,10 +41,18 @@ this software.
 #define UDM_NAMESPACE Udm_VS10
 namespace UDM_NAMESPACE {};
 namespace Udm = UDM_NAMESPACE;
+#if defined(_M_AMD64)
+#ifdef _DEBUG
+#define UDM_DLL_LIB "UdmDll_v100_x64D.lib"
+#else
+#define UDM_DLL_LIB "UdmDll_v100_x64.lib"
+#endif
+#elif defined(_M_IX86)
 #ifdef _DEBUG
 #define UDM_DLL_LIB "UdmDll_VS10D.lib"
 #else
 #define UDM_DLL_LIB "UdmDll_VS10.lib"
+#endif
 #endif
 #define UDM_RVALUE
 #else
@@ -56,7 +64,7 @@ namespace Udm = UDM_NAMESPACE;
 #endif
 #endif /* _MSC_VER == 1600 */
 
-#if defined(UDM_DYNAMIC_LINKING) && !defined(UDM_DLL_EXPORT)
+#if defined(UDM_DYNAMIC_LINKING) && !defined(UDM_DLL_EXPORT) && defined(UDM_DLL_LIB)
 #pragma comment(lib, UDM_DLL_LIB)
 #endif
 #else
