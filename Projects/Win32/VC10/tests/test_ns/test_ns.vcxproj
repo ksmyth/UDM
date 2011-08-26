@@ -142,6 +142,7 @@ exit 0
     <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_ns\test_ns.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\test_ns\test_ns_test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_ns\test_ns.h">

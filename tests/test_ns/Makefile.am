@@ -7,7 +7,7 @@ TESTS			= $(noinst_PROGRAMS)
 
 BUILT_SOURCES		= test_ns.cpp test_ns.h test_ns.xsd \
 			  test_ns_A.xsd test_ns_B.xsd test_ns_AB.xsd
-test_ns_SOURCES		= main.cpp
+test_ns_SOURCES		= main.cpp test_ns_test.cpp
 nodist_test_ns_SOURCES	= $(BUILT_SOURCES)
 test_ns_LDADD		= ../../lib/libudm.la $(CPPUNITLIBS)
 

@@ -1,64 +1,50 @@
-// test_ns.cpp : Defines the entry point for the console application.
-//
+#include <cppunit/CompilerOutputter.h>
 
-#include "test_ns.h"
-#include <Uml.h>
+#include <cppunit/ui/text/TestRunner.h>
+#include <cppunit/extensions/HelperMacros.h>
 
-void writeTest(const std::string& fname)
+#ifdef _WIN32
+#include <crtdbg.h>
+#include <signal.h>
+#include <windows.h>
+
+int __cdecl CrtReportHook(int reportType, char *message, int *returnValue)
 {
-
-	Udm::SmartDataNetwork out(test_ns::diagram);
-	out.CreateNew(fname.c_str(), "test_ns_AB.xsd", test_ns::AB::AB::meta, Udm::CHANGES_PERSIST_ALWAYS);
-
-	test_ns::AB::AB ab = test_ns::AB::AB::Cast(out.GetRootObject());
-
-	test_ns::A::A1 a1 = test_ns::A::A1::Create(ab);
-	test_ns::A::AA::A1 a_aa1 = test_ns::A::AA::A1::Create(ab);
-	test_ns::B::B1 b1 = test_ns::B::B1::Create(ab);
-	test_ns::AB::AB1 ab1 = test_ns::AB::AB1::Create(ab);
-	test_ns::A::AA::A2 a2 = test_ns::A::AA::A2::Create(ab);
-	test_ns::AB::ABAB::AB2 ab2 = test_ns::AB::ABAB::AB2::Create(ab, test_ns::AB::AB::meta_ab2);
-
-	ab2.dst() += a2;
-
-	out.CloseWithUpdate();
-}
-
-//==========================================
-void readTest(const std::string& fname)
-{
-
-	Udm::SmartDataNetwork in(test_ns::diagram);
-	in.OpenExisting(fname.c_str(), "test_ns_AB.xsd", Udm::CHANGES_PERSIST_ALWAYS);
-
-	test_ns::AB::AB ab = test_ns::AB::AB::Cast(in.GetRootObject());
-
-	in.CloseNoUpdate();
-}
-//=========================================
-
-int main()
-{
-	try
-	{
-		std::string fn ="test.xml";
-		writeTest(fn);
-		readTest(fn);
-
-		// test initialization from another diagram
-		Udm::SmartDataNetwork udmDN(Uml::diagram);
-		udmDN.OpenExisting("test_ns_udm.xml", "", Udm::CHANGES_LOST_DEFAULT);
-		
-		Uml::Diagram theUmlDiagram(Uml::Diagram::Cast(udmDN.GetRootObject()));
-		test_ns::Initialize(theUmlDiagram);
-
+	if (reportType == _CRT_ASSERT) {
+		DebugBreak();
+		return TRUE;
 	}
-	catch(udm_exception& e)
-	{
-		std::cout << e.what();
-		return 1;
-	}
-
-	return 0;
+	return FALSE;
 }
 
+void __cdecl AbrtHandler(int)
+{
+	DebugBreak();
+}
+#endif
+
+int main(int argc, char* argv[])
+{
+#ifdef _WIN32
+	signal(SIGABRT, &AbrtHandler);
+	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
+	_set_abort_behavior(0, _WRITE_ABORT_MSG);
+	_CrtSetReportHook(&CrtReportHook);
+#endif
+
+	CPPUNIT_NS::Test *suite = CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest();
+
+	// Adds the test to the list of test to run
+	CPPUNIT_NS::TextUi::TestRunner runner;
+	runner.addTest( suite );
+
+	// Change the default outputter to a compiler error format outputter
+	runner.setOutputter( new CPPUNIT_NS::CompilerOutputter( &runner.result(),
+                                                       std::cerr ) );
+	// Run the test.
+	bool wasSucessful = runner.run();
+
+	// Return error code 1 if the one of test failed.
+	return wasSucessful ? 0 : 1;
+	
+}
