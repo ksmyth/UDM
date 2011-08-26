@@ -3,8 +3,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IntDir>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\$(Configuration)\obj\tests\$(ProjectName)\))</IntDir>
-    <OutDir>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\$(Configuration)\))</OutDir>
+    <IntDir>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\$(Platform)\VC10\$(Configuration)\obj\tests\$(ProjectName)\))</IntDir>
+    <OutDir>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\$(Platform)\VC10\$(Configuration)\))</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>

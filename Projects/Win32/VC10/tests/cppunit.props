@@ -4,7 +4,9 @@
   <PropertyGroup Label="UserMacros">
     <UDM_EXE>$(UDM_PATH)\bin\Udm.exe</UDM_EXE>
   </PropertyGroup>
-  <PropertyGroup />
+  <PropertyGroup>
+    <ExecutablePath>$(UDM_3RDPARTY_PATH)\cppunit-1.12.1\bin;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(UDM_3RDPARTY_PATH)\cppunit-1.12.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

@@ -5,9 +5,17 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -20,7 +28,18 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -36,7 +55,17 @@
     <Import Project="..\cppunit.props" />
     <Import Project="..\UdmTests.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\cppunit.props" />
+    <Import Project="..\UdmTests.props" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\cppunit.props" />
+    <Import Project="..\UdmTests.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\cppunit.props" />
     <Import Project="..\UdmTests.props" />
@@ -45,7 +74,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <udm_RuleAfterTargets>mga2udmxml</udm_RuleAfterTargets>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <udm_RuleAfterTargets>mga2udmxml</udm_RuleAfterTargets>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <udm_RuleAfterTargets>mga2udmxml</udm_RuleAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <udm_RuleAfterTargets>mga2udmxml</udm_RuleAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -60,6 +95,25 @@
       <AdditionalDependencies>
       </AdditionalDependencies>
     </mga2udmxml>
+    <PreBuildEvent>
+      <Command>mkdir "$(OutDir)Gen\samples"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <mga2udmxml>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </mga2udmxml>
+    <PreBuildEvent>
+      <Command>mkdir "$(OutDir)Gen\samples"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -77,24 +131,57 @@
       <AdditionalDependencies>
       </AdditionalDependencies>
     </mga2udmxml>
+    <PreBuildEvent>
+      <Command>mkdir "$(OutDir)Gen\samples"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <mga2udmxml>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </mga2udmxml>
+    <PreBuildEvent>
+      <Command>mkdir "$(OutDir)Gen\samples"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <mga2udmxml Include="..\..\..\..\..\samples\CreateLampModel\LampDiagramUML.xme">
       <FileType>Document</FileType>
       <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LampDiagram</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LampDiagram</MetaName>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </AdditionalDependencies>
       <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LampDiagram</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LampDiagram</MetaName>
       <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </AdditionalDependencies>
+      <AdditionalDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </AdditionalDependencies>
     </mga2udmxml>
   </ItemGroup>
   <ItemGroup>
     <udm Include="..\..\..\..\..\samples\CreateLampModel\LampDiagram_udm.xml">
       <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">LampDiagram</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">LampDiagram</MetaName>
       <IntegrateXSD Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IntegrateXSD>
+      <IntegrateXSD Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IntegrateXSD>
       <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">LampDiagram</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">LampDiagram</MetaName>
       <IntegrateXSD Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IntegrateXSD>
+      <IntegrateXSD Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IntegrateXSD>
     </udm>
   </ItemGroup>
   <ItemGroup>

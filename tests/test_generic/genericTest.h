@@ -11,7 +11,7 @@ namespace UdmTests
 	class genericTest : public CPPUNIT_NS::TestFixture
 	{
 		CPPUNIT_TEST_SUITE( genericTest );
-#ifdef _WIN32
+#if defined(_WIN32) && defined(_M_IX86)
 		CPPUNIT_TEST( testDOMMGA );
 		CPPUNIT_TEST( testMGADOM );
 		CPPUNIT_TEST( testMGAMGA );

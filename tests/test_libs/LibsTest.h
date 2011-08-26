@@ -15,7 +15,7 @@ namespace UdmTests
 	class LibsTest : public CPPUNIT_NS::TestFixture
 	{
 		CPPUNIT_TEST_SUITE( LibsTest );
-#ifdef _WIN32
+#if defined(_WIN32) && defined(_M_IX86)
 		CPPUNIT_TEST( testMGA );
 #endif
 		CPPUNIT_TEST( testDOM );

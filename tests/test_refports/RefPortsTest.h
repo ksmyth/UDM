@@ -13,7 +13,7 @@ namespace UdmTests
 		CPPUNIT_TEST_SUITE( refPortsTest );
 		CPPUNIT_TEST(testDOM);
 		CPPUNIT_TEST(testMEM);
-#ifdef _WIN32
+#if defined(_WIN32) && defined(_M_IX86)
 		CPPUNIT_TEST(testMGA);
 #endif
 		CPPUNIT_TEST_SUITE_END();
