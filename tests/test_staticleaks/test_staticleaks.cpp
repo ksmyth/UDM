@@ -31,11 +31,15 @@ namespace UdmTests
 	_CrtMemState dllState;
 
 	HMODULE test_staticleaksdll = LoadLibrary("test_staticleaksdll.dll");
+	if (!test_staticleaksdll)
+		DebugBreak();
 #if defined(_M_AMD64)
 	init = (init_t)GetProcAddress(test_staticleaksdll , "?init@@YAXPEAX@Z");
 #elif defined(_M_IX86)
 	init = (init_t)GetProcAddress(test_staticleaksdll , "?init@@YAXPAX@Z");
 #endif
+	if (!init)
+		DebugBreak();
 	init(&dllState);
 
 	typedef void (*terminate_t)();
