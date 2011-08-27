@@ -27,7 +27,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Running $(ProjectName)"
-				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_refports&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine="cd &quot;$(OutDir)\Gen\samples&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
 				Outputs="NONE"
 			/>
 			<Tool
