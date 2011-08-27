@@ -57,6 +57,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="cppunitd.lib"
 				GenerateDebugInformation="true"
 				LargeAddressAware="2"
 				RandomizedBaseAddress="1"
@@ -94,11 +95,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\..\..\..\tests\test_childrenorder\childrenorderTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\tests\test_staticleaksdll\DllMain.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\Build\Win32\VC9\Debug\Gen\samples\LampDiagram.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\tests\test_ns\main.cpp"
 				>
 			</File>
 		</Filter>
