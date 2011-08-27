@@ -17,7 +17,7 @@ namespace UdmTests
 
 		
 	private:
-		char * getRndFileName();
+		std::string getRndFileName();
 		void removeFile(const string &pathname);
 		bool ordertest(const char *);	//returns false if failed
 		public:
