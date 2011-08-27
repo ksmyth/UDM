@@ -222,6 +222,7 @@ this software.
 #include <list>
 #include <string>
 #include <map>
+#include <memory>
 
 namespace Uml
 {
@@ -3348,22 +3349,22 @@ public:
 									const string &metalocator, const ::Uml::Class &rootclass, 
 									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) {
 		if(dn) throw udm_exception("DataNetwork is already open"); 
-		DataNetwork *dn1 = CreateBackend(systemname, metaroot, pr);
-		if(!dn1) throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"
+		std::auto_ptr<DataNetwork> dn1(CreateBackend(systemname, metaroot, pr));
+		if(!dn1.get()) throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"
 									 "Available backends: " + DumpBackendNames().c_str());
 		dn1->CreateNew(systemname, metalocator, rootclass, sem);
-		dn = dn1;
+		dn = dn1.release();
 	}
 
 	virtual void OpenExisting(const string &systemname, 
 									const string &metalocator = "", 
 									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) {
 		if(dn) throw udm_exception("DataNetwork is already open"); 
-		DataNetwork *dn1 = CreateBackend(systemname, metaroot,pr);
-		if(!dn1) throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"
+		std::auto_ptr<DataNetwork> dn1(CreateBackend(systemname, metaroot,pr));
+		if(!dn1.get()) throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"
 									 "Available backends: " + DumpBackendNames().c_str());
 		dn1->OpenExisting(systemname, metalocator, sem);
-		dn = dn1;
+		dn = dn1.release();
 	}
 	virtual void CloseWithUpdate() 
 	{
@@ -3441,11 +3442,11 @@ public:
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS)
 	{
 		if(dn) throw udm_exception("DataNetwork is already open"); 
-		DataNetwork *dn1 = CreateBackend("string_dom.xml", metaroot, pr);//the name can be anything, which ends in .xml. String backend is supported only by DOM
-		if(!dn1) throw udm_exception(string("Cannot deduce Udm backend type .xml from available backends: ") + DumpBackendNames().c_str());
+		std::auto_ptr<DataNetwork> dn1(CreateBackend("string_dom.xml", metaroot, pr));//the name can be anything, which ends in .xml. String backend is supported only by DOM
+		if(dn1.get() == NULL) throw udm_exception(string("Cannot deduce Udm backend type .xml from available backends: ") + DumpBackendNames().c_str());
 		
 		dn1->CreateNewToString(metalocator, rootclass,sem);
-		dn = dn1;
+		dn = dn1.release();
 		str_based = true;
 	};
 	virtual void OpenExistingFromString(string &str, 
@@ -3453,11 +3454,11 @@ public:
 									enum Udm::BackendSemantics sem = Udm::CHANGES_PERSIST_ALWAYS)
 	{
 		if(dn) throw udm_exception("DataNetwork is already open"); 
-		DataNetwork *dn1 = CreateBackend("string_dom.xml", metaroot, pr);//the name can be anything, which ends in .xml. String backend is supported only by DOM
-		if(!dn1) throw udm_exception(string("Cannot deduce Udm backend type .xml from available backends: ") + DumpBackendNames().c_str());
+		std::auto_ptr<DataNetwork> dn1(CreateBackend("string_dom.xml", metaroot, pr));//the name can be anything, which ends in .xml. String backend is supported only by DOM
+		if(dn1.get() == NULL) throw udm_exception(string("Cannot deduce Udm backend type .xml from available backends: ") + DumpBackendNames().c_str());
 
 		dn1->OpenExistingFromString(str,metalocator,sem);
-		dn = dn1;
+		dn = dn1.release();
 		str_based = true;
 	};
 	virtual const string & Str(){return str;};
