@@ -54,8 +54,8 @@ XERCES_CPP_NAMESPACE_BEGIN
 XERCES_CPP_NAMESPACE_END
 XERCES_CPP_NAMESPACE_USE
 
-typedef std::map<unsigned long, DOMElement*> IdToDomElementMap;
-typedef std::pair<const unsigned long, DOMElement*> IdToDomElementMapItem;
+typedef std::map<Udm::ObjectImpl::uniqueId_type, DOMElement*> IdToDomElementMap;
+typedef std::pair<const Udm::ObjectImpl::uniqueId_type, DOMElement*> IdToDomElementMapItem;
 
 	
 namespace UdmDom
@@ -141,7 +141,7 @@ namespace UdmDom
 		
 		//map of Elements in the Diagram
 		IdToDomElementMap DomElements;
-		void DoMapping(DOMElement *const e, long id, bool force);
+		void DoMapping(DOMElement *const e, Udm::ObjectImpl::uniqueId_type id, bool force);
 		DOMElement* Search(const XMLCh *str);
 
 		//get the string if datanetwork is str_based

@@ -824,18 +824,22 @@ namespace UdmDom
 		{
 			//static unsigned long idcount = time(NULL);
 
-			static unsigned long id;
+			uniqueId_type id;
 			const XMLCh *a = dom_element->getAttribute(gXML__id);
 			if(EmptyVal(a)) 
 			{
-				XMLCh buf[21] = { chLatin_i, chLatin_d, chNull };
+				XMLCh buf[25] = { chLatin_i, chLatin_d, chNull };
 				//we have a unique id for ordering
 				//so why maintain two of them ?
 				id  = uniqueId();	
 
 				//build the string attribute
-				//begins with 'id'				
+				//begins with 'id'		
+#if defined(_WIN32) && defined(_M_AMD64)
+				swprintf_s(buf, L"id%Ix", id);
+#else
 				XMLString::binToText(id, buf + 2, 18, 16);
+#endif
 
 				//assign it
 				dom_element->setAttribute(gXML__id, buf);
@@ -883,13 +887,17 @@ namespace UdmDom
 					//this is part of the project
 					//we will record every id in the backend
 
-					static unsigned long id;
+					Udm::ObjectImpl::uniqueId_type id;
 					const XMLCh *a = dom_element->getAttribute(gXML__id);
 					if(EmptyVal(a)) 
 					{
-						XMLCh buf[21] = { chLatin_i, chLatin_d, chNull };
+						XMLCh buf[25] = { chLatin_i, chLatin_d, chNull };
 						id  = reinterpret_cast<uniqueId_type>(p);	
+#if defined(_WIN32) && defined(_M_AMD64)
+						swprintf_s(buf, L"id%Ix", id);
+#else
 						XMLString::binToText(id, buf + 2, 18, 16);
+#endif
 						dom_element->setAttribute(gXML__id, buf);
 						SET_ID_ATTR(dom_element, gXML__id);
 					}
@@ -1816,7 +1824,7 @@ namespace UdmDom
 					//in the map there *might* be a mapping from unique id to dom_element
 					//we remove it, if there is
 					//also note that it's not a must
-					unsigned long id = uniqueId();
+					uniqueId_type id = uniqueId();
 					//Minor bugfix here
 					//element should be removed after removing from the mapping.
 					//since __getdn() calls need the DOM tree to be consistent
@@ -3562,7 +3570,7 @@ namespace UdmDom
 	}
 
 
-	void DomDataNetwork::DoMapping(DOMElement *const e, long id,  bool force)
+	void DomDataNetwork::DoMapping(DOMElement *const e, DomObject::uniqueId_type id,  bool force)
 	{
 			IdToDomElementMapItem item_to_store(id, e);
 			pair<IdToDomElementMap::iterator, bool> ins_res;

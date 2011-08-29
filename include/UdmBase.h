@@ -308,7 +308,11 @@ namespace UDM_NAMESPACE
 
 	public:
 		// every object in one project must return a unique uniqueId
+#if defined(_WIN32) && defined(_M_AMD64)
+		typedef size_t uniqueId_type;
+#else
 		typedef long uniqueId_type;
+#endif
 
 		virtual uniqueId_type uniqueId() const = 0;
 
@@ -3259,7 +3263,7 @@ public:
 	virtual void resetStaticUdmProject() { if (!(pr && _static_pr)) throw("Datanetwork is either not part of a project or is part of a non-static project!"); pr = NULL; };
 
 	virtual Object ObjectById(Object::uniqueId_type) { 
-		throw udm_exception("This backend does not support ObjectByID!!"); 
+		throw udm_exception("This backend does not support ObjectByID"); 
 	}
 	const ::Uml::Diagram &GetRootMeta() const { 
 		return *metaroot.dgr;

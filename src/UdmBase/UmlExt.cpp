@@ -669,8 +669,10 @@ namespace Uml
 					name = auxname;
 				}
 				else {
-					char buf[12];
-#ifdef _WIN32
+					char buf[25];
+#if defined(_WIN32) && defined(_M_AMD64)
+					sprintf_s(buf, "%Ix", r.__impl()->uniqueId());
+#elif defined(_WIN32)
 					_ultoa(r.__impl()->uniqueId(),buf,10);
 #else
 					snprintf(buf, 11, "%ld", r.__impl()->uniqueId());

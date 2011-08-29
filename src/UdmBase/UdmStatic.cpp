@@ -3469,13 +3469,16 @@ namespace UdmStatic
 	
 	unsigned long StaticObject::Serialize(FILE *f)
 	{
+#if defined(_WIN32) && defined(_M_AMD64)
+		// FIXME: add map<uniqueId_type, unsigned long> id_map;
+#endif
 		//this will return the length in bytes of space 
 		//and write this object to file
 
 
 		unsigned long length = 0;
 
-		//write mY uniqueID to file
+		//write my uniqueId to file
 		unsigned long my_id = uniqueId();
 		fwrite(&my_id, sizeof(unsigned long), 1, f);
 		length += sizeof(unsigned long);
