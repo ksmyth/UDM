@@ -55,7 +55,13 @@ namespace Udm.Native
         }
         public IUdmObject parent
         {
-            get { return new UdmCliObject(backing.GetParent()); }
+            get { 
+            	UdmObject o = backing.GetParent();
+                if (o.uniqueId() == 0)
+                	return null;
+                return new UdmCliObject(o);
+            }
+            
             set
             {
                 if (value == null)
