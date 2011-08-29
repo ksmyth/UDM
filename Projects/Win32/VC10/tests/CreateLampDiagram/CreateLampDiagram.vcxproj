@@ -96,7 +96,8 @@
       </AdditionalDependencies>
     </mga2udmxml>
     <PreBuildEvent>
-      <Command>mkdir "$(OutDir)Gen\samples"</Command>
+      <Command>mkdir "$(OutDir)Gen\samples"
+if exist "$(OutDir)Gen\samples\" exit /b 0</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -112,7 +113,8 @@
       </AdditionalDependencies>
     </mga2udmxml>
     <PreBuildEvent>
-      <Command>mkdir "$(OutDir)Gen\samples"</Command>
+      <Command>mkdir "$(OutDir)Gen\samples"
+if exist "$(OutDir)Gen\samples\" exit /b 0</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -132,7 +134,8 @@
       </AdditionalDependencies>
     </mga2udmxml>
     <PreBuildEvent>
-      <Command>mkdir "$(OutDir)Gen\samples"</Command>
+      <Command>mkdir "$(OutDir)Gen\samples"
+if exist "$(OutDir)Gen\samples\" exit /b 0</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,7 +155,8 @@
       </AdditionalDependencies>
     </mga2udmxml>
     <PreBuildEvent>
-      <Command>mkdir "$(OutDir)Gen\samples"</Command>
+      <Command>mkdir "$(OutDir)Gen\samples"
+if exist "$(OutDir)Gen\samples\" exit /b 0</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
