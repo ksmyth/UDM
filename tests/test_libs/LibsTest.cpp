@@ -222,7 +222,7 @@ void UdmTests::LibsTest::testMGA()
 void UdmTests::LibsTest::testDOM()
 {
 	cout << endl << "library operations on DOM";
-	//testLibOperations("xml");
+	testLibOperations("xml");
 }
 
 void UdmTests::LibsTest::testMEM()
