@@ -11,18 +11,20 @@ namespace GMEConsole
 	{
 		CComPtr<IMgaClient> client;	
 		CComQIPtr<IDispatch> pDispatch;
-		HRESULT s1 = project->GetClientByName(L"GME.Application",&client);
+		HRESULT s1 = project->GetClientByName(CComBSTR(L"GME.Application"),&client);
 
 		if ((SUCCEEDED(s1)) && (client != 0))
 		{
 			HRESULT s2 = client->get_OLEServer(&pDispatch);
 			if ((SUCCEEDED(s2)) && (pDispatch != 0))
 			{
+				// release here in case setupConsole was called twice
+				gmeoleapp.Release();
 				HRESULT s3 = pDispatch->QueryInterface(&gmeoleapp);
 				if ((SUCCEEDED(s3)) && (gmeoleapp != 0))
 				{
 					// gmeoleapp->ConsoleClear();
-					gmeoleapp->put_ConsoleContents(L"");
+					gmeoleapp->put_ConsoleContents(NULL);
 				}
 				else
 				{
