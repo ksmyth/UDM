@@ -237,28 +237,6 @@
 				>
 			</File>
 			<File
-				RelativePath="$(ReleaseGenPath)\LampDiagram.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="$(DebugGenPath)\LampDiagram.cpp"
 				>
 				<FileConfiguration
@@ -282,23 +260,33 @@
 					/>
 				</FileConfiguration>
 			</File>
-		</Filter>
-		<Filter
-			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl"
-			>
 			<File
-				RelativePath="$(ReleaseGenPath)\LampDiagram.h"
+				RelativePath="$(ReleaseGenPath)\LampDiagram.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
-						Name="VCCustomBuildTool"
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
 			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl"
+			>
 			<File
 				RelativePath="$(DebugGenPath)\LampDiagram.h"
 				>
@@ -311,13 +299,8 @@
 					/>
 				</FileConfiguration>
 			</File>
-		</Filter>
-		<Filter
-			Name="UML Diagrams"
-			Filter="xml"
-			>
 			<File
-				RelativePath="$(ReleaseGenPath)\LampDiagram_udm.xml"
+				RelativePath="$(ReleaseGenPath)\LampDiagram.h"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -327,17 +310,12 @@
 						Name="VCCustomBuildTool"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="LampDiagram_udm.xml -&gt; C++ API"
-						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
-						Outputs="$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h"
-					/>
-				</FileConfiguration>
 			</File>
+		</Filter>
+		<Filter
+			Name="UML Diagrams"
+			Filter="xml"
+			>
 			<File
 				RelativePath="$(DebugGenPath)\LampDiagram_udm.xml"
 				>
@@ -361,6 +339,28 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="$(ReleaseGenPath)\LampDiagram_udm.xml"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="LampDiagram_udm.xml -&gt; C++ API"
+						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot; -v&#x0D;&#x0A;"
+						Outputs="$(GenPath)\LampDiagram.xsd; $(GenPath)\LampDiagram.cpp; $(GenPath)\LampDiagram.h"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="$(SourceDir)\LampDiagramGME.xme"
 				>
 				<FileConfiguration
@@ -370,7 +370,7 @@
 						Name="VCCustomBuildTool"
 						Description="$(InputFileName) -&gt; LampDiagram.xmp, Registering LampDiagram paradigm"
 						CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
-						Outputs="$(InputDir)LampDiagram.xmp;$(InputDir)LampDiagram.xmp.log;$(InputDir)LampDiagram.mta;$(InputDir)$(InputName).mga"
+						Outputs="xxxx;$(InputDir)LampDiagram.xmp;$(InputDir)LampDiagram.mta;$(InputDir)$(InputName).mga"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -380,7 +380,7 @@
 						Name="VCCustomBuildTool"
 						Description="$(InputFileName) -&gt; LampDiagram.xmp, Registering LampDiagram paradigm"
 						CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\CreateMGA&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
-						Outputs="$(InputDir)LampDiagram.xmp;$(InputDir)LampDiagram.xmp.log;$(InputDir)LampDiagram.mta;$(InputDir)$(InputName).mga"
+						Outputs="xxxx;$(InputDir)LampDiagram.xmp;$(InputDir)LampDiagram.mta;$(InputDir)$(InputName).mga"
 					/>
 				</FileConfiguration>
 			</File>
