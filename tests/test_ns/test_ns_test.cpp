@@ -20,6 +20,8 @@ public:
 	void test_ns();
 };
 
+CPPUNIT_TEST_SUITE_REGISTRATION(TestNSTest);
+
 
 void TestNSTest::writeTest(const std::string& fname)
 {
