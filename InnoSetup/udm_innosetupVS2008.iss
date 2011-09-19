@@ -94,8 +94,8 @@ Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\XalanMessages_1_11.dll; DestDir: {
 Source: {#UDM3rdPartyPath}\xalan-c_1_11_0\bin\XalanMessages_1_11D.dll; DestDir: {app}\bin; Components: Full3rdParty; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\{#UDMDLL}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Debug\{#UDMDLLD}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
-Source: {#UDMPATH}\Build\Win32\VC9\Release\GmeOclExprChecker.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
-Source: {#UDMPATH}\Build\Win32\VC9\Release\UML2XML.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
+Source: {#UDMPATH}\Build\Win32\VC10\Release\GmeOclExprChecker.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
+Source: {#UDMPATH}\Build\Win32\VC10\Release\UML2XML.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
 Source: {#GREATPATH}\bin\MetaGME2Uml.dll; DestDir: {app}\bin; Components: Core; Flags: ignoreversion regserver
 Source: {#UDMPATH}\Build\Win32\VC9\Release\Udm.exe; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmBackendDump.exe; DestDir: {app}\bin; Components: Core; Flags: ignoreversion

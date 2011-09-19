@@ -4,11 +4,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmBase", "UdmBase\UdmBase.vcproj", "{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UML2XML", "UML GME\Interpreter\BONComponent.vcproj", "{207DA527-EC80-4A83-B5C2-B2A02281AFBA}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3CAE3DEE-065E-426C-9C3C-F1F59217C00B} = {3CAE3DEE-065E-426C-9C3C-F1F59217C00B}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmDom", "UdmDom\UdmDom.vcproj", "{9A094C52-E029-4333-AC60-580B9B928E4E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmXmi", "UdmXmi\UdmXmi.vcproj", "{CA16ED97-F738-4FAF-985C-FAE05AED8D07}"
@@ -35,11 +30,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmCopy", "UdmCopy\UdmCopy.vcproj", "{1D7BFE97-37FA-48A3-8952-2B9D60114F42}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3CAE3DEE-065E-426C-9C3C-F1F59217C00B} = {3CAE3DEE-065E-426C-9C3C-F1F59217C00B}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GmeOclExprChecker", "UML GME\ExprChecker\GmeOclExprChecker.vcproj", "{C2E74DE0-8084-42E2-941D-F18816C98D88}"
-	ProjectSection(ProjectDependencies) = postProject
-		{207DA527-EC80-4A83-B5C2-B2A02281AFBA} = {207DA527-EC80-4A83-B5C2-B2A02281AFBA}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XmiToUdm", "XmiToUdm\XmiToUdm.vcproj", "{3321A2AD-4DCE-4767-BF7C-32C8B5FA9A97}"
@@ -134,14 +124,6 @@ Global
 		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.Release MinDependency|Win32.Build.0 = Release|Win32
 		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.Release|Win32.ActiveCfg = Release|Win32
 		{30C55DA9-9CBA-4D6C-BBBD-C7E8823A027D}.Release|Win32.Build.0 = Release|Win32
-		{207DA527-EC80-4A83-B5C2-B2A02281AFBA}.BootUdmCompile Debug|Win32.ActiveCfg = Debug|Win32
-		{207DA527-EC80-4A83-B5C2-B2A02281AFBA}.BootUdmCompile Release|Win32.ActiveCfg = Release MinDependency|Win32
-		{207DA527-EC80-4A83-B5C2-B2A02281AFBA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{207DA527-EC80-4A83-B5C2-B2A02281AFBA}.Debug|Win32.Build.0 = Debug|Win32
-		{207DA527-EC80-4A83-B5C2-B2A02281AFBA}.Release MinDependency|Win32.ActiveCfg = Release MinDependency|Win32
-		{207DA527-EC80-4A83-B5C2-B2A02281AFBA}.Release MinDependency|Win32.Build.0 = Release MinDependency|Win32
-		{207DA527-EC80-4A83-B5C2-B2A02281AFBA}.Release|Win32.ActiveCfg = Release MinDependency|Win32
-		{207DA527-EC80-4A83-B5C2-B2A02281AFBA}.Release|Win32.Build.0 = Release MinDependency|Win32
 		{9A094C52-E029-4333-AC60-580B9B928E4E}.BootUdmCompile Debug|Win32.ActiveCfg = Debug|Win32
 		{9A094C52-E029-4333-AC60-580B9B928E4E}.BootUdmCompile Release|Win32.ActiveCfg = Release|Win32
 		{9A094C52-E029-4333-AC60-580B9B928E4E}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -198,14 +180,6 @@ Global
 		{1D7BFE97-37FA-48A3-8952-2B9D60114F42}.Release MinDependency|Win32.Build.0 = Release|Win32
 		{1D7BFE97-37FA-48A3-8952-2B9D60114F42}.Release|Win32.ActiveCfg = Release|Win32
 		{1D7BFE97-37FA-48A3-8952-2B9D60114F42}.Release|Win32.Build.0 = Release|Win32
-		{C2E74DE0-8084-42E2-941D-F18816C98D88}.BootUdmCompile Debug|Win32.ActiveCfg = Debug|Win32
-		{C2E74DE0-8084-42E2-941D-F18816C98D88}.BootUdmCompile Release|Win32.ActiveCfg = Release MinDependency|Win32
-		{C2E74DE0-8084-42E2-941D-F18816C98D88}.Debug|Win32.ActiveCfg = Debug|Win32
-		{C2E74DE0-8084-42E2-941D-F18816C98D88}.Debug|Win32.Build.0 = Debug|Win32
-		{C2E74DE0-8084-42E2-941D-F18816C98D88}.Release MinDependency|Win32.ActiveCfg = Release MinDependency|Win32
-		{C2E74DE0-8084-42E2-941D-F18816C98D88}.Release MinDependency|Win32.Build.0 = Release MinDependency|Win32
-		{C2E74DE0-8084-42E2-941D-F18816C98D88}.Release|Win32.ActiveCfg = Release MinDependency|Win32
-		{C2E74DE0-8084-42E2-941D-F18816C98D88}.Release|Win32.Build.0 = Release MinDependency|Win32
 		{3321A2AD-4DCE-4767-BF7C-32C8B5FA9A97}.BootUdmCompile Debug|Win32.ActiveCfg = Debug|Win32
 		{3321A2AD-4DCE-4767-BF7C-32C8B5FA9A97}.BootUdmCompile Release|Win32.ActiveCfg = Release|Win32
 		{3321A2AD-4DCE-4767-BF7C-32C8B5FA9A97}.Debug|Win32.ActiveCfg = Debug|Win32
