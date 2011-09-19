@@ -113,7 +113,9 @@ Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCliBridge.dll; DestDir: {app}\bin
 Source: {#UDMPATH}\src\UdmCliGen\dist\UdmCliGen.exe; DestDir: {app}\bin; Components: CS; Flags: ignoreversion
 Source: {#UDMPATH}\src\UdmCliGen\dist\python26.dll; DestDir: {app}\bin; Components: Python CS; Flags: ignoreversion
 Source: {#UDMPATH}\bin\Python26\udm.pyd; DestDir: {app}\bin\Python26; Components: Python CS; Flags: ignoreversion
+Source: {#UDMPATH}\bin\Python26\__init__.py; DestDir: {app}\bin\Python26; Components: Python CS; Flags: ignoreversion
 Source: {#UDMPATH}\bin\Python27\udm.pyd; DestDir: {app}\bin\Python27; Components: Python; Flags: ignoreversion
+Source: {#UDMPATH}\bin\Python27\__init__.py; DestDir: {app}\bin\Python27; Components: Python; Flags: ignoreversion
 Source: {#UDMPATH}\bin\udm.py; DestDir: {app}\bin; Components: Python CS; Flags: ignoreversion
 Source: {#UDMPATH}\bin\Python26\boost_python-vc100-mt-1_44.dll; DestDir: {app}\bin\Python26; Components: Python CS; Flags: ignoreversion
 Source: {#UDMPATH}\bin\Python27\boost_python-vc100-mt-1_44.dll; DestDir: {app}\bin\Python27; Components: Python CS; Flags: ignoreversion
