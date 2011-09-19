@@ -2234,6 +2234,8 @@ namespace UdmDom
 
 				//dep does not have at this moment an archetype!!!
 				dep->setParent(this, Uml::theOther(role), false);
+				// Set _id attribute. Users expect every element to have an id (for use with other xml tools)
+				dep->GetID();
 
 				
 				
