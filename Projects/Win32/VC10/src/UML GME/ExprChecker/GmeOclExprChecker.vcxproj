@@ -97,7 +97,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     </CustomBuildStep>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\include;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\..\include;$(OutDir)..\Gen\src\UML GME\Interpreter;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -139,6 +139,9 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
+    <Midl>
+      <AdditionalIncludeDirectories>..\..\..\..\..\..\src\UML GME\ExprChecker;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
@@ -215,7 +218,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\include;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\..\include;$(OutDir)..\Gen\src\UML GME\Interpreter;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -257,6 +260,10 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
+    <Midl>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <AdditionalIncludeDirectories>..\..\..\..\..\..\src\UML GME\ExprChecker;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </Midl>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
@@ -408,6 +415,9 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <Project>{207da527-ec80-4a83-b5c2-b2a02281afba}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="$(GME_ROOT)\SDK\BON\Common\ComponentLib.idl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

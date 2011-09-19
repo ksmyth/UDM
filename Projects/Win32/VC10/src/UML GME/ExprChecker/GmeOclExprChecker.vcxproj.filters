@@ -172,4 +172,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Midl Include="$(GME_ROOT)\SDK\BON\Common\ComponentLib.idl">
+      <Filter>Source Files</Filter>
+    </Midl>
+  </ItemGroup>
 </Project>
