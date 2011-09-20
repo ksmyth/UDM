@@ -219,7 +219,7 @@ string xml_verify_str =
 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n\
 <RootFolder xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"LampDiagram.xsd\">\n\
 \n\
-  <Lamp ArrayBool=\"false;false;true;true\" ArrayInt=\"2;3;4;5\" ArrayReal=\"6;7;8;9\" ArrayStr=\"first;second;\" ModelName=\"Default Lamp Name\" _id=\"ide\" name=\"cool!\" sample=\"3.141592\"/>\n\
+  <Lamp ArrayBool=\"false;false;true;true\" ArrayInt=\"2;3;4;5\" ArrayReal=\"6;7;8;9\" ArrayStr=\"first;second;\" ModelName=\"Default Lamp Name\" _id=\"id10\" name=\"cool!\" sample=\"3.141592\"/>\n\
 \n\
 </RootFolder>\n";
 
