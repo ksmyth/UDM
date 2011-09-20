@@ -135,7 +135,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd$(PYTHON_VERSION).pdb</ProgramDatabaseFile>
-      <ImportLibrary>$(TargetName)python.lib</ImportLibrary>
+      <ImportLibrary>$(IntDir)$(TargetName)python.lib</ImportLibrary>
       <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\$(Configuration)\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
@@ -177,7 +177,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <TargetMachine>MachineX86</TargetMachine>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd$(PYTHON_VERSION).pdb</ProgramDatabaseFile>
-      <ImportLibrary>$(TargetName)python.lib</ImportLibrary>
+      <ImportLibrary>$(IntDir)$(TargetName)python.lib</ImportLibrary>
       <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\$(Configuration)\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
@@ -225,7 +225,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd$(PYTHON_VERSION).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\Win32\VC10\Release\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>$(TargetName)python.lib</ImportLibrary>
+      <ImportLibrary>$(IntDir)$(TargetName)python.lib</ImportLibrary>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
