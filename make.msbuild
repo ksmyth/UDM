@@ -17,16 +17,17 @@
   <Target Name="BuildVS9">
     <MSBuild Projects="Projects\Win32\VC9\src\Udm.sln" Targets="Build" Properties="Configuration=Debug" />
     <MSBuild Projects="Projects\Win32\VC9\src\Udm.sln" Targets="Build" Properties="Configuration=Release" />
+  </Target>
+
+  <Target Name="TestVS9">
     <MSBuild Projects="Projects\Win32\VC9\tests\UdmTests.sln" Targets="Build" Properties="Configuration=Debug" />
     <MSBuild Projects="Projects\Win32\VC9\tests\UdmTests.sln" Targets="Build" Properties="Configuration=Release" />
   </Target>
 
   <Target Name="BuildVS10" DependsOnTargets="CheckEnv">
-    <MSBuild Projects="Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" Targets="Build" Properties="Configuration=Debug" />
-    <MSBuild Projects="Projects\Win32\VC10\src\UdmDll\UdmDll.vcxproj" Targets="Build" Properties="Configuration=Release" />
+    <MSBuild Projects="Projects\Win32\VC10\src\Udm.sln" Targets="Build" Properties="Configuration=Debug" />
+    <MSBuild Projects="Projects\Win32\VC10\src\Udm.sln" Targets="Build" Properties="Configuration=Release" />
     <MSBuild Projects="Projects\Win32\VC10\src\UdmCli.sln" Targets="Build" Properties="Configuration=Release" />
-    <MSBuild Projects="Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Debug" />
-    <MSBuild Projects="Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Release" />
     <MSBuild Projects="Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Release27" />
     <!-- TODO: tests -->
   </Target>
