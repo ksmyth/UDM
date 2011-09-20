@@ -25,6 +25,7 @@
 #include "StdAfx.h"
 #include "GMECOM.h"
 #include "OCLCommon.h"
+#include "Mga.h"
 
 // From GME2000\Common\CommonSmart.h
 

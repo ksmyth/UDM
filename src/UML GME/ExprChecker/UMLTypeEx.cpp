@@ -34,6 +34,7 @@ CHANGELOG
 #include <strstream>
 #include "CardinalityObject.h"
 #include "AttributeObject.h"
+#include "Mga.h"
 
 
 namespace OCLUML
