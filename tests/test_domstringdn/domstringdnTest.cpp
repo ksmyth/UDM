@@ -241,7 +241,7 @@ string xml_verify_str =
 	
 	const string& outstr = ddn.Str();
 
-	CPPUNIT_ASSERT(  strcmp(xml_verify_str.c_str(), outstr.c_str()) == 0);
+	CPPUNIT_ASSERT_EQUAL(xml_verify_str, outstr);
 
 
 	ddn.CreateNewToString("LampDiagram.xsd", RootFolder::meta, Udm::CHANGES_PERSIST_ALWAYS);
@@ -252,7 +252,7 @@ string xml_verify_str =
 
 	const string & outstr1 = ddn.Str();
 
-	CPPUNIT_ASSERT(  strcmp(xml_verify_str1.c_str(), outstr1.c_str()) == 0);
+	CPPUNIT_ASSERT_EQUAL(xml_verify_str1, outstr1);
 
 };
 
