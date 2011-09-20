@@ -39,14 +39,17 @@ this software.
 #include <UdmOcl.h>
 #include <cstring>
 
+#if (_MSC_VER == 1600) /* VS2010 */
+#include "../Uml/Uml_xsd.h"
+#endif
+
 #define METADEPOSITORY_KEY(key) (string("__UdmPOI__") + string(key))
 
 using namespace Udm;
 using namespace Uml;
 
-namespace Uml_xsd
-{
- const std::string& getString();
+namespace Uml_xsd {
+	const std::string& getString();
 }
 
 static string last_error;			//static string to store the last error
