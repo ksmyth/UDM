@@ -21,7 +21,6 @@ popd
 set PATH=%UDM_PATH%\bin;^
 %UDM_3RDPARTY_PATH%\cppunit-1.12.1\bin;^
 %UDM_3RDPARTY_PATH%\info-zip;^
-%UDM_3RDPARTY_PATH%\sed;^
 %UDM_3RDPARTY_PATH%\apache-ant-1.7.1\bin;^
 %PATH%
 
