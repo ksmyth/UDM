@@ -818,6 +818,7 @@ void ClassGen::Parents()
 		if (the_other.isNavigable()) 
 		{
 			// Udm::ParentAttr<T> R() const { return Udm::ParentAttr<T>(impl, meta_R); }
+			// FIXME this is slow in StaticDataNetwork if there's only one child role, since it needs to get all the children of the parent
 			meth_defs.push_back( boost::format("Udm::ParentAttr< %1%> %2%() const { return Udm::ParentAttr< %1%>(impl, meta_%2%); }") % parent_name % rel_name );
 
 			if (gen.opts.mode == UdmOpts::CXX_GENERIC)
