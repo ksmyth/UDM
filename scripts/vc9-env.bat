@@ -18,8 +18,7 @@ popd
 
 :udm_path_set
 
-set PATH=%UDM_3RDPARTY_PATH%\xerces-c_2_8_0\bin;^
-%UDM_3RDPARTY_PATH%\xalan-c_1_11_0\bin;^
+set PATH=%UDM_PATH%\bin;^
 %UDM_3RDPARTY_PATH%\cppunit-1.12.1\bin;^
 %UDM_3RDPARTY_PATH%\info-zip;^
 %UDM_3RDPARTY_PATH%\sed;^
