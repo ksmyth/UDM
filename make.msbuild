@@ -34,6 +34,10 @@
   <Target Name="UdmCliGen" DependsOnTargets="CheckEnv">
     <MSBuild Projects="src\UdmCliGen\make.msbuild"/>
   </Target>
+  
+  <Target Name="judm" DependsOnTargets="CheckEnv">
+    <Exec Command="call scripts\run-ant-on-judm.bat VC9 Release generate test" WorkingDirectory="$(MSBuildThisFileDirectory)"/>
+  </Target>
 
   <PropertyGroup>
     <ISS>InnoSetup\udm_innosetupVS2008.iss</ISS>
