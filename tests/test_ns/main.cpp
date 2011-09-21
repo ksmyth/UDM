@@ -21,15 +21,27 @@ void __cdecl AbrtHandler(int)
 {
 	DebugBreak();
 }
+
+struct _CrtHooksRAII {
+	_CrtHooksRAII() {
+		oldAbrtHandler = signal(SIGABRT, &AbrtHandler);
+		_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
+		_set_abort_behavior(0, _WRITE_ABORT_MSG);
+		oldHook = _CrtSetReportHook(&CrtReportHook);
+	}
+	~_CrtHooksRAII() {
+		_CrtSetReportHook(oldHook);
+		signal(SIGABRT, oldAbrtHandler);
+	}
+	_CRT_REPORT_HOOK oldHook;
+	void (__cdecl *oldAbrtHandler)(int);
+};
 #endif
 
 int main(int argc, char* argv[])
 {
 #ifdef _WIN32
-	signal(SIGABRT, &AbrtHandler);
-	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
-	_set_abort_behavior(0, _WRITE_ABORT_MSG);
-	_CrtSetReportHook(&CrtReportHook);
+	_CrtHooksRAII hooks;
 #endif
 
 	CPPUNIT_NS::Test *suite = CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest();
