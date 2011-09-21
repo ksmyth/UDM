@@ -22,7 +22,7 @@ set PATH=%UDM_PATH%\bin;^
 %UDM_3RDPARTY_PATH%\cppunit-1.12.1\bin;^
 %UDM_3RDPARTY_PATH%\info-zip;^
 %UDM_3RDPARTY_PATH%\sed;^
-%UDM_3RDPARTY_PATH%\ant-1.6.2\bin;^
+%UDM_3RDPARTY_PATH%\apache-ant-1.7.1\bin;^
 %PATH%
 
 set JAVA_HOME=%JDK_PATH%
@@ -30,4 +30,3 @@ set JAVA_HOME=%JDK_PATH%
 set _CLASSPATH=%UDM_3RDPARTY_PATH%\junit\junit.jar;%UDM_3RDPARTY_PATH%\antlr-2.7.7\antlr.jar
 if defined CLASSPATH (set CLASSPATH=%_CLASSPATH%;%CLASSPATH%) else (set CLASSPATH=%_CLASSPATH%)
 
-set ANT_HOME=%UDM_3RDPARTY_PATH%\ant-1.6.2
