@@ -42,8 +42,8 @@
   <PropertyGroup>
     <ISS>InnoSetup\udm_innosetupVS2008.iss</ISS>
   </PropertyGroup>
-  <Target Name="Installer">
-    <!-- Must BuildVS9, BuildVS10, UdmCliGen, and `ant generate test` first-->
+  <Target Name="Installer" DependsOnTargets="BuildVS9;BuildVS10;judm">
+    <!-- Must build MetaGME2UML before this -->
     <CallTarget Targets="ISCC"/>
   </Target>
 </Project>
