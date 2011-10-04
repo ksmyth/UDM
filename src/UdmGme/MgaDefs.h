@@ -53,6 +53,35 @@ static void comthrow(HRESULT res, char *e, int l)
 #define objself (folderself? (IMgaObject *) folderself : (IMgaObject *)self)
 #define testself (self ? self : (throw udm_exception("Invalid method on folders"), NULL))
 #define NAMEGET(x) (((string)((x).name())).c_str())
-#define PATHGET(x) (((x).getPath2("::", false)).c_str())
+
+
+static string getClassPath(const Uml::Class& c)
+{
+	if (!c)
+		return "";
+	std::string ret;
+	Udm::Object o = c;
+	while (o.GetParent())
+	{
+		const Uml::Class& type = o.type();
+		if (type == Uml::Class::meta)
+		{
+			ret = static_cast<std::string>(Uml::Class::Cast(o).name()) + ret;
+		} 
+		else if (type == Uml::Namespace::meta)
+		{
+			ret = static_cast<std::string>(Uml::Namespace::Cast(o).name()) + std::string("::") + ret;
+		} 
+		else if (type == Uml::Diagram::meta)
+		{
+			ret = static_cast<std::string>(Uml::Diagram::Cast(o).name()) + std::string("::") + ret;
+		} 
+		o = o.GetParent();
+	}
+	// ASSERT(ret == c.getPath2("::", false));
+    return ret;
+}
+
+#define PATHGET(x) (getClassPath(x).c_str())
 #define foldiffold (folderself ? folderself : self)
 #endif
