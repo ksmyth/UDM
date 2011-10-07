@@ -265,9 +265,9 @@ function AddConfig90(proj, strProjectName)
 		    CLTool.BasicRuntimeChecks = basicRuntimeCheckOption.runtimeBasicCheckAll;
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDebugDLL;
 		    CLTool.TreatWChar_tAsBuiltInType = "true";
-		    CLTool.UsePrecompiledHeader = "0";
             CLTool.WarningLevel = "3";
 		    CLTool.DebugInformationFormat = debugOption.debugEditAndContinue;
+			CLTool.ForcedIncludeFiles = "StdAfx.h"
 
             // DEBUG RESOURCE COMPILER SETTINGS
 		    var RCTool = config.Tools('VCResourceCompilerTool');
@@ -326,9 +326,9 @@ function AddConfig90(proj, strProjectName)
 		    CLTool.PreprocessorDefinitions = "WIN32;NDEBUG;_WINDOWS;_USRDLL";
 		    CLTool.RuntimeLibrary = runtimeLibraryOption.rtMultiThreadedDLL;
 		    CLTool.TreatWChar_tAsBuiltInType = "true";
-		    CLTool.UsePrecompiledHeader = "0";
 		    CLTool.WarningLevel = "3";
 		    CLTool.DebugInformationFormat = debugOption.debugEnabled;
+			CLTool.ForcedIncludeFiles = "StdAfx.h"
     		
 		    // RELEASE RESOURCE COMPILER SETTINGS
 		    var RCTool = config.Tools('VCResourceCompilerTool');
@@ -368,8 +368,7 @@ function AddConfig90(proj, strProjectName)
 
 function PchSettings(proj)
 {
-    //	SetCommonPchSettings(proj);
-    SetNoPchSettings(proj);
+    SetCommonPchSettings(proj);
 }
 
 function DelFile(fso, strWizTempFile)
