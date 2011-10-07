@@ -11,7 +11,7 @@
 // the terms of this license. You must not remove this notice, or
 // any other, from this software.
 
-// Setup program for the UDM Interpreter Wizard for VC++ 9.0 (Visual Studio 2008)
+// Setup program for the UDM Interpreter Wizard for VC++ 10.0 (Visual Studio 2010)
 
 
 main();
