@@ -971,6 +971,7 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 	}
 	
 
+	bool need_libroot_element = can_be_libroot;
 	::Uml::Namespace ns = c.parent_ns();
 	if (!cwcps.empty() || has_text_attr || can_be_libroot) 
 	{
@@ -1023,12 +1024,14 @@ void GenerateXMLSchemaElement(const ::Uml::Class &c,  ostream &output, const set
 				else if	(cwcps_i->second.second != 1)
 					output << " maxOccurs=\"" << cwcps_i->second.second << "\"";
 				output << "/>" << endl;
+				if (c == cwcps_i->first)
+					need_libroot_element = false;
 			}
 			cwcps_i++;
 		}
 
 		// always attach libraries last
-		if (can_be_libroot)
+		if (need_libroot_element)
 		{
 			output << "\t\t\t<xsd:element name=\"" << name << "\"";
 			if (ns != ::Uml::Namespace(NULL))
