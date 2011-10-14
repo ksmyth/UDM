@@ -47,8 +47,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,2,8,0
- PRODUCTVERSION 3,2,8
+ FILEVERSION 3,2,9,0
+ PRODUCTVERSION 3,2,9
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -65,12 +65,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "ISIS, Vanderbilt University"
             VALUE "FileDescription", "UdmDll Dynamic Link Library"
-            VALUE "FileVersion", "3.2.8"
+            VALUE "FileVersion", "3.2.9"
             VALUE "InternalName", "UdmDll"
             VALUE "LegalCopyright", "Copyright (C) 2010"
             VALUE "OriginalFilename", "UdmDll.dll"
             VALUE "ProductName", "UdmDll Dynamic Link Library"
-            VALUE "ProductVersion", "3.2.8"
+            VALUE "ProductVersion", "3.2.9"
         END
     END
     BLOCK "VarFileInfo"

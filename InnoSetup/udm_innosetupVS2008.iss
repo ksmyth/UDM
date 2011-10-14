@@ -5,7 +5,7 @@
 #pragma option -v+
 #pragma verboselevel 9
 
-#define GMEVER "11.3.23"
+#define GMEVER "11.10.14"
 
 #define UDMPATH GetEnv('UDM_PATH')
 #define UDM3rdPartyPATH GetEnv('UDM_3RDPARTY_PATH')
@@ -18,7 +18,7 @@
 
 #define UDMVER GetEnv('UDM_VERSION')
 #if UDMVER == ""
-#define UDMVER "3.2.8"
+#define UDMVER "3.2.9"
 #endif
 #define OutputFileBase "Udm_setup"
 
@@ -108,7 +108,7 @@ Source: {#UDMPATH}\Build\Win32\VC9\Release\XmiToUdm.exe; DestDir: {app}\bin; Com
 Source: {#UDMPATH}\Build\Win32\VC9\Release\UdmSwig.dll; DestDir: {app}\bin; Components: Java; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC10\Release\{#UDMDLLVS10}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
 Source: {#UDMPATH}\Build\Win32\VC10\Debug\{#UDMDLLDVS10}; DestDir: {app}\bin; Components: Core; Flags: ignoreversion
-Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCli.dll; DestDir: {app}\bin; StrongAssemblyName: "UdmCli, Version=3.2.8.0, Culture=neutral, PublicKeyToken=9b61694741cb5693, ProcessorArchitecture=x86"; Flags: "gacinstall sharedfile uninsnosharedfileprompt"; Components: CS
+Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCli.dll; DestDir: {app}\bin; StrongAssemblyName: "UdmCli, Version=3.2.9.0, Culture=neutral, PublicKeyToken=9b61694741cb5693, ProcessorArchitecture=x86"; Flags: "gacinstall sharedfile uninsnosharedfileprompt"; Components: CS
 Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCliBridge.dll; DestDir: {app}\bin; Components: CS; Flags: ignoreversion
 Source: {#UDMPATH}\src\UdmCliGen\dist\UdmCliGen.exe; DestDir: {app}\bin; Components: CS; Flags: ignoreversion
 Source: {#UDMPATH}\src\UdmCliGen\dist\python26.dll; DestDir: {app}\bin; Components: Python CS; Flags: ignoreversion
@@ -214,7 +214,7 @@ Root: HKCU; Subkey: Environment; ValueType: string; ValueName: UDM_PATH; ValueDa
 Root: HKCU; Subkey: Environment; ValueType: string; ValueName: UDM_3RDPARTY_PATH; ValueData: {app}\3rdparty; Flags: uninsdeletevalue deletevalue; Components: not System
 Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: UDM_PATH; ValueData: {app}; Flags: uninsdeletevalue deletevalue; Components: System
 Root: HKLM; Subkey: SYSTEM\CurrentControlSet\Control\Session Manager\Environment; ValueType: string; ValueName: UDM_3RDPARTY_PATH; ValueData: {app}\3rdparty; Flags: uninsdeletevalue deletevalue; Components: System
-Root: HKLM; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\UdmCli; ValueType: string; ValueData: "C:\Windows\assembly\GAC_32\UdmCli\3.2.8.0__9b61694741cb5693"; Flags: uninsdeletevalue deletevalue
+Root: HKLM; Subkey: SOFTWARE\Microsoft\.NETFramework\v2.0.50727\AssemblyFoldersEx\UdmCli; ValueType: string; ValueData: "C:\Windows\assembly\GAC_32\UdmCli\3.2.9.0__9b61694741cb5693"; Flags: uninsdeletevalue deletevalue
 
 
 [Run]
