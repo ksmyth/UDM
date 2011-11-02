@@ -251,6 +251,10 @@ using namespace MGALib;
 #undef INTERFACEVERSION_INCLUDED
 #undef INTERFACE_VERSION
 
+// KMS: VS intellisense has a hard time loading from typelib GUID. This fixes it:
+//#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Release\obj\src\UdmGme\Mga.tlh"
+//#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Release\obj\src\UdmGme\Meta.tlh"
+
 
 namespace UdmGme 
 {
@@ -288,6 +292,43 @@ namespace UdmGme
 
 		assocmapitem() : metaobjs_count(0),  metaobjs(NULL), rp_helper(false), pt_abstract(false), src_rp_helper(&Udm::_null), dst_rp_helper(&Udm::_null) {};
 	};
+
+	SmartBSTR GetRoleFromMeta(IMgaMetaFCOPtr& meta, const wchar_t* role_type)
+	{
+		SmartBSTR role = meta->RegistryValue[role_type];
+		if (role.length() == 0)
+		{
+			if (wcscmp(role_type, L"sName") == 0)
+			{
+				if (meta->ObjType == OBJTYPE_CONNECTION)
+					return SmartBSTR(L"src") + meta->Name;
+				else if (meta->ObjType == OBJTYPE_SET)
+					return SmartBSTR(L"set") + meta->Name;
+			}
+			else if (wcscmp(role_type, L"dName") == 0)
+			{
+				if (meta->ObjType == OBJTYPE_CONNECTION)
+					return SmartBSTR(L"dst") + meta->Name;
+			}
+			else if (wcscmp(role_type, L"mName") == 0)
+			{
+				if (meta->ObjType == OBJTYPE_SET)
+					return SmartBSTR(L"members");
+			}
+			else if (wcscmp(role_type, L"rName") == 0)
+			{
+				if (meta->ObjType == OBJTYPE_REFERENCE)
+					return SmartBSTR(L"ref");
+			}
+			else if (wcscmp(role_type, L"rrName") == 0)
+			{
+				if (meta->ObjType == OBJTYPE_REFERENCE)
+					return SmartBSTR(L"referedby") + meta->Name;
+			}
+			// TODO dRefParent
+		}
+		return role;
+	}
 
 	
 	struct privdata 
@@ -3262,8 +3303,8 @@ bbreak:			;
 								if (p)
 								{
 									if (p->GetObjType() != OBJTYPE_REFERENCE) continue;
-									SmartBSTR herename = p->RegistryValue["rrName"];
-									SmartBSTR therename = p->RegistryValue["rName"];
+									SmartBSTR herename = GetRoleFromMeta(p, L"rrName");
+									SmartBSTR therename = GetRoleFromMeta(p, L"rName");
 									if (!(!therename) && !(!herename))
 									{
 										if (string((const char *) therename) != "ref") continue;
@@ -3385,16 +3426,16 @@ bbreak:			;
 								switch(bt->GetObjType()) 
 								{
 									case OBJTYPE_REFERENCE:
-											herename = bt->RegistryValue["rrName"];
-											therename = bt->RegistryValue["rName"];
+											herename = GetRoleFromMeta(bt, L"rrName");
+											therename = GetRoleFromMeta(bt, L"rName");
 											break;
 									case OBJTYPE_SET:						
-											herename = bt->RegistryValue["sName"];
-											therename = bt->RegistryValue["mName"];
+											herename = GetRoleFromMeta(bt, L"sName");
+											therename = GetRoleFromMeta(bt, L"mName");
 											break;
 									case OBJTYPE_CONNECTION:
-											sRefParent = bt->RegistryValue["sRefParent"];
-											dRefParent = bt->RegistryValue["dRefParent"];
+											sRefParent = GetRoleFromMeta(bt, L"sRefParent");
+											dRefParent = GetRoleFromMeta(bt, L"dRefParent");
 											nn->rp_helper = true;//it's an rp_helper connection
 											break;
 									default:
@@ -3513,18 +3554,18 @@ bbreak:			;
 					switch(nn->ot) 
 					{
 						case OBJTYPE_REFERENCE:
-							herename = nn->metaobj->RegistryValue["rrName"];
-							therename = nn->metaobj->RegistryValue["rName"];
+							herename = GetRoleFromMeta(nn->metaobj, L"rrName");
+							therename = GetRoleFromMeta(nn->metaobj, L"rName");
 							break;
 						case OBJTYPE_SET:
-							herename = nn->metaobj->RegistryValue["sName"];
-							therename = nn->metaobj->RegistryValue["mName"];
+							herename = GetRoleFromMeta(nn->metaobj, L"sName");
+							therename = GetRoleFromMeta(nn->metaobj, L"mName");
 							break;
 						case OBJTYPE_CONNECTION:
 							if (nn->rp_helper) break;
 							
-							herename = nn->metaobj->RegistryValue["sName"];
-							therename = nn->metaobj->RegistryValue["dName"];
+							herename = GetRoleFromMeta(nn->metaobj, L"sName");
+							therename = GetRoleFromMeta(nn->metaobj, L"dName");
 							{
 								for(set< ::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
 								{
@@ -3559,8 +3600,8 @@ bbreak:			;
 						if(nn->ot != expect) throw udm_exception(errPrefix + "Association resolves to invalid object type: " +  (string)p->Name);
 				
 						//compute which one is the primary role name
-						herename = p->RegistryValue["sName"];
-						therename = p->RegistryValue["dName"];
+						herename = GetRoleFromMeta(p, L"sName");
+						therename = GetRoleFromMeta(p, L"dName");
 						{
 							for(set< ::Uml::AssociationRole>::iterator j = roles.begin(); j != roles.end(); j++) 
 							{
@@ -3613,10 +3654,10 @@ bbreak:			;
 			assocmapitem *nn = i->second;
 			if ( !nn->metaobj ) continue;
 
-			SmartBSTR sRefParent = nn->metaobj->RegistryValue["sRefParent"];
-			SmartBSTR dRefParent = nn->metaobj->RegistryValue["dRefParent"];
-			SmartBSTR herename = nn->metaobj->RegistryValue["sName"];
-			SmartBSTR therename = nn->metaobj->RegistryValue["dName"];
+			SmartBSTR sRefParent = GetRoleFromMeta(nn->metaobj, L"sRefParent");
+			SmartBSTR dRefParent = GetRoleFromMeta(nn->metaobj, L"dRefParent");
+			SmartBSTR herename = GetRoleFromMeta(nn->metaobj, L"sName");
+			SmartBSTR therename = GetRoleFromMeta(nn->metaobj, L"dName");
 
 			if ( nn->ot != OBJTYPE_CONNECTION || nn->rp_helper || !sRefParent || !dRefParent ) continue;
 
