@@ -9,7 +9,7 @@ Homepage: http://repo.isis.vanderbilt.edu/downloads?tool=UDM
 Package: udm-dev
 Section: libdevel
 Architecture: any
-Depends: udm (= ${binary:Version}), ${misc:Depends}
+Depends: udm (= ${binary:Version}), ${misc:Depends}, libxerces-c2-dev
 Description: Universal Data Model client development headers
  Udm provides an API for accessing and modifying models.
 
