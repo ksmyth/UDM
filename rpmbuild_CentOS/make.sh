@@ -11,7 +11,7 @@ VERSION=3.13
 set -e
 set -u
 
-if [ -d udm-$VERSION ]; then true rm -rf udm-$VERSION; fi
+if [ -d udm-$VERSION ]; then rm -rf udm-$VERSION; fi
 mkdir udm-$VERSION
 pushd ..
 ./configure LDFLAGS="-L$(pwd)/debian/zlib-1.2.3.3.dfsg/contrib/minizip/" CPPFLAGS="-I$(pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"  CXXFLAGS="-I$(pwd)/debian/zlib-1.2.3.3.dfsg/contrib/" --without-xalan --without-antlr --prefix=/usr
@@ -21,4 +21,4 @@ popd
 tar -zcvf udm-$VERSION.tar.gz udm-$VERSION
 cp -f udm-$VERSION.tar.gz SOURCES/
 
-rpmbuild -ba SPECS/udm.spec
+rpmbuild --define "_topdir $(pwd)" -ba SPECS/udm.spec
