@@ -58,9 +58,11 @@ fi
 ])
 
 AC_ARG_WITH(xalan,
-[  --disable-xalan    ])
+[  --disable-xalan    ],
+[],
+[with_xalan=yes])
 
-AS_IF([test "x$enable_xalan" != "xno"], [
+AS_IF([test "x$with_xalan" = "xno"], [
  AC_DEFINE(NO_XALAN, 1, [Define this to disable xalan])
  AM_CONDITIONAL([NO_XALAN], [true])
  enable_xalan=no
