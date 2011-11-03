@@ -7,7 +7,7 @@ AC_CONFIG_AUX_DIR([config])
 # judm paths are longer than 99 characters, so force pax format
 AM_INIT_AUTOMAKE([tar-pax])
 AC_CONFIG_SRCDIR([src/UdmBase/UdmBase.cpp])
-AC_CONFIG_SUBDIRS([src/UdmOclPat/GOCL])
+#AC_CONFIG_SUBDIRS([src/UdmOclPat/GOCL])
 AC_LANG([C++])
 AC_DISABLE_STATIC
 
@@ -39,6 +39,7 @@ AC_ARG_WITH(antlr,
 			[Name of antlr (version 1.33) from PCCTS [[default=antlr]]]),
 	[antlr_name="$withval"],
 	[antlr_name="antlr"])
+AS_IF([test x$with_antlr != xno], [
 AC_CHECK_PROG(antlr, $antlr_name, $antlr_name)
 if test x$antlr = x; then
    AC_MSG_ERROR([$antlr_name not found])
@@ -50,12 +51,33 @@ else
    AC_MSG_RESULT([no])
    AC_MSG_ERROR([antlr version 1.33 is needed])
 fi
+ AM_CONDITIONAL([NO_ANTLR], [false])
+], [
+ AM_CONDITIONAL([NO_ANTLR], [true])
+ AC_DEFINE(NO_ANTLR, 1, [Define this to disable antlr])
+])
+
+AC_ARG_WITH(xalan,
+[  --disable-xalan    ])
+
+AS_IF([test "x$enable_xalan" != "xno"], [
+ AC_DEFINE(NO_XALAN, 1, [Define this to disable xalan])
+ AM_CONDITIONAL([NO_XALAN], [true])
+ enable_xalan=no
+ XALANLIBS=""  
+],
+[
+ AM_CONDITIONAL([NO_XALAN], [false])
+ enable_xalan=yes
+ XALANLIBS="-lxalan-c"
+])
+
+
 
 # Checks for libraries.
 CPPUNITLIBS="-lcppunit -ldl"
 DLOPENLIBS=""
 MINIZIPLIBS="-lz -lminizip"
-XALANLIBS="-lxalan-c"
 XERCESLIBS="-lxerces-c"
 
 # Checks for header files.

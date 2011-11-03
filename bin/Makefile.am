@@ -1,7 +1,17 @@
 ## Makefile.am -- Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS		= Udm UdmBackendDump UdmCopy UdmOclPat UdmToXmi \
-	UdmViz XmiToUdm
+
+OPTPROGRAMS =
+if ! NO_XALAN
+OPTPROGRAMS += UdmToXmi 
+OPTPROGRAMS += XmiToUdm
+endif
+if ! NO_ANTLR
+OPTPROGRAMS += UdmOclPat
+endif
+
+
+bin_PROGRAMS		= Udm UdmBackendDump UdmCopy UdmViz $(OPTPROGRAMS)
 
 
 Udm_SOURCES		=

@@ -250,6 +250,7 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
 
     }//end gene
 
+#ifndef NO_ANTLR
    cint_string res;
    if(!dn.OCL_Evaluate(res))
    {
@@ -262,6 +263,7 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
    }
   
    cout << string(res.buffer()) << endl;
+#endif
   
 
   RemoveXsd(xsdn);

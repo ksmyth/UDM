@@ -328,6 +328,7 @@ int main(int argc, char **argv) {
 			return 0;
 		};
 
+#ifndef NO_XALAN
 		//check for XMI input
 		//1. If there is no DTDPath, it can not be an XMI Input
 
@@ -394,6 +395,7 @@ int main(int argc, char **argv) {
 			inputfile = input_udm;
 
 		}
+#endif /* NO_XALAN */
 
 		UdmDom::DomDataNetwork  nw(Uml::diagram);
 		nw.OpenExisting(inputfile,"", Udm::CHANGES_LOST_DEFAULT);

@@ -36,7 +36,9 @@ this software.
 #include <Uml.h>
 #include <UmlExt.h>
 #include <UdmDom.h>
+#ifndef NO_ANTLR
 #include <UdmOcl.h>
+#endif
 #include <cstring>
 
 #if (_MSC_VER == 1600) /* VS2010 */
@@ -1477,6 +1479,8 @@ UdmPseudoDataNetwork::~UdmPseudoDataNetwork()
 	
 };
 
+
+#ifndef NO_ANTLR
 bool UdmPseudoDataNetwork::OCL_Evaluate(cint_string& res)
 {
   CINT_DN_TRY(dn_id);
@@ -1510,6 +1514,12 @@ bool UdmPseudoDataNetwork::OCL_Evaluate(cint_string& res)
   return true;
   CINT_DN_CATCH
 }
+#else
+bool UdmPseudoDataNetwork::OCL_Evaluate(cint_string& res)
+{
+  // TODO: print a warning that constraints are disabled
+}
+#endif /* NO_ANTLR */
 	
 
 bool UPO_SetDiagram(UdmPseudoObject &diagram_what, const char* name)

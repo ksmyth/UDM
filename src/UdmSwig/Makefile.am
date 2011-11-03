@@ -2,6 +2,11 @@
 
 SWIG			= @swig@
 
+SWIG_FLAGS = 
+if NO_ANTLR
+SWIG_FLAGS += -DNO_ANTLR
+endif
+
 # gcc 4 optimizations based on strict aliasing break constructs like
 # jresult = *(UdmPseudoObject **)&result; // jresult is not changed
 AM_CPPFLAGS		= -I$(top_srcdir)/include -fno-strict-aliasing
@@ -20,7 +25,7 @@ sources-stamp: UdmSwig.i Makefile
 	@rm -f sources-temp
 	@touch sources-temp
 	mkdir -p ../../judm/src/UdmSwig/edu/vanderbilt/isis/udm/swig
-	$(SWIG) -java -package edu.vanderbilt.isis.udm.swig \
+	$(SWIG) $(SWIG_FLAGS) -java -package edu.vanderbilt.isis.udm.swig \
 		-outdir ../../judm/src/UdmSwig/edu/vanderbilt/isis/udm/swig \
 		-v -c++ -o UdmSwig_wrap.cpp $(srcdir)/UdmSwig.i
 	@mv -f sources-temp $@
