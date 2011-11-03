@@ -4,10 +4,6 @@ VERSION=3.13
 
 # http://stackoverflow.com/questions/880227/what-is-the-minimum-i-have-to-do-to-create-an-rpm-file
 
-#cat ~/.rpmmacros
-# %_topdir expanded_pwd
-# %_tmppath  %{_topdir}/tmp
-
 set -e
 set -u
 
