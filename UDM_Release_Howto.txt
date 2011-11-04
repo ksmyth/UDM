@@ -14,53 +14,46 @@ Update with new version, info:
  /UDM/trunk/Projects/Win32/VC10/src/UdmDll/UdmDll.rc
  /UDM/trunk/Projects/Win32/VC9/src/UdmDll/UdmDll.rc
  /UDM/trunk/include/UdmBase.h
- /UDM/trunk/releaseinfo.txt
+ /UDM/trunk/releaseinfo.txt (+GME version)
  /UDM/trunk/Projects/Win32/VC10/src/UdmCli/Properties/AssemblyInfo.cs
-ci -m 'Prepare for release 3.2.8'
+ /UDM/trunk/debian/changelog
+ci -m 'Prepare for release 3.2.9'
 
-svn cp https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_8
-svn co https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_8 Udm
+svn cp https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_9
+svn co https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_9
+svn co https://svn.isis.vanderbilt.edu/MoBIES/GReAT/trunk GReAT
 
 rem VS10 cmd prompt
 rem Building MetaGME2UML is a requirement for a Udm release
+
+set PATH=%UDM_PATH%\bin;%PATH%
+c:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild "%UDM_PATH%"\make.msbuild /t:BuildVS9;BuildVS10;UdmCliGen;judm
+
 set PATH=%UDM_PATH%\bin;%PATH%
 msbuild "%GREAT_PATH%\Tools\MetaGME2UMX\MetaGME2UMX Interpreters\MetaGME2UML_interpreterVS2010.vcxproj" /t:Rebuild /p:Configuration=Release
 
-msbuild "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" /p:Configuration=Debug /t:Rebuild
-msbuild "c:\Program Files\GME\SDK\DecoratorLib\DecoratorLib.sln" /p:Configuration=Release /t:Rebuild
-
-set PATH=%UDM_PATH%\bin;%PATH%
-c:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild "%UDM_PATH%"\make.msbuild /t:BuildVS9;BuildVS10;UdmCliGen
-
-pushd %UDM_PATH%\judm
-"%UDM_PATH%\scripts\vc9-env.bat"
-set Path=%UDM_3RDPARTY_PATH%\apache-ant-1.7.1\bin;%PATH%
-set ANT_HOME=
-set ANT_PATH=
-"%UDM_3RDPARTY_PATH%"\apache-ant-1.7.1\bin\ant
-
-msbuild "%UDM_PATH%"\make.msbuild /t:Installer
-# rename InnoSetup output UDM_r3_2_8.exe
+msbuild "%UDM_PATH%"\make.msbuild /t:ISCC
+# rename InnoSetup output UDM_r3_2_9.exe
 # test installer http://kms1/svn/installs/ vm_installs_test.py secrets-installtest2.py
 
 export JOB_NAME=Udm
-export BUILD_NUMBER=3.2.8
+export BUILD_NUMBER=3.2.9
 pushd %UDM_PATH%
 "%GREAT_PATH%"\common-scripts\hudson_archive_pdbs.cmd
 pushd %GREAT_PATH%
 "%GREAT_PATH%"\common-scripts\hudson_archive_pdbs.cmd
-"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%UDM_PATH%" /s \\kms1\symbols /t Udm /v "3.2.8"
-"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t UdmGReAT /v "3.2.8"
+"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%UDM_PATH%" /s \\kms1\symbols /t Udm /v "3.2.9"
+"\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t UdmGReAT /v "3.2.9"
 
 # ------------------------
 # bash
-svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_8 Udm_source_r3.2.8
-/c/Program\ Files/7-Zip/7z.exe a -r Udm_source_r3.2.8.zip Udm_source_r3.2.8/
-cp Udm_source_r3.2.8/releaseinfo.txt UDM_Release_Notes.txt 
+svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/A3_2_9 Udm_source_r3.2.9
+/c/Program\ Files/7-Zip/7z.exe a -r Udm_source_r3.2.9.zip Udm_source_r3.2.9/
+cp Udm_source_r3.2.9/releaseinfo.txt UDM_Release_Notes.txt 
 
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.8/
-scp UDM_Release_Notes.txt UDM_r3_2_8.exe Udm_source_r3.2.8.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.8/
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.8/
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.9/
+scp UDM_Release_Notes.txt UDM_r3_2_9.exe Udm_source_r3.2.9.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.9/
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.9/
 
 # For GReAT release:
 "\Program Files\Debugging Tools for Windows (x86)\symstore.exe" add /r /f "%GREAT_PATH%" /s \\kms1\symbols /t GReAT /v "1.7.5"
@@ -74,7 +67,7 @@ scp GReAT_Release_Notes.txt GReAT_r1_7_5.exe GReAT_source_r1.7.5.zip GReAT_3rdpa
 ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7.5
 
 # For Udm and GReAT
-# On http://repo add Folder 3.2.8; add Download UDM_Release_Notes.txt, UDM_r3_2_8.exe, Udm_source_r3.2.8.zip
+# On http://repo add Folder 3.2.9; add Download UDM_Release_Notes.txt, UDM_r3_2_9.exe, Udm_source_r3.2.9.zip
 # JIRA: make release
 # email announcement
 # change http://kms1/svn/installs/install.py sync to installs/install.exe, https://svn.isis.vanderbilt.edu/isis-common/trunk/common-scripts/install.exe
@@ -83,20 +76,20 @@ ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7
 
 # GME Release
 # VS 2010 command prompt
-svn co https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_11.8.1
+svn co https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_11.10.14
 set GME_ROOT=%CD%
 set JAVA_HOME=c:\Program Files\Java\jdk1.5.0_22
 Install\Build\build.py -s 1 -e 13 -v
 set DBGTOOLS=%ProgramFiles%\Debugging Tools for Windows (x86)
 Install\symbols_source_server.cmd
-"%DBGTOOLS%\symstore" add /r /f "%CD%" /s \\kms1.isis.vanderbilt.edu\symbols /t "GME" /v "11.8.1"
+"%DBGTOOLS%\symstore" add /r /f "%CD%" /s \\kms1.isis.vanderbilt.edu\symbols /t "GME" /v "11.10.14"
 
-svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_11.8.1 GME-11_8_1_src &&
-/c/Program\ Files/7-Zip/7z.exe a -r GME-11_8_1_src.zip GME-11_8_1_src/
+svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_11.10.14 GME-11_10_14_src &&
+/c/Program\ Files/7-Zip/7z.exe a -r GME-11_10_14_src.zip GME-11_10_14_src/
+# Copy README.txt from build
 
-
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GME/11.8.1/
-scp README.txt GME-11.8.1.msi GME-11_8_1_src.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GME/11.8.1/
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GME/11.8.1/
-
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GME/11.10.14/
+scp README.txt GME-11.10.14.msi GME-11_10_14_src.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GME/11.10.14/
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GME/11.10.14/
+repo: short name L11.10.14
 
