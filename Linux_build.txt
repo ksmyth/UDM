@@ -49,7 +49,7 @@ Building:
   model-files.zip; save the archive in the top directory of your build
   directory
 - configure and build Udm with the usual sequence of steps for GNU autotools:
-  configure  (for RHEL and Fedora: configure --with-antlr=antlr1)
+  ./configure  (for RHEL and Fedora: ./configure --with-antlr=antlr1)
   make
 - to run the tests launch the following command in the top build directory:
   make check
@@ -68,3 +68,11 @@ sudo update-java-alternatives -s java-6-sun
 wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
 # Build binary debs
 fakeroot debian/rules binary
+
+Building (CentOS)
+----------------------------------------------
+- CentOS <6: enable RPMForge repository: http://wiki.centos.org/AdditionalResources/Repositories/RPMForge
+  yum -y groupinstall 'Development Libraries' 'Development Tools' 'Java Development'
+  yum -y install ccache cppunit-devel xerces-c-devel swig ant-junit boost-devel antlr
+  setenforce permissive
+  cd rpmbuild_CentOS && bash make.sh
