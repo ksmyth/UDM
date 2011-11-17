@@ -7,7 +7,7 @@ ALL RIGHTS RESERVED
 
 1. Windows Operating system (XP, Vista, 7)
 
-2. GME 10, r11.10.14 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 11, r11.10.14 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. Visual Studio 9 or Visual Studio 10
