@@ -4,10 +4,6 @@
 #include <string> // STL
 
 
-[!if DYNAMIC_META_XML_BACKEND && META_LOADING_DYNAMIC || USE_XML_BACKEND]
-#define _USE_DOM
-[!endif]
-
 [!if USE_CONSOLE]
 #define _USE_CONSOLE
 [!endif]
