@@ -84,10 +84,21 @@ string UmlClassCPPName(const ::Uml::Class &cl)
 
 string UmlClassCPPName(const ::Uml::Class &cl, const ::Uml::Namespace &ns)
 {
+	string ret = "::" + cl.getPath2("::");
 	if ((::Uml::Namespace) cl.parent_ns() == ns)
+	{
+		std::set<Uml::Class> classes = Uml::AncestorClasses(cl);
+		classes.erase(cl);
+		for (std::set<Uml::Class>::iterator classesIt = classes.begin(); classesIt != classes.end(); classesIt++)
+		{
+			if (classesIt->name() == cl.name())
+				return ret;
+		}
+		if (cl.name() == "Object")
+			return ret;
 		return cl.name();
-	else
-		return "::" + cl.getPath2("::");
+	}
+	return ret;
 }
 
 string join(const string &sep, const vector<string> &v)

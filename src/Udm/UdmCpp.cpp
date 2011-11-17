@@ -202,7 +202,7 @@ string InheritanceSolver::getAncestorList(const ::Uml::Class &cl) const
 	if( bases.size() == 0) 
 	{
 		if (virtualbaseclasses.find(cl) != virtualbaseclasses.end()) ret+= " virtual ";
-		ret += "public Udm::Object";
+		ret += "public ::Udm::Object";
 	}
 	else 
 	{

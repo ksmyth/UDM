@@ -290,7 +290,7 @@ public:
 		{
 			idt = string(c.depth_level() + 2, '\t');
 
-			class_def_start = boost::format("class %1%Visitor : public Udm::BaseVisitor") % gen.opts.macro;
+			class_def_start = boost::format("class %1%Visitor : public ::Udm::BaseVisitor") % gen.opts.macro;
 
 			set< ::Uml::Class> classes = c.classes();
 			for (set< ::Uml::Class>::const_iterator cl_i = classes.begin(); cl_i != classes.end(); cl_i++)
