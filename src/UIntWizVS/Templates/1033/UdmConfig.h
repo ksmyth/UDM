@@ -32,7 +32,7 @@
 [!if VALID_HEADER_TO_INCLUDE]
 #include "[!output HEADER_TO_INCLUDE]"
  
-#define META_NAMESPACE [!output NAMESPACE_NAME]
+#define META_NAMESPACE ::[!output NAMESPACE_NAME]
 
 [!endif]
 
