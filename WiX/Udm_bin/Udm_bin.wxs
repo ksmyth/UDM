@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='windows-1252'?>
+
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' RequiredVersion='3.0.4813.0'>
+
+  <?include ..\Udm_inc.wxi ?>
+
+  <Module Id='Udm_bin' Language='1033' Codepage='1252' Version='$(var.VERSIONSTR)'>
+
+    <Package Id='$(var.Udm_bin_Package_Id)' Keywords='GME, MIC, modeling, domain specific languages' Description='Generic Modeling Environment Installer'
+        Manufacturer='Vanderbilt University, ISIS'
+        InstallerVersion='300' Languages='1033' SummaryCodepage='1252'
+        InstallPrivileges='elevated' InstallScope='perMachine'/>
+
+    <!-- =========================================================== -->
+    <!-- DIRECTORY STRUCTURE -->
+    <!-- =========================================================== -->
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id='$(var.ProgramFilesNativeFolder)'>
+        <Directory Id='ISIS' Name='ISIS'>
+          <Directory Id='INSTALLDIR' Name='Udm'>
+            <Directory Id='bin' Name='bin'>
+              <Directory Id='Python26' Name='Python26'/>
+              <Directory Id='Python27' Name='Python27'/>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <DirectoryRef Id="bin">
+      <Component>
+        <File Source="$(var.UDM_3RDPARTY_PATH)\xalan-c_1_11_0\bin\Xalan-C_1_11.dll" />
+      </Component>
+      <Component>
+        <File Source="$(var.UDM_3RDPARTY_PATH)\xalan-c_1_11_0\bin\XalanMessages_1_11.dll" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC9\Debug\UdmDll_3_2D.dll" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Debug\UdmDll_3_2_VS10D.dll" />
+      </Component>
+
+      <?if $(sys.BUILDARCH)=x86 ?>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\Udm.exe" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\UdmCopy.exe" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\UdmBackendDump.exe" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\UdmOclPat.exe" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\UdmViz.exe" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\XmiToUdm.exe" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\UdmToXmi.exe" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC9\Release\UdmSwig.dll" />
+      </Component>
+      <Component>
+        <File Source="..\judm\build\build_win\judm\judm.jar" />
+      </Component>
+      <Component>
+        <File Source="..\bin\udm.py" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\UdmCli.dll" Assembly=".net"/>
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\UdmCliBridge.dll" />
+      </Component>
+      <Component>
+        <File Source="..\src\UdmCliGen\dist\UdmCliGen.exe" />
+      </Component>
+      <Component>
+        <File Source="..\src\UdmCliGen\dist\python26.dll" />
+      </Component>
+      <?endif?>
+    </DirectoryRef>
+
+    <?if $(sys.BUILDARCH)=x86 ?>
+    <ComponentGroupRef Id="UMLOCLExpressionChecker"/>
+    <ComponentGroupRef Id="UML2XML"/>
+    <ComponentGroupRef Id="MetaGME2Uml"/>
+    <DirectoryRef Id="Python26">
+      <Component>
+        <File Source="..\bin\Python26\udm.pyd" />
+      </Component>
+      <Component>
+        <File Source="..\bin\Python26\__init__.py" />
+      </Component>
+      <Component>
+        <File Source="..\bin\Python26\boost_python-vc100-mt-1_44.dll" />
+      </Component>
+
+    </DirectoryRef>
+    <DirectoryRef Id="Python27">
+      <Component>
+        <File Source="..\bin\Python27\udm.pyd" Id="udm.pyd27"/>
+      </Component>
+      <Component>
+        <File Source="..\bin\Python27\__init__.py" Id="initpy27"/>
+      </Component>
+      <Component>
+        <File Source="..\bin\Python27\boost_python-vc100-mt-1_44.dll" Id="boost_python_vc100_mt_1_44.dll27"/>
+      </Component>
+    </DirectoryRef>
+    <?endif?>
+
+  </Module>
+</Wix>

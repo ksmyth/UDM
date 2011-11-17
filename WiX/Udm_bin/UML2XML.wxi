@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Fragment>
+  <DirectoryRef Id="bin" />
+</Fragment>
+<Fragment>
+<ComponentGroup Id="UML2XML">
+  <Component Id="UML2XML.dll" Directory="bin">
+    <File Source="..\Build\Win32\VC10\Release\UML2XML.dll">
+      <TypeLib Id="F3F6FC1C-D175-47D1-AC14-7EF210CC818F" Description="MGA Interpreter TypeLibrary (UML2XML)" Language="0" MajorVersion="1" MinorVersion="0">
+        <Class Id="{B05E71F0-2A71-4646-92E9-317507B32844}" Context="InprocServer32" Description="MGA.Interpreter.UML2XML">
+          <ProgId Id="MGA.Interpreter.UML2XML" Description="MGA.Interpreter.UML2XML" />
+        </Class>
+      </TypeLib>
+    </File>
+    <RegistryKey Root='HKLM' Key='Software\GME\Components\MGA.Interpreter.UML2XML'>
+      <RegistryValue Name='Description' Type='string' Value='UML2XML'/>
+      <RegistryValue Name='Icon' Type='string' Value=',IDI_COMPICON'/>
+      <RegistryValue Name='Paradigm' Type='string' Value='UML,UMLModelTransformer'/>
+      <RegistryValue Name='Tooltip' Type='string' Value='UML 2 UDM/XML Interpreter'/>
+      <RegistryValue Name='Type' Type='integer' Value='1'/>
+
+      <RegistryKey Key='Associated'>
+        <RegistryValue Name='UML' Type='string' Value=''/>
+        <RegistryValue Name='UMLModelTransformer' Type='string' Value=''/>
+      </RegistryKey>
+
+    </RegistryKey>
+  </Component>
+</ComponentGroup>
+</Fragment>
+</Wix>

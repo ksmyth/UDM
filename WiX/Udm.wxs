@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='windows-1252'?>
+
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' RequiredVersion='3.0.4813.0'>
+
+  <?include Udm_inc.wxi ?>
+
+
+
+  <Product Name='$(var.ProductName)' Id='*' UpgradeCode='$(var.UpgradeCode)'
+        Language='1033' Codepage='1252' Version='$(var.VERSIONSTR)' Manufacturer='Vanderbilt University, ISIS'>
+
+    <Package Id='*' Description='Universal Data Model'
+        Manufacturer='Vanderbilt University, ISIS'
+        InstallerVersion='300' Languages='1033' Compressed='yes' SummaryCodepage='1252'
+        InstallPrivileges='elevated' InstallScope='perMachine'/>
+
+
+    <Upgrade Id="$(var.UpgradeCode)">
+      <UpgradeVersion Minimum="$(var.VERSIONSTR)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
+      <UpgradeVersion OnlyDetect="no" Minimum="1.0.0" IncludeMinimum="yes" Maximum="$(var.VERSIONSTR)" IncludeMaximum="no" Property="PREVIOUSFOUND"/>
+    </Upgrade>
+    <CustomActionRef Id="WixExitEarlyWithSuccess"/>
+
+    <InstallExecuteSequence>
+      <RemoveExistingProducts After="InstallValidate" />
+    </InstallExecuteSequence>
+
+    <Media Id='1' Cabinet='Udm.cab' EmbedCab='yes' />
+
+    <Condition Message="This application is only supported on Windows XP or higher.">
+      <![CDATA[Installed OR (VersionNT >= 501)]]>
+    </Condition>
+
+    <!-- TODO WixVariable Id="WixUILicenseRtf" Value="..\Doc\Legal\License.rtf" / -->
+
+    <!-- =========================================================== -->
+    <!-- DIRECTORY STRUCTURE -->
+    <!-- =========================================================== -->
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id='$(var.ProgramFilesNativeFolder)'>
+        <Directory Id='ISIS' Name='ISIS'>
+          <Directory Id='INSTALLDIR' Name='Udm'>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <!-- =========================================================== -->
+    <!-- MERGE MODULES -->
+    <!-- =========================================================== -->
+    <DirectoryRef Id='TARGETDIR'>
+      <Merge Id="CRT100" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_CRT_$(sys.BUILDARCH).msm" DiskId="1" />
+      <Merge Id="MFC100" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_MFC_$(sys.BUILDARCH).msm" DiskId="1" />
+      <Merge Id="ATL100" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_ATL_$(sys.BUILDARCH).msm" DiskId="1" />
+
+      <Merge Id="UdmDll_VS10" Language="1033" SourceFile="UdmDll_VS10\UdmDll_VS10.msm" DiskId="1" />
+      <Merge Id="Udm_SDK" Language="1033" SourceFile="Udm_SDK\Udm_SDK.msm" DiskId="1"/>
+      <Merge Id="Udm_bin" Language="1033" SourceFile="Udm_bin\Udm_bin.msm" DiskId="1"/>
+      <?if $(sys.BUILDARCH)=x64 ?>
+      <Merge Id="UdmDll_VS10_x64" Language="1033" SourceFile="UdmDll_VS10\UdmDll_VS10_x64.msm" DiskId="1" />
+      <Merge Id="Udm_bin_x64" Language="1033" SourceFile="Udm_bin\Udm_bin_x64.msm" DiskId="1"/>
+      <Merge Id="CRT100_x86" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_CRT_x86.msm" DiskId="1" />
+      <Merge Id="MFC100_x86" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_MFC_x86.msm" DiskId="1" />
+      <Merge Id="ATL100_x86" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_ATL_x86.msm" DiskId="1" />
+      <?endif?>
+    </DirectoryRef>
+
+
+    <!-- =========================================================== -->
+    <!-- FEATURES -->
+    <!-- =========================================================== -->
+    <Feature Id='Complete' Title='Udm' Description='The complete package' Display='expand' Level='1'>
+
+      <MergeRef Id='Udm_SDK' />
+      <MergeRef Id='Udm_bin' />
+      <MergeRef Id='UdmDll_VS10' />
+      <?if $(sys.BUILDARCH)=x64 ?>
+      <MergeRef Id='UdmDll_VS10_x64'/>
+      <MergeRef Id='Udm_bin_x64' />
+      <MergeRef Id='CRT100_x86' />
+      <MergeRef Id='MFC100_x86' />
+      <MergeRef Id='ATL100_x86' />
+      <?endif?>
+
+      <MergeRef Id='CRT100' />
+      <MergeRef Id='MFC100' />
+      <MergeRef Id='ATL100' />
+    </Feature>
+
+    <!-- =========================================================== -->
+    <!-- USER INTERFACE -->
+    <!-- =========================================================== -->
+    <UI>
+      <UIRef Id="WixUI_Minimal" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+      <InstallUISequence>
+        <Show Dialog="UserExit" OnExit="cancel">0</Show>
+      </InstallUISequence>
+    </UI>
+
+  </Product>
+</Wix>
