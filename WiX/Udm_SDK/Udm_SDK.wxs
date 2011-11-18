@@ -141,9 +141,9 @@
       <Component>
         <File Source="..\Build\x64\VC10\Release\UdmDll_v100_x64.lib" />
       </Component>
-      <!-- <Component>
-        <File Source="..\..\Build\x64\VC10\Debug\UdmDll_v100_x64D.lib" />
-      </Component> -->
+      <Component>
+        <File Source="..\Build\x64\VC10\Debug\UdmDll_v100_x64D.lib" />
+      </Component>
       <?endif?>
     </DirectoryRef>
 
