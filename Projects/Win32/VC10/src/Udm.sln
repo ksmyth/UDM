@@ -52,6 +52,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MPCGen", "MPCGen\MPCGen.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmPython", "UdmPython\UdmPython.vcxproj", "{55409968-F077-4A87-87D5-F28DB28181C2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmWiX", "..\..\..\..\WiX\UdmWiX.vcxproj", "{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BootUdmCompile Debug|Win32 = BootUdmCompile Debug|Win32
@@ -380,6 +382,18 @@ Global
 		{55409968-F077-4A87-87D5-F28DB28181C2}.Release|Win32.ActiveCfg = Release|Win32
 		{55409968-F077-4A87-87D5-F28DB28181C2}.Release|Win32.Build.0 = Release|Win32
 		{55409968-F077-4A87-87D5-F28DB28181C2}.Release|x64.ActiveCfg = Release|x64
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.BootUdmCompile Debug|Win32.ActiveCfg = Debug|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.BootUdmCompile Debug|Win32.Build.0 = Debug|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.BootUdmCompile Debug|x64.ActiveCfg = Debug|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.BootUdmCompile Release|Win32.ActiveCfg = Release|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.BootUdmCompile Release|Win32.Build.0 = Release|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.BootUdmCompile Release|x64.ActiveCfg = Release|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.Debug|Win32.Build.0 = Debug|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.Debug|x64.ActiveCfg = Debug|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.Release|Win32.ActiveCfg = Release|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.Release|Win32.Build.0 = Release|Win32
+		{D63CBBDB-4F2C-4840-A915-291DD4C2A0F4}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
