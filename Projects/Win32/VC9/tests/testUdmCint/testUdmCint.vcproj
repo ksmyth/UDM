@@ -77,7 +77,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmOcld.lib GOCLd.lib cppunitd.lib testrunnerd.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2d.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib zlibd.lib"
+				AdditionalDependencies="UmlD.lib UdmOcld.lib GOCLd.lib cppunitd.lib testrunnerd.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib zlibd.lib"
 				OutputFile="$(OutDir)\testUdmCintD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

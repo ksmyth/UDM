@@ -76,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtilD.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtilD.lib zlibD.lib UdmDomD.lib xerces-c_2.lib"
 				OutputFile="$(OutDir)\test_childrenorder.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

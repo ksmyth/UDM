@@ -170,7 +170,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2.lib"
 				OutputFile="$(OutDir)\test_domstringdn.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

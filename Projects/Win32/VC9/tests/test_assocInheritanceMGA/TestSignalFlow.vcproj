@@ -76,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmGmeD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2D.lib"
+				AdditionalDependencies="UmlD.lib UdmGmeD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibD.lib UdmDomD.lib xerces-c_2.lib"
 				OutputFile="$(OutDir)\TestSignalFlow.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

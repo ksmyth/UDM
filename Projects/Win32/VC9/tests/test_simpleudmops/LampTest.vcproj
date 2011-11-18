@@ -171,7 +171,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib Xerces-c_2D.lib zlibD.lib cppunitd.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib UdmUtilD.lib xerces-c_2.lib zlibD.lib cppunitd.lib"
 				OutputFile="$(OutDir)\LampTest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

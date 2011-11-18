@@ -83,7 +83,7 @@ exit 0
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UmlD.lib;UdmBaseD.lib;UdmDomD.lib;UdmUtilD.lib;xerces-c_2D.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>UmlD.lib;UdmBaseD.lib;UdmDomD.lib;UdmUtilD.lib;xerces-c_2.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)cross_linksD.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

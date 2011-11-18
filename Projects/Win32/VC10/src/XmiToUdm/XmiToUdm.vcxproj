@@ -117,7 +117,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UmlD.lib;UdmXmiD.lib;xerces-c_2D.lib;Xalan-C_1D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>UmlD.lib;UdmXmiD.lib;xerces-c_2.lib;Xalan-C_1D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -161,7 +161,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UmlD.lib;UdmXmiD.lib;xerces-c_2D.lib;Xalan-C_1D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>UmlD.lib;UdmXmiD.lib;xerces-c_2.lib;Xalan-C_1D.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>

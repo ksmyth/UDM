@@ -72,7 +72,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib Xerces-c_2D.lib UdmUtilD.lib zlibD.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib UdmDomD.lib UdmGmeD.lib xerces-c_2.lib UdmUtilD.lib zlibD.lib"
 				OutputFile="$(OutDir)\UdmVizD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmDllD.lib cppunitd.lib testrunnerd.lib Xalan-C_1d.lib xerces-c_2d.lib"
+				AdditionalDependencies="UdmDllD.lib cppunitd.lib testrunnerd.lib Xalan-C_1d.lib xerces-c_2.lib"
 				OutputFile="$(OutDir)\testOCLD.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(OutDir)"

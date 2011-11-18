@@ -170,7 +170,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UdmXmiD.lib xerces-c_2D.lib Xalan-C_1D.lib"
+				AdditionalDependencies="UdmXmiD.lib xerces-c_2.lib Xalan-C_1D.lib"
 				OutputFile="$(OutDir)\UdmToXmiD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

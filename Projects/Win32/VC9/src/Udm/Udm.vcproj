@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib File2CodeD.lib JavaAPIGenD.lib UdmXmiD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2D.lib Xalan-C_1D.lib zlibD.lib"
+				AdditionalDependencies="UmlD.lib File2CodeD.lib JavaAPIGenD.lib UdmXmiD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2.lib Xalan-C_1D.lib zlibD.lib"
 				OutputFile="$(OutDir)\UdmD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

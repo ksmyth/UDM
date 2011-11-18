@@ -170,7 +170,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UmlD.lib;GOCLd.lib;UdmOcld.lib;jvm.lib;jawt.lib;UdmPOID.lib;Xalan-C_1d.lib;xerces-c_2d.lib;UdmBaseD.lib;UdmDomD.lib;UdmUtilD.lib;zlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>UmlD.lib;GOCLd.lib;UdmOcld.lib;jvm.lib;jawt.lib;UdmPOID.lib;Xalan-C_1d.lib;xerces-c_2.lib;UdmBaseD.lib;UdmDomD.lib;UdmUtilD.lib;zlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>

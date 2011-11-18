@@ -111,7 +111,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UmlD.lib;UdmBaseD.lib;UdmDomD.lib;UdmGmeD.lib;Xerces-c_2D.lib;UdmUtilD.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>UmlD.lib;UdmBaseD.lib;UdmDomD.lib;UdmGmeD.lib;xerces-c_2.lib;UdmUtilD.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -153,7 +153,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UmlD.lib;UdmBaseD.lib;UdmDomD.lib;UdmGmeD.lib;Xerces-c_2D.lib;UdmUtilD.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>UmlD.lib;UdmBaseD.lib;UdmDomD.lib;UdmGmeD.lib;xerces-c_2.lib;UdmUtilD.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>

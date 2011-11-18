@@ -172,7 +172,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibd.lib UdmDomd.lib xerces-c_2d.lib"
+				AdditionalDependencies="UmlD.lib UdmBaseD.lib cppunitd.lib testrunnerd.lib UdmUtild.lib zlibd.lib UdmDomd.lib xerces-c_2.lib"
 				OutputFile="$(OutDir)\test_cintstring.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

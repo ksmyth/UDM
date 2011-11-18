@@ -77,7 +77,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cppunitd.lib testrunnerd.lib UdmDlld.lib zlibD.lib xerces-c_2D.lib"
+				AdditionalDependencies="cppunitd.lib testrunnerd.lib UdmDlld.lib zlibD.lib xerces-c_2.lib"
 				OutputFile="$(OutDir)\Test_CrossLinksD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
