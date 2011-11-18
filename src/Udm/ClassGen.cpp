@@ -150,7 +150,7 @@ void ClassGen::Basic(const InheritanceSolver &is)
 	meth_defs.push_back( boost::format("%1% CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role = ::Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl); }") % cl_name );
 
 	// Udm::InstantiatedAttr<C> C::Instances() { return Udm::InstantiatedAttr<C>(impl); }
-	meth_defs.push_back( boost::format("::Udm::InstantiatedAttr<%1%> Instances() { return ::Udm::InstantiatedAttr<%1%>(impl); }") % cl_name );
+	meth_defs.push_back( boost::format("::Udm::InstantiatedAttr< %1% > Instances() { return ::Udm::InstantiatedAttr<%1%>(impl); }") % cl_name );
 
 	// template <class Pred> Udm::InstantiatedAttr<C, Pred> Instances_sorted(const Pred &) { return Udm::InstantiatedAttr<C, Pred>(impl); }
 	meth_defs.push_back( boost::format("template <class Pred> ::Udm::InstantiatedAttr<%1%, Pred> Instances_sorted(const Pred &) { return ::Udm::InstantiatedAttr<%1%, Pred>(impl); }") % cl_name );
@@ -159,13 +159,13 @@ void ClassGen::Basic(const InheritanceSolver &is)
 	meth_defs.push_back( boost::format("%1% CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role = ::Udm::NULLCHILDROLE) { return __Create(meta, parent, role, impl, true); }") % cl_name );
 
 	// Udm::DerivedAttr<C> Derived() { return Udm::DerivedAttr<C>(impl); }
-	meth_defs.push_back( boost::format("::Udm::DerivedAttr<%1%> Derived() { return Udm::DerivedAttr<%1%>(impl); }") % cl_name );
+	meth_defs.push_back( boost::format("::Udm::DerivedAttr< %1% > Derived() { return Udm::DerivedAttr<%1%>(impl); }") % cl_name );
 
 	// template <class Pred> Udm::DerivedAttr<C, Pred> Derived_sorted(const Pred &) { return Udm::DerivedAttr<C, Pred>(impl); }
-	meth_defs.push_back( boost::format("template <class Pred> ::Udm::DerivedAttr<%1%, Pred> Derived_sorted(const Pred &) { return ::Udm::DerivedAttr<%1%, Pred>(impl); }") % cl_name );
+	meth_defs.push_back( boost::format("template <class Pred> ::Udm::DerivedAttr< %1%, Pred> Derived_sorted(const Pred &) { return ::Udm::DerivedAttr<%1%, Pred>(impl); }") % cl_name );
 
 	// Udm::ArchetypeAttr<C> Archetype() const { return Udm::ArchetypeAttr<C>(impl); }
-	meth_defs.push_back( boost::format("::Udm::ArchetypeAttr<%1%> Archetype() const { return ::Udm::ArchetypeAttr<%1%>(impl); }") % cl_name );
+	meth_defs.push_back( boost::format("::Udm::ArchetypeAttr< %1% > Archetype() const { return ::Udm::ArchetypeAttr<%1%>(impl); }") % cl_name );
 
 
 	if (gen.opts.mode == UdmOpts::CXX_GENERIC)
