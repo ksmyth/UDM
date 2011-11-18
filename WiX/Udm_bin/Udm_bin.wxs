@@ -44,6 +44,7 @@
       <?if $(sys.BUILDARCH)=x86 ?>
       <Component>
         <File Source="..\Build\Win32\VC10\Release\Udm.exe" />
+        <Environment Id="UDM_PATH" Action="set" System="yes" Name="UDM_PATH" Value="[INSTALLDIR]" />
       </Component>
       <Component>
         <File Source="..\Build\Win32\VC10\Release\UdmCopy.exe" />
