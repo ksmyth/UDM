@@ -14,7 +14,7 @@
     <!-- DIRECTORY STRUCTURE -->
     <!-- =========================================================== -->
     <Directory Id='TARGETDIR' Name='SourceDir'>
-      <Directory Id='$(var.ProgramFilesNativeFolder)'>
+      <Directory Id='ProgramFilesFolder'>
         <Directory Id='ISIS' Name='ISIS'>
           <Directory Id='INSTALLDIR' Name='Udm'>
             <Directory Id='bin' Name='bin'/>
