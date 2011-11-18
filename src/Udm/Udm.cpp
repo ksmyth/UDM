@@ -20,7 +20,10 @@ this software.
 
 #include "./JavaAPIGen/JavaAPIGen.h"
 
-#ifdef WIN32
+#ifdef _WIN32
+#if defined(_M_AMD64)
+#define ZLIB_WINAPI
+#endif
 #include <contrib\minizip\unzip.h>
 #else
 #include <minizip/unzip.h>

@@ -57,6 +57,9 @@ this software.
 #include <UdmStatic.h>
 
 //zip 
+#if defined(_M_AMD64)
+#define ZLIB_WINAPI
+#endif
 #include <zlib.h>
 
 #ifdef WIN32
