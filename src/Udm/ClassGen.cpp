@@ -889,7 +889,7 @@ void ClassGen::Parents()
 			meth_defs.push_back( boost::format("::Udm::ParentAttr< %1%> parent() const { return ::Udm::ParentAttr< %1%>(impl, ::Udm::NULLPARENTROLE); }") % UmlClassCPPName(ans_class) );
 		} else {
 			// Udm::ParentAttr<Udm::Object> parent() const { return Udm::ParentAttr<Udm::Object>(impl, Udm::NULLPARENTROLE); }
-			meth_defs.push_back( boost::format("::Udm::ParentAttr<::Udm::Object> parent() const { return ::Udm::ParentAttr<::Udm::Object>(impl, ::Udm::NULLPARENTROLE); }") );
+			meth_defs.push_back( boost::format("::Udm::ParentAttr< ::Udm::Object> parent() const { return ::Udm::ParentAttr< ::Udm::Object>(impl, ::Udm::NULLPARENTROLE); }") );
 
 			for(set< ::Uml::Class>::iterator ccc = ans.begin(); ccc != ans.end(); ccc++) 
 			{
@@ -945,7 +945,7 @@ void ClassGen::AssocEnds(const ::Uml::Diagram &cross_dgr)
 
 				::Uml::AssociationRole orp_helper = the_other.rp_helper();
 				if (orp_helper) {
-					typedefs.push_back( boost::format("typedef std::pair< %1%, std::vector<::Udm::Object> > %2%_chain_t") % tclass_cpp_name % rel_name );
+					typedefs.push_back( boost::format("typedef std::pair< %1%, std::vector< ::Udm::Object> > %2%_chain_t") % tclass_cpp_name % rel_name );
 					meth_defs.push_back( boost::format("::Udm::AssocEndChainAttr< %1%, %2%_chain_t > %2%_chain() const { return ::Udm::AssocEndChainAttr< %1%, %2%_chain_t >(impl, meta_%2%_end_); }") % tclass_cpp_name % rel_name );
 
 					string orp_helper_name = ::Uml::MakeRoleName(orp_helper);
