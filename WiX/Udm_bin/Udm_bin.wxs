@@ -28,6 +28,12 @@
     </Directory>
 
     <DirectoryRef Id="bin">
+      <?if $(sys.BUILDARCH)=x64?>
+      <Component>
+        <File Source="..\Build\x64\VC10\Debug\UdmDll_3_2_v100_x64D.dll" />
+      </Component>
+      <?endif?>
+      <?if $(sys.BUILDARCH)=x86 ?>
       <Component>
         <File Source="$(var.UDM_3RDPARTY_PATH)\xalan-c_1_11_0\bin\Xalan-C_1_11.dll" />
       </Component>
@@ -46,11 +52,10 @@
       <Component>
         <File Source="..\Build\Win32\VC10\Debug\UdmDll_3_2_VS10D.dll" />
       </Component>
-
-      <?if $(sys.BUILDARCH)=x86 ?>
       <Component>
         <File Source="..\Build\Win32\VC10\Release\Udm.exe" />
         <Environment Id="UDM_PATH" Action="set" System="yes" Name="UDM_PATH" Value="[INSTALLDIR]" />
+        <Environment Id="PATH" Action="set" System="yes" Name="PATH" Value="[bin]" Part="last" />
       </Component>
       <Component>
         <File Source="..\Build\Win32\VC10\Release\UdmCopy.exe" />
