@@ -119,7 +119,46 @@ namespace UDM_NAMESPACE
 	const ::Uml::CompositionChildRole NULLCHILDROLE;
 	const ::Uml::CompositionParentRole NULLPARENTROLE;
 
-	
+
+	UDM_DLL Object::~Object()
+	{
+#ifdef UDM_RVALUE
+		if (impl)
+#endif
+		{
+			UDM_ASSERT(impl != NULL);
+			impl->release(); 
+#ifdef _DEBUG
+			impl = NULL;
+#endif
+		}
+	}
+
+	UDM_DLL const Object & Object::operator =(const Object &a)
+	{
+		UDM_ASSERT(a.impl != NULL);
+		ObjectImpl *t = a.impl->clone();
+
+		UDM_ASSERT(impl != NULL);
+		impl->release();
+
+		impl = t;
+		return a;
+	}
+
+#ifdef UDM_RVALUE
+	UDM_DLL Object& Object::operator=(Object&& a)
+	{
+		if (this != &a) {
+			if (impl != NULL)
+				impl->release();
+			impl = a.impl;
+			a.impl = NULL;
+		}
+		return *this;
+	}
+#endif
+
 	UDM_DLL ObjectImpl *Object::__Cast(const Object &a, const ::Uml::Class &meta)
 	{
 		if(a && !Uml::IsDerivedFrom(a.type(), meta) )
@@ -158,6 +197,69 @@ namespace UDM_NAMESPACE
 				return parent.impl->createChild(role, meta);
 			else
 				return parent.impl->createChild(role, Uml::SafeTypeContainer::GetSafeType(meta));
+	}
+
+	UDM_DLL set<Object> Object::getAssociation(const ::Uml::AssociationRole &meta, int mode) const
+	{
+		set<Object> ret;
+
+		vector<ObjectImpl*> a = impl->getAssociation(meta, mode);
+		vector<ObjectImpl*>::const_iterator i = a.begin();
+		while( i != a.end() )
+		{
+			ret.insert(*i);
+			++i;
+		}
+
+		return ret;
+	}
+
+	UDM_DLL void Object::setAssociation(const ::Uml::AssociationRole &meta, const set<Object> &a, int mode)
+	{
+		vector<ObjectImpl*> b;
+
+		set<Object>::const_iterator i = a.begin();
+		while( i != a.end() )
+		{
+			b.push_back((*i).impl);
+			++i;
+		}
+
+		impl->setAssociation(meta, b, mode);
+	}
+
+	UDM_DLL void Object::connectTo(const ::Uml::AssociationRole &meta, const Object &target, const vector<Object> &refs)
+	{
+		vector<ObjectImpl*> refs_impl;
+
+		vector<Object>::const_iterator i = refs.begin();
+		while ( i != refs.end() )
+		{
+			refs_impl.push_back((*i).impl);
+			++i;
+		}
+
+		impl->connectTo(meta, target.impl, refs_impl);
+	}
+
+	UDM_DLL void Object::disconnectFrom(const ::Uml::AssociationRole &meta, const Object &peer)
+	{
+		impl->disconnectFrom(meta, peer.impl);
+	}
+
+	UDM_DLL vector<Object> Object::getConnectingChain(const ::Uml::AssociationRole &meta, const Object &peer) const
+	{
+		vector<Object> ret;
+
+		vector<ObjectImpl*> a = impl->getConnectingChain(meta, peer.impl);
+		vector<ObjectImpl*>::const_iterator i = a.begin();
+		while( i != a.end() )
+		{
+			ret.push_back(*i);
+			++i;
+		}
+
+		return ret;
 	}
 
 	UDM_DLL Object Object::archetype() const
@@ -1908,6 +2010,170 @@ namespace UDM_NAMESPACE
 
 			return ret.str();
 		}
+
+
+	DataNetwork* SmartDataNetwork::testdn() const 
+	{
+		if(dn) return dn;
+		throw udm_exception("Missing data network");
+	}
+
+	SmartDataNetwork::SmartDataNetwork(const UdmDiagram &metainfo, UdmProject * pr) :
+	  	DataNetwork(metainfo, pr) 
+	{	
+		dn = NULL;	
+		str_based = false;
+	}
+
+	SmartDataNetwork::~SmartDataNetwork() 
+	{ 
+		delete dn;
+	}
+	
+	SmartDataNetwork & SmartDataNetwork::operator=(SmartDataNetwork &a)
+	{
+		if (dn && a.dn)
+			*dn = *(a.dn);
+		else 
+			throw udm_exception("Either the source or the destination SmartDataNetwork does not exist.");
+		return *this;
+	}
+
+	SmartDataNetwork & SmartDataNetwork::operator=(DataNetwork &a)
+	{
+		if (dn)
+			*dn = a;
+		else 
+			throw udm_exception("The destination SmartDataNetwork does not exist.");
+		return *this;
+	};
+	
+	void SmartDataNetwork::CreateNew(const string &systemname, 
+						const string &metalocator, const ::Uml::Class &rootclass, 
+						enum BackendSemantics sem)
+	{
+		if (dn)
+			throw udm_exception("DataNetwork is already open"); 
+
+		std::auto_ptr<DataNetwork> dn1(CreateBackend(systemname, metaroot, pr));
+		if (!dn1.get())
+			throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"
+					    "Available backends: " + DumpBackendNames().c_str());
+		dn1->CreateNew(systemname, metalocator, rootclass, sem);
+		dn = dn1.release();
+	}
+
+	void SmartDataNetwork::OpenExisting(const string &systemname, 
+						const string &metalocator, 
+						enum BackendSemantics sem) {
+		if (dn)
+			throw udm_exception("DataNetwork is already open"); 
+
+		std::auto_ptr<DataNetwork> dn1(CreateBackend(systemname, metaroot,pr));
+		if (!dn1.get())
+			throw udm_exception("Cannot deduce Udm backend type from " + systemname + "\n"
+						 "Available backends: " + DumpBackendNames().c_str());
+		dn1->OpenExisting(systemname, metalocator, sem);
+		dn = dn1.release();
+	}
+
+	void SmartDataNetwork::CloseWithUpdate() 
+	{
+		testdn()->CloseWithUpdate();
+
+		if (str_based)
+		{
+			str = dn->Str();
+			str_based = false;
+		}
+
+		delete dn;
+		dn = NULL;
+	}
+
+	void SmartDataNetwork::CloseNoUpdate()	
+	{  
+		testdn()->CloseNoUpdate();
+		
+		if (str_based)
+		{
+			str = dn->Str();
+			str_based = false;
+		}
+	
+		delete dn; 
+		dn = NULL; 
+	}
+
+	void SmartDataNetwork::SaveAs(string systemname)
+	{
+		testdn()->SaveAs(systemname);
+	}
+
+	void SmartDataNetwork::CloseAs(string systemname)
+	{
+		testdn()->CloseAs(systemname); 
+
+		if (str_based)
+		{
+			str = dn->Str();
+			str_based = false;
+		}
+	
+		delete dn; 
+		dn = NULL;
+	}
+
+	bool SmartDataNetwork::isOpen() { return dn ? dn->isOpen() : false; }
+
+	void SmartDataNetwork::CommitEditSequence() { testdn()->CommitEditSequence(); }
+	void SmartDataNetwork::AbortEditSequence() { testdn()->AbortEditSequence(); }
+
+	Object SmartDataNetwork::GetRootObject() const { return testdn()->GetRootObject(); }
+	Object SmartDataNetwork::ObjectById(Object::uniqueId_type t) { return testdn()->ObjectById(t); }
+
+	const ::Uml::Diagram& SmartDataNetwork::GetRootMeta() const { return testdn()->GetRootMeta(); }
+	bool SmartDataNetwork::IsTypeSafe() { return testdn()->IsTypeSafe(); }
+
+	UdmProject* SmartDataNetwork::GetProject() { return testdn()->GetProject(); }
+	void SmartDataNetwork::setStaticUdmProject(StaticUdmProject* _pr) { testdn()->setStaticUdmProject(_pr);	}
+	void SmartDataNetwork::resetStaticUdmProject() { testdn()->resetStaticUdmProject(); }
+
+	void SmartDataNetwork::CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass,
+							enum Udm::BackendSemantics sem)
+	{
+		if (dn)
+			throw udm_exception("DataNetwork is already open"); 
+
+		//the name can be anything, which ends in .xml. String backend is supported only by DOM
+		std::auto_ptr<DataNetwork> dn1(CreateBackend("string_dom.xml", metaroot, pr));
+		if (dn1.get() == NULL)
+			throw udm_exception(string("Cannot deduce Udm backend type .xml from available backends: ") + DumpBackendNames().c_str());
+		
+		dn1->CreateNewToString(metalocator, rootclass, sem);
+		dn = dn1.release();
+		str_based = true;
+	}
+
+	void SmartDataNetwork::OpenExistingFromString(string &str, 
+							const string &metalocator, 
+							enum Udm::BackendSemantics sem)
+	{
+		if (dn)
+			throw udm_exception("DataNetwork is already open"); 
+
+		//the name can be anything, which ends in .xml. String backend is supported only by DOM
+		std::auto_ptr<DataNetwork> dn1(CreateBackend("string_dom.xml", metaroot, pr));
+		if (dn1.get() == NULL)
+			throw udm_exception(string("Cannot deduce Udm backend type .xml from available backends: ") + DumpBackendNames().c_str());
+
+		dn1->OpenExistingFromString(str,metalocator,sem);
+		dn = dn1.release();
+		str_based = true;
+	}
+
+	const string & SmartDataNetwork::Str() {return str; }
+	set<Object> SmartDataNetwork::GetAllInstancesOf(const ::Uml::Class& meta) { return testdn()->GetAllInstancesOf(meta); }
 
 
 		//the map for static metadepository
