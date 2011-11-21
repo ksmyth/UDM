@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.59])
-AC_INIT([udm], [3.13])
+AC_INIT([udm], [3.29])
 AC_CONFIG_AUX_DIR([config])
 # judm paths are longer than 99 characters, so force pax format
 AM_INIT_AUTOMAKE([tar-pax])

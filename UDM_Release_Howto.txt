@@ -16,6 +16,7 @@ Update with new version, info:
  /UDM/trunk/include/UdmBase.h
  /UDM/trunk/releaseinfo.txt (+GME version)
  /UDM/trunk/Projects/Win32/VC10/src/UdmCli/Properties/AssemblyInfo.cs
+ /UDM/trunk/configure.ac
  /UDM/trunk/debian/changelog
 ci -m 'Prepare for release 3.2.9'
 
