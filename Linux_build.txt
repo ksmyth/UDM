@@ -16,16 +16,15 @@ Requirements:
 - junit
 - Boost
 
-Build-environment preparation (Fedora 11, 12):
+Build-environment preparation (Fedora 14 or newer):
 ----------------------------------------------
 - install development tools and libraries
   yum groupinstall 'Development Libraries' 'Development Tools' 'Java Development'
-  yum install ccache cppunit-devel swig xalan-c-devel xerces-c-devel
+  yum install ccache cppunit-devel minizip-devel swig xalan-c-devel xerces-c-devel
   yum install ant ant-junit ant-trax junit xerces-j2 xalan-j2 xml-commons-apis
-- install the following rpms from our repository:
-  minizip, minizip-devel, minizip-libs, pccts
+- install the following rpm from our repository or disable antlr: pccts
 
-Build-environment preparation (RHEL 5):
+Build-environment preparation (RHEL/CentOS 5):
 ----------------------------------------------
 - enable EPEL repository: http://fedoraproject.org/wiki/EPEL
 - install development tools and libraries
@@ -49,7 +48,7 @@ Building:
   model-files.zip; save the archive in the top directory of your build
   directory
 - configure and build Udm with the usual sequence of steps for GNU autotools:
-  ./configure  (for RHEL and Fedora: ./configure --with-antlr=antlr1)
+  ./configure  (for RHEL/CentOS and Fedora: ./configure --with-antlr=antlr1)
   make
 - to run the tests launch the following command in the top build directory:
   make check
