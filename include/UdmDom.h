@@ -128,14 +128,14 @@ namespace UdmDom
 //		multiple roles in its container simultaneously (but always at least one)
 // otherwise, a new role assignment removes prior role 
 		static bool MultiRolesEnabled() { return multiroles; }
-		static bool EnableMultiRoles(bool p) { multiroles = p; return p; }
+		static bool EnableMultiRoles(bool p) { multiroles = p; return p;}
 
 		UDM_DLL Object ObjectById(Object::uniqueId_type id);
 		
-		static Udm::DataNetwork *factory(const Udm::UdmDiagram &meta, Udm::UdmProject* project = NULL)
+		static Udm::DataNetwork *factory(const Udm::UdmDiagram &meta, Udm::UdmProject* project = NULL) 
 		{
 			return new DomDataNetwork(meta, project);
-		} 
+		}
 	
 		static const string FindFile(const string file_name);
 		
@@ -154,13 +154,33 @@ namespace UdmDom
 
 	struct str_xsd_storage
 	{
+
 		typedef map<const string, const string> str_str_map;
 		
 		static UDM_DLL str_str_map static_xsd_container;
+		static void StoreXsd(const string key, const string & xsd_str)
+		{
+			str_str_map::value_type item(key, xsd_str);
+			pair<str_str_map::const_iterator, bool> ins_res = static_xsd_container.insert(item);
+			if (!ins_res.second && (xsd_str!=ins_res.first->second)) // only if it differs from the stored one Kalmar
+				throw udm_exception(string("An XSD by that name is already stored with a different content: ") + key);
 
-		static void StoreXsd(const string &key, const string &xsd_str);
-		static void RemoveXsd(const string &key);
-		static void ClearXsdStorage();
+
+		};
+
+		static void RemoveXsd(const string key)
+		{
+			
+			static_xsd_container.erase(key);
+
+		}
+ 		static void ClearXsdStorage()
+		{
+			
+			static_xsd_container.clear();
+
+		}
+
 	};
 
 
