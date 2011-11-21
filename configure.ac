@@ -7,7 +7,6 @@ AC_CONFIG_AUX_DIR([config])
 # judm paths are longer than 99 characters, so force pax format
 AM_INIT_AUTOMAKE([tar-pax])
 AC_CONFIG_SRCDIR([src/UdmBase/UdmBase.cpp])
-#AC_CONFIG_SUBDIRS([src/UdmOclPat/GOCL])
 AC_LANG([C++])
 AC_DISABLE_STATIC
 
@@ -40,21 +39,22 @@ AC_ARG_WITH(antlr,
 	[antlr_name="$withval"],
 	[antlr_name="antlr"])
 AS_IF([test x$with_antlr != xno], [
-AC_CHECK_PROG(antlr, $antlr_name, $antlr_name)
-if test x$antlr = x; then
-   AC_MSG_ERROR([$antlr_name not found])
-fi
-AC_MSG_CHECKING([if $antlr_name is version 1.33])
-if $antlr 2>&1 | $EGREP -iq 'Antlr parser generator   Version 1.33'; then
-   AC_MSG_RESULT([yes])
-else
-   AC_MSG_RESULT([no])
-   AC_MSG_ERROR([antlr version 1.33 is needed])
-fi
- AM_CONDITIONAL([NO_ANTLR], [false])
+  AC_CHECK_PROG(antlr, $antlr_name, $antlr_name)
+  if test x$antlr = x; then
+    AC_MSG_ERROR([$antlr_name not found])
+  fi
+  AC_MSG_CHECKING([if $antlr_name is version 1.33])
+  if $antlr 2>&1 | $EGREP -iq 'Antlr parser generator   Version 1.33'; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+    AC_MSG_ERROR([antlr version 1.33 is needed])
+  fi
+  AM_CONDITIONAL([NO_ANTLR], [false])
+  AC_CONFIG_SUBDIRS([src/UdmOclPat/GOCL])
 ], [
- AM_CONDITIONAL([NO_ANTLR], [true])
- AC_DEFINE(NO_ANTLR, 1, [Define this to disable antlr])
+  AM_CONDITIONAL([NO_ANTLR], [true])
+  AC_DEFINE(NO_ANTLR, 1, [Define this to disable antlr])
 ])
 
 AC_ARG_WITH(xalan,
