@@ -56,20 +56,20 @@ void CGen< ::Uml::Diagram>::CustomProcess(const ::Uml::Diagram &cross_diagram, c
 	begin_meta_init_links2 = boost::format("void InitMetaLinks(const ::Uml::Diagram &parent) {");
 	end_meta_init_links2   = boost::format("}");
 
-	other_decls.push_back( boost::format("extern %1%Udm::UdmDiagram diagram")
+	other_decls.push_back( boost::format("extern %1% ::Udm::UdmDiagram diagram")
 				% gen.opts.macro );
 
-	other_defs.push_back( boost::format("%1%Udm::UdmDiagram diagram = { &meta, Initialize }") % gen.opts.macro );
+	other_defs.push_back( boost::format("%1% ::Udm::UdmDiagram diagram = { &meta, Initialize }") % gen.opts.macro );
 
 	other_defs.push_back( boost::format("static struct _regClass\n\
 \t{\n\
 \t\t_regClass()\n\
 \t\t{\n\
-\t\t\tUdm::MetaDepository::StoreDiagram(\"%1%\", diagram);\n\
+\t\t\t::Udm::MetaDepository::StoreDiagram(\"%1%\", diagram);\n\
 \t\t}\n\
 \t\t~_regClass()\n\
 \t\t{\n\
-\t\t\tUdm::MetaDepository::RemoveDiagram(\"%1%\");\n\
+\t\t\t::Udm::MetaDepository::RemoveDiagram(\"%1%\");\n\
 \t\t}\n\
 \t} __regUnUsed\
 ")
@@ -108,13 +108,13 @@ void CGen< ::Uml::Diagram>::CustomProcess(const ::Uml::Diagram &cross_diagram, c
 		meth_defs.push_back( boost::format("\t%1%::Initialize();") % (string) cross_diagram.name() );
 
 	meth_defs.push_back( boost::format("\n\
-\t\tUDM_ASSERT( meta == Udm::null );\n\
+\t\tUDM_ASSERT( meta == ::Udm::null );\n\
 ")
 				);
 
 	if (gen.opts.meta_init == UdmOpts::DYNAMIC_INIT)
-		meth_defs.push_back( boost::format("\tUdmStatic::StaticDataNetwork * meta_dn = new UdmStatic::StaticDataNetwork(::Uml::diagram);\n\
-\t\tmeta_dn->CreateNew(\"%1%.mem\", \"\", ::Uml::Diagram::meta, Udm::CHANGES_LOST_DEFAULT);\n\
+		meth_defs.push_back( boost::format("\t::UdmStatic::StaticDataNetwork * meta_dn = new ::UdmStatic::StaticDataNetwork(::Uml::diagram);\n\
+\t\tmeta_dn->CreateNew(\"%1%.mem\", \"\", ::Uml::Diagram::meta, ::Udm::CHANGES_LOST_DEFAULT);\n\
 \t\tmeta = ::Uml::Diagram::Cast(meta_dn->GetRootObject());\n\
 \n\
 \t\t::Uml::InitDiagramProps(meta, \"%1%\", \"%2%\");\n\
@@ -136,11 +136,11 @@ void CGen< ::Uml::Diagram>::CustomProcess(const ::Uml::Diagram &cross_diagram, c
 
 	// create a static DN for Uml meta
 	if (gen.opts.meta_init == UdmOpts::STATIC_INIT && dgr_name == "Uml")
-		meth_defs.push_back( boost::format("\tUdmStatic::StaticDataNetwork* dn = new UdmStatic::StaticDataNetwork(diagram);\n\
+		meth_defs.push_back( boost::format("\t::UdmStatic::StaticDataNetwork* dn = new ::UdmStatic::StaticDataNetwork(diagram);\n\
 \t\tdn->rootobject = meta;\n\
-\t\tstatic_cast<UdmStatic::StaticObject*>(dn->rootobject.__impl())->mydn = dn;\n\
+\t\tstatic_cast< ::UdmStatic::StaticObject*>(dn->rootobject.__impl())->mydn = dn;\n\
 \t\tdn->systemname = \"%1%\";\n\
-\t\tdn->sem = Udm::CHANGES_LOST_DEFAULT;\n\
+\t\tdn->sem = ::Udm::CHANGES_LOST_DEFAULT;\n\
 \n\
 ")
 					% dgr_name
@@ -193,7 +193,7 @@ void CGen< ::Uml::Diagram>::CustomProcess(const ::Uml::Diagram &cross_diagram, c
 \t}\n\
 ")
 					% gen.opts.macro
-					% (cross_diagram && (cross_diagram != c) ? "UDM_ASSERT(::" + (string) cross_diagram.name() + "::meta != Udm::null);" : "")
+					% (cross_diagram && (cross_diagram != c) ? "UDM_ASSERT(::" + (string) cross_diagram.name() + "::meta != ::Udm::null);" : "")
 					% (uri_mapping_stmts.size() ? "_SetURIMapping();" : "")
 					% (xsd_storage_stmts.size() ? "_SetXsdStorage();" : "")
 				     );

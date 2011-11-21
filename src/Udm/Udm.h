@@ -167,13 +167,20 @@ protected:
 	vector<boost::format> typedefs;
 
 	// constructors
+	vector<boost::format> ctor_decls;
+	vector<boost::format> ctor_rvalue_decls;
 	vector<boost::format> ctor_defs;
+	vector<boost::format> ctor_rvalue_defs;
 
 	// destructors
+	vector<boost::format> dtor_decls;
 	vector<boost::format> dtor_defs;
 
 	// methods
+	vector<boost::format> meth_decls;
+	vector<boost::format> meth_rvalue_decls;
 	vector<boost::format> meth_defs;
+	vector<boost::format> meth_rvalue_defs;
 	// methods accessing composition relationships (for MPL code)
 	vector<boost::format> meth_defs_mpl_comp;
 	// methods accessing association relationships (for MPL code)
@@ -296,13 +303,16 @@ public:
 			for (set< ::Uml::Class>::const_iterator cl_i = classes.begin(); cl_i != classes.end(); cl_i++)
 			{
 				if (!cl_i->isAbstract()) {
-					meth_defs.push_back( boost::format("virtual void Visit_%1%(const %1% &) {}") % (string)cl_i->name() );
+					meth_decls.push_back( boost::format("virtual void Visit_%1%(const %1% &)") % (string)cl_i->name() );
+					meth_defs.push_back( boost::format("void Visitor::Visit_%1%(const %1% &) {}") % (string)cl_i->name() );
 				}
 			}
 
-			meth_defs.push_back( boost::format("virtual void Visit_Object(const Udm::Object &) {}") );
+			meth_decls.push_back( boost::format("virtual void Visit_Object(const ::Udm::Object &)") );
+			meth_defs.push_back( boost::format("void Visitor::Visit_Object(const ::Udm::Object &) {}") );
 
-			dtor_defs.push_back( boost::format("virtual ~Visitor() {}") );
+			dtor_decls.push_back( boost::format("virtual ~Visitor()") );
+			dtor_defs.push_back( boost::format("Visitor::~Visitor() {}") );
 		}
 	}
 };

@@ -429,7 +429,7 @@ vector<boost::format> UdmGen::CPPURIMapping() const
 			const std::string& ns = it->first;
 			const std::string& uri = it->second;
 
-			r.push_back( boost::format("\tUdmDom::AddURIToUMLNamespaceMapping(\"%1%\", \"%2%\", \"%3%_%4%.xsd\");") % uri % ns % (string) diagram.name() % UdmUtil::replace_delimiter(ns, "::", "_") );
+			r.push_back( boost::format("\t::UdmDom::AddURIToUMLNamespaceMapping(\"%1%\", \"%2%\", \"%3%_%4%.xsd\");") % uri % ns % (string) diagram.name() % UdmUtil::replace_delimiter(ns, "::", "_") );
 		}
 	}
 
@@ -452,7 +452,7 @@ vector<boost::format> UdmGen::CPPXsdStorage() const
 
 			File2Code f2c(opts.out_dir, nsn + std::string("_xsd"), infname, File2Code::CPP);
 			f2c.gen();
-			r.push_back( boost::format("\tUdmDom::str_xsd_storage::StoreXsd(\"%1%.xsd\", %1%_xsd::getString());") % nsn );
+			r.push_back( boost::format("\t::UdmDom::str_xsd_storage::StoreXsd(\"%1%.xsd\", %1%_xsd::getString());") % nsn );
 		}
 
 		const string& dgrn = diagram.name();
