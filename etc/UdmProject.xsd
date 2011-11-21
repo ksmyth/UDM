@@ -3,7 +3,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
  elementFormDefault="qualified" 
 >
-<!-- generated on Mon May 02 10:02:17 2011 -->
+<!-- generated on Mon Nov 21 10:43:35 2011 -->
 
 
 	<xsd:complexType name="DatanetworkType">

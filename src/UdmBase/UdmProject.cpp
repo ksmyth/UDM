@@ -1,6 +1,6 @@
 // cpp (meta datanetwork format) source file UdmProject.cpp
 // generated from diagram UdmProject
-// generated on Mon May 02 10:02:17 2011
+// generated on Mon Nov 21 10:43:35 2011
 
 #include "UdmProject.h"
 #include <UmlExt.h>
@@ -12,6 +12,32 @@ using namespace std;
 
 namespace UdmProject {
 
+	Datanetwork::Datanetwork() {}
+	Datanetwork::Datanetwork(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	Datanetwork::Datanetwork(const Datanetwork &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	Datanetwork::Datanetwork(Datanetwork &&master) : UDM_OBJECT(master) {};
+
+	Datanetwork Datanetwork::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	Datanetwork& Datanetwork::operator=(Datanetwork &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	Datanetwork Datanetwork::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	Datanetwork Datanetwork::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	Datanetwork Datanetwork::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< Datanetwork> Datanetwork::Instances() { return ::Udm::InstantiatedAttr< Datanetwork>(impl); }
+	Datanetwork Datanetwork::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< Datanetwork> Datanetwork::Derived() { return ::Udm::DerivedAttr< Datanetwork>(impl); }
+	::Udm::ArchetypeAttr< Datanetwork> Datanetwork::Archetype() const { return ::Udm::ArchetypeAttr< Datanetwork>(impl); }
+	::Udm::StringAttr Datanetwork::metaDgr() const { return ::Udm::StringAttr(impl, meta_metaDgr); }
+	::Udm::StringAttr Datanetwork::systemname() const { return ::Udm::StringAttr(impl, meta_systemname); }
+	::Udm::StringAttr Datanetwork::metalocator() const { return ::Udm::StringAttr(impl, meta_metalocator); }
+	::Udm::ParentAttr< ::UdmProject::Project> Datanetwork::cross_associations_Project_parent() const { return ::Udm::ParentAttr< ::UdmProject::Project>(impl, meta_cross_associations_Project_parent); }
+	::Udm::ParentAttr< ::UdmProject::Project> Datanetwork::instances_Project_parent() const { return ::Udm::ParentAttr< ::UdmProject::Project>(impl, meta_instances_Project_parent); }
+	::Udm::ParentAttr< ::UdmProject::Project> Datanetwork::crosslinks_Project_parent() const { return ::Udm::ParentAttr< ::UdmProject::Project>(impl, meta_crosslinks_Project_parent); }
+	::Udm::ParentAttr< ::UdmProject::Project> Datanetwork::parent() const { return ::Udm::ParentAttr< ::UdmProject::Project>(impl, ::Udm::NULLPARENTROLE); }
+
 	::Uml::Class Datanetwork::meta;
 	::Uml::Attribute Datanetwork::meta_metaDgr;
 	::Uml::Attribute Datanetwork::meta_systemname;
@@ -19,6 +45,31 @@ namespace UdmProject {
 	::Uml::CompositionParentRole Datanetwork::meta_cross_associations_Project_parent;
 	::Uml::CompositionParentRole Datanetwork::meta_instances_Project_parent;
 	::Uml::CompositionParentRole Datanetwork::meta_crosslinks_Project_parent;
+
+	Project::Project() {}
+	Project::Project(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	Project::Project(const Project &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	Project::Project(Project &&master) : UDM_OBJECT(master) {};
+
+	Project Project::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	Project& Project::operator=(Project &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	Project Project::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	Project Project::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	Project Project::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< Project> Project::Instances() { return ::Udm::InstantiatedAttr< Project>(impl); }
+	Project Project::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< Project> Project::Derived() { return ::Udm::DerivedAttr< Project>(impl); }
+	::Udm::ArchetypeAttr< Project> Project::Archetype() const { return ::Udm::ArchetypeAttr< Project>(impl); }
+	::Udm::StringAttr Project::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::ChildAttr< ::UdmProject::Datanetwork> Project::cross_associations() const { return ::Udm::ChildAttr< ::UdmProject::Datanetwork>(impl, meta_cross_associations); }
+	::Udm::ChildrenAttr< ::UdmProject::Datanetwork> Project::instances() const { return ::Udm::ChildrenAttr< ::UdmProject::Datanetwork>(impl, meta_instances); }
+	::Udm::ChildAttr< ::UdmProject::Datanetwork> Project::crosslinks() const { return ::Udm::ChildAttr< ::UdmProject::Datanetwork>(impl, meta_crosslinks); }
+	::Udm::ChildrenAttr< ::UdmProject::Datanetwork> Project::Datanetwork_kind_children() const { return ::Udm::ChildrenAttr< ::UdmProject::Datanetwork>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ParentAttr< ::Udm::Object> Project::parent() const { return ::Udm::ParentAttr< ::Udm::Object>(impl, ::Udm::NULLPARENTROLE); }
 
 	::Uml::Class Project::meta;
 	::Uml::Attribute Project::meta_name;
@@ -98,7 +149,7 @@ namespace UdmProject {
 		::Uml::Initialize();
 
 	
-		UDM_ASSERT( meta == Udm::null );
+		UDM_ASSERT( meta == ::Udm::null );
 
 		meta = ::Uml::CreateDiagram();
 
@@ -115,16 +166,16 @@ namespace UdmProject {
 	}
 
 
-	Udm::UdmDiagram diagram = { &meta, Initialize };
+	 ::Udm::UdmDiagram diagram = { &meta, Initialize };
 	static struct _regClass
 	{
 		_regClass()
 		{
-			Udm::MetaDepository::StoreDiagram("UdmProject", diagram);
+			::Udm::MetaDepository::StoreDiagram("UdmProject", diagram);
 		}
 		~_regClass()
 		{
-			Udm::MetaDepository::RemoveDiagram("UdmProject");
+			::Udm::MetaDepository::RemoveDiagram("UdmProject");
 		}
 	} __regUnUsed;
 

@@ -1,6 +1,6 @@
 // cpp (meta datanetwork format) source file Uml.cpp
 // generated from diagram Uml
-// generated on Mon May 02 10:02:54 2011
+// generated on Mon Nov 21 10:42:57 2011
 
 #include "Uml.h"
 #include <UmlExt.h>
@@ -12,19 +12,111 @@ using namespace std;
 
 namespace Uml {
 
+	CompositionChildRole::CompositionChildRole() {}
+	CompositionChildRole::CompositionChildRole(::Udm::ObjectImpl *impl) : GenericRole(impl) {}
+	CompositionChildRole::CompositionChildRole(const CompositionChildRole &master) : GenericRole(master) {}
+
+#ifdef UDM_RVALUE
+	CompositionChildRole::CompositionChildRole(CompositionChildRole &&master) : GenericRole(master) {};
+
+	CompositionChildRole CompositionChildRole::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	CompositionChildRole& CompositionChildRole::operator=(CompositionChildRole &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	CompositionChildRole CompositionChildRole::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	CompositionChildRole CompositionChildRole::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	CompositionChildRole CompositionChildRole::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< CompositionChildRole> CompositionChildRole::Instances() { return ::Udm::InstantiatedAttr< CompositionChildRole>(impl); }
+	CompositionChildRole CompositionChildRole::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< CompositionChildRole> CompositionChildRole::Derived() { return ::Udm::DerivedAttr< CompositionChildRole>(impl); }
+	::Udm::ArchetypeAttr< CompositionChildRole> CompositionChildRole::Archetype() const { return ::Udm::ArchetypeAttr< CompositionChildRole>(impl); }
+	::Udm::IntegerAttr CompositionChildRole::max() const { return ::Udm::IntegerAttr(impl, meta_max); }
+	::Udm::IntegerAttr CompositionChildRole::min() const { return ::Udm::IntegerAttr(impl, meta_min); }
+	::Udm::PointerAttr< Class> CompositionChildRole::target() const { return ::Udm::PointerAttr< Class>(impl, meta_target); }
+	::Udm::ParentAttr< ::Uml::Composition> CompositionChildRole::parent() const { return ::Udm::ParentAttr< ::Uml::Composition>(impl, meta_parent); }
+
 	::Uml::Class CompositionChildRole::meta;
 	::Uml::Attribute CompositionChildRole::meta_max;
 	::Uml::Attribute CompositionChildRole::meta_min;
 	::Uml::AssociationRole CompositionChildRole::meta_target;
 	::Uml::CompositionParentRole CompositionChildRole::meta_parent;
 
+	GenericRole::GenericRole() {}
+	GenericRole::GenericRole(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	GenericRole::GenericRole(const GenericRole &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	GenericRole::GenericRole(GenericRole &&master) : UDM_OBJECT(master) {};
+
+	GenericRole GenericRole::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	GenericRole& GenericRole::operator=(GenericRole &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	GenericRole GenericRole::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	GenericRole GenericRole::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	GenericRole GenericRole::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< GenericRole> GenericRole::Instances() { return ::Udm::InstantiatedAttr< GenericRole>(impl); }
+	GenericRole GenericRole::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< GenericRole> GenericRole::Derived() { return ::Udm::DerivedAttr< GenericRole>(impl); }
+	::Udm::ArchetypeAttr< GenericRole> GenericRole::Archetype() const { return ::Udm::ArchetypeAttr< GenericRole>(impl); }
+	::Udm::BooleanAttr GenericRole::isNavigable() const { return ::Udm::BooleanAttr(impl, meta_isNavigable); }
+	::Udm::StringAttr GenericRole::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::ParentAttr< ::Udm::Object> GenericRole::parent() const { return ::Udm::ParentAttr< ::Udm::Object>(impl, ::Udm::NULLPARENTROLE); }
+
 	::Uml::Class GenericRole::meta;
 	::Uml::Attribute GenericRole::meta_isNavigable;
 	::Uml::Attribute GenericRole::meta_name;
 
+	CompositionParentRole::CompositionParentRole() {}
+	CompositionParentRole::CompositionParentRole(::Udm::ObjectImpl *impl) : GenericRole(impl) {}
+	CompositionParentRole::CompositionParentRole(const CompositionParentRole &master) : GenericRole(master) {}
+
+#ifdef UDM_RVALUE
+	CompositionParentRole::CompositionParentRole(CompositionParentRole &&master) : GenericRole(master) {};
+
+	CompositionParentRole CompositionParentRole::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	CompositionParentRole& CompositionParentRole::operator=(CompositionParentRole &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	CompositionParentRole CompositionParentRole::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	CompositionParentRole CompositionParentRole::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	CompositionParentRole CompositionParentRole::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< CompositionParentRole> CompositionParentRole::Instances() { return ::Udm::InstantiatedAttr< CompositionParentRole>(impl); }
+	CompositionParentRole CompositionParentRole::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< CompositionParentRole> CompositionParentRole::Derived() { return ::Udm::DerivedAttr< CompositionParentRole>(impl); }
+	::Udm::ArchetypeAttr< CompositionParentRole> CompositionParentRole::Archetype() const { return ::Udm::ArchetypeAttr< CompositionParentRole>(impl); }
+	::Udm::PointerAttr< Class> CompositionParentRole::target() const { return ::Udm::PointerAttr< Class>(impl, meta_target); }
+	::Udm::ParentAttr< ::Uml::Composition> CompositionParentRole::parent() const { return ::Udm::ParentAttr< ::Uml::Composition>(impl, meta_parent); }
+
 	::Uml::Class CompositionParentRole::meta;
 	::Uml::AssociationRole CompositionParentRole::meta_target;
 	::Uml::CompositionParentRole CompositionParentRole::meta_parent;
+
+	AssociationRole::AssociationRole() {}
+	AssociationRole::AssociationRole(::Udm::ObjectImpl *impl) : GenericRole(impl) {}
+	AssociationRole::AssociationRole(const AssociationRole &master) : GenericRole(master) {}
+
+#ifdef UDM_RVALUE
+	AssociationRole::AssociationRole(AssociationRole &&master) : GenericRole(master) {};
+
+	AssociationRole AssociationRole::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	AssociationRole& AssociationRole::operator=(AssociationRole &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	AssociationRole AssociationRole::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	AssociationRole AssociationRole::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	AssociationRole AssociationRole::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< AssociationRole> AssociationRole::Instances() { return ::Udm::InstantiatedAttr< AssociationRole>(impl); }
+	AssociationRole AssociationRole::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< AssociationRole> AssociationRole::Derived() { return ::Udm::DerivedAttr< AssociationRole>(impl); }
+	::Udm::ArchetypeAttr< AssociationRole> AssociationRole::Archetype() const { return ::Udm::ArchetypeAttr< AssociationRole>(impl); }
+	::Udm::IntegerAttr AssociationRole::max() const { return ::Udm::IntegerAttr(impl, meta_max); }
+	::Udm::IntegerAttr AssociationRole::min() const { return ::Udm::IntegerAttr(impl, meta_min); }
+	::Udm::BooleanAttr AssociationRole::isPrimary() const { return ::Udm::BooleanAttr(impl, meta_isPrimary); }
+	::Udm::PointerAttr< AssociationRole> AssociationRole::rp_helper() const { return ::Udm::PointerAttr< AssociationRole>(impl, meta_rp_helper); }
+	::Udm::PointerAttr< AssociationRole> AssociationRole::rp_helper_user() const { return ::Udm::PointerAttr< AssociationRole>(impl, meta_rp_helper_user); }
+	::Udm::PointerAttr< Class> AssociationRole::target() const { return ::Udm::PointerAttr< Class>(impl, meta_target); }
+	::Udm::ParentAttr< ::Uml::Association> AssociationRole::parent() const { return ::Udm::ParentAttr< ::Uml::Association>(impl, meta_parent); }
 
 	::Uml::Class AssociationRole::meta;
 	::Uml::Attribute AssociationRole::meta_max;
@@ -34,6 +126,45 @@ namespace Uml {
 	::Uml::AssociationRole AssociationRole::meta_rp_helper_user;
 	::Uml::AssociationRole AssociationRole::meta_target;
 	::Uml::CompositionParentRole AssociationRole::meta_parent;
+
+	Class::Class() {}
+	Class::Class(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	Class::Class(const Class &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	Class::Class(Class &&master) : UDM_OBJECT(master) {};
+
+	Class Class::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	Class& Class::operator=(Class &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	Class Class::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	Class Class::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	Class Class::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< Class> Class::Instances() { return ::Udm::InstantiatedAttr< Class>(impl); }
+	Class Class::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< Class> Class::Derived() { return ::Udm::DerivedAttr< Class>(impl); }
+	::Udm::ArchetypeAttr< Class> Class::Archetype() const { return ::Udm::ArchetypeAttr< Class>(impl); }
+	::Udm::BooleanAttr Class::isAbstract() const { return ::Udm::BooleanAttr(impl, meta_isAbstract); }
+	::Udm::StringAttr Class::stereotype() const { return ::Udm::StringAttr(impl, meta_stereotype); }
+	::Udm::StringAttr Class::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::StringAttr Class::from() const { return ::Udm::StringAttr(impl, meta_from); }
+	::Udm::AssocAttr< CompositionChildRole> Class::childRoles() const { return ::Udm::AssocAttr< CompositionChildRole>(impl, meta_childRoles); }
+	::Udm::AssocAttr< CompositionParentRole> Class::parentRoles() const { return ::Udm::AssocAttr< CompositionParentRole>(impl, meta_parentRoles); }
+	::Udm::AssocAttr< AssociationRole> Class::associationRoles() const { return ::Udm::AssocAttr< AssociationRole>(impl, meta_associationRoles); }
+	::Udm::PointerAttr< Association> Class::association() const { return ::Udm::PointerAttr< Association>(impl, meta_association); }
+	::Udm::AssocAttr< Class> Class::baseTypes() const { return ::Udm::AssocAttr< Class>(impl, meta_baseTypes); }
+	::Udm::AssocAttr< Class> Class::subTypes() const { return ::Udm::AssocAttr< Class>(impl, meta_subTypes); }
+	::Udm::ChildrenAttr< ::Uml::ConstraintDefinition> Class::definitions() const { return ::Udm::ChildrenAttr< ::Uml::ConstraintDefinition>(impl, meta_definitions); }
+	::Udm::ChildrenAttr< ::Uml::Attribute> Class::attributes() const { return ::Udm::ChildrenAttr< ::Uml::Attribute>(impl, meta_attributes); }
+	::Udm::ChildrenAttr< ::Uml::Constraint> Class::constraints() const { return ::Udm::ChildrenAttr< ::Uml::Constraint>(impl, meta_constraints); }
+	::Udm::ChildrenAttr< ::Uml::TaggedValue> Class::tagValues() const { return ::Udm::ChildrenAttr< ::Uml::TaggedValue>(impl, meta_tagValues); }
+	::Udm::ChildrenAttr< ::Uml::TaggedValue> Class::TaggedValue_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::TaggedValue>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::ConstraintDefinition> Class::ConstraintDefinition_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::ConstraintDefinition>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::Attribute> Class::Attribute_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::Attribute>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::Constraint> Class::Constraint_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::Constraint>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ParentAttr< ::Uml::Diagram> Class::parent() const { return ::Udm::ParentAttr< ::Uml::Diagram>(impl, meta_parent); }
+	::Udm::ParentAttr< ::Uml::Namespace> Class::parent_ns() const { return ::Udm::ParentAttr< ::Uml::Namespace>(impl, meta_parent_ns); }
 
 	::Uml::Class Class::meta;
 	::Uml::Attribute Class::meta_isAbstract;
@@ -53,6 +184,36 @@ namespace Uml {
 	::Uml::CompositionParentRole Class::meta_parent;
 	::Uml::CompositionParentRole Class::meta_parent_ns;
 
+	Diagram::Diagram() {}
+	Diagram::Diagram(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	Diagram::Diagram(const Diagram &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	Diagram::Diagram(Diagram &&master) : UDM_OBJECT(master) {};
+
+	Diagram Diagram::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	Diagram& Diagram::operator=(Diagram &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	Diagram Diagram::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	Diagram Diagram::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	Diagram Diagram::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< Diagram> Diagram::Instances() { return ::Udm::InstantiatedAttr< Diagram>(impl); }
+	Diagram Diagram::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< Diagram> Diagram::Derived() { return ::Udm::DerivedAttr< Diagram>(impl); }
+	::Udm::ArchetypeAttr< Diagram> Diagram::Archetype() const { return ::Udm::ArchetypeAttr< Diagram>(impl); }
+	::Udm::StringAttr Diagram::version() const { return ::Udm::StringAttr(impl, meta_version); }
+	::Udm::StringAttr Diagram::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::ChildrenAttr< ::Uml::Class> Diagram::classes() const { return ::Udm::ChildrenAttr< ::Uml::Class>(impl, meta_classes); }
+	::Udm::ChildrenAttr< ::Uml::Association> Diagram::associations() const { return ::Udm::ChildrenAttr< ::Uml::Association>(impl, meta_associations); }
+	::Udm::ChildrenAttr< ::Uml::Composition> Diagram::compositions() const { return ::Udm::ChildrenAttr< ::Uml::Composition>(impl, meta_compositions); }
+	::Udm::ChildrenAttr< ::Uml::Namespace> Diagram::namespaces() const { return ::Udm::ChildrenAttr< ::Uml::Namespace>(impl, meta_namespaces); }
+	::Udm::ChildrenAttr< ::Uml::Class> Diagram::Class_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::Class>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::Association> Diagram::Association_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::Association>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::Composition> Diagram::Composition_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::Composition>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::Namespace> Diagram::Namespace_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::Namespace>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ParentAttr< ::Udm::Object> Diagram::parent() const { return ::Udm::ParentAttr< ::Udm::Object>(impl, ::Udm::NULLPARENTROLE); }
+
 	::Uml::Class Diagram::meta;
 	::Uml::Attribute Diagram::meta_version;
 	::Uml::Attribute Diagram::meta_name;
@@ -60,6 +221,35 @@ namespace Uml {
 	::Uml::CompositionChildRole Diagram::meta_associations;
 	::Uml::CompositionChildRole Diagram::meta_compositions;
 	::Uml::CompositionChildRole Diagram::meta_namespaces;
+
+	Association::Association() {}
+	Association::Association(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	Association::Association(const Association &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	Association::Association(Association &&master) : UDM_OBJECT(master) {};
+
+	Association Association::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	Association& Association::operator=(Association &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	Association Association::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	Association Association::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	Association Association::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< Association> Association::Instances() { return ::Udm::InstantiatedAttr< Association>(impl); }
+	Association Association::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< Association> Association::Derived() { return ::Udm::DerivedAttr< Association>(impl); }
+	::Udm::ArchetypeAttr< Association> Association::Archetype() const { return ::Udm::ArchetypeAttr< Association>(impl); }
+	::Udm::BooleanAttr Association::nonpersistent() const { return ::Udm::BooleanAttr(impl, meta_nonpersistent); }
+	::Udm::StringAttr Association::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::PointerAttr< Class> Association::assocClass() const { return ::Udm::PointerAttr< Class>(impl, meta_assocClass); }
+	::Udm::ChildrenAttr< ::Uml::AssociationRole> Association::roles() const { return ::Udm::ChildrenAttr< ::Uml::AssociationRole>(impl, meta_roles); }
+	::Udm::ChildrenAttr< ::Uml::TaggedValue> Association::tagValues() const { return ::Udm::ChildrenAttr< ::Uml::TaggedValue>(impl, meta_tagValues); }
+	::Udm::ChildrenAttr< ::Uml::GenericRole> Association::GenericRole_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::GenericRole>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::AssociationRole> Association::AssociationRole_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::AssociationRole>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::TaggedValue> Association::TaggedValue_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::TaggedValue>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ParentAttr< ::Uml::Diagram> Association::parent() const { return ::Udm::ParentAttr< ::Uml::Diagram>(impl, meta_parent); }
+	::Udm::ParentAttr< ::Uml::Namespace> Association::parent_ns() const { return ::Udm::ParentAttr< ::Uml::Namespace>(impl, meta_parent_ns); }
 
 	::Uml::Class Association::meta;
 	::Uml::Attribute Association::meta_nonpersistent;
@@ -70,6 +260,34 @@ namespace Uml {
 	::Uml::CompositionParentRole Association::meta_parent;
 	::Uml::CompositionParentRole Association::meta_parent_ns;
 
+	Composition::Composition() {}
+	Composition::Composition(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	Composition::Composition(const Composition &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	Composition::Composition(Composition &&master) : UDM_OBJECT(master) {};
+
+	Composition Composition::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	Composition& Composition::operator=(Composition &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	Composition Composition::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	Composition Composition::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	Composition Composition::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< Composition> Composition::Instances() { return ::Udm::InstantiatedAttr< Composition>(impl); }
+	Composition Composition::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< Composition> Composition::Derived() { return ::Udm::DerivedAttr< Composition>(impl); }
+	::Udm::ArchetypeAttr< Composition> Composition::Archetype() const { return ::Udm::ArchetypeAttr< Composition>(impl); }
+	::Udm::BooleanAttr Composition::nonpersistent() const { return ::Udm::BooleanAttr(impl, meta_nonpersistent); }
+	::Udm::StringAttr Composition::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::ChildAttr< ::Uml::CompositionParentRole> Composition::parentRole() const { return ::Udm::ChildAttr< ::Uml::CompositionParentRole>(impl, meta_parentRole); }
+	::Udm::ChildAttr< ::Uml::CompositionChildRole> Composition::childRole() const { return ::Udm::ChildAttr< ::Uml::CompositionChildRole>(impl, meta_childRole); }
+	::Udm::ChildrenAttr< ::Uml::CompositionChildRole> Composition::CompositionChildRole_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::CompositionChildRole>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::GenericRole> Composition::GenericRole_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::GenericRole>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::CompositionParentRole> Composition::CompositionParentRole_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::CompositionParentRole>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ParentAttr< ::Uml::Diagram> Composition::parent() const { return ::Udm::ParentAttr< ::Uml::Diagram>(impl, meta_parent); }
+	::Udm::ParentAttr< ::Uml::Namespace> Composition::parent_ns() const { return ::Udm::ParentAttr< ::Uml::Namespace>(impl, meta_parent_ns); }
+
 	::Uml::Class Composition::meta;
 	::Uml::Attribute Composition::meta_nonpersistent;
 	::Uml::Attribute Composition::meta_name;
@@ -77,6 +295,36 @@ namespace Uml {
 	::Uml::CompositionChildRole Composition::meta_childRole;
 	::Uml::CompositionParentRole Composition::meta_parent;
 	::Uml::CompositionParentRole Composition::meta_parent_ns;
+
+	Namespace::Namespace() {}
+	Namespace::Namespace(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	Namespace::Namespace(const Namespace &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	Namespace::Namespace(Namespace &&master) : UDM_OBJECT(master) {};
+
+	Namespace Namespace::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	Namespace& Namespace::operator=(Namespace &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	Namespace Namespace::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	Namespace Namespace::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	Namespace Namespace::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< Namespace> Namespace::Instances() { return ::Udm::InstantiatedAttr< Namespace>(impl); }
+	Namespace Namespace::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< Namespace> Namespace::Derived() { return ::Udm::DerivedAttr< Namespace>(impl); }
+	::Udm::ArchetypeAttr< Namespace> Namespace::Archetype() const { return ::Udm::ArchetypeAttr< Namespace>(impl); }
+	::Udm::StringAttr Namespace::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::ChildrenAttr< ::Uml::Namespace> Namespace::namespaces() const { return ::Udm::ChildrenAttr< ::Uml::Namespace>(impl, meta_namespaces); }
+	::Udm::ChildrenAttr< ::Uml::Class> Namespace::classes() const { return ::Udm::ChildrenAttr< ::Uml::Class>(impl, meta_classes); }
+	::Udm::ChildrenAttr< ::Uml::Composition> Namespace::compositions() const { return ::Udm::ChildrenAttr< ::Uml::Composition>(impl, meta_compositions); }
+	::Udm::ChildrenAttr< ::Uml::Association> Namespace::associations() const { return ::Udm::ChildrenAttr< ::Uml::Association>(impl, meta_associations); }
+	::Udm::ChildrenAttr< ::Uml::Class> Namespace::Class_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::Class>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::Association> Namespace::Association_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::Association>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::Composition> Namespace::Composition_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::Composition>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ChildrenAttr< ::Uml::Namespace> Namespace::Namespace_kind_children() const { return ::Udm::ChildrenAttr< ::Uml::Namespace>(impl, ::Udm::NULLCHILDROLE); }
+	::Udm::ParentAttr< ::Uml::Diagram> Namespace::parent() const { return ::Udm::ParentAttr< ::Uml::Diagram>(impl, meta_parent); }
+	::Udm::ParentAttr< ::Uml::Namespace> Namespace::parent_ns() const { return ::Udm::ParentAttr< ::Uml::Namespace>(impl, meta_parent_ns); }
 
 	::Uml::Class Namespace::meta;
 	::Uml::Attribute Namespace::meta_name;
@@ -87,11 +335,60 @@ namespace Uml {
 	::Uml::CompositionParentRole Namespace::meta_parent;
 	::Uml::CompositionParentRole Namespace::meta_parent_ns;
 
+	TaggedValue::TaggedValue() {}
+	TaggedValue::TaggedValue(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	TaggedValue::TaggedValue(const TaggedValue &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	TaggedValue::TaggedValue(TaggedValue &&master) : UDM_OBJECT(master) {};
+
+	TaggedValue TaggedValue::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	TaggedValue& TaggedValue::operator=(TaggedValue &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	TaggedValue TaggedValue::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	TaggedValue TaggedValue::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	TaggedValue TaggedValue::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< TaggedValue> TaggedValue::Instances() { return ::Udm::InstantiatedAttr< TaggedValue>(impl); }
+	TaggedValue TaggedValue::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< TaggedValue> TaggedValue::Derived() { return ::Udm::DerivedAttr< TaggedValue>(impl); }
+	::Udm::ArchetypeAttr< TaggedValue> TaggedValue::Archetype() const { return ::Udm::ArchetypeAttr< TaggedValue>(impl); }
+	::Udm::StringAttr TaggedValue::value() const { return ::Udm::StringAttr(impl, meta_value); }
+	::Udm::StringAttr TaggedValue::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::ParentAttr< ::Uml::Association> TaggedValue::assocParent() const { return ::Udm::ParentAttr< ::Uml::Association>(impl, meta_assocParent); }
+	::Udm::ParentAttr< ::Uml::Class> TaggedValue::classParent() const { return ::Udm::ParentAttr< ::Uml::Class>(impl, meta_classParent); }
+	::Udm::ParentAttr< ::Udm::Object> TaggedValue::parent() const { return ::Udm::ParentAttr< ::Udm::Object>(impl, ::Udm::NULLPARENTROLE); }
+
 	::Uml::Class TaggedValue::meta;
 	::Uml::Attribute TaggedValue::meta_value;
 	::Uml::Attribute TaggedValue::meta_name;
 	::Uml::CompositionParentRole TaggedValue::meta_assocParent;
 	::Uml::CompositionParentRole TaggedValue::meta_classParent;
+
+	ConstraintDefinition::ConstraintDefinition() {}
+	ConstraintDefinition::ConstraintDefinition(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	ConstraintDefinition::ConstraintDefinition(const ConstraintDefinition &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	ConstraintDefinition::ConstraintDefinition(ConstraintDefinition &&master) : UDM_OBJECT(master) {};
+
+	ConstraintDefinition ConstraintDefinition::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	ConstraintDefinition& ConstraintDefinition::operator=(ConstraintDefinition &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	ConstraintDefinition ConstraintDefinition::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	ConstraintDefinition ConstraintDefinition::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	ConstraintDefinition ConstraintDefinition::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< ConstraintDefinition> ConstraintDefinition::Instances() { return ::Udm::InstantiatedAttr< ConstraintDefinition>(impl); }
+	ConstraintDefinition ConstraintDefinition::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< ConstraintDefinition> ConstraintDefinition::Derived() { return ::Udm::DerivedAttr< ConstraintDefinition>(impl); }
+	::Udm::ArchetypeAttr< ConstraintDefinition> ConstraintDefinition::Archetype() const { return ::Udm::ArchetypeAttr< ConstraintDefinition>(impl); }
+	::Udm::StringAttr ConstraintDefinition::stereotype() const { return ::Udm::StringAttr(impl, meta_stereotype); }
+	::Udm::StringAttr ConstraintDefinition::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::StringAttr ConstraintDefinition::parameterList() const { return ::Udm::StringAttr(impl, meta_parameterList); }
+	::Udm::StringAttr ConstraintDefinition::expression() const { return ::Udm::StringAttr(impl, meta_expression); }
+	::Udm::StringAttr ConstraintDefinition::returnType() const { return ::Udm::StringAttr(impl, meta_returnType); }
+	::Udm::ParentAttr< ::Uml::Class> ConstraintDefinition::parent() const { return ::Udm::ParentAttr< ::Uml::Class>(impl, meta_parent); }
 
 	::Uml::Class ConstraintDefinition::meta;
 	::Uml::Attribute ConstraintDefinition::meta_stereotype;
@@ -100,6 +397,35 @@ namespace Uml {
 	::Uml::Attribute ConstraintDefinition::meta_expression;
 	::Uml::Attribute ConstraintDefinition::meta_returnType;
 	::Uml::CompositionParentRole ConstraintDefinition::meta_parent;
+
+	Attribute::Attribute() {}
+	Attribute::Attribute(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	Attribute::Attribute(const Attribute &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	Attribute::Attribute(Attribute &&master) : UDM_OBJECT(master) {};
+
+	Attribute Attribute::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	Attribute& Attribute::operator=(Attribute &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	Attribute Attribute::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	Attribute Attribute::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	Attribute Attribute::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< Attribute> Attribute::Instances() { return ::Udm::InstantiatedAttr< Attribute>(impl); }
+	Attribute Attribute::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< Attribute> Attribute::Derived() { return ::Udm::DerivedAttr< Attribute>(impl); }
+	::Udm::ArchetypeAttr< Attribute> Attribute::Archetype() const { return ::Udm::ArchetypeAttr< Attribute>(impl); }
+	::Udm::StringAttr Attribute::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::StringAttr Attribute::type() const { return ::Udm::StringAttr(impl, meta_type); }
+	::Udm::StringAttrArr Attribute::defvalue() const { return ::Udm::StringAttrArr(impl, meta_defvalue); }
+	::Udm::IntegerAttr Attribute::min() const { return ::Udm::IntegerAttr(impl, meta_min); }
+	::Udm::IntegerAttr Attribute::max() const { return ::Udm::IntegerAttr(impl, meta_max); }
+	::Udm::StringAttr Attribute::visibility() const { return ::Udm::StringAttr(impl, meta_visibility); }
+	::Udm::BooleanAttr Attribute::ordered() const { return ::Udm::BooleanAttr(impl, meta_ordered); }
+	::Udm::BooleanAttr Attribute::nonpersistent() const { return ::Udm::BooleanAttr(impl, meta_nonpersistent); }
+	::Udm::BooleanAttr Attribute::registry() const { return ::Udm::BooleanAttr(impl, meta_registry); }
+	::Udm::ParentAttr< ::Uml::Class> Attribute::parent() const { return ::Udm::ParentAttr< ::Uml::Class>(impl, meta_parent); }
 
 	::Uml::Class Attribute::meta;
 	::Uml::Attribute Attribute::meta_name;
@@ -112,6 +438,29 @@ namespace Uml {
 	::Uml::Attribute Attribute::meta_nonpersistent;
 	::Uml::Attribute Attribute::meta_registry;
 	::Uml::CompositionParentRole Attribute::meta_parent;
+
+	Constraint::Constraint() {}
+	Constraint::Constraint(::Udm::ObjectImpl *impl) : UDM_OBJECT(impl) {}
+	Constraint::Constraint(const Constraint &master) : UDM_OBJECT(master) {}
+
+#ifdef UDM_RVALUE
+	Constraint::Constraint(Constraint &&master) : UDM_OBJECT(master) {};
+
+	Constraint Constraint::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
+	Constraint& Constraint::operator=(Constraint &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+
+#endif
+	Constraint Constraint::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
+	Constraint Constraint::Create(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role); }
+	Constraint Constraint::CreateInstance(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl); }
+	::Udm::InstantiatedAttr< Constraint> Constraint::Instances() { return ::Udm::InstantiatedAttr< Constraint>(impl); }
+	Constraint Constraint::CreateDerived(const ::Udm::Object &parent, const ::Uml::CompositionChildRole &role) { return __Create(meta, parent, role, impl, true); }
+	::Udm::DerivedAttr< Constraint> Constraint::Derived() { return ::Udm::DerivedAttr< Constraint>(impl); }
+	::Udm::ArchetypeAttr< Constraint> Constraint::Archetype() const { return ::Udm::ArchetypeAttr< Constraint>(impl); }
+	::Udm::StringAttr Constraint::description() const { return ::Udm::StringAttr(impl, meta_description); }
+	::Udm::StringAttr Constraint::name() const { return ::Udm::StringAttr(impl, meta_name); }
+	::Udm::StringAttr Constraint::expression() const { return ::Udm::StringAttr(impl, meta_expression); }
+	::Udm::ParentAttr< ::Uml::Class> Constraint::parent() const { return ::Udm::ParentAttr< ::Uml::Class>(impl, meta_parent); }
 
 	::Uml::Class Constraint::meta;
 	::Uml::Attribute Constraint::meta_description;
@@ -497,15 +846,17 @@ namespace Uml {
 		::Uml::Initialize();
 
 	
-		UDM_ASSERT( meta == Udm::null );
+		UDM_ASSERT( meta == ::Udm::null );
 
 		meta = ::Uml::CreateDiagram();
 
-		UdmStatic::StaticDataNetwork* dn = new UdmStatic::StaticDataNetwork(diagram);
+
+		::UdmStatic::StaticDataNetwork* dn = new ::UdmStatic::StaticDataNetwork(diagram);
 		dn->rootobject = meta;
-		static_cast<UdmStatic::StaticObject*>(dn->rootobject.__impl())->mydn = dn;
+		static_cast< ::UdmStatic::StaticObject*>(dn->rootobject.__impl())->mydn = dn;
 		dn->systemname = "Uml";
-		dn->sem = Udm::CHANGES_LOST_DEFAULT;
+		dn->sem = ::Udm::CHANGES_LOST_DEFAULT;
+
 
 		CreateMeta();
 		InitMeta();
@@ -519,16 +870,16 @@ namespace Uml {
 	}
 
 
-	UDM_DLL Udm::UdmDiagram diagram = { &meta, Initialize };
+	UDM_DLL  ::Udm::UdmDiagram diagram = { &meta, Initialize };
 	static struct _regClass
 	{
 		_regClass()
 		{
-			Udm::MetaDepository::StoreDiagram("Uml", diagram);
+			::Udm::MetaDepository::StoreDiagram("Uml", diagram);
 		}
 		~_regClass()
 		{
-			Udm::MetaDepository::RemoveDiagram("Uml");
+			::Udm::MetaDepository::RemoveDiagram("Uml");
 		}
 	} __regUnUsed;
 
