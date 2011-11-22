@@ -35,4 +35,8 @@ extern CComModule _Module;
 #include <fstream>
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
+#include "UdmBase.h"
+#include "Uml.h"
+#include "UmlExt.h"
+
 #endif // !defined(AFX_STDAFX_H__C4EFDDFC_C095_4509_B571_632F0986D162__INCLUDED)
