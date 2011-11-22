@@ -41,7 +41,7 @@ CSHARP_NAMESPACE3(Udm, Udm.Native, NullObject)
 CSHARP_NAMESPACE3(Udm, Udm.Native, Object)
 CSHARP_NAMESPACE3(Udm, Udm.Native, ObjectImpl)
 CSHARP_NAMESPACE3(Udm, Udm.Native, std::set<UDM_NAMESPACE::Object>);
-CSHARP_NAMESPACE3(Udm, Udm.Native, ParentAttr<UDM_NAMESPACE::Object>)
+CSHARP_NAMESPACE3(Udm, Udm.Native, ParentAttr< ::UDM_NAMESPACE::Object>)
 CSHARP_NAMESPACE3(Udm, Udm.Native, RealArrAttrItem)
 CSHARP_NAMESPACE3(Udm, Udm.Native, RealAttr)
 CSHARP_NAMESPACE3(Udm, Udm.Native, RealAttrArr)
@@ -253,7 +253,7 @@ namespace UDM_NAMESPACE {
 
 %include "UdmBase.h"
 
-%template(ObjectParentAttr) UDM_NAMESPACE::ParentAttr<UDM_NAMESPACE::Object>;
+%template(ObjectParentAttr) UDM_NAMESPACE::ParentAttr< ::UDM_NAMESPACE::Object>;
 %template(Object_set) std::set<UDM_NAMESPACE::Object>;
 %template(ObjectImpl_vector) std::vector<UDM_NAMESPACE::ObjectImpl*>;
 %template(DataNetworkSpecifier_vector) std::vector<UDM_NAMESPACE::DataNetworkSpecifier>;
