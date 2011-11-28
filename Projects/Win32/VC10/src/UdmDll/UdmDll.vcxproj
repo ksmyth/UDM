@@ -304,7 +304,6 @@ copy "$(OutDir)"\UdmDll_VS10D.lib "$(UDM_PATH)"\lib
       <ImportLibrary>$(OutDir)UdmDll_$(PlatformToolset)_$(Platform)D.lib</ImportLibrary>
       <ForceSymbolReferences>
       </ForceSymbolReferences>
-      <IgnoreSpecificDefaultLibraries>UdmGmeD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
@@ -343,6 +342,10 @@ copy "$(OutDir)"\UdmDll_v100_x64D.lib "$(UDM_PATH)"\lib
     <ProjectReference Include="..\UdmOclPat\GOCL\src\GOCL.vcxproj">
       <Project>{ee407066-7819-4ae2-b0f5-e64fc5e54415}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\UdmOcl\UdmOcl.vcxproj">
       <Project>{5106c980-bc3d-48c5-a033-0d58c20f9980}</Project>
