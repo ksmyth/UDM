@@ -350,10 +350,18 @@ copy "$(OutDir)"\UdmDll_v100_x64D.lib "$(UDM_PATH)"\lib
     <ProjectReference Include="..\UdmOcl\UdmOcl.vcxproj">
       <Project>{5106c980-bc3d-48c5-a033-0d58c20f9980}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\UdmPOI\UdmPOI.vcxproj">
       <Project>{aa870453-dbea-4162-9699-563a975e5a84}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\UdmUtil\UdmUtil.vcxproj">
       <Project>{e663042b-f135-4502-b7a1-d62f21126e3b}</Project>
@@ -362,6 +370,10 @@ copy "$(OutDir)"\UdmDll_v100_x64D.lib "$(UDM_PATH)"\lib
     <ProjectReference Include="..\UdmXmi\UdmXmi.vcxproj">
       <Project>{ca16ed97-f738-4faf-985c-fae05aed8d07}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\Uml\Uml.vcxproj">
       <Project>{6a53e343-14c2-4463-a9c8-332dae560eaf}</Project>
