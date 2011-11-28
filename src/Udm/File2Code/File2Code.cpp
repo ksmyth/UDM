@@ -229,7 +229,7 @@ void  File2Code::generateMap(std::istream& in, StrStrVecMap& map)
         if (str.find("<!-- generated on ") != std::string::npos) {
           out << "//"; 
         }
-        out << "\t\t\tstr +=";   
+        out << "\t\tstr +=";   
         out << "\"";   
 
         std::string tmp;
@@ -252,9 +252,9 @@ void  File2Code::generateMap(std::istream& in, StrStrVecMap& map)
         out << ";";
         vec.push_back(out.str());
       }
-      vec.push_back("\t\t}");
-      vec.push_back("\t\treturn str;");
       vec.push_back("\t}");
+      vec.push_back("\t\treturn str;");
+      vec.push_back("}");
       
       if (!in.good())
        break;
