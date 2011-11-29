@@ -53,10 +53,13 @@
       <Merge Id="MFC100" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_MFC_$(sys.BUILDARCH).msm" DiskId="1" />
       <Merge Id="ATL100" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_ATL_$(sys.BUILDARCH).msm" DiskId="1" />
 
+      <Merge Id="xerces_c" Language="1033" SourceFile="xerces_c\xerces_c.msm" DiskId="1" />
+      <Merge Id="UdmDll" Language="1033" SourceFile="UdmDll\UdmDll.msm" DiskId="1" />
       <Merge Id="UdmDll_VS10" Language="1033" SourceFile="UdmDll_VS10\UdmDll_VS10.msm" DiskId="1" />
       <Merge Id="Udm_SDK" Language="1033" SourceFile="Udm_SDK\Udm_SDK.msm" DiskId="1"/>
       <Merge Id="Udm_bin" Language="1033" SourceFile="Udm_bin\Udm_bin.msm" DiskId="1"/>
       <?if $(sys.BUILDARCH)=x64 ?>
+      <Merge Id="xerces_c_x64" Language="1033" SourceFile="xerces_c\xerces_c_x64.msm" DiskId="1" />
       <Merge Id="UdmDll_VS10_x64" Language="1033" SourceFile="UdmDll_VS10\UdmDll_VS10_x64.msm" DiskId="1" />
       <Merge Id="Udm_bin_x64" Language="1033" SourceFile="Udm_bin\Udm_bin_x64.msm" DiskId="1"/>
       <Merge Id="CRT100_x86" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_CRT_x86.msm" DiskId="1" />
@@ -73,8 +76,11 @@
 
       <MergeRef Id='Udm_SDK' />
       <MergeRef Id='Udm_bin' />
+      <MergeRef Id='xerces_c' />
+      <MergeRef Id='UdmDll' />
       <MergeRef Id='UdmDll_VS10' />
       <?if $(sys.BUILDARCH)=x64 ?>
+      <MergeRef Id='xerces_c_x64'/>
       <MergeRef Id='UdmDll_VS10_x64'/>
       <MergeRef Id='Udm_bin_x64' />
       <MergeRef Id='CRT100_x86' />

@@ -4,22 +4,19 @@
 
   <?include ..\Udm_inc.wxi?>
 
-  <Module Id='UdmDll_VS10' Language='1033' Codepage='1252' Version='$(var.VERSIONSTR)'>
+  <Module Id='UdmDll' Language='1033' Codepage='1252' Version='$(var.VERSIONSTR)'>
 
-    <Package Id='$(var.UdmDll_VS10_Package_Id)' Manufacturer='Vanderbilt University, ISIS'
+    <Package Id='35DC72B5-A81C-4190-ACE7-9D10CE1DA1A1' Manufacturer='Vanderbilt University, ISIS'
         InstallerVersion='300' Languages='1033' SummaryCodepage='1252'
         InstallPrivileges='elevated' InstallScope='perMachine'/>
 
     <Directory Id='TARGETDIR' Name='SourceDir'>
       <Directory Id='$(var.SystemFolderNative)' Name='$(var.SystemFolderNative)'>
+      <?if $(sys.BUILDARCH)=x86?>
         <Component>
-          <File Source='$(var.Build)VC10\Release\$(var.UdmDllVC10)' />
+          <File Source='$(var.Build)VC9\Release\UdmDll_3_2.dll' />
         </Component>
-        <?if $(sys.BUILDARCH)=x64 ?>
-        <Component>
-          <File Source='..\bin\zlibwapi.dll' />
-        </Component>
-        <?endif?>
+      <?endif?>
       </Directory>
     </Directory>
 
