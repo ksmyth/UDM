@@ -37,7 +37,7 @@ def adjacent_file(file):
 
 def build(sourcedir, arch, msi=False):
     def get_wixobj(file):
-        return os.path.splitext(file)[0] + ".wixobj"
+        return os.path.splitext(file)[0] + ('_x64' if arch == 'x64' else '') + ".wixobj"
 
     def get_svnversion():
         import subprocess
@@ -66,6 +66,7 @@ def build(sourcedir, arch, msi=False):
 
     #ignore warning 1055, ICE82 from VC9 merge modules
     if msi:
+        print 'Building msi ' + arch
         msi_names = {'x86': 'Udm.msi', 'x64': 'Udm_x64.msi'}
         system(['light', '-nologo', '-sw1055', '-sice:ICE82', '-ext', 'WixNetFxExtension', '-ext', 'WixUIExtension', '-ext', 'WixUtilExtension', '-o', msi_names[arch] ] + [ get_wixobj(file) for file in sources ])
     else:
@@ -94,13 +95,20 @@ if __name__=='__main__':
         import glob
         import os.path
         files = [os.path.dirname(wxs) for wxs in glob.glob(os.path.join(os.path.dirname(__file__ ), '*/*.wxs'))]
+    import multiprocessing
+    pool = multiprocessing.Pool()
     for file in files:
         for arch in arches:
             print 'Building ' + file + ' ' + arch
-            build(file, arch)
+            #build(file, arch)
+            pool.apply_async(build, (file, arch))
+    pool.close()
+    pool.join()
 
     if options.msi or len(args) == 0:
+        import multiprocessing
+        pool = multiprocessing.Pool()
         for arch in arches:
-            if options.msi == 0 or len(args) == 0:
-                print 'Building msi ' + arch
-                build('', arch, True)
+            pool.apply_async(build, ('', arch, True))
+        pool.close()
+        pool.join()
