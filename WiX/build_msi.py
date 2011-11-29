@@ -55,8 +55,7 @@ def build(sourcedir, arch, msi=False):
     sourcedir = adjacent_file(('' if sourcedir == '' else sourcedir + "\\"))
     import glob
     sources = glob.glob(sourcedir + '*.wxi') + glob.glob(sourcedir + '*.wxs')
-    if 'Udm_inc.wxi' in sources:
-        sources.remove('Udm_inc.wxi')
+    sources = [source for source in sources if source.find('Udm_inc.wxi') == -1]
 
     defines = [('UDM_3RDPARTY_PATH',  os.environ['UDM_3RDPARTY_PATH']),
                ('GREAT_PATH',  os.environ['GREAT_PATH'])]
