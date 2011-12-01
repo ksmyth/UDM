@@ -103,24 +103,11 @@ if __name__=='__main__':
         files = [os.path.dirname(wxs) for wxs in glob.glob(os.path.join(os.path.dirname(__file__ ), '*/*.wxs'))]
         if len(files) == 0:
             raise Exception("0 sources found in " + os.path.dirname(__file__ ))
-    import multiprocessing
-    pool = multiprocessing.Pool()
-    jobs = []
     for file in files:
         for arch in arches:
             print 'Building ' + file + ' ' + arch
-            jobs.append(pool.apply_async(build, (file, arch)))
-    pool.close()
-    pool.join()
-    for job in jobs:
-        job.get()
+            build(file, arch)
 
     if options.msi or len(args) == 0:
-        jobs = []
-        pool = multiprocessing.Pool()
         for arch in arches:
-            jobs.append(pool.apply_async(build, ('', arch, True)))
-        pool.close()
-        pool.join()
-        for job in jobs:
-            job.get()
+            build('', arch, True)
