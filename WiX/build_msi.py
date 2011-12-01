@@ -35,6 +35,10 @@ def system(args, dirname=None):
 def adjacent_file(file):
     return os.path.join(os.path.dirname(__file__), file)
 
+def build_packed(args):
+    sourcedir, arch, msi = args
+    build(sourcedir, arch, msi)
+
 def build(sourcedir, arch, msi=False):
     def get_wixobj(file):
         return os.path.splitext(file)[0] + ('_x64' if arch == 'x64' else '') + ".wixobj"
@@ -56,6 +60,8 @@ def build(sourcedir, arch, msi=False):
     import glob
     sources = glob.glob(sourcedir + '*.wxi') + glob.glob(sourcedir + '*.wxs')
     sources = [source for source in sources if source.find('Udm_inc.wxi') == -1]
+    if len(sources) == 0:
+        raise Exception("0 sources found in " + sourcedir)
 
     defines = [('UDM_3RDPARTY_PATH',  os.environ['UDM_3RDPARTY_PATH']),
                ('GREAT_PATH',  os.environ['GREAT_PATH'])]
@@ -95,20 +101,26 @@ if __name__=='__main__':
         import glob
         import os.path
         files = [os.path.dirname(wxs) for wxs in glob.glob(os.path.join(os.path.dirname(__file__ ), '*/*.wxs'))]
+        if len(files) == 0:
+            raise Exception("0 sources found in " + os.path.dirname(__file__ ))
     import multiprocessing
     pool = multiprocessing.Pool()
+    jobs = []
     for file in files:
         for arch in arches:
             print 'Building ' + file + ' ' + arch
-            #build(file, arch)
-            pool.apply_async(build, (file, arch))
+            jobs.append(pool.apply_async(build, (file, arch)))
     pool.close()
     pool.join()
+    for job in jobs:
+        job.get()
 
     if options.msi or len(args) == 0:
-        import multiprocessing
+        jobs = []
         pool = multiprocessing.Pool()
         for arch in arches:
-            pool.apply_async(build, ('', arch, True))
+            jobs.append(pool.apply_async(build, ('', arch, True)))
         pool.close()
         pool.join()
+        for job in jobs:
+            job.get()
