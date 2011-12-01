@@ -32,6 +32,9 @@
       <Component>
         <File Source="..\Build\x64\VC10\Debug\UdmDll_3_2_v100_x64D.dll" />
       </Component>
+      <Component>
+        <File Source="..\Build\x64\VC10\Release\UdmDll_3_2_v100_x64.dll" />
+      </Component>
       <?endif?>
       <?if $(sys.BUILDARCH)=x86 ?>
       <Component>
@@ -47,10 +50,19 @@
         <File Source="$(var.UDM_3RDPARTY_PATH)\xalan-c_1_11_0\bin\XalanMessages_1_11D.dll" />
       </Component>
       <Component>
+        <File Source="..\bin\xerces-c_2_8.dll" />
+      </Component>
+      <Component>
         <File Source="..\Build\Win32\VC9\Debug\UdmDll_3_2D.dll" />
       </Component>
       <Component>
         <File Source="..\Build\Win32\VC10\Debug\UdmDll_3_2_VS10D.dll" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC9\Release\UdmDll_3_2.dll" />
+      </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\UdmDll_3_2_VS10.dll" />
       </Component>
       <Component>
         <File Source="..\Build\Win32\VC10\Release\Udm.exe" />
