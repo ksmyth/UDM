@@ -63,8 +63,7 @@ def build(sourcedir, arch, msi=False):
     if len(sources) == 0:
         raise Exception("0 sources found in " + sourcedir)
 
-    defines = [('UDM_3RDPARTY_PATH',  os.environ['UDM_3RDPARTY_PATH']),
-               ('GREAT_PATH',  os.environ['GREAT_PATH'])]
+    defines = [('GREAT_PATH',  os.environ['GREAT_PATH'])]
 
     for source in sources:
         #arch = [ '-arch', ('x86' if source.find('x64') == -1 else 'x64') ]

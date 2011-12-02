@@ -38,16 +38,16 @@
       <?endif?>
       <?if $(sys.BUILDARCH)=x86 ?>
       <Component>
-        <File Source="$(var.UDM_3RDPARTY_PATH)\xalan-c_1_11_0\bin\Xalan-C_1_11.dll" />
+        <File Source="..\bin\Xalan-C_1_11.dll" />
       </Component>
       <Component>
-        <File Source="$(var.UDM_3RDPARTY_PATH)\xalan-c_1_11_0\bin\XalanMessages_1_11.dll" />
+        <File Source="..\bin\XalanMessages_1_11.dll" />
       </Component>
       <Component>
-        <File Source="$(var.UDM_3RDPARTY_PATH)\xalan-c_1_11_0\bin\Xalan-C_1_11D.dll" />
+        <File Source="..\bin\Xalan-C_1_11D.dll" />
       </Component>
       <Component>
-        <File Source="$(var.UDM_3RDPARTY_PATH)\xalan-c_1_11_0\bin\XalanMessages_1_11D.dll" />
+        <File Source="..\bin\XalanMessages_1_11D.dll" />
       </Component>
       <Component>
         <File Source="..\bin\xerces-c_2_8.dll" />
