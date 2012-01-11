@@ -19,10 +19,33 @@
       <UpgradeVersion Minimum="$(var.VERSIONSTR)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED"/>
       <UpgradeVersion OnlyDetect="no" Minimum="1.0.0" IncludeMinimum="yes" Maximum="$(var.VERSIONSTR)" IncludeMaximum="no" Property="PREVIOUSFOUND"/>
     </Upgrade>
+    <?if $(sys.BUILDARCH)=x64 ?>
+    <Upgrade Id="D656A56A-F239-4B35-865C-840B1EA235E0">
+      <UpgradeVersion Minimum="$(var.VERSIONSTR)" OnlyDetect="yes" Property="NEWERVERSIONDETECTED_X86"/>
+      <UpgradeVersion OnlyDetect="no" Minimum="1.0.0" IncludeMinimum="yes" Maximum="$(var.VERSIONSTR)" IncludeMaximum="no" Property="PREVIOUSFOUND_X86"/>
+    </Upgrade>
+    <?endif?>
+    <?if $(sys.BUILDARCH)=x64 ?>
+    <InstallExecuteSequence>
+      <Custom Action="WixExitEarlyWithSuccess" After="FindRelatedProducts">NEWERVERSIONDETECTED OR NEWERVERSION_DETECTED_X86</Custom>
+    </InstallExecuteSequence>
+    <?else?>
     <CustomActionRef Id="WixExitEarlyWithSuccess"/>
+    <?endif?>
 
     <InstallExecuteSequence>
       <RemoveExistingProducts After="InstallValidate" />
+    </InstallExecuteSequence>
+
+
+    <Property Id='UNINSTALL_EXE32'>
+      <RegistrySearch Id='LocateUninstallExe32' Type='file' Root='HKLM' Key='SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\ISIS UDM_is1' Name='UninstallString' Win64='no'>
+        <FileSearch Id='LocateUninstallExe32File' Name='unins000.exe' />
+      </RegistrySearch>
+    </Property>
+    <CustomAction Id="RemovePreviousVersion32" Property="UNINSTALL_EXE32" ExeCommand="/VERYSILENT" Execute="deferred" Return="ignore" />
+    <InstallExecuteSequence>
+      <Custom Action="RemovePreviousVersion32" After="InstallInitialize">UNINSTALL_EXE32</Custom>
     </InstallExecuteSequence>
 
     <Media Id='1' Cabinet='Udm.cab' EmbedCab='yes' />
@@ -61,6 +84,7 @@
       <?if $(sys.BUILDARCH)=x64 ?>
       <Merge Id="xerces_c_x64" Language="1033" SourceFile="xerces_c\xerces_c_x64.msm" DiskId="1" />
       <Merge Id="UdmDll_VS10_x64" Language="1033" SourceFile="UdmDll_VS10\UdmDll_VS10_x64.msm" DiskId="1" />
+      <Merge Id="Udm_SDK_x64" Language="1033" SourceFile="Udm_SDK\Udm_SDK_x64.msm" DiskId="1"/>
       <Merge Id="Udm_bin_x64" Language="1033" SourceFile="Udm_bin\Udm_bin_x64.msm" DiskId="1"/>
       <Merge Id="CRT100_x86" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_CRT_x86.msm" DiskId="1" />
       <Merge Id="MFC100_x86" Language="0" SourceFile="$(env.ProgramFiles)\Common Files\Merge Modules\Microsoft_VC100_MFC_x86.msm" DiskId="1" />
@@ -83,6 +107,7 @@
       <MergeRef Id='xerces_c_x64'/>
       <MergeRef Id='UdmDll_VS10_x64'/>
       <MergeRef Id='Udm_bin_x64' />
+      <MergeRef Id='Udm_SDK_x64' />
       <MergeRef Id='CRT100_x86' />
       <MergeRef Id='MFC100_x86' />
       <MergeRef Id='ATL100_x86' />

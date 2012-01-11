@@ -11,7 +11,7 @@
   <?define ProgramFilesNativeFolder='ProgramFiles64Folder'?>
   <?define SystemFolderNative='System64Folder'?>
   <?define Win64='yes'?>
-  <?define ProductName='Udm (64 bit)'?>
+  <?define ProductName='ISIS Udm (64 bit)'?>
   <?define Release='x64\Release'?>
   <?define lib='lib\x64'?>
   <?define bin='bin\x64'?>
@@ -27,7 +27,7 @@
   <?define ProgramFilesNativeFolder='ProgramFilesFolder'?>
   <?define SystemFolderNative='SystemFolder'?>
   <?define Win64='no'?>
-  <?define ProductName='Udm'?>
+  <?define ProductName='ISIS Udm'?>
   <?define Release='Release'?>
   <?define lib='lib'?>
   <?define bin='bin'?>
