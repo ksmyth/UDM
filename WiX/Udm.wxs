@@ -54,7 +54,9 @@
       <![CDATA[Installed OR (VersionNT >= 501)]]>
     </Condition>
 
-    <!-- TODO WixVariable Id="WixUILicenseRtf" Value="..\Doc\Legal\License.rtf" / -->
+    <WixVariable Id="WixUILicenseRtf" Value="..\license.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="WixUiBanner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="WixUIDialog.bmp" />
 
     <!-- =========================================================== -->
     <!-- DIRECTORY STRUCTURE -->
