@@ -34,6 +34,7 @@
       </Component>
       <Component>
         <File Source="..\Build\x64\VC10\Release\UdmDll_3_2_v100_x64.dll" />
+        <Environment Id="PATH" Action="set" System="yes" Name="PATH" Value="[bin]" Part="last" />
       </Component>
       <?endif?>
       <?if $(sys.BUILDARCH)=x86 ?>
@@ -66,9 +67,7 @@
       </Component>
       <Component>
         <File Source="..\Build\Win32\VC10\Release\Udm.exe" />
-        <?if $(sys.BUILDARCH)=x86 ?>
         <Environment Id="UDM_PATH" Action="set" System="yes" Name="UDM_PATH" Value="[INSTALLDIR]" />
-        <?endif?>
         <Environment Id="PATH" Action="set" System="yes" Name="PATH" Value="[bin]" Part="last" />
       </Component>
       <Component>
