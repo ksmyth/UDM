@@ -1,8 +1,6 @@
 #pragma warning( disable : 4786 )
 #include "CommonHeaders.h"
 
-#import "progid:Mga.MgaMetaFolder" version("1.0") implementation_only rename("Kind", "kind")
-#import "progid:Mga.MgaFolders" version("1.0") implementation_only rename("Dst", "dst") rename("Src", "src") rename("Kind", "kind")
-#import "progid:Mga.CoreBinFile" version("1.0") implementation_only
-// GMELib
-#import "libid:0ADEEC71-D83A-11D3-B36B-005004CC8592" implementation_only
+#import "file:Core.dll" version("1.0") implementation_only
+#import "file:Meta.dll" version("1.0") implementation_only rename("Kind", "kind")
+#import "file:Mga.dll" version("1.0") implementation_only rename("Dst", "dst") rename("Src", "src") rename("Kind", "kind")

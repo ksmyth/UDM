@@ -251,9 +251,6 @@ using namespace MGALib;
 #undef INTERFACEVERSION_INCLUDED
 #undef INTERFACE_VERSION
 
-// KMS: VS intellisense has a hard time loading from typelib GUID. This fixes it:
-//#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Release\obj\src\UdmGme\Mga.tlh"
-//#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Release\obj\src\UdmGme\Meta.tlh"
 
 
 namespace UdmGme 

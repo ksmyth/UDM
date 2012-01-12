@@ -22,11 +22,25 @@
 */
 
 // KMS: these renames are for GME r1365 (Work around "MIDL changes the case of identifier in generated type library" http://support.microsoft.com/kb/q220137/)
-#import "progid:Mga.MgaMetaFolder" version("1.0") no_implementation rename("Kind", "kind")
-#import "progid:Mga.MgaFolders" version("1.0") no_implementation rename("Dst", "dst") rename("Src", "src") rename("Kind", "kind")
-#import "progid:Mga.CoreBinFile" version("1.0") no_implementation
-// GMELib
-#import "libid:0ADEEC71-D83A-11D3-B36B-005004CC8592" no_implementation
+#if !defined(__INTELLISENSE__)
+#import "file:Core.dll" version("1.0") no_implementation
+#import "file:Meta.dll" version("1.0") no_implementation rename("Kind", "kind")
+#import "file:Mga.dll" version("1.0") no_implementation rename("Dst", "dst") rename("Src", "src") rename("Kind", "kind")
+#else
+// IntelliSense has a known issue with the above lines.
+//  http://connect.microsoft.com/VisualStudio/feedback/details/533526/vc-2010-intellisense-import-directive-using-libid-does-not-work
+#ifdef _DEBUG
+// If IntelliSense reports "Cannot open source file", compile then reopen the project
+// KMS: VS intellisense has a hard time loading from typelib GUID. This fixes it:
+#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Debug\obj\src\UdmGme\Core.tlh"
+#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Debug\obj\src\UdmGme\Mga.tlh"
+#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Debug\obj\src\UdmGme\Meta.tlh"
+#else
+#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Release\obj\src\UdmGme\Core.tlh"
+#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Release\obj\src\UdmGme\Mga.tlh"
+#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Release\obj\src\UdmGme\Meta.tlh"
+#endif
+#endif
 
 
 //only this is needed from the UdmGme namespace.
