@@ -37,6 +37,9 @@ this software.
 
 
 #ifdef _WIN32
+#ifndef _DLL
+#pragma message("Warning: Udm clients should be compiled under /MD or /MDd")
+#endif
 #if (_MSC_VER == 1600) /* VS2010 */
 #define UDM_NAMESPACE Udm_VS10
 namespace UDM_NAMESPACE {};
