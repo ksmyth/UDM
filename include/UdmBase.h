@@ -3360,6 +3360,13 @@ public:
 		dn = dn1.release();
 	}
 
+	template<class CreateF>
+	void CreateNew(CreateF& f) {
+		if(dn)
+			throw udm_exception("DataNetwork is already open"); 
+		dn = f(metaroot, pr);
+	}
+
 	virtual void OpenExisting(const string &systemname, 
 									const string &metalocator = "", 
 									enum BackendSemantics sem = CHANGES_PERSIST_ALWAYS) {
@@ -3370,6 +3377,14 @@ public:
 		dn1->OpenExisting(systemname, metalocator, sem);
 		dn = dn1.release();
 	}
+
+	template<class OpenF>
+	void OpenExisting(OpenF& f) {
+		if(dn)
+			throw udm_exception("DataNetwork is already open"); 
+		dn = f(metaroot, pr);
+	}
+
 	virtual void CloseWithUpdate() 
 	{
 		testdn()->CloseWithUpdate();

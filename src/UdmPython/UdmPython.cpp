@@ -15,8 +15,50 @@
 using namespace boost::python;
 using namespace std;
 
-void SDN_OpenExisting(Udm::SmartDataNetwork& self, const string &systemname, const string& metalocator) {
-	self.OpenExisting(systemname, metalocator, Udm::CHANGES_LOST_DEFAULT);
+// returns borrowed reference
+IUnknown* object2IUnknown(object o) {
+	//	oleobj = disp._oleobj_
+	//	addr = repr(oleobj).split()[-1][2:-1]
+	//	val = int(addr, 16)
+	object oleobj;
+	if (PyObject_HasAttrString(o.ptr(), "_oleobj_") )
+		oleobj = o.attr("_oleobj_");
+	else
+		oleobj = o;
+	object addr = import("__builtin__").attr("repr")(oleobj).attr("split")()[-1].slice(2, -1);
+	object val = import("__builtin__").attr("int")(addr, 16);
+	return (IUnknown*)(void*)static_cast<const size_t>(extract<size_t>(val));
+}
+
+Udm::Object SDN_Gme2Udm(Udm::SmartDataNetwork& self, object o) {
+	IUnknown* punk = object2IUnknown(o);
+	UdmGme::GmeDataNetwork* gmedn = dynamic_cast<UdmGme::GmeDataNetwork*>(self.testdn());
+	if (!gmedn)
+		throw std::runtime_error("self is not a GmeDataNetwork");
+	return gmedn->Gme2Udm(punk);
+}
+
+void SDN_OpenExisting(Udm::SmartDataNetwork& self, object systemname, const string& metalocator) {
+	extract<std::string> string_systemname(systemname);
+	if (string_systemname.check())
+	{
+		self.OpenExisting(string_systemname, metalocator, Udm::CHANGES_LOST_DEFAULT);
+		return;
+	}
+	if (PyObject_HasAttrString(systemname.ptr(), "_oleobj_") 
+		|| PyObject_HasAttrString(systemname.ptr(), "GetIDsOfNames"))
+	{
+		// OpenExisting calls AddRef
+		IUnknown* punk = object2IUnknown(systemname);
+
+		self.OpenExisting([&](const Udm::UdmDiagram &metaroot, Udm::UdmProject* pr) -> Udm::DataNetwork* {
+			std::auto_ptr<UdmGme::GmeDataNetwork> dn1(new UdmGme::GmeDataNetwork(metaroot, pr));
+			dn1->OpenExisting(punk, Udm::CHANGES_LOST_DEFAULT, true);
+			return dn1.release();
+		});
+		return;
+	}
+	throw runtime_error("Unrecognized type for systemname");
 }
 
 void SDN_CreateNew(Udm::SmartDataNetwork& self, const string &systemname, const string& metalocator, const Udm::Object rootclass) {
@@ -545,10 +587,13 @@ BOOST_PYTHON_MODULE(UDM_PY_MODULE_NAME)
 		.def("close_no_update", &Udm::SmartDataNetwork::CloseNoUpdate)
 		.def("save_as", &Udm::SmartDataNetwork::SaveAs)
 		.add_property("root", &Udm::SmartDataNetwork::GetRootObject)
+		.def("convert_gme2udm", SDN_Gme2Udm)
 	;
 	scope().attr("SmartDataNetwork").attr("__init__") = eval("lambda self, *args: None");
 	exec(
 "def map_uml_names(diagram):\n"
+"    import sys\n"
+"    udm = sys.modules['udm']\n"
 "    class_meta = filter(lambda class_: class_.name == 'Class', udm.uml_diagram().children())[0]\n"
 "    namespace_meta = filter(lambda class_: class_.name == 'Namespace', udm.uml_diagram().children())[0]\n"
 "    class ClassMap(object):\n"
