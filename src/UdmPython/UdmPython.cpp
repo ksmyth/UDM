@@ -51,7 +51,7 @@ void SDN_OpenExisting(Udm::SmartDataNetwork& self, object systemname, const stri
 		// OpenExisting calls AddRef
 		IUnknown* punk = object2IUnknown(systemname);
 
-		self.OpenExisting([&](const Udm::UdmDiagram &metaroot, Udm::UdmProject* pr) -> Udm::DataNetwork* {
+		self.OpenExisting_([&](const Udm::UdmDiagram &metaroot, Udm::UdmProject* pr) -> Udm::DataNetwork* {
 			std::auto_ptr<UdmGme::GmeDataNetwork> dn1(new UdmGme::GmeDataNetwork(metaroot, pr));
 			dn1->OpenExisting(punk, Udm::CHANGES_LOST_DEFAULT, true);
 			return dn1.release();

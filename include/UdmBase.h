@@ -3361,7 +3361,7 @@ public:
 	}
 
 	template<class CreateF>
-	void CreateNew(CreateF& f) {
+	void CreateNew_(CreateF& f) {
 		if(dn)
 			throw udm_exception("DataNetwork is already open"); 
 		dn = f(metaroot, pr);
@@ -3379,7 +3379,7 @@ public:
 	}
 
 	template<class OpenF>
-	void OpenExisting(OpenF& f) {
+	void OpenExisting_(OpenF& f) {
 		if(dn)
 			throw udm_exception("DataNetwork is already open"); 
 		dn = f(metaroot, pr);
