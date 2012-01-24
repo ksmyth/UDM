@@ -10,7 +10,7 @@
       <AdditionalIncludeDirectories>$(UDM_3RDPARTY_PATH)\Python-2.7.2\PC;$(UDM_3RDPARTY_PATH)\Python-2.7.2\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(UDM_3RDPARTY_PATH)\Python-2.7.2\PCbuild;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(UDM_3RDPARTY_PATH)\Python-2.7.2\PCbuild\$(PlatformShortName);$(UDM_3RDPARTY_PATH)\Python-2.7.2\PCbuild;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
