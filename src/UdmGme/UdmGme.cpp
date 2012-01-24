@@ -3749,7 +3749,6 @@ bbreak:			;
 				project->AbortTransaction();
 				priv.terr->Destroy();
 			}
-			project->Close(VARIANT_TRUE);
 			throw s;
 		}
 
