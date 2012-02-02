@@ -3764,7 +3764,7 @@ bbreak:			;
 		hasOpened=false;
 		semantics = sem;
 		IMgaProjectPtr  &project = priv.project;
-		COMTHROW(project.CreateInstance(	OLESTR("Mga.MgaProject")));
+		COMTHROW(project.CreateInstance(OLESTR("Mga.MgaProject"), 0, CLSCTX_INPROC));
 		CheckVersion(project);
 		VARIANT_BOOL ro;
 		try {
@@ -3800,7 +3800,7 @@ bbreak:			;
 		hasOpened=false;
 		semantics = sem;
 		IMgaProjectPtr  &project = priv.project;
-		COMTHROW(project.CreateInstance(	OLESTR("MGA.MgaProject")));
+		COMTHROW(project.CreateInstance(OLESTR("MGA.MgaProject"), 0, CLSCTX_INPROC));
 		CheckVersion(project);
 		try {
 			COMTHROW(project->Create( createGMEconnstr(systemname), SmartBSTR(metalocator.c_str())));
