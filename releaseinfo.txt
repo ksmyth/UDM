@@ -1,4 +1,4 @@
-Copyright (c) Vanderbilt University, 2001-2011
+Copyright (c) Vanderbilt University, 2001-2012
 ALL RIGHTS RESERVED
 
 ** UDM : Universal Data Model **
@@ -7,17 +7,20 @@ ALL RIGHTS RESERVED
 
 1. Windows Operating system (XP, Vista, 7)
 
-2. GME 11, r11.10.14 from: http://www.isis.vanderbilt.edu/Projects/gme/Download.html
+2. GME 12, r12.1.24 from: http://repo.isis.vanderbilt.edu/downloads?tool=GME
 NOTE: You need to have administrative privileges to install GME correctly.
 
-3. Visual Studio 9 or Visual Studio 10
-   (This version of UDM can also be used with Visual Studio 2008 Express Edition or Visual Studio 2010 Express Edition.
+3. To develop using UDM: Visual Studio 9 or Visual Studio 10
+   (This version of UDM can also be used with Visual Studio 2008 Express Edition or Visual C++ 2010 Express.
     Please visit http://www.microsoft.com/eXPress/download/#webInstall
     for instructions on how to download and install the free express edition)
 
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+02/02/12		-	Release 3.2.10
+		-	64 bit UdmDll (VC10)
+
 10/14/11		-	Release 3.2.9
 		-	Performance improvements
 		-	Visual Studio 2010 Interpreter wizard
