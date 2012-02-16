@@ -146,6 +146,8 @@ namespace UdmGme
 			return new GmeDataNetwork(meta, project);
 		}
 
+		UDM_DLL struct Udm::AssociationRoleInfo GetAssociationRoleInfo(const ::Uml::AssociationRole &role) const;
+
 	private:
 		int writeOps;
 		bool hasOpened;

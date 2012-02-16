@@ -380,6 +380,14 @@ namespace UDM_NAMESPACE
 		throw udm_exception("Unsupported method");
 	}
 
+	UDM_DLL struct AssociationRoleInfo DataNetwork::GetAssociationRoleInfo(const ::Uml::AssociationRole &role) const
+	{
+		struct AssociationRoleInfo ret;
+		ret.has_direction = ret.is_src = false;
+
+		return ret;
+	}
+
 
 	//	--- attribute setters/getters for multiple value (array) type attributes
 

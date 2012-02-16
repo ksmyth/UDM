@@ -9,7 +9,8 @@ BUILT_SOURCES			= PackageA.cpp PackageA.h PackageA.xsd \
 				  PackageB.cpp PackageB.h PackageB.xsd \
 				  testAssociationScenarios.cpp \
 				  testAssociationScenarios.h \
-				  testAssociationScenarios.xsd
+				  testAssociationScenarios.xsd \
+				  LampDiagram.cpp LampDiagram.h LampDiagram.xsd
 TestGetAdjacentObjects_SOURCES	= main.cpp TestGetAdjacentObjects.cpp \
 				  TestGetAdjacentObjects.h
 nodist_TestGetAdjacentObjects_SOURCES	= $(BUILT_SOURCES)
@@ -18,10 +19,11 @@ TestGetAdjacentObjects_LDADD	= ../../lib/libudm.la $(CPPUNITLIBS)
 CLEANFILES		= $(BUILT_SOURCES) sources-stamp testmodel.udm
 
 
-sources-stamp: testAssociationScenarios_udm.udm ../../bin/Udm Makefile
+sources-stamp: testAssociationScenarios_udm.udm ../../samples/LampDiagram_udm.xml ../../bin/Udm Makefile
 	@rm -f sources-temp
 	@touch sources-temp
-	../../bin/Udm $< -d ../../etc -T
+	../../bin/Udm testAssociationScenarios_udm.udm -d ../../etc -T
+	../../bin/Udm ../../samples/LampDiagram_udm.xml -d ../../etc -T
 	@mv -f sources-temp $@
 
 $(BUILT_SOURCES): sources-stamp

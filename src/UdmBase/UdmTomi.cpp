@@ -1266,6 +1266,97 @@ UDM_DLL pair<Object,Object> Object::GetPeersFromAssociationClassObject()
 };
 
 
+// UDM TOMI Paradigm Independent Interface
+// For an association class instance, returns the source and, respectively, the
+// destination, if the source role or destination role can be established (MGA backedn)
+UDM_DLL	Object Object::getSrcObject()
+{
+	Object ret;
+
+	set< ::Uml::Class> ancestorClasses = ::Uml::AncestorClasses(type());
+	for (set< ::Uml::Class>::iterator p_currClass = ancestorClasses.begin();
+				p_currClass != ancestorClasses.end(); p_currClass++)
+	{
+		::Uml::Association assoc = p_currClass->association();
+		if (assoc) 
+		{
+			set< ::Uml::AssociationRole> peerRoles = assoc.roles();
+			::Uml::AssociationRole role = *peerRoles.begin();
+			
+			struct AssociationRoleInfo roleInfo = __impl()->__getdn()->GetAssociationRoleInfo(role);
+			if (roleInfo.has_direction) {
+				vector<ObjectImpl*> srcPeers = roleInfo.is_src
+					? impl->getAssociation(role, Udm::TARGETFROMCLASS)
+					: impl->getAssociation(::Uml::theOther(role), Udm::TARGETFROMCLASS);
+				ret = *srcPeers.begin();
+			}
+
+			//through the inheritence hierarchy, only one association class can exist
+			continue;
+		}
+	}
+	if ( ret == &Udm::_null )
+	{
+		//try cross package
+		if (__impl()->__getdn()->GetProject())
+		{
+			UdmProject * pr = __impl()->__getdn()->GetProject();
+			Object src_o = pr->GetPlaceHolder(*this, false);
+			if (src_o)
+			{
+				Object ret_o = src_o.getSrcObject();
+				ret = pr->GetRealObject(ret_o);
+			}
+		};
+	}
+
+	return ret;
+}
+
+UDM_DLL	Object Object::getDstObject()
+{
+	Object ret;
+
+	set< ::Uml::Class> ancestorClasses = ::Uml::AncestorClasses(type());
+	for (set< ::Uml::Class>::iterator p_currClass = ancestorClasses.begin();
+				p_currClass != ancestorClasses.end(); p_currClass++)
+	{
+		::Uml::Association assoc = p_currClass->association();
+		if (assoc) 
+		{
+			set< ::Uml::AssociationRole> peerRoles = assoc.roles();
+			::Uml::AssociationRole role = *peerRoles.begin();
+			
+			struct AssociationRoleInfo roleInfo = __impl()->__getdn()->GetAssociationRoleInfo(role);
+			if (roleInfo.has_direction) {
+				vector<ObjectImpl*> dstPeers = !roleInfo.is_src
+					? impl->getAssociation(role, Udm::TARGETFROMCLASS)
+					: impl->getAssociation(::Uml::theOther(role), Udm::TARGETFROMCLASS);
+				ret = *dstPeers.begin();
+			}
+
+			//through the inheritence hierarchy, only one association class can exist
+			continue;
+		}
+	}
+	if ( ret == &Udm::_null )
+	{
+		//try cross package
+		if (__impl()->__getdn()->GetProject())
+		{
+			UdmProject * pr = __impl()->__getdn()->GetProject();
+			Object src_o = pr->GetPlaceHolder(*this, false);
+			if (src_o)
+			{
+				Object ret_o = src_o.getDstObject();
+				ret = pr->GetRealObject(ret_o);
+			}
+		};
+	}
+
+	return ret;
+}
+
 
 // Functions for creating Udm entities
 

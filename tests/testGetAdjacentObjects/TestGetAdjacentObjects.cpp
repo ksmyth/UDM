@@ -424,6 +424,42 @@ void UdmTests::TestGetAdjacentObjects::testAssocsFrom_clA2() {
 	CPPUNIT_ASSERT( res4b == comp4b);
 }
 
+void testLampGetSrcDstObject(const string &dst, bool has_direction_support)
+{
+	Udm::SmartDataNetwork nw(LampDiagram::diagram);
+	nw.CreateNew(dst, "LampDiagram", LampDiagram::RootFolder::meta, Udm::CHANGES_LOST_DEFAULT);
+
+	LampDiagram::RootFolder rf = LampDiagram::RootFolder::Cast(nw.GetRootObject());
+	LampDiagram::Lamp lamp = LampDiagram::Lamp::Create(rf);
+
+	LampDiagram::ControlLink cl = LampDiagram::ControlLink::Create(lamp);
+	LampDiagram::Bulb bulb = LampDiagram::Bulb::Create(lamp);
+	LampDiagram::Switch mswitch = LampDiagram::Switch::Create(lamp, LampDiagram::Lamp::meta_MainSwitch);
+	
+	cl.src_end() = bulb;
+	cl.dst_end() = mswitch;
+
+	if (has_direction_support) {
+		CPPUNIT_ASSERT( cl.getSrcObject() == bulb );
+		CPPUNIT_ASSERT( cl.getDstObject() == mswitch );
+	} else {
+		CPPUNIT_ASSERT( cl.getSrcObject() == &Udm::_null );
+		CPPUNIT_ASSERT( cl.getDstObject() == &Udm::_null );
+	}
+
+	nw.CloseNoUpdate();
+}
+
+void UdmTests::TestGetAdjacentObjects::testGetSrcDstObject()
+{
+
+#ifdef _WIN32
+	testLampGetSrcDstObject("lamptest.mga", true);
+#endif
+
+	testLampGetSrcDstObject("lamptest.mem", false);
+}
+
 void UdmTests::TestGetAdjacentObjects::test()
 {
 	try {
@@ -435,6 +471,7 @@ void UdmTests::TestGetAdjacentObjects::test()
 		testAssocsFrom_clA1();
 		testAssocsFrom_clA2Base();
 		testAssocsFrom_clA2();
+		testGetSrcDstObject();
 	} catch (const udm_exception& e) {
 		std::cout << e.what() << std::endl;
 		CPPUNIT_FAIL("Udm exception");

@@ -275,6 +275,13 @@ namespace UDM_NAMESPACE
 // etc.
 	} attstatus_enum;
 
+	// Only the MGA backend knows the direction
+	struct AssociationRoleInfo
+	{
+		bool has_direction;
+		bool is_src;
+	};
+
 
 	class DataNetwork;
 	class UdmProject;
@@ -2905,7 +2912,6 @@ namespace UDM_NAMESPACE
 			AssociationInfo(const ::Uml::Class & ref) : clsAssociation(ref){};
 		};
 
-
 		// UDM TOMI Paradigm Independent Interface
 		struct CompositionInfo
 		{	
@@ -3015,6 +3021,12 @@ namespace UDM_NAMESPACE
 		// UDM TOMI Paradigm Independent Interface
 		// Gets the two peers from an object of association class type
 		pair<Object,Object> GetPeersFromAssociationClassObject();
+		// UDM TOMI Paradigm Independent Interface
+		// For an association class instance, returns the source and, respectively, the
+		// destination, if the source role or destination role can be established (MGA backend).
+		// The Null object is returned if the roles cannot be established.
+		Object getSrcObject();
+		Object getDstObject();
 		// Functions for creating Udm entities
 		// UDM TOMI Paradigm Independent Interface
 		// Creates an object of clsType
@@ -3291,6 +3303,8 @@ public:
 	virtual UDM_DLL const string & Str();
 
 	virtual UDM_DLL set<Object> GetAllInstancesOf(const ::Uml::Class& meta);
+
+	virtual UDM_DLL struct AssociationRoleInfo GetAssociationRoleInfo(const ::Uml::AssociationRole &role) const;
 
 	friend void ::Uml::Initialize();
 };

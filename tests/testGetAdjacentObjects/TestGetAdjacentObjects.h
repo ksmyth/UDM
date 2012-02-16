@@ -6,9 +6,13 @@
 #include "testAssociationScenarios.h"
 #include "PackageA.h"
 #include "PackageB.h"
+#include "LampDiagram.h"
 
 using namespace std;
 
+#ifdef _WIN32
+UDM_USE_MGA
+#endif
 UDM_USE_DOM
 
 namespace UdmTests
@@ -34,6 +38,8 @@ namespace UdmTests
 		void testAssocsFrom_clA1();
 		void testAssocsFrom_clA2Base();
 		void testAssocsFrom_clA2();
+		//
+		void testGetSrcDstObject();
 
 	private:
 		Udm::UdmProject _pr;

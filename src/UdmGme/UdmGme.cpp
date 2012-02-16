@@ -3683,6 +3683,19 @@ bbreak:			;
 		amap.clear();
 	}
 
+	UDM_DLL struct Udm::AssociationRoleInfo GmeDataNetwork::GetAssociationRoleInfo(const ::Uml::AssociationRole &role) const
+	{
+		struct Udm::AssociationRoleInfo ret;
+
+		::Uml::Association assoc = role.parent();
+		assocmapitem *nn = amap.find(assoc.uniqueId())->second;
+
+		ret.has_direction = true;
+		ret.is_src = nn->primary == role;
+
+		return ret;
+	}
+
 		void CheckVersion(IMgaProject *p) {
 		// IGMEVersionInfo and IMgaVersionInfo have the same GUID and vtable definition, so this works across versions
 #ifdef GME_VS10
