@@ -7,7 +7,7 @@ Requirements:
 -------------------
 	- Visual Studio 2008 or 2010
 	- J2SE 1.5 (or later) JDK
-	- (For UdmCliGen.exe) Python 2.6 with py2exe
+	- (For UdmCliGen.exe) Python 2.6 or 2.7 with py2exe
 
 Step-by-step guide:
 -------------------------
