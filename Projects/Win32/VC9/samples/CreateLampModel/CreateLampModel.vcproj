@@ -369,7 +369,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="$(InputFileName) -&gt; LampDiagram.xmp, Registering LampDiagram paradigm"
-						CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;cscript &quot;$(UDM_PATH)\etc\CreateMGA.vbs&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
+						CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;cscript &quot;$(UDM_PATH)\etc\CreateMGA.vbs&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME&#x0D;&#x0A;cscript &quot;$(UDM_PATH)\etc\CreateXmp.vbs&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
 						Outputs="xxxx;$(InputDir)LampDiagram.xmp;$(InputDir)LampDiagram.mta;$(InputDir)$(InputName).mga"
 					/>
 				</FileConfiguration>
@@ -379,7 +379,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="$(InputFileName) -&gt; LampDiagram.xmp, Registering LampDiagram paradigm"
-						CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;cscript &quot;$(UDM_PATH)\etc\CreateMGA.vbs&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME&#x0D;&#x0A;&quot;$(UDM_PATH)\etc\CreateXmp&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
+						CommandLine="cd &quot;$(InputDir)&quot;&#x0D;&#x0A;cscript &quot;$(UDM_PATH)\etc\CreateMGA.vbs&quot; &quot;$(InputName).xme&quot; &quot;$(InputName).mga&quot; MetaGME&#x0D;&#x0A;cscript &quot;$(UDM_PATH)\etc\CreateXmp.vbs&quot; &quot;$(InputName).mga&quot;&#x0D;&#x0A;"
 						Outputs="xxxx;$(InputDir)LampDiagram.xmp;$(InputDir)LampDiagram.mta;$(InputDir)$(InputName).mga"
 					/>
 				</FileConfiguration>
