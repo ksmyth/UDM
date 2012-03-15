@@ -4316,6 +4316,7 @@ namespace UdmDom
 		~reg() {
 			DomDataNetwork::UnRegisterBackends();
 			//disabled due to crashes caused by destructors called after Terminate()
+			//not calling Terminate causes appverif failures when UdmDll is unloaded, since XMLPlatformUtils::Initialize creates critical sections
 			//XMLPlatformUtils::Terminate();
 		}
 	} _reg_unused;
