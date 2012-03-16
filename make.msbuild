@@ -50,6 +50,6 @@
   </PropertyGroup>
   <Target Name="Installer" DependsOnTargets="BuildVS9;BuildVS10;BuildVS10_x64;judm">
     <!-- Must build MetaGME2UML before this -->
-    <CallTarget Targets="ISCC"/>
+    <!-- TODO: Exec build_msi.py -->
   </Target>
 </Project>
