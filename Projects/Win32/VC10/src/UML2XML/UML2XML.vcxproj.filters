@@ -69,6 +69,9 @@
     <ClCompile Include="..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\UML GME\OclParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\src\UML GME\Interpreter\Component.def">

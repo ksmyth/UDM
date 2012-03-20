@@ -28,13 +28,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>Dynamic</UseOfMfc>
-    <UseOfAtl>Static</UseOfAtl>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>Dynamic</UseOfMfc>
-    <UseOfAtl>Static</UseOfAtl>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -103,10 +101,11 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;..\..\..\..\..\src\UML GME\Interpreter;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <HeaderFileName>%(Filename).h</HeaderFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\SDK\BON\Common;$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\SDK\BON\Common;$(IntDir);..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -157,10 +156,11 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;..\..\..\..\..\src\UML GME\Interpreter;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <HeaderFileName>%(Filename).h</HeaderFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\SDK\BON\Common;$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\SDK\BON\Common;$(IntDir);..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -210,11 +210,12 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;..\..\..\..\..\src\UML GME\Interpreter;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <HeaderFileName>%(Filename).h</HeaderFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\SDK\BON\Common;$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\SDK\BON\Common;$(IntDir);..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -269,11 +270,12 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;..\..\..\..\..\src\UML GME\Interpreter;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <HeaderFileName>%(Filename).h</HeaderFileName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\SDK\BON\Common;$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\SDK\BON\Common;$(IntDir);..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;_USRDLL;BUILDER_OBJECT_NETWORK;UDM_DYNAMIC_LINKING;UML2XML;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -327,19 +329,37 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Formatter.cpp" />
     <ClCompile Include="..\..\..\..\..\src\UML GME\Interpreter\GetRelativeFilename.cpp" />
     <ClCompile Include="..\..\..\..\..\src\UML GME\Interpreter\int_exception.cpp" />
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lattrib.cpp" />
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lcardin.cpp" />
+    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lattrib.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lcardin.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pattrib.cpp">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pcardin.cpp">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\src\UML GME\Interpreter\StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -348,6 +368,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\..\src\UML GME\OclParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\src\UML GME\Interpreter\Component.def" />
@@ -356,24 +377,20 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <FileType>Document</FileType>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating code from attribute.g</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating code from attribute.g</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(IntDir)"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cd "$(IntDir)"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating code from attribute.g</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating code from attribute.g</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd "$(IntDir)"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cd "$(IntDir)"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pattrib.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PattribTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lattrib.cpp;%(Outputs)</Outputs>
@@ -383,24 +400,20 @@ java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
       <FileType>Document</FileType>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating code from cardinality.g</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating code from cardinality.g</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(IntDir)"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cd "$(IntDir)"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating code from cardinality.g</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating code from cardinality.g</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd "$(IntDir)"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mkdir "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
-cd "$(ProjectDir)$(OutDir)..\Gen\src\UML GME\Interpreter"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cd "$(IntDir)"
 java -cp "%ANTLR_JAR%" antlr.Tool "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Pcardin.cpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\PcardinTokenTypes.txt;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.hpp;$(OutDir)..\Gen\src\UML GME\Interpreter\Lcardin.cpp;%(Outputs)</Outputs>
