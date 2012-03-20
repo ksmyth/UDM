@@ -8,3 +8,4 @@
 #include <statreg.h>
 #endif
 
+#include "UdmBase.h"

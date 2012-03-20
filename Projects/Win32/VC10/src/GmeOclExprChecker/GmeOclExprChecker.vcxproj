@@ -49,31 +49,31 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\antlr.props" />
+    <Import Project="..\antlr.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\antlr.props" />
+    <Import Project="..\antlr.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\antlr.props" />
+    <Import Project="..\antlr.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
-    <Import Project="..\..\antlr.props" />
+    <Import Project="..\antlr.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\..\..\Build\Win32\VC10\Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\..\..\..\Build\Win32\VC10\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\..\Build\Win32\VC10\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\..\..\Build\Win32\VC10\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)obj\src\UML GME\ExprChecker\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)obj\src\UML GME\ExprChecker\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\..\..\Build\Win32\VC10\Release\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\..\..\Build\Win32\VC10\Release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\..\Build\Win32\VC10\Release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\..\..\Build\Win32\VC10\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)obj\src\UML GME\ExprChecker\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)obj\src\UML GME\ExprChecker\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
@@ -97,7 +97,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     </CustomBuildStep>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\..\include;$(OutDir)..\Gen\src\UML GME\Interpreter;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\include;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -122,7 +122,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>nafxcwd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ModuleDefinitionFile>..\..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(IntDir)GmeOclExprChecker.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -139,7 +139,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Midl>
-      <AdditionalIncludeDirectories>..\..\..\..\..\..\src\UML GME\ExprChecker;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\src\UML GME\ExprChecker;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -158,7 +158,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     </CustomBuildStep>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\include;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\include;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -183,7 +183,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>nafxcwd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ModuleDefinitionFile>..\..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(IntDir)GmeOclExprChecker.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -216,7 +216,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>..\..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\..\include;$(OutDir)..\Gen\src\UML GME\Interpreter;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\include;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -241,7 +241,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>nafxcw.lib;msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ModuleDefinitionFile>..\..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -259,7 +259,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     </ProjectReference>
     <Midl>
       <HeaderFileName>%(Filename).h</HeaderFileName>
-      <AdditionalIncludeDirectories>..\..\..\..\..\..\src\UML GME\ExprChecker;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\..\src\UML GME\ExprChecker;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -279,7 +279,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\..\include;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(OutDir)..\Gen\src\UML GME\Interpreter;..\..\..\..\..\src\UML GME\ExprChecker;..\..\..\..\..\src\UML GME\Interpreter;..\..\..\..\..\src\UdmOCLPat\GOCL\Include;..\..\..\..\..\include;$(GME_ROOT)\sdk\bon\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;OCL_USING_STL_NAMESPACE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -304,7 +304,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>nafxcw.lib;msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ModuleDefinitionFile>..\..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -321,32 +321,32 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.cpp" />
+    <ClCompile Include="..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.cpp" />
+    <ClCompile Include="..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.cpp" />
     <ClCompile Include="$(GME_ROOT)\sdk\bon\common\ComHelp.cpp" />
     <ClCompile Include="$(GME_ROOT)\sdk\bon\common\ComponentDll.cpp" />
     <ClCompile Include="$(GME_ROOT)\sdk\bon\common\ComponentObj.cpp" />
     <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Console.cpp" />
     <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Exceptions.cpp" />
     <ClCompile Include="$(GME_ROOT)\sdk\bon\common\Formatter.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\src\UML GME\ExprChecker\GMECommon.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\src\UML GME\ExprChecker\GMESyntacticSemanticDialog.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lattrib.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lcardin.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pattrib.cpp">
+    <ClCompile Include="..\..\..\..\..\src\UML GME\ExprChecker\GMECommon.cpp" />
+    <ClCompile Include="..\..\..\..\..\src\UML GME\ExprChecker\GMESyntacticSemanticDialog.cpp" />
+    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lattrib.cpp" />
+    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lcardin.cpp" />
+    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pattrib.cpp">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pcardin.cpp">
+    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pcardin.cpp">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">/wd4101 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\src\UML GME\ExprChecker\StdAfx.cpp">
+    <ClCompile Include="..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.cpp" />
+    <ClCompile Include="..\..\..\..\..\src\UML GME\ExprChecker\StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
@@ -356,58 +356,54 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\src\UML GME\ExprChecker\UMLConstraint.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\src\UML GME\ExprChecker\UMLFacade.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\src\UML GME\ExprChecker\UMLTypeEx.cpp" />
+    <ClCompile Include="..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.cpp" />
+    <ClCompile Include="..\..\..\..\..\src\UML GME\ExprChecker\UMLConstraint.cpp" />
+    <ClCompile Include="..\..\..\..\..\src\UML GME\ExprChecker\UMLFacade.cpp" />
+    <ClCompile Include="..\..\..\..\..\src\UML GME\ExprChecker\UMLTypeEx.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def" />
-    <None Include="..\..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico" />
-    <None Include="..\..\..\..\..\..\src\UML GME\ExprChecker\constraint_icons.bmp" />
-    <None Include="..\..\..\..\..\..\src\UML GME\ExprChecker\error_icons.bmp" />
-    <None Include="..\..\..\..\..\..\src\UML GME\ExprChecker\line_icons.bmp" />
-    <None Include="..\..\..\..\..\..\src\UML GME\ExprChecker\warning.ico" />
+    <None Include="..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.def" />
+    <None Include="..\..\..\..\..\src\UML GME\ExprChecker\CompIcon.ico" />
+    <None Include="..\..\..\..\..\src\UML GME\ExprChecker\constraint_icons.bmp" />
+    <None Include="..\..\..\..\..\src\UML GME\ExprChecker\error_icons.bmp" />
+    <None Include="..\..\..\..\..\src\UML GME\ExprChecker\line_icons.bmp" />
+    <None Include="..\..\..\..\..\src\UML GME\ExprChecker\warning.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.rc">
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    <ResourceCompile Include="..\..\..\..\..\src\UML GME\ExprChecker\GmeOclExprChecker.rc">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OUTDIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OUTDIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OUTDIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OUTDIR);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\Interpreter\AttributeObject.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\Interpreter\CardinalityObject.h" />
     <ClInclude Include="$(GME_ROOT)\sdk\bon\common\ComHelp.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\ExprChecker\ComponentConfig.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\ComponentConfig.h" />
     <ClInclude Include="$(GME_ROOT)\sdk\bon\common\ComponentDll.h" />
     <ClInclude Include="$(GME_ROOT)\sdk\bon\common\ComponentObj.h" />
     <ClInclude Include="$(GME_ROOT)\sdk\bon\common\Console.h" />
     <ClInclude Include="$(GME_ROOT)\sdk\bon\common\Formatter.h" />
     <ClInclude Include="$(GME_ROOT)\sdk\bon\common\GMECOM.H" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\ExprChecker\GMECommon.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\ExprChecker\GMESyntacticSemanticDialog.h" />
-    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lcardin.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pattrib.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pcardin.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\ExprChecker\Resource.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\ExprChecker\StdAfx.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\ExprChecker\UMLConstraint.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\ExprChecker\UMLFacade.h" />
-    <ClInclude Include="..\..\..\..\..\..\src\UML GME\ExprChecker\UMLTypeEx.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\GMECommon.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\GMESyntacticSemanticDialog.h" />
+    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Lcardin.hpp" />
+    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pattrib.hpp" />
+    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\PattribTokenTypes.hpp" />
+    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\Pcardin.hpp" />
+    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UML GME\Interpreter\PcardinTokenTypes.hpp" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\Resource.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\StdAfx.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\Interpreter\StringBuffer.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\UMLConstraint.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\UMLFacade.h" />
+    <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\UMLTypeEx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Interpreter\BONComponent.vcxproj">
+    <ProjectReference Include="UML2XML\UML2XML.vcxproj">
       <Project>{207da527-ec80-4a83-b5c2-b2a02281afba}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
