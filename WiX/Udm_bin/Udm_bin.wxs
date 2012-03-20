@@ -112,10 +112,10 @@
       <?endif?>
     </DirectoryRef>
 
+    <ComponentGroupRef Id="MetaGME2Uml"/>
+    <ComponentGroupRef Id="UML2XML"/>
     <?if $(sys.BUILDARCH)=x86 ?>
     <ComponentGroupRef Id="UMLOCLExpressionChecker"/>
-    <ComponentGroupRef Id="UML2XML"/>
-    <ComponentGroupRef Id="MetaGME2Uml"/>
     <DirectoryRef Id="Python26">
       <Component>
         <File Source="..\bin\Python26\udm.pyd" />
