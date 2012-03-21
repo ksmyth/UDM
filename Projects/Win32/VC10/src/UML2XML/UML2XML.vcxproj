@@ -78,11 +78,11 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\..\Build\Win32\VC10\Debug\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)obj\src\UML GME\Interpreter\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)obj\src\UML2XML\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\..\Build\Win32\VC10\Release\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)obj\src\UML GME\Interpreter\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)obj\src\UML2XML\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
@@ -97,11 +97,11 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <Outputs>$(IntDir)regsvr32.trg;%(Outputs)</Outputs>
     </CustomBuildStep>
     <Midl>
-      <AdditionalOptions>/server none /client none /I "$(GME_ROOT)\Interfaces" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;..\..\..\..\..\src\UML GME\Interpreter;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <OutputDirectory>$(IntDir)</OutputDirectory>
+      <TypeLibraryName>$(ProjectName).tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -124,6 +124,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>ANTLRD.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -152,11 +153,11 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <Outputs>$(IntDir)regsvr32.trg;%(Outputs)</Outputs>
     </CustomBuildStep>
     <Midl>
-      <AdditionalOptions>/server none /client none /I "$(GME_ROOT)\Interfaces" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;..\..\..\..\..\src\UML GME\Interpreter;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <OutputDirectory>$(IntDir)</OutputDirectory>
+      <TypeLibraryName>$(ProjectName).tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -179,6 +180,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>ANTLRD.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -206,11 +208,11 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <Outputs>$(IntDir)regsvr32.trg;%(Outputs)</Outputs>
     </CustomBuildStep>
     <Midl>
-      <AdditionalOptions>/server none /client none /I "$(GME_ROOT)\Interfaces" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;..\..\..\..\..\src\UML GME\Interpreter;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <OutputDirectory>$(IntDir)</OutputDirectory>
+      <TypeLibraryName>$(ProjectName).tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
@@ -235,6 +237,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
@@ -266,11 +269,11 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <Outputs>$(IntDir)regsvr32.trg;%(Outputs)</Outputs>
     </CustomBuildStep>
     <Midl>
-      <AdditionalOptions>/server none /client none /I "$(GME_ROOT)\Interfaces" %(AdditionalOptions)</AdditionalOptions>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;..\..\..\..\..\src\UML GME\Interpreter;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <OutputDirectory>$(IntDir)</OutputDirectory>
+      <TypeLibraryName>$(ProjectName).tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
@@ -295,6 +298,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
