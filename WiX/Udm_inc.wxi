@@ -18,7 +18,7 @@
   <?define Build='..\Build\x64\'?>
   <?define UdmDllVC10=UdmDll_3_2_v100_x64.dll?>
   <?define XercesC=xerces-c_2_8_x64.dll?>
-  <?define Great_bin=$(var.GREAT_PATH)\bin?>
+  <?define Great_bin=$(var.GREAT_PATH)\bin\x64?>
   <?else ?>
   <?define UpgradeCode='D656A56A-F239-4B35-865C-840B1EA235E0'?>
   <?define UdmDll_VS10_Package_Id='8A4C258E-953D-402B-9B16-5706B1A8CF56'?>
