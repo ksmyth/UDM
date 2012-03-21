@@ -138,8 +138,8 @@
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin &amp;&amp; ^
-copy "$(OutDir)"\UdmDll_VS10.lib "$(UDM_PATH)"\lib
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin &amp;&amp; ^
+xcopy /Y/D/F "$(OutDir)"\UdmDll_VS10.lib "$(UDM_PATH)"\lib
 </Command>
       <Message>Copy $(TargetName) to bin</Message>
       <Outputs>$(UDM_PATH)\bin\$(TargetName)</Outputs>
@@ -196,8 +196,8 @@ copy "$(OutDir)"\UdmDll_VS10.lib "$(UDM_PATH)"\lib
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin &amp;&amp; ^
-copy "$(OutDir)"\UdmDll_v100_x64.lib "$(UDM_PATH)"\lib
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin &amp;&amp; ^
+xcopy /Y/D/F "$(OutDir)"\UdmDll_v100_x64.lib "$(UDM_PATH)"\lib
 </Command>
       <Message>Copy $(TargetName) to bin</Message>
       <Outputs>$(UDM_PATH)\bin\$(TargetName)</Outputs>
@@ -252,8 +252,8 @@ copy "$(OutDir)"\UdmDll_v100_x64.lib "$(UDM_PATH)"\lib
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin &amp;&amp; ^
-copy "$(OutDir)"\UdmDll_VS10D.lib "$(UDM_PATH)"\lib
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin &amp;&amp; ^
+xcopy /Y/D/F "$(OutDir)"\UdmDll_VS10D.lib "$(UDM_PATH)"\lib
 </Command>
       <Message>Copy $(TargetName) to bin</Message>
       <Outputs>$(UDM_PATH)\bin\$(TargetName)</Outputs>
@@ -307,8 +307,8 @@ copy "$(OutDir)"\UdmDll_VS10D.lib "$(UDM_PATH)"\lib
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin &amp;&amp; ^
-copy "$(OutDir)"\UdmDll_v100_x64D.lib "$(UDM_PATH)"\lib
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin &amp;&amp; ^
+xcopy /Y/D/F "$(OutDir)"\UdmDll_v100_x64D.lib "$(UDM_PATH)"\lib
 </Command>
       <Message>Copy $(TargetName) to bin</Message>
       <Outputs>$(UDM_PATH)\bin\$(TargetName)</Outputs>
