@@ -139,6 +139,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <Midl>
       <AdditionalIncludeDirectories>..\..\..\..\..\src\UML GME\ExprChecker;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
     </Midl>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -200,6 +201,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <Midl>
       <AdditionalIncludeDirectories>..\..\..\..\..\src\UML GME\ExprChecker;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
     </Midl>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -263,6 +265,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <Midl>
       <AdditionalIncludeDirectories>..\..\..\..\..\src\UML GME\ExprChecker;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
     </Midl>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -325,6 +328,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <Midl>
       <AdditionalIncludeDirectories>..\..\..\..\..\src\UML GME\ExprChecker;$(GME_ROOT)\Interfaces;$(GME_ROOT)\Gme\Interfaces;$(GME_ROOT)\bin;$(GME_ROOT)\Gme\Release;$(GME_ROOT)\Gme\Debug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
