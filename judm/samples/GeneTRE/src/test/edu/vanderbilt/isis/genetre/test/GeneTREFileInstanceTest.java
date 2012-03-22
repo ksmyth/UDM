@@ -191,6 +191,7 @@ public class GeneTREFileInstanceTest extends TestCase {
      * @throws UdmException
      */
     public void testOpenExistingFromFile() throws UdmException {
+    	testCreateBlankInstance();
         ContainerFileFactory gtf = FactoryRepository.getgenetreContainerFileFactory();
         Container con = gtf.open(NEW_INSTANCE_FILE);
 

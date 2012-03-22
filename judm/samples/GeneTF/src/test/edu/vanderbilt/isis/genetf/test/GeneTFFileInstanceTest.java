@@ -167,6 +167,7 @@ public class GeneTFFileInstanceTest extends TestCase {
      * @throws UdmException
      */
     public void testOpenExistingFromFile() throws UdmException {
+    	testCreateBlankInstance();
         ContainerFileFactory gtf = FactoryRepository.getgenetfContainerFileFactory();
         Container con = gtf.open(NEW_INSTANCE_FILE);
 
