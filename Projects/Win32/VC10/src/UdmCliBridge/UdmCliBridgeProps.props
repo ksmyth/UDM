@@ -7,7 +7,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir>$([System.IO.Path]::GetFullPath(..\..\..\..\..\Build\Win32\VC10\$(Configuration)))</OutDir>
+    <OutDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\..\..\Build\Win32\VC10\$(Configuration)))\</OutDir>
     <IntDir>$(OutDir)obj\src\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
