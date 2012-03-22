@@ -111,7 +111,7 @@ Source: {#UDMPATH}\Build\Win32\VC10\Debug\{#UDMDLLDVS10}; DestDir: {app}\bin; Co
 Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCli.dll; DestDir: {app}\bin; StrongAssemblyName: "UdmCli, Version=3.2.10.0, Culture=neutral, PublicKeyToken=9b61694741cb5693, ProcessorArchitecture=x86"; Flags: "gacinstall sharedfile uninsnosharedfileprompt"; Components: CS
 Source: {#UDMPATH}\Build\Win32\VC10\Release\UdmCliBridge.dll; DestDir: {app}\bin; Components: CS; Flags: ignoreversion
 Source: {#UDMPATH}\src\UdmCliGen\dist\UdmCliGen.exe; DestDir: {app}\bin; Components: CS; Flags: ignoreversion
-Source: {#UDMPATH}\src\UdmCliGen\dist\python26.dll; DestDir: {app}\bin; Components: Python CS; Flags: ignoreversion
+Source: {#UDMPATH}\src\UdmCliGen\dist\python27.dll; DestDir: {app}\bin; Components: Python CS; Flags: ignoreversion
 Source: {#UDMPATH}\bin\Python26\udm.pyd; DestDir: {app}\bin\Python26; Components: Python CS; Flags: ignoreversion
 Source: {#UDMPATH}\bin\Python26\__init__.py; DestDir: {app}\bin\Python26; Components: Python CS; Flags: ignoreversion
 Source: {#UDMPATH}\bin\Python27\udm.pyd; DestDir: {app}\bin\Python27; Components: Python; Flags: ignoreversion
