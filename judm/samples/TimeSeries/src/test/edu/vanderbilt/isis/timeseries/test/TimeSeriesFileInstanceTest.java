@@ -158,6 +158,7 @@ public class TimeSeriesFileInstanceTest extends TestCase {
      */
     public void testOpenExistingFromFileSaveToStream()
         throws UdmException, IOException {
+    	testCreateBlankInstance();
         ContainerFileFactory gtf = FactoryRepository.getTimeSeriesContainerFileFactory();
         Container con = gtf.open(NEW_INSTANCE_FILE);
 
