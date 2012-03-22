@@ -1,5 +1,5 @@
 # Script to generate .exe file for UdmCliGen.py
-# /c/Python26/python UdmCliGen-setup.py py2exe
+# /c/Python27/python UdmCliGen-setup.py py2exe
 
 from distutils.core import setup
 import py2exe
