@@ -107,7 +107,7 @@
         <File Source="..\src\UdmCliGen\dist\UdmCliGen.exe" />
       </Component>
       <Component>
-        <File Source="..\src\UdmCliGen\dist\python26.dll" />
+        <File Source="..\src\UdmCliGen\dist\python27.dll" />
       </Component>
       <?endif?>
     </DirectoryRef>
