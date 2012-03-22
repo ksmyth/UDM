@@ -28,7 +28,7 @@ goto setup_args
 
 :start
 pushd %_UDM_PATH%\judm
-ant -Dudm.bin.dir=%_UDM_PATH%\Build\Win32\%_VC%\%_UDM_BUILD% %_CMD_LINE%
+ant "-Dudm.bin.dir=%_UDM_PATH%\Build\Win32\%_VC%\%_UDM_BUILD%" %_CMD_LINE%
 popd
 
 exit /b
