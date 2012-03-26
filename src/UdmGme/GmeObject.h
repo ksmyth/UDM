@@ -145,6 +145,7 @@ namespace UdmGme
 										//does not recurse when a a derived/instace
 										//object is created with an archetype that has children
 										//(this is done by the underlaying MGA layer
+		virtual void getChildRole(Udm::ObjectImpl *c, ::Uml::CompositionChildRole &ret) const;
 	// --- associations
 
 

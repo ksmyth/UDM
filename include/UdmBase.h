@@ -413,6 +413,11 @@ namespace UDM_NAMESPACE
 			const bool real_archetype = true,
 			const bool need_safetype = false) = 0;
 
+		/*
+			If c is a child of this object, then set ret to be the role taken by the child,
+			otherwise set ret to null.
+		 */
+		virtual void getChildRole(ObjectImpl *c, ::Uml::CompositionChildRole &ret) const = 0;
 
 		/* 
 			should be invoked when an object has an archetype
@@ -655,6 +660,8 @@ namespace UDM_NAMESPACE
 			const bool subtype = false,
 			const bool real_archetype = true,
 			const bool need_safetype = false) { throw e; }
+
+		virtual void getChildRole(ObjectImpl *c, ::Uml::CompositionChildRole &ret) const { throw e; }
 
 		virtual vector<ObjectImpl*> getAssociation(const ::Uml::AssociationRole &meta, int mode = TARGETFROMPEER) const { throw e; }
 		virtual void setAssociation(
@@ -3009,6 +3016,9 @@ namespace UDM_NAMESPACE
 		// Retrieves all children considering role names and child types.
 		// To ignore child types set clsChildType to ClassType(NULL).
 		set<Object> GetChildObjects(const CompositionInfo& cmpType, const ::Uml::Class & clsChildType) const;
+		// UDM TOMI Paradigm Independent Interface
+		// Get the composition child role the given child has in this parent. Sets the ret parameter to NULL if the given child is not actually a child.
+		void GetChildRole(const Object &child, ::Uml::CompositionChildRole &ret) const;
 		// UDM TOMI Paradigm Independent Interface
 		// Test if the object is in the tree rooted at where
 		bool IsNodeOfTree(const Object &where);

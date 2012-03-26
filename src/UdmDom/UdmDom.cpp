@@ -2381,6 +2381,47 @@ namespace UdmDom
 				return dep;
 		}
 
+		void getChildRole(ObjectImpl *c, ::Uml::CompositionChildRole &ret) const
+		{
+			ret = NULL;
+			if (c == NULL || c == &Udm::_null) return;
+
+			DomObject &cc = *static_cast<DomObject *>(c);
+
+			// check that c is our child
+			bool is_child = false;
+			for (DOMNode *n = dom_element->getFirstChild(); n != NULL; n = n->getNextSibling())
+				if (n->getNodeType() == DOMNode::ELEMENT_NODE && n->isEqualNode(cc.dom_element))
+				{
+					is_child = true;
+					break;
+				}
+
+			if (!is_child) return;
+
+			::Uml::Composition comp = ::Uml::matchChildToParent(cc.m_type, m_type);
+			if (comp)
+			{
+				ret = comp.childRole();
+				return;
+			}
+
+			XMLCh *chas = (XMLCh*) cc.dom_element->getAttribute(gXML___child_as);
+
+			set< ::Uml::Class> pancs = ::Uml::AncestorClasses(m_type);
+			set< ::Uml::Class> cancs = ::Uml::AncestorClasses(cc.m_type);
+			for (set< ::Uml::Class>::const_iterator j = cancs.begin(); j != cancs.end(); j++) {
+				set< ::Uml::CompositionChildRole> cr = j->childRoles();
+				for (set< ::Uml::CompositionChildRole>::const_iterator i = cr.begin(); i != cr.end(); i++)
+					if (pancs.find(::Uml::theOther(*i).target()) != pancs.end())
+						if (DSFind(chas, GetANameFor(i->parent())) >= 0) {
+							ret = *i;
+							return;
+						}
+			}
+		}
+
+
 	// --- associations
 
 	public:

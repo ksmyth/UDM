@@ -2301,6 +2301,100 @@ bbreak:			;
 	};
 */
 
+	void GmeObject::getChildRole(Udm::ObjectImpl *c, ::Uml::CompositionChildRole &ret) const
+	{
+		ret = NULL;
+		if (c == NULL || c == &Udm::_null) return;
+
+		GmeObject *cc = static_cast<GmeObject *>(c);
+
+		// check that c is our child
+		IMgaMetaRolePtr rr;
+		bool is_child = false;
+		if (folderself)
+		{
+			if (cc->folderself)
+			{
+				IMgaFoldersPtr fchds = folderself->ChildFolders;
+				MGACOLL_ITERATE(IMgaFolder, fchds)
+				{
+					if (MGACOLL_ITER == cc->folderself)
+					{
+						is_child = true;
+						break;
+					}
+				}
+				MGACOLL_ITERATE_END;
+			}
+			else
+			{
+				IMgaFCOsPtr chds = folderself->ChildFCOs;
+				MGACOLL_ITERATE(IMgaFCO, chds) 
+				{
+					if (MGACOLL_ITER == cc->self)
+					{
+						is_child = true;
+						rr = MGACOLL_ITER->MetaRole;
+						break;
+					}
+				}
+				MGACOLL_ITERATE_END;
+			}
+		}
+		else
+		{
+			IMgaModelPtr model = self;
+			if (model == NULL) return;
+
+			IMgaFCOsPtr chds = model->ChildFCOs;
+			MGACOLL_ITERATE(IMgaFCO, chds) 
+			{
+				if (MGACOLL_ITER == cc->self)
+				{
+					is_child = true;
+					rr = MGACOLL_ITER->MetaRole;
+					break;
+				}
+			}
+			MGACOLL_ITERATE_END;
+		}
+
+		if (!is_child) return;
+
+		// if only one composition role permitted, then return it
+		::Uml::Composition comp = ::Uml::matchChildToParent(cc->m_type, m_type);
+		if (comp)
+		{
+			ret = comp.childRole();
+			return;
+		}
+
+		ASSERT(rr != NULL);
+		string MetaRole((const char *) rr->Name);
+
+		set< ::Uml::Class> pancs = ::Uml::AncestorClasses(m_type);
+		set< ::Uml::Class> cancs = ::Uml::AncestorClasses(cc->m_type);
+		for (set< ::Uml::Class>::const_iterator j = cancs.begin(); j != cancs.end(); j++) {
+			set< ::Uml::CompositionChildRole> cr = j->childRoles();
+			for (set< ::Uml::CompositionChildRole>::const_iterator i = cr.begin(); i != cr.end(); i++)
+				if (pancs.find(::Uml::theOther(*i).target()) != pancs.end())
+				{
+					if (MetaRole == (string)i->name())
+					{
+						ret = *i;
+						return;
+					}
+					set<string> MetaRoleFilter = ((GmeDataNetwork*) mydn)->GetMetaRoleFilter(*i);
+					if (MetaRoleFilter.find(MetaRole) != MetaRoleFilter.end())
+					{
+						ret = *i;
+						return;
+					}
+				}
+		}
+	}
+
+
 	IMgaAttributePtr GmeObject::getAttribute(BSTR name)
 	{
 		IMgaMetaAttributePtr attr_meta;

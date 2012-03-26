@@ -1075,6 +1075,14 @@ UDM_DLL set<Object> Object::GetChildObjects(const CompositionInfo& cmpType, cons
 
 
 // UDM TOMI Paradigm Independent Interface
+// Get the composition child role the given child has in this parent. Sets the ret parameter to NULL if the given child is not actually a child.
+UDM_DLL void Object::GetChildRole(const Object &child, ::Uml::CompositionChildRole &ret) const
+{
+	impl->getChildRole(child.__impl(), ret);
+}
+
+
+// UDM TOMI Paradigm Independent Interface
 // Test if the object is in the tree rooted at where
 UDM_DLL bool Object::IsNodeOfTree(const Object &where)
 {

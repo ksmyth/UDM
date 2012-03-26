@@ -1770,6 +1770,20 @@ namespace UdmStatic
 									// the final refCount is 3 after leaving this function !
 	}
 
+	void StaticObject::getChildRole(ObjectImpl *c, ::Uml::CompositionChildRole &ret) const
+	{
+		ret = NULL;
+		if (c == NULL || c == &Udm::_null) return;
+
+		for (children_type::const_iterator i = m_children.begin(); i != m_children.end(); i++)
+			if (i->second == c)
+			{
+				Udm::DataNetwork * meta_dn = ((StaticDataNetwork*)c->__getdn())->GetMetaDn();
+				ret = ::Uml::CompositionChildRole::Cast(meta_dn->ObjectById(i->first));
+				return;
+			}
+	}
+
 
 	vector<ObjectImpl*> StaticObject::getAssociation(const ::Uml::AssociationRole &meta, int mode ) const
 	{

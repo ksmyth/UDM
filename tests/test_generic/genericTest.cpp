@@ -265,7 +265,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				s3t2.position() = "(220,100)";
 
 
-			
+
 
 	// Create bulbs with terminals
 				Bulb bulb1	= Bulb::Create(doubleBulbLamp); 
@@ -304,11 +304,35 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				b3t1.position() = "(320,100)";
 				ElectricTerminal b3t2 = ElectricTerminal::Create(bulb3);
 				b3t2.position() = "(320,200)";
-	
 
 
+				// Check child roles
+				{
+					::Uml::CompositionChildRole ccr;
 
+					// child can have only one possible role
+					doubleBulbLamp.GetChildRole(thePlug, ccr);
+					CPPUNIT_ASSERT(ccr = Lamp::meta_Plug_child);
 
+					// child can have multiple roles
+					doubleBulbLamp.GetChildRole(mainSwitch, ccr);
+					CPPUNIT_ASSERT(ccr == Lamp::meta_MainSwitch);
+
+					doubleBulbLamp.GetChildRole(switch1, ccr);
+					CPPUNIT_ASSERT(ccr == Lamp::meta_FunctionSwitch);
+
+					doubleBulbLamp.GetChildRole(bulb3, ccr);
+					CPPUNIT_ASSERT(ccr = Lamp::meta_Bulb_children);
+
+					// first parameter is not actually a child
+					doubleBulbLamp.GetChildRole(mst1, ccr);
+					CPPUNIT_ASSERT(!ccr);
+
+					doubleBulbLamp.GetChildRole(Udm::null, ccr);
+					CPPUNIT_ASSERT(!ccr);
+				}
+
+			
 
 
 

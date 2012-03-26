@@ -335,6 +335,7 @@ namespace UdmStatic
 		vector<ObjectImpl*> getChildren(const ::Uml::CompositionChildRole &meta, const ::Uml::Class &cls) const;
 		void setChildren(const ::Uml::CompositionChildRole &meta, const vector<ObjectImpl*> &a, const bool direct = true);
 		ObjectImpl *createChild(const ::Uml::CompositionChildRole &childrole, const ::Uml::Class &meta, const Udm::ObjectImpl* archetype = NULL, const bool subtype = false, const bool real_archetype = true, const bool need_safetype = false);
+		void getChildRole(ObjectImpl *c, ::Uml::CompositionChildRole &ret) const;
 
 	// --- associations
 		typedef udm_multimap<uniqueId_type, StaticObject*> assoc_type;
