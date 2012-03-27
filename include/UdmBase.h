@@ -413,12 +413,6 @@ namespace UDM_NAMESPACE
 			const bool real_archetype = true,
 			const bool need_safetype = false) = 0;
 
-		/*
-			If c is a child of this object, then set ret to be the role taken by the child,
-			otherwise set ret to null.
-		 */
-		virtual void getChildRole(ObjectImpl *c, ::Uml::CompositionChildRole &ret) const = 0;
-
 		/* 
 			should be invoked when an object has an archetype
 			returns false if the object is there because one of the parent inherited it
@@ -524,6 +518,13 @@ namespace UDM_NAMESPACE
 		// root folder is added by default, no reverse order suport, delimiter is never added to the front
 		virtual string getPath( const string &strDelimiter = "/", bool bNeedRootFolder = true ) const;
 		virtual string toString() const;
+
+		/*
+			If c is a child of this object, then set ret to be the role taken by the child,
+			otherwise set ret to null.
+		 */
+		virtual void getChildRole(ObjectImpl *c, ::Uml::CompositionChildRole &ret) const = 0;
+
 	};
 
 
