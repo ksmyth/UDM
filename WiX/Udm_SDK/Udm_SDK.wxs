@@ -102,6 +102,9 @@
       <Component>
         <File Source="..\etc\UmlMeta.xme" />
       </Component>
+      <Component>
+        <File Source="..\Build\Win32\VC10\Release\StrResGen.exe" />
+      </Component>
     </DirectoryRef>
 
     <DirectoryRef Id="etc_Java">
