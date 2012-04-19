@@ -537,7 +537,8 @@ namespace UDM_NAMESPACE
 		double d;
 		for (vector<string>::const_iterator i = vals.begin(); i != vals.end(); i++)
 		{
-			if(sscanf(i->c_str(), "%lf", &d) != 1) throw udm_exception("Attr is of non-float format: " + sc_delimited);
+			if (!UdmUtil::stringToDouble(i->c_str(), d))
+				throw udm_exception("Attr is of non-float format: '" + sc_delimited + "'");
 			ret.push_back(d);
 		}
 

@@ -811,6 +811,49 @@ namespace UdmUtil
 		return r;
 	}
 
+	// return: true if str represents -Inf, Inf, or NaN
+	static bool ParseSpecialDouble(const char* str, double& out)
+	{
+		const char* val = (*str == '-' && *str != '\0') ? str + 1 : str;
+		if (strnicmp("-Inf", str, 4) == 0 || strnicmp("-1.#INF", str, 7) == 0)
+		{
+			out = -std::numeric_limits<double>::infinity();
+			return true;
+		}
+		else if (strnicmp("Inf", str, 3) == 0 || strnicmp("1.#INF", str, 6) == 0)
+		{
+			out = std::numeric_limits<double>::infinity();
+			return true;
+		}
+		else if (strnicmp("NaN", val, 3) == 0 || strnicmp("1.#IND", val, 7) == 0 || strnicmp("1.#QNAN", val, 7) == 0 || strnicmp("1.#SNAN", val, 7) == 0)
+		{
+			out = std::numeric_limits<double>::quiet_NaN();
+			return true;
+		}
+		return false;
+	}
+
+	UDM_DLL bool stringToDouble(const char* val, double& out)
+	{
+		if (ParseSpecialDouble(val, out))
+		{
+			return true;
+		}
+		else
+		{
+			char* endptr;
+			double tmp;
+			tmp = strtod(val, &endptr);
+
+			if (*endptr != '\0')
+			{
+				return false;
+			}
+			out = tmp;
+			return true;
+		}
+	}
+
 	UDM_DLL string doubleToString(double val, int minimum_precision)
 	{
 		const int MAXIMAL_PRECISION = 19;
@@ -818,7 +861,27 @@ namespace UdmUtil
 
 		char result[64];
 
+		// special values per xml-xerces/c/src/util/XMLDouble.cpp
+		if (val != val)
+		{
+			return "NaN";
+		}
+		else if(val == std::numeric_limits<double>::infinity())
+		{
+			return "INF";
+		}
+		else if (val == -std::numeric_limits<double>::infinity())
+		{
+			return "-INF";
+		}
+
+		// This works (but is not minimal):
+		//_snprintf_s(result, 64, "%.17g", val);
+		//return result;
+
 		int precision_is_good;
+		// KMS: this code is incredibly inefficient
+		// TODO: use something like Gay's dtoa.c
 
 		do {
 			UDM_ASSERT(precision <= MAXIMAL_PRECISION);
@@ -834,7 +897,8 @@ namespace UdmUtil
 #endif
 
 			double d;
-			if (sscanf(result, "%lf", &d) != 1) throw udm_exception("Internal error when converting from double to string");
+			if (sscanf(result, "%lf", &d) != 1)
+				throw udm_exception("Internal error when converting from double to string");
 
 			precision_is_good = d == val;
 			precision++;

@@ -1250,18 +1250,13 @@ namespace UdmDom
 			if(EmptyVal(a)) return 0.0;
 
 			char *a_buf = XMLString::transcode(a);
+			double d;
 
-			char *endptr;
-			double d = strtod(a_buf, &endptr);
-
-			if (*endptr != '\0')
+			if (!UdmUtil::stringToDouble(a_buf, d))
 			{
 				XMLString::release(&a_buf);
 				throw udm_exception("Attr is of non-float format");
 			}
-
-			XMLString::release(&a_buf);
-
 			return d;
 		}
 

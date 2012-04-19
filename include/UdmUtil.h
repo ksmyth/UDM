@@ -77,6 +77,8 @@ namespace UdmUtil
 	// Converts a double value to a string, using the least necessary
 	// precision to represent the original double value.
 	UDM_DLL string doubleToString(double val, int minimum_precision = 2);
+	// returns false if parsing failed
+	UDM_DLL bool stringToDouble(const char* val, double& out);
 	UDM_DLL string stacktrace();	
 };
 
