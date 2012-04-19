@@ -22,6 +22,7 @@
 
 #include <sstream>
 #include <limits>
+#include <string.h>
 
 
 using namespace Uml;
