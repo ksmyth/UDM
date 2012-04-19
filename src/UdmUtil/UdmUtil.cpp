@@ -21,7 +21,7 @@
 #endif
 
 #include <sstream>
-
+#include <limits>
 
 
 using namespace Uml;
