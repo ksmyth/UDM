@@ -815,17 +815,20 @@ namespace UdmUtil
 	static bool ParseSpecialDouble(const char* str, double& out)
 	{
 		const char* val = (*str == '-' && *str != '\0') ? str + 1 : str;
-		if (strnicmp("-Inf", str, 4) == 0 || strnicmp("-1.#INF", str, 7) == 0)
+#if defined(_WIN32)
+#define strncasecmp _strnicmp
+#endif
+		if (strncasecmp("-Inf", str, 4) == 0 || strncasecmp("-1.#INF", str, 7) == 0)
 		{
 			out = -std::numeric_limits<double>::infinity();
 			return true;
 		}
-		else if (strnicmp("Inf", str, 3) == 0 || strnicmp("1.#INF", str, 6) == 0)
+		else if (strncasecmp("Inf", str, 3) == 0 || strncasecmp("1.#INF", str, 6) == 0)
 		{
 			out = std::numeric_limits<double>::infinity();
 			return true;
 		}
-		else if (strnicmp("NaN", val, 3) == 0 || strnicmp("1.#IND", val, 7) == 0 || strnicmp("1.#QNAN", val, 7) == 0 || strnicmp("1.#SNAN", val, 7) == 0)
+		else if (strncasecmp("NaN", val, 3) == 0 || strncasecmp("1.#IND", val, 7) == 0 || strncasecmp("1.#QNAN", val, 7) == 0 || strncasecmp("1.#SNAN", val, 7) == 0)
 		{
 			out = std::numeric_limits<double>::quiet_NaN();
 			return true;
