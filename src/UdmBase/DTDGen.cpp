@@ -418,7 +418,7 @@ namespace DTDGen
 
 				if(::Uml::Association(iii->association())) {
 					if(ass) {
-						throw udm_exception("Class " + name + "has multiple associations"); 
+						throw udm_exception("Class " + name + " has multiple associations"); 
 					}
 					else ass = iii->association();
 				}
@@ -738,7 +738,7 @@ namespace DTDGen
 
 			if(::Uml::Association(iii->association())) {
 				if(ass) {
-					throw udm_exception("Class " + c.getPath2("::", false) + "has multiple associations"); 
+					throw udm_exception("Class " + c.getPath2("::", false) + " has multiple associations"); 
 				}
 				else ass = iii->association();
 			}
