@@ -1974,8 +1974,19 @@ bbreak:			;
 			{
 				//the CompositionRole of the contained FCO
 				string MetaRole((const char *)MGACOLL_ITER->MetaRole->Name);
+				string roleWithNamespaces = (string)role.name();
+				if (roleWithNamespaces.length() != 0)
+				{
+					Uml::Namespace ns = static_cast<Uml::Class>(role.target()).parent_ns();
+					while (ns)
+					{
+						roleWithNamespaces = static_cast<std::string>(ns.name()) + "::" + roleWithNamespaces;
+						ns = ns.parent_ns();
+					}
+				}
 
-				if (MetaRole != (string)role.name())//most common case
+
+				if (MetaRole != roleWithNamespaces)//most common case
 				{
 					//get the possible MetaRoles for containment via this role
 					set<string> MetaRoleFilter = ((GmeDataNetwork*)mydn)->GetMetaRoleFilter(role);
@@ -2226,19 +2237,29 @@ bbreak:			;
 			//MakeShortRolename is not good - when ccr has no name, and it points towards an abstract base class,
 			//the returned string will be the name of the abstract base class, but it should be 
 
-			string rn = ccr.name();
-			if (rn.empty())
+			string roleWithNamespaces = ccr.name();
+			if (roleWithNamespaces.empty())
 			{
 				string kn = PATHGET(kind);
 				rr = mmodel->RoleByName[SmartBSTR(kn.c_str())];
 			}
 			else
 			{
+				if (roleWithNamespaces.length() != 0)
+				{
+					Uml::Namespace ns = static_cast<Uml::Class>(ccr.target()).parent_ns();
+					while (ns)
+					{
+						roleWithNamespaces = static_cast<std::string>(ns.name()) + "::" + roleWithNamespaces;
+						ns = ns.parent_ns();
+					}
+				}
+
 				IMgaMetaRolesPtr rrs;
 				rrs = mmodel->Roles;
 				MGACOLL_ITERATE(IMgaMetaRole, rrs) 
 				{
-					if (rn == ToUdmRoleName(MGACOLL_ITER, ccr)) {
+					if (roleWithNamespaces == static_cast<const char*>(MGACOLL_ITER->GetName())) {
 						rr = MGACOLL_ITER;
 						break;
 					}

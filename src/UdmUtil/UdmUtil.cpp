@@ -369,7 +369,7 @@ namespace UdmUtil
 					if(p_dstChild==&Udm::_null) // The object has not been created yet
 					{
 						
-						//getArhcetype() clone()-s it first
+						//getArchetype() clone()-s it first
 						ObjectImpl * p_srcChildArc = p_srcChild->getArchetype();
 						//destination archetype (-to be-) variable
 						ObjectImpl * p_dstChildArc= &Udm::_null;
@@ -500,7 +500,7 @@ namespace UdmUtil
 						//which where created by createChild() call
 						//attributes must be copied.
 
-						//getArhcetype() clone()-s it first
+						//getArchetype() clone()-s it first
 						ObjectImpl * p_srcChildArc = p_srcChild->getArchetype();
 						if ( p_srcChildArc  && (p_srcChildArc != &Udm::_null))
 						{

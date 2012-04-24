@@ -18,6 +18,18 @@ void writeTest(const std::string& fname)
 	CHost::A::DAtom d = CHost::A::DAtom::Create(cm);
 	d.name() = "A::DAtom obj";
 
+	CHost::C::C2Model c2m = CHost::C::C2Model::Create(rf);
+	
+	CHost::A::AModel a2 = CHost::A::AModel::Create(c2m, CHost::C::C2Model::meta_Role1);
+	CHost::A::AModel a3 = CHost::A::AModel::Create(c2m, CHost::C::C2Model::meta_Role2);
+
+	std::set<CHost::A::AModel> role1s = (std::set<CHost::A::AModel>)c2m.Role1();
+	if (role1s.size() == 0)
+		throw udm_exception("role1s is empty");
+	std::set<CHost::A::AModel> role2s = (std::set<CHost::A::AModel>)c2m.Role2();
+	if (role2s.size() == 0)
+		throw udm_exception("role2s is empty");
+
 	out.CloseWithUpdate();
 }
 
