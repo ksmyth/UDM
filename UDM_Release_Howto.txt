@@ -62,21 +62,22 @@ ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7
 
 
 # GME Release
-ssh kms1 python ./bin/pdb_promote.py x2 "Finding ID"
-wget -O GME_x64-12.2.7.msi http://build.isis.vanderbilt.edu/job/GME_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/Install/GME_x64.msi && \
-wget -O GME-12.2.7.msi http://build.isis.vanderbilt.edu/job/GME/label=build-slave1/lastSuccessfulBuild/artifact/trunk/Install/GME.msi && \
-wget -O README.txt http://build.isis.vanderbilt.edu/job/GME/label=build-slave1/ws/trunk/Doc/README.txt
+Release notes: Doc/README_in.txt
+ssh kms1 cd symbolstmp && python ~/bin/pdb_promote.py x2 "Finding ID"
+wget -O GME_x64-12.4.20.msi http://build.isis.vanderbilt.edu/job/GME_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/Install/GME_x64.msi && \
+wget -O GME-12.4.20.msi http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/lastSuccessfulBuild/artifact/trunk/Install/GME.msi && \
+wget -O README.txt http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/ws/trunk/Doc/README.txt
 
-for file in http://build.isis.vanderbilt.edu/job/GME_x64/lastSuccessfulBuild/label=build-slave6/artifact/trunk/Install/GME_bin_x64.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave1/artifact/trunk/Install/GME_bin.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave1/artifact/trunk/Install/GME_paradigms.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave1/artifact/trunk/Install/GME_SDK.msm; do wget $file; done
+for file in http://build.isis.vanderbilt.edu/job/GME_x64/lastSuccessfulBuild/label=build-slave6/artifact/trunk/Install/GME_bin_x64.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_bin.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_paradigms.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_SDK.msm; do wget $file; done
 
-svn cp -m 'Tag Release 12.2.7' https://svn.isis.vanderbilt.edu/GMESRC/trunk https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_12.2.7
-svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_12.2.7 GME-12.2.7_src && \
-/c/Program\ Files/7-Zip/7z.exe a -r GME-12.2.7_src.zip GME-12.2.7_src/
+svn cp -m 'Tag Release 12.4.20' https://svn.isis.vanderbilt.edu/GMESRC/trunk https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_12.4.20
+svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_12.4.20 GME-12.4.20_src && \
+/c/Program\ Files/7-Zip/7z.exe a -r GME-12.4.20_src.zip GME-12.4.20_src/
 
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GME/12.2.7/ && \
-scp README.txt GME-12.2.7.msi GME_x64-12.2.7.msi GME-12.2.7_src.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GME/12.2.7/ && \
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GME/12.2.7/
-# repo: Add Folder, short name O12.2.7 . Add "Download"s
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GME/12.4.20/ && \
+scp README.txt GME-12.4.20.msi GME_x64-12.4.20.msi GME-12.4.20_src.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GME/12.4.20/ && \
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GME/12.4.20/
+# repo: Add Folder, short name Q12.4.20 . Add "Download"s
 
 # JIRA: make release
 # change http://kms1/svn/installs/install.py sync to installs/install.exe, https://svn.isis.vanderbilt.edu/isis-common/trunk/common-scripts/install.exe
