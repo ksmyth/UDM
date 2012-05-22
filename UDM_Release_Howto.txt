@@ -79,6 +79,11 @@ scp README.txt GME-12.4.20.msi GME_x64-12.4.20.msi GME-12.4.20_src.zip ksmyth@re
 ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GME/12.4.20/
 # repo: Add Folder, short name Q12.4.20 . Add "Download"s
 
+# Update online documentation:
+ssh kms1 sudo mount -t davfs -o uid=1000 https://forge.isis.vanderbilt.edu/gme/dav/ gmedav
+rsync --delete --delete-excluded -avP . --include=/Tutorial** --include google3a6cca9137b58176.html --include=index.html --include=markdown.css --include='*/' --include='**GME Manual and User Guide.pdf' --exclude=*  kms1:gmedav/www/
+
+
 # JIRA: make release
 # change http://kms1/svn/installs/install.py sync to installs/install.exe, https://svn.isis.vanderbilt.edu/isis-common/trunk/common-scripts/install.exe
 
