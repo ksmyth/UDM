@@ -248,6 +248,9 @@ void DiagramGen::CustomProcess(const ::Uml::Diagram &cross_diagram, const Inheri
 					if (!jj->first.empty())
 					{
 						::Uml::Namespace ns_from = ::Uml::namespaceByPath(dgr_from, jj->first, ":");
+						if (!ns_from)
+							throw udm_exception(std::string("Couldn't find ") + jj->first + " in namespace "
+								+ static_cast<std::string>(dgr_from.name()));
 						NamespaceGen ngen(ns_from, gen);
 						ngen.Process(cross_diagram, p_is, false);
 						decl.begin_ns.insert(decl.begin_ns.end(), ngen.begin_ns.begin(), ngen.begin_ns.end());

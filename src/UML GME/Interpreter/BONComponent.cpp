@@ -258,6 +258,10 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 				package->CheckInheritance();
 				package->BuildCompositions();
 				package->BuildAssociations();
+				if (package->GetNameorAlias() == name)
+				{
+					throw int_exception("Error: package " + package->GetNameorAlias() + " must have a different name than the root folder");
+				}
 
 				::Uml::Diagram dgr = ::Uml::Diagram::Cast(pr.GetDataNetwork((LPCTSTR) (package->GetNameorAlias() + ".xml")).GetRootObject());
 
@@ -297,12 +301,12 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 	}
 	catch (int_exception &e)
 	{
-		if (param & GME_SILENT_MODE) return;
-
-		std::string str  = e.what();
+		std::string err = e.what();
 		//do we have stg to say?
-		if (str.length())
-			AfxMessageBox(e.what().c_str());
+		if (!(param & GME_SILENT_MODE))
+			AfxMessageBox(err.c_str());
+		else
+			std::cerr << err << std::endl;
 	}
 	catch (udm_exception &e)
 	{
@@ -311,6 +315,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		GMEConsole::Console::Error::WriteLine(err.c_str());
 		if (!(param & GME_SILENT_MODE))
 			AfxMessageBox(err.c_str());
+		GMEConsole::Console::ReleaseConsole();
 	}
 }
 
