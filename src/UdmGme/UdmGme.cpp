@@ -794,7 +794,8 @@ namespace UdmGme
 			}
 			MGACOLL_ITERATE_END
 
-			if (found) return references;
+			if (found)
+				return references;
 		}
 
 
@@ -1316,7 +1317,8 @@ bbreak:			;
 		bool reverse = (nn->primary != meta);
 
 		::Uml::AssociationRole rp_helper_role = reverse ? nn->dst_rp_helper : nn->src_rp_helper;
-		if (!rp_helper_role) return NULL;
+		if (!rp_helper_role)
+			return NULL;
 
 		assocmapitem *nn_rp = dn->amap.find( ((::Uml::Association) rp_helper_role.parent()).uniqueId() )->second;
 		return nn_rp;
@@ -1450,7 +1452,8 @@ bbreak:			;
 		vector<ObjectImpl*> ret;
 
 		assocmapitem *nn_rp = getRPAssocMapItem(meta, (GmeDataNetwork*) mydn);
-		if (!nn_rp) return ret;
+		if (!nn_rp)
+			return ret;
 
 		string rname = Uml::MakeRoleName(nn_rp->primary);
 
@@ -1930,7 +1933,8 @@ bbreak:			;
 		}
 
 		IMgaModelPtr model = self;
-		if(model == NULL) return ret;
+		if(model == NULL)
+			return ret;
 		//IMgaMetaRolePtr rr;
 		
 		
@@ -2169,7 +2173,8 @@ bbreak:			;
 				}
 
 				//if still not found, than the this is not contained via the requested role
-				if (!found) return &Udm::_null;		
+				if (!found)
+					return &Udm::_null;		
 			}
 		}
 
@@ -2325,7 +2330,8 @@ bbreak:			;
 	void GmeObject::getChildRole(Udm::ObjectImpl *c, ::Uml::CompositionChildRole &ret) const
 	{
 		ret = NULL;
-		if (c == NULL || c == &Udm::_null) return;
+		if (c == NULL || c == &Udm::_null)
+			return;
 
 		GmeObject *cc = static_cast<GmeObject *>(c);
 
@@ -2365,7 +2371,8 @@ bbreak:			;
 		else
 		{
 			IMgaModelPtr model = self;
-			if (model == NULL) return;
+			if (model == NULL)
+				return;
 
 			IMgaFCOsPtr chds = model->ChildFCOs;
 			MGACOLL_ITERATE(IMgaFCO, chds) 
@@ -2380,7 +2387,8 @@ bbreak:			;
 			MGACOLL_ITERATE_END;
 		}
 
-		if (!is_child) return;
+		if (!is_child)
+			return;
 
 		// if only one composition role permitted, then return it
 		::Uml::Composition comp = ::Uml::matchChildToParent(cc->m_type, m_type);
@@ -2480,7 +2488,8 @@ bbreak:			;
 					return ret;
 				}
 			}
-			else return("");
+			else
+				return("");
 		}
 		else val = testself->StrAttrByName[SmartBSTR(rname.c_str())];
 		return (char *)val;
@@ -2557,11 +2566,14 @@ bbreak:			;
 		}
 		else if(rname == "position") 
 		{
-			if (!a.size()) return;		//empty strings should be allowed and nothing should happen in such cases.
+			if (!a.size())
+				return;		//empty strings should be allowed and nothing should happen in such cases.
 
-			if(testself->MetaRole == NULL) return;
+			if(testself->MetaRole == NULL)
+				return;
 			IMgaPartsPtr parts = testself->Parts;
-			if(parts->Count == 0) return;
+			if(parts->Count == 0)
+				return;
 
 			const part_position poss = getPartPosition(a);
 
@@ -2789,7 +2801,8 @@ bbreak:			;
 	uniqueId_type GmeObject::uniqueId() const 
 	{
 		SmartBSTR nn;
-		if (__uniqueId_set) return __uniqueId;
+		if (__uniqueId_set)
+			return __uniqueId;
 
 		if(folderself) 
 			nn = folderself->ID;
@@ -2961,7 +2974,8 @@ bbreak:			;
 			IMgaFCOPtr peer = self->DerivedFrom;
 			if (peer)
 				return (self->IsInstance == VARIANT_FALSE);
-			else return false;
+			else
+				return false;
 		
 		}
 		return false;
@@ -2974,7 +2988,8 @@ bbreak:			;
 			IMgaFCOPtr peer = self->DerivedFrom;
 			if (peer)
 				return (self->IsInstance == VARIANT_TRUE);
-			else return false;
+			else
+				return false;
 	
 		}
 		return false;
@@ -2984,7 +2999,8 @@ bbreak:			;
 
 	Udm::DataNetwork * GmeObject::__getdn()
 	{ 
-		if (mydn) return const_cast<Udm::DataNetwork*>(mydn);
+		if (mydn)
+			return const_cast<Udm::DataNetwork*>(mydn);
 		throw udm_exception("Data Network is NULL in constructor! GmeObject without a data network ?!");
 
 		/*
@@ -3095,7 +3111,8 @@ bbreak:			;
 
 		bool operator == (const BinGuid& peer) const
 		{
-			if( v1 != peer.v1) return false; // speed-up
+			if( v1 != peer.v1)
+				return false; // speed-up
 
 			return ( v1 == peer.v1
 					&& v2 == peer.v2
@@ -3110,7 +3127,8 @@ bbreak:			;
 
 		bool operator < ( const BinGuid& peer) const
 		{
-			if( v1 < peer.v1) return true; // speed-up
+			if( v1 < peer.v1)
+				return true; // speed-up
 
 			return v1 < peer.v1
 					|| v1 == peer.v1 && v2 < peer.v2
@@ -3140,7 +3158,8 @@ bbreak:			;
 
 		bool operator< ( const UniqueId& peer) const
 		{
-			if( objectId < peer.objectId) return true;
+			if( objectId < peer.objectId)
+				return true;
 
 			return objectId < peer.objectId
 					|| objectId == peer.objectId && libId < peer.libId;
@@ -3314,13 +3333,16 @@ bbreak:			;
 //			relation names matching the end names
 	IMgaMetaFCOPtr MetaObjLookup(IMgaMetaModel *metam, SmartBSTR &name) {
 		IMgaMetaFCOPtr p;
-		if(metam->get_DefinedFCOByName(name, VARIANT_FALSE, &p) == S_OK) return p;
-		if(p) return p;
+		if(metam->get_DefinedFCOByName(name, VARIANT_FALSE, &p) == S_OK)
+			return p;
+		if(p)
+			return p;
 		IMgaMetaFCOsPtr FCOs = metam->DefinedFCOs;
 		MGACOLL_ITERATE(IMgaMetaFCO, FCOs) {
 			if(MGACOLL_ITER->ObjType == OBJTYPE_MODEL) {
 				p = MetaObjLookup(IMgaMetaModelPtr(MGACOLL_ITER),name);
-				if(p) return p;
+				if(p)
+					return p;
 			}
 		}
 		MGACOLL_ITERATE_END;
@@ -3329,19 +3351,22 @@ bbreak:			;
 
 	IMgaMetaFCOPtr MetaObjLookup(IMgaMetaFolder *metaf, SmartBSTR &name) {
 		IMgaMetaFCOPtr p;
-		if(metaf->get_DefinedFCOByName(name, VARIANT_FALSE, &p) == S_OK) return p;
+		if(metaf->get_DefinedFCOByName(name, VARIANT_FALSE, &p) == S_OK)
+			return p;
 
 		IMgaMetaFoldersPtr folds = metaf->DefinedFolders;
 		MGACOLL_ITERATE(IMgaMetaFolder, folds) {
 			p = MetaObjLookup(MGACOLL_ITER,name);
-			if(p) return p;
+			if(p)
+				return p;
 		}
 		MGACOLL_ITERATE_END;
 		IMgaMetaFCOsPtr FCOs = metaf->DefinedFCOs;
 		MGACOLL_ITERATE(IMgaMetaFCO, FCOs) {
 			if(MGACOLL_ITER->ObjType == OBJTYPE_MODEL) {
 				p = MetaObjLookup(IMgaMetaModelPtr(MGACOLL_ITER),name);
-				if(p) return p;
+				if(p)
+					return p;
 			}
 		}
 		MGACOLL_ITERATE_END;
@@ -3999,7 +4024,8 @@ bbreak:			;
 	{ 
 			char buf[100];
 			int kindcode = id/100000000;
-			if(kindcode < OBJTYPE_MODEL || kindcode  > OBJTYPE_FOLDER) return NULL;
+			if(kindcode < OBJTYPE_MODEL || kindcode  > OBJTYPE_FOLDER)
+				return NULL;
 			sprintf(buf, "id-%04lx-%08lx", kindcode + 100 ,  id%100000000);
 			
 			IMgaObjectPtr obj;
@@ -4008,10 +4034,13 @@ bbreak:			;
 			*/
 			obj = priv.project->GetObjectByID(SmartBSTR(buf));
 			IMgaFolderPtr fold(obj);
-			//if(hr != S_OK) return NULL;
+			//if(hr != S_OK)
+			//return NULL;
 			//else
-			if(fold) return new GmeObject( IMgaFolderPtr(obj), this);
-			else return new GmeObject( IMgaFCOPtr(obj), this);
+			if(fold)
+				return new GmeObject( IMgaFolderPtr(obj), this);
+			else
+				return new GmeObject( IMgaFCOPtr(obj), this);
 	}
 
 	UDM_DLL void GmeDataNetwork::CloseWithUpdate() 
@@ -4087,7 +4116,8 @@ bbreak:			;
 
 	void GmeDataNetwork::CountWriteOps()
 	{
-		if(semantics== Udm::CHANGES_LOST_DEFAULT)return;
+		if(semantics== Udm::CHANGES_LOST_DEFAULT)
+			return;
 
 		if(writeOps%WRITE_OP_REFRESH_RATE==WRITE_OP_REFRESH_RATE-1)
 		{
@@ -4106,7 +4136,8 @@ bbreak:			;
 		map< ::Uml::CompositionChildRole, string_set>::iterator cache_i = meta_role_filter_cache.find(role);
 		
 		//return if found
-		if (cache_i != meta_role_filter_cache.end()) return cache_i->second;
+		if (cache_i != meta_role_filter_cache.end())
+			return cache_i->second;
 
 		//create the valid MGA CompositionRoles for this role
 		string_set MetaRoleFilter;
