@@ -554,8 +554,18 @@ namespace UdmUtil
 		for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin();
 						p_currClass!=ancestorClasses.end(); p_currClass++)
 		{
-			// Getting the association roles and iterating through them
 			set< ::Uml::AssociationRole> assocRoles=p_currClass->associationRoles();
+			Uml::Association assoc = p_currClass->association();
+			if (assoc)
+			{
+				std::set<Uml::AssociationRole> roles = assoc.roles();
+				for (std::set<Uml::AssociationRole>::iterator rolesIt = roles.begin(); rolesIt != roles.end(); rolesIt++)
+				{
+					assocRoles.insert(*rolesIt);
+				}
+
+			}
+			// Getting the association roles and iterating through them
 			for(set< ::Uml::AssociationRole>::iterator p_currAssocRole=assocRoles.begin();p_currAssocRole!=assocRoles.end();p_currAssocRole++)
 			{
 
@@ -563,11 +573,21 @@ namespace UdmUtil
 
 				//this function is expected to be called twice, first iwth simplelinks true, and then with simpleLinks false
 				//if simpleLinks is true, only simple associations are copied
-				//if simpleLinks is ffalse, only assoc. class based associations are copied
+				//if simpleLinks is false, only assoc. class based associations are copied
 				if (simpleLinks && assocClass) continue;	
 				if (!simpleLinks &&  !assocClass) continue;	
 				::Uml::AssociationRole o_role = ::Uml::theOther(*p_currAssocRole);
-				vector<ObjectImpl*>srcPeers=p_srcRoot->getAssociation(o_role,assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER);
+				int mode;
+				if ((Udm::Object)p_currAssocRole->parent() == assoc)
+				{
+					mode = Udm::TARGETFROMCLASS;
+				}
+				else
+				{
+					mode = assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER;
+				}
+
+				vector<ObjectImpl*>srcPeers=p_srcRoot->getAssociation(o_role, mode);
 				
 				//if (srcPeers.size()) 
 				//	cout <<"\t now copying links via role: " << (string)(p_currAssocRole->name()) << "<->" << (string)(o_role.name()) << endl;
@@ -641,7 +661,7 @@ namespace UdmUtil
 				{
 			
 				//	cout << "\t\t seting associations, vector contains: " << dstPeers.size() << endl;
-					p_dstRoot->setAssociation(o_role,dstPeers, assocClass?Udm::CLASSFROMTARGET : Udm::TARGETFROMPEER, direct);
+					p_dstRoot->setAssociation(o_role,dstPeers, mode, direct);
 				}
 				
 				// Releasing dstPeers cloned 
