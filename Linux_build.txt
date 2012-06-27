@@ -35,18 +35,25 @@ Build-environment preparation (RHEL/CentOS 5):
 - install the following rpms from our repository:
   minizip, minizip-devel, minizip-libs, pccts
 
+Obtaining model-files.zip:
+--------------------------
+From scratch:
+ - build udm, judm and the tests on Windows: msbuild make.msbuild /t:BuildVS9;judm
+ - on Windows run %UDM_PATH%\scripts\archive-model-files.bat, it will
+   create %UDM_PATH%\model-files-*.zip, an archive with the model data
+   files generated on Windows
+ - Copy the archive model-files-*.zip and rename it to model-files.zip.
+
+From build.isis:
+wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
+
 Building:
 ---------------------
-- build udm, judm and the tests on Windows;
-- on Windows run %UDM_PATH%\scripts\archive-model-files.bat, it will
-  create %UDM_PATH%\model-files-*.zip, an archive with the model data
-  files generated on Windows
 - on Linux export or checkout the Udm sources from subversion repository
 - in the top directory run
   autoreconf -i
-- from Windows copy the archive model-files-*.zip and rename it to
-  model-files.zip; save the archive in the top directory of your build
-  directory
+- Obtain model-files.zip as above
+- Save model-files.zip in the top directory of your build directory
 - configure and build Udm with the usual sequence of steps for GNU autotools:
   ./configure  (for RHEL/CentOS and Fedora: ./configure --with-antlr=antlr1)
   make
@@ -63,7 +70,7 @@ sudo apt-get install ccache libcppunit-dev libxalan110-dev ant junit libxerces-c
 # Configure alternatives to use java-6-sun
 sudo update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
 sudo update-java-alternatives -s java-6-sun
-# Copy model-files.zip as above or:
+# Obtain model-files.zip as above or:
 wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
 # Build binary debs
 fakeroot debian/rules binary
