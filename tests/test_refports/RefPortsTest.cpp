@@ -97,15 +97,16 @@ void UdmTests::refPortsTest::testRefPorts(const string &file)
 	CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_container()) == aref1);
 	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref);
 
-	ARef1 aref1_ = ARef1::Cast(c.a_end__rp_container());
-	std::set<C> conns = aref1_.a_end__rp_container_rev();
-	CPPUNIT_ASSERT_EQUAL((size_t)1, conns.size());
-	CPPUNIT_ASSERT_EQUAL(c, *conns.begin());
+	// we allow aref and bref.__rp_container_rev().size() == 0 before a_ and b_end_end are set
 
 	// connect src and dst
 	c.a_end_end() = a;
 	c.b_end_end() = b;
 	
+	ARef1 aref1_ = ARef1::Cast(c.a_end__rp_container());
+	std::set<C> conns = aref1_.a_end__rp_container_rev();
+	CPPUNIT_ASSERT_EQUAL((size_t)1, conns.size());
+	CPPUNIT_ASSERT_EQUAL(c, *conns.begin());
 
 #if 0
 	// what should happen when the reference port is connected and the
@@ -170,7 +171,9 @@ void UdmTests::refPortsTest::testRefPorts(const string &file)
 	c.a_end_chain().disconnect();
 	CPPUNIT_ASSERT(A::Cast(c.a_end_end()) == Udm::null);
 	CPPUNIT_ASSERT(APar::Cast(aref1.ref()) == apar);
-	CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_container()) == aref1);
+	// We don't guarantee either assertions:
+	//CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_container()) == aref1);
+	//CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_container()) == Udm::null);
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == b2);
 
 	// disconnect dst
@@ -178,7 +181,9 @@ void UdmTests::refPortsTest::testRefPorts(const string &file)
 	CPPUNIT_ASSERT(B::Cast(c.b_end_end()) == Udm::null);
 	CPPUNIT_ASSERT(BPar::Cast(bref2.ref()) == bpar2);
 	CPPUNIT_ASSERT(BRef::Cast(bref3.ref()) == bref2);
-	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref3);
+	// We don't guarantee either assertions:
+	//CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref3);
+	//CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == Udm::null);
 
 
 	c.a_end_end() = a;

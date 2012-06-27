@@ -477,6 +477,8 @@ namespace UdmGme
 	// to clear peer_toRemove's registry too, call it again with arguments reversed and the other role name
 	void RpHelperRemoveFromRegistry(const IMgaFCOPtr &fco, const IMgaFCOPtr &peer_toRemove, const string &role_name)
 	{
+		if (fco->Status != OBJECT_EXISTS)
+			return;
 		SmartBSTR co_ids = fco->RegistryValue[role_name.c_str()];
 		if (!(!co_ids))
 		{
@@ -545,15 +547,10 @@ namespace UdmGme
 		return ret;
 	}
 
-	IMgaFCOsPtr RpHelperFindPeerFCOs(const IMgaFCOPtr &self,
-		const string &role_name, bool role_isNavigable,
-		const string &other_role_name, bool other_role_isNavigable,
-		const GmeDataNetwork *dn, bool only_ifNavigable, bool set_registry = true);
-
 	IMgaFCOsPtr RpHelperFindPeerFCOsFromModel(const IMgaFCOPtr &self,
 		const string &role_name, bool role_isNavigable,
 		const string &other_role_name, bool other_role_isNavigable,
-		const GmeDataNetwork *dn, bool only_ifNavigable, bool set_registry)
+		const GmeDataNetwork *dn, bool only_ifNavigable)
 	{
 		IMgaFCOsPtr ret;
 		ret.CreateInstance("Mga.MgaFCOs");
@@ -584,12 +581,6 @@ namespace UdmGme
 
 				if (!only_ifNavigable || (only_ifNavigable && role_isNavigable))
 					COMTHROW(ret->Append(fco));
-
-				if (set_registry)
-				{
-					RpHelperAddToRegistry(self, fco, role_name, role_isNavigable);
-					RpHelperAddToRegistry(fco, self, other_role_name, other_role_isNavigable);
-				}
 			}
 		}
 		else if (self->GetObjType() == OBJTYPE_REFERENCE)
@@ -602,18 +593,13 @@ namespace UdmGme
 			MGACOLL_ITERATE(IMgaConnPoint, cp)
 			{
 				IMgaSimpleConnectionPtr conn = MGACOLL_ITER->Owner;
-				IMgaFCOsPtr references = RpHelperFindPeerFCOsFromModel(conn, other_role_name, other_role_isNavigable, role_name, role_isNavigable, dn, true, false);
+				IMgaFCOsPtr references = RpHelperFindPeerFCOsFromModel(conn, other_role_name, other_role_isNavigable, role_name, role_isNavigable, dn, true);
 				MGACOLL_ITERATE(IMgaFCO, references)
 				{
 					if (reference->GetIsEqual(MGACOLL_ITER) == VARIANT_TRUE)
 					{
 						if (!only_ifNavigable || (only_ifNavigable && role_isNavigable))
 							COMTHROW(ret->Append(conn));
-						if (set_registry)
-						{
-							RpHelperAddToRegistry(self, conn, role_name, role_isNavigable);
-							RpHelperAddToRegistry(conn, self, other_role_name, other_role_isNavigable);
-						}
 					};
 				}
 				MGACOLL_ITERATE_END;
@@ -624,40 +610,6 @@ namespace UdmGme
 		return ret;
 	}
 
-	IMgaFCOsPtr RpHelperFindPeerFCOs(const IMgaFCOPtr &self,
-		const string &role_name, bool role_isNavigable,
-		const string &other_role_name, bool other_role_isNavigable,
-		const GmeDataNetwork *dn, bool only_ifNavigable, bool set_registry)
-	{
-		IMgaFCOsPtr ret;
-		ret.CreateInstance("Mga.MgaFCOs");
-
-		set<string> seen_fcos;
-
-		IMgaFCOsPtr fcos = RpHelperFindPeerFCOsFromRegistry(self, role_name, only_ifNavigable, dn);
-		MGACOLL_ITERATE(IMgaFCO, fcos)
-		{
-			if (seen_fcos.find(string(MGACOLL_ITER->GetID())) == seen_fcos.end())
-			{
-				COMTHROW(ret->Append(MGACOLL_ITER));
-				seen_fcos.insert(string(MGACOLL_ITER->GetID()));
-			}
-		}
-		MGACOLL_ITERATE_END;
-
-		fcos = RpHelperFindPeerFCOsFromModel(self, role_name, role_isNavigable, other_role_name, other_role_isNavigable, dn, only_ifNavigable, set_registry);
-		MGACOLL_ITERATE(IMgaFCO, fcos)
-		{
-			if (seen_fcos.find(string(MGACOLL_ITER->GetID())) == seen_fcos.end())
-			{
-				COMTHROW(ret->Append(MGACOLL_ITER));
-				seen_fcos.insert(string(MGACOLL_ITER->GetID()));
-			}
-		}
-		MGACOLL_ITERATE_END;
-
-		return ret;
-	}
 
 #if 0
 	// Before connecting self to peer, check that the result would be valid.
@@ -708,12 +660,13 @@ namespace UdmGme
 	}
 #endif
 
-	IMgaFCOPtr getPrefferedSrcRef(const IMgaSimpleConnectionPtr& conn, const GmeDataNetwork * dn)
+	IMgaFCOPtr getPrefferedSrcRef(const IMgaSimpleConnectionPtr& conn, const GmeDataNetwork * dn, SmartBSTR& regName=SmartBSTR())
 	{
 		SmartBSTR regrolename = conn->RegistryValue["sRefParent"];
 		IMgaFCOPtr ret;
 		if (!(!regrolename))
 		{
+			regName = regrolename;
 			IMgaFCOsPtr references = RpHelperFindPeerFCOsFromRegistry(conn, string(regrolename), true, dn);
 			if (references->GetCount() == 1)
 					ret = references->GetItem(1);
@@ -721,12 +674,13 @@ namespace UdmGme
 		return ret;
 	};
 
-	IMgaFCOPtr getPrefferedDstRef(const IMgaSimpleConnectionPtr& conn, const GmeDataNetwork * dn)
+	IMgaFCOPtr getPrefferedDstRef(const IMgaSimpleConnectionPtr& conn, const GmeDataNetwork * dn, SmartBSTR& regName=SmartBSTR())
 	{
 		SmartBSTR regrolename = conn->RegistryValue["dRefParent"];
 		IMgaFCOPtr ret;
 		if (!(!regrolename))
 		{
+			regName = regrolename;
 			IMgaFCOsPtr references = RpHelperFindPeerFCOsFromRegistry(conn, string(regrolename), true, dn);
 			if (references->GetCount() == 1)
 					ret = references->GetItem(1);
@@ -949,12 +903,13 @@ bbreak:			;
 				IMgaFCOPtr peer = static_cast<GmeObject *>(*nvect.begin())->self;
 				if(reverse) 
 				{
-					IMgaFCOPtr pref_ref = getPrefferedSrcRef(IMgaSimpleConnectionPtr(self), (GmeDataNetwork*)mydn);
+					SmartBSTR regName;
+					IMgaFCOPtr pref_ref = getPrefferedSrcRef(IMgaSimpleConnectionPtr(self), (GmeDataNetwork*)mydn, regName);
 					if (pref_ref)
 					{
 						IMgaFCOsPtr references = FindReferencesToFCO(peer, pref_ref);
 						COMTHROW(IMgaSimpleConnectionPtr(self)->SetSrc(references, peer));
-						
+						self->RegistryNode[regName]->Clear();
 					}
 					else
 					{
@@ -973,11 +928,13 @@ bbreak:			;
 				}//if(reverse) 
 				else 
 				{
-					IMgaFCOPtr pref_ref = getPrefferedDstRef(IMgaSimpleConnectionPtr(self), (GmeDataNetwork*)mydn);
+					SmartBSTR regName;
+					IMgaFCOPtr pref_ref = getPrefferedDstRef(IMgaSimpleConnectionPtr(self), (GmeDataNetwork*)mydn, regName);
 					if (pref_ref)
 					{
 						IMgaFCOsPtr references = FindReferencesToFCO(peer, pref_ref);
 						COMTHROW(IMgaSimpleConnectionPtr(self)->SetDst(references, peer));
+						self->RegistryNode[regName]->Clear();
 					}
 					else
 					{
@@ -1012,9 +969,8 @@ bbreak:			;
 					IMgaSimpleConnectionPtr conn = static_cast<GmeObject *>(*i)->self;
 					
 					//we need to check if there is an associated helper connection
-					GmeObject * go = new GmeObject(conn, mydn);
-					go->RemoveHelperConnections();
-					delete go;
+					GmeObject go(conn, mydn);
+					go.RemoveHelperConnections();
 
 					conn->DestroyObject();
 				}//for i pvect
@@ -1025,11 +981,13 @@ bbreak:			;
 					IMgaSimpleConnectionPtr conn = static_cast<GmeObject *>(*i)->self;
 					if(reverse)
 					{
-						IMgaFCOPtr pref_ref = getPrefferedDstRef(conn, (GmeDataNetwork*)mydn);
+						SmartBSTR regName;
+						IMgaFCOPtr pref_ref = getPrefferedDstRef(conn, (GmeDataNetwork*)mydn, regName);
 						if (pref_ref)
 						{
 							IMgaFCOsPtr references = static_cast<GmeObject *>(*i)->FindReferencesToFCO(self, pref_ref);
 							COMTHROW(conn->SetDst(references, self));
+							self->RegistryNode[regName]->Clear();
 						}
 						else
 						{
@@ -1046,11 +1004,13 @@ bbreak:			;
 					}//if(reverse)
 					else 
 					{
-						IMgaFCOPtr pref_ref = getPrefferedSrcRef(conn, (GmeDataNetwork*)mydn);
+						SmartBSTR regName;
+						IMgaFCOPtr pref_ref = getPrefferedSrcRef(conn, (GmeDataNetwork*)mydn, regName);
 						if (pref_ref)
 						{
 							IMgaFCOsPtr references = static_cast<GmeObject *>(*i)->FindReferencesToFCO(self, pref_ref);
 							COMTHROW(conn->SetSrc(references, self));
+							self->RegistryNode[regName]->Clear();
 						}
 						else
 						{
@@ -1096,7 +1056,6 @@ bbreak:			;
 								throw udm_exception("Connection to reference port already exists, delete it first before changing the reference!");
 #endif
 							RpHelperAddToRegistry(self, connecting_object, rname, isNavigable);
-							RpHelperAddToRegistry(connecting_object, self, oname, oIsNavigable);
 						}
 					}
 					if (pvect.size())
@@ -1105,7 +1064,6 @@ bbreak:			;
 						{
                             IMgaFCOPtr connecting_object = static_cast<GmeObject *>(*i)->self;
 							RpHelperRemoveFromRegistry(self, connecting_object, rname);
-							RpHelperRemoveFromRegistry(connecting_object, self, oname);
 						}
 					};
 				}//if (nn->rp_helper)
@@ -1506,7 +1464,7 @@ bbreak:			;
 					IMgaFCOsPtr fcos = RpHelperFindPeerFCOsFromModel(self,
 						rname, meta.isNavigable(),
 						orole.name(), orole.isNavigable(),
-						(GmeDataNetwork *)mydn, true, false);
+						(GmeDataNetwork *)mydn, true);
 					MGACOLL_ITERATE(IMgaFCO, fcos)
 					{
 						ret.push_back(new GmeObject(MGACOLL_ITER, mydn));
