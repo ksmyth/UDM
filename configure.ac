@@ -79,7 +79,7 @@ AS_IF([test "x$with_xalan" = "xno"], [
 # Checks for libraries.
 CPPUNITLIBS="-lcppunit -ldl"
 DLOPENLIBS=""
-MINIZIPLIBS="-lz -lminizip"
+MINIZIPLIBS="-lminizip -lz"
 XERCESLIBS="-lxerces-c"
 
 # Checks for header files.

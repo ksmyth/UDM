@@ -9,8 +9,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-JAVA_HOME := /usr/lib/jvm/java-6-sun
-export JAVA_HOME=/usr/lib/jvm/java-6-sun
+JAVA_HOME := /usr/lib/jvm/default-java
+export JAVA_HOME=/usr/lib/jvm/default-java
 
 
 
@@ -49,7 +49,7 @@ ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
 	CWD=$(shell pwd)
-	./configure $(CROSS) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs,-L$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/minizip/" CPPFLAGS="-I/usr/lib/jvm/java-6-sun/include/ -I/usr/lib/jvm/java-6-sun/include/linux/ -I$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"  CXXFLAGS="-I/usr/lib/jvm/java-6-sun/include/ -I/usr/lib/jvm/java-6-sun/include/linux/ -I$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"
+	./configure $(CROSS) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs,-L$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/minizip/" CPPFLAGS="-I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/ -I$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"  CXXFLAGS="-I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/ -I$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"
 
 build: build-stamp
 build-stamp:  config.status 
