@@ -9,9 +9,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-JAVA_HOME := /usr/lib/jvm/default-java
-export JAVA_HOME=/usr/lib/jvm/default-java
-
+JAVA_HOME := $(shell dirname $(shell dirname $(shell readlink -f /etc/alternatives/javac)))
+export JAVA_HOME=$(shell dirname $(shell dirname $(shell readlink -f /etc/alternatives/javac)))
 
 
 # These are used for cross-compiling and for saving the configure script
@@ -49,7 +48,7 @@ ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
 	CWD=$(shell pwd)
-	./configure $(CROSS) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs,-L$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/minizip/" CPPFLAGS="-I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/ -I$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"  CXXFLAGS="-I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/ -I$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"
+	./configure $(CROSS) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs,-L$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/minizip/" CPPFLAGS="-I$(JAVA_HOME)/include/ -I$(JAVA_HOME)/include/linux/ -I$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"  CXXFLAGS="-I$(JAVA_HOME)/include/ -I$(JAVA_HOME)/include/linux/ -I$(shell pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"
 
 build: build-stamp
 build-stamp:  config.status 
