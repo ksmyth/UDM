@@ -1,7 +1,7 @@
 Source: udm
 Priority: extra
 Maintainer: Kevin Smyth <ksmyth@isis.vanderbilt.edu>
-Build-Depends: debhelper (>= 7), autotools-dev, ccache, libcppunit-dev, libxalan110-dev, ant, junit, libxerces-c2-dev, sun-java6-jdk, ant-optional, pccts, libboost1.40-dev, zlib1g-dev, swig
+Build-Depends: debhelper (>= 7), autoconf, libtool, autotools-dev, ccache, libcppunit-dev, libxalan110-dev, ant, junit, libxerces-c2-dev, sun-java6-jdk, ant-optional, pccts, libboost1.40-dev, zlib1g-dev, swig
 Standards-Version: 3.8.1
 Section: libs
 Homepage: http://repo.isis.vanderbilt.edu/downloads?tool=UDM

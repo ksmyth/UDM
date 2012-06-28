@@ -3,98 +3,109 @@
 	<description>Java Wrapper for UDM</description>
 
 	<condition property="isWindows">
-	  <or>
 		<os family="Windows" />
-      </or>
 	</condition>
 
 	<!-- Get the environment variables of UDM from Windows -->
+	<property environment="env" />
+	<condition property="udm.dir" value="${env.UDM_PATH}" ><isset property="isWindows"/></condition>
+	<condition property="udm.bin.dir" value="${env.UDM_PATH}/bin" ><isset property="isWindows"/></condition>
+	<condition property="udm.etc.dir" value="${env.UDM_PATH}/etc" ><isset property="isWindows"/></condition>
+	<condition property="udm_3rdparty.dir" value="${env.UDM_3RDPARTY_PATH}"><isset property="isWindows"/></condition>
+	<condition property="build.dir" value="build/build_win"><isset property="isWindows"/></condition>
+	<condition property="junit.dir" value="${udm_3rdparty.dir}/junit"><isset property="isWindows"/></condition>
+	<condition property="srcdir" value="${basedir}"><isset property="isWindows"/></condition>
+	<condition property="windir" value="${env.windir}"><isset property="isWindows"/></condition>
+	<condition property="cmd.exe" value="${windir}\SysWoW64\cmd.exe">
+		<and>
+			<isset property="isWindows"/>
+			<available file="${windir}\SysWoW64\cmd.exe"/>
+		</and>
+	</condition>
+	<condition property="cmd.exe" value="cmd.exe"><isset property="isWindows"/></condition>
+
+	<!--
+		If UdmD.exe exists and it is newer than Udm.exe or Udm.exe does not exist,
+		then use UdmD.exe and UdmSwigD.dll
+	-->
+	<condition property="udm.bin.exe" value="UdmD.exe">
+		<and>
+			<isset property="isWindows"/>
+			<available file="${udm.bin.dir}/UdmD.exe" />
+			<or>
+				<not>
+					<available file="${udm.bin.dir}/Udm.exe" />
+				</not>
+				<and>
+					<uptodate srcfile="${udm.bin.dir}/Udm.exe" targetfile="${udm.bin.dir}/UdmD.exe" />
+				</and>
+			</or>
+		</and>
+	</condition>
+	<!-- when ant is upgraded, remove this and use "else" in the previous condition -->
+	<condition property="udm.bin.exe" value="Udm.exe">
+		<and>
+			<isset property="isWindows"/>
+			<not>
+				<isset property="udm.bin.exe" />
+			</not>
+			<available file="${udm.bin.dir}/Udm.exe" />
+		</and>
+	</condition>
+
+	<fail message="Neither Debug nor the Release Udm project has been built">
+		<condition>
+			<and>
+				<isset property="isWindows"/>
+				<not>
+					<isset property="udm.bin.exe"/>
+				</not>
+			</and>
+		</condition>
+	</fail>
+
+
+	<condition property="udm.bin.swigdll" value="UdmSwigD.dll">
+		<and>
+			<isset property="isWindows"/>
+			<equals arg1="${udm.bin.exe}" arg2="UdmD.exe" casesensitive="false" />
+		</and>
+	</condition>
+	<!-- when ant is upgraded, remove this and use "else" in the previous condition -->
+	<condition property="udm.bin.swigdll" value="UdmSwig.dll">
+		<and>
+			<isset property="isWindows"/>
+			<equals arg1="${udm.bin.exe}" arg2="Udm.exe" casesensitive="false" />
+		</and>
+	</condition>
+
 	<target name="setenveclipse" if="isWindows">
 		<echo> "Windows platform" </echo>
-		<property environment="env" />
-		<property name="udm.dir" location="${env.UDM_PATH}" />
-		<property name="udm.bin.dir" location="${env.UDM_PATH}/bin" />
-		<property name="udm.etc.dir" location="${env.UDM_PATH}/etc" />
-		<property name="udm_3rdparty.dir" location="${env.UDM_3RDPARTY_PATH}" />
-		<property name="build.dir" location="build/build_win" />
-		<property name="junit.dir" location="${udm_3rdparty.dir}/junit" />
-		<property name="srcdir" location="${basedir}" />
-		<property name="windir" environment="env" value="${env.windir}" />
-		<available file="${windir}\SysWoW64\cmd.exe" property="cmd.exe" value="${windir}\SysWoW64\cmd.exe" />
-		<property name="cmd.exe" value="cmd.exe" />
-
-		<!--
-			If UdmD.exe exists and it is newer than Udm.exe or Udm.exe does not exist,
-			then use UdmD.exe and UdmSwigD.dll
-		-->
-		<condition property="udm.bin.exe" value="UdmD.exe">
-			<and>
-				<available file="${udm.bin.dir}/UdmD.exe" />
-				<or>
-					<not>
-						<available file="${udm.bin.dir}/Udm.exe" />
-					</not>
-					<and>
-						<uptodate srcfile="${udm.bin.dir}/Udm.exe" targetfile="${udm.bin.dir}/UdmD.exe" />
-					</and>
-				</or>
-			</and>
-		</condition>
-		<!-- when ant is upgraded, remove this and use "else" in the previous condition -->
-		<condition property="udm.bin.exe" value="Udm.exe">
-			<and>
-				<not>
-					<isset property="udm.bin.exe" />
-				</not>
-				<available file="${udm.bin.dir}/Udm.exe" />
-			</and>
-		</condition>
-
-		<fail unless="udm.bin.exe"
-			message="Neither Debug nor the Release Udm project has been built" />
-
-
-		<condition property="udm.bin.swigdll" value="UdmSwigD.dll">
-			<equals arg1="${udm.bin.exe}" arg2="UdmD.exe" casesensitive="false" />
-		</condition>
-		<!-- when ant is upgraded, remove this and use "else" in the previous condition -->
-		<condition property="udm.bin.swigdll" value="UdmSwig.dll">
-			<equals arg1="${udm.bin.exe}" arg2="Udm.exe" casesensitive="false" />
-		</condition>
-
+	</target>
+	<target name="setenvlinux" unless="isWindows">
+		<echo> "Linux platform" </echo>
 	</target>
 
 	<!-- Get the environment variables of UDM from UNIX systems -->
-	<target name="setenvlinux" unless="isWindows">
-		<echo> "Linux platform" </echo>
-		<property environment="env" />
-		<property name="udm.dir" location=".." />
-		<property name="udm.src.dir" location=".." />
-		<property name="udm.bin.dir" location="${udm.dir}/bin" />
-		<property name="udm.etc.dir" location="${udm.src.dir}/etc" />
-		<property name="udm_3rdparty.dir" location="/usr" />
-		<property name="build.dir" location="build/build_linux" />
-		<property name="srcdir" location="${basedir}" />
-	</target>
+	<property environment="env" />
+	<property name="udm.dir" location=".." />
+	<property name="udm.src.dir" location=".." />
+	<property name="udm.bin.dir" location="${udm.dir}/bin" />
+	<property name="udm.etc.dir" location="${udm.src.dir}/etc" />
+	<property name="udm_3rdparty.dir" location="/usr" />
+	<property name="build.dir" location="build/build_linux" />
+	<property name="srcdir" location="${basedir}" />
+	<condition property="junit.dir" value="/usr/share/java/">
+		<available file="/usr/share/java/junit.jar"/>
+	</condition>
 
-	<!-- Set Classpath on Windows -->
-	<target name="init-windows-compile.classpath" if="isWindows">
-		<path id="compile.classpath">
-			<pathelement location="${judm.classes.dir}" />
-			<pathelement location="${judmhelper.classes.dir}" />
-			<fileset dir="${junit.dir}">
-				<include name="junit.jar" />
-			</fileset>
-		</path>
-	</target>
-
-	<!-- Set Classpath on UNIX -->
-	<target name="init-linux-compile.classpath" unless="isWindows">
-		<path id="compile.classpath">
-			<pathelement location="${judm.classes.dir}" />
-			<pathelement location="${judmhelper.classes.dir}" />
-		</path>
-	</target>
+	<path id="compile.classpath">
+		<pathelement location="${judm.classes.dir}" />
+		<pathelement location="${judmhelper.classes.dir}" />
+		<fileset dir="${junit.dir}">
+			<include name="junit.jar" />
+		</fileset>
+	</path>
 
 	<!-- Initialize directories and properties of the build -->
 	<target name="init" depends="setenveclipse, setenvlinux" description="Initialize directories.">
@@ -138,10 +149,6 @@
 
 		<!-- Directory of the batch files -->
 		<property name="batch.dir" location="${srcdir}/etc" />
-
-		<!-- Classpath -->
-		<antcall target="init-windows-compile.classpath" />
-		<antcall target="init-linux-compile.classpath" />
 	</target>
 
 	<!-- Clean all jUdm build products -->
@@ -271,7 +278,7 @@
 	</target>
 
 	<!-- Compile the SWIG/UDM source codes -->
-	<target name="judm-compile" description="Compile the SWIG/UDM source codes.">
+	<target name="judm-compile" description="Compile the SWIG/UDM source codes." depends="init">
 
 		<!-- Create library for classes classes-->
 		<mkdir dir="${judm.classes.dir}" />
@@ -304,7 +311,6 @@
 			<classpath>
 				<path refid="compile.classpath" />
 				<pathelement location="${build.dir}/${dspackage}/classes/main" />
-				<pathelement location="${junit.dir}/junit.jar" />
 			</classpath>
 		</javac>
 
@@ -663,7 +669,7 @@
 	</target>
 
 	<!-- Generate a domain-specific API documentation -->
-	<target name="ds-apidoc" description="Generate ${dspackage} API documentation" depends="init-windows-compile.classpath">
+	<target name="ds-apidoc" description="Generate ${dspackage} API documentation">
 		<fail unless="dspackage" message="Missing parameter: dspackage" />
 		
 		<!-- Create library for apidoc -->
