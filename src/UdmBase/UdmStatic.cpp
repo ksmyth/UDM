@@ -1963,7 +1963,7 @@ namespace UdmStatic
 		throw udm_exception("Could not find the corresponding subtype or instance in one of the parent's subtype/instance object.");
 
 	};
-		
+
 	void StaticObject::setAssociation(
 		const ::Uml::AssociationRole &meta, 
 		const vector<ObjectImpl*> &nvect, 
@@ -2030,8 +2030,7 @@ namespace UdmStatic
 			
 			//we will call release() when we remove them from removed_links
 			vector<ObjectImpl*> cl_vec = getAssociation(meta,mode);
-			for(vector<ObjectImpl*>::iterator cl_vec_i = cl_vec.begin(); cl_vec_i != cl_vec.end(); cl_vec_i++)
-					removed_links.insert(*cl_vec_i);
+			removed_links.insert(cl_vec.begin(), cl_vec.end());
 
 
 			for(vector<ObjectImpl*>::const_iterator nvect_i = nvect.begin(); nvect_i != nvect.end(); nvect_i++)
@@ -2073,7 +2072,7 @@ namespace UdmStatic
 
 			};
 			if (!all_removed_ok)
-				throw udm_exception(" Inherited links can not be removed from instance objects.");
+				throw udm_exception("Inherited links can not be removed from instance objects.");
 
 			if (added_links.size())
 			{
@@ -2093,8 +2092,6 @@ namespace UdmStatic
 		}
 
 
-		//we will need our ancestors 
-		set< ::Uml::Class> anc_s = Uml::AncestorClasses(m_type);
 		//check the mode parameter			
 		if (mode != Udm::TARGETFROMPEER)
 		{
@@ -2106,31 +2103,16 @@ namespace UdmStatic
 
 			if ( mode == Udm::TARGETFROMCLASS)
 			{
-				//i'm an association class
-				//one target is needed
+				// I'm an association class, one target is needed
 
-				//find the association
-				::Uml::Association ass = m_type.association();				
-			
-				if (!ass) 
-				{
-					for ( set< ::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
-					{
-						ass = (*anc_i).association();
-						if (ass) break;
-					}
-				} 
-	
+				// Find the association
+				::Uml::Association ass = ::Uml::GetAncestorAssociation(m_type);
 				if (!ass)
 					throw udm_exception("TARGETFROMCLASS was requested and I'm not an association class!");
 				
 				set< ::Uml::AssociationRole> ass_roles = ass.roles();
 				if (ass_roles.size() != 2) 
-				{
-					string err_str;
-					err_str = "Invalid association " + (string) ass.name() + " found in meta information";
-					throw udm_exception(err_str);
-				}
+					throw udm_exception("Invalid association " + (string) ass.name() + " found in meta information");
 
 				set< ::Uml::AssociationRole >::iterator role_it = ass_roles.begin();
 
@@ -2140,7 +2122,7 @@ namespace UdmStatic
 				{
 					role_end = *(++role_it);
 					if (role_end != meta)
-						throw udm_exception("Invalid role name  specified in StaticObject::setAssociation!");
+						throw udm_exception("Invalid role name specified in StaticObject::setAssociation!");
 				}
 
 				//now role_end is the right AssociationRole
@@ -2153,7 +2135,7 @@ namespace UdmStatic
 					StaticObject * obj  = (StaticObject*) (*vect_it_1);
 					
 					if(!Uml::IsDerivedFrom(obj->m_type,target_class))
-						 throw udm_exception("invalid association!");	
+						 throw udm_exception("Invalid association!");	
 
 				}
 
@@ -2162,18 +2144,12 @@ namespace UdmStatic
 			else
 			{
 				if (mode != Udm::CLASSFROMTARGET)
-					throw udm_exception("Invalid mode in StaticObject::setAssociation()");
+					throw udm_exception("Invalid mode in StaticObject::setAssociation!");
 				
 				//one end of an association class
 
 				//get all my rolenames (from ancestor classes, too)
-
-				set< ::Uml::AssociationRole> roles;
-				for ( set< ::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
-				{
-					set< ::Uml::AssociationRole> c_roles = (*anc_i).associationRoles();
-					roles.insert(c_roles.begin(), c_roles.end());
-				}
+				set< ::Uml::AssociationRole> roles = ::Uml::AncestorAssociationRoles(m_type);
 				
 				//find the role provided
 				set< ::Uml::AssociationRole>::iterator i = roles.find(orole);
@@ -2192,13 +2168,7 @@ namespace UdmStatic
 			
 	
 			//get all my rolenames (from ancestor classes, too)
-
-			set< ::Uml::AssociationRole> roles;
-			for ( set< ::Uml::Class>::iterator anc_i = anc_s.begin(); anc_i != anc_s.end(); anc_i++)
-			{
-				set< ::Uml::AssociationRole> c_roles = (*anc_i).associationRoles();
-				roles.insert(c_roles.begin(), c_roles.end());
-			}
+			set< ::Uml::AssociationRole> roles = ::Uml::AncestorAssociationRoles(m_type);
 			
 			set< ::Uml::AssociationRole>::iterator i = roles.find(orole);
 			if (i == roles.end()) 
@@ -2211,14 +2181,8 @@ namespace UdmStatic
 		//set up a searchable set with object to associate
 		//btw, why the hell are we working with vectors on inside APIs?!
 
-		set<ObjectImpl*> to_associate;
-		for(vector<ObjectImpl*>::const_iterator to_ass_i = nvect.begin(); to_ass_i!= nvect.end(); to_ass_i++)
-		{
-			//this is a local map which will be anyway deleted,
-			//so we don't increment the refcounter
-			pair<set<ObjectImpl*> ::iterator, bool> ins_res = to_associate.insert(*to_ass_i);
-			if (!ins_res.second) throw udm_exception("Fatal error in StaticObject::setAssociation(). Map insertion failed: 1");
-		}
+		// we don't increment the refcounter because this local map will be deleted
+		set<ObjectImpl*> to_associate(nvect.begin(), nvect.end());
 
 		//fix for UDM-37:
 		//even if we remove items from to_associate because an association already exists,
@@ -2327,7 +2291,7 @@ namespace UdmStatic
 					};
 
 					if (!found)
-						throw udm_exception("Static Datanetwork error: Link corresponding to acrhetype link could not be located in derived/instantiated object!");
+						throw udm_exception("Static Datanetwork error: Link corresponding to archetype link could not be located in derived/instantiated object!");
 					
 					found = false;
 
@@ -2345,7 +2309,7 @@ namespace UdmStatic
 					};
 
 					if (!found)
-						throw udm_exception("Static Datanetwork error: Link corresponding to acrhetype link could not be located in derived/instantiated object!");
+						throw udm_exception("Static Datanetwork error: Link corresponding to archetype link could not be located in derived/instantiated object!");
 					
 
 					//remove the link
@@ -2399,7 +2363,7 @@ namespace UdmStatic
 			//5. find among them the one which is derived/subtype of this
 			//6, find the iterators in their association_map
 			//7. insert the corresponding associations
-			//8. increment the recounts
+			//8. increment the refcounts
 			
 			set<StaticObject*>::iterator psti_i = m_parent->st_and_i.begin();
 			while (psti_i != m_parent->st_and_i.end())

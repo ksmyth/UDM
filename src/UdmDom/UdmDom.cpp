@@ -2606,13 +2606,9 @@ namespace UdmDom
 
 			
 
-			set<Udm::Object> existing_ass;
-			//geth the existing associations
+			//get the existing associations
 			vector<ObjectImpl*> existing_associations = getAssociation(role, mode);
-			for(vector<ObjectImpl*>::iterator ea_i = existing_associations.begin(); ea_i != existing_associations.end(); ea_i++)
-			{
-				existing_ass.insert(*ea_i);	//it was cloned in getAssociation, so it's safe!
-			}
+			set<Udm::Object> existing_ass(existing_associations.begin(), existing_associations.end());
 
 
 			bool no_change = false;
@@ -2651,13 +2647,9 @@ namespace UdmDom
 
 
 			if(mode == Udm::CLASSFROMTARGET) 
-			{
 				oname += "_end_";
-			}
-			if(mode == Udm::TARGETFROMCLASS) 
-			{
+			else if(mode == Udm::TARGETFROMCLASS) 
 				tname += "_end_";
-			}
 			
 			XMLCh *oname_buf = XMLString::transcode(oname.c_str());
 			XMLCh *tname_buf = XMLString::transcode(tname.c_str());
