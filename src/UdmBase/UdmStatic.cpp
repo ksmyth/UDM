@@ -2348,12 +2348,8 @@ namespace UdmStatic
 			((StaticObject*)(*it_to_ass))->associations.safe_insert(ass_me);
 		}
 
-		for(set<ObjectImpl*>::iterator it_to_ass = to_associate_in_st_and_i.begin(); it_to_ass != to_associate_in_st_and_i.end(); it_to_ass++)
-		{
-			//it is a reference setting, we'll do it afterwards
-			//if ( ((string)(meta.name()) == "ref") && (mode == Udm::TARGETFROMPEER) && nvect.size()==1) continue;
-			if (isRefLink (meta, mode, nvect)) continue;
-
+		//it is a reference setting, we'll do it afterwards
+		if (!isRefLink (meta, mode, nvect)) {
 
 			//archetype/derived/instance stuff
 			//1. get parent
@@ -2382,31 +2378,30 @@ namespace UdmStatic
 				if (!s_or_i_pd) 
 					throw udm_exception("Expected a primarily derived parent somewhere in the hierarchy!");
 
+				for(set<ObjectImpl*>::iterator it_to_ass = to_associate_in_st_and_i.begin(); it_to_ass != to_associate_in_st_and_i.end(); it_to_ass++)
+				{
 
+					//these will be those subtype/instance object of so and this, 
+					//which are direct children of s_or_i
+					StaticObject * s_or_i_of_so = ((StaticObject*)(*it_to_ass))->FindCorrespondingObjectInStOrITree(s_or_i_pd);
+					StaticObject * s_or_i_of_this = FindCorrespondingObjectInStOrI(s_or_i);
 
-				//these will be those subtype/instance object of so and this, 
-				//which are direct children of s_or_i
-				StaticObject * s_or_i_of_so = ((StaticObject*)(*it_to_ass))->FindCorrespondingObjectInStOrITree(s_or_i_pd);
-				StaticObject * s_or_i_of_this = FindCorrespondingObjectInStOrI(s_or_i);
+					if (!s_or_i_of_so) continue; // a corresponding object could not be located
 
-				if (!s_or_i_of_so) continue; // a correspondig object could not be located
-				//add the new link to these objects
-				//one for me,
+					//add the new link to these objects
+					//one for me,
 
-				// it might be already set...
+					// it might be already set...
 
-				
-				pair<uniqueId_type const, StaticObject*> ass1(meta.uniqueId(), (StaticObject*)(s_or_i_of_so->clone()));
-				s_or_i_of_this->associations.safe_insert(ass1);
+					pair<uniqueId_type const, StaticObject*> ass1(meta.uniqueId(), (StaticObject*)(s_or_i_of_so->clone()));
+					s_or_i_of_this->associations.safe_insert(ass1);
 			
-				//and the other one for my party
-				pair<uniqueId_type const, StaticObject*> ass2(orole.uniqueId(), (StaticObject*)(s_or_i_of_this->clone()));
-				s_or_i_of_so->associations.safe_insert(ass2);
-
-
-
+					//and the other one for my party
+					pair<uniqueId_type const, StaticObject*> ass2(orole.uniqueId(), (StaticObject*)(s_or_i_of_this->clone()));
+					s_or_i_of_so->associations.safe_insert(ass2);
+				}
 			}
-		};
+		}
 
 		//it is a reference setting, we'll do it afterwards
 		//if ( ((string)(meta.name()) == "ref") && (mode == Udm::TARGETFROMPEER) && nvect.size()==1) 
