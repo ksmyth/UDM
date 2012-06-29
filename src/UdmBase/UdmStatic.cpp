@@ -2337,6 +2337,10 @@ namespace UdmStatic
 
 		for(set<ObjectImpl*>::iterator it_to_ass = to_associate.begin(); it_to_ass != to_associate.end(); it_to_ass++)
 		{
+			//remove association between peer and its peers when the model says that peer can be connected to a single object
+			if (orole.max() == 1 && mode == Udm::TARGETFROMPEER)
+				((StaticObject*)(*it_to_ass))->setAssociation(orole, vector<ObjectImpl*>(), mode, false);
+
 			//ok, create the link(increment ref. count's)
 		
 			//one for me,
