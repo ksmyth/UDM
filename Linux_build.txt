@@ -78,6 +78,9 @@ fakeroot debian/rules binary
 Building on Ubuntu 12.04 (Precise):
 ----------------------------------------------
 sudo apt-get install fakeroot debhelper build-essential autoconf libtool libxerces-c2-dev autotools-dev ccache libcppunit-dev libxalan110-dev ant junit ant-optional pccts libboost1.48-dev zlib1g-dev swig openjdk-6-jdk
+# Obtain model-files.zip as above or:
+wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
+# Build binary debs
 fakeroot debian/rules binary
 
 Building (CentOS)
