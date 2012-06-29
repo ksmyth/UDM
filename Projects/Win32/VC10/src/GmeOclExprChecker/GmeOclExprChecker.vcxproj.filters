@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Header Files">
@@ -63,28 +63,7 @@
     <ClCompile Include="..\..\..\..\..\src\UML GME\ExprChecker\UMLTypeEx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\obj\src\UML GME\Interpreter\Lattrib.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\obj\src\UML GME\Interpreter\Lattrib.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\obj\src\UML GME\Interpreter\Lcardin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\obj\src\UML GME\Interpreter\Lcardin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\obj\src\UML GME\Interpreter\Pattrib.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\obj\src\UML GME\Interpreter\Pattrib.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\obj\src\UML GME\Interpreter\Pcardin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\obj\src\UML GME\Interpreter\Pcardin.cpp">
+    <ClCompile Include="..\..\..\..\..\src\UML GME\OclParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
