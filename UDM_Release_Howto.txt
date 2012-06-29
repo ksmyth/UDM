@@ -3,7 +3,6 @@ Currently only Kevin Smyth <ksmyth@isis.vanderbilt.edu> makes Udm releases
 First see UDM_compile_guideVS2008.txt
 
 Update with new version, info:
- /UDM/trunk/InnoSetup/udm_innosetupVS2008.iss
  /UDM/trunk/WiX/Udm_inc.wxi
  /UDM/trunk/Projects/Win32/VC10/src/UdmDll/UdmDll.rc
  /UDM/trunk/Projects/Win32/VC9/src/UdmDll/UdmDll.rc
@@ -12,23 +11,23 @@ Update with new version, info:
  /UDM/trunk/Projects/Win32/VC10/src/UdmCli/Properties/AssemblyInfo.cs
  /UDM/trunk/configure.ac
  /UDM/trunk/debian/changelog (`dch -i`)
-ci -m 'Prepare for release 3.2.10'
+ci -m 'Prepare for release 3.2.11'
 
-svn cp -m 'Tag release 3.2.10' https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.10
+svn cp -m 'Tag release 3.2.11' https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.11
 
 For "Finding ID" in Udm (x2), Udm_x64: ssh kms1 python ./bin/pdb_promote.py 
 
-wget -O UDM_x64-3.2.10.msi http://build.isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi
-wget -O UDM-3.2.10.msi http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
+wget -O UDM_x64-3.2.11.msi http://build.isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi
+wget -O UDM-3.2.11.msi http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
 for file in http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do wget "$file"; done
 
-svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.10 Udm_source_r3.2.10 && \
-/c/Program\ Files/7-Zip/7z.exe a -r Udm_source_r3.2.10.zip Udm_source_r3.2.10/ && \
-cp Udm_source_r3.2.10/releaseinfo.txt UDM_Release_Notes.txt 
+svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.11 Udm_source_r3.2.11 && \
+/c/Program\ Files/7-Zip/7z.exe a -r Udm_source_r3.2.11.zip Udm_source_r3.2.11/ && \
+cp Udm_source_r3.2.11/releaseinfo.txt UDM_Release_Notes.txt 
 
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.10/ && \
-scp UDM_Release_Notes.txt UDM-3.2.10.msi UDM_x64-3.2.10.msi Udm_source_r3.2.10.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.10/ && \
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.10/
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.11/ && \
+scp UDM_Release_Notes.txt UDM-3.2.11.msi UDM_x64-3.2.11.msi Udm_source_r3.2.11.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.11/ && \
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.11/
 
 # For GReAT release:
 Bump Jenkins GReAT release number
@@ -54,7 +53,7 @@ scp GReAT_Release_Notes.txt GReAT-1.7.6.exe GReAT_source_r1.7.6.zip ksmyth@repo.
 ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7.6
 
 # For Udm and GReAT
-# On http://repo add Folder 3.2.10; add Downloads
+# On http://repo add Folder 3.2.11; add Downloads
 # JIRA: make release
 # email announcement
 # change http://kms1/svn/installs/install.py sync to installs/install.exe, https://svn.isis.vanderbilt.edu/isis-common/trunk/common-scripts/install.exe

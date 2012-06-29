@@ -7,7 +7,7 @@ ALL RIGHTS RESERVED
 
 1. Windows Operating system (XP, Vista, 7)
 
-2. GME 12, r12.1.24 from: http://repo.isis.vanderbilt.edu/downloads?tool=GME
+2. GME 12, r12.6.29 from: http://repo.isis.vanderbilt.edu/downloads?tool=GME
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. To develop using UDM: Visual Studio 9 or Visual Studio 10
@@ -19,6 +19,21 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+06/29/2012		-	Release 3.2.11
+		-	Add Object::getSrcObject() and Object::getDstObject() (only works with GME backend)
+		-	Add Object::GetChildRole()
+		-	GME backend refport changes:
+				refport_parent_rev may return Udm::null if the src/dst is not set
+				refport_parent may return Udm::null after src/dst is cleared
+				Reference's registry is not modified, and Connection's registry is cleared when src/dst is set
+					Fixes some "Object not found" exceptions (especially after xme export, import)
+		-	Fix serialization/deserialization of double values INF, -INF, and NaN in DOM backend
+		-	Fix bug in GME backend where CompositionRole in a Namespace isn't matched to GME role in CreateChild or GetChildren(CCR)
+		-	Fix bug with UML2XML: with crosslinks, a Diagram cannot have the same name as the RootFolder
+		-	Fix bug in CopyObjectHierarchy with a pre-populated copy-associative map: set AssociationClass ends
+				Bug appears as a Connection not having an endpoint set when source/dest is refport
+		-	Ubuntu build: read /etc/alternatives/javac to determine default Java. Support 12.04 (Precise)
+
 02/02/12		-	Release 3.2.10
 		-	64 bit UdmDll (VC10 only)
 

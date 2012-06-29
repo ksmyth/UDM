@@ -4125,8 +4125,8 @@ inline UDM_DLL std::ostream & operator<< (std::ostream &o, Udm::StringAttr c) { 
 // tldr: use CHANGES_LOST_DEFAULT and CloseWithUpdate() instead
 
 
-// Version 3.2.10
+// Version 3.2.11
 #define UDM_VERSION_MAJOR 3
-#define UDM_VERSION_MINOR (2 * 10 + 10 * 1)
+#define UDM_VERSION_MINOR (2 * 10 + 11 * 1)
 #define UDM_VERSION UDM_VERSION_MAJOR * 100 + UDM_VERSION_MINOR
 #endif//MOBIES_UDMBASE_H
