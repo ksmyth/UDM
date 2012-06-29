@@ -15,6 +15,7 @@
 #endif	//WIN32
 
 #include <cstdlib>
+#include <limits>
 
 
 // Registers the fixture into the 'registry'
@@ -115,6 +116,8 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 			
 			
 				vector<double> b;
+				b.push_back(-numeric_limits<double>::infinity());
+				b.push_back(numeric_limits<double>::infinity());
 				b.push_back(2.4);
 				b.push_back(1.1);
 				b.push_back(3.141592653589793234);
@@ -122,21 +125,25 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				doubleBulbLamp.ArrayReal() = b;
 
 				//the attribute is ordered array, the order is also checked
-				CPPUNIT_ASSERT_EQUAL((double)9.9999999999999991e-005L, (double)doubleBulbLamp.ArrayReal()[0]);
-				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[1] == 1.1);
-				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[2] == 2.4);
-				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[3] == 3.141592653589793234);
+				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[0] == -numeric_limits<double>::infinity());
+				CPPUNIT_ASSERT_EQUAL((double)9.9999999999999991e-005L, (double)doubleBulbLamp.ArrayReal()[1]);
+				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[2] == 1.1);
+				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[3] == 2.4);
+				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[4] == 3.141592653589793234);
+				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[5] == numeric_limits<double>::infinity());
 				//getting non-existing items - they should be zero
-				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[4] == 0);
+				CPPUNIT_ASSERT(doubleBulbLamp.ArrayReal()[6] == 0);
 			
 
 				//testing non-persistent array attributes
 				doubleBulbLamp.TempArrayReal() = b;			//assign
 				b = doubleBulbLamp.TempArrayReal();			//retrieve
 
-				CPPUNIT_ASSERT(b[1] == 1.1);
-				CPPUNIT_ASSERT(b[2] == 2.4);
-				CPPUNIT_ASSERT(b[3] == 3.141592653589793234);
+				CPPUNIT_ASSERT(b[0] == -numeric_limits<double>::infinity());
+				CPPUNIT_ASSERT(b[2] == 1.1);
+				CPPUNIT_ASSERT(b[3] == 2.4);
+				CPPUNIT_ASSERT(b[4] == 3.141592653589793234);
+				CPPUNIT_ASSERT(b[5] == numeric_limits<double>::infinity());
 				
 				vector<bool> c;
 				c.push_back(true);
