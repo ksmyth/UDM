@@ -58,18 +58,44 @@ void UdmTests::refPortsTest::testRefPorts(const string &file)
 	BPar bpar2 = BPar::Create(root);
 	bpar2.name() = "bpar2";
 
+
+	ARef1::Create(root_refs).ref() = apar;
 	// create references
 	ARef1 aref1 = ARef1::Create(root_refs);
 	aref1.name() = "aref1";
 
+	ARef1::Create(root_refs).ref() = apar;
+
+	BRef::Create(root_refs).ref() = bpar;
+	BRef::Create(root_refs).ref() = bpar2;
+	
 	BRef bref = BRef::Create(root_refs);
 	bref.name() = "bref";
+
+	BRef::Create(root_refs).ref() = bpar;
+	BRef::Create(root_refs).ref() = bpar2;
+
+	BRef::Create(root_refs2).ref() = bpar;
+	BRef::Create(root_refs2).ref() = bpar2;
 
 	BRef bref2 = BRef::Create(root_refs2);
 	bref2.name() = "bref2";
 
+	BRef::Create(root_refs2).ref() = bpar;
+	BRef::Create(root_refs2).ref() = bpar2;
+	BRef::Create(root_refs2).ref() = bref2;
+
+	BRef::Create(root_refs).ref() = bpar;
+	BRef::Create(root_refs).ref() = bpar2;
+	BRef::Create(root_refs).ref() = bref2;
+
+
 	BRef bref3 = BRef::Create(root_refs);
 	bref3.name() = "bref3";
+
+	BRef::Create(root_refs).ref() = bpar;
+	BRef::Create(root_refs).ref() = bpar2;
+	BRef::Create(root_refs).ref() = bref2;
 
 	aref1.ref() = apar;
 	bref.ref() = bpar;
@@ -97,14 +123,33 @@ void UdmTests::refPortsTest::testRefPorts(const string &file)
 	CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_container()) == aref1);
 	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref);
 
+	c.a_end__rp_container() = ARef1::Cast(Udm::null);
+	c.b_end__rp_container() = BRef::Cast(Udm::null);
+
+	CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_container()) == Udm::null);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == Udm::null);
+
+	c.a_end__rp_container() = aref1;
+	c.b_end__rp_container() = bref2;
+	c.b_end__rp_container() = bref;
+
+	CPPUNIT_ASSERT(ARef1::Cast(c.a_end__rp_container()) == aref1);
+	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref);
+
 	// we allow aref and bref.__rp_container_rev().size() == 0 before a_ and b_end_end are set
 
 	// connect src and dst
 	c.a_end_end() = a;
 	c.b_end_end() = b;
-	
+
+	std::set<C> conns;
 	ARef1 aref1_ = ARef1::Cast(c.a_end__rp_container());
-	std::set<C> conns = aref1_.a_end__rp_container_rev();
+	conns = aref1_.a_end__rp_container_rev();
+	CPPUNIT_ASSERT_EQUAL((size_t)1, conns.size());
+	CPPUNIT_ASSERT_EQUAL(c, *conns.begin());
+
+	BRef bref1_ = BRef::Cast(c.b_end__rp_container());
+	conns = bref1_.b_end__rp_container_rev();
 	CPPUNIT_ASSERT_EQUAL((size_t)1, conns.size());
 	CPPUNIT_ASSERT_EQUAL(c, *conns.begin());
 
@@ -127,9 +172,17 @@ void UdmTests::refPortsTest::testRefPorts(const string &file)
 	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref3);
 #endif
 
+	set<B> bs;
+	conns.clear();
+	a.b_end() = conns;
+
 	// connect to another refport using another refport container
-	c.b_end__rp_container() = bref3;
+	// c.b_end__rp_container() = bref3;
+	conns.clear();
+	conns.insert(c);
+	bref3.b_end__rp_container_rev() = conns;
 	c.b_end_end() = b2;
+	CPPUNIT_ASSERT_EQUAL(BRef::Cast(c.b_end__rp_container()), bref3);
 
 	// show connecting chains
 	{

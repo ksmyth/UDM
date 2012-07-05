@@ -479,7 +479,7 @@ namespace UdmGme
 	{
 		if (fco->Status != OBJECT_EXISTS)
 			return;
-		SmartBSTR co_ids = fco->RegistryValue[role_name.c_str()];
+		SmartBSTR co_ids = fco->RegistryValue[role_name.c_str()]; // FIXME: need to handle E_NOTFOUND or E_NAME_NOT_FOUND?
 		if (!(!co_ids))
 		{
 			RpHelperIDs ids = StringToList(string(co_ids));
@@ -564,15 +564,23 @@ namespace UdmGme
 			IMgaFCOsPtr references;
 
 			SmartBSTR src_role_name = conn->RegistryValue["sRefParent"];
+			HRESULT (__stdcall IMgaSimpleConnection::*fn)(IMgaFCOs**);
 			if (!src_role_name) {
 				SmartBSTR dst_role_name = conn->RegistryValue["dRefParent"];
-				try {
-					references = role_name.compare(dst_role_name) == 0 ? conn->GetDstReferences() : conn->GetSrcReferences();
-				} catch (udm_exception&) {}
+				fn = role_name.compare(dst_role_name) == 0 ? &IMgaSimpleConnection::get_DstReferences : &IMgaSimpleConnection::get_SrcReferences;
 			} else {
-				try {
-					references = role_name.compare(src_role_name) == 0 ? conn->GetSrcReferences() : conn->GetDstReferences();
-				} catch (udm_exception&) {}
+				fn = role_name.compare(src_role_name) == 0 ? &IMgaSimpleConnection::get_SrcReferences : &IMgaSimpleConnection::get_DstReferences;
+			}
+			{
+				struct IMgaFCOs * _result = 0;
+				IMgaSimpleConnection& iconn = *(static_cast<IMgaSimpleConnection*>(conn));
+				HRESULT _hr = (iconn.*fn)(&_result);
+				if (_hr != E_MGA_NAME_NOT_FOUND)
+				{
+					if (FAILED(_hr))
+						_com_issue_errorex(_hr, conn, __uuidof(conn));
+					references = IMgaFCOsPtr(_result, false);
+				}
 			}
 
 			if (references != NULL && references->GetCount() > 0)
@@ -919,6 +927,7 @@ bbreak:			;
 						}
 						catch(udm_exception&) 
 						{
+							// Warning: an arbitrary reference is chosen here
 							IMgaFCOsPtr references = FindReferencesToFCO(peer);
 							COMTHROW(IMgaSimpleConnectionPtr(self)->SetSrc(references, peer));
 						}
@@ -945,6 +954,7 @@ bbreak:			;
 						}
 						catch(udm_exception&) 
 						{
+							// Warning: an arbitrary reference is chosen here
 							IMgaFCOsPtr references = FindReferencesToFCO(peer);
 							COMTHROW(IMgaSimpleConnectionPtr(self)->SetDst(references, peer));
 						}
@@ -964,15 +974,24 @@ bbreak:			;
 				}
 				MGACOLL_ITERATE_END;
 */
+				ASSERT(pvect.size() <= 1);
+				ASSERT(kvect.size() <= 1);
 				for(i = pvect.begin(); i != pvect.end(); i++) 
 				{
 					IMgaSimpleConnectionPtr conn = static_cast<GmeObject *>(*i)->self;
 					
 					//we need to check if there is an associated helper connection
-					GmeObject go(conn, mydn);
-					go.RemoveHelperConnections();
-
-					conn->DestroyObject();
+					//GmeObject go(conn, mydn);
+					//go.RemoveHelperConnections();
+					// FIXME: remove refport_parent regnode?
+					if (reverse)
+					{
+						conn->SetDst(NULL, NULL);
+					}
+					else
+					{
+						conn->SetSrc(NULL, NULL);
+					}
 				}//for i pvect
 				for(i = kvect.begin(); i != kvect.end(); i++) 
 				{
@@ -997,8 +1016,9 @@ bbreak:			;
 							}
 							catch (udm_exception&)
 							{
+								// Warning: an arbitrary reference is chosen here
 								IMgaFCOsPtr references = static_cast<GmeObject *>(*i)->FindReferencesToFCO(self);
-								COMTHROW(conn->SetDst(references, self));
+								conn->SetDst(references, self);
 							}
 						}
 					}//if(reverse)
@@ -1024,8 +1044,9 @@ bbreak:			;
 							//	cout <<"\t\t Source: " << (char *)(self->GetName())<<endl;
 							//	cout <<"\t\t connection: " << (char*)(conn->GetName()) << endl;
 
+								// Warning: an arbitrary reference is chosen here
 								IMgaFCOsPtr references = static_cast<GmeObject *>(*i)->FindReferencesToFCO(self);
-								COMTHROW(conn->SetSrc(references, self));
+								conn->SetSrc(references, self);
 
 							}
 						}
@@ -1034,11 +1055,13 @@ bbreak:			;
 			}//if(mode == Udm::CLASSFROMTARGET) 
 			else 
 			{
+				ASSERT(mode == Udm::TARGETFROMPEER);
 				if (nn->rp_helper )
 				{
 					
 
-					if (kvect.size() > 1 && self->GetObjType() != OBJTYPE_REFERENCE) throw udm_exception("In case of np_helper connection there should be maximum one connecting object!");
+					if (kvect.size() > 1 && self->GetObjType() != OBJTYPE_REFERENCE)
+						throw udm_exception("In case of np_helper connection there should be maximum one connecting object!");
 
 					::Uml::AssociationRole orole = ::Uml::theOther(meta);
 					string oname = orole.name();
@@ -1055,7 +1078,14 @@ bbreak:			;
 							if (RpHelperNotValidConn(self, connecting_object, rname, oname))
 								throw udm_exception("Connection to reference port already exists, delete it first before changing the reference!");
 #endif
-							RpHelperAddToRegistry(self, connecting_object, rname, isNavigable);
+							if (self->ObjType == OBJTYPE_CONNECTION)
+							{
+								RpHelperAddToRegistry(self, connecting_object, rname, isNavigable);
+							}
+							else
+							{
+								RpHelperAddToRegistry(connecting_object, self, oname, oIsNavigable);
+							}
 						}
 					}
 					if (pvect.size())
@@ -1063,7 +1093,14 @@ bbreak:			;
 						for (vector<ObjectImpl*>::const_iterator i = pvect.begin(); i != pvect.end(); i++)
 						{
                             IMgaFCOPtr connecting_object = static_cast<GmeObject *>(*i)->self;
-							RpHelperRemoveFromRegistry(self, connecting_object, rname);
+							if (self->ObjType == OBJTYPE_CONNECTION)
+							{
+								RpHelperRemoveFromRegistry(self, connecting_object, rname);
+							}
+							else
+							{
+								RpHelperRemoveFromRegistry(connecting_object, self, oname);
+							}
 						}
 					};
 				}//if (nn->rp_helper)
@@ -1081,11 +1118,6 @@ bbreak:			;
 							{
 								if(peer == static_cast<GmeObject *>(*i)->self) 
 								{
-									//we need to check if there is an associated helper connection
-									GmeObject * go = new GmeObject( conn, mydn);
-									go->RemoveHelperConnections();
-									delete go;
-
 									conn->DestroyObject();
 									break;
 								}
@@ -1977,42 +2009,6 @@ bbreak:			;
 		setParent(NULL, NULL);
 	};
 
-	void GmeObject::RemoveHelperConnections()
-	{
-		//we have to check if this object has an rp_helper helper connection
-		if (self)
-		{//folders won;t have connections
-			set< ::Uml::AssociationRole> all_roles;
-			set< ::Uml::AssociationRole> ars = Uml::AncestorAssociationTargetRoles(m_type);//.associationRoles();
-			set< ::Uml::AssociationRole>::iterator ars_i;
-			for (ars_i = ars.begin(); ars_i != ars.end(); ars_i++)
-			{
-				if (ars_i->isNavigable()) all_roles.insert(*ars_i);
-				::Uml::AssociationRole orole = Uml::theOther(*ars_i);
-				if (orole.isNavigable()) all_roles.insert(orole);
-
-			};
-			
-			for (ars_i = all_roles.begin(); ars_i != all_roles.end(); ars_i++)
-			{
-				string oar_name = ars_i->name();
-				::Uml::Association assoc = ars_i->parent();
-				assocmapitem *nn = ((GmeDataNetwork *)__getdn())->amap.find(assoc.uniqueId())->second;
-				if (nn->ot == OBJTYPE_CONNECTION && nn->rp_helper)
-				{
-					IMgaFCOsPtr fcos = RpHelperFindPeerFCOsFromRegistry(self,
-						oar_name, false,
-						(GmeDataNetwork *)__getdn());
-					MGACOLL_ITERATE(IMgaFCO, fcos)
-					{
-						RpHelperRemoveFromRegistry(MGACOLL_ITER, self, oar_name);
-					}
-					MGACOLL_ITERATE_END;
-				};
-			};
-		};
-	};
-
 	void GmeObject::setParent(ObjectImpl *a, const ::Uml::CompositionParentRole &role, const bool direct) 
 	{
 		((GmeDataNetwork*)mydn)->CountWriteOps();
@@ -2024,8 +2020,6 @@ bbreak:			;
 			COMTHROW(objself->get_Status(&oStatus));
 			if (oStatus == OBJECT_EXISTS)
 			{
-				
-				RemoveHelperConnections();
 				COMTHROW(objself->DestroyObject());	
 			}
 				
