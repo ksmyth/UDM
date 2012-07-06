@@ -974,8 +974,6 @@ bbreak:			;
 				}
 				MGACOLL_ITERATE_END;
 */
-				ASSERT(pvect.size() <= 1);
-				ASSERT(kvect.size() <= 1);
 				for(i = pvect.begin(); i != pvect.end(); i++) 
 				{
 					IMgaSimpleConnectionPtr conn = static_cast<GmeObject *>(*i)->self;
