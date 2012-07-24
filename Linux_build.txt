@@ -89,4 +89,6 @@ Building (CentOS)
   yum -y groupinstall 'Development Libraries' 'Development Tools' 'Java Development'
   yum -y install ccache cppunit-devel xerces-c-devel swig ant-junit boost-devel antlr
   setenforce permissive
+  wget -O model-files.zip http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip
+  autoreconf -i
   cd rpmbuild_CentOS && bash make.sh
