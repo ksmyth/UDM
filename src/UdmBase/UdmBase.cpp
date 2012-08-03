@@ -1957,6 +1957,11 @@ namespace UDM_NAMESPACE
 			}
 
 		};
+
+		UDM_DLL DataNetwork* CreateSmartDataNetwork(const UdmDiagram &metainfo, UdmProject * pr)
+		{
+			return new SmartDataNetwork(metainfo, pr);
+		}
 }
 
 

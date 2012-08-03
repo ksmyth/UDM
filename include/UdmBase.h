@@ -3320,7 +3320,11 @@ public:
 	friend void ::Uml::Initialize();
 };
 
-
+// This function is provided for backwards-compatibility:
+//  If a virtual function is added to DataNetwork, programs that are compiled against the augmented version and
+//  instantiate a SmartDataNetwork will not link against older version of Udm
+// TLDR: use CreateSmartDataNetwork instead of new SmartDataNetwork
+UDM_DLL DataNetwork* CreateSmartDataNetwork(const UdmDiagram &metainfo, UdmProject * pr = NULL);
 
 class SmartDataNetwork : public DataNetwork 
 {
@@ -3508,6 +3512,10 @@ public:
 	virtual const string & Str(){return str;};
 	virtual set<Object> GetAllInstancesOf(const ::Uml::Class& meta){return testdn()->GetAllInstancesOf(meta);};
 
+	virtual UDM_DLL struct AssociationRoleInfo GetAssociationRoleInfo(const ::Uml::AssociationRole &role) const
+	{
+		return testdn()->GetAssociationRoleInfo(role);
+	}
 };
 
 	class UDM_DLL  MetaDepository
