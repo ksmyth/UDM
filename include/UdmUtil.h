@@ -45,7 +45,7 @@ namespace UdmUtil
 	//utility which copies a subtree from a data network to another
 	//consistent (same) meta is assumed.
 	//direct parameter will be passed thru setAssociation
-	
+	// returns: 0 if successful
 	UDM_DLL int reqCopyLinks(Udm::ObjectImpl* p_srcRoot,Udm::ObjectImpl* p_dstRoot, copy_assoc_map& cam, const bool direct = true,const bool simpleLinks = true, const CopyOpts &opts = DefCopyOpts);
 	UDM_DLL int CopyObjectHierarchy(Udm::ObjectImpl* p_srcRoot, Udm::ObjectImpl* p_dstRoot, Udm::DataNetwork* p_dstBackend, copy_assoc_map &cam, const CopyOpts &opts = DefCopyOpts);
 	
