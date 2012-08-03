@@ -3861,7 +3861,7 @@ namespace UdmDom
 		resolver->DontUseStrXsd();
 
 		savesystemname = systemname;
-		if(!strnicmp(savesystemname.c_str(),"DOM:", 4)) savesystemname.erase(0,4);
+		if(!strnicmp(savesystemname.c_str(),"DOM:", static_cast<size_t>(4))) savesystemname.erase(0,4);
 
 		::Uml::Diagram dgr = GetRootMeta();
 		try
@@ -3993,7 +3993,7 @@ namespace UdmDom
 
 			UDM_ASSERT( metalocator.length());
 			savesystemname = systemname;
-			if(!strnicmp(savesystemname.c_str(),"DOM:", 4)) savesystemname.erase(0,4);
+			if(!strnicmp(savesystemname.c_str(),"DOM:", static_cast<size_t>(4))) savesystemname.erase(0,4);
 
 			XStr ml(metalocator);
 			MyEntityResolver mr;
@@ -4028,7 +4028,7 @@ namespace UdmDom
 			if(!pp)
 			{
 				string mlExtension = xsd_file.size() >= 4 ?	xsd_file.substr(xsd_file.size() - 4, 4) : "";
-				if(strnicmp(mlExtension.c_str(), ".xsd", 4) != 0 )
+				if(strnicmp(mlExtension.c_str(), ".xsd", static_cast<size_t>(4)) != 0 )
 				{
 					xsd_file += ".xsd";
 					XStr ml2(xsd_file);
