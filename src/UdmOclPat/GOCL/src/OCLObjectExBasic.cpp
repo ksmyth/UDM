@@ -21,7 +21,7 @@ namespace OclBasic
 	std::string PrintCollection( const std::string& strTypeName, const OclMeta::ObjectVector& vecElements )
 	{
 		char chBuffer[ 100 ];
-		sprintf( chBuffer, "%d", vecElements.size() );
+		sprintf( chBuffer, "%d", (int)vecElements.size() );
 		return strTypeName + " { size: " + std::string( chBuffer ) + "; } ";
 		/*
 		std::string strObject = strTypeName + " { " + std::string( chBuffer ) + " , [ ";

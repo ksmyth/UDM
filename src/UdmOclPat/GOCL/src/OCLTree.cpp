@@ -1222,7 +1222,7 @@ namespace OclTree
 
 		if ( m_vecDeclarators.empty() ) {
 			char chBuffer[ 20 ];
-			sprintf( chBuffer, "!iter%d", context.m_vecImplicits.size() );
+			sprintf( chBuffer, "!iter%d", (int)context.m_vecImplicits.size() );
 			m_vecDeclarators.push_back( std::string( chBuffer ) );
 			context.m_vecImplicits.push_back( std::string( chBuffer ) );
 		}
@@ -1533,7 +1533,7 @@ namespace OclTree
 				TypeSeq vecType = m_pThisNode->m_vecType;
 				vecType.erase( vecType.begin() );
 				char chBuffer[ 20 ];
-				sprintf( chBuffer, "!iter%d", contextIterator.m_vecImplicits.size() );
+				sprintf( chBuffer, "!iter%d", (int)contextIterator.m_vecImplicits.size() );
 				contextIterator.m_ctxTypes.AddVariable( std::string( chBuffer ), vecType, true );
 				contextIterator.m_vecImplicits.push_back( std::string( chBuffer ) );
 
