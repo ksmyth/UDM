@@ -194,7 +194,7 @@ void FactoryGen::generateExampleString( )
   m_example_output << "\t */" << endl;
   m_example_output << "\tpublic void testOpenFromString_" << m_root_name << "_" << containerDescriptionFunc( ) << "() \n\t\tthrows UdmException " << endl;
   m_example_output << "\t{" << endl; 
-  m_example_output << "\t\tString xmlString = \"<...>\";" << endl;
+  m_example_output << "\t\tjava.lang.String xmlString = \"<...>\";" << endl;
   m_example_output << "\t\t// open the data network" << endl;
   m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "StringFactory gtf \n\t\t\t= FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << "StringFactory();" << endl;
   m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "."  << m_root_name << " root \n\t\t\t= gtf.open(xmlString);" << endl;
@@ -206,7 +206,7 @@ void FactoryGen::generateExampleString( )
   m_example_output << "\t\tgtf.checkConstraints();" << endl;
   m_example_output << "\t\t" << endl;
   m_example_output << "\t\t// close and save the data network" << endl;
-  m_example_output << "\t\tString result = gtf.save();" << endl;
+  m_example_output << "\t\tjava.lang.String result = gtf.save();" << endl;
   m_example_output << "\t\tSystem.out.println(result);" << endl;
   m_example_output << "\t}" << endl;
 
@@ -217,7 +217,7 @@ void FactoryGen::generateExampleString( )
   m_example_output << containerDescriptionDoc( ) << endl;
   m_example_output << "\t * @throws UdmException" << endl;
   m_example_output << "\t */" << endl;
-  m_example_output << "\tpublic void testOpenFromStream_" << m_root_name << "_" << containerDescriptionFunc( ) << "(InputStream in) \n\t\tthrows UdmException " << endl;
+  m_example_output << "\tpublic void testOpenFromStream_" << m_root_name << "_" << containerDescriptionFunc( ) << "(java.io.InputStream in) \n\t\tthrows UdmException " << endl;
   m_example_output << "\t{" << endl; 
   m_example_output << "\t\t// open the data network" << endl;
   m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "StringFactory gtf \n\t\t\t= FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << "StringFactory();" << endl;
@@ -232,7 +232,7 @@ void FactoryGen::generateExampleString( )
   m_example_output << "\t\tgtf.checkConstraints();" << endl;
   m_example_output << "\t\t" << endl;
   m_example_output << "\t\t// close and save the data network" << endl;
-  m_example_output << "\t\tInputStream result = gtf.saveAsStream();" << endl;
+  m_example_output << "\t\tjava.io.InputStream result = gtf.saveAsStream();" << endl;
   m_example_output << "\t\t" << endl;
   m_example_output << "\t}" << endl;
 }
@@ -359,10 +359,10 @@ void FactoryGen::constructor( )
   m_output << "public class " << m_root_name << m_type << "Factory" << endl;
   m_output << "{" << endl;
   m_output << "\t// resource information" << endl;
-  m_output << "\tprivate static final String packagePath = \"/edu/vanderbilt/isis/meta/\";" << endl;
-  m_output << "\tprivate static final String xmlMetaFile =\"" << m_inputfile << "\";" << endl;
-  m_output << "\tprivate static final String xsdMetaFile =\"" << containerDescriptionFunc( ) << ".xsd\";" << endl;
-  m_output << "\tprivate static final String metaName =\"" << m_diag_name << "\";" << endl;
+  m_output << "\tprivate static final java.lang.String packagePath = \"/edu/vanderbilt/isis/meta/\";" << endl;
+  m_output << "\tprivate static final java.lang.String xmlMetaFile =\"" << m_inputfile << "\";" << endl;
+  m_output << "\tprivate static final java.lang.String xsdMetaFile =\"" << containerDescriptionFunc( ) << ".xsd\";" << endl;
+  m_output << "\tprivate static final java.lang.String metaName =\"" << m_diag_name << "\";" << endl;
   m_output << "\t// the wrapped " << Utils::toLower( m_type ) << " factory instance" << endl;
   m_output << "\tprivate Udm" << m_type << "Factory factory;" << endl;
   m_output << endl;
@@ -465,7 +465,7 @@ void FactoryGen::createDNInFile( )
   m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
-  m_output << "\tpublic " << m_root_name << " create" << "(String instanceFileName) \n\t\t throws UdmException" << endl;
+  m_output << "\tpublic " << m_root_name << " create" << "(java.lang.String instanceFileName) \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
   m_output << "\t\t" << m_root_name << " root =" << endl;
   m_output << "\t\t\tnew " << m_root_name << "(" << endl;
@@ -521,7 +521,7 @@ void FactoryGen::openDNFromFile( )
   m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
-  m_output << "\tpublic " << m_root_name << " open(String instanceFileName) \n\t\t throws UdmException" << endl;
+  m_output << "\tpublic " << m_root_name << " open(java.lang.String instanceFileName) \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
   m_output << "\t\t" << m_root_name << " root = \n\t\t\tnew " << m_root_name << "(" << endl;
   m_output << "\t\t\t\tfactory.openExistingDataNetwork(instanceFileName)" << endl;
@@ -539,7 +539,7 @@ void FactoryGen::openDNFromFile( )
   m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
-  m_output << "\tpublic " << m_root_name << " open(InputStream xmlStream) \n\t\t throws UdmException" << endl;
+  m_output << "\tpublic " << m_root_name << " open(java.io.InputStream xmlStream) \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
   m_output << "\t\t" << m_root_name << " root = \n\t\t\tnew " << m_root_name << "(" << endl;
   m_output << "\t\t\t\tfactory.openExistingDataNetworkFromStream(xmlStream)" << endl;
@@ -561,7 +561,7 @@ void FactoryGen::openDNFromString( )
   m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
-  m_output << "\tpublic " << m_root_name << " open(String xmlString) \n\t\t throws UdmException" << endl;
+  m_output << "\tpublic " << m_root_name << " open(java.lang.String xmlString) \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
   m_output << "\t\t" << m_root_name << " root = \n\t\t\tnew " << m_root_name << "(" << endl;
   m_output << "\t\t\t\tfactory.openExistingDataNetwork(xmlString)" << endl;
@@ -579,7 +579,7 @@ void FactoryGen::openDNFromString( )
   m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
-  m_output << "\tpublic " << m_root_name << " open(InputStream xmlStream) \n\t\t throws UdmException" << endl;
+  m_output << "\tpublic " << m_root_name << " open(java.io.InputStream xmlStream) \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
   m_output << "\t\t" << m_root_name << " root = \n\t\t\tnew " << m_root_name << "(" << endl;
   m_output << "\t\t\t\tfactory.openExistingDataNetworkFromStream(xmlStream)" << endl;
@@ -625,7 +625,7 @@ void FactoryGen::saveDNFile( )
   m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
-  m_output << "\tpublic void saveAs(String instanceFileName) \n\t\t throws UdmException" << endl;
+  m_output << "\tpublic void saveAs(java.lang.String instanceFileName) \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
   m_output << "\t\tfactory.saveAs(instanceFileName);" << endl;
   m_output << "\t\tUdmHelper.ClearXsdStorage();" << endl;
@@ -644,10 +644,10 @@ void FactoryGen::saveDNString( )
   m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
-  m_output << "\tpublic String save() \n\t\t throws UdmException" << endl;
+  m_output << "\tpublic java.lang.String save() \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
   m_output << "\t\tfactory.closeWithUpdate();" << endl;
-  m_output << "\t\tString result = factory.saveAs();" << endl;
+  m_output << "\t\tjava.lang.String result = factory.saveAs();" << endl;
   m_output << "\t\tUdmHelper.ClearXsdStorage();" << endl;
   m_output << "\t\tfactory.unloadDiagram();" << endl;
   m_output << "\t\treturn result;" << endl;
@@ -666,10 +666,10 @@ void FactoryGen::saveAsStream( )
   m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
-  m_output << "\tpublic InputStream saveAsStream() \n\t\t throws UdmException" << endl;
+  m_output << "\tpublic java.io.InputStream saveAsStream() \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
   m_output << "\t\tfactory.closeWithUpdate();" << endl;
-  m_output << "\t\tInputStream result = factory.saveAsStream();" << endl;
+  m_output << "\t\tjava.io.InputStream result = factory.saveAsStream();" << endl;
   m_output << "\t\tUdmHelper.ClearXsdStorage();" << endl;
   m_output << "\t\tfactory.unloadDiagram();" << endl;
   m_output << "\t\treturn result;" << endl;
@@ -687,7 +687,7 @@ void FactoryGen::checkConstraints( )
   m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
   // function signature
-  m_output << "\tpublic String checkConstraints() \n\t\t throws UdmException" << endl;
+  m_output << "\tpublic java.lang.String checkConstraints() \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
   m_output << "\t\treturn (factory.getDataNetwork().checkConstraints());" << endl;
   m_output << "\t}" << endl;

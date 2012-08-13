@@ -114,7 +114,7 @@ void UtilsGen::wrapper( )
   m_output << "\tpublic static UdmPseudoObject wrapWithSubclass(UdmPseudoObject obj, Diagram diagram)";
   m_output <<  "\n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
-  m_output << "\t\tString type = obj.getType();" << endl;
+  m_output << "\t\tjava.lang.String type = obj.getType();" << endl;
 
   for ( classes_i = classes.begin(); classes_i != classes.end(); classes_i++ )
   {

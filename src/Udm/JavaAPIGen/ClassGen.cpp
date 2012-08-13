@@ -7,6 +7,9 @@
 #include <cstring>
 
 #include <sstream>
+#include <algorithm>
+#include <deque>
+#include <iterator>
 
 //! Constructor.
 /*!
@@ -52,23 +55,40 @@ void ClassGen::generate()
   cg.accessAttributes( );
   cg.associations( );
 
-  set< ::Uml::Class> bases = m_cl.baseTypes();
-  set< ::Uml::Class>::iterator basesIt = bases.begin();
-  for (; basesIt != bases.end(); basesIt++)
-  {
-	  if (basesIt == bases.begin())
-		  // These methods are defined via inheritance
-		  continue;
+  set<Uml::Class> bases = m_cl.baseTypes();
+  set<Uml::Class> inheritedBases;
 
+  deque< ::Uml::Class> basesDeque;
+  basesDeque.push_back(m_cl);
+  while (!basesDeque.empty())
+  {
+	  Uml::Class base = basesDeque.front();
+	  basesDeque.pop_front();
+	  std::set<Uml::Class> basesBases = base.baseTypes();
+	  std::copy(basesBases.begin(), basesBases.end(), std::back_inserter(basesDeque));
+	  std::copy(basesBases.begin(), basesBases.end(), std::inserter(inheritedBases, inheritedBases.begin()));
+  }
+
+  Uml::Class firstBase = *bases.begin();
+  set<Uml::Class> firstBaseAncestors = Uml::AncestorClasses(firstBase);
+  vector<Uml::Class> baseClassesToGenerate;
+  baseClassesToGenerate.resize(inheritedBases.size() + 1);
+  set_difference(inheritedBases.begin(), inheritedBases.end(), firstBaseAncestors.begin(), firstBaseAncestors.end(), baseClassesToGenerate.begin());
+
+  vector<Uml::Class>::iterator basesIt = baseClassesToGenerate.begin();
+  for (; *basesIt; basesIt++)
+  {
 	  // TODO: lowercase this?
-    string pck = Utils::getPackageSignature( *basesIt, m_ns_path, m_package_name );
+    string pck = Utils::getPackageSignature(*basesIt, m_ns_path, m_package_name);
+	pck = pck.substr(0, pck.length() - 1);
+	pck = Utils::toPackageName(pck);
 	std::stringstream ioutput; // The method declarations for the interface will be in a base interface, so we ignore them
+
 	CG<stringstream> cg(*basesIt, pck, m_output, ioutput, basesIt->name(), m_ns_path);
 	m_output << " // Methods for " << basesIt->name() << endl;
 	cg.accessChildren();
 	cg.accessAttributes();
 	cg.associations();
-    m_base_name = pck + (string)bases.begin()->name();
   }
 
 
@@ -140,8 +160,6 @@ void ClassGen::constructor( )
   // generate the signature of the class
   m_output << "public ";
 
-  if ( m_cl.isAbstract() )
-    m_output << "abstract ";
 
   m_output << "class " << m_cl_name << " extends " << m_base_name << " implements I" << m_cl_name << endl;
   m_ioutput << "public interface I" << m_cl_name << " ";
@@ -163,10 +181,10 @@ void ClassGen::constructor( )
 
   if ( !m_cl.isAbstract() )
   {
-    m_output << "\tpublic static final String META_TYPE = \"" << m_cl_name << "\";" << endl;
-    m_output << "\tpublic static final String META_TYPE_NS = \"" << m_ns_path_orig << "\";" << endl;
-    m_ioutput << "\tpublic static final String META_TYPE = \"" << m_cl_name << "\";" << endl;
-    m_ioutput << "\tpublic static final String META_TYPE_NS = \"" << m_ns_path_orig << "\";" << endl;
+    m_output << "\tpublic static final java.lang.String META_TYPE = \"" << m_cl_name << "\";" << endl;
+    m_output << "\tpublic static final java.lang.String META_TYPE_NS = \"" << m_ns_path_orig << "\";" << endl;
+    m_ioutput << "\tpublic static final java.lang.String META_TYPE = \"" << m_cl_name << "\";" << endl;
+    m_ioutput << "\tpublic static final java.lang.String META_TYPE_NS = \"" << m_ns_path_orig << "\";" << endl;
     m_output << "\tprivate static UdmPseudoObject metaClass;" << endl;
     m_output << endl;
   }
@@ -304,16 +322,22 @@ void ClassGen::CG<OS_I>::accessChildren( )
 {
   m_output << "\t/* Accessing children */" << endl << endl;
 
+  set<Uml::Class> allContainedClasses;
+
   // set of contained classes
   set< ::Uml::Class> conts = Uml::ContainedClasses( m_cl );
   for ( set< ::Uml::Class>::iterator c_i = conts.begin(); c_i != conts.end(); c_i++ )
   {
     // the descendants of the contained class
     set < ::Uml::Class> conts_der = Uml::DescendantClasses( *c_i );
-    for ( set< ::Uml::Class>::iterator c_d_i = conts_der.begin(); c_d_i != conts_der.end(); c_d_i++ )
+	std::copy(conts_der.begin(), conts_der.end(), std::inserter(allContainedClasses, allContainedClasses.begin()));
+  }
+
+  {
+    for ( set< ::Uml::Class>::iterator c_d_i = allContainedClasses.begin(); c_d_i != allContainedClasses.end(); c_d_i++ )
     {
       if ( c_d_i->isAbstract() )
-        continue;
+        continue; // FIXME: KMS this looks wrong
 
       ::Uml::Composition comp = Uml::matchChildToParent( *c_d_i, m_cl );
       string c_i_name = getInterfaceIfNeeded(*c_d_i);
@@ -424,7 +448,7 @@ void ClassGen::CG<OS_I>::accessChildren( )
             m_output << "\t/**" << endl;
             m_output << "\t *  Composition role name <code>" << ccr_name << "</code>." << endl;
             m_output << "\t */" << endl;
-            m_output << "\tpublic static final String " << Utils::getCCRString(*ccrs_i) << " = \"" << (string)ccrs_i->name() << "\";";
+            m_output << "\tpublic static final java.lang.String " << Utils::getCCRString(*ccrs_i) << " = \"" << (string)ccrs_i->name() << "\";";
             m_output << endl << endl;
 
             //getRoleName
@@ -492,8 +516,8 @@ void ClassGen::CG<OS_I>::accessAttributes( )
     m_output << "\t/**" << endl;
     m_output << "\t * Attribute for <code>" << att_name << "</code>." << endl;
     m_output << "\t */" << endl;
-    m_output << "\tpublic static final String " << att_name << " = \"" << att_name << "\";" << endl;
-    m_ioutput << "\tpublic static final String " << att_name << " = \"" << att_name << "\";" << endl;
+    m_output << "\tpublic static final java.lang.String " << att_name << " = \"" << att_name << "\";" << endl;
+    m_ioutput << "\tpublic static final java.lang.String " << att_name << " = \"" << att_name << "\";" << endl;
     m_output << endl;
 
     // type of the attribute
@@ -504,12 +528,12 @@ void ClassGen::CG<OS_I>::accessAttributes( )
     {
         if ( array )
         {
-          jtype = "String []";
+          jtype = "java.lang.String []";
           upo_call = "StrValues";
         }
         else
         {
-          jtype = "String";
+          jtype = "java.lang.String";
           upo_call = "StringVal";
         }
     }
@@ -617,7 +641,7 @@ void ClassGen::CG<OS_I>::associations( )
       m_ioutput << "\tpublic void set" << ar_name << "(" << pkg_name << tname << " a) throws UdmException;" << endl;
       m_output << "\t{" << endl;
       m_output << "\t\tUdmPseudoObjectContainer container = new UdmPseudoObjectContainer(1);" << endl;
-      m_output << "\t\tcontainer.setAt(0, a);" << endl;
+      m_output << "\t\tcontainer.setAt(0, (UdmPseudoObject)a);" << endl;
       m_output << "\t\tsetAssociation(\"" << ar_name << "\", container, UdmHelper.TARGET_FROM_CLASS);" << endl;
       m_output << "\t}" << endl;
       m_output << endl;

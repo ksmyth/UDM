@@ -85,15 +85,9 @@ const string & Utils::getCopyrightText ( )
 */
 string Utils::toPackageName ( const string & packagePath )
 {
-   string ret ( packagePath );
-
-   for ( unsigned int i = 0; i < ret.size(); i++ )
-   {
-      if ( ret[i] == '/' )
-         ret[i] = '.';
-   }
-
-   return ret;
+	string ret(packagePath);
+	std::replace(ret.begin(), ret.end(), '/', '.');
+	return ret;
 }
 
 //! Creates a directory structure from a package signature .
@@ -171,7 +165,7 @@ vector< ::Uml::Class> Utils::getPossibleRootClasses (const set< ::Uml::Class> & 
 
 //! Returns the package signature for the specific class.
 /*!
-  If the namespace path of cl differs form the namespace path specified by the 
+  If the namespace path of cl differs from the namespace path specified by the 
   parameter current_ns_path, then it returns the the abolute path 
   (package signature) of cl.
 */
@@ -180,20 +174,26 @@ string Utils::getPackageSignature(const ::Uml::Class &cl
   , const string & pckg_hierarcy)
 
 {
-  string ret;
-
-  ::Uml::Namespace cl_ns = cl.parent_ns();
-  string cl_ns_path = cl_ns ? cl_ns.getPath2("::", false) : "";
-  cl_ns_path = Utils::toLower(cl_ns_path);
-
-  if ( cl_ns_path != Utils::toLower(current_ns_path) )
-  {
-    string pck_name = Utils::toPackageName( pckg_hierarcy );
-    pck_name.resize( pck_name.length( ) - current_ns_path.length( ) );
-	ret = pck_name + UdmUtil::replace_delimiter(cl_ns_path, "::", ".") + ".";
-  }
-
-  return ret;
+	ASSERT(pckg_hierarcy[pckg_hierarcy.length()-1] != '/');
+	ASSERT(pckg_hierarcy[pckg_hierarcy.length()-1] != '.');
+	ASSERT(current_ns_path[current_ns_path.length()-1] != '.');
+	::Uml::Namespace cl_ns = cl.parent_ns();
+	string cl_ns_path = cl_ns ? cl_ns.getPath2(".", false) : "";
+	cl_ns_path = Utils::toLower(cl_ns_path);
+	string ret;
+	ret = Utils::toPackageName(pckg_hierarcy);
+	if (current_ns_path.length())
+	{
+		ret.resize(ret.length() - (current_ns_path.length() + 1));
+	}
+	if (cl_ns_path.length())
+	{
+		ret += ".";
+		ret += cl_ns_path;
+	}
+	ret += ".";
+	ASSERT(ret[ret.length()-1] == '.');
+	return ret;
 }
 
 //! Returns the first non-abstract ancestor of the class specified by the parameter
