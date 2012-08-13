@@ -11,8 +11,9 @@ if [ -d udm-$VERSION ]; then rm -rf udm-$VERSION; fi
 mkdir udm-$VERSION
 pushd ..
 pushd debian/zlib-1.2.3.3.dfsg/contrib/minizip && make libminizip && popd
+autoreconf -i
 ./configure LDFLAGS="-L$(pwd)/debian/zlib-1.2.3.3.dfsg/contrib/minizip/" CPPFLAGS="-I$(pwd)/debian/zlib-1.2.3.3.dfsg/contrib/"  CXXFLAGS="-I$(pwd)/debian/zlib-1.2.3.3.dfsg/contrib/" --without-xalan --without-antlr --prefix=/usr
-make DESTDIR=`pwd`/rpmbuild_CentOS/udm-$VERSION install
+make DESTDIR="$(pwd)"/rpmbuild_CentOS/udm-$VERSION install
 popd
 
 tar -zcvf udm-$VERSION.tar.gz udm-$VERSION
