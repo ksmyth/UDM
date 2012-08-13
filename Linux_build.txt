@@ -1,6 +1,27 @@
-Linux_build.txt
-Software requirements and instructions to compile UDM source files on
-Linux
+HOWTO install Udm from ISIS repos:
+
+CentOS 5.8:
+----------
+On CentOS 5, ISIS Udm packages require python-hashlib from EPEL:
+ Enable EPEL repository: http://fedoraproject.org/wiki/EPEL:
+  wget http://mirror.utexas.edu/epel/5/i386/epel-release-5-4.noarch.rpm
+  rpm -i epel-release-5-4.noarch.rpm
+ yum install -y python-hashlib
+cat > /etc/yum.repos.d/isis.repo <<EOF
+[isis]
+name=ISIS \$releasever - \$basearch
+baseurl=http://repo.isis.vanderbilt.edu/Download/UDM/rhel/\$releasever/\$basearch/
+enabled=1
+gpgcheck=0
+EOF
+
+yum install -y udm
+
+
+Software requirements and instructions to compile UDM source files on Linux
+
+Building:
+---------
 
 Requirements:
 -------------
@@ -29,11 +50,11 @@ Build-environment preparation (RHEL/CentOS 5):
 - enable EPEL repository: http://fedoraproject.org/wiki/EPEL
 - install development tools and libraries
   yum groupinstall 'Development Libraries' 'Development Tools' 'Java Development'
-  yum install ccache cppunit-devel swig xalan-c-devel xerces-c-devel
-  yum install ant ant-junit ant-trax junit xerces-j2 xalan-j2 xml-commons-apis
-  yum install java-1.6.0-openjdk java-1.6.0-openjdk-devel
+  yum install -y ccache cppunit-devel swig xalan-c-devel xerces-c-devel
+  yum install -y ant ant-junit ant-trax junit xerces-j2 xalan-j2 xml-commons-apis
+  yum install -y java-1.6.0-openjdk java-1.6.0-openjdk-devel
 - install the following rpms from our repository:
-  minizip, minizip-devel, minizip-libs, pccts
+  yum install -y minizip minizip-devel minizip-libs pccts
 
 Obtaining model-files.zip:
 --------------------------
@@ -66,7 +87,7 @@ Building:
 Building on Ubuntu 10.04 (Lucid):
 ----------------------------------------------
 # Install Build-Deps:
-sudo apt-get install debhelper build-essential autoconf libtool ccache libcppunit-dev libxalan110-dev ant junit libxerces-c2-dev sun-java6-jdk ant-optional pccts libboost1.40-dev zlib1g-dev swig
+sudo apt-get install debhelper build-essential autoconf libtool ccache libcppunit-dev libxalan110-dev ant junit libxerces-c2-dev sun-java6-jdk ant-optional pccts libboost-dev zlib1g-dev swig
 # Configure alternatives to use java-6-sun
 sudo update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
 sudo update-java-alternatives -s java-6-sun
@@ -77,7 +98,7 @@ fakeroot debian/rules binary
 
 Building on Ubuntu 12.04 (Precise):
 ----------------------------------------------
-sudo apt-get install fakeroot debhelper build-essential autoconf libtool libxerces-c2-dev autotools-dev ccache libcppunit-dev libxalan110-dev ant junit ant-optional pccts libboost1.48-dev zlib1g-dev swig openjdk-6-jdk
+sudo apt-get install fakeroot debhelper build-essential autoconf libtool libxerces-c2-dev autotools-dev ccache libcppunit-dev libxalan110-dev ant junit ant-optional pccts libboost-dev zlib1g-dev swig openjdk-6-jdk
 # Obtain model-files.zip as above or:
 wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
 # Build binary debs
