@@ -41,6 +41,8 @@ namespace std {
 	%template(VectorOfStrings) vector<cint_string>;
 };
 
+using namespace std;
+
 /* MAIN CLASSES AND FUNCTIONS */
 struct UdmDouble 
 {
