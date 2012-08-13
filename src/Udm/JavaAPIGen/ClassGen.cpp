@@ -69,26 +69,29 @@ void ClassGen::generate()
 	  std::copy(basesBases.begin(), basesBases.end(), std::inserter(inheritedBases, inheritedBases.begin()));
   }
 
-  Uml::Class firstBase = *bases.begin();
-  set<Uml::Class> firstBaseAncestors = Uml::AncestorClasses(firstBase);
-  vector<Uml::Class> baseClassesToGenerate;
-  baseClassesToGenerate.resize(inheritedBases.size() + 1);
-  set_difference(inheritedBases.begin(), inheritedBases.end(), firstBaseAncestors.begin(), firstBaseAncestors.end(), baseClassesToGenerate.begin());
-
-  vector<Uml::Class>::iterator basesIt = baseClassesToGenerate.begin();
-  for (; *basesIt; basesIt++)
+  if (bases.size())
   {
-	  // TODO: lowercase this?
-    string pck = Utils::getPackageSignature(*basesIt, m_ns_path, m_package_name);
-	pck = pck.substr(0, pck.length() - 1);
-	pck = Utils::toPackageName(pck);
-	std::stringstream ioutput; // The method declarations for the interface will be in a base interface, so we ignore them
+	  Uml::Class firstBase = *bases.begin();
+	  set<Uml::Class> firstBaseAncestors = Uml::AncestorClasses(firstBase);
+	  vector<Uml::Class> baseClassesToGenerate;
+	  baseClassesToGenerate.resize(inheritedBases.size() + 1);
+	  set_difference(inheritedBases.begin(), inheritedBases.end(), firstBaseAncestors.begin(), firstBaseAncestors.end(), baseClassesToGenerate.begin());
 
-	CG<stringstream> cg(*basesIt, pck, m_output, ioutput, basesIt->name(), m_ns_path);
-	m_output << " // Methods for " << basesIt->name() << endl;
-	cg.accessChildren();
-	cg.accessAttributes();
-	cg.associations();
+	  vector<Uml::Class>::iterator basesIt = baseClassesToGenerate.begin();
+	  for (; *basesIt; basesIt++)
+	  {
+		  // TODO: lowercase this?
+		string pck = Utils::getPackageSignature(*basesIt, m_ns_path, m_package_name);
+		pck = pck.substr(0, pck.length() - 1);
+		pck = Utils::toPackageName(pck);
+		std::stringstream ioutput; // The method declarations for the interface will be in a base interface, so we ignore them
+
+		CG<stringstream> cg(*basesIt, pck, m_output, ioutput, basesIt->name(), m_ns_path);
+		m_output << " // Methods for " << basesIt->name() << endl;
+		cg.accessChildren();
+		cg.accessAttributes();
+		cg.associations();
+	  }
   }
 
 
