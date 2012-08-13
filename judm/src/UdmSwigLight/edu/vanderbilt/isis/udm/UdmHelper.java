@@ -253,7 +253,7 @@ public class UdmHelper {
 
     public static void initialize() throws Exception {
         try {
-            System.loadLibrary("UDMSwig");
+            System.loadLibrary("UdmSwig");
         } catch (Exception e) {
             throw new RuntimeException("Error while initializing UDM DLLs through JNI",
                 e);
