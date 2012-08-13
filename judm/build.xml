@@ -405,13 +405,13 @@
 		<delete dir="samples/${dspackage}/src/main/test" />
 
 		<!-- Generate UDM XML from the XME XML file -->
-		<exec dir="samples/${dspackage}/meta" executable="${cmd.exe}">
+		<exec dir="samples/${dspackage}/meta" executable="${cmd.exe}" failonerror="true">
 			<arg line="/c &quot;${udm.etc.dir}/xme2udmxml&quot; ${dspackage}_uml.xme ${dspackage}.mga " />
 		</exec>
 		
 		<!-- Generate UDM XML from the XME XML file -->
 		<echo> Run ${udm.bin.dir}\udm.exe ${dspackage}_udm.xml ${udm_options} </echo>
-		<exec dir="samples/${dspackage}/meta" executable="${udm.bin.dir}/${udm.bin.exe}">
+		<exec dir="samples/${dspackage}/meta" executable="${udm.bin.dir}/${udm.bin.exe}" failonerror="true">
 			<arg line="${dspackage}_udm.xml ${udm_options}" />
 		</exec>
 		
@@ -440,7 +440,7 @@
 
 		<!-- Generate UDM XML from the XME XML file -->
 		<echo> Run ${udm.bin.dir}/Udm ${dspackage}_udm.xml ${udm_options} </echo>
-		<exec dir="samples/${dspackage}/meta" executable="${udm.bin.dir}/Udm">
+		<exec dir="samples/${dspackage}/meta" executable="${udm.bin.dir}/Udm" failonerror="true">
 			<arg line="${dspackage}_udm.xml ${udm_options}" />
 		</exec>
 		
