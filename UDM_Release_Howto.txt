@@ -23,15 +23,16 @@ wget -O UDM-3.2.11.msi http://build.isis.vanderbilt.edu/job/UDM/label=build-slav
 for file in http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do wget "$file"; done
 wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms1/lastSuccessfulBuild/artifact/udm_3.2.11-1_i386.deb
 wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms1/lastSuccessfulBuild/artifact/udm-dev_3.2.11-1_i386.deb
+wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms46/lastSuccessfulBuild/artifact/udm_3.2.11-1_amd64.deb
+wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms46/lastSuccessfulBuild/artifact/udm-dev_3.2.11-1_amd64.deb
 
 svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.11 Udm_source_r3.2.11 && \
 '/c/Program Files (x86)/7-Zip/7z.exe' a -r Udm_source_r3.2.11.zip Udm_source_r3.2.11/ && \
 cp Udm_source_r3.2.11/releaseinfo.txt UDM_Release_Notes.txt 
 
 ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.11/ && \
-scp UDM_Release_Notes.txt UDM-3.2.11.msi UDM_x64-3.2.11.msi Udm_source_r3.2.11.zip udm_3.2.11-1_i386.deb udm-dev_3.2.11-1_i386.deb ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.11/ && \
-scp udm_3.2.11-1_i386.deb udm-dev_3.2.11-1_i386.deb ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.11/ && \
-
+scp UDM_Release_Notes.txt UDM-3.2.11.msi UDM_x64-3.2.11.msi Udm_source_r3.2.11.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.11/ && \
+scp udm_3.2.11-1_i386.deb udm-dev_3.2.11-1_i386.deb udm_3.2.11-1_amd64.deb udm-dev_3.2.11-1_amd64.deb ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.11/ && \
 ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.11/
 
 # repo: Add Folder, short name A3.2.11. Add "Download"s
