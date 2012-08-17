@@ -538,7 +538,14 @@ PyObject* Object_Convert(Udm::Object udmObject) {
 }
 }
 
+#ifdef _WIN32
+#ifndef UDM_PY_MODULE_NAME
+#error UDM_PY_MODULE_NAME undefined
+#endif
 BOOST_PYTHON_MODULE(UDM_PY_MODULE_NAME)
+#else
+BOOST_PYTHON_MODULE(udm)
+#endif
 {
 	class_<Udm::Object>("Object")
 		.add_property("type", Object_type)

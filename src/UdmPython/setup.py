@@ -24,7 +24,8 @@ setup_args = dict(
 setup_args['ext_modules'] = [
   Extension('udm',
     ['UdmPython.cpp'],
-    libraries=['boost_python'], # TODO: udm?
+    libraries=['boost_python', 'udm'], # TODO: udm?
+    library_dirs = [os.path.join(this_dir, '../../lib/.libs')],
     include_dirs=['/usr/include/udm/', os.path.join(this_dir, '../../include')])
 ]
 if platform.system() == 'Windows':
