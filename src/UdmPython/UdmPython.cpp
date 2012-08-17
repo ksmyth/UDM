@@ -2,7 +2,9 @@
 #include "UdmBase.h"
 #include "Uml.h"
 #include "UmlExt.h"
+#ifdef _WIN32
 #include "UdmGme.h"
+#endif
 #include "UdmUtil.h"
 
 #include "boost/python.hpp"
@@ -15,6 +17,7 @@
 using namespace boost::python;
 using namespace std;
 
+#ifdef _WIN32
 // returns borrowed reference
 IUnknown* object2IUnknown(object o) {
 	//	oleobj = disp._oleobj_
@@ -37,6 +40,7 @@ Udm::Object SDN_Gme2Udm(Udm::SmartDataNetwork& self, object o) {
 		throw std::runtime_error("self is not a GmeDataNetwork");
 	return gmedn->Gme2Udm(punk);
 }
+#endif
 
 void SDN_OpenExisting(Udm::SmartDataNetwork& self, object systemname, const string& metalocator) {
 	extract<std::string> string_systemname(systemname);
@@ -45,6 +49,7 @@ void SDN_OpenExisting(Udm::SmartDataNetwork& self, object systemname, const stri
 		self.OpenExisting(string_systemname, metalocator, Udm::CHANGES_LOST_DEFAULT);
 		return;
 	}
+#ifdef _WIN32
 	if (PyObject_HasAttrString(systemname.ptr(), "_oleobj_") 
 		|| PyObject_HasAttrString(systemname.ptr(), "GetIDsOfNames"))
 	{
@@ -58,6 +63,7 @@ void SDN_OpenExisting(Udm::SmartDataNetwork& self, object systemname, const stri
 		});
 		return;
 	}
+#endif
 	throw runtime_error("Unrecognized type for systemname");
 }
 
@@ -90,10 +96,10 @@ Udm::Object Uml_Diagram() {
 	return (Udm::Object) Uml::Class::meta.parent();
 }
 
-template<class colT>
+template<typename colT>
 boost::python::list toList(colT collection) {
 	boost::python::list ret;
-	colT::iterator it = collection.begin();
+	typename colT::iterator it = collection.begin();
 	for (; it != collection.end(); it++) {
 		ret.append(object(*it));
 	}
@@ -110,7 +116,7 @@ Uml::Attribute getAttribute(Udm::Object& self, std::string& name) {
 	attrs.insert(aattrs.begin(),aattrs.end());
 
 	
-	for(set< ::Uml::Attribute>::iterator attrsIt = attrs.begin(); attrsIt != attrs.end(); attrsIt++) {
+	for(set< ::Uml::Attribute> ::iterator attrsIt = attrs.begin(); attrsIt != attrs.end(); attrsIt++) {
 		string strCurrAttrName = attrsIt->name();
 		
 		if (strCurrAttrName == name) {
@@ -208,13 +214,13 @@ void Object_set_adjacent_helper(Udm::Object& self, object _targets, object srcro
 	}
 
 	::Uml::Class srcClass = self.type();
-	set<::Uml::Class> ancestorClasses = ::Uml::AncestorClasses(srcClass);
-	set<::Uml::Class>::iterator ancestorClassesIt = ancestorClasses.begin();
+	set< ::Uml::Class> ancestorClasses = ::Uml::AncestorClasses(srcClass);
+	set< ::Uml::Class> ::iterator ancestorClassesIt = ancestorClasses.begin();
 
 	for(; ancestorClassesIt != ancestorClasses.end(); ancestorClassesIt++) {
 		// Getting the association roles and iterating through them
-		set<::Uml::AssociationRole> assocRoles = ancestorClassesIt->associationRoles();
-		set<::Uml::AssociationRole>::iterator assocRolesIt = assocRoles.begin();
+		set< ::Uml::AssociationRole> assocRoles = ancestorClassesIt->associationRoles();
+		set< ::Uml::AssociationRole> ::iterator assocRolesIt = assocRoles.begin();
 		for(; assocRolesIt != assocRoles.end(); assocRolesIt++) {
 			::Uml::AssociationRole oRole = ::Uml::theOther(*assocRolesIt);
 			// Checking role names
@@ -257,7 +263,7 @@ void Object_set_adjacent_helper(Udm::Object& self, object _targets, object srcro
 					Udm::Object& o = extract<Udm::Object&>(_targets[i]);
 					targets_impl.push_back(o.__impl());
 					if (o.__impl()->__getdn()->uniqueId() != self.__impl()->__getdn()->uniqueId()) {
-						throw std::exception("Cannot set_adjacent with a target from a different DataNetwork");
+						throw udm_exception("Cannot set_adjacent with a target from a different DataNetwork");
 					}
 				}
 			}
@@ -310,28 +316,28 @@ object Object_adjacent_helper(Udm::Object& self, object srcrolename, object dstr
 	}
 
 	::Uml::Class srcClass = self.type();
-	set<::Uml::Class> ancestorClasses = ::Uml::AncestorClasses(srcClass);
-	set<::Uml::Class>::iterator ancestorClassesIt = ancestorClasses.begin();
+	set< ::Uml::Class> ancestorClasses = ::Uml::AncestorClasses(srcClass);
+	set< ::Uml::Class> ::iterator ancestorClassesIt = ancestorClasses.begin();
 
 	for(; ancestorClassesIt != ancestorClasses.end(); ancestorClassesIt++) {
-		::Uml::Association association = static_cast<::Uml::Association>(ancestorClassesIt->association());
+		::Uml::Association association = static_cast< ::Uml::Association>(ancestorClassesIt->association());
 		if (association && dstrolename != object()) {
-			std::set<::Uml::AssociationRole> roles = association.AssociationRole_kind_children();
-			for (auto roleIt = roles.begin(); roleIt != roles.end(); roleIt++) {
+			std::set< ::Uml::AssociationRole> roles = association.AssociationRole_kind_children();
+			for (std::set< ::Uml::AssociationRole> ::iterator roleIt = roles.begin(); roleIt != roles.end(); roleIt++) {
 				::Uml::AssociationRole role = *roleIt;
 				if (static_cast<std::string>(role.name()) == 
 						static_cast<const char*>(extract<const char*>(dstrolename))) {
 					using namespace Udm;
 					vector<ObjectImpl*> dstPeers = self.__impl()->getAssociation(role, Udm::TARGETFROMCLASS);
-					vector<ObjectImpl*>::iterator dstPeersIt = dstPeers.begin();
+					vector<ObjectImpl*> ::iterator dstPeersIt = dstPeers.begin();
 					foundApplicableAssociation = true;
 					return object(Udm::Object(*dstPeersIt));
 				}
 			}
 		}
 		// Getting the association roles and iterating through them
-		set<::Uml::AssociationRole> assocRoles = ancestorClassesIt->associationRoles();
-		set<::Uml::AssociationRole>::iterator assocRolesIt = assocRoles.begin();
+		set< ::Uml::AssociationRole> assocRoles = ancestorClassesIt->associationRoles();
+		set< ::Uml::AssociationRole> ::iterator assocRolesIt = assocRoles.begin();
 		for(; assocRolesIt != assocRoles.end(); assocRolesIt++) {
 			::Uml::AssociationRole oRole = ::Uml::theOther(*assocRolesIt);
 			// Checking role names
@@ -360,7 +366,7 @@ object Object_adjacent_helper(Udm::Object& self, object srcrolename, object dstr
 			// simple association
 			if (!assoc_cls) {
 				vector<ObjectImpl*> dstPeers = self.__impl()->getAssociation(oRole, Udm::TARGETFROMPEER);
-				vector<ObjectImpl*>::iterator dstPeersIt = dstPeers.begin();
+				vector<ObjectImpl*> ::iterator dstPeersIt = dstPeers.begin();
 
 				for (; dstPeersIt != dstPeers.end(); dstPeersIt++) {
 					Udm::Object dstObject(*dstPeersIt);
@@ -382,7 +388,7 @@ object Object_adjacent_helper(Udm::Object& self, object srcrolename, object dstr
 			// Check all association with classes
 			vector<ObjectImpl*> assocs = self.__impl()->getAssociation(oRole, Udm::CLASSFROMTARGET);
 
-			for(vector<ObjectImpl*>::iterator p_currAssoc = assocs.begin(); p_currAssoc != assocs.end(); p_currAssoc++)
+			for(vector<ObjectImpl*> ::iterator p_currAssoc = assocs.begin(); p_currAssoc != assocs.end(); p_currAssoc++)
 			{
 				Udm::Object assocCls_obj(*p_currAssoc);
 				::Uml::Class clsAssociation = assocCls_obj.type();
@@ -393,7 +399,7 @@ object Object_adjacent_helper(Udm::Object& self, object srcrolename, object dstr
 
 				// Get and test the peers
 				vector<ObjectImpl*> dstPeers = assocCls_obj.__impl()->getAssociation(oRole, Udm::TARGETFROMCLASS);
-				vector<ObjectImpl*>::iterator dstPeersIt = dstPeers.begin();
+				vector<ObjectImpl*> ::iterator dstPeersIt = dstPeers.begin();
 				for (; dstPeersIt != dstPeers.end(); dstPeersIt++) {
 					Udm::Object dstObject(*dstPeersIt);
 						
@@ -520,7 +526,11 @@ Udm::Object Object_create(Udm::Object& meta, Udm::Object& parent /*,Udm::Object&
 }
 
 extern "C" {
+#ifdef _WIN32
 __declspec(dllexport) PyObject* __cdecl Object_Convert(Udm::Object udmObject) {
+#else
+PyObject* Object_Convert(Udm::Object udmObject) {
+#endif
 	object o(udmObject);
 	PyObject* ret = o.ptr();
 	Py_INCREF(ret);
@@ -587,7 +597,9 @@ BOOST_PYTHON_MODULE(UDM_PY_MODULE_NAME)
 		.def("close_no_update", &Udm::SmartDataNetwork::CloseNoUpdate)
 		.def("save_as", &Udm::SmartDataNetwork::SaveAs)
 		.add_property("root", &Udm::SmartDataNetwork::GetRootObject)
+#ifdef _WIN32
 		.def("convert_gme2udm", SDN_Gme2Udm)
+#endif
 	;
 	scope().attr("SmartDataNetwork").attr("__init__") = eval("lambda self, *args: None");
 	exec(
@@ -606,8 +618,10 @@ BOOST_PYTHON_MODULE(UDM_PY_MODULE_NAME)
 "    return map_classes(diagram)\n",
 		import("__main__").attr("__dict__"), scope().attr("__dict__"));
 
+#ifdef _WIN32
 	def("UdmId2GmeId", UdmGme::UdmId2GmeId);
 	Udm::Object::uniqueId_type (*GmeId2UdmId)(const char* gmeId) = &UdmGme::GmeId2UdmId;
 	def("GmeId2UdmId", GmeId2UdmId);
+#endif
 
 }
