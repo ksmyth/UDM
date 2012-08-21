@@ -284,13 +284,13 @@
 		<mkdir dir="${judm.classes.dir}" />
 
 		<!-- Compile util classes-->
-		<javac srcdir="${util.src.dir}" destdir="${judm.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" target="1.5" />
+		<javac srcdir="${util.src.dir}" destdir="${judm.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" target="1.5" source="1.5" />
 		
 		<!-- Compile SWIG generated UdmCint classes-->
-		<javac srcdir="${udmswig.src.dir}" destdir="${judm.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" target="1.5" />
+		<javac srcdir="${udmswig.src.dir}" destdir="${judm.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" target="1.5" source="1.5" />
 
 		<!-- Compile wrapper for the SWIG generated Java code classes (UdmCintLight)-->
-		<javac srcdir="${udmswiglight.src.dir}" destdir="${judm.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" target="1.5" />
+		<javac srcdir="${udmswiglight.src.dir}" destdir="${judm.classes.dir}" deprecation="false" debug="true" classpathref="compile.classpath" target="1.5" source="1.5" />
 
 	</target>
 
@@ -304,10 +304,10 @@
 		<mkdir dir="${build.dir}/${dspackage}/classes/test" />
 
 		<!-- Compile the main classes -->
-		<javac srcdir="samples/${dspackage}/src/main" destdir="${build.dir}/${dspackage}/classes/main" deprecation="false" debug="true" classpathref="compile.classpath" target="1.5" />
+		<javac srcdir="samples/${dspackage}/src/main" destdir="${build.dir}/${dspackage}/classes/main" deprecation="false" debug="true" classpathref="compile.classpath" target="1.5" source="1.5" />
 
 		<!-- Compile the test classes -->
-		<javac srcdir="${srcdir}/samples/${dspackage}/src/test" destdir="${build.dir}/${dspackage}/classes/test" deprecation="false" debug="true" target="1.5" >
+		<javac srcdir="${srcdir}/samples/${dspackage}/src/test" destdir="${build.dir}/${dspackage}/classes/test" deprecation="false" debug="true" target="1.5" source="1.5" >
 			<classpath>
 				<path refid="compile.classpath" />
 				<pathelement location="${build.dir}/${dspackage}/classes/main" />
