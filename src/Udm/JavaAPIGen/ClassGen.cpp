@@ -200,7 +200,7 @@ void ClassGen::constructor( )
   m_output << "\t * @param  metaDiagram The diagram of the data network" << endl;
   m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
   m_output << "\t */ " << endl;
-  m_output << "\tprotected " << m_cl_name << "(UdmPseudoObject upo, Diagram metaDiagram) \n\t\tthrows UdmException" << endl;
+  m_output << "\tpublic " << m_cl_name << "(UdmPseudoObject upo, Diagram metaDiagram) \n\t\tthrows UdmException" << endl;
   m_output << "\t{" << endl;
   m_output << "\t\tsuper(upo, metaDiagram);" << endl;
   m_output << "\t}" << endl << endl;
@@ -699,7 +699,7 @@ void ClassGen::CG<OS_I>::associations( )
       // the canonical form of the to_class
       string pckg_signature = Utils::getPackageSignature(to_class, m_ns_path, m_package_name);
 
-      if ( (ar_i->max() == 0) || (ar_i->max() == 1) )
+	  if ( (Uml::theOther(*ar_i).max() == 0) || (Uml::theOther(*ar_i).max() == 1) )
       {
         //single cardinality
         m_output << "\t/**" << endl;
