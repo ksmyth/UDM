@@ -159,6 +159,7 @@ UDMCint.UPO_SetClass(swigNewUPO,diagram,"Regulation");
     
    }
   
+   CPPUNIT_ASSERT(res.buffer());
    cout << string(res.buffer()) << endl;
 #endif
  

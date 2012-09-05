@@ -39,7 +39,7 @@ this software.
 #include <vector>
 #include "cint_string.h"
 
-#ifdef UDM_DYNAMIC_LINKING
+#ifdef _WIN64
 #define NO_ANTLR
 #endif
 
