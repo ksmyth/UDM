@@ -298,7 +298,7 @@ cd  "$(OutDir)..\Gen\src\UdmSwig"
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Gen\src\UdmSwig\UdmSwig_wrap.cpp" />
+    <ClCompile Include="..\..\..\..\..\Build\$(Platform)\VC10\Gen\src\UdmSwig\UdmSwig_wrap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UdmDll\UdmDll.vcxproj">
