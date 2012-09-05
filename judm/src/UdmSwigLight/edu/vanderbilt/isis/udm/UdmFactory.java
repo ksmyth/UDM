@@ -26,7 +26,7 @@ public abstract class UdmFactory {
     private String packagePath;
     protected Diagram metaDiagram;
     protected UdmPseudoDataNetwork dataNetwork;
-
+	
     private void findSwigDll() {
         String judm_path = null;
         String swig_lib = System.mapLibraryName("UdmSwig");

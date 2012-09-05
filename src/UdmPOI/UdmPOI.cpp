@@ -41,7 +41,7 @@ this software.
 #endif
 #include <cstring>
 
-#if (_MSC_VER == 1600) /* VS2010 */
+#if (_MSC_VER >= 1600) /* VS2010 */
 #include "../Uml/Uml_xsd.h"
 #endif
 
@@ -60,8 +60,8 @@ static bool was_error = false;		//static bool to indicate an error after the las
 //structure to identify an object
 struct _upi_o_id {
 	unsigned long dnid;
-	unsigned long oid;
-	_upi_o_id(const unsigned long d, const unsigned long o)
+	UdmPseudoObject::ob_id_type oid;
+	_upi_o_id(const unsigned long d, const UdmPseudoObject::ob_id_type o)
 	{
 		dnid = d;
 		oid = o;
@@ -224,7 +224,7 @@ UdmPseudoObject::UdmPseudoObject()
 };
 
 
-UdmPseudoObject::UdmPseudoObject(unsigned long dn_id, unsigned long ob_id)
+UdmPseudoObject::UdmPseudoObject(unsigned long dn_id, ob_id_type ob_id)
 {
 	this->dn_id = dn_id;
 	this->ob_id = ob_id;
@@ -260,7 +260,7 @@ UdmPseudoObject& UdmPseudoObject::operator=(const UdmPseudoObject& frm)
 	return *this;
 };
 
-unsigned long UdmPseudoObject::_ob_id() const
+UdmPseudoObject::ob_id_type UdmPseudoObject::_ob_id() const
 {
 	return ob_id;
 };
@@ -1518,6 +1518,7 @@ bool UdmPseudoDataNetwork::OCL_Evaluate(cint_string& res)
 bool UdmPseudoDataNetwork::OCL_Evaluate(cint_string& res)
 {
   // TODO: print a warning that constraints are disabled
+	return true;
 }
 #endif /* NO_ANTLR */
 	

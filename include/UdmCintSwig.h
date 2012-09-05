@@ -39,6 +39,10 @@ this software.
 #include <vector>
 #include "cint_string.h"
 
+#ifdef UDM_DYNAMIC_LINKING
+#define NO_ANTLR
+#endif
+
 using namespace std;
 
 
@@ -123,17 +127,24 @@ static const int CLASSFROMTARGET = 2;
 class  UdmPseudoObject
 
 {
-	
-	unsigned long ob_id;
+public:
+#if defined(_M_AMD64)
+	typedef __int64 ob_id_type;
+#else
+	typedef unsigned long ob_id_type;
+#endif
+
+private:
+	ob_id_type ob_id;
 	unsigned long dn_id;
 
 public:
 	
-	unsigned long _ob_id() const;
+	ob_id_type _ob_id() const;
 	unsigned long _dn_id() const;
 
 	UdmPseudoObject();				//NULL object
-	UdmPseudoObject(unsigned long dn_id, unsigned long ob_id);
+	UdmPseudoObject(unsigned long dn_id, ob_id_type ob_id);
 	UdmPseudoObject& operator=(const UdmPseudoObject& frm);
 	// Himanshu: Adding a equals operator for UdmPseudoObject
 	bool operator ==(const UdmPseudoObject& to);

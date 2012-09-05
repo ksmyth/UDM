@@ -15,6 +15,7 @@
     <!-- DIRECTORY STRUCTURE -->
     <!-- =========================================================== -->
     <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id='$(var.SystemFolderNative)' Name='$(var.SystemFolderNative)'/>
       <Directory Id='$(var.ProgramFilesNativeFolder)'>
         <Directory Id='ISIS' Name='ISIS'>
           <Directory Id='INSTALLDIR' Name='Udm'>
@@ -26,6 +27,14 @@
         </Directory>
       </Directory>
     </Directory>
+
+    <?if $(sys.BUILDARCH)=x64?>
+	<DirectoryRef Id="$(var.SystemFolderNative)">
+	  <Component>
+	    <File Source="..\Build\x64\VC10\Release\UdmSwig.dll"/>
+	  </Component>
+	</DirectoryRef>
+	<?endif?>
 
     <DirectoryRef Id="bin">
       <?if $(sys.BUILDARCH)=x64?>
