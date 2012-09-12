@@ -74,15 +74,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <udm_RuleAfterTargets>mga2udmxml</udm_RuleAfterTargets>
+    <mga2udmxml_RuleBeforeTargets>udm</mga2udmxml_RuleBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <udm_RuleAfterTargets>mga2udmxml</udm_RuleAfterTargets>
+    <mga2udmxml_RuleBeforeTargets>udm</mga2udmxml_RuleBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <udm_RuleAfterTargets>mga2udmxml</udm_RuleAfterTargets>
+    <mga2udmxml_RuleBeforeTargets>udm</mga2udmxml_RuleBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <udm_RuleAfterTargets>mga2udmxml</udm_RuleAfterTargets>
+    <mga2udmxml_RuleBeforeTargets>udm</mga2udmxml_RuleBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
