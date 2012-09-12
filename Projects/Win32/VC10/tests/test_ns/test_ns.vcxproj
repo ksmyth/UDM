@@ -42,6 +42,10 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\udm.props" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmxml.props" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2xmp.props" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\xme2mga.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
@@ -74,6 +78,22 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectName)</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)D</TargetName>
+    <mga2udmxml_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">xme2mga</mga2udmxml_RuleAfterTargets>
+    <mga2udmxml_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">xme2mga</mga2udmxml_RuleAfterTargets>
+    <mga2udmxml_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xme2mga</mga2udmxml_RuleAfterTargets>
+    <mga2udmxml_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xme2mga</mga2udmxml_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mga2udmxml</udm_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mga2udmxml</udm_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mga2udmxml</udm_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mga2udmxml</udm_RuleAfterTargets>
+    <mga2udmxml_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">udm</mga2udmxml_RuleBeforeTargets>
+    <mga2udmxml_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">udm</mga2udmxml_RuleBeforeTargets>
+    <mga2udmxml_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">udm</mga2udmxml_RuleBeforeTargets>
+    <mga2udmxml_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">udm</mga2udmxml_RuleBeforeTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mga2udmxml</xme2mga_RuleBeforeTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mga2udmxml</xme2mga_RuleBeforeTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mga2udmxml</xme2mga_RuleBeforeTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mga2udmxml</xme2mga_RuleBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -110,7 +130,7 @@ exit 0
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>cd "$(OutDir)Gen\tests\test_ns"
+      <Command>cd ..\..\..\..\..\tests\test_ns
 "$(TargetPath)"
 </Command>
     </CustomBuildStep>
@@ -152,7 +172,7 @@ exit 0
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>cd "$(OutDir)Gen\tests\test_ns"
+      <Command>cd ..\..\..\..\..\tests\test_ns
 "$(TargetPath)"
 </Command>
     </CustomBuildStep>
@@ -195,7 +215,7 @@ exit 0
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>cd "$(OutDir)Gen\tests\test_ns"
+      <Command>cd ..\..\..\..\..\tests\test_ns
 "$(TargetPath)"
 </Command>
     </CustomBuildStep>
@@ -213,7 +233,7 @@ exit 0
     </PreBuildEvent>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\..\..\include;$(OutDir)Gen\tests\test_ns;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>UDM_DYNAMIC_LINKING;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CPPUNIT_DLL;UDM_DYNAMIC_LINKING;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -221,7 +241,7 @@ exit 0
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>cppunit.lib</AdditionalDependencies>
+      <AdditionalDependencies>cppunit_dllx64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)test_ns.exe</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -237,7 +257,7 @@ exit 0
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>cd "$(OutDir)Gen\tests\test_ns"
+      <Command>cd ..\..\..\..\..\tests\test_ns
 "$(TargetPath)"
 </Command>
     </CustomBuildStep>
@@ -248,72 +268,37 @@ exit 0
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\tests\test_ns\main.cpp" />
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_ns\test_ns.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_ns\test_ns.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\test_ns\test_ns.cpp" />
     <ClCompile Include="..\..\..\..\..\tests\test_ns\test_ns_test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_ns\test_ns.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_ns\test_ns.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
+    <xme2mga Include="..\..\..\..\..\tests\test_ns\test_ns_uml.xme" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_ns\test_ns_udm.xml">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\test_ns" "%(FullPath)" -t -v
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\test_ns" "%(FullPath)" -t -v
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\test_ns\test_ns.cpp;$(OutDir)Gen\tests\test_ns\test_ns.h;$(OutDir)Gen\tests\test_ns\test_ns.dtd;$(OutDir)Gen\tests\test_ns\test_ns.xsd;$(OutDir)Gen\tests\test_ns\test_ns_A.dtd;$(OutDir)Gen\tests\test_ns\test_ns_A.xsd;$(OutDir)Gen\tests\test_ns\test_ns_B.dtd;$(OutDir)Gen\tests\test_ns\test_ns_B.xsd;$(OutDir)Gen\tests\test_ns\test_ns_AB.dtd;$(OutDir)Gen\tests\test_ns\test_ns_AB.xsd;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Gen\tests\test_ns\test_ns.cpp;$(OutDir)Gen\tests\test_ns\test_ns.h;$(OutDir)Gen\tests\test_ns\test_ns.dtd;$(OutDir)Gen\tests\test_ns\test_ns.xsd;$(OutDir)Gen\tests\test_ns\test_ns_A.dtd;$(OutDir)Gen\tests\test_ns\test_ns_A.xsd;$(OutDir)Gen\tests\test_ns\test_ns_B.dtd;$(OutDir)Gen\tests\test_ns\test_ns_B.xsd;$(OutDir)Gen\tests\test_ns\test_ns_AB.dtd;$(OutDir)Gen\tests\test_ns\test_ns_AB.xsd;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Udm.exe</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Udm.exe</AdditionalInputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_ns\test_ns_udm.xml">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\test_ns" %(FullPath) -t -v
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\test_ns" %(FullPath) -t -v
-</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)UdmD.exe</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)UdmD.exe</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\test_ns\test_ns.cpp;$(OutDir)Gen\tests\test_ns\test_ns.h;$(OutDir)Gen\tests\test_ns\test_ns.dtd;$(OutDir)Gen\tests\test_ns\test_ns.xsd;$(OutDir)Gen\tests\test_ns\test_ns_A.dtd;$(OutDir)Gen\tests\test_ns\test_ns_A.xsd;$(OutDir)Gen\tests\test_ns\test_ns_B.dtd;$(OutDir)Gen\tests\test_ns\test_ns_B.xsd;$(OutDir)Gen\tests\test_ns\test_ns_AB.dtd;$(OutDir)Gen\tests\test_ns\test_ns_AB.xsd;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Gen\tests\test_ns\test_ns.cpp;$(OutDir)Gen\tests\test_ns\test_ns.h;$(OutDir)Gen\tests\test_ns\test_ns.dtd;$(OutDir)Gen\tests\test_ns\test_ns.xsd;$(OutDir)Gen\tests\test_ns\test_ns_A.dtd;$(OutDir)Gen\tests\test_ns\test_ns_A.xsd;$(OutDir)Gen\tests\test_ns\test_ns_B.dtd;$(OutDir)Gen\tests\test_ns\test_ns_B.xsd;$(OutDir)Gen\tests\test_ns\test_ns_AB.dtd;$(OutDir)Gen\tests\test_ns\test_ns_AB.xsd;%(Outputs)</Outputs>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\tests\test_ns\test_ns_uml.xme">
+    <mga2udmxml Include="..\..\..\..\..\tests\test_ns\test_ns_uml.mga">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(TargetDir)\Gen\tests\test_ns"
-"$(UDM_PATH)\etc\xme2udmxml" "%(FullPath)" "%(FileName).mga"
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cd "$(TargetDir)\Gen\tests\test_ns"
-"$(UDM_PATH)\etc\xme2udmxml" "%(FullPath)" "%(FileName).mga"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\test_ns\%(FileName).mga;$(OutDir)Gen\tests\test_ns\test_ns_udm.xml;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Gen\tests\test_ns\%(FileName).mga;$(OutDir)Gen\tests\test_ns\test_ns_udm.xml;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd "$(TargetDir)\Gen\tests\test_ns"
-"$(UDM_PATH)\etc\xme2udmxml" "%(FullPath)" "%(FileName).mga"
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cd "$(TargetDir)\Gen\tests\test_ns"
-"$(UDM_PATH)\etc\xme2udmxml" "%(FullPath)" "%(FileName).mga"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\test_ns\%(FileName).mga;$(OutDir)Gen\tests\test_ns\test_ns_udm.xml;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Gen\tests\test_ns\%(FileName).mga;$(OutDir)Gen\tests\test_ns\test_ns_udm.xml;%(Outputs)</Outputs>
-    </CustomBuild>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">test_ns</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">test_ns</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">test_ns</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">test_ns</MetaName>
+    </mga2udmxml>
+  </ItemGroup>
+  <ItemGroup>
+    <udm Include="..\..\..\..\..\tests\test_ns\test_ns_udm.xml">
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">test_ns</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">test_ns</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">test_ns</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">test_ns</MetaName>
+    </udm>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\tests\test_ns\test_ns.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\udm.targets" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmxml.targets" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2xmp.targets" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\xme2mga.targets" />
   </ImportGroup>
 </Project>

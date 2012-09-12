@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -42,6 +42,10 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\udm.props" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmxml.props" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\xme2mga.props" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmudm.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
@@ -74,6 +78,22 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectName)</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)D</TargetName>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mga2udmudm</udm_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mga2udmudm</udm_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mga2udmudm</udm_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mga2udmudm</udm_RuleAfterTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mga2udmudm</xme2mga_RuleBeforeTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mga2udmudm</xme2mga_RuleBeforeTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mga2udmudm</xme2mga_RuleBeforeTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mga2udmudm</xme2mga_RuleBeforeTargets>
+    <mga2udmudm_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">udm</mga2udmudm_RuleBeforeTargets>
+    <mga2udmudm_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">udm</mga2udmudm_RuleBeforeTargets>
+    <mga2udmudm_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">udm</mga2udmudm_RuleBeforeTargets>
+    <mga2udmudm_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">udm</mga2udmudm_RuleBeforeTargets>
+    <mga2udmudm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">xme2mga</mga2udmudm_RuleAfterTargets>
+    <mga2udmudm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">xme2mga</mga2udmudm_RuleAfterTargets>
+    <mga2udmudm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xme2mga</mga2udmudm_RuleAfterTargets>
+    <mga2udmudm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xme2mga</mga2udmudm_RuleAfterTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -227,7 +247,7 @@ exit 0
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>cppunit.lib</AdditionalDependencies>
+      <AdditionalDependencies>cppunit_dllx64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)testGetAdjacentObjects.exe</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -256,62 +276,19 @@ exit 0
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\tests\testGetAdjacentObjects\main.cpp" />
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\PackageA.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\PackageA.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\PackageB.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\PackageB.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\testGetAdjacentObjects\PackageA.cpp" />
+    <ClCompile Include="..\..\..\..\..\tests\testGetAdjacentObjects\PackageB.cpp" />
+    <ClCompile Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios.cpp" />
     <ClCompile Include="..\..\..\..\..\tests\testGetAdjacentObjects\TestGetAdjacentObjects.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\PackageA.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\PackageA.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\PackageB.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\PackageB.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
+    <ClInclude Include="..\..\..\..\..\tests\testGetAdjacentObjects\PackageA.h" />
+    <ClInclude Include="..\..\..\..\..\tests\testGetAdjacentObjects\PackageB.h" />
+    <ClInclude Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios.h" />
     <ClInclude Include="..\..\..\..\..\tests\testGetAdjacentObjects\testGetAdjacentObjects.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios.xme">
-      <FileType>Document</FileType>
+    <xme2mga Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios.xme">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Converting %(FullPath) to $(OutDir)Gen\tests\testGetAdjacentObjects\%(FileName)_udm.udm</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Converting %(FullPath) to $(OutDir)Gen\tests\testGetAdjacentObjects\%(FileName)_udm.udm</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(TargetDir)\Gen\tests\testGetAdjacentObjects"
@@ -332,44 +309,37 @@ exit 0
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\testGetAdjacentObjects\%(FileName).mga;$(OutDir)Gen\tests\testGetAdjacentObjects\%(FileName)_udm.udm;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Gen\tests\testGetAdjacentObjects\%(FileName).mga;$(OutDir)Gen\tests\testGetAdjacentObjects\%(FileName)_udm.udm;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios_udm.udm">
       <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating UDM API files...</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating UDM API files...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)udm.exe" -o "$(OutDir)Gen\tests\testGetAdjacentObjects" %(FullPath)
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(OutDir)udm.exe" -o "$(OutDir)Gen\tests\testGetAdjacentObjects" %(FullPath)
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.h;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.xsd;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.h;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.xsd;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.xsd;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.h;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.xsd;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.h;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.xsd;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.xsd;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Udm.exe</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Udm.exe</AdditionalInputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\testAssociationScenarios_udm.udm">
-      <FileType>Document</FileType>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating UDM API files...</Message>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating UDM API files...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)udmD.exe" -o "$(OutDir)Gen\tests\testGetAdjacentObjects" %(FullPath)
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(OutDir)udmD.exe" -o "$(OutDir)Gen\tests\testGetAdjacentObjects" %(FullPath)
-</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)UdmD.exe</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)UdmD.exe</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.h;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.xsd;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.h;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.xsd;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.xsd;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.h;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageA.xsd;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.h;$(OutDir)Gen\tests\testGetAdjacentObjects\PackageB.xsd;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h;$(OutDir)Gen\tests\testGetAdjacentObjects\testAssociationScenarios.xsd;%(Outputs)</Outputs>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
+    </xme2mga>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CreateLampDiagram\CreateLampDiagram.vcxproj">
       <Project>{3fb0a5a6-8815-45a3-8d68-777c708410fb}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <mga2udmudm Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios.mga">
+      <FileType>Document</FileType>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">testAssociationScenarios</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">testAssociationScenarios</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">testAssociationScenarios</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">testAssociationScenarios</MetaName>
+    </mga2udmudm>
+  </ItemGroup>
+  <ItemGroup>
+    <udm Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios_udm.udm">
+      <FileType>Document</FileType>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">testAssociationScenarios</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">testAssociationScenarios</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">testAssociationScenarios</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">testAssociationScenarios</MetaName>
+    </udm>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\udm.targets" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmxml.targets" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\xme2mga.targets" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmudm.targets" />
   </ImportGroup>
 </Project>

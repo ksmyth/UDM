@@ -15,16 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testOCL\SBML2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testOCL\SBML2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\tests\testOCL\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\tests\testOCL\Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\testOCL\SBML2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,19 +29,20 @@
     <ClInclude Include="..\..\..\..\..\tests\testOCL\Test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\tests\testOCL\SBML2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\tests\testOCL\versionCheck.xml" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testOCL\SBML2.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testOCL\SBML2_udm.xml" />
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testOCL\SBML2.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testOCL\SBML2_udm.xml" />
-    <CustomBuild Include="..\..\..\..\..\tests\testOCL\SBML2_uml.xme" />
+    <xme2mga Include="..\..\..\..\..\tests\testOCL\SBML2_uml.xme" />
+  </ItemGroup>
+  <ItemGroup>
+    <mga2udmxml Include="..\..\..\..\..\tests\testOCL\SBML2_uml.mga" />
+  </ItemGroup>
+  <ItemGroup>
+    <udm Include="..\..\..\..\..\tests\testOCL\SBML2_udm.xml" />
   </ItemGroup>
 </Project>

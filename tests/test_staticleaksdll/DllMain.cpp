@@ -18,7 +18,7 @@ __declspec(dllexport) void init(void* data) {
 	//RefPort::Initialize();
 	LampDiagram::Initialize();
 	UdmUtil::stacktrace();
-#if defined(_M_IX86)
+#if defined(_M_IX86) // fails with cppunit dll, since there is only one test registry
 	main(0, NULL);
 #endif
 }

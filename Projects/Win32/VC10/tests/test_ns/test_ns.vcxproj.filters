@@ -15,28 +15,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_ns\test_ns.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_ns\test_ns.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\tests\test_ns\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\tests\test_ns\test_ns_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\test_ns\test_ns.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_ns\test_ns.h">
+    <xme2mga Include="..\..\..\..\..\tests\test_ns\test_ns_uml.xme" />
+  </ItemGroup>
+  <ItemGroup>
+    <mga2udmxml Include="..\..\..\..\..\tests\test_ns\test_ns_uml.mga" />
+  </ItemGroup>
+  <ItemGroup>
+    <udm Include="..\..\..\..\..\tests\test_ns\test_ns_udm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\tests\test_ns\test_ns.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_ns\test_ns_udm.xml" />
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_ns\test_ns.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_ns\test_ns_udm.xml" />
-    <CustomBuild Include="..\..\..\..\..\tests\test_ns\test_ns_uml.xme" />
+    </ClInclude>
   </ItemGroup>
 </Project>

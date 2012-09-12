@@ -42,6 +42,9 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\udm.props" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmxml.props" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\xme2mga.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
@@ -74,6 +77,22 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectName)</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)D</TargetName>
+    <mga2udmxml_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">udm</mga2udmxml_RuleBeforeTargets>
+    <mga2udmxml_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">xme2mga</mga2udmxml_RuleAfterTargets>
+    <mga2udmxml_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">udm</mga2udmxml_RuleBeforeTargets>
+    <mga2udmxml_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">xme2mga</mga2udmxml_RuleAfterTargets>
+    <mga2udmxml_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">udm</mga2udmxml_RuleBeforeTargets>
+    <mga2udmxml_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xme2mga</mga2udmxml_RuleAfterTargets>
+    <mga2udmxml_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">udm</mga2udmxml_RuleBeforeTargets>
+    <mga2udmxml_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xme2mga</mga2udmxml_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mga2udmxml</udm_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mga2udmxml</udm_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mga2udmxml</udm_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mga2udmxml</udm_RuleAfterTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mga2udmxml</xme2mga_RuleBeforeTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mga2udmxml</xme2mga_RuleBeforeTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">mga2udmxml</xme2mga_RuleBeforeTargets>
+    <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|x64'">mga2udmxml</xme2mga_RuleBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -197,7 +216,7 @@ exit 0
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>cppunit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>cppunit_dllx64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)testOCL.exe</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -216,54 +235,15 @@ exit 0
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\tests\testOCL\main.cpp" />
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testOCL\SBML2.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testOCL\SBML2.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\testOCL\SBML2.cpp" />
     <ClCompile Include="..\..\..\..\..\tests\testOCL\Test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testOCL\SBML2.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testOCL\SBML2.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
+    <ClInclude Include="..\..\..\..\..\tests\testOCL\SBML2.h" />
     <ClInclude Include="..\..\..\..\..\tests\testOCL\Test.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testOCL\SBML2_udm.xml">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\testOCL" "%(FullPath)" -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(OutDir)Udm.exe" -o "$(OutDir)Gen\tests\testOCL" "%(FullPath)" -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\testOCL\SBML2.cpp;$(OutDir)Gen\tests\testOCL\SBML2.h;$(OutDir)Gen\tests\testOCL\SBML2.dtd;$(OutDir)Gen\tests\testOCL\SBML2.xsd;$(OutDir)Gen\tests\testOCL\SBML2_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_math.dtd;$(OutDir)Gen\tests\testOCL\SBML2_math.xsd;$(OutDir)Gen\tests\testOCL\SBML2_math_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_sbml.dtd;$(OutDir)Gen\tests\testOCL\SBML2_sbml.xsd;$(OutDir)Gen\tests\testOCL\SBML2_sbml_xsd.h;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Gen\tests\testOCL\SBML2.cpp;$(OutDir)Gen\tests\testOCL\SBML2.h;$(OutDir)Gen\tests\testOCL\SBML2.dtd;$(OutDir)Gen\tests\testOCL\SBML2.xsd;$(OutDir)Gen\tests\testOCL\SBML2_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_math.dtd;$(OutDir)Gen\tests\testOCL\SBML2_math.xsd;$(OutDir)Gen\tests\testOCL\SBML2_math_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_sbml.dtd;$(OutDir)Gen\tests\testOCL\SBML2_sbml.xsd;$(OutDir)Gen\tests\testOCL\SBML2_sbml_xsd.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Udm.exe</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Udm.exe</AdditionalInputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testOCL\SBML2_udm.xml">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\testOCL" %(FullPath) -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(OutDir)UdmD.exe" -o "$(OutDir)Gen\tests\testOCL" %(FullPath) -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Gen\tests\testOCL\SBML2.cpp;$(OutDir)Gen\tests\testOCL\SBML2.h;$(OutDir)Gen\tests\testOCL\SBML2.dtd;$(OutDir)Gen\tests\testOCL\SBML2.xsd;$(OutDir)Gen\tests\testOCL\SBML2_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_math.dtd;$(OutDir)Gen\tests\testOCL\SBML2_math.xsd;$(OutDir)Gen\tests\testOCL\SBML2_math_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_sbml.dtd;$(OutDir)Gen\tests\testOCL\SBML2_sbml.xsd;$(OutDir)Gen\tests\testOCL\SBML2_sbml_xsd.h;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Gen\tests\testOCL\SBML2.cpp;$(OutDir)Gen\tests\testOCL\SBML2.h;$(OutDir)Gen\tests\testOCL\SBML2.dtd;$(OutDir)Gen\tests\testOCL\SBML2.xsd;$(OutDir)Gen\tests\testOCL\SBML2_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_math.dtd;$(OutDir)Gen\tests\testOCL\SBML2_math.xsd;$(OutDir)Gen\tests\testOCL\SBML2_math_xsd.h;$(OutDir)Gen\tests\testOCL\SBML2_sbml.dtd;$(OutDir)Gen\tests\testOCL\SBML2_sbml.xsd;$(OutDir)Gen\tests\testOCL\SBML2_sbml_xsd.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)UdmD.exe</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)UdmD.exe</AdditionalInputs>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\tests\testOCL\SBML2_uml.xme">
-      <FileType>Document</FileType>
+    <xme2mga Include="..\..\..\..\..\tests\testOCL\SBML2_uml.xme">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(TargetDir)\Gen\tests\testOCL"
 "$(UDM_PATH)\etc\xme2udmxml" "%(FullPath)" "%(FileName).mga"
 </Command>
@@ -280,10 +260,31 @@ exit 0
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Gen\tests\testOCL\%(FileName).mga;$(OutDir)Gen\tests\testOCL\SBML2_udm.xml;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Gen\tests\testOCL\%(FileName).mga;$(OutDir)Gen\tests\testOCL\SBML2_udm.xml;%(Outputs)</Outputs>
-    </CustomBuild>
+      <FileType>Document</FileType>
+    </xme2mga>
+    <mga2udmxml Include="..\..\..\..\..\tests\testOCL\SBML2_uml.mga">
+      <FileType>Document</FileType>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SBML2</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">SBML2</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SBML2</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SBML2</MetaName>
+    </mga2udmxml>
+    <udm Include="..\..\..\..\..\tests\testOCL\SBML2_udm.xml">
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">SBML2</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">SBML2</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">SBML2</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">SBML2</MetaName>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">-t -v -T -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">-t -v -T -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">-t -v -T -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">-t -v -T -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 %(AdditionalOptions)</AdditionalOptions>
+    </udm>
     <None Include="..\..\..\..\..\tests\testOCL\versionCheck.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\udm.targets" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmxml.targets" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\xme2mga.targets" />
   </ImportGroup>
 </Project>

@@ -49,6 +49,7 @@
   <ImportGroup Label="ExtensionSettings">
     <Import Project="..\..\..\..\..\common-scripts\build_customization\udm.props" />
     <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmxml.props" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2xmp.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -199,5 +200,6 @@ if exist "$(OutDir)Gen\samples\" exit /b 0</Command>
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\..\..\..\..\common-scripts\build_customization\udm.targets" />
     <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmxml.targets" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2xmp.targets" />
   </ImportGroup>
 </Project>

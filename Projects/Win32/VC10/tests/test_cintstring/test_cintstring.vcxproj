@@ -165,7 +165,7 @@ exit 0
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cppunit.lib</AdditionalDependencies>
+      <AdditionalDependencies>cppunit_dllx64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)test_cintstring.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

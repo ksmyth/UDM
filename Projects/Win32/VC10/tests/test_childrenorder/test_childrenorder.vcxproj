@@ -264,7 +264,7 @@
       <AdditionalIncludeDirectories>$(OutDir)Gen\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cppunit.lib</AdditionalDependencies>
+      <AdditionalDependencies>cppunit_dllx64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)test_childrenorder.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -327,6 +327,9 @@
   <ItemGroup>
     <ProjectReference Include="..\CreateLampDiagram\CreateLampDiagram.vcxproj">
       <Project>{3fb0a5a6-8815-45a3-8d68-777c708410fb}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\RegisterLampDiagram\RegisterLampDiagram.vcxproj">
+      <Project>{dbe04af7-af6a-408d-8734-e45ea656441a}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -18,31 +18,31 @@
     <ClInclude Include="..\..\..\..\..\tests\test_refports\RefPortsTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\tests\test_refports\RefPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_refports\RefPort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_refports\RefPort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\tests\test_refports\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\tests\test_refports\RefPortsTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\test_refports\RefPort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_refports\RefPort.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\test_refports\RefPort_udm.xml" />
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_refports\RefPort.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\test_refports\RefPort_udm.xml" />
-    <CustomBuild Include="..\..\..\..\..\tests\test_refports\RefPortGme.xme" />
-    <CustomBuild Include="..\..\..\..\..\tests\test_refports\RefPortUml.xme" />
+    <xme2mga Include="..\..\..\..\..\tests\test_refports\RefPortGme.xme" />
+  </ItemGroup>
+  <ItemGroup>
+    <mga2xmp Include="..\..\..\..\..\tests\test_refports\RefPortGme.mga" />
+  </ItemGroup>
+  <ItemGroup>
+    <mga2udmxml Include="..\..\..\..\..\tests\test_refports\RefPortUml.xme" />
+  </ItemGroup>
+  <ItemGroup>
+    <udm Include="..\..\..\..\..\tests\test_refports\RefPort_udm.xml" />
   </ItemGroup>
 </Project>

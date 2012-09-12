@@ -13,6 +13,9 @@
       <UniqueIdentifier>{3861cd47-266d-4d58-b018-8fc389595648}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
+    <Filter Include="NewFilter1">
+      <UniqueIdentifier>{03d1ffa4-0138-43eb-99cb-49fc3e64959f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\tests\testUdmCint\main.cpp">
@@ -31,11 +34,15 @@
     <None Include="..\..\..\..\..\tests\testUdmCint\versionCheck.xml" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testUdmCint\GeneTF_udm.xml" />
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testUdmCint\SBML2Ex_udm.xml" />
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testUdmCint\GeneTF_udm.xml" />
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testUdmCint\SBML2Ex_udm.xml" />
-    <CustomBuild Include="..\..\..\..\..\tests\testUdmCint\GeneTF_uml.xme" />
-    <CustomBuild Include="..\..\..\..\..\tests\testUdmCint\SBML2Ex_uml.xme" />
+    <xme2mga Include="..\..\..\..\..\tests\testUdmCint\SBML2Ex_uml.xme" />
+    <xme2mga Include="..\..\..\..\..\tests\testUdmCint\GeneTF_uml.xme" />
+  </ItemGroup>
+  <ItemGroup>
+    <mga2udmxml Include="..\..\..\..\..\tests\testUdmCint\SBML2Ex_uml.mga" />
+    <mga2udmxml Include="..\..\..\..\..\tests\testUdmCint\GeneTF_uml.mga" />
+  </ItemGroup>
+  <ItemGroup>
+    <udm Include="..\..\..\..\..\tests\testUdmCint\SBML2Ex_udm.xml" />
+    <udm Include="..\..\..\..\..\tests\testUdmCint\GeneTF_udm.xml" />
   </ItemGroup>
 </Project>

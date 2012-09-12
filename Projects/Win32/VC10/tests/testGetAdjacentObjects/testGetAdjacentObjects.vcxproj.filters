@@ -15,28 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\PackageA.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\PackageB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\PackageA.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\PackageB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\tests\testGetAdjacentObjects\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\tests\testGetAdjacentObjects\TestGetAdjacentObjects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\testGetAdjacentObjects\PackageA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\testGetAdjacentObjects\PackageB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,34 +35,29 @@
     <ClInclude Include="..\..\..\..\..\tests\testGetAdjacentObjects\testGetAdjacentObjects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\tests\testGetAdjacentObjects\PackageB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\tests\testGetAdjacentObjects\PackageA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\PackageA.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\PackageB.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Debug\Gen\tests\testGetAdjacentObjects\testAssociationScenarios_udm.udm">
+    <xme2mga Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios.xme">
       <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\PackageA.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\PackageB.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\Build\Win32\VC10\Release\Gen\tests\testGetAdjacentObjects\testAssociationScenarios_udm.udm">
+    </xme2mga>
+  </ItemGroup>
+  <ItemGroup>
+    <mga2udmudm Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios.mga">
       <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios.xme">
+    </mga2udmudm>
+  </ItemGroup>
+  <ItemGroup>
+    <udm Include="..\..\..\..\..\tests\testGetAdjacentObjects\testAssociationScenarios_udm.udm">
       <Filter>Resource Files</Filter>
-    </CustomBuild>
+    </udm>
   </ItemGroup>
 </Project>
