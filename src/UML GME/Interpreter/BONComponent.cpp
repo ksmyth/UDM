@@ -171,7 +171,7 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		GatherPackageFolders(root, *packages);
 		
 		if(packages->GetCount() == 0)
-		{	throw int_exception("Uml2Xml Error: There are no class diagrams in the project. No output will be generated");
+		{	throw int_exception("Uml2Xml Error: There are no Class Diagrams inside of Packages in the project. No output will be generated");
 		}
 
 		if(packages->GetCount() == 1)
