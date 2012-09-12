@@ -94,11 +94,24 @@ class udm_exception : public std::exception
 	}
 public:
 	udm_exception() throw() : stacktrace(get_stacktrace()) { _init(); }
-	udm_exception(const udm_exception &a) throw() : description(a.description), stacktrace(get_stacktrace()) { _init(); }
-	udm_exception(const std::string &d) throw() : description(d), stacktrace(get_stacktrace()) { _init(); }
-	udm_exception(const char *d) throw() : description(d), stacktrace(get_stacktrace()) { _init(); }
+	udm_exception(const std::string &d) throw() : 
+#ifdef _MSC_VER
+	// for std::exception e = (udm_exception)ue; e.what() to work, we must call the baseclass constructor with a string (since the std copy constructor doesn't call udm_exception::what)
+		exception(d.c_str()),
+#endif
+		description(d), stacktrace(get_stacktrace()) { _init(); }
+	udm_exception(const char *d) throw() :
+#ifdef _MSC_VER
+		exception(d),
+#endif
+		description(d), stacktrace(get_stacktrace()) { _init(); }
 	const udm_exception &operator =(const udm_exception &a) throw()
-		{ description = a.description; stacktrace = get_stacktrace(); _init(); return *this; }
+	{
+#ifdef _MSC_VER
+		*((::std::exception*)this) = a;
+#endif
+		description = a.description; stacktrace = get_stacktrace(); _init(); return *this;
+	}
 	virtual ~udm_exception() throw() { }
 	virtual const char *what() const throw() { return descr_wstack.c_str(); }
 	virtual const char *where() const throw() { return stacktrace.c_str(); }
