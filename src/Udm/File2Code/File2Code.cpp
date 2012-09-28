@@ -33,7 +33,7 @@ void File2Code::gen()
   std::ifstream in(m_infname.c_str());
   if (!in.good())
   {
-    std::string err = m_infname + std::string(" could not open.");
+    std::string err = std::string("Could not open '") + m_infname + "'";
     throw std::runtime_error(err);
   }
 

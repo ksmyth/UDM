@@ -459,6 +459,11 @@ int main(int argc, char **argv) {
 		return(-1);
 
 	}
+	catch(const std::exception &e)
+	{
+		cerr << "Exception: " << e.what() << endl;
+		return(-2);
+	}
 	
 	//just use the UdmDom::
 	UdmDom::Dummy_For_Linker++;

@@ -84,9 +84,13 @@ void ClassGen::generate()
 		string pck = Utils::getPackageSignature(*basesIt, m_ns_path, m_package_name);
 		pck = pck.substr(0, pck.length() - 1);
 		pck = Utils::toPackageName(pck);
+		string ns_path;
+		if (Uml::IsDerivedFrom(basesIt->GetParent().type(), Uml::Namespace::meta)) {
+			ns_path = static_cast<Uml::Namespace>(basesIt->parent_ns()).getPath2("::", false);
+		}
 		std::stringstream ioutput; // The method declarations for the interface will be in a base interface, so we ignore them
 
-		CG<stringstream> cg(*basesIt, pck, m_output, ioutput, basesIt->name(), m_ns_path);
+		CG<stringstream> cg(*basesIt, pck, m_output, ioutput, basesIt->name(), ns_path);
 		m_output << " // Methods for " << basesIt->name() << endl;
 		cg.accessChildren();
 		cg.accessAttributes();
