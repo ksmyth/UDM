@@ -135,6 +135,7 @@
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)UdmDll_VS10.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
@@ -193,6 +194,7 @@ xcopy /Y/D/F "$(OutDir)"\UdmDll_VS10.lib "$(UDM_PATH)"\lib
       <ImportLibrary>$(OutDir)UdmDll_$(PlatformToolset)_$(Platform).lib</ImportLibrary>
       <ForceSymbolReferences>
       </ForceSymbolReferences>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
@@ -249,6 +251,7 @@ xcopy /Y/D/F "$(OutDir)"\UdmDll_v100_x64.lib "$(UDM_PATH)"\lib
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)UdmDll_VS10D.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
@@ -304,6 +307,7 @@ xcopy /Y/D/F "$(OutDir)"\UdmDll_VS10D.lib "$(UDM_PATH)"\lib
       <ImportLibrary>$(OutDir)UdmDll_$(PlatformToolset)_$(Platform)D.lib</ImportLibrary>
       <ForceSymbolReferences>
       </ForceSymbolReferences>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
