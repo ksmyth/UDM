@@ -567,6 +567,10 @@ namespace UdmGme
 			HRESULT (__stdcall IMgaSimpleConnection::*fn)(IMgaFCOs**);
 			if (!src_role_name) {
 				SmartBSTR dst_role_name = conn->RegistryValue["dRefParent"];
+				if (!dst_role_name)
+				{
+					return ret;
+				}
 				fn = role_name.compare(dst_role_name) == 0 ? &IMgaSimpleConnection::get_DstReferences : &IMgaSimpleConnection::get_SrcReferences;
 			} else {
 				fn = role_name.compare(src_role_name) == 0 ? &IMgaSimpleConnection::get_SrcReferences : &IMgaSimpleConnection::get_DstReferences;
