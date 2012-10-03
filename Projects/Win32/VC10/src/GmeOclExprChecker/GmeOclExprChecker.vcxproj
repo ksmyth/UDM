@@ -363,54 +363,6 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ClInclude Include="$(GME_ROOT)\sdk\bon\common\GMECOM.H" />
     <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\GMECommon.h" />
     <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\GMESyntacticSemanticDialog.h" />
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Debug\obj\src\UML GME\Interpreter\Lattrib.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Release\obj\src\UML GME\Interpreter\Lattrib.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Debug\obj\src\UML GME\Interpreter\Lcardin.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Release\obj\src\UML GME\Interpreter\Lcardin.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Debug\obj\src\UML GME\Interpreter\Pattrib.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Release\obj\src\UML GME\Interpreter\Pattrib.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Debug\obj\src\UML GME\Interpreter\PattribTokenTypes.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Release\obj\src\UML GME\Interpreter\PattribTokenTypes.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Debug\obj\src\UML GME\Interpreter\Pcardin.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Release\obj\src\UML GME\Interpreter\Pcardin.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Debug\obj\src\UML GME\Interpreter\PcardinTokenTypes.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Build\Win32\VC10\Release\obj\src\UML GME\Interpreter\PcardinTokenTypes.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\RawComponent.h" />
     <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\Resource.h" />
     <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\StdAfx.h" />
