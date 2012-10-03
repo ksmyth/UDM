@@ -203,7 +203,11 @@ int main(int argc, char **argv) {
 			UdmUtil::copy_assoc_map dummy;
 			int ret;
 			if (flatten)
-				ret = UdmUtil::FlattenLibrariesAndCopyObjectHierarchy(fromDN.GetRootObject(), toDN.GetRootObject(), &toDN, dummy);
+			{
+				Udm::Object fromDNRoot = fromDN.GetRootObject();
+				Udm::Object toDNRoot = toDN.GetRootObject();
+				ret = UdmUtil::FlattenLibrariesAndCopyObjectHierarchy(fromDNRoot, toDNRoot, &toDN, dummy);
+			}
 			else
 				ret = cp.Copy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN, dummy);
 
