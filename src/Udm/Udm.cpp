@@ -40,7 +40,7 @@ static const char* udm_usage =
 "  -c corba meta\n"
 "\n"
 "  [default] Generate C++\n"
-"  -s Generate C#\n"
+//"  -s Generate C#\n"
 "  -j Generate Java\n"
 "  --leesa Generate C++ with support for generic programming\n"
 "\n"
