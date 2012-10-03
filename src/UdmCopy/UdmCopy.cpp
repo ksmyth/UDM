@@ -21,6 +21,7 @@ UDM_USE_MGA
 #include <UdmUtil.h>
 
 #include <cstdlib>
+#include <string.h>
 
 /*
 static Diagram linkdiag;
@@ -138,9 +139,10 @@ int main(int argc, char **argv) {
 	}
 
 		if(argc != 4 && argc != 5) {
-			cout << "Usage: UdmCopy <indataname> <outdataname> <diagramname> [<metalocator>]" << endl;
+			cout << "Usage: UdmCopy [-f] <indataname> <outdataname> <diagramname> [<metalocator>]" << endl;
 			cout << "  where: <diagramname>: Udm .xml file" << endl;
 			cout << "         <metalocator>: .xsd file" << endl;
+			cout << "  -f  flatten: remove libraries from output" << endl;
 			cout << "  The .xsd must be in the current directory or PATH, or <metalocator> must be specified." << endl;
 			cout << "  Example mga->xml: UdmCopy model.mga model.xml paradigm.xml" << endl;
 			cout << "  Example mga->xml: UdmCopy model.mga model.xml path-to/paradigm.xml path-to/paradigm.xsd" << endl;
