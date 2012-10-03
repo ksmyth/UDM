@@ -43,6 +43,15 @@
     <MSBuild Projects="Projects\Win32\VC10\tests\UdmTests.sln" Targets="Build" Properties="Configuration=Debug;Platform=x64" />
     <MSBuild Projects="Projects\Win32\VC10\tests\UdmTests.sln" Targets="Build" Properties="Configuration=Release;Platform=x64" />
   </Target>
+  <Target Name="BuildVS11" DependsOnTargets="CheckEnv">
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="VisualStudioVersion=11.0;PlatformToolset=v110;Configuration=Debug" />
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="VisualStudioVersion=11.0;PlatformToolset=v110;Configuration=Release" />
+  </Target>
+  <Target Name="BuildVS11_x64" DependsOnTargets="CheckEnv">
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="VisualStudioVersion=11.0;PlatformToolset=v110;Configuration=Debug;Platform=x64" />
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="VisualStudioVersion=11.0;PlatformToolset=v110;Configuration=Release;Platform=x64" />
+  </Target>
+
   <Target Name="UdmCliGen" DependsOnTargets="CheckEnv">
     <MSBuild Projects="src\UdmCliGen\make.msbuild"/>
   </Target>
