@@ -129,6 +129,27 @@ namespace UdmUtil
 		return ExtractName(ob.__impl(), att_name);
 	}
 
+	UDM_DLL int FlattenLibrariesAndCopyObjectHierarchy(Udm::Object& srcRoot, Udm::Object& dstRoot, Udm::DataNetwork* dstBackend, UdmUtil::copy_assoc_map &cam)
+	{
+		std::set<Udm::Object> children = srcRoot.GetChildObjects();
+		for (std::set<Udm::Object> ::iterator childrenIt = children.begin(); childrenIt != children.end(); childrenIt++)
+		{
+			Udm::Object child = *childrenIt;
+			std::string lib_name;
+			if (child.isLibRoot())
+			{
+				if (FlattenLibrariesAndCopyObjectHierarchy(child, dstRoot, dstBackend, cam) != 0)
+				{
+					return 1;
+				}
+			}
+		}
+		if (CopyObjectHierarchy(srcRoot.__impl(), dstRoot.__impl(), dstBackend, cam) != 0)
+		{
+			return 1;
+		}
+		return 0;
+	}
 
 
 	UDM_DLL int CopyObjectHierarchy(Udm::ObjectImpl* p_srcRoot, Udm::ObjectImpl* p_dstRoot, Udm::DataNetwork* p_dstBackend, copy_assoc_map &cam, const CopyOpts &opts)

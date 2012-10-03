@@ -47,8 +47,9 @@ public:
 	{
 	}
 
-	void Copy(ObjectImpl *p_srcRoot, ObjectImpl *p_dstRoot, DataNetwork *p_dstBackend, UdmUtil::copy_assoc_map &cam, bool inside_lib = false)
+	int Copy(ObjectImpl *p_srcRoot, ObjectImpl *p_dstRoot, DataNetwork *p_dstBackend, UdmUtil::copy_assoc_map &cam, bool inside_lib = false)
 	{
+		int ret = 0;
 		vector<ObjectImpl*> children = p_srcRoot->getChildren(NULL, p_srcRoot->type());
 		for (vector<ObjectImpl*>::const_iterator i = children.begin(); i != children.end(); i++) {
 
@@ -117,13 +118,25 @@ public:
 		}
 
 		UdmUtil::CopyOpts opts = { true, inside_lib };
-		UdmUtil::CopyObjectHierarchy(p_srcRoot, p_dstRoot, p_dstBackend, cam, opts);
+		if (UdmUtil::CopyObjectHierarchy(p_srcRoot, p_dstRoot, p_dstBackend, cam, opts) != 0)
+		{
+			ret = 1;
+		}
+		return ret;
 	}
 };
 
 
 int main(int argc, char **argv) {
 		
+	bool flatten = false;
+	if (argc > 2 && strcmp(argv[1], "-f") == 0)
+	{
+		flatten = true;
+		argc--;
+		argv++;
+	}
+
 		if(argc != 4 && argc != 5) {
 			cout << "Usage: UdmCopy <indataname> <outdataname> <diagramname> [<metalocator>]" << endl;
 			cout << "  where: <diagramname>: Udm .xml file" << endl;
@@ -186,14 +199,23 @@ int main(int argc, char **argv) {
 			UdmCopy cp(udmDataDiagram, metaloc, toDN_ext);
 
 			UdmUtil::copy_assoc_map dummy;
-			cp.Copy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN, dummy);
+			int ret;
+			if (flatten)
+				ret = UdmUtil::FlattenLibrariesAndCopyObjectHierarchy(fromDN.GetRootObject(), toDN.GetRootObject(), &toDN, dummy);
+			else
+				ret = cp.Copy(fromDN.GetRootObject().__impl(), toDN.GetRootObject().__impl(), &toDN, dummy);
 
 			toDN.CloseWithUpdate();
 
+			if (ret != 0)
+			{
+				cerr << "Copy failed" << endl;
+				exit(-2);
+			}
 		}
 
 		catch(udm_exception u) {
-			cout << u.what() << endl;
+			cerr << u.what() << endl;
 			exit(-1);
 		}
 
