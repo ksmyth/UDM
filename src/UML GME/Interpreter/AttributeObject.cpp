@@ -463,10 +463,12 @@ void AttributeObject::BuildUML(::Uml::Class &uml_cls)
 				s_i = s.begin();
 			}
 
-			s_i = s.end() - 1;
-			while (s.size() && *s_i == '"') {
-				s.erase(s_i);
+			if (s.length()) {
 				s_i = s.end() - 1;
+				while (s.size() && *s_i == '"') {
+					s.erase(s_i);
+					s_i = s.end() - 1;
+				}
 			}
 			defval_tmp.push_back(s);
 		}
