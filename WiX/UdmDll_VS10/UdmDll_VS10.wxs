@@ -13,7 +13,7 @@
     <Directory Id='TARGETDIR' Name='SourceDir'>
       <Directory Id='$(var.SystemFolderNative)' Name='$(var.SystemFolderNative)'>
         <Component>
-          <File Source='$(var.Build)VC10\Release\$(var.UdmDllVC10)' />
+          <File Source='$(var.Build)v110\Release\$(var.UdmDllVC10)' />
         </Component>
         <?if $(sys.BUILDARCH)=x64 ?>
         <Component>
