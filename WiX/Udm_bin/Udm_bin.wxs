@@ -60,7 +60,7 @@
         <File Source="..\Build\Win32\VC9\Debug\UdmDll_3_2D.dll" />
       </Component>
       <Component>
-        <File Source="..\Build\Win32\VC10\Debug\UdmDll_3_2_VS10D.dll" />
+        <File Source="..\Build\Win32\v100\Debug\UdmDll_3_2_VS10D.dll" />
       </Component>
       <Component>
         <File Source="..\Build\Win32\VC10\Release\Udm.exe" />
