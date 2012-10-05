@@ -135,17 +135,17 @@
         <File Source="..\Build\Win32\VC9\Debug\UdmDllD.lib" />
       </Component>
       <Component>
-        <File Source="..\Build\Win32\VC10\Release\UdmDll_VS10.lib" />
+        <File Source="..\Build\Win32\v100\Release\UdmDll_VS10.lib" />
       </Component>
       <Component>
-        <File Source="..\Build\Win32\VC10\Debug\UdmDll_VS10D.lib" />
+        <File Source="..\Build\Win32\v100\Debug\UdmDll_VS10D.lib" />
       </Component>
       <?else?>
       <Component>
-        <File Source="..\Build\x64\VC10\Release\UdmDll_v100_x64.lib" />
+        <File Source="..\Build\x64\v100\Release\UdmDll_v100_x64.lib" />
       </Component>
       <Component>
-        <File Source="..\Build\x64\VC10\Debug\UdmDll_v100_x64D.lib" />
+        <File Source="..\Build\x64\v100\Debug\UdmDll_v100_x64D.lib" />
       </Component>
       <?endif?>
     </DirectoryRef>
