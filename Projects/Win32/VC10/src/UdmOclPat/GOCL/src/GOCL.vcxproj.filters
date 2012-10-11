@@ -11,13 +11,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UdmOclPat\GOCL\src\ocl.cpp">
+    <ClCompile Include="..\..\..\..\..\..\..\Build\Win32\v100\Gen\src\UdmOclPat\GOCL\src\ocl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp">
+    <ClCompile Include="..\..\..\..\..\..\..\Build\Win32\v100\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Build\Win32\VC10\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp">
+    <ClCompile Include="..\..\..\..\..\..\..\Build\Win32\v100\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\src\UdmOclPat\GOCL\src\ANTLRBase\AParser.cpp">
