@@ -428,7 +428,7 @@ XMLCh* transcode(const std::string& toTranscode)
 	utf8::unchecked::utf8to16(toTranscode.begin(), toTranscode.end(), std::back_inserter(transcoded));
 	XMLCh* const retVal = (XMLCh*) manager->allocate((transcoded.size() + 1) * sizeof(XMLCh));
 	XMLCh* copy = retVal;
-	for (std::vector<XMLCh>::const_iterator it = transcoded.cbegin(); it != transcoded.cend(); it++)
+	for (std::vector<XMLCh>::iterator it = transcoded.begin(); it != transcoded.end(); it++)
 	{
 		*copy = *it;
 		copy++;
