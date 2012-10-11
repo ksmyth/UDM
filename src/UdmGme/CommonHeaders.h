@@ -32,13 +32,13 @@
 #ifdef _DEBUG
 // If IntelliSense reports "Cannot open source file", compile then reopen the project
 // KMS: VS intellisense has a hard time loading from typelib GUID. This fixes it:
-#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Debug\obj\src\UdmGme\Core.tlh"
-#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Debug\obj\src\UdmGme\Mga.tlh"
-#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Debug\obj\src\UdmGme\Meta.tlh"
+#include "K:\git\UDM\Build\Win32\v100\Debug\obj\src\UdmGme\Core.tlh"
+#include "K:\git\UDM\Build\Win32\v100\Debug\obj\src\UdmGme\Mga.tlh"
+#include "K:\git\UDM\Build\Win32\v100\Debug\obj\src\UdmGme\Meta.tlh"
 #else
-#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Release\obj\src\UdmGme\Core.tlh"
-#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Release\obj\src\UdmGme\Mga.tlh"
-#include "C:\Users\ksmyth\git\UDM\Build\Win32\VC10\Release\obj\src\UdmGme\Meta.tlh"
+#include "K:\git\UDM\Build\Win32\v100\Release\obj\src\UdmGme\Core.tlh"
+#include "K:\git\UDM\Build\Win32\v100\Release\obj\src\UdmGme\Mga.tlh"
+#include "K:\git\UDM\Build\Win32\v100\Release\obj\src\UdmGme\Meta.tlh"
 #endif
 #endif
 
