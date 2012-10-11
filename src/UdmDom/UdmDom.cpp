@@ -392,7 +392,7 @@ XMLCh* transcode(const std::string& toTranscode)
     return retVal;
 }
 
-#else
+#elif UDM_LOCALE_IS_UTF8
 
 char* transcode(const XMLCh* const toTranscode)
 {
@@ -402,6 +402,39 @@ char* transcode(const XMLCh* const toTranscode)
 XMLCh* transcode(const std::string& toTranscode)
 {
 	return XMLString::transcode(toTranscode.c_str());
+}
+
+#else
+#include "utf8/unchecked.h"
+char* transcode(const XMLCh* const toTranscode)
+{
+	MemoryManager* const manager = XMLPlatformUtils::fgMemoryManager;
+	std::string transcoded;
+	size_t length = 0;
+	for (const XMLCh* c = toTranscode; *c != 0; c++)
+	{
+		length++;
+	}
+	utf8::unchecked::utf16to8(toTranscode, toTranscode + length, std::back_inserter(transcoded));
+	char* const retVal = (char*) manager->allocate(transcoded.length() + 1);
+	strcpy(retVal, transcoded.c_str());
+	return retVal;
+}
+
+XMLCh* transcode(const std::string& toTranscode)
+{
+	MemoryManager* const manager = XMLPlatformUtils::fgMemoryManager;
+	std::vector<XMLCh> transcoded;
+	utf8::unchecked::utf8to16(toTranscode.begin(), toTranscode.end(), std::back_inserter(transcoded));
+	XMLCh* const retVal = (XMLCh*) manager->allocate((transcoded.size() + 1) * sizeof(XMLCh));
+	XMLCh* copy = retVal;
+	for (std::vector<XMLCh>::const_iterator it = transcoded.cbegin(); it != transcoded.cend(); it++)
+	{
+		*copy = *it;
+		copy++;
+	}
+	*copy = 0;
+	return retVal;
 }
 
 #endif
