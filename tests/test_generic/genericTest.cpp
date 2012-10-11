@@ -4,10 +4,12 @@
 #include <UdmBase.h>
 #include <UdmUtil.h>
 #include <cint_string.h>
+#include <string.h>
+#include <iostream>
 #include "genericTest.h"
 #include "LampDiagram.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <io.h>
 #include <stdio.h>
 #else	//WIN32
@@ -32,11 +34,31 @@ UDM_USE_DOM
 UDM_USE_MGA
 #endif
 
+const char* utf8_test_strings[] = {
+// Árvíztűrő tükörfúrógép
+"\xc3\x81\x72\x76\xc3\xad\x7a\x74\xc5\xb1\x72\xc5\x91\x20\x74\xc3\xbc\x6b\xc3\xb6\x72\x66\xc3\xba\x72\xc3\xb3\x67\xc3\xa9\x70",
+// Γαζέες καὶ μυρτιὲς δὲν θὰ βρῶ πιὰ στὸ χρυσαφὶ ξέφωτο
+"\xce\x93\xce\xb1\xce\xb6\xce\xad\xce\xb5\xcf\x82\x20\xce\xba\xce\xb1\xe1\xbd\xb6\x20\xce\xbc\xcf\x85\xcf\x81\xcf\x84\xce\xb9\xe1\xbd\xb2\xcf\x82\x20\xce\xb4\xe1\xbd\xb2\xce\xbd\x20\xce\xb8\xe1\xbd\xb0\x20\xce\xb2\xcf\x81\xe1\xbf\xb6\x20\xcf\x80\xce\xb9\xe1\xbd\xb0\x20\xcf\x83\xcf\x84\xe1\xbd\xb8\x20\xcf\x87\xcf\x81\xcf\x85\xcf\x83\xce\xb1\xcf\x86\xe1\xbd\xb6\x20\xce\xbe\xce\xad\xcf\x86\xcf\x89\xcf\x84\xce\xbf",
+// いろはにほへとちりぬるを
+"\xe3\x81\x84\xe3\x82\x8d\xe3\x81\xaf\xe3\x81\xab\xe3\x81\xbb\xe3\x81\xb8\xe3\x81\xa8\xe3\x81\xa1\xe3\x82\x8a\xe3\x81\xac\xe3\x82\x8b\xe3\x82\x92",
+// ウヰノオクヤマ ケフコエテ アサキユメミシ ヱヒモセスン
+"\xe3\x82\xa6\xe3\x83\xb0\xe3\x83\x8e\xe3\x82\xaa\xe3\x82\xaf\xe3\x83\xa4\xe3\x83\x9e\x20\xe3\x82\xb1\xe3\x83\x95\xe3\x82\xb3\xe3\x82\xa8\xe3\x83\x86\x20\xe3\x82\xa2\xe3\x82\xb5\xe3\x82\xad\xe3\x83\xa6\xe3\x83\xa1\xe3\x83\x9f\xe3\x82\xb7\x20\xe3\x83\xb1\xe3\x83\x92\xe3\x83\xa2\xe3\x82\xbb\xe3\x82\xb9\xe3\x83\xb3",
+// דג סקרן שט בים מאוכזב ולפתע מצא לו חברה איך הקליט
+"\xd7\x93\xd7\x92\x20\xd7\xa1\xd7\xa7\xd7\xa8\xd7\x9f\x20\xd7\xa9\xd7\x98\x20\xd7\x91\xd7\x99\xd7\x9d\x20\xd7\x9e\xd7\x90\xd7\x95\xd7\x9b\xd7\x96\xd7\x91\x20\xd7\x95\xd7\x9c\xd7\xa4\xd7\xaa\xd7\xa2\x20\xd7\x9e\xd7\xa6\xd7\x90\x20\xd7\x9c\xd7\x95\x20\xd7\x97\xd7\x91\xd7\xa8\xd7\x94\x20\xd7\x90\xd7\x99\xd7\x9a\x20\xd7\x94\xd7\xa7\xd7\x9c\xd7\x99\xd7\x98",
+// Съешь же ещё этих мягких французских булок да выпей чаю
+"\xd0\xa1\xd1\x8a\xd0\xb5\xd1\x88\xd1\x8c\x20\xd0\xb6\xd0\xb5\x20\xd0\xb5\xd1\x89\xd1\x91\x20\xd1\x8d\xd1\x82\xd0\xb8\xd1\x85\x20\xd0\xbc\xd1\x8f\xd0\xb3\xd0\xba\xd0\xb8\xd1\x85\x20\xd1\x84\xd1\x80\xd0\xb0\xd0\xbd\xd1\x86\xd1\x83\xd0\xb7\xd1\x81\xd0\xba\xd0\xb8\xd1\x85\x20\xd0\xb1\xd1\x83\xd0\xbb\xd0\xbe\xd0\xba\x20\xd0\xb4\xd0\xb0\x20\xd0\xb2\xd1\x8b\xd0\xbf\xd0\xb5\xd0\xb9\x20\xd1\x87\xd0\xb0\xd1\x8e",
+// ๏ เป็นมนุษย์สุดประเสริฐเลิศคุณค่า  กว่าบรรดาฝูงสัตว์เดรัจฉาน
+"\xe0\xb9\x8f\x20\xe0\xb9\x80\xe0\xb8\x9b\xe0\xb9\x87\xe0\xb8\x99\xe0\xb8\xa1\xe0\xb8\x99\xe0\xb8\xb8\xe0\xb8\xa9\xe0\xb8\xa2\xe0\xb9\x8c\xe0\xb8\xaa\xe0\xb8\xb8\xe0\xb8\x94\xe0\xb8\x9b\xe0\xb8\xa3\xe0\xb8\xb0\xe0\xb9\x80\xe0\xb8\xaa\xe0\xb8\xa3\xe0\xb8\xb4\xe0\xb8\x90\xe0\xb9\x80\xe0\xb8\xa5\xe0\xb8\xb4\xe0\xb8\xa8\xe0\xb8\x84\xe0\xb8\xb8\xe0\xb8\x93\xe0\xb8\x84\xe0\xb9\x88\xe0\xb8\xb2\x20\x20\xe0\xb8\x81\xe0\xb8\xa7\xe0\xb9\x88\xe0\xb8\xb2\xe0\xb8\x9a\xe0\xb8\xa3\xe0\xb8\xa3\xe0\xb8\x94\xe0\xb8\xb2\xe0\xb8\x9d\xe0\xb8\xb9\xe0\xb8\x87\xe0\xb8\xaa\xe0\xb8\xb1\xe0\xb8\x95\xe0\xb8\xa7\xe0\xb9\x8c\xe0\xb9\x80\xe0\xb8\x94\xe0\xb8\xa3\xe0\xb8\xb1\xe0\xb8\x88\xe0\xb8\x89\xe0\xb8\xb2\xe0\xb8\x99",
+// ಠ_ಠ
+"\xe0\xb2\xa0\x5f\xe0\xb2\xa0",
+};
+
+
 using namespace LampDiagram;
 
 char * UdmTests::genericTest::getRndFileName()
 {
-#ifdef WIN32
+#ifdef _WIN32
 		char * def_tmp_dir = "c:\\";
 #else
 		char * def_tmp_dir = "/tmp/";
@@ -52,7 +74,7 @@ char * UdmTests::genericTest::getRndFileName()
 		//create a temporary folder and set the path
 		//char t_dir_name[L_tmpnam +1];
 		char * t_dir_name;
-#ifdef WIN32
+#ifdef _WIN32
 		t_dir_name = _tempnam(tmp_dir, "UDM");
 #else	//WIN32
 		t_dir_name = tempnam(tmp_dir, "UDM");
@@ -63,7 +85,7 @@ char * UdmTests::genericTest::getRndFileName()
 
 void UdmTests::genericTest::removeFile(const string &pathname)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	_unlink(pathname.c_str());
 #else
 	unlink(pathname.c_str());
@@ -179,6 +201,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				d.push_back("triple back\\\\\\slash");
 				d.push_back("triple semi-coloback\\;\\;\\;slash-1");
 				d.push_back("triple semi-coloback\\\\\\;;;slash-2");
+				d.push_back("xxabcd\xc3\xa9");
 				doubleBulbLamp.ArrayStr() = d;
 				
 				CPPUNIT_ASSERT((string)doubleBulbLamp.ArrayStr()[0] == "apple");
@@ -192,7 +215,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				CPPUNIT_ASSERT((string)doubleBulbLamp.ArrayStr()[8] == "triple semi-coloback\\;\\;\\;slash-1");
 				CPPUNIT_ASSERT((string)doubleBulbLamp.ArrayStr()[9] == "triple semi-coloback\\\\\\;;;slash-2");
 				CPPUNIT_ASSERT((string)doubleBulbLamp.ArrayStr()[10] == "triplesemi;;;colon");
-				
+				CPPUNIT_ASSERT((string)doubleBulbLamp.ArrayStr()[11] == "xxabcd\xc3\xa9");
 
 							
 				//testing non-persistent array attributes
@@ -210,7 +233,7 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 				CPPUNIT_ASSERT(d[8] == "triple semi-coloback\\;\\;\\;slash-1");
 				CPPUNIT_ASSERT(d[9] == "triple semi-coloback\\\\\\;;;slash-2");
 				CPPUNIT_ASSERT(d[10] == "triplesemi;;;colon");
-				
+				CPPUNIT_ASSERT(d[11] == "xxabcd\xc3\xa9");
 
 
 
@@ -628,6 +651,15 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 			CPPUNIT_ASSERT(ed_s.size() == 8); //all the devices: 3 Bulb, 3 switch, 1 plug, 1 lamp
 			
 
+			for (int i = 0; i < sizeof(utf8_test_strings) / sizeof(utf8_test_strings[0]); i++)
+			{
+				doubleBulbLamp.RegAttr() = utf8_test_strings[i];
+				CPPUNIT_ASSERT(utf8_test_strings[i] == std::string(doubleBulbLamp.RegAttr()));
+				CPPUNIT_ASSERT_EQUAL(strlen(utf8_test_strings[i]), std::string(doubleBulbLamp.RegAttr()).length());
+				doubleBulbLamp.ModelName() = utf8_test_strings[i];
+				CPPUNIT_ASSERT(utf8_test_strings[i] == std::string(doubleBulbLamp.ModelName()));
+			}
+
 			//testing assignment
 						
 			Udm::SmartDataNetwork snw(LampDiagram::diagram);
@@ -645,6 +677,22 @@ bool UdmTests::genericTest::generictest(const char * src, const char * dst)
 	return false;
 };
 
+
+static void testLastUTF8StringInXML(const std::string& filename)
+{
+	std::string encoding = "encoding=\"UTF-8\"";
+	std::string test_string = utf8_test_strings[sizeof(utf8_test_strings)/sizeof(utf8_test_strings[0])-1];
+	std::string test1 = std::string("ModelName=\"") + test_string + "\"";
+	std::string test2 = std::string("RegAttr=\"") + test_string + "\"";
+	std::ifstream stream(filename.c_str(), ios::in | ios::binary);
+	CPPUNIT_ASSERT(stream.good());
+	char data[2048];
+	stream.read(data, sizeof(data));
+	CPPUNIT_ASSERT(std::string(data).find(encoding) != std::string::npos);
+	CPPUNIT_ASSERT(std::string(data).find(test1) != std::string::npos);
+	CPPUNIT_ASSERT(std::string(data).find(test2) != std::string::npos);
+}
+
 #ifdef _WIN32
 void UdmTests::genericTest::testDOMMGA()
 {
@@ -653,6 +701,7 @@ void UdmTests::genericTest::testDOMMGA()
 	std::string fname_std = std::string(fname) + ".xml";
 	std::string fname_std_1 = std::string(fname) + ".mga";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	testLastUTF8StringInXML(fname_std);
 	removeFile(fname_std);
 	removeFile(fname_std_1);
 	free(fname);
@@ -689,6 +738,7 @@ void UdmTests::genericTest::testMGADOM()
 	std::string fname_std = std::string(fname) + ".mga";
 	std::string fname_std_1 = std::string(fname) + ".xml";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	testLastUTF8StringInXML(fname_std_1);
 	removeFile(fname_std);
 	removeFile(fname_std_1);
 	free(fname);
@@ -714,6 +764,8 @@ void UdmTests::genericTest::testDOMDOM()
 	std::string fname_std = std::string(fname) + ".xml";
 	std::string fname_std_1 = std::string(fname) + "1.xml";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	testLastUTF8StringInXML(fname_std);
+	testLastUTF8StringInXML(fname_std_1);
 	removeFile(fname_std);
 	removeFile(fname_std_1);
 	free(fname);
@@ -726,6 +778,7 @@ void UdmTests::genericTest::testDOMMEM()
 	std::string fname_std = std::string(fname) + ".xml";
 	std::string fname_std_1 = std::string(fname) + ".mem";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	testLastUTF8StringInXML(fname_std);
 	removeFile(fname_std);
 	removeFile(fname_std_1);
 	free(fname);
@@ -750,6 +803,7 @@ void UdmTests::genericTest::testMEMDOM()
 	std::string fname_std = std::string(fname) + ".mem";
 	std::string fname_std_1 = std::string(fname) + ".xml";
 	generictest(fname_std.c_str(),fname_std_1.c_str());
+	testLastUTF8StringInXML(fname_std_1);
 	removeFile(fname_std);
 	removeFile(fname_std_1);
 	free(fname);

@@ -252,6 +252,70 @@ using namespace MGALib;
 #undef INTERFACE_VERSION
 
 
+static _bstr_t BSTRFromUTF8(const std::string & utf8)
+{
+    if (utf8.empty())
+        return _bstr_t();
+
+    // Fail if an invalid input character is encountered
+    const DWORD conversionFlags = MB_ERR_INVALID_CHARS;
+
+    const int utf16Length = ::MultiByteToWideChar(CP_UTF8, conversionFlags, utf8.data(), utf8.length(), NULL, 0);
+    if (utf16Length == 0)
+    {
+        DWORD error = ::GetLastError();
+
+        throw udm_exception(
+            (error == ERROR_NO_UNICODE_TRANSLATION) ? 
+                "Invalid UTF-8 sequence found in input string." :
+                "Can't get length of UTF-16 string (MultiByteToWideChar failed).");
+	}
+
+	BSTR utf16 = SysAllocStringByteLen(NULL, utf16Length*2);
+	if (utf16 == NULL)
+		throw std::bad_alloc();
+
+	if (!::MultiByteToWideChar(CP_UTF8, 0, utf8.data(), utf8.length(), utf16, utf16Length))
+    {
+        DWORD error = ::GetLastError();
+		SysFreeString(utf16);
+        throw udm_exception("Can't convert string from UTF-8 to UTF-16 (MultiByteToWideChar failed).");
+    }
+
+    return _bstr_t(utf16, false);
+}
+
+static std::string UTF8FromBSTR(BSTR utf16)
+{
+    if (utf16 == NULL || *utf16 == L'\0')
+        return std::string();
+
+
+    // const int utf16Length = static_cast<int>(wcslen(utf16));
+	const int utf16Length = SysStringLen(utf16);
+
+    // Get length (in chars) of resulting UTF-8 string
+    const int utf8Length = ::WideCharToMultiByte(CP_UTF8, 0, utf16, utf16Length, NULL, 0, NULL, NULL);
+
+	if (utf8Length == 0)
+    {
+        DWORD error = ::GetLastError();
+        throw udm_exception("Can't get length of UTF-8 string (WideCharToMultiByte failed).");
+    }
+
+    std::string utf8;
+    utf8.resize(utf8Length);
+
+	if (!::WideCharToMultiByte(CP_UTF8, 0, utf16, utf16Length, &utf8[0], utf8.length(), NULL, NULL))
+    {
+        DWORD error = ::GetLastError();
+        throw udm_exception("Can't convert string from UTF-16 to UTF-8 (WideCharToMultiByte failed).");
+    }
+
+    return utf8;
+}
+
+
 
 namespace UdmGme 
 {
@@ -2403,7 +2467,7 @@ bbreak:			;
 				COMTHROW(self->get_RegistryNode(reg_node_name, &reg_node));
 				
 			val = reg_node->Value;
-			return val.length()? (char*)val : "";
+			return val.length()? UTF8FromBSTR(val) : "";
 
 
 		}
@@ -2443,10 +2507,10 @@ bbreak:			;
 				}
 			}
 			else
-				return("");
+				return "";
 		}
 		else val = testself->StrAttrByName[SmartBSTR(rname.c_str())];
-		return (char *)val;
+		return UTF8FromBSTR(val);
 	}
 
 	typedef pair<const long, const long> pos_in_aspect;
@@ -2497,22 +2561,22 @@ bbreak:			;
 		{
 			//to be written as a registry value
 			IMgaRegNodePtr reg_node;
-			BSTR reg_node_name = SmartBSTR(rname.c_str());
+			_bstr_t reg_node_name = BSTRFromUTF8(rname);
 		
 			if (folderself)
 				COMTHROW(folderself->get_RegistryNode(reg_node_name, &reg_node));
 			else
 				COMTHROW(self->get_RegistryNode(reg_node_name, &reg_node));
 
-			COMTHROW(reg_node->put_Value(SmartBSTR(a.c_str())));
+			COMTHROW(reg_node->put_Value(BSTRFromUTF8(a)));
 
 
 		}
 		else if(rname == "name")
 		{
-			objself->Name = SmartBSTR(a.c_str()); 
+			objself->Name = BSTRFromUTF8(a); 
 			if (folderself && folderself->Project->RootFolder == folderself) {
-				folderself->Project->Name = SmartBSTR(a.c_str());
+				folderself->Project->Name = BSTRFromUTF8(a);
 			}
 #ifdef _DEBUG
 			name = a; 
@@ -2554,7 +2618,7 @@ bbreak:			;
 			}
 
 		}
-		else testself->StrAttrByName[SmartBSTR(rname.c_str())] = SmartBSTR(a.c_str());
+		else testself->StrAttrByName[BSTRFromUTF8(rname)] = BSTRFromUTF8(a);
 	};
 
 	bool GmeObject::getBooleanAttr(const ::Uml::Attribute &meta) const	

@@ -335,6 +335,78 @@ static const XMLCh gXML_UTF_8[] =
 };
 
 
+#ifdef _WIN32
+char* transcode(const XMLCh* const toTranscode)
+{
+	MemoryManager* const manager = XMLPlatformUtils::fgMemoryManager;
+    if (!toTranscode)
+        return 0;
+
+    char* retVal = 0;
+    if (*toTranscode)
+    {
+        // Calc the needed size
+        const unsigned int neededLen = ::WideCharToMultiByte(CP_UTF8, 0, toTranscode, -1, NULL, 0, NULL, NULL);
+
+        // Allocate a buffer of that size plus one for the null and transcode
+        retVal = (char*) manager->allocate((neededLen + 1) * sizeof(char)); //new char[neededLen + 1];
+        ::WideCharToMultiByte(CP_UTF8, 0, (LPCWSTR)toTranscode, -1, retVal, neededLen+1, NULL, NULL);
+
+        // And cap it off anyway just to make sure
+        retVal[neededLen] = 0;
+    }
+     else
+    {
+        retVal = (char*) manager->allocate(sizeof(char)); //new char[1];
+        retVal[0] = 0;
+    }
+    return retVal;
+}
+
+
+XMLCh* transcode(const std::string& toTranscode)
+{
+	MemoryManager* const manager = XMLPlatformUtils::fgMemoryManager;
+    XMLCh* retVal = 0;
+	if (!toTranscode.length())
+	{
+        retVal = (XMLCh*) manager->allocate(sizeof(XMLCh));
+        retVal[0] = 0;
+		return retVal;
+	}
+
+    // Calculate the buffer size required
+    const unsigned int neededLen = ::MultiByteToWideChar(CP_UTF8, 0, toTranscode.c_str(), toTranscode.length(), NULL, 0);
+    if (neededLen == 0)
+    {
+        retVal = (XMLCh*) manager->allocate(sizeof(XMLCh));
+        retVal[0] = 0;
+        return retVal;
+    }
+
+    // Allocate a buffer of that size plus one for the null and transcode
+    retVal = (XMLCh*) manager->allocate((neededLen + 1) * sizeof(XMLCh));
+    ::MultiByteToWideChar(CP_UTF8, 0, toTranscode.c_str(), toTranscode.length(), (LPWSTR)retVal, neededLen + 1);
+
+	retVal[neededLen] = 0;
+    return retVal;
+}
+
+#else
+
+char* transcode(const XMLCh* const toTranscode)
+{
+	return XMLString::transcode(toTranscode);
+}
+
+XMLCh* transcode(const std::string& toTranscode)
+{
+	return XMLString::transcode(toTranscode.c_str());
+}
+
+#endif
+
+
 namespace UdmDom
 {	
 	/*
@@ -386,7 +458,7 @@ namespace UdmDom
 		StrX(const XMLCh* const toTranscode)
 		{
 			// Call the private transcoding method
-			fLocalForm = XMLString::transcode(toTranscode);
+			fLocalForm = transcode(toTranscode);
 		}
 
 		~StrX()
@@ -405,14 +477,9 @@ namespace UdmDom
 		XMLCh* fUnicodeForm;
 	
 	public :
-		XStr(const char* const toTranscode)
+		XStr(const std::string& toTranscode)
 		{
-			fUnicodeForm = XMLString::transcode(toTranscode);
-		}
-
-		XStr(const string &toTranscode)
-		{
-			fUnicodeForm = XMLString::transcode(toTranscode.c_str());
+			fUnicodeForm = transcode(toTranscode);
 		}
 
 		~XStr()
@@ -527,8 +594,8 @@ namespace UdmDom
 
 	static inline void setAttrValue(DOMElement &element, const string &name, const string &value)
 	{
-		XMLCh *name_buf = XMLString::transcode(name.c_str());
-		XMLCh *value_buf = XMLString::transcode(value.c_str());
+		XMLCh *name_buf = transcode(name);
+		XMLCh *value_buf = transcode(value);
 		element.setAttribute(name_buf, value_buf);
 		XMLString::release(&name_buf);
 		XMLString::release(&value_buf);
@@ -536,14 +603,14 @@ namespace UdmDom
 
 	static inline void setAttrValue(DOMElement &element, const XMLCh *name, const string &value)
 	{
-		XMLCh *value_buf = XMLString::transcode(value.c_str());
+		XMLCh *value_buf = transcode(value);
 		element.setAttribute(name, value_buf);
 		XMLString::release(&value_buf);
 	}
 
 	static inline const XMLCh *getAttrValue(DOMElement &element, const string &name)
 	{
-		XMLCh *name_buf = XMLString::transcode(name.c_str());
+		XMLCh *name_buf = transcode(name);
 		const XMLCh *value = element.getAttribute(name_buf);
 		XMLString::release(&name_buf);
 
@@ -553,7 +620,7 @@ namespace UdmDom
 	void setTextValue(DOMElement &parent_element, const string &value)
 	{
 		
-		XMLCh *value_buf = XMLString::transcode(value.c_str());
+		XMLCh *value_buf = transcode(value);
 		DOMText *tn = parent_element.getOwnerDocument()->createTextNode(value_buf);
 		parent_element.appendChild(tn);
 		tn->setNodeValue(value_buf);
@@ -578,7 +645,7 @@ namespace UdmDom
 			if ( (n->getNodeType() == DOMNode::TEXT_NODE))
 			{
 				DOMText *tn = (DOMText*)n;
-				char *a = XMLString::transcode(tn->getNodeValue());
+				char *a = transcode(tn->getNodeValue());
         
 				values.push_back(a);
 
@@ -596,7 +663,7 @@ namespace UdmDom
 			if ( (n->getNodeType() == DOMNode::TEXT_NODE))
 			{
 				DOMText *tn = (DOMText*)n;
-				char *a = XMLString::transcode(tn->getNodeValue());
+				char *a = transcode(tn->getNodeValue());
 				retval = a;
 				XMLString::release(&a);
 				break;
@@ -711,7 +778,7 @@ namespace UdmDom
 				key += ns_path + ":";
 			}
 
-			char *cl_name = XMLString::transcode(element.getLocalName());	//class name
+			char *cl_name = transcode(element.getLocalName());	//class name
 			key += cl_name;
 			XMLString::release(&cl_name);
 
@@ -734,7 +801,7 @@ namespace UdmDom
 		static int DSFind(const XMLCh *where, const string &what) {
 			if(where == NULL) return -1;
 			
-			XMLCh *what_buf = XMLString::transcode(what.c_str());
+			XMLCh *what_buf = transcode(what);
 			int index = XMLString::patternMatch(where, what_buf);
 
 			XMLString::release(&what_buf);
@@ -758,7 +825,7 @@ namespace UdmDom
 			XMLString::copyString(retval, src);
 			XMLString::catString(retval, gXML_space);
 
-			XMLCh *data_buf = XMLString::transcode(data.c_str());
+			XMLCh *data_buf = transcode(data);
 			XMLString::catString(retval, data_buf);
 
 			XMLString::release(&data_buf);
@@ -911,7 +978,7 @@ namespace UdmDom
 			
 			//DOMString pa = dom_element.getAttribute(DOMString("desynched_atts"));
 			const XMLCh *pa = dom_element->getAttribute(gXML__desynched_atts);
-			XMLCh *myname_buf = XMLString::transcode(myname.c_str());
+			XMLCh *myname_buf = transcode(myname);
 			if(EmptyVal(pa)) 
 			{
 				//dom_element.setAttribute( DOMString("desynched_atts"), DOMString(myname.c_str()));
@@ -1017,11 +1084,11 @@ namespace UdmDom
 			}	
 			else
 			{
-				XMLCh *name_buf = XMLString::transcode( ((string) meta.name()).c_str() );
+				XMLCh *name_buf = transcode( ((string) meta.name()) );
 				DOMAttr *as = dom_element->getAttributeNode(name_buf);
 				if(as != NULL && as->getSpecified()) 
 				{
-					char *a_buf = XMLString::transcode(as->getValue());
+					char *a_buf = transcode(as->getValue());
 					a = a_buf;
 					XMLString::release(&a_buf);
 				}
@@ -1397,12 +1464,12 @@ namespace UdmDom
 		void removeAssociation(const string &tname, const string &oname, 
 								const string &myid) 
 		{
-			XMLCh *tname_buf = XMLString::transcode(tname.c_str());
+			XMLCh *tname_buf = transcode(tname);
 			XMLCh *origattr = XMLString::replicate( dom_element->getAttribute(tname_buf) );
 			dom_element->removeAttribute(tname_buf);
 			XMLString::release(&tname_buf);
 
-			XMLCh *oname_buf = XMLString::transcode(oname.c_str());
+			XMLCh *oname_buf = transcode(oname);
 			XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = dom_element->getOwnerDocument();
 
 			const BaseRefVectorOf<XMLCh> *v = XMLString::tokenizeString(origattr);
@@ -1691,7 +1758,7 @@ namespace UdmDom
 
 					// we only get here, if multiple roles match, so they have to be recorded
 					string ncomp = GetANameFor(comp);
-					XMLCh *ncomp_buf = XMLString::transcode(ncomp.c_str());
+					XMLCh *ncomp_buf = transcode(ncomp);
 					if(!EmptyVal(chas)) 
 					{
 						if(DSFind(chas,ncomp) < 0) 
@@ -1803,7 +1870,7 @@ namespace UdmDom
 								return;												// do not delete child if multiroles were in effect
 							}
 
-							XMLCh *ncomp_buf = XMLString::transcode(ncomp.c_str());
+							XMLCh *ncomp_buf = transcode(ncomp);
 							UDM_ASSERT( XMLString::compareString(chas, ncomp_buf) == 0);
 							XMLString::release(&ncomp_buf);
 						}
@@ -2651,8 +2718,8 @@ namespace UdmDom
 			else if(mode == Udm::TARGETFROMCLASS) 
 				tname += "_end_";
 			
-			XMLCh *oname_buf = XMLString::transcode(oname.c_str());
-			XMLCh *tname_buf = XMLString::transcode(tname.c_str());
+			XMLCh *oname_buf = transcode(oname);
+			XMLCh *tname_buf = transcode(tname);
 			XMLCh *origattr = XMLString::replicate( dom_element->getAttribute(tname_buf) );
 
 			XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc = dom_element->getOwnerDocument();
