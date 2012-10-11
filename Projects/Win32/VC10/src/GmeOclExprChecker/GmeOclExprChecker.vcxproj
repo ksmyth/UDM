@@ -114,7 +114,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>ANTLRD.lib;GOCLD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ANTLRD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>nafxcwd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -226,7 +226,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     </ResourceCompile>
     <Link>
       <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>ANTLR.lib;GOCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ANTLR.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>nafxcw.lib;msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -372,6 +372,14 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ClInclude Include="..\..\..\..\..\src\UML GME\ExprChecker\UMLTypeEx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\UdmOclPat\GOCL\src\GOCL.vcxproj">
+      <Project>{ee407066-7819-4ae2-b0f5-e64fc5e54415}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
     <ProjectReference Include="..\UML2XML\UML2XML.vcxproj">
       <Project>{207da527-ec80-4a83-b5c2-b2a02281afba}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
