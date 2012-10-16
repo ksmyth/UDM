@@ -77,8 +77,8 @@ Udm::SmartDataNetwork* SDN_NewHelper(Uml::Diagram* umldiag, Udm::UdmDiagram* udm
 	return new Udm::SmartDataNetwork(*udmdiag);
 }
 
-object SDN_NewHelper_ = make_function(SDN_NewHelper,	with_custodian_and_ward_postcall<1, 0,
-														with_custodian_and_ward_postcall<2, 0,
+object SDN_NewHelper_ = make_function(SDN_NewHelper,	with_custodian_and_ward_postcall<0, 1,
+														with_custodian_and_ward_postcall<0, 2,
 														return_value_policy<manage_new_object> > >());
 
 static void dummy(void) {}
