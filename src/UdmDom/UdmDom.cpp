@@ -450,7 +450,8 @@ namespace UdmDom
 	{
 		return ( ((string)(meta.name()) == "ref") && (mode == Udm::TARGETFROMPEER) && nvect.size()==1);
 	};
-	
+
+
 // --------------------------- DomObject
 
 	//function which returns the long id from the string id
@@ -2693,6 +2694,73 @@ namespace UdmDom
 		void setAssociation(const ::Uml::AssociationRole &role, const vector<ObjectImpl*> &nvect, int mode = Udm::TARGETFROMPEER, const bool direct = true)	
 		{
 			
+			//handle ref port container change
+			::Uml::Class m_type = ((ObjectImpl*)this)->type();
+
+			bool isRefPortContChange = false;
+			bool isHelperAssoc = UdmUtil::isHelperAssociation(Uml::MakeRoleName(role), Uml::IsAssocClass(m_type));
+
+			if (isHelperAssoc){
+				long dnid = ((DomDataNetwork*)mydn)->uniqueId();
+			}
+		
+			bool realConnExists = true;
+			Uml::Association assoc = m_type.association();
+
+			if(isHelperAssoc)
+			{
+				if (assoc)
+				{
+					vector<ObjectImpl*> a = getAssociation(role.rp_helper_user(), Udm::TARGETFROMCLASS);
+					if (a.size() == 0) realConnExists = false;
+				} else
+				{
+					if (nvect.size()!=1) throw udm_exception("Assigning more than one connection to role {"+(string)role.name()+"} is not permitted!");
+					ObjectImpl* connection = *(nvect.begin());
+					Uml::Class conn_type = connection->type();
+					Uml::Association conn_type_ass = conn_type.association();
+					if (! conn_type_ass ) throw udm_exception ("Association class {"+(string)conn_type.name()+"} without association!");
+				
+					vector<ObjectImpl*> a = connection->getAssociation( Uml::theOther(role).rp_helper_user(), Udm::TARGETFROMCLASS);
+					if (a.size() == 0) realConnExists = false;
+				}
+			}
+
+			isRefPortContChange = isHelperAssoc && realConnExists && direct;
+			
+			
+
+			if (!isRefPortContChange && direct) {
+
+				pair<multimap<long, multimap<long, XMLCh*>>::const_iterator, multimap<long, multimap<long, XMLCh*>>::const_iterator>  it = ((DomDataNetwork*)mydn)->to_assoc_help.equal_range(uniqueId());
+				
+				for (multimap<long, multimap<long, XMLCh*>>::const_iterator j = it.first; j != it.second;)
+				{
+					multimap<long, XMLCh*> emap = j->second;
+					multimap<long, multimap<long, XMLCh*>>::const_iterator erase_it = j++;
+					Uml::AssociationRole ar = role.rp_helper();
+					long count = emap.count(ar.uniqueId());	
+					if (count)
+					{
+						if (count > 1) throw udm_exception("More than one reference assigned to association role: "+(string)ar.name());
+						pair<multimap<long, XMLCh*>::const_iterator, multimap<long, XMLCh*>::const_iterator>  it1 = emap.equal_range(ar.uniqueId());
+						
+						vector<ObjectImpl*> v;
+						XMLCh* oid = (*it1.first).second;
+
+						DOMElement *elem = (dom_element->getOwnerDocument())->getElementById(oid);
+						DomObject dobj = DomObject(elem, mydn);
+
+						v.insert(v.begin(), (ObjectImpl*)&dobj);
+						setAssociation(ar, v, Udm::TARGETFROMPEER, false);
+						//(*it1.first).second->release();
+						XMLString::release(&oid);
+						((DomDataNetwork*)mydn)->to_assoc_help.erase(erase_it);
+					}
+				}
+				
+			}
+			
 
 			Udm::Object this_o = clone();	//most of the archetype/derived/instances related 
 											//code will use TOMI Object level functions
@@ -2788,21 +2856,33 @@ namespace UdmDom
 							currentpeer->removeAttribute(tname_buf);
 						else
 						{
-							int k = DSFind(cpa, peerid);
-							if (k >= 0)
-							{
-								XMLCh *cpa_new = XMLString::replicate(cpa);
-								DSRemoveSubstr(cpa_new, k, XMLString::stringLen(peerid) + 1);
-								if (XMLString::stringLen(cpa_new))
-									currentpeer->setAttribute(tname_buf, cpa_new);
+							if (!isRefPortContChange) {
+								int k = DSFind(cpa, peerid);
+								if (k >= 0)
+								{
+									XMLCh *cpa_new = XMLString::replicate(cpa);
+									DSRemoveSubstr(cpa_new, k, XMLString::stringLen(peerid) + 1);
+									if (XMLString::stringLen(cpa_new))
+										currentpeer->setAttribute(tname_buf, cpa_new);
+									else
+										currentpeer->removeAttribute(tname_buf);
+								}
 								else
 									currentpeer->removeAttribute(tname_buf);
 							}
-							else
-								currentpeer->removeAttribute(tname_buf);
 						}
 					}
-					peer.dom_element->setAttribute(oname_buf, myid);
+					if (!isRefPortContChange){
+						peer.dom_element->setAttribute(oname_buf, myid);
+					} else {
+						if(nvect.size() == 1){
+							pair<long, XMLCh*> p = make_pair(orole.uniqueId(), XMLString::replicate(myid));
+							multimap<long, XMLCh*> mmap;
+							mmap.insert(p);
+							((DomDataNetwork*)mydn)->to_assoc_help.insert(make_pair(peer.uniqueId(), mmap));
+						}
+					}
+
 				}
 				else 
 				{
@@ -2814,8 +2894,17 @@ namespace UdmDom
 
 			if(aa == NULL) dom_element->removeAttribute(tname_buf);
 			else {
-				dom_element->setAttribute(tname_buf, aa); 
-				XMLString::release(&aa);
+				if(isRefPortContChange){
+					//save current to tmp map
+					pair<long, XMLCh*> p = make_pair(role.uniqueId(), XMLString::replicate(aa));
+					multimap<long, XMLCh*> mmap;
+					mmap.insert(p);
+					((DomDataNetwork*)mydn)->to_assoc_help.insert(make_pair(uniqueId(), mmap));
+				}else{
+					dom_element->setAttribute(tname_buf, aa);
+					XMLString::release(&aa);
+				}
+
 			}
 
 			{

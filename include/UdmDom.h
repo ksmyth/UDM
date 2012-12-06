@@ -89,6 +89,9 @@ namespace UdmDom
 		static UDM_DLL string DTDPath;
 		//meta type-cache-by-name
 		map<string, ::Uml::Class> meta_class_cache;
+		//to temporarily store helper associations
+		multimap<long, multimap<long, XMLCh*>> to_assoc_help;
+
 
 		UDM_DLL DomDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* pr = NULL);
 		UDM_DLL ~DomDataNetwork();

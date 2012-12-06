@@ -2005,6 +2005,56 @@ namespace UdmStatic
 		else if (mode == Udm::CLASSFROMTARGET) ms = "CLASSFROMTARGET";
 		cout << " mode: " << ms << endl;
 		*/
+		
+		//ref port container change 
+		bool isRefPortContChange = false;
+		bool isHelperAssoc = UdmUtil::isHelperAssociation(Uml::MakeRoleName(meta), Uml::IsAssocClass(m_type));
+		
+		bool realConnExists = true;
+		Uml::Association assoc = m_type.association();
+
+
+		if(isHelperAssoc)
+		{
+			if (assoc)
+			{
+				vector<ObjectImpl*> a = getAssociation(meta.rp_helper_user(), Udm::TARGETFROMCLASS);
+				if (a.size() == 0) realConnExists = false;
+			} else
+			{
+				if (nvect.size()!=1) throw udm_exception("Assigning more than one connection to role {"+(string)meta.name()+"} is not permitted!");
+				ObjectImpl* connection = *(nvect.begin());
+				Uml::Class conn_type = connection->type();
+				Uml::Association conn_type_ass = conn_type.association();
+				if (! conn_type_ass ) throw udm_exception ("Association class {"+(string)conn_type.name()+"} without association!");
+			
+				vector<ObjectImpl*> a = connection->getAssociation( Uml::theOther(meta).rp_helper_user(), Udm::TARGETFROMCLASS);
+				if (a.size() == 0) realConnExists = false;
+			}
+		}
+		
+		isRefPortContChange = isHelperAssoc && realConnExists && direct;
+
+		if (!isRefPortContChange && direct) {
+			assoc_type::iterator it;
+			
+			Uml::AssociationRole ar = meta.rp_helper();
+			long count = to_assoc_help.count(ar.uniqueId());	
+			if (count)
+			{
+				if (count > 1) throw udm_exception("More than one reference assigned to association role: "+(string)ar.name());
+
+				pair<assoc_type::const_iterator, assoc_type::const_iterator>  it1 = to_assoc_help.equal_range(ar.uniqueId());
+
+				vector<ObjectImpl*> v;
+				v.insert(v.begin(), (*it1.first).second);
+					
+				setAssociation(ar, v, Udm::TARGETFROMPEER, false);
+				(*it1.first).second->release();
+				to_assoc_help.erase(ar.uniqueId());
+			}
+	
+		}
 
 
 		//inherited children of instances
@@ -2239,8 +2289,11 @@ namespace UdmStatic
 				bidir_ass_pair iterators = bam_i->second;
 				
 				//remove from both association maps
-				associations.erase(iterators.first);
-				so->associations.erase(iterators.second);
+				if(!isRefPortContChange){
+					associations.erase(iterators.first);
+					so->associations.erase(iterators.second);
+				}
+
 
 				//archetype/derived stuff.
 				//this link needs to be deleted in all my instantiated and derived objects
@@ -2324,10 +2377,12 @@ namespace UdmStatic
 					
 				}
 
-				so->release();				//because deleted my party from my assoc. table
+				if(!isRefPortContChange)
+					so->release();				//because deleted my party from my assoc. table
 				if (this->refCount <= 1)
 					throw udm_exception("Recount error is setassociation. At least my parent should have a reference to me!");
-				this->release();			//because deleted myself from my party's assoc. table
+				if(!isRefPortContChange)
+					this->release();			//because deleted myself from my party's assoc. table
 			}
 			else
 				to_associate.erase(it_to_ass);
@@ -2338,18 +2393,30 @@ namespace UdmStatic
 		for(set<ObjectImpl*>::iterator it_to_ass = to_associate.begin(); it_to_ass != to_associate.end(); it_to_ass++)
 		{
 			//remove association between peer and its peers when the model says that peer can be connected to a single object
-			if (orole.max() == 1 && mode == Udm::TARGETFROMPEER)
+			if (!isRefPortContChange && orole.max() == 1 && mode == Udm::TARGETFROMPEER)
 				((StaticObject*)(*it_to_ass))->setAssociation(orole, vector<ObjectImpl*>(), mode, false);
 
 			//ok, create the link(increment ref. count's)
 		
 			//one for me,
 			pair<uniqueId_type const, StaticObject*> associated(meta.uniqueId(), ((StaticObject*)(*it_to_ass)->clone()));
-			associations.safe_insert(associated);
+			
+			if (!isRefPortContChange){
+				associations.safe_insert(associated);
+			}else {
+				to_assoc_help.safe_insert(associated);
+			}
+
 			
 			//and the other one for my party
 			pair<uniqueId_type const, StaticObject*> ass_me(orole.uniqueId(), (StaticObject*)this->clone());
-			((StaticObject*)(*it_to_ass))->associations.safe_insert(ass_me);
+			
+			if (!isRefPortContChange) {
+				((StaticObject*)(*it_to_ass))->associations.safe_insert(ass_me);
+			}else{
+				((StaticObject*)(*it_to_ass))->to_assoc_help.safe_insert(ass_me);
+			}
+
 		}
 
 		//it is a reference setting, we'll do it afterwards

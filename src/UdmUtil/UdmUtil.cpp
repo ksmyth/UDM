@@ -280,7 +280,10 @@ namespace UdmUtil
 		}
 
 	}
-	
+	bool isHelperAssociation(string roleName, bool isAssocClass)
+	{
+		return (!isAssocClass ? roleName.find("_rp_container_rev") != string::npos : roleName.find("_rp_container") != string::npos);
+	}
 	
 	int reqCopyObjectHierarchy(ObjectImpl* p_srcRoot, ObjectImpl* p_dstRoot, DataNetwork* p_dstBackend,  bool & finished, copy_assoc_map &cam)
 	{

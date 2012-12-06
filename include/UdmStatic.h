@@ -340,7 +340,7 @@ namespace UdmStatic
 	// --- associations
 		typedef udm_multimap<uniqueId_type, StaticObject*> assoc_type;
 		assoc_type associations;	// not reference counted, bidirectional
-		
+		assoc_type to_assoc_help;
 
 		vector<ObjectImpl*> getAssociation(const ::Uml::AssociationRole &meta, int mode = Udm::TARGETFROMPEER) const;
 		void setAssociation(
