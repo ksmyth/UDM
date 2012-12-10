@@ -42,7 +42,7 @@ namespace UdmUtil
 	};
 	extern UDM_DLL const CopyOpts DefCopyOpts;
 
-	UDM_DLL bool isHelperAssociation(string roleName, bool isAssocClass);
+	UDM_DLL bool isHelperAssociation(Uml::AssociationRole assocRole, Uml::Class cls);
 
 	//utility which copies a subtree from a data network to another
 	//consistent (same) meta is assumed.

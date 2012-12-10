@@ -2695,14 +2695,8 @@ namespace UdmDom
 		{
 			
 			//handle ref port container change
-			::Uml::Class m_type = ((ObjectImpl*)this)->type();
-
 			bool isRefPortContChange = false;
-			bool isHelperAssoc = UdmUtil::isHelperAssociation(Uml::MakeRoleName(role), Uml::IsAssocClass(m_type));
-
-			if (isHelperAssoc){
-				long dnid = ((DomDataNetwork*)mydn)->uniqueId();
-			}
+			bool isHelperAssoc = UdmUtil::isHelperAssociation(role, m_type);
 		
 			bool realConnExists = true;
 			Uml::Association assoc = m_type.association();
@@ -2732,18 +2726,18 @@ namespace UdmDom
 
 			if (!isRefPortContChange && direct) {
 
-				pair<multimap<long, multimap<long, XMLCh*>>::const_iterator, multimap<long, multimap<long, XMLCh*>>::const_iterator>  it = ((DomDataNetwork*)mydn)->to_assoc_help.equal_range(uniqueId());
+				pair<multimap<long, DomDataNetwork::to_assoc_help_mmap>::const_iterator, multimap<long, DomDataNetwork::to_assoc_help_mmap>::const_iterator>  it = ((DomDataNetwork*)mydn)->to_assoc_help.equal_range(uniqueId());
 				
-				for (multimap<long, multimap<long, XMLCh*>>::const_iterator j = it.first; j != it.second;)
+				for (multimap<long,  DomDataNetwork::to_assoc_help_mmap>::const_iterator j = it.first; j != it.second;)
 				{
-					multimap<long, XMLCh*> emap = j->second;
-					multimap<long, multimap<long, XMLCh*>>::const_iterator erase_it = j++;
+					DomDataNetwork::to_assoc_help_mmap emap = j->second;
+					multimap<long, DomDataNetwork::to_assoc_help_mmap>::const_iterator erase_it = j++;
 					Uml::AssociationRole ar = role.rp_helper();
 					long count = emap.count(ar.uniqueId());	
 					if (count)
 					{
 						if (count > 1) throw udm_exception("More than one reference assigned to association role: "+(string)ar.name());
-						pair<multimap<long, XMLCh*>::const_iterator, multimap<long, XMLCh*>::const_iterator>  it1 = emap.equal_range(ar.uniqueId());
+						pair<DomDataNetwork::to_assoc_help_mmap::const_iterator, DomDataNetwork::to_assoc_help_mmap::const_iterator>  it1 = emap.equal_range(ar.uniqueId());
 						
 						vector<ObjectImpl*> v;
 						XMLCh* oid = (*it1.first).second;
@@ -2877,7 +2871,7 @@ namespace UdmDom
 					} else {
 						if(nvect.size() == 1){
 							pair<long, XMLCh*> p = make_pair(orole.uniqueId(), XMLString::replicate(myid));
-							multimap<long, XMLCh*> mmap;
+							DomDataNetwork::to_assoc_help_mmap mmap;
 							mmap.insert(p);
 							((DomDataNetwork*)mydn)->to_assoc_help.insert(make_pair(peer.uniqueId(), mmap));
 						}
@@ -2897,14 +2891,13 @@ namespace UdmDom
 				if(isRefPortContChange){
 					//save current to tmp map
 					pair<long, XMLCh*> p = make_pair(role.uniqueId(), XMLString::replicate(aa));
-					multimap<long, XMLCh*> mmap;
+					DomDataNetwork::to_assoc_help_mmap mmap;
 					mmap.insert(p);
 					((DomDataNetwork*)mydn)->to_assoc_help.insert(make_pair(uniqueId(), mmap));
 				}else{
 					dom_element->setAttribute(tname_buf, aa);
-					XMLString::release(&aa);
 				}
-
+				XMLString::release(&aa);
 			}
 
 			{

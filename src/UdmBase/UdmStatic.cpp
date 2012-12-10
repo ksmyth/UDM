@@ -2008,8 +2008,8 @@ namespace UdmStatic
 		
 		//ref port container change 
 		bool isRefPortContChange = false;
-		bool isHelperAssoc = UdmUtil::isHelperAssociation(Uml::MakeRoleName(meta), Uml::IsAssocClass(m_type));
-		
+		bool isHelperAssoc = UdmUtil::isHelperAssociation(meta, m_type);
+
 		bool realConnExists = true;
 		Uml::Association assoc = m_type.association();
 

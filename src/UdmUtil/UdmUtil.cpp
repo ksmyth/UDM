@@ -280,9 +280,9 @@ namespace UdmUtil
 		}
 
 	}
-	bool isHelperAssociation(string roleName, bool isAssocClass)
+	bool isHelperAssociation(Uml::AssociationRole assocRole, Uml::Class cls)
 	{
-		return (!isAssocClass ? roleName.find("_rp_container_rev") != string::npos : roleName.find("_rp_container") != string::npos);
+		return (Uml::AssociationRole)theOther(assocRole).rp_helper_user() != Udm::null || (Uml::IsAssocClass(cls) && (Uml::AssociationRole)assocRole.rp_helper_user()!= Udm::null);
 	}
 	
 	int reqCopyObjectHierarchy(ObjectImpl* p_srcRoot, ObjectImpl* p_dstRoot, DataNetwork* p_dstBackend,  bool & finished, copy_assoc_map &cam)
