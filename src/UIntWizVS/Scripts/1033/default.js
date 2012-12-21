@@ -280,7 +280,6 @@ function AddConfig90(proj, strProjectName)
 		    LinkTool.LinkIncremental = linkIncrementalType.linkIncrementalYes;
 		    LinkTool.GenerateDebugInformation = "true";
 		    LinkTool.SubSystem = subSystemOption.subSystemWindows;
-		    LinkTool.TargetMachine = machineTypeOption.machineX86;
 		    LinkTool.ModuleDefinitionFile = 'Component.def';
 			LinkTool.RegisterOutput = true;
 		    if (dte.Version != '10.0')
@@ -341,7 +340,6 @@ function AddConfig90(proj, strProjectName)
 		    LinkTool.LinkIncremental = linkIncrementalType.linkIncrementalNo;
 		    LinkTool.GenerateDebugInformation = "true";
 		    LinkTool.SubSystem = subSystemOption.subSystemWindows;
-		    LinkTool.TargetMachine = machineTypeOption.machineX86;
 		    LinkTool.ModuleDefinitionFile = 'Component.def';
 			LinkTool.RegisterOutput = true;
 		    if (dte.Version != '10.0')
