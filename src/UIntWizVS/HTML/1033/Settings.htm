@@ -235,7 +235,7 @@
   			  <TD VALIGN="TOP" HEIGHT="40" COLSPAN="5">
   				&nbsp;
   				 
-  				<SPAN CLASS="itemText">UDM Library Linkage:
+  				<SPAN CLASS="itemText" id="UdmLibLinkage">UDM Library Linkage:
 					 <P CLASS="Spacer">&nbsp;</P>
 	
 	  				 <INPUT TYPE="radio" CLASS="Radio" NAME="udmlinking" ID="UDM_LINKING_DYNAMIC" ACCESSKEY="d" TITLE="UDM will be linked as a DLL to your interpreter.">
@@ -463,6 +463,10 @@ function InitDocument(document)
 	    document.all['metaDynamic'].style.visibility = 'visible';	    	    
 	    document.all['staticMeta'].style.visibility = 'hidden';
 	}
+    
+    if (window.external.dte.Version == '10.0') {
+        document.all['UdmLibLinkage'].style.visibility = 'hidden';
+    }
 
 }
 
