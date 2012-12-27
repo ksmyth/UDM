@@ -17,6 +17,31 @@
 using namespace boost::python;
 using namespace std;
 
+object utf8tostring(const std::string& utf8) {
+#ifdef PY3K
+	PyObject* transcoded = PyUnicode_FromString(utf8.c_str());
+#else
+	PyObject* transcoded = PyUnicode_DecodeUTF8(utf8.c_str(), utf8.length(), "replace");
+	//PyObject* transcoded = PyString_Decode(utf8.c_str(), utf8.length(), "UTF-8", "replace");
+#endif
+	return object(handle<>(transcoded));
+}
+
+std::string stringtoutf8(object& string)
+{
+	if (PyUnicode_Check(string.ptr()))
+	{
+		object encoded(handle<>(PyUnicode_AsEncodedString(string.ptr(), "UTF-8", "replace")));
+#ifdef PY3K
+		return PyBytes_AS_STRING(encoded.ptr());
+#else
+		return PyString_AS_STRING(encoded.ptr());
+#endif
+	}
+	else
+		return PyString_AsString(string.ptr());
+}
+
 #ifdef _WIN32
 // returns borrowed reference
 IUnknown* object2IUnknown(object o) {
@@ -43,9 +68,9 @@ Udm::Object SDN_Gme2Udm(Udm::SmartDataNetwork& self, object o) {
 #endif
 
 void SDN_OpenExisting(Udm::SmartDataNetwork& self, object systemname, const string& metalocator) {
-	extract<std::string> string_systemname(systemname);
-	if (string_systemname.check())
+	if (PyString_Check(systemname.ptr()) || PyUnicode_Check(systemname.ptr()))
 	{
+		std::string string_systemname = stringtoutf8(systemname);
 		self.OpenExisting(string_systemname, metalocator, Udm::CHANGES_LOST_DEFAULT);
 		return;
 	}
@@ -137,7 +162,7 @@ object Object_attr(Udm::Object& self, str _name) {
 		return object(self.getIntegerAttr(attr));
 	}
 	if (static_cast<string>(attr.type()) == "String" || static_cast<string>(attr.type()) == "Text") {
-		return object(self.getStringAttr(attr));
+		return utf8tostring(self.getStringAttr(attr));
 	}
 	if (static_cast<string>(attr.type()) == "Real") {
 		return object(self.getRealAttr(attr));
@@ -160,7 +185,7 @@ object Object_set_attr(Udm::Object& self, str _name, object value) {
 		return object();
 	}
 	if (static_cast<string>(attr.type()) == "String" || static_cast<string>(attr.type()) == "Text") {
-		self.setStringAttr(attr, extract<std::string>(value));
+		self.setStringAttr(attr, stringtoutf8(value));
 		return object();
 	}
 	if (static_cast<string>(attr.type()) == "Real") {
