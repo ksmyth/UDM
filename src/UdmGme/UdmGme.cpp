@@ -2792,7 +2792,7 @@ bbreak:			;
 
 	string UdmId2GmeId(uniqueId_type udmId) {
 		char buffer[24];
-		sprintf_s(buffer, "id-%04X-%08X", udmId / 100000000 + 100, udmId % 100000000);
+		sprintf_s(buffer, "id-%04x-%08x", udmId / 100000000 + 100, udmId % 100000000);
 		return string(buffer);
 	}
 
