@@ -99,7 +99,7 @@ void SDN_CreateNew(Udm::SmartDataNetwork& self, const string &systemname, const 
 
 // Helper function so lifetimes are managed properly
 Udm::SmartDataNetwork* SDN_NewHelper(Uml::Diagram* umldiag, Udm::UdmDiagram* udmdiag) {
-	return new Udm::SmartDataNetwork(*udmdiag);
+	return (Udm::SmartDataNetwork*)Udm::CreateSmartDataNetwork(*udmdiag);
 }
 
 object SDN_NewHelper_ = make_function(SDN_NewHelper,	with_custodian_and_ward_postcall<0, 1,
