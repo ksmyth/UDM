@@ -280,10 +280,7 @@ namespace UdmUtil
 		}
 
 	}
-	bool isHelperAssociation(Uml::AssociationRole assocRole, Uml::Class cls)
-	{
-		return (Uml::AssociationRole)theOther(assocRole).rp_helper_user() != Udm::null || (Uml::IsAssocClass(cls) && (Uml::AssociationRole)assocRole.rp_helper_user()!= Udm::null);
-	}
+	
 	
 	int reqCopyObjectHierarchy(ObjectImpl* p_srcRoot, ObjectImpl* p_dstRoot, DataNetwork* p_dstBackend,  bool & finished, copy_assoc_map &cam)
 	{

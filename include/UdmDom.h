@@ -57,7 +57,7 @@ XERCES_CPP_NAMESPACE_USE
 typedef std::map<Udm::ObjectImpl::uniqueId_type, DOMElement*> IdToDomElementMap;
 typedef std::pair<const Udm::ObjectImpl::uniqueId_type, DOMElement*> IdToDomElementMapItem;
 
-
+	
 namespace UdmDom
 {
 	using namespace std;
@@ -71,7 +71,7 @@ namespace UdmDom
 	
 	bool isXmi(const string& filename);
 
-
+	
 	class DomDataNetwork : public Udm::DataNetwork 
 	{
 		static bool multiroles;
@@ -89,11 +89,6 @@ namespace UdmDom
 		static UDM_DLL string DTDPath;
 		//meta type-cache-by-name
 		map<string, ::Uml::Class> meta_class_cache;
-
-		//to temporarily store helper associations
-		typedef multimap<long, XMLCh*> to_assoc_help_mmap;
-		multimap<long, to_assoc_help_mmap> to_assoc_help;
-
 
 		UDM_DLL DomDataNetwork(const Udm::UdmDiagram &metainfo, Udm::UdmProject* pr = NULL);
 		UDM_DLL ~DomDataNetwork();

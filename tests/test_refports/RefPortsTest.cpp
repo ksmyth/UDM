@@ -153,7 +153,7 @@ void UdmTests::refPortsTest::testRefPorts(const string &file)
 	CPPUNIT_ASSERT_EQUAL((size_t)1, conns.size());
 	CPPUNIT_ASSERT_EQUAL(c, *conns.begin());
 
-#if 1
+#if 0
 	// what should happen when the reference port is connected and the
 	// user changes the reference port container preference?
 	// - reconnect with the new container?
@@ -172,21 +172,17 @@ void UdmTests::refPortsTest::testRefPorts(const string &file)
 	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref3);
 #endif
 
+	set<B> bs;
+	conns.clear();
+	a.b_end() = conns;
+
 	// connect to another refport using another refport container
-	//c.b_end__rp_container() = bref3;
+	// c.b_end__rp_container() = bref3;
 	conns.clear();
 	conns.insert(c);
-	bref.b_end__rp_container_rev() = conns;
-	CPPUNIT_ASSERT_EQUAL(BRef::Cast(c.b_end__rp_container()), bref3);
-	// after port change, the preference becomes visible
-	c.b_end_end() = b;
-	CPPUNIT_ASSERT_EQUAL(BRef::Cast(c.b_end__rp_container()), bref);
-
-	c.b_end__rp_container() = bref3;
-	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref);
-	// after port change, the preference becomes visible
+	bref3.b_end__rp_container_rev() = conns;
 	c.b_end_end() = b2;
-	CPPUNIT_ASSERT(BRef::Cast(c.b_end__rp_container()) == bref3); 
+	CPPUNIT_ASSERT_EQUAL(BRef::Cast(c.b_end__rp_container()), bref3);
 
 	// show connecting chains
 	{
