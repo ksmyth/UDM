@@ -51,7 +51,7 @@ svn cp -m 'Tag release 1.7.7' https://svn.isis.vanderbilt.edu/MoBIES/GReAT/trunk
 For "Finding ID...": ssh kms1 python ./bin/pdb_promote.py 
 perl -pli -e 's/grcc.pdb/GRCC.pdb/g; s/metagme2uml.pdb/MetaGME2UML.pdb/g; s/codegenerator.pdb/CodeGenerator.pdb/g; s/grd_interpreter.pdb/GRD_interpreter.pdb/g; s/generatecfgmodel.pdb/GenerateCfgModel.pdb/g; s/generateconfig.pdb/GenerateConfig.pdb/g; s/generategr.pdb/GenerateGR.pdb/g; s/generategrc.pdb/GenerateGRC.pdb/g; s/great master interpreter.pdb/GReAT Master Interpreter.pdb/g; s/libraryupdate.pdb/LibraryUpdate.pdb/g; s/umtdecorator.pdb/UMTDecorator.pdb/g; s/umthelper.pdb/UMTHelper.pdb/g; s/legacyupdate.pdb/LegacyUpdate.pdb/g; s/blockify.pdb/Blockify.pdb/g; s/createrule.pdb/CreateRule.pdb/g; ' 
 
-wget -O GReAT-1.7.7.exe http://build.isis.vanderbilt.edu/job/GReAT/label=build-slave8/lastSuccessfulBuild/artifact/trunk/InnoSetup/GReAT_setup.exe
+wget -O GReAT-1.7.7.exe http://build.isis.vanderbilt.edu/job/GReAT/label=build-slave3/lastSuccessfulBuild/artifact/trunk/InnoSetup/GReAT_setup.exe
 
 svn export https://svn.isis.vanderbilt.edu/MoBIES/GReAT/tags/1.7.7 GReAT_source_r1.7.7 && \
 /cygdrive/c/Program\ Files/7-Zip/7z.exe a -r GReAT_source_r1.7.7{.zip,} && \
