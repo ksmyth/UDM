@@ -2198,7 +2198,8 @@ bbreak:			;
 
 		
 		IMgaObjectPtr po;
-		COMTHROW(objself->GetParent(&po, NULL));
+		objtype_enum objtype;
+		COMTHROW(objself->GetParent(&po, &objtype));
 		IMgaModelPtr m(po);
 
 		if(m) 
