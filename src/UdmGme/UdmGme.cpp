@@ -2483,7 +2483,8 @@ bbreak:			;
 				if (count == 1)
 				{
 					IMgaPartPtr part = parts->Item[1];
-					COMTHROW(part->GetGmeAttrs(NULL, &x, &y));
+					_bstr_t icon;
+					COMTHROW(part->GetGmeAttrs(icon.GetAddress(), &x, &y));
 					char buf[30];
 					sprintf(buf,"(%d,%d)", x, y);
 					return buf;
@@ -2494,7 +2495,8 @@ bbreak:			;
 					for (int i = 1; i <= count; i++)
 					{
 						IMgaPartPtr part = parts->Item[i];
-						COMTHROW(part->GetGmeAttrs(NULL, &x, &y));
+						_bstr_t icon;
+						COMTHROW(part->GetGmeAttrs(icon.GetAddress(), &x, &y));
 						SmartBSTR aspect =  part->MetaAspect->Name;
 						ret += (char *) aspect;
 
