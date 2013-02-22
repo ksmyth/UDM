@@ -58,6 +58,35 @@ IUnknown* object2IUnknown(object o) {
 	return (IUnknown*)(void*)static_cast<const size_t>(extract<size_t>(val));
 }
 
+// PythonCOM.h: PYCOM_EXPORT PyObject *PyCom_PyObjectFromIUnknown(IUnknown *punk, REFIID riid, BOOL bAddRef = FALSE);
+typedef PyObject *(*PyCom_PyObjectFromIUnknown_t)(IUnknown *punk, REFIID riid, BOOL bAddRef);
+object SDN_Udm2Gme(Udm::SmartDataNetwork& self, const Udm::Object o) {
+	if (o == Udm::null)
+		return object();
+	UdmGme::GmeDataNetwork* gmedn = dynamic_cast<UdmGme::GmeDataNetwork*>(self.testdn());
+	if (!gmedn)
+		throw std::runtime_error("self is not a GmeDataNetwork");
+	object win32comclient = import("win32com.client"); // also loads pythoncomxx.dll
+	LPUNKNOWN punk = UdmGme::Udm2Gme(o);
+	if (punk == NULL)
+		return object();
+	IDispatchPtr pdispatch = punk;
+	punk->Release();
+	if (pdispatch == NULL)
+		return object();
+	char pythoncomname[40];
+	sprintf_s(pythoncomname, "pythoncom%d%d.dll", PY_MAJOR_VERSION, PY_MINOR_VERSION);
+	HMODULE pythoncom = GetModuleHandle(pythoncomname);
+	if (pythoncom == NULL)
+		throw std::runtime_error(std::string("Could not load ") + pythoncomname);
+	PyCom_PyObjectFromIUnknown_t PyCom_PyObjectFromIUnknown = (PyCom_PyObjectFromIUnknown_t)GetProcAddress(pythoncom, "PyCom_PyObjectFromIUnknown");
+	if (PyCom_PyObjectFromIUnknown == NULL)
+		throw std::runtime_error(std::string("Could not load PyCom_PyObjectFromIUnknown from ") + pythoncomname);
+	PyObject* obj = (*PyCom_PyObjectFromIUnknown)(pdispatch, IID_IDispatch, TRUE);
+	object pyidispatch = object(handle<>(obj));
+	return win32comclient.attr("Dispatch")(pyidispatch);
+}
+
 Udm::Object SDN_Gme2Udm(Udm::SmartDataNetwork& self, object o) {
 	IUnknown* punk = object2IUnknown(o);
 	UdmGme::GmeDataNetwork* gmedn = dynamic_cast<UdmGme::GmeDataNetwork*>(self.testdn());
@@ -631,6 +660,7 @@ BOOST_PYTHON_MODULE(udm)
 		.add_property("root", &Udm::SmartDataNetwork::GetRootObject)
 #ifdef _WIN32
 		.def("convert_gme2udm", SDN_Gme2Udm)
+		.def("convert_udm2gme", SDN_Udm2Gme)
 #endif
 	;
 	scope().attr("SmartDataNetwork").attr("__init__") = eval("lambda self, *args: None");
