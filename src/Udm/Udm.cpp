@@ -19,6 +19,7 @@ this software.
 #include <fstream>
 
 #include "./JavaAPIGen/JavaAPIGen.h"
+#include "./PythonAPIGen/PythonAPIGen.h"
 
 #ifdef _WIN32
 #if defined(_M_AMD64)
@@ -112,6 +113,12 @@ int main(int argc, char **argv) {
 				else if (c == 'j')
 				{
 					opts.mode = UdmOpts::JAVA;
+					continue;
+				}
+				//Python API generation
+				else if (c == 'p')
+				{
+					opts.mode = UdmOpts::PYTHON;
 					continue;
 				}
 				else if (c == 's')
@@ -434,6 +441,13 @@ int main(int argc, char **argv) {
 		if (opts.mode == UdmOpts::JAVA) 
 		{
 			JavaAPIGen gen(diagram, opts.ns_map, inputfile);
+			gen.generate();
+			return 0;
+		}
+
+		if (opts.mode == UdmOpts::PYTHON)
+		{
+			PythonAPIGen gen(diagram, opts.ns_map, inputfile);
 			gen.generate();
 			return 0;
 		}

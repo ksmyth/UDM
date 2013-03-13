@@ -28,7 +28,8 @@ struct UdmOpts {
 		CXX_DEFAULT,		// C++
 		CXX_GENERIC,		// C++ with support for generic programming
 		C_SHARP,
-		JAVA
+		JAVA,
+		PYTHON
 	} mode;
 
 	enum MetaInitType {
