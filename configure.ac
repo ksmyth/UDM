@@ -147,6 +147,7 @@ AC_CONFIG_FILES([Makefile
 	src/Udm/Makefile
 	src/Udm/File2Code/Makefile
 	src/Udm/JavaAPIGen/Makefile
+	src/Udm/PythonAPIGen/Makefile
 	src/UdmBase/Makefile
 	src/UdmBackendDump/Makefile
 	src/UdmCopy/Makefile
