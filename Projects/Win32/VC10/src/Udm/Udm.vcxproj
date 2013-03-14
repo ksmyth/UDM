@@ -344,6 +344,9 @@
       <Project>{dcbd6ed0-5dd4-4c81-af53-12f6f3d810b5}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="PythonAPIGen\PythonAPIGen.vcxproj">
+      <Project>{f264ec86-7ae6-4a51-a35c-cb4947e57f28}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

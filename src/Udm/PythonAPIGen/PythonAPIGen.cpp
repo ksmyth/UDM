@@ -1,5 +1,6 @@
 #include "PythonAPIGen.h"
 
+#include <iterator>
 
 void GeneratePythonClass(const ::Uml::Class &cl, const string & pckg_hierarcy, const string& diagName);
 
