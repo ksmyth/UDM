@@ -3,4 +3,4 @@
 AM_CPPFLAGS		= -I$(top_srcdir)/include
 
 noinst_LTLIBRARIES	= libudm_pythonapigen.la
-libudm_pythonapigen_la_SOURCES	= PythonAPIGen.cpp
+libudm_pythonapigen_la_SOURCES	= PythonAPIGen.cpp PythonAPIGen.h
