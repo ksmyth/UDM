@@ -2227,23 +2227,34 @@ bbreak:			;
 			//string shr = Uml::MakeShortRoleName(ccr);
 			//string kn = kind.name();
 
-			if ( ((string)ccr.name()).compare(((::Uml::Class)ccr.target()).name()) == 0)
+			//auto dbg1 = (string)ccr.name();
+			//auto dbg2 = (string)((::Uml::Class)ccr.target()).name();
+			//auto dbg3 = PATHGET(kind);
+
+			string target = ((::Uml::Class)ccr.target()).name();
+			if (Uml::IsCrossNSComposition(ccr.parent()))
+			{
+				Uml::Namespace ns = static_cast<Uml::Class>(ccr.target()).parent_ns();
+				while (ns)
+				{
+					target = static_cast<std::string>(ns.name()) + "_" + target;
+					ns = ns.parent_ns();
+				}
+			}
+
+			if ( ((string)ccr.name()).compare(target) == 0)
 			{
 				//the rolename might be created with ccr.target().name()
 				//by the CPP code generator. Hence, the MGA rolename may be
 				//empty or may be Uml::MakeShortRoleName, no one can tell.
 				
 				//first we try without rolename appended, this happens more often
-				try 
-				{
-					mn = PATHGET(kind);
-					rr = mmodel->RoleByName[SmartBSTR(mn.c_str())];
-				}
-				catch(udm_exception& )
+				mn = PATHGET(kind);
+				mmodel->get_RoleByName(SmartBSTR(mn.c_str()), &rr);
+				if (rr == NULL)
 				{
 					mn = PATHGET(kind) + (string)ccr.name();
 					rr = mmodel->RoleByName[SmartBSTR(mn.c_str())];
-
 				}
 			}
 			else
@@ -2259,7 +2270,7 @@ bbreak:			;
 
 			
 			//MakeShortRolename is not good - when ccr has no name, and it points towards an abstract base class,
-			//the returned string will be the name of the abstract base class, but it should be 
+			//the returned string will be the name of the abstract base class, but it should be the inherited class
 
 			string roleWithNamespaces = ccr.name();
 			if (roleWithNamespaces.empty())
@@ -2269,28 +2280,14 @@ bbreak:			;
 			}
 			else
 			{
-				if (roleWithNamespaces.length() != 0)
+				Uml::Namespace ns = static_cast<Uml::Class>(ccr.target()).parent_ns();
+				while (ns)
 				{
-					Uml::Namespace ns = static_cast<Uml::Class>(ccr.target()).parent_ns();
-					while (ns)
-					{
-						roleWithNamespaces = static_cast<std::string>(ns.name()) + "::" + roleWithNamespaces;
-						ns = ns.parent_ns();
-					}
+					roleWithNamespaces = static_cast<std::string>(ns.name()) + "::" + roleWithNamespaces;
+					ns = ns.parent_ns();
 				}
 
-				IMgaMetaRolesPtr rrs;
-				rrs = mmodel->Roles;
-				MGACOLL_ITERATE(IMgaMetaRole, rrs) 
-				{
-					if (roleWithNamespaces == static_cast<const char*>(MGACOLL_ITER->GetName())) {
-						rr = MGACOLL_ITER;
-						break;
-					}
-				}
-				MGACOLL_ITERATE_END;
-
-				//rr = mmodel->RoleByName[SmartBSTR(rn.c_str())];
+				mmodel->get_RoleByName(_bstr_t(roleWithNamespaces.c_str()), &rr);
 			}
 			
 			//mn = Uml::MakeShortRoleName(ccr);
@@ -2298,8 +2295,10 @@ bbreak:			;
 
 		}
 
-		if(rr == NULL) 
+		if(rr == NULL)
+		{
 			throw udm_exception("Role not found in model: " + mn);
+		}
 
 		return rr;
 

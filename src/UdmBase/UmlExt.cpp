@@ -732,15 +732,14 @@ namespace Uml
 	{
 		int i = 0;
 		set<Class> descs = DescendantClasses(ccr.target());
-		set<Class>::iterator descs_i = descs.begin();
 
-		while (descs_i != descs.end())
+		for (set<Class>::iterator descs_i = descs.begin(); descs_i != descs.end(); descs_i++)
 		{
-			if (i > 1) return true;
-			if ((bool)(descs_i->isAbstract()) == false) i++;
-			descs_i++;
+			if ((bool)(descs_i->isAbstract()) == false || *descs_i == static_cast<Class>(ccr.target()))
+				i++;
+			if (i > 1)
+				return true;
 		}
-		if (i> 1) return true;
 
 		return false;
 	}
