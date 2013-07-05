@@ -138,6 +138,7 @@
       <ImportLibrary>$(OutDir)UdmDll_VS10.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <DelayLoadDLLs>Xalan-c_1_11.dll</DelayLoadDLLs>
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
