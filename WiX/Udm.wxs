@@ -109,6 +109,8 @@
       <MergeRef Id='xerces_c' />
       <MergeRef Id='UdmDll' />
       <MergeRef Id='UdmDll_VS10' />
+      <Merge Id="UdmDll_VC11"/>
+      <Merge Id="UdmSDK_VC11"/>
       <?if $(sys.BUILDARCH)=x64 ?>
       <MergeRef Id='xerces_c_x64'/>
       <MergeRef Id='UdmDll_VS10_x64'/>
@@ -117,6 +119,8 @@
       <MergeRef Id='CRT100_x86' />
       <MergeRef Id='MFC100_x86' />
       <MergeRef Id='ATL100_x86' />
+      <MergeRef Id="UdmDll_VC11_x64"/>
+      <MergeRef Id="UdmSDK_VC11_x64"/>
       <?endif?>
 
       <MergeRef Id='CRT100' />
