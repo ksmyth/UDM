@@ -88,9 +88,9 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkIncremental>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UdmDll_3_2_VS10D</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">UdmDll_3_2_$(PlatformToolset)_$(Platform)D</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UdmDll_3_2_$(PlatformToolset)_$(Platform)D</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UdmDll_3_2_VS10</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">UdmDll_3_2_$(PlatformToolset)_$(Platform)</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UdmDll_3_2_$(PlatformToolset)_$(Platform)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
@@ -142,6 +142,7 @@
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)UdmDll_$(PlatformToolset)_$(Platform).lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <DelayLoadDLLs>Xalan-c_1_11.dll</DelayLoadDLLs>
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>

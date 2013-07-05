@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='windows-1252'?>
+
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' RequiredVersion='3.0.4813.0'>
+
+  <?include ..\Udm_inc.wxi?>
+
+  <Module Id='UdmDll_VC11' Language='1033' Codepage='1252' Version='$(var.VERSIONSTR)'>
+
+    <Package Id='$(var.UdmDll_VC11_Package_Id)' Manufacturer='Vanderbilt University, ISIS'
+        InstallerVersion='300' Languages='1033' SummaryCodepage='1252'
+        InstallPrivileges='elevated' InstallScope='perMachine'/>
+
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id='$(var.SystemFolderNative)' Name='$(var.SystemFolderNative)'>
+        <Component Id='UdmDllVC11' Guid='$(var.UdmDllVC11_Guid)'>
+          <File Source='$(var.Build)v110\Release\$(var.UdmDllVC11)' />
+        </Component>
+      </Directory>
+    </Directory>
+
+  </Module>
+</Wix>

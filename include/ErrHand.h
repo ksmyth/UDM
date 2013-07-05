@@ -40,7 +40,23 @@ this software.
 #ifndef _DLL
 #pragma message("Warning: Udm clients should be compiled under /MD or /MDd")
 #endif
-#if (_MSC_VER == 1600) /* VS2010 */
+#if (_MSC_VER == 1700) /* VS2012 VC11 */
+#define UDM_NAMESPACE Udm_VC11
+namespace UDM_NAMESPACE {};
+namespace Udm = UDM_NAMESPACE;
+#define UDM_PLATFORM_TOOLSET "v110"
+#ifdef _DEBUG
+#define UDM_DEBUG "D"
+#else
+#define UDM_DEBUG ""
+#endif
+#if defined(_M_AMD64)
+#define UDM_PLATFORM "x64"
+#else
+#define UDM_PLATFORM "Win32"
+#endif
+#define UDM_DLL_LIB "UdmDll_" UDM_PLATFORM_TOOLSET "_" UDM_PLATFORM UDM_DEBUG ".lib"
+#elif (_MSC_VER == 1600) /* VS2010 */
 #define UDM_NAMESPACE Udm_VS10
 namespace UDM_NAMESPACE {};
 namespace Udm = UDM_NAMESPACE;
