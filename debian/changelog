@@ -1,3 +1,9 @@
+udm (3.2.11-1) lucid; urgency=low
+
+  * Udm 3.2.12
+
+ -- Kevin Smyth <ksmyth@isis.vanderbilt.edu>  Mon, 29 Jul 2013 18:52:51 +0000
+
 udm (3.2.11-2) lucid; urgency=low
 
   * Include judm.jar

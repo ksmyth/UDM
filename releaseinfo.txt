@@ -6,11 +6,12 @@ ALL RIGHTS RESERVED
 ** Software Requirements **
 
 1. Windows Operating system (XP, Vista, 7)
+NOTE: Udm can also be used on Linux
 
 2. GME 12, r12.6.29 from: http://repo.isis.vanderbilt.edu/downloads?tool=GME
 NOTE: You need to have administrative privileges to install GME correctly.
 
-3. To develop using UDM: Visual Studio 9 or Visual Studio 10
+3. To develop using UDM: Visual Studio 2008, 2010, or 2012
    (The UDM library can also be used with Visual Studio 2008 Express Edition or Visual C++ 2010 Express.
     Note that you cannot make GME interpreters with the Express Editions, as they do not include MFC or ATL.
     Please visit http://www.microsoft.com/eXPress/download/#webInstall
@@ -19,6 +20,26 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+    - Release 3.2.12 (7/29/2013)
+        -   Add Visual Studio 2012 (VC11) UdmDll
+        -   UdmGme: fix GetMetaRole for cross-namespace compositions where the contained class has multiple child roles (META-990)
+        -   UdmGme: fix GetMetaRole for a class that inherits from an abstract class with no other descendents (META-990)
+        -   UdmGme: fix position attribute for out-of-proc GME objects
+        -   UdmGme: fix UdmId2GmeId: GME IDs are lower-case
+        -   Udm.exe: domain-specific Python code generation
+        -   Unicode support:
+                std::string in Udm are now UTF-8
+                udm.pyd: Support unicode objects
+                Udm VS C++ project wizard: support Unicode in GMEConsole
+        -   udm.pyd: Add convert_udm2gme method
+        -   udm.pyd: Fix meta lifetime management, which appeared as an access violation/segfault
+        -   Uml2UDMXML: fix crash on default value empty string ("")
+        -   Fix Java generation for baseclass outside namespace containing links inside namespace
+        -   Fix Java generation for class that inherits from a baseclass multiple times
+        -   VC: Fix std::exception.what for catching udm_exception as std::exception
+        -   UdmDll_VS10: delay-load Xalan dll
+
+
 06/29/2012		-	Release 3.2.11
 		-	Add Object::getSrcObject() and Object::getDstObject() (only works with GME backend)
 		-	Add Object::GetChildRole()

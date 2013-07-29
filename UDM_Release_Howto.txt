@@ -10,32 +10,32 @@ Update with new version, info:
  /UDM/trunk/releaseinfo.txt (+GME version)
  /UDM/trunk/Projects/Win32/VC10/src/UdmCli/Properties/AssemblyInfo.cs
  /UDM/trunk/configure.ac
- /UDM/trunk/debian/changelog (`dch -i`)
-ci -m 'Prepare for release 3.2.11'
+ /UDM/trunk/debian/changelog (`DEBEMAIL='ksmyth@isis.vanderbilt.edu' DEBFULLNAME='Kevin Smyth' dch -i`)
+ci -m 'Prepare for release 3.2.12'
 
-svn cp -m 'Tag release 3.2.11' https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.11
+svn cp -m 'Tag release 3.2.12' https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.12
 
 For "Finding ID" in Udm (x2), Udm_x64 (x2): ssh kms1 cd symbolstmp python ./bin/pdb_promote.py 
 perl -pli -e 'foreach $f (qw/Udm.exe UdmSwig.dll MetaGME2UML.pdb MetaGME2Uml.dll Udmd.pdb UDMOclPat.exe UDMOclPat.pdb/) { s/$f/$f/ig; }'
 
-wget -O UDM_x64-3.2.11.msi http://build.isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi &&
-wget -O UDM-3.2.11.msi http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
+wget -O UDM_x64-3.2.12.msi http://build.isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi &&
+wget -O UDM-3.2.12.msi http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
 for file in http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do wget "$file"; done
-wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms1/lastSuccessfulBuild/artifact/udm_3.2.11-2_i386.deb
-wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms1/lastSuccessfulBuild/artifact/udm-dev_3.2.11-2_i386.deb
-wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms46/lastSuccessfulBuild/artifact/udm_3.2.11-2_amd64.deb
-wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms46/lastSuccessfulBuild/artifact/udm-dev_3.2.11-2_amd64.deb
+wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms1/lastSuccessfulBuild/artifact/udm_3.2.12-2_i386.deb
+wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms1/lastSuccessfulBuild/artifact/udm-dev_3.2.12-2_i386.deb
+wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms46/lastSuccessfulBuild/artifact/udm_3.2.12-2_amd64.deb
+wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms46/lastSuccessfulBuild/artifact/udm-dev_3.2.12-2_amd64.deb
 
-svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.11 Udm_source_r3.2.11 && \
-'/c/Program Files (x86)/7-Zip/7z.exe' a -r Udm_source_r3.2.11.zip Udm_source_r3.2.11/ && \
-cp Udm_source_r3.2.11/releaseinfo.txt UDM_Release_Notes.txt 
+svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.12 Udm_source_r3.2.12 && \
+'/c/Program Files (x86)/7-Zip/7z.exe' a -r Udm_source_r3.2.12.zip Udm_source_r3.2.12/ && \
+cp Udm_source_r3.2.12/releaseinfo.txt UDM_Release_Notes.txt 
 
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.11/ && \
-scp UDM_Release_Notes.txt UDM-3.2.11.msi UDM_x64-3.2.11.msi Udm_source_r3.2.11.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.11/ && \
-scp udm_3.2.11-2_i386.deb udm-dev_3.2.11-2_i386.deb udm_3.2.11-2_amd64.deb udm-dev_3.2.11-2_amd64.deb ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.11/ && \
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.11/
+ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.12/ && \
+scp UDM_Release_Notes.txt UDM-3.2.12.msi UDM_x64-3.2.12.msi Udm_source_r3.2.12.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.12/ && \
+scp udm_3.2.12-2_i386.deb udm-dev_3.2.12-2_i386.deb udm_3.2.12-2_amd64.deb udm-dev_3.2.12-2_amd64.deb ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.12/ && \
+ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.12/
 
-# repo: Add Folder, short name A3.2.11. Add "Download"s
+# repo: Add Folder, short name A3.2.12. Add "Download"s
 
 # For GReAT release:
 Bump Jenkins GReAT release number
@@ -61,7 +61,7 @@ scp GReAT_Release_Notes.txt GReAT-1.7.7.exe GReAT_source_r1.7.7.zip ksmyth@repo.
 ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7.7
 
 # For Udm and GReAT
-# On http://repo add Folder 3.2.11; add Downloads
+# On http://repo add Folder 3.2.12; add Downloads
 # EDIT uploadgme.py first
 set PATH=%PATH%;%userprofile%\bin
 %userprofile%\bin\selenium\Scripts\python.exe %userprofile%\bin\uploadgme.py
