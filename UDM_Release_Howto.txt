@@ -73,32 +73,37 @@ set PATH=%PATH%;%userprofile%\bin
 
 # GME Release
 Release notes: Doc/README_in.txt
-ssh kms1 cd symbolstmp && python ~/bin/pdb_promote.py x2 "Finding ID"
+Version number: Doc/index.md
+ssh kms1 'cd symbolstmp && python ~/bin/pdb_promote.py 0000006395 0000006396' x2 "Finding ID"
 ssh kms1 rsync -avP symbols /media/7ce1528b-2101-4764-81e3-aed9112e3ad8/214/
-wget -O GME_x64-12.12.11.msi http://build.isis.vanderbilt.edu/job/GME_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/Install/GME_x64.msi && \
-wget -O GME-12.12.11.msi http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/lastSuccessfulBuild/artifact/trunk/Install/GME.msi && \
+export PATH=$PATH:/c/cygwin/bin
+wget -O GME_x64-13.7.10.msi http://build.isis.vanderbilt.edu/job/GME_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/Install/GME_x64.msi && \
+wget -O GME-13.7.10.msi http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/lastSuccessfulBuild/artifact/trunk/Install/GME.msi && \
 wget -O README.txt http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/ws/trunk/Doc/README.txt
 
 for file in http://build.isis.vanderbilt.edu/job/GME_x64/lastSuccessfulBuild/label=build-slave6/artifact/trunk/Install/GME_bin_x64.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_bin.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_paradigms.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_SDK.msm; do wget $file; done
 
-svn cp -m 'Tag Release 12.12.11' https://svn.isis.vanderbilt.edu/GMESRC/trunk https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_12.12.11
-svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_12.12.11 GME-12.12.11_src && \
-'/cygdrive/c/Program Files/7-Zip/7z.exe' a -r GME-12.12.11_src.zip GME-12.12.11_src/
+svn cp -m 'Tag Release 13.7.10' https://svn.isis.vanderbilt.edu/GMESRC/trunk https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_13.7.10
+svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_13.7.10 GME-13.7.10_src && \
+'/c/Program Files/7-Zip/7z.exe' a -r GME-13.7.10_src.zip GME-13.7.10_src/
 
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/GME/12.12.11/ && \
-scp README.txt GME-12.12.11.msi GME_x64-12.12.11.msi GME-12.12.11_src.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/GME/12.12.11/ && \
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GME/12.12.11/
-# now automated:  repo: Add Folder, short name TA12.12.11 . Add "Download"s
-# EDIT uploadgme.py first
-set PATH=%PATH%;%userprofile%\bin
-%userprofile%\bin\selenium\Scripts\python.exe %userprofile%\bin\uploadgme.py
+ssh repo@repo.isis.vanderbilt.edu mkdir GME/13.7.10/ && \
+scp README.txt GME-13.7.10.msi GME_x64-13.7.10.msi GME-13.7.10_src.zip repo@repo.isis.vanderbilt.edu:GME/13.7.10/ && \
+ssh repo@repo.isis.vanderbilt.edu chmod -R a+r GME/13.7.10/
 
 
 # Update online documentation:
+cd Doc
+C:\Users\meta\Downloads\markdown\Scripts\python -m markdown index.md > index.html
 ssh kms1 sudo mount -t davfs -o uid=1000 https://forge.isis.vanderbilt.edu/gme/dav/ gmedav
 rsync --delete --delete-excluded -avP . --include=/Tutorial** --include google3a6cca9137b58176.html --include=index.html --include=markdown.css --include='*/' --include='**GME Manual and User Guide.pdf' --exclude=*  kms1:gmedav/www/
 
 
 # JIRA: make release
 # change http://kms1/svn/installs/install.py sync to installs/install.exe, https://svn.isis.vanderbilt.edu/isis-common/trunk/common-scripts/install.exe
+
+Check for missing symbols
+set _NT_SYMBOL_PATH=C:\Windows\symbols\dll;C:\Windows\system32;srv*c:\symbols*http://symbols.isis.vanderbilt.edu/;srv*c:\symbols*http://msdl.microsoft.com/download/symbols
+"c:\Program Files (x86)\Debugging Tools for Windows (x86)\symchk.exe" /r "C:\Program Files (x86)\GME"
+"c:\Program Files (x86)\Debugging Tools for Windows (x86)\symchk.exe" /r "C:\Program Files\GME"
 
