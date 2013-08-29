@@ -733,14 +733,11 @@ namespace DTDGen
 			associations = Uml::AncestorAssociationTargetRoles(c);
 
 		set< ::Uml::Class> ccl = ::Uml::AncestorClasses(c);
-		::Uml::Association ass;
+		set< ::Uml::Association> assocations;
 		for(set< ::Uml::Class>::iterator iii = ccl.begin(); iii != ccl.end(); iii++) {
 
 			if(::Uml::Association(iii->association())) {
-				if(ass) {
-					throw udm_exception("Class " + c.getPath2("::", false) + " has multiple associations"); 
-				}
-				else ass = iii->association();
+				assocations.insert(iii->association());
 			}
 		}
 
@@ -895,8 +892,8 @@ namespace DTDGen
 			++j;
 		}
 
-		if(ass) {
-			set< ::Uml::AssociationRole> rs(ass.roles());
+		for(set< ::Uml::Association>::iterator assocIt = assocations.begin(); assocIt != assocations.end(); assocIt++) {
+			set< ::Uml::AssociationRole> rs(assocIt->roles());
 			set< ::Uml::AssociationRole>::iterator j = rs.begin();
 			while( j != rs.end() ) {
 				name = ::Uml::MakeRoleName(*j);
