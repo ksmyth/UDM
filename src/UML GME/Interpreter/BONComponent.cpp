@@ -1395,7 +1395,15 @@ void CAssociationBase::_BuildUML(::Uml::Association &ass, bool is_cross)
 		ass.name() = (LPCTSTR) nm;
 
 	if(associationClass)
-		ass.assocClass() = is_cross ? associationClass->GetCrossUmlClass() : associationClass->GetUmlClass();
+	{
+		Uml::Class assocClass = is_cross ? associationClass->GetCrossUmlClass() : associationClass->GetUmlClass();
+		if (static_cast<Uml::Association>(assocClass.association()))
+		{
+			throw udm_exception(std::string("Error: ") + static_cast<const char*>(association) + " cannot have more than 1 association class. "
+				"If two association classes are desired, use a superclass to define one.");
+		}
+		ass.assocClass() = assocClass;
+	}
 
 	::Uml::AssociationRole role = ::Uml::AssociationRole::Create(ass);
 	role.name() = (LPCTSTR) srcName;
