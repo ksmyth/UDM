@@ -28,7 +28,7 @@
   <property name="Path.udm" value="${project::get-base-directory()}"/>
   <setenv name="UDM_PATH" value="${Path.udm}\.."/>
 
-  <property name="Path.jdk" value="${environment::get-variable('JDK_PATH')}"/>
+  <property name="Path.jdk" value="${environment::get-variable('JAVA_HOME')}"/>
 
   <if test="${environment::variable-exists('VSVERSION')}">
     <property name="Version.VS" value="${environment::get-variable('VSVERSION')}"/>"/>

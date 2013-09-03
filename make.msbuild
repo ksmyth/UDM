@@ -7,7 +7,8 @@
 
   <Target Name="CheckEnv" DependsOnTargets="CheckEnvGme;CheckEnvUdm">
     <Error Text="UDM_3RDPARTY_PATH='$(UDM_3RDPARTY_PATH)' doesn't exist" Condition="!Exists('$(UDM_3RDPARTY_PATH)')"/>
-    <Error Text="JDK_PATH='$(JDK_PATH)' doesn't exist" Condition="!Exists('$(JDK_PATH)')"/>
+    <Error Text="JAVA_HOME='$(JAVA_HOME)' doesn't exist" Condition="!Exists('$(JAVA_HOME)')"/>
+    <Error Text="JAVA_HOME='$(JAVA_HOME)' doesn't point to a JDK" Condition="!Exists('$(JAVA_HOME)\include\jni.h')"/>
   </Target>
 
   <ItemGroup>

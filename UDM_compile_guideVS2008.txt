@@ -22,7 +22,7 @@ Step-by-step guide:
 		your https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ working copy
 	UDM_3RDPARTY_PATH=
 		the UDM_VS2010 subdirectory of your https://svn.isis.vanderbilt.edu/isis-common/trunk/3rdparty/ working copy
-	JDK_PATH=
+	JAVA_HOME=
 		your Java 1.5 (or later) JDK path, e.g. c:\Program Files\Java\jdk1.6.0_16
 
 	4. Use Projects/Win32/VC9/src/Udm.sln for VS2008 or Projects/Win32/VC10/src/Udm.sln for VS2010
