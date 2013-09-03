@@ -15,27 +15,39 @@ ci -m 'Prepare for release 3.2.12'
 
 svn cp -m 'Tag release 3.2.12' https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.12
 
-For "Finding ID" in Udm (x2), Udm_x64 (x2): ssh kms1 cd symbolstmp python ./bin/pdb_promote.py 
-perl -pli -e 'foreach $f (qw/Udm.exe UdmSwig.dll MetaGME2UML.pdb MetaGME2Uml.dll Udmd.pdb UDMOclPat.exe UDMOclPat.pdb/) { s/$f/$f/ig; }'
 
-wget -O UDM_x64-3.2.12.msi http://build.isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi &&
-wget -O UDM-3.2.12.msi http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
-for file in http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do wget "$file"; done
-wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms1/lastSuccessfulBuild/artifact/udm_3.2.12-2_i386.deb
-wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms1/lastSuccessfulBuild/artifact/udm-dev_3.2.12-2_i386.deb
-wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms46/lastSuccessfulBuild/artifact/udm_3.2.12-2_amd64.deb
-wget http://build.isis.vanderbilt.edu/job/Udm_Linux/label=kms46/lastSuccessfulBuild/artifact/udm-dev_3.2.12-2_amd64.deb
+
+for url in http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/console http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/console http://build.isis.vanderbilt.edu/job/UDM_vc11/label=build-slave11/lastBuild/console;
+do
+ curl -s "$url" | grep "Finding ID" | sed 's/Finding ID...  //'
+done | xargs 
+For "Finding ID" in Udm (x3), Udm_x64 (x2): ssh kms1 cd symbolstmp python ./bin/pdb_promote.py 
+for file in 0000006636 0000006637 0000006632 0000006633 0000006631; do perl -pli -e 'foreach $f (qw/Udm.exe UdmSwig.dll MetaGME2UML.pdb MetaGME2Uml.dll Udmd.pdb UDMOclPat.exe UDMOclPat.pdb/) { s/$f/$f/ig; }' 000Admin/$file; done
+
+curl -o UDM_x64-3.2.12.msi http://build.isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi &&
+curl -o UDM-3.2.12.msi http://build.isis.vanderbilt.edu/job/UDM_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
+for file in http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do curl -O "$file"; done
+(mkdir -p ubuntu10.04 && cd ubuntu10.04 &&
+curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04/lastSuccessfulBuild/artifact/udm_3.2.12-1_i386.deb &&
+curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04/lastSuccessfulBuild/artifact/udm-dev_3.2.12-1_i386.deb
+curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04_x64/lastSuccessfulBuild/artifact/udm_3.2.12-1_amd64.deb &&
+curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04_x64/lastSuccessfulBuild/artifact/udm-dev_3.2.12-1_amd64.deb )
+(mkdir ubuntu12.04 && cd ubuntu12.04 &&
+curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04/lastSuccessfulBuild/artifact/udm_3.2.12-1_i386.deb &&
+curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04/lastSuccessfulBuild/artifact/udm-dev_3.2.12-1_i386.deb
+curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm_3.2.12-1_amd64.deb &&
+curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm-dev_3.2.12-1_amd64.deb )
 
 svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.12 Udm_source_r3.2.12 && \
-'/c/Program Files (x86)/7-Zip/7z.exe' a -r Udm_source_r3.2.12.zip Udm_source_r3.2.12/ && \
-cp Udm_source_r3.2.12/releaseinfo.txt UDM_Release_Notes.txt 
+PATH="$PATH":'/c/Program Files (x86)/7-Zip/':'/c/Program Files/7-Zip/' 7z.exe a -r Udm_source_r3.2.12.zip Udm_source_r3.2.12/ && \
+cp Udm_source_r3.2.12/releaseinfo.txt UDM_Release_Notes.txt
 
-ssh ksmyth@repo.isis.vanderbilt.edu mkdir /project/www/Download/UDM/3.2.12/ && \
-scp UDM_Release_Notes.txt UDM-3.2.12.msi UDM_x64-3.2.12.msi Udm_source_r3.2.12.zip ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.12/ && \
-scp udm_3.2.12-2_i386.deb udm-dev_3.2.12-2_i386.deb udm_3.2.12-2_amd64.deb udm-dev_3.2.12-2_amd64.deb ksmyth@repo.isis.vanderbilt.edu:/project/www/Download/UDM/3.2.12/ && \
-ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/UDM/3.2.12/
+ssh repo@repo.isis.vanderbilt.edu mkdir -p UDM/3.2.12/ UDM/3.2.12/ubuntu10.04 UDM/3.2.12/ubuntu12.04 && \
+scp UDM_Release_Notes.txt UDM-3.2.12.msi UDM_x64-3.2.12.msi Udm_source_r3.2.12.zip repo@repo.isis.vanderbilt.edu:UDM/3.2.12/ && \
+scp ubuntu10.04/* repo@repo.isis.vanderbilt.edu:UDM/3.2.12/ubuntu10.04 && \
+scp ubuntu12.04/* repo@repo.isis.vanderbilt.edu:UDM/3.2.12/ubuntu12.04 && \
+ssh repo@repo.isis.vanderbilt.edu chmod -R a+r UDM/3.2.12/
 
-# repo: Add Folder, short name A3.2.12. Add "Download"s
 
 # For GReAT release:
 Bump Jenkins GReAT release number
@@ -74,22 +86,22 @@ set PATH=%PATH%;%userprofile%\bin
 # GME Release
 Release notes: Doc/README_in.txt
 Version number: Doc/index.md
-ssh kms1 'cd symbolstmp && python ~/bin/pdb_promote.py 0000006395 0000006396' x2 "Finding ID"
+ssh kms1 'cd symbolstmp && python ~/bin/pdb_promote.py 0000007008 0000007009' x2 "Finding ID"
 ssh kms1 rsync -avP symbols /media/7ce1528b-2101-4764-81e3-aed9112e3ad8/214/
 export PATH=$PATH:/c/cygwin/bin
-wget -O GME_x64-13.7.10.msi http://build.isis.vanderbilt.edu/job/GME_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/Install/GME_x64.msi && \
-wget -O GME-13.7.10.msi http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/lastSuccessfulBuild/artifact/trunk/Install/GME.msi && \
+wget -O GME_x64-13.8.28.msi http://build.isis.vanderbilt.edu/job/GME_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/Install/GME_x64.msi && \
+wget -O GME-13.8.28.msi http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/lastSuccessfulBuild/artifact/trunk/Install/GME.msi && \
 wget -O README.txt http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/ws/trunk/Doc/README.txt
 
 for file in http://build.isis.vanderbilt.edu/job/GME_x64/lastSuccessfulBuild/label=build-slave6/artifact/trunk/Install/GME_bin_x64.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_bin.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_paradigms.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_SDK.msm; do wget $file; done
 
-svn cp -m 'Tag Release 13.7.10' https://svn.isis.vanderbilt.edu/GMESRC/trunk https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_13.7.10
-svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_13.7.10 GME-13.7.10_src && \
-'/c/Program Files/7-Zip/7z.exe' a -r GME-13.7.10_src.zip GME-13.7.10_src/
+svn cp -m 'Tag Release 13.8.28' https://svn.isis.vanderbilt.edu/GMESRC/trunk https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_13.8.28
+svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_13.8.28 GME-13.8.28_src && \
+'/c/Program Files/7-Zip/7z.exe' a -r GME-13.8.28_src.zip GME-13.8.28_src/
 
-ssh repo@repo.isis.vanderbilt.edu mkdir GME/13.7.10/ && \
-scp README.txt GME-13.7.10.msi GME_x64-13.7.10.msi GME-13.7.10_src.zip repo@repo.isis.vanderbilt.edu:GME/13.7.10/ && \
-ssh repo@repo.isis.vanderbilt.edu chmod -R a+r GME/13.7.10/
+ssh repo@repo.isis.vanderbilt.edu mkdir GME/13.8.28/ && \
+scp README.txt GME-13.8.28.msi GME_x64-13.8.28.msi GME-13.8.28_src.zip repo@repo.isis.vanderbilt.edu:GME/13.8.28/ && \
+ssh repo@repo.isis.vanderbilt.edu chmod -R a+r GME/13.8.28/
 
 
 # Update online documentation:
