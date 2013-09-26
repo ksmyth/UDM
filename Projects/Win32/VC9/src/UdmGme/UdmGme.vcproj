@@ -206,7 +206,7 @@
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
 						UsePrecompiledHeader="0"
-						BrowseInformation="1"
+						BrowseInformation="0"
 					/>
 				</FileConfiguration>
 			</File>

@@ -131,7 +131,7 @@
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/"
-				BrowseInformation="1"
+				BrowseInformation="0"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
@@ -331,7 +331,7 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
-						BrowseInformation="1"
+						BrowseInformation="0"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -373,7 +373,7 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
-						BrowseInformation="1"
+						BrowseInformation="0"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -415,7 +415,7 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
-						BrowseInformation="1"
+						BrowseInformation="0"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -457,7 +457,7 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
-						BrowseInformation="1"
+						BrowseInformation="0"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -499,7 +499,7 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
-						BrowseInformation="1"
+						BrowseInformation="0"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -541,7 +541,7 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
-						BrowseInformation="1"
+						BrowseInformation="0"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -583,7 +583,7 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"
-						BrowseInformation="1"
+						BrowseInformation="0"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
