@@ -75,7 +75,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib File2CodeD.lib JavaAPIGenD.lib PythonAPIGenD.lib UdmXmiD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2.lib Xalan-C_1D.lib zlibD.lib"
+				AdditionalDependencies="UmlD.lib File2CodeD.lib JavaAPIGenD.lib PythonAPIGenD.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib xerces-c_2.lib zlibD.lib"
 				OutputFile="$(OutDir)\UdmD.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -172,7 +172,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib File2Code.lib JavaAPIGen.lib PythonAPIGen.lib UdmXmi.lib UdmBase.lib Xalan-C_1.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
+				AdditionalDependencies="Uml.lib File2Code.lib JavaAPIGen.lib PythonAPIGen.lib UdmBase.lib UdmDom.lib UdmUtil.lib xerces-c_2.lib zlib.lib"
 				OutputFile="$(OutDir)\Udm.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

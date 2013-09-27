@@ -16,6 +16,5 @@ __pragma(comment(linker, "/include:?DummyFL@UdmGme@@3HA"))
 #include <cint_string.h>
 #include <UdmOcl.h>
 __pragma(comment(linker, "/include:?UnInitialize@Ocl@@YAXXZ"))
-__pragma(comment(linker, "/include:?XmiToUdm@@YAHPBD0@Z"))
 #endif
 

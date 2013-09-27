@@ -128,6 +128,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>xerces-c_2.lib;Xalan-C_1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
@@ -215,6 +216,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>xerces-c_2.lib;Xalan-C_1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
@@ -294,6 +296,9 @@
   <ItemGroup>
     <ProjectReference Include="..\UdmDll\UdmDll.vcxproj">
       <Project>{3cae3dee-065e-426c-9c3c-f1f59217c00b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\UdmXmi\UdmXmi.vcxproj">
+      <Project>{ca16ed97-f738-4faf-985c-fae05aed8d07}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

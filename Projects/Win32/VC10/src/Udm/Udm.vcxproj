@@ -51,14 +51,12 @@
     <Import Project="..\zlib.props" />
     <Import Project="..\boost.props" />
     <Import Project="..\Xerces-c.props" />
-    <Import Project="..\Xalan-c.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\zlib.props" />
     <Import Project="..\boost.props" />
     <Import Project="..\Xerces-c.props" />
-    <Import Project="..\Xalan-c.props" />
     <Import Project="..\..\..\..\..\Udm_x64.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
@@ -66,14 +64,12 @@
     <Import Project="..\zlib.props" />
     <Import Project="..\boost.props" />
     <Import Project="..\Xerces-c.props" />
-    <Import Project="..\Xalan-c.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\zlib.props" />
     <Import Project="..\boost.props" />
     <Import Project="..\Xerces-c.props" />
-    <Import Project="..\Xalan-c.props" />
     <Import Project="..\..\..\..\..\Udm_x64.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -120,7 +116,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>xerces-c_2.lib;Xalan-C_1.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xerces-c_2.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -147,7 +143,7 @@
       <AdditionalOptions>/Zm1000  %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\..\..\include;..\..\..\..\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NOMINMAX;NO_XALAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -213,7 +209,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Xalan-C_1.lib;xerces-c_2.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xerces-c_2.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -239,7 +235,7 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\..\..\include;..\..\..\..\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NOMINMAX;NO_XALAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_CONSOLE;_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -328,9 +324,6 @@
     <ProjectReference Include="..\UdmUtil\UdmUtil.vcxproj">
       <Project>{e663042b-f135-4502-b7a1-d62f21126e3b}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\UdmXmi\UdmXmi.vcxproj">
-      <Project>{ca16ed97-f738-4faf-985c-fae05aed8d07}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Uml\Uml.vcxproj">
       <Project>{6a53e343-14c2-4463-a9c8-332dae560eaf}</Project>

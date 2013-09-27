@@ -54,14 +54,12 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\Xerces-c.props" />
-    <Import Project="..\Xalan-c.props" />
     <Import Project="..\zlib.props" />
     <Import Project="..\..\..\..\..\Udm.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\Xerces-c.props" />
-    <Import Project="..\Xalan-c.props" />
     <Import Project="..\zlib.props" />
     <Import Project="..\..\..\..\..\Udm_x64.props" />
     <Import Project="..\..\..\..\..\Udm.props" />
@@ -69,14 +67,12 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\Xerces-c.props" />
-    <Import Project="..\Xalan-c.props" />
     <Import Project="..\zlib.props" />
     <Import Project="..\..\..\..\..\Udm.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
     <Import Project="..\Xerces-c.props" />
-    <Import Project="..\Xalan-c.props" />
     <Import Project="..\zlib.props" />
     <Import Project="..\..\..\..\..\Udm_x64.props" />
     <Import Project="..\..\..\..\..\Udm.props" />
@@ -131,7 +127,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UdmUtil.lib;UdmBase.lib;UDMPOI.lib;UdmOcl.lib;Uml.lib;UdmDom.lib;UdmGme.lib;UdmXMI.lib;Xalan-C_1.lib;xerces-c_2.lib;zlib.lib;GOCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>UdmUtil.lib;UdmBase.lib;UDMPOI.lib;UdmOcl.lib;Uml.lib;UdmDom.lib;UdmGme.lib;xerces-c_2.lib;zlib.lib;GOCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -142,7 +138,6 @@
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)UdmDll_$(PlatformToolset)_$(Platform).lib</ImportLibrary>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <DelayLoadDLLs>Xalan-c_1_11.dll</DelayLoadDLLs>
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
@@ -246,7 +241,7 @@ xcopy /Y/D/F "$(OutDir)"\UdmDll_$(PlatformToolset)_$(Platform).lib "$(UDM_PATH)"
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UdmBaseD.lib;UdmOclD.lib;UdmPOID.lib;UmlD.lib;UdmDomD.lib;UdmGmeD.lib;UdmXMID.lib;UdmUtilD.lib;Xalan-C_1.lib;xerces-c_2.lib;zlibD.lib;GOCLD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>UdmBaseD.lib;UdmOclD.lib;UdmPOID.lib;UmlD.lib;UdmDomD.lib;UdmGmeD.lib;UdmUtilD.lib;xerces-c_2.lib;zlibD.lib;GOCLD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -376,9 +371,6 @@ xcopy /Y/D/F "$(OutDir)"\UdmDll_$(PlatformToolset)_$(Platform)D.lib "$(UDM_PATH)
     <ProjectReference Include="..\UdmUtil\UdmUtil.vcxproj">
       <Project>{e663042b-f135-4502-b7a1-d62f21126e3b}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\UdmXmi\UdmXmi.vcxproj">
-      <Project>{ca16ed97-f738-4faf-985c-fae05aed8d07}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Uml\Uml.vcxproj">
       <Project>{6a53e343-14c2-4463-a9c8-332dae560eaf}</Project>
