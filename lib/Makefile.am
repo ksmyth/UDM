@@ -7,6 +7,9 @@ ANTLRLIBS += ../src/UdmOcl/libudmocl.la \
 endif
 
 lib_LTLIBRARIES		= libudm.la libUdmSwig.la
+if ! NO_XALAN
+lib_LTLIBRARIES += libudmxmi.la
+endif
 
 libudm_la_SOURCES	=
 libudm_la_LIBADD	= \
@@ -25,3 +28,11 @@ libUdmSwig_la_LIBADD	= ../src/UdmSwig/libudmswig.la libudm.la
 libUdmSwig_la_LDFLAGS	= -version-info 3:1:3
 # Force C++ linking
 nodist_EXTRA_libUdmSwig_la_SOURCES	= dummy.cxx
+
+if ! NO_XALAN
+libudmxmi_la_SOURCES	=
+libudmxmi_la_LIBADD	= ../src/UdmXmi/libudmxmi.la libudm.la $(XERCESLIBS) $(XALANLIBS)
+libudmxmi_la_LDFLAGS	= -version-info 3:1:3
+# Force C++ linking
+nodist_EXTRA_libudmxmi_la_SOURCES	= dummy.cxx
+endif

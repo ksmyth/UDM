@@ -45,7 +45,8 @@ nodist_EXTRA_UdmOclPat_SOURCES	= dummy.cxx
 UdmToXmi_SOURCES	=
 UdmToXmi_LDADD	= \
 	../src/UdmToXmi/libudmtoxmi.la \
-	../lib/libudm.la
+	../lib/libudm.la \
+	../lib/libudmxmi.la
 nodist_EXTRA_UdmToXmi_SOURCES	= dummy.cxx
 
 
@@ -59,5 +60,6 @@ nodist_EXTRA_UdmViz_SOURCES	= dummy.cxx
 XmiToUdm_SOURCES	=
 XmiToUdm_LDADD	= \
 	../src/XmiToUdm/libxmitoudm.la \
-	../lib/libudm.la
+	../lib/libudm.la \
+	../lib/libudmxmi.la
 nodist_EXTRA_XmiToUdm_SOURCES	= dummy.cxx
