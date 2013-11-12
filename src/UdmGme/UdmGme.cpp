@@ -653,8 +653,10 @@ namespace UdmGme
 				IMgaFCOPtr fco = references->GetItem(1);
 
 				if (!only_ifNavigable || (only_ifNavigable && role_isNavigable))
-					if (reference == NULL || reference->GetIsEqual(fco))
+					if (reference == NULL)
 						COMTHROW(ret->Append(fco));
+					else if (reference->GetIsEqual(fco))
+						COMTHROW(ret->Append(self));
 			}
 		}
 		else if (self->GetObjType() == OBJTYPE_REFERENCE)
