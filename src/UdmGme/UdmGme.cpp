@@ -587,7 +587,7 @@ namespace UdmGme
 	IMgaFCOsPtr RpHelperFindPeerFCOsFromRegistry(const IMgaFCOPtr &self, const string &role_name, bool only_ifNavigable, const GmeDataNetwork *dn)
 	{
 		IMgaFCOsPtr ret;
-		ret.CreateInstance("Mga.MgaFCOs");
+		ret.CreateInstance(__uuidof(MgaFCOs));
 
 		SmartBSTR co_ids = self->RegistryValue[role_name.c_str()];
 		if (!(!co_ids))
@@ -611,14 +611,11 @@ namespace UdmGme
 		return ret;
 	}
 
-	IMgaFCOsPtr RpHelperFindPeerFCOsFromModel(const IMgaFCOPtr &self,
+	void RpHelperFindPeerFCOsFromModel(const IMgaFCOPtr &self,
 		const string &role_name, bool role_isNavigable,
 		const string &other_role_name, bool other_role_isNavigable,
-		const GmeDataNetwork *dn, bool only_ifNavigable)
+		const GmeDataNetwork *dn, bool only_ifNavigable, IMgaFCOsPtr& ret, IMgaReferencePtr& reference)
 	{
-		IMgaFCOsPtr ret;
-		ret.CreateInstance("Mga.MgaFCOs");
-
 		if (self->GetObjType() == OBJTYPE_CONNECTION)
 		{
 			// we are the connection, find the reference (the first reference from
@@ -627,13 +624,13 @@ namespace UdmGme
 			IMgaSimpleConnectionPtr conn(self);
 			IMgaFCOsPtr references;
 
-			SmartBSTR src_role_name = conn->RegistryValue["sRefParent"];
+			SmartBSTR src_role_name = conn->RegistryValue[L"sRefParent"];
 			HRESULT (__stdcall IMgaSimpleConnection::*fn)(IMgaFCOs**);
 			if (!src_role_name) {
-				SmartBSTR dst_role_name = conn->RegistryValue["dRefParent"];
+				SmartBSTR dst_role_name = conn->RegistryValue[L"dRefParent"];
 				if (!dst_role_name)
 				{
-					return ret;
+					return;
 				}
 				fn = role_name.compare(dst_role_name) == 0 ? &IMgaSimpleConnection::get_DstReferences : &IMgaSimpleConnection::get_SrcReferences;
 			} else {
@@ -656,7 +653,8 @@ namespace UdmGme
 				IMgaFCOPtr fco = references->GetItem(1);
 
 				if (!only_ifNavigable || (only_ifNavigable && role_isNavigable))
-					COMTHROW(ret->Append(fco));
+					if (reference == NULL || reference->GetIsEqual(fco))
+						COMTHROW(ret->Append(fco));
 			}
 		}
 		else if (self->GetObjType() == OBJTYPE_REFERENCE)
@@ -669,19 +667,21 @@ namespace UdmGme
 			MGACOLL_ITERATE(IMgaConnPoint, cp)
 			{
 				IMgaSimpleConnectionPtr conn = MGACOLL_ITER->Owner;
-				IMgaFCOsPtr references = RpHelperFindPeerFCOsFromModel(conn, other_role_name, other_role_isNavigable, role_name, role_isNavigable, dn, true);
-				MGACOLL_ITERATE(IMgaFCO, references)
-				{
-					if (reference->GetIsEqual(MGACOLL_ITER) == VARIANT_TRUE)
-					{
-						if (!only_ifNavigable || (only_ifNavigable && role_isNavigable))
-							COMTHROW(ret->Append(conn));
-					};
-				}
-				MGACOLL_ITERATE_END;
+				RpHelperFindPeerFCOsFromModel(conn, other_role_name, other_role_isNavigable, role_name, role_isNavigable, dn, true, ret, reference);
 			}
 			MGACOLL_ITERATE_END;
 		}
+	}
+
+	IMgaFCOsPtr RpHelperFindPeerFCOsFromModel(const IMgaFCOPtr &self,
+		const string &role_name, bool role_isNavigable,
+		const string &other_role_name, bool other_role_isNavigable,
+		const GmeDataNetwork *dn, bool only_ifNavigable)
+	{
+		IMgaFCOsPtr ret;
+		ret.CreateInstance(__uuidof(MgaFCOs));
+
+		RpHelperFindPeerFCOsFromModel(self, role_name, role_isNavigable, other_role_name, other_role_isNavigable, dn, only_ifNavigable, ret, IMgaReferencePtr());
 
 		return ret;
 	}
@@ -794,7 +794,7 @@ namespace UdmGme
 
 				IMgaFCOPtr final_referred(referred);//final referred
 			
-				references.CreateInstance("Mga.MgaFCOs");
+				references.CreateInstance(__uuidof(MgaFCOs));
 							
 				COMTHROW(references->Append(cp_ref_child));
 
@@ -854,7 +854,7 @@ namespace UdmGme
 		if (connection_parent != NULL && peer_parent != NULL)
 		{
 			IMgaFCOsPtr references;
-			references.CreateInstance("Mga.MgaFCOs");
+			references.CreateInstance(__uuidof(MgaFCOs));
 
 			MGACOLL_ITERATE(IMgaFCO, start_refs)
 			{
@@ -1432,7 +1432,7 @@ bbreak:			;
 		IMgaSimpleConnectionPtr conn(conn_go->self);
 
 		IMgaFCOsPtr pref_refs;
-		pref_refs.CreateInstance("Mga.MgaFCOs");
+		pref_refs.CreateInstance(__uuidof(MgaFCOs));
 		for (vector<Udm::ObjectImpl*>::const_iterator i = refs.begin(); i != refs.end(); i++)
 			COMTHROW(pref_refs->Append(static_cast<GmeObject *>(*i)->self));
 
@@ -1475,13 +1475,13 @@ bbreak:			;
 	IMgaFCOsPtr RefsChain(const IMgaSimpleConnectionPtr &conn, const string &role_name)
 	{
 		IMgaFCOsPtr ret;
-		ret.CreateInstance("Mga.MgaFCOs");
+		ret.CreateInstance(__uuidof(MgaFCOs));
 
 		IMgaFCOsPtr references;
 
-		SmartBSTR src_role_name = conn->RegistryValue["sRefParent"];
+		SmartBSTR src_role_name = conn->RegistryValue[L"sRefParent"];
 		if (!src_role_name) {
-			SmartBSTR dst_role_name = conn->RegistryValue["dRefParent"];
+			SmartBSTR dst_role_name = conn->RegistryValue[L"dRefParent"];
 			try {
 				references = role_name.compare(dst_role_name) == 0 ? conn->GetDstReferences() : conn->GetSrcReferences();
 			} catch (udm_exception&) {}
@@ -1908,7 +1908,7 @@ bbreak:			;
 		int cnt = 0;
 		IMgaMetaRolesPtr roles;
 		IMgaFCOsPtr fcos;
-		fcos.CreateInstance("Mga.MgaFCOs");
+		fcos.CreateInstance(__uuidof(MgaFCOs));
 		roles.CreateInstance("Mga.MgaMetaRoles");
 		for(vector<ObjectImpl *>::const_iterator i = aa.begin(); i != aa.end(); i++) 
 		{
@@ -2143,7 +2143,7 @@ bbreak:			;
 		IMgaFCOsPtr fcos;
 		IMgaMetaRolesPtr roles;
 
-		fcos.CreateInstance("Mga.MgaFCOs");
+		fcos.CreateInstance(__uuidof(MgaFCOs));
 		roles.CreateInstance("Mga.MgaMetaRoles");
 		COMTHROW(fcos->Append(self));
 		COMTHROW(roles->Append(rr));

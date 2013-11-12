@@ -176,21 +176,25 @@ namespace Uml
 			return NULL;
 	}
 
-
-	UDM_DLL set<Class> AncestorClasses(const Class &c)
+	void AncestorClasses(const Class &c, set<Class>& ret)
 	{
-		set<Class> ret;
 		ret.insert(c);
 
 		set<Class> baseTypes = c.baseTypes();
 		set<Class>::iterator i = baseTypes.begin();
 		while( i != baseTypes.end() )
 		{
-			set<Class> a = AncestorClasses(*i);
-			ret.insert(a.begin(), a.end());
+			AncestorClasses(*i, ret);
 
 			++i;
 		}
+	}
+
+	UDM_DLL set<Class> AncestorClasses(const Class &c)
+	{
+		set<Class> ret;
+
+		AncestorClasses(c, ret);
 		
 		return ret;
 	}
