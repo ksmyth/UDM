@@ -20,4 +20,12 @@ pushd %_UDM_PATH%
 zip -r %_UDM_PATH%\model-files-%_VC%-%_UDM_BUILD%.zip judm -i *_udm.xml -i *_udm.udm -x judm/build/*
 popd
 
+pushd %_UDM_PATH%
+zip -r %_UDM_PATH%\model-files-%_VC%-%_UDM_BUILD%.zip tests -i *_udm.xml -i *_udm.udm
+popd
+
+pushd %_UDM_PATH%
+zip -r %_UDM_PATH%\model-files-%_VC%-%_UDM_BUILD%.zip samples -i *_udm.xml -i *_udm.udm
+popd
+
 exit /b

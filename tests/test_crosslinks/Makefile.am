@@ -6,9 +6,9 @@ noinst_PROGRAMS		= test_CrossLinks
 TESTS			= $(noinst_PROGRAMS)
 
 BUILT_SOURCES		= CL.cpp CL.h CL.xsd \
-			  CLPackage.cpp CLPackage.h CLPackage.xsd \
-			  Package1.cpp Package1.h Package1.xsd \
-			  Package2.cpp Package2.h Package2.xsd
+			  CD1.cpp CD1.h CD1.xsd \
+			  CD2.cpp CD2.h CD2.xsd \
+			  CD3.cpp CD3.h CD3.xsd
 test_CrossLinks_SOURCES	= CrossLinkTester.cpp CrossLinkTester.h \
 			  test_CrossLinks.cpp
 nodist_test_CrossLinks_SOURCES	= $(BUILT_SOURCES)
