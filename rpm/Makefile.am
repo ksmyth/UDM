@@ -5,10 +5,10 @@ ARCH = $(shell uname -i)
 rpms: RPMS/$(ARCH)/udm-@PACKAGE_VERSION@-0localbuild.$(ARCH).rpm SRPMS/udm-@PACKAGE_VERSION@-0localbuild.srpm
 
 RPMS/$(ARCH)/udm-@PACKAGE_VERSION@-0localbuild.$(ARCH).rpm: prepare_build_env
-	rpmbuild --target i686 --define "_topdir `pwd`" -bb SPECS/udm.spec
+	rpmbuild --define "_topdir `pwd`" -bb SPECS/udm.spec
 
 SRPMS/udm-@PACKAGE_VERSION@-0localbuild.srpm: prepare_build_env
-	rpmbuild --target i686 --define "_topdir `pwd`" -bs SPECS/udm.spec
+	rpmbuild --define "_topdir `pwd`" -bs SPECS/udm.spec
 
 prepare_build_env: udm.spec
 	mkdir -p RPMS/$(ARCH) BUILD SOURCES SPECS SRPMS

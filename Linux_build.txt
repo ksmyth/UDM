@@ -44,8 +44,7 @@ Build-environment preparation (Fedora 14 or newer):
   yum groupinstall 'Development Libraries' 'Development Tools' 'Java Development'
   yum install ccache cppunit-devel minizip-devel swig xalan-c-devel xerces-c-devel
   yum install ant ant-junit ant-trax junit xerces-j2 xalan-j2 xml-commons-apis
-- install the following rpm from our repository or disable antlr: pccts, minzip, minizip-lib, minizip-devel
- (pccts-1.33mr33-13.2.fc5.1.i386.rpm, minizip-1.01e-1.fc6.1.i386.rpm, minizip-devel-1.01e-1.fc6.1.i386.rpm, minizip-libs-1.01e-1.fc6.1.i386.rpm) 
+- install the following rpm from our repository or disable antlr: pccts
 
 Build-environment preparation (RHEL/CentOS 5):
 ----------------------------------------------
@@ -84,73 +83,27 @@ Building:
   make check
 - to build the binary and source rpms launch the following command in
   the top build directory:
-  make rpms (for Ubuntu, use alien to convert the rpm-s to deb packages)
+  make rpms
 
 Building on Ubuntu 10.04 (Lucid):
 ----------------------------------------------
 # Install Build-Deps:
-sudo apt-get install debhelper build-essential autoconf libtool ccache libcppunit-dev libxalan110-dev ant junit libxerces-c2-dev sun-java6-jdk ant-optional pccts libboost-dev zlib1g-dev swig libboost-python-dev alien
+sudo apt-get install debhelper build-essential autoconf libtool ccache libcppunit-dev libxalan110-dev ant junit libxerces-c2-dev sun-java6-jdk ant-optional pccts libboost-dev zlib1g-dev swig libboost-python-dev
 # Configure alternatives to use java-6-sun
 sudo update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
 sudo update-java-alternatives -s java-6-sun
-# Install the following rpm from our repository or disable antlr: minzip, minizip-lib, minizip-devel
-alien --install minizip-1.01e-1.fc6.1.i386.rpm
-alien --install minizip-devel-1.01e-1.fc6.1.i386.rpm
-alien --install minizip-libs-1.01e-1.fc6.1.i386.rpm
 # Obtain model-files.zip as above or:
 wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
-# Build binary debs // this will not work at the moment
-#fakeroot debian/rules binary
-# Configure and build Udm with the usual sequence of steps for GNU autotools, at top build directory: 
-autoreconf -i
-./configure
-make
-# Run the tests:
-make check
-# If check fails, then:
-# 1) Make sure minizip library links are there in the source, if not, create them:
-#ln -s ../../debian/zlib-1.2.3.3.dfsg/contrib/minizip src/Udm/minizip
-#ln -s ../../debian/zlib-1.2.3.3.dfsg/contrib/minizip src/UdmBase/minizip
-# 2) Aslo make sure that the jdk library is included so the gcc knows it:
-#JNI_PATH = find / -type f -name 'jni.h' | sed 's/jni.h//1'
-#export CPATH=$CPATH:$JNI_PATH
-# Build binary and source rpms:
-make rpms
-# Convert the needed rpms from rpm/RMPS/$(ARCH)/ where 
-#$(ARCH) is the architecture of the computer and 
-#$(filename) is desired package (eg. if development or java distribution is needed)
-alien --scripts $(filename)
+# Build binary debs
+fakeroot debian/rules binary
 
 Building on Ubuntu 12.04 (Precise):
 ----------------------------------------------
-sudo apt-get install fakeroot debhelper build-essential autoconf libtool libxerces-c2-dev autotools-dev ccache libcppunit-dev libxalan110-dev ant junit ant-optional pccts libboost-dev zlib1g-dev swig openjdk-6-jdk  libboost-python-dev alien
-# Install the following rpm from our repository or disable antlr: minzip, minizip-lib, minizip-devel
-alien --install minizip-1.01e-1.fc6.1.i386.rpm
-alien --install minizip-devel-1.01e-1.fc6.1.i386.rpm
-alien --install minizip-libs-1.01e-1.fc6.1.i386.rpm
+sudo apt-get install fakeroot debhelper build-essential autoconf libtool libxerces-c2-dev autotools-dev ccache libcppunit-dev libxalan110-dev ant junit ant-optional pccts libboost-dev zlib1g-dev swig openjdk-6-jdk libboost-python-dev
 # Obtain model-files.zip as above or:
 wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
-# Build binary debs // this will not work at the moment
-#fakeroot debian/rules binary
-# Configure and build Udm with the usual sequence of steps for GNU autotools, at top build directory: 
-autoreconf -i
-./configure
-make
-# Run the tests:
-make check
-# If check fails, then:
-# 1) Make sure minizip library links are there in the source, if not, create them:
-#ln -s ../../debian/zlib-1.2.3.3.dfsg/contrib/minizip src/Udm/minizip
-#ln -s ../../debian/zlib-1.2.3.3.dfsg/contrib/minizip src/UdmBase/minizip
-# 2) Aslo make sure that the jdk library is included so the gcc knows it:
-#JNI_PATH = find / -type f -name 'jni.h' | sed 's/jni.h//1'
-#export CPATH=$CPATH:$JNI_PATH
-# Build binary and source rpms:
-make rpms
-# Convert the needed rpms from rpm/RMPS/$(ARCH)/ where 
-#$(ARCH) is the architecture of the computer and 
-#$(filename) is desired package (eg. if development or java distribution is needed)
-alien --scripts $(filename)
+# Build binary debs
+fakeroot debian/rules binary
 
 Building (CentOS)
 ----------------------------------------------

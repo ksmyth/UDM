@@ -17,8 +17,7 @@ bin_PROGRAMS		= Udm UdmBackendDump UdmCopy UdmViz $(OPTPROGRAMS)
 Udm_SOURCES		=
 Udm_LDADD		= \
 	../src/Udm/libudm.la \
-	../lib/libudm.la \
-	-lminizip -lz
+	../lib/libudm.la
 nodist_EXTRA_Udm_SOURCES	= dummy.cxx
 
 

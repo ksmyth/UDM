@@ -9,14 +9,14 @@ Group: Development/Tools
 Source: %{name}-%{version}.tar.gz
 #Source1: model-files.zip
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-Packager: ISIS (Institute for Software Integrated Systems), Vanderbilt University, http://www.isis.vanderbilt.edu
+Packager: Endre Magyari <endre@nextra.ro>
 License: Vanderbilt University EULA
-#BuildRequires: xerces-c-devel, xalan-c-devel, minizip-devel, pccts
-#BuildRequires: swig >= 1.3.24, cppunit-devel
-#BuildRequires: ant, ant-junit, ant-trax, junit, xml-commons-apis
-#BuildRequires: java-devel
-#BuildRequires: boost-devel
-#Requires: xerces-c, xalan-c, minizip-libs
+BuildRequires: xerces-c-devel, xalan-c-devel, minizip-devel, pccts
+BuildRequires: swig >= 1.3.24, cppunit-devel
+BuildRequires: ant, ant-junit, ant-trax, junit, xml-commons-apis
+BuildRequires: java-devel
+BuildRequires: boost-devel
+Requires: xerces-c, xalan-c, minizip-libs
 %if "%{rhldisttag}" == "rh7"
 BuildRequires: gcc3-c++
 %endif
@@ -50,6 +50,7 @@ developing Java programs that use the UDM framework.
 
 %prep
 %setup -q
+#%setup -a 1 -D -q
 
 %build
 %if "%{rhldisttag}" == "rh7"
@@ -60,6 +61,7 @@ export CXX=g++
 %configure --enable-static --with-swig=%{swig} --with-antlr=%{antlr}
 make %{_smp_mflags}
 
+#%check
 make check
 
 %install
@@ -78,13 +80,10 @@ cp -pr judm/build/build_linux/judm/apidoc $RPM_BUILD_ROOT%{_javadocdir}/%{name}-
 
 # java samples
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/samples/java
-
-
 for sample in GeneTF GeneTRE SBML2Ex TimeSeries; do
     install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/samples/java/$sample
-    cp -pr /home/palfi/Prj/UDM/trunk_actual/judm/build/build_linux/$sample/ $RPM_BUILD_ROOT%{_datadir}/%{name}/samples/java/$sample
+    cp -pr judm/build/build_linux/$sample/{apidoc,*.jar,meta,runtests.sh,samples} $RPM_BUILD_ROOT%{_datadir}/%{name}/samples/java/$sample
 done
-
 
 %postun
 /sbin/ldconfig
@@ -100,7 +99,6 @@ rm -fr $RPM_BUILD_ROOT
 %doc doc/*.pdf
 %{_bindir}/*
 %{_libdir}/libudm.so.*
-/usr/lib/libudmxmi.so*
 # judm loads libUdmSwig.so, include it here
 %{_libdir}/libUdmSwig.so*
 %{_datadir}/%{name}/etc
@@ -110,7 +108,6 @@ rm -fr $RPM_BUILD_ROOT
 %{_includedir}/%{name}
 %{_libdir}/*.*a
 %{_libdir}/libudm.so
-/usr/lib/libudmxmi.so*
 %{_datadir}/%{name}/samples/LampDiagram_udm.xml
 %{_datadir}/%{name}/samples/CreateLampModel
 %{_datadir}/%{name}/samples/cross_links
