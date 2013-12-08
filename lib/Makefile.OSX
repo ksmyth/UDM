@@ -3,6 +3,8 @@ include ../Makefile.OSX.incl
 all:
 	gcc -dynamiclib  -arch i386 -o libUdm.dylib \
 	../src/Udm/ClassGen.o ../src/Udm/DiagramGen.o ../src/Udm/NamespaceGen.o ../src/Udm/UdmCpp.o ../src/Udm/UdmCppH.o ../src/Udm/UdmCS.o ../src/Udm/File2Code/File2Code.cpp \
+	../src/Udm/JavaAPIGen/ClassGen.o ../src/Udm/JavaAPIGen/FactoryGen.o ../src/Udm/JavaAPIGen/JavaAPIGen.o ../src/Udm/JavaAPIGen/Utils.o \
+	../src/Udm/JavaAPIGen/UtilsGen.o ../src/Udm/PythonAPIGen/PythonAPIGen.o \
 	../src/Udm/UdmUtil.o ../src/UdmBase/cint_string.o ../src/UdmBase/DTDGen.o ../src/UdmBase/Project.o ../src/UdmBase/UdmBase.o \
 	../src/UdmBase/UdmProject.o ../src/UdmBase/UdmStatic.o ../src/UdmBase/UdmTomi.o ../src/UdmBase/UmlExt.o ../src/UdmDom/UdmDom.o \
 	../src/UdmOcl/UdmOcl.o ../src/UdmOcl/UdmOclObject.o ../src/UdmOcl/UdmOclType.o ../src/UdmPOI/UdmPOI.o ../src/UdmUtil/UdmUtil.o ../src/Uml/Uml.o \
