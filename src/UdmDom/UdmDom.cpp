@@ -1437,10 +1437,12 @@ namespace UdmDom
 			::Uml::CompositionChildRole chr = comp.childRole();
 			string ret = chr.name();
 			if(ret.empty())
+			{
 				if (::Uml::IsCrossNSComposition(comp))
 					ret = ((::Uml::Class) chr.target()).getPath2("_", false);
 				else
 					ret = ((::Uml::Class) chr.target()).name();
+			}
 			return ret;
 		}
 
@@ -1756,10 +1758,12 @@ namespace UdmDom
 					}
 
 					if (!inserted)
+					{
 						if (insert_point != NULL)
 							aa.dom_element->insertBefore(dom_element, insert_point);
 						else
 							aa.dom_element->appendChild(dom_element);
+					}
 
 
 			   }

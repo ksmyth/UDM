@@ -26,6 +26,7 @@
 char *_itoa( int value, char *string, int radix )
 {
 	sprintf(string, "%d", value);
+    return string;
 };
 #endif
 
@@ -629,6 +630,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 							case ENT_ALL :
 								strErrAll += LINE_END + strErr;
 								break;
+                            default:
+                                break;
 						}
 						bResult = false;
 
@@ -652,7 +655,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 								case ENT_ALL :
 									strErrAll += LINE_END + strErr;
 									break;
-							}
+                                default:
+                                    break;							}
 							bResult = false;
 						}
 						else
@@ -692,6 +696,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 					case ENT_ALL :
 						strErrAll += LINE_END + strErr;
 						break;
+                    default:
+                        break;
 				}
 				bResult = false;
 			}
@@ -769,6 +775,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 					case ENT_ALL :
 						strErrAll += LINE_END + strErr;
 						break;
+                    default:
+                        break;
 				}
 				bResult = false;
 			}
@@ -922,6 +930,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 							case ENT_ALL :
 								strErrAll += LINE_END + strErr;
 								break;
+                            default:
+                                break;
 						}
 						eResult = CER_UNDEFINED;
 					}
@@ -936,6 +946,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 							case CER_UNDEFINED :
 								eResult = CER_UNDEFINED;
 								break;
+                            default:
+                                break;
 						}
 					}
 					catch ( const udm_exception& ex ) {
@@ -946,6 +958,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 							case ENT_ALL :
 								strErrAll += LINE_END + (std::string) ex.what();
 								break;
+                            default:
+                                break;
 						}
 					}
 				}
@@ -971,6 +985,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 				case ENT_ALL :
 					strErrAll += LINE_END + (std::string) ex.what();
 					break;
+                default:
+                    break;
 			}
 		}
 
@@ -986,6 +1002,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 						case CER_UNDEFINED :
 							eResult = CER_UNDEFINED;
 							break;
+                        default:
+                            break;
 					}
 				} catch ( const udm_exception& ex ) {
 					switch ( options.sErrorNotification.eExceptionKind ) {
@@ -995,6 +1013,8 @@ void inReplace( std::string& str, const std::string& str1, const std::string& st
 						case ENT_ALL :
 							strErrAll += LINE_END + (std::string) ex.what();
 							break;
+                        default:
+                            break;
 					}
 				}
 			}

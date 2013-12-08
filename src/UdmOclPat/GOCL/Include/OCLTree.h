@@ -735,7 +735,11 @@ namespace OclTree
 					TreeNodeVector 	m_vecNodes;
 					EnumerationNode( TreeManager* pManager );
 					~EnumerationNode();
-					virtual 	std::string 	Print( const std::string& strTabs ) const { return "Enumeration Node - size: " + m_vecNodes.size(); };
+                    virtual 	std::string 	Print( const std::string& strTabs ) const {
+                        char ret[50];
+                        sprintf(ret, "Enumeration Node - size: %lu", m_vecNodes.size() );
+                        return ret;
+                    };
 					virtual 	bool                 CheckImplementation( TypeContext& context );
 					virtual 	OclMeta::Object      Evaluate( ObjectContext& context );
 	};

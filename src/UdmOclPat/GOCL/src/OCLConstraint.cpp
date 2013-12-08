@@ -77,7 +77,7 @@ namespace Ocl
 
 	Constraint::State Constraint::Define( const std::string& strName, const std::string& strText, bool bDynamic )
 	{
-		if ( ! strName.empty() || ! strText.empty() && m_eState <= CS_DEFINED ) {
+		if ( ! strName.empty() || (! strText.empty() && m_eState <= CS_DEFINED) ) {
 			m_bDynamic = bDynamic;
 			if ( ! strName.empty() )
 				m_strName = strName;

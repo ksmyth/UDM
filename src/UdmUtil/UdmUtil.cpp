@@ -1054,6 +1054,7 @@ namespace UdmUtil
 #endif // if defined(HAVE_DLFCN_H)
 
 	#else // if defined(HAVE_EXECINFO_H)
+        #if defined(_WIN32)
 
 	vector<string> get_symbols()
 	{
@@ -1113,12 +1114,13 @@ namespace UdmUtil
 
 		return res;
 	}
-
+        #endif //if defined (_WIN32)
 	#endif // if defined(HAVE_EXECINFO_H)
 
 	UDM_DLL string stacktrace()
 	{
 		string trace = "Call stack:\n";
+        vector<string> v;
 
 #if defined(HAVE_EXECINFO_H)
 
@@ -1126,10 +1128,10 @@ namespace UdmUtil
 		void *stack_addrs[64];
 		size_t stack_depth = backtrace(stack_addrs, 64);
 
-		vector<string> v = get_symbols(stack_addrs, stack_depth);
+		v = get_symbols(stack_addrs, stack_depth);
 
 #elif defined(_WIN32)
-		vector<string> v = get_symbols();
+		v = get_symbols();
 #endif // defined(HAVE_EXECINFO_H)
 
 		for (size_t i = 0; i < v.size(); i++)

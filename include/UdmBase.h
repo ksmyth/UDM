@@ -305,6 +305,7 @@ namespace UDM_NAMESPACE
 		virtual ObjectImpl *clone() = 0;
 		virtual void release() = 0;
 		virtual DataNetwork *__getdn() = 0;
+		virtual ~ObjectImpl() {};
 
 	// --- type
 
@@ -611,7 +612,7 @@ namespace UDM_NAMESPACE
 		static udm_exception e;
 
 	public:
-		inline NullObject();  
+		inline NullObject();
 		// in Object::Object(...) we assume this refererence counting behaviour
 		virtual ObjectImpl *clone() { return this; }
 		virtual void release() { } 
@@ -699,8 +700,8 @@ namespace UDM_NAMESPACE
 
 	extern UDM_DLL NullObject _null;
 
-	inline NullObject::NullObject() { UDM_ASSERT(this == &_null); } 
-
+	inline NullObject::NullObject() { UDM_ASSERT(this == &_null); }
+  
 	extern UDM_DLL const ::Uml::CompositionChildRole NULLCHILDROLE;
 	extern UDM_DLL const ::Uml::CompositionParentRole NULLPARENTROLE;
 
@@ -4117,7 +4118,7 @@ inline UDM_DLL std::ostream & operator<< (std::ostream &o, Udm::StringAttr c) { 
 #define UDM_USE_MGA 
 #endif
 #else
-#define UDM_USE_DOM namespace UdmDom{extern UDM_DLL int DummyFL;static int *Dummy_For_Linker = &DummyFL; static struct _use_var{_use_var(){Dummy_For_Linker++;}} __unused;};
+#define UDM_USE_DOM namespace UdmDom{extern UDM_DLL int DummyFL;static int *Dummy_For_Linker = &DummyFL; struct _use_var{_use_var(){Dummy_For_Linker++;}} __unused;};
 #endif
 
 

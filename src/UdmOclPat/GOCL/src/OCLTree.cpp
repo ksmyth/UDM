@@ -240,7 +240,7 @@ namespace OclTree
 				return feature2;
 
 			vecAmbiguities[ 1 ] = 0;
-			if ( feature1 || ! feature1 && exception.GetCode() == vecAmbiguities[ 0 ] ) {
+			if ( feature1 || (! feature1 && exception.GetCode() == vecAmbiguities[ 0 ] )) {
 				if ( feature1 )
 					vecAmbiguities[ 0 ] = 0;
 				POOLADDEX(exAmbiguity, OclCommon::Exception( OclCommon::Exception::ET_SEMANTIC, vecAmbiguities[ 2 ], vecSignatures[ 0 ]->Print(), vecSignatures[ 1 ]->Print() ) );
@@ -256,7 +256,7 @@ namespace OclTree
 			}
 
 			if ( ex.GetCode() == vecAmbiguities[ 1 ] ) {
-				if ( feature1 || ! feature1 && exception.GetCode() == vecAmbiguities[ 0 ] ) {
+				if ( feature1 || (! feature1 && exception.GetCode() == vecAmbiguities[ 0 ] )) {
 					if ( feature1 )
 						vecAmbiguities[ 0 ] = 0;
 					POOLADDEX(exAmbiguity, OclCommon::Exception( OclCommon::Exception::ET_SEMANTIC, vecAmbiguities[ 2 ], vecSignatures[ 0 ]->Print(), vecSignatures[ 1 ]->Print() ) );
@@ -320,8 +320,8 @@ namespace OclTree
 		context.vecViolations.push_back( violation );
 		context.iViolationCount++;
 
-		if ( violation.bIsException )
-			context.m_bHasException;
+		//if ( violation.bIsException )
+		//	context.m_bHasException;
 	}
 
 	// terge
@@ -330,8 +330,8 @@ namespace OclTree
 		context.vecViolations.push_back( violation );
 		context.iViolationCount++;
 
-		if ( violation.bIsException )
-			context.m_bHasException;
+		//if ( violation.bIsException )
+		//	context.m_bHasException;
 	}
 
 	bool TreeNode::IsBooleanReturned()
@@ -1050,7 +1050,7 @@ namespace OclTree
 
 		// Evaluation of any kind of operators
 
-		if ( spOperand1.IsUndefined() || m_pOperandNode2 && spOperand2.IsUndefined() )
+		if ( spOperand1.IsUndefined() || (m_pOperandNode2 && spOperand2.IsUndefined()) )
 			return OclMeta::Object::UNDEFINED;
 
 		EVALTRY {
@@ -1251,7 +1251,7 @@ namespace OclTree
 
 		// Check Argument
 
-		bool bArgumentValid = m_bTester && ! m_pArgumentNode->m_vecType.empty() || ! m_vecTypeDecl.empty() && m_pArgumentNode->Check( context );
+		bool bArgumentValid = (m_bTester && ! m_pArgumentNode->m_vecType.empty() )|| (! m_vecTypeDecl.empty() && m_pArgumentNode->Check( context ));
 
 		// Check if Iterator exists
 
@@ -1587,7 +1587,7 @@ namespace OclTree
 						m_pIterator->m_pThisNode = m_pThisNode;
 						m_pIterator->m_strCallOperator = "->";
 						m_pIterator->m_strName = m_strName;
-						m_pIterator->m_vecDeclarators;
+						//m_pIterator->m_vecDeclarators;
 						m_pIterator->m_mapPositions = m_mapPositions;
 						m_pIterator->m_pArgumentNode = m_vecArguments[ 0 ];
 
@@ -1631,7 +1631,7 @@ namespace OclTree
 						m_pIterator->m_pThisNode = m_pThisNode;
 						m_pIterator->m_strCallOperator = "->";
 						m_pIterator->m_strName = m_strName;
-						m_pIterator->m_vecDeclarators;
+						//m_pIterator->m_vecDeclarators;
 						m_pIterator->m_mapPositions = m_mapPositions;
 						m_pIterator->m_pArgumentNode = m_vecArguments[ 0 ];
 

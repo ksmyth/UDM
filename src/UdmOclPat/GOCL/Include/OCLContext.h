@@ -281,7 +281,7 @@ namespace OclCommon
 
 			bool AddVariable( const std::string& strName, const TItem& object, bool bAssignable = false, bool bRedefine = false )
 			{
-				if ( bRedefine && ! m_vecContexts[ m_vecContexts.size() - 1 ].ExistsVariable( strName ) || ! ExistsVariable( strName ) ) {
+				if ( (bRedefine && ! m_vecContexts[ m_vecContexts.size() - 1 ].ExistsVariable( strName )) || ! ExistsVariable( strName ) ) {
 					m_vecContexts[ m_vecContexts.size() - 1 ].AddVariable( strName, object, bAssignable );
 					return true;
 				}

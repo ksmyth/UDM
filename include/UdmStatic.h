@@ -80,7 +80,7 @@ public:
 		
 		if (!found)
 		{
-			TYPENAME std::multimap<T, Z>::iterator inserted_at = insert(item);
+			TYPENAME std::multimap<T, Z>::iterator inserted_at = this->insert(item);
 			return TYPENAME std::pair<TYPENAME std::multimap<T, Z>::iterator,bool> (inserted_at, true);
 		}
 		return TYPENAME std::pair<TYPENAME std::multimap<T, Z>::iterator,bool>(this->end(), false);

@@ -353,7 +353,7 @@ namespace UmlOcl
 		 			::Uml::Class child = childRole.target();
 		 			std::string strClass = child.name();
 
-					if ( ! strRole.empty() && strRole == strName || strName == ::UdmOcl::LowerFirst( strClass ) ) {
+					if ( (! strRole.empty() && strRole == strName) || (strName == ::UdmOcl::LowerFirst( strClass )) ) {
 		 				TypeSeq vecType;
 		 				if ( childRole.max() > 1 || childRole.max() == -1 )
 		 					vecType.push_back( "ocl::Set" );
@@ -383,7 +383,7 @@ namespace UmlOcl
 							std::string strRole = (*itTo).name();
 							::Uml::Class peer = (*itTo).target();
 							std::string strClass = peer.name();
-							if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == ::UdmOcl::LowerFirst( strClass ) ) {
+							if ( (! strRole.empty() && strRole == strName) || (strRole.empty() && strName == ::UdmOcl::LowerFirst( strClass )) ) {
 								TypeSeq vecType;
 		 						if ( (*itTo).max() > 1 ||  (*itTo).max() == -1 )
 		 							vecType.push_back( "ocl::Set" );
@@ -409,7 +409,7 @@ namespace UmlOcl
 						std::string strClass = assocClass.name();
 						std::string strRole = (*itFrom).name();
 						std::string strClassRole = ::UdmOcl::LowerFirst( strClass );
-						if ( strAcceptable.empty() && strClassRole == strName || ! strAcceptable.empty() && ! strRole.empty() && strRole == strName && strAcceptable == strClassRole ) {
+						if ( (strAcceptable.empty() && strClassRole == strName) || (! strAcceptable.empty() && ! strRole.empty() && strRole == strName && strAcceptable == strClassRole )) {
 							set< ::Uml::AssociationRole> setToRoles = association.roles();
 							TypeSeq vecType;
 							set< ::Uml::AssociationRole>::iterator itTo;
@@ -442,7 +442,7 @@ namespace UmlOcl
 			 			::Uml::Class target = (*it).target();
 			 			std::string strClass = target.name();
 			 			std::string strRole = (*it).name();
-			 			if ( ! strRole.empty() && strRole == strName || strRole.empty() && strName == ::UdmOcl::LowerFirst( strClass ) ) {
+			 			if ( (! strRole.empty() && strRole == strName) || (strRole.empty() && strName == ::UdmOcl::LowerFirst( strClass ) )) {
 							TypeSeq vecType( 1, ::UdmOcl::GetQualifiedName( target ) );
 			 				vecFeatures.push_back( new OclMeta::Association( strName, "", vecType, new TObjectDerived_Targets( *it ), true ) );
 			 			}

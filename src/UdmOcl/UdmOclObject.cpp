@@ -36,6 +36,7 @@
 char *_ltoa( long value, char *string, int radix )
 {
 	sprintf(string, "%ld", value);
+    return string;
 };
 #endif
 
