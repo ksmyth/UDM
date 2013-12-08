@@ -1,0 +1,15 @@
+include ../../Makefile.OSX.incl
+
+SOURCES=ClassGen.cpp NamespaceGen.cpp UdmCS.cpp	UdmCppH.cpp DiagramGen.cpp Udm.cpp UdmCpp.cpp UdmUtil.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+
+all: $(SOURCES) $(OBJECTS)
+	echo "\n invoking make in sub File2Code ..."
+	$(MAKE) -C File2Code/ -f Makefile.OSX
+
+.cpp.o:
+	$(CC) $(CFLAGS) $(INCLUDE) $< -o $@
+clean: 
+	rm -f *.o
+	$(MAKE) clean -C File2Code/ -f Makefile.OSX
+

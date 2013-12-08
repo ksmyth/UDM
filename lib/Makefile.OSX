@@ -1,0 +1,19 @@
+include ../Makefile.OSX.incl
+
+all:
+	gcc -dynamiclib  -arch i386 -o libUdm.dylib \
+	../src/Udm/ClassGen.o ../src/Udm/DiagramGen.o ../src/Udm/NamespaceGen.o ../src/Udm/UdmCpp.o ../src/Udm/UdmCppH.o ../src/Udm/UdmCS.o ../src/Udm/File2Code/File2Code.cpp \
+	../src/Udm/UdmUtil.o ../src/UdmBase/cint_string.o ../src/UdmBase/DTDGen.o ../src/UdmBase/Project.o ../src/UdmBase/UdmBase.o \
+	../src/UdmBase/UdmProject.o ../src/UdmBase/UdmStatic.o ../src/UdmBase/UdmTomi.o ../src/UdmBase/UmlExt.o ../src/UdmDom/UdmDom.o \
+	../src/UdmOcl/UdmOcl.o ../src/UdmOcl/UdmOclObject.o ../src/UdmOcl/UdmOclType.o ../src/UdmPOI/UdmPOI.o ../src/UdmUtil/UdmUtil.o ../src/Uml/Uml.o \
+	../src/UdmOclPat/GOCL/src/OCLCommon.o ../src/UdmOclPat/GOCL/src/OCLFactory.o ../src/UdmOclPat/GOCL/src/OCLObjectExBasic.o ../src/UdmOclPat/GOCL/src/OCLTree.o \
+	../src/UdmOclPat/GOCL/src/OCLConstraint.o ../src/UdmOclPat/GOCL/src/OCLFeature.o ../src/UdmOclPat/GOCL/src/OCLParserStatic.o ../src/UdmOclPat/GOCL/src/OCLType.o \
+	../src/UdmOclPat/GOCL/src/OCLContext.o ../src/UdmOclPat/GOCL/src/OCLFeatureImplementation.o ../src/UdmOclPat/GOCL/src/OCLRefCount.o ../src/UdmOclPat/GOCL/src/OCLTypeExBasic.o \
+	../src/UdmOclPat/GOCL/src/OCLException.o ../src/UdmOclPat/GOCL/src/OCLObject.o ../src/UdmOclPat/GOCL/src/OCLSignature.o \
+	../src/UdmOclPat/GOCL/src/generated/OCLLexer.o	../src/UdmOclPat/GOCL/src/generated/OCLParser.o	../src/UdmOclPat/GOCL/src/generated/ocl.o \
+	../src/UdmOclPat/GOCL/src/ANTLRBase/AParser.o ../src/UdmOclPat/GOCL/src/ANTLRBase/ATokenBuffer.o ../src/UdmOclPat/GOCL/src/ANTLRBase/DLexerBase.o \
+	$(MINIZIP)/minizip/libminizip.a \
+	-lz -lxerces-c -lstdc++ -L $(XERCESCROOT)/lib
+
+clean:
+	rm -f libUdm.dylib

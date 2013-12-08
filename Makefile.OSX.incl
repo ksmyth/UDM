@@ -1,0 +1,17 @@
+CC=gcc
+CFLAGS=-c -arch i386
+
+
+#to be configured by the user
+#already on a Mac with XCode
+PYTHON=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/
+
+#packages that are downloaded/installed manually 
+UDMHOME=~/trunk
+MINIZIP=~/devtools
+BOOST=~/devtools/boost_1_55_0
+ANTLR=~/devtools/pccts/bin/antlr
+DLG=~/devtools/pccts/bin/dlg
+#end of section configured by user
+
+INCLUDE=-I $(UDMHOME)/include -I $(UDMHOME)/src -I $(UDMHOME)/src/UdmOclPat/GOCL/Include/ -I $(MINIZIP) -I $(XERCES)/include -I $(BOOST) -I $(PYTHON) -I $(XERCESCROOT)/include -I $(XALANCROOT)/src -I $(XALANCROOT)/nls/include

@@ -1,0 +1,30 @@
+include ../../../../Makefile.OSX.incl
+
+
+SOURCES                   = OCLCommon.cpp OCLConstraint.cpp OCLContext.cpp \
+                          OCLException.cpp OCLFactory.cpp OCLFeature.cpp \
+                          OCLFeatureImplementation.cpp OCLObject.cpp \
+                          OCLObjectExBasic.cpp OCLParserStatic.cpp \
+                          OCLRefCount.cpp OCLSignature.cpp OCLTree.cpp \
+                          OCLType.cpp OCLTypeExBasic.cpp generated/OCLLexer.cpp	generated/OCLParser.cpp	generated/ocl.cpp
+
+OBJECTS=$(SOURCES:.cpp=.o)
+
+all: antlr $(SOURCES) $(OBJECTS)
+	echo "\n Invoking make in ANTLRBase ...";
+	$(MAKE) -C ANTLRBase/ -f Makefile.OSX;
+
+antlr:	ocl.g
+	rm -rf generated
+	mkdir generated
+	$(ANTLR) -CC -ft OCLTokens.h -fl OCLParser.dlg -o generated/ ocl.g
+	$(DLG) -C2 -i -CC -cl OCLLexer generated/OCLParser.dlg -o generated/
+
+	
+.cpp.o:
+	$(CC) $(CFLAGS) $(INCLUDE) -I generated/ -I ANTLRBase/  $< -o $@
+clean: 
+	rm -f *.o
+	rm -rf generated/
+	$(MAKE) clean -C ANTLRBase/ -f Makefile.OSX;
+	
