@@ -56,7 +56,7 @@ ANTLRTokenBuffer(ANTLRTokenStream *_input, int _k, int _cs)
 	buffer = (_ANTLRTokenPtr *)
 			 calloc(chunk_size+1,sizeof(_ANTLRTokenPtr ));
 	if ( buffer == NULL ) {
-		panic("cannot alloc token buffer");
+		panic((char*)"cannot alloc token buffer");
 	}
 	buffer++;				// leave the first elem empty so tp-1 is valid ptr
 
@@ -306,7 +306,7 @@ extendBuffer()
 		realloc((char *)(buffer-1),
 				(buffer_size+1)*sizeof(_ANTLRTokenPtr ));
 	if ( buffer == NULL ) {
-		panic("cannot alloc token buffer");
+		panic((char*)"cannot alloc token buffer");
 	}
 	buffer++;				// leave the first elem empty so tp-1 is valid ptr
 

@@ -147,7 +147,7 @@ public:
 										  ANTLRChar *txt,
 										  int line)
 	{
-		panic("call to ANTLRRefCountToken::makeToken()\n");
+		panic((char *)"call to ANTLRRefCountToken::makeToken()\n");
 		return NULL;
 	}
 };
@@ -162,7 +162,7 @@ public:
 	ANTLRCommonNoRefCountToken(ANTLRTokenType t, ANTLRChar *s)
 	{ setType(t); _line = 0; _text = NULL; setText(s); }
 	ANTLRCommonNoRefCountToken()
-	{ setType((ANTLRTokenType)0); _line = 0; _text = NULL; setText(""); }
+	{ setType((ANTLRTokenType)0); _line = 0; _text = NULL; setText((char*)""); }
 
 	~ANTLRCommonNoRefCountToken() { if (_text) delete [] _text; }  // MR9 RJV: Added Destructor to remove string
 
@@ -180,11 +180,11 @@ public:
           if (_text) delete [] _text;
           if (s != NULL) {
          	_text = new ANTLRChar[strlen(s)+1];
-            if (_text == NULL) panic("ANTLRCommonNoRefCountToken::setText new failed");
+            if (_text == NULL) panic((char*)"ANTLRCommonNoRefCountToken::setText new failed");
             strcpy(_text,s);
     	  } else {
             _text = new ANTLRChar[1];
-            if (_text == NULL) panic("ANTLRCommonNoRefCountToken::setText new failed");
+            if (_text == NULL) panic((char*)"ANTLRCommonNoRefCountToken::setText new failed");
             strcpy(_text,"");
           };
         };
@@ -230,7 +230,7 @@ public:
 	ANTLRCommonToken(ANTLRTokenType t, ANTLRChar *s) : ANTLRRefCountToken(t,s)
 		{ setType(t); _line = 0; _text = NULL; setText(s); }                    // MR9
 	ANTLRCommonToken()
-		{ setType((ANTLRTokenType)0); _line = 0; _text = NULL; setText(""); }   // MR9
+		{ setType((ANTLRTokenType)0); _line = 0; _text = NULL; setText((char*)""); }   // MR9
 
 	virtual ~ANTLRCommonToken() { if (_text) delete [] _text; } // MR9 RJV: Added Destructor to remove string
 
@@ -248,11 +248,11 @@ public:
           if (_text) delete [] _text;
           if (s != NULL) {
          	_text = new ANTLRChar[strlen(s)+1];
-            if (_text == NULL) panic("ANTLRCommonToken::setText new failed");
+            if (_text == NULL) panic((char*)"ANTLRCommonToken::setText new failed");
             strcpy(_text,s);
     	  } else {
             _text = new ANTLRChar[1];
-            if (_text == NULL) panic("ANTLRCommonToken::setText new failed");
+            if (_text == NULL) panic((char*)"ANTLRCommonToken::setText new failed");
             strcpy(_text,"");
           };
         };

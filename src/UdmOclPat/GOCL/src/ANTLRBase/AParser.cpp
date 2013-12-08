@@ -477,7 +477,7 @@ ANTLRParser::FAIL(int k, ...)
     va_start(ap, k);
 
     zzFAILtext[0] = '\0';
-	if ( k > SETWORDCOUNT ) panic("FAIL: overflowed buffer");
+	if ( k > SETWORDCOUNT ) panic((char*)"FAIL: overflowed buffer");
     for (i=1; i<=k; i++)    /* collect all lookahead sets */
     {
         f[i-1] = va_arg(ap, SetWordType *);

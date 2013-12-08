@@ -57,7 +57,7 @@ DLGLexerBase(DLGInputStream *in,
 	this->_bufsize = bufsize;
 	this->_lextext = new DLGChar[_bufsize];
 	if ( this->_lextext==NULL ) {
-	    panic("text buffer is NULL");
+	    panic((char*)"text buffer is NULL");
 	}
 	this->_begexpr = this->_endexpr = NULL;
 	this->ch = this->bufovf = 0;
@@ -206,7 +206,7 @@ err_in()
 ANTLRTokenType DLGLexerBase::
 erraction()
 {
-	errstd("invalid token");
+	errstd((char*)"invalid token");
 	advance();
 	skip();
 	return (ANTLRTokenType) 0;	// bogus, but satisfies compiler
@@ -215,7 +215,7 @@ erraction()
 _ANTLRTokenPtr DLGLexerBase::
 getToken()
 {
-	if ( token_to_fill==NULL ) panic("NULL token_to_fill");
+	if ( token_to_fill==NULL ) panic((char*)"NULL token_to_fill");
 	ANTLRTokenType tt = nextTokenType();
 	_ANTLRTokenPtr tk = token_to_fill->makeToken(tt, _lextext,_line);
 	return tk;
