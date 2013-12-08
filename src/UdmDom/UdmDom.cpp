@@ -2881,7 +2881,7 @@ namespace UdmDom
 				while (instances_i != instances.end())
 				{
 					(*instances_i)->setAssociation(role, nvect,mode, false);
-					delete *instances_i;
+					delete (DomObject*)*instances_i;
 					instances_i++;
 				}
 
@@ -2891,7 +2891,7 @@ namespace UdmDom
 				while (deriveds_i  != deriveds.end())
 				{
 					(*deriveds_i )->setAssociation(role, nvect,mode, false);
-					delete *deriveds_i ;
+					delete (DomObject*)*deriveds_i ;
 					deriveds_i ++;
 				}
 
