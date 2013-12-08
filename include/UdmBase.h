@@ -305,7 +305,7 @@ namespace UDM_NAMESPACE
 		virtual ObjectImpl *clone() = 0;
 		virtual void release() = 0;
 		virtual DataNetwork *__getdn() = 0;
-		virtual ~ObjectImpl() {};
+		//virtual ~ObjectImpl() {};
 
 	// --- type
 
