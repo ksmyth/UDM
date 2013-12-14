@@ -1,5 +1,9 @@
-CC=gcc
-CFLAGS=-c -arch i386
+#CC=gcc
+CC=g++
+ARCH=i386
+#ARCH=x86_64
+CFLAGS=-c -arch $(ARCH)
+BCFLAGS=-arch $(ARCH)
 
 
 #to be configured by the user
