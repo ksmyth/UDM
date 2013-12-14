@@ -60,7 +60,7 @@ Build-environment preparation (RHEL/CentOS 5):
 Obtaining model-files.zip:
 --------------------------
 From scratch:
- - build udm, judm and the tests on Windows: msbuild make.msbuild /t:BuildVS9;judm
+ - build udm, judm and the tests on Windows: msbuild make.msbuild /t:BuildVS9;judm;TestVS9
  - on Windows run %UDM_PATH%\scripts\archive-model-files.bat, it will
    create %UDM_PATH%\model-files-*.zip, an archive with the model data
    files generated on Windows
