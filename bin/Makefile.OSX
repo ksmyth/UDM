@@ -14,9 +14,9 @@ UdmBackendDump:
 UdmOclPat:
 	$(CC) $(BCFLAGS) ../src/UdmOclPat/UdmPat.o -o UdmOclPat -lUdm -L../lib
 UdmToXmi:
-	$(CC) $(BCFLAGS) ../src/UdmToXmi/UdmToXmi.o ../src/UdmXmi/XSLT.o ../src/UdmXmi/Transform.o -o UdmToXmi -lUdm -L../lib -lxalan-c -L$(XALANCROOT)/lib -lxerces-c -L$(XERCESCROOT)/lib
+	$(CC) $(BCFLAGS) ../src/UdmToXmi/UdmToXmi.o ../src/UdmXmi/XSLT.o ../src/UdmXmi/Transform.o -o UdmToXmi -lUdm -L../lib -lxalan-c -L $(XALANCROOT)/lib -lxerces-c -L $(XERCESCROOT)/lib
 XmiToUdm:
-	$(CC) $(BCFLAGS) ../src/XmiToUdm/XmiToUdm.o ../src/UdmXmi/XSLT.o ../src/UdmXmi/Transform.o -o XmiToUdm -lUdm -L../lib -lxalan-c -L$(XALANCROOT)/lib -lxerces-c -L$(XERCESCROOT)/lib
+	$(CC) $(BCFLAGS) ../src/XmiToUdm/XmiToUdm.o ../src/UdmXmi/XSLT.o ../src/UdmXmi/Transform.o -o XmiToUdm -lUdm -L../lib -lxalan-c -L $(XALANCROOT)/lib -lxerces-c -L $(XERCESCROOT)/lib
 
 
 clean:

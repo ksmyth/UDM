@@ -1,11 +1,21 @@
 include ../../Makefile.OSX.incl
 
-SOURCES=UdmSwigMain.cpp
+SOURCES=UdmSwigMain.cpp UdmSwig_wrap.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 
 all: $(SOURCES) $(OBJECTS)
 
+
+UdmSwig_wrap.cpp:build_UdmSwig_wrap.sh
+	./build_UdmSwig_Wrap.sh
+
+build_UdmSwig_wrap.sh:
+	rm -f build_UdmSwig_wrap.sh
+	echo "source ../../set-env.sh" > build_UdmSwig_wrap.sh
+	echo $(SWIG)" -java -package edu.vanderbilt.isis.udm.swig -outdir ../../judm/src/UdmSwig/edu/vanderbilt/isis/udm/swig/ -v -c++ -o UdmSwig_wrap.cpp UdmSwig.i " >> build_UdmSwig_wrap.sh
+	chmod +x build_UdmSwig_wrap.sh
+
 .cpp.o:
-	$(CC) $(CFLAGS) $(INCLUDE) $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) -I$(JDK_INCLUDE) $< -o $@
 clean: 
-	rm -f *.o
+	rm -f *.o UdmSwig_wrap.cpp build_UdmSwig_wrap.sh

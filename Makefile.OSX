@@ -1,6 +1,8 @@
+include Makefile.OSX.incl
+
 SUBDIRS = src lib bin
 
-all:
+all:	env	
 	@for dir in $(SUBDIRS);\
 	do \
 		echo "\nInvoking make in subdir: " $${dir};\
@@ -13,4 +15,13 @@ clean:
 		echo "\nInvoking make clean in subdir: " $${dir};\
 		$(MAKE) clean -C $${dir} $@ -f Makefile.OSX ;\
 	done
+	rm -f set-env.sh
+
+
+env:
+	rm -f set-env.sh
+	echo "export PCRE_LIBS="$(PCRE)"/.libs/" >>set-env.sh 
+	echo "export SWIG_LIB="$(SWIGLIB) >> set-env.sh
+	echo "export DYLD_LIBRARY_PATH="$(UDMHOME)"/lib:"$(XERCESCROOT)"/lib:"$(XALANCROOT)"/lib:"$(PCRE)"/.libs" >>set-env.sh
+	chmod +x set-env.sh
 

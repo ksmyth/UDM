@@ -1,5 +1,8 @@
 #CC=gcc
 CC=g++
+
+#Xerces binary was available only for i386
+#Therefore the whole package is compiled for i386
 ARCH=i386
 #ARCH=x86_64
 CFLAGS=-c -arch $(ARCH)
@@ -9,6 +12,7 @@ BCFLAGS=-arch $(ARCH)
 #to be configured by the user
 #already on a Mac with XCode
 PYTHON=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/
+JDK_INCLUDE=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers/
 
 #packages that are downloaded/installed manually 
 UDMHOME=~/trunk
@@ -16,6 +20,12 @@ MINIZIP=~/devtools
 BOOST=~/devtools/boost_1_55_0
 ANTLR=~/devtools/pccts/bin/antlr
 DLG=~/devtools/pccts/bin/dlg
+SWIGDIR=~/devtools/swig-2.0.11
+PCRE=~/devtools/pcre-8.33
+XERCESCROOT=~/devtools/xerces-c_2_8_0-x86-macosx-gcc_4_0
+XALANCROOT=~/devtools/xalan-c-1.11/c
 #end of section configured by user
 
+SWIGLIB=$(SWIGDIR)/lib
+SWIG=$(SWIGDIR)/swig
 INCLUDE=-I $(UDMHOME)/include -I $(UDMHOME)/src -I $(UDMHOME)/src/UdmOclPat/GOCL/Include/ -I $(MINIZIP) -I $(XERCES)/include -I $(BOOST) -I $(PYTHON) -I $(XERCESCROOT)/include -I $(XALANCROOT)/src -I $(XALANCROOT)/nls/include
