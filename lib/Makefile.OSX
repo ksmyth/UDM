@@ -1,7 +1,9 @@
 include ../Makefile.OSX.incl
 
-all:
-	gcc -dynamiclib  -arch i386 -o libUdm.dylib \
+all:libUdm libUdmSwig
+
+libUdm:
+	$(CC) -dynamiclib  -arch $(ARCH) -o libUdm.dylib \
 	../src/Udm/ClassGen.o ../src/Udm/DiagramGen.o ../src/Udm/NamespaceGen.o ../src/Udm/UdmCpp.o ../src/Udm/UdmCppH.o ../src/Udm/UdmCS.o ../src/Udm/File2Code/File2Code.cpp \
 	../src/Udm/JavaAPIGen/ClassGen.o ../src/Udm/JavaAPIGen/FactoryGen.o ../src/Udm/JavaAPIGen/JavaAPIGen.o ../src/Udm/JavaAPIGen/Utils.o \
 	../src/Udm/JavaAPIGen/UtilsGen.o ../src/Udm/PythonAPIGen/PythonAPIGen.o \
@@ -17,5 +19,9 @@ all:
 	$(MINIZIP)/minizip/libminizip.a \
 	-lz -lxerces-c -lstdc++ -L $(XERCESCROOT)/lib
 
+libUdmSwig:
+	$(CC) -dynamiclib -arch $(ARCH) -o libUdmSwig.dylib ../src/UdmSwig/UdmSwigMain.o ../src/UdmSwig/UdmSwig_wrap.o -lUdm -L .
+	
+
 clean:
-	rm -f libUdm.dylib
+	rm -f libUdm.dylib libUdmSwig.dylib
