@@ -1,7 +1,11 @@
 #CC=gcc
 CC=g++
 
+# ANT build tool is already on MAC OS X with XCODE
+ANT=ant
+
 #Xerces binary was available only for i386
+#Xerces source does not compile in MACOSX with --arch x86_64
 #Therefore the whole package is compiled for i386
 ARCH=i386
 #ARCH=x86_64
@@ -9,12 +13,14 @@ CFLAGS=-c -arch $(ARCH)
 BCFLAGS=-arch $(ARCH)
 
 
-#to be configured by the user
 #already on a Mac with XCode
 PYTHON=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/
 JDK_INCLUDE=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers/
 
-#packages that are downloaded/installed manually 
+#################################################
+#packages that are downloaded/installed manually#
+#section to be configured by the user
+#################################################
 UDMHOME=~/trunk
 MINIZIP=~/devtools
 BOOST=~/devtools/boost_1_55_0
@@ -24,7 +30,12 @@ SWIGDIR=~/devtools/swig-2.0.11
 PCRE=~/devtools/pcre-8.33
 XERCESCROOT=~/devtools/xerces-c_2_8_0-x86-macosx-gcc_4_0
 XALANCROOT=~/devtools/xalan-c-1.11/c
-#end of section configured by user
+#JAVA 1.6.0 is needed in order to have a JVM which is capable to load 32bit shared libraries (UdmSwig) (-d32 flag)
+#UdmSwig is a shared library compiled with i386
+JVMD32=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/java
+###################################
+#end of section configured by user#
+###################################
 
 SWIGLIB=$(SWIGDIR)/lib
 SWIG=$(SWIGDIR)/swig

@@ -5,6 +5,17 @@
 	<condition property="isWindows">
 		<os family="Windows" />
 	</condition>
+	
+	<condition property="isMac">
+		<os family="mac" />
+	</condition>
+
+	<condition property="isLinux">
+		<and>
+			<not><isset property="isWindows"/></not>
+			<not><isset property="isMac"/></not>
+		</and>
+	</condition>
 
 	<!-- Get the environment variables of UDM from Windows -->
 	<property environment="env" />
@@ -82,8 +93,11 @@
 	<target name="setenveclipse" if="isWindows">
 		<echo> "Windows platform" </echo>
 	</target>
-	<target name="setenvlinux" unless="isWindows">
+	<target name="setenvlinux" if="isLinux">
 		<echo> "Linux platform" </echo>
+	</target>
+	<target name="setenvmac" if="isMac">
+		<echo> "MAC OS X platform" </echo>
 	</target>
 
 	<!-- Get the environment variables of UDM from UNIX systems -->
@@ -93,11 +107,22 @@
 	<property name="udm.bin.dir" location="${udm.dir}/bin" />
 	<property name="udm.etc.dir" location="${udm.src.dir}/etc" />
 	<property name="udm_3rdparty.dir" location="/usr" />
-	<property name="build.dir" location="build/build_linux" />
+	<condition property="build.dir" value="build/build_linux"><isset property="isLinux"/></condition>
+	<condition property="build.dir" value="build/build_macosx"><isset property="isMac"/></condition>
 	<property name="srcdir" location="${basedir}" />
 	<condition property="junit.dir" value="/usr/share/java/">
 		<available file="/usr/share/java/junit.jar"/>
 	</condition>
+	<condition property="jvm32d" value="${env.JVMD32}">
+		<and>
+			<available file="${env.JVMD32}"/>
+			<isset property="isMac"/>
+		</and>
+	</condition>
+
+
+
+	
 
 	<path id="compile.classpath">
 		<pathelement location="${judm.classes.dir}" />
@@ -108,7 +133,7 @@
 	</path>
 
 	<!-- Initialize directories and properties of the build -->
-	<target name="init" depends="setenveclipse, setenvlinux" description="Initialize directories.">
+	<target name="init" depends="setenveclipse, setenvlinux, setenvmac" description="Initialize directories.">
 		<tstamp />
 
 		<!-- Directory of the compilation -->
@@ -734,19 +759,60 @@
 		<echo> Test ${dspackage}... </echo>
 		<fail unless="dspackage" message="Missing parameter: dspackage" />
 
+		<!--  On Mac, we have to use a 32bit JVM because of UdmSwig being available only in 32bits mode. The path to this special java binary is expected in environment variable JVM32D  -->
+		<fail message=" Could not found 32bit Java Virtual Machine while running tests on Mac OS">
+			<condition>
+				<and>
+					<isset property="isMac"/>
+					<not> <isset property="jvm32d"/></not>
+				</and>
+			</condition>
+		</fail>
+		<!-- use a different JVM -->
+		<condition property="javacall" value="${jvm32d}">
+			<isset property="isMac"/>
+		</condition>
+		<condition property="javacall" value="java">
+				<not>
+					<isset property="isMac"/>
+				</not>
+		</condition>
+		<!--use the -d32 flag on mac and -d64 flag on other--> 
+		<condition property="javaversion" value="-d32">
+			<isset property="isMac"/>
+		</condition>
+		<condition property="javaversion" value="-d64">
+				<not>
+					<isset property="isMac"/>
+				</not>
+		</condition>
+
+		<echo> Using ${javacall} ${javaversion} for Java Virtual Machine </echo>
+
+		
+
 		<!-- on Windows, the PATH for the junit call is inherited with the assumption that scripts/VC9-env.bat was called before ant was invoked -->
+
+
 		<condition property="test.pathvar" value="UNNEEDED">
 			<isset property="isWindows"/>
 		</condition>
+
 		<property name="test.pathvar" value="PATH" />
 		<!-- Run junit tests -->
-		<junit fork="yes" dir="${build.dir}/${dspackage}">
+		<junit fork="yes" dir="${build.dir}/${dspackage}" jvm="${javacall}">
 			<!-- This is necessary for System.load("UdmSwig") to succeed -->
+			<jvmarg value="${javaversion}"/>
+			<!-- 
+			The classpath should be sufficient. 
+			This line broke the tests on Mac OS X.
+			I checked the below directories and none of them exists, at least while running ant test on Mac OSx
 			<jvmarg value="-Djava.library.path=${judm.dir}${path.separator}${judm.dir}/bin${path.separator}${udm.bin.dir}/../lib/.libs" />
+			-->
 			<jvmarg value="-Djava.util.logging.config.file=${udmswiglight.src.dir}/debug-logging.properties" />
-			<!-- We need to add the dir containing the DLLs that UdmSwig depends on
-				to the PATH rather than java.library.path.  -->
-			<env key="${test.pathvar}" path="${judm.dir}${path.separator}${judm.dir}/bin"/>
+            <!-- We need to add the dir containing the DLLs that UdmSwig depends on
+             to the PATH rather than java.library.path.  -->
+            <env key="${test.pathvar}" path="${judm.dir}${path.separator}${judm.dir}/bin"/>
 			<classpath>
 				<path refid="compile.classpath" />
 				<pathelement location="${build.dir}/${dspackage}/classes/main" />

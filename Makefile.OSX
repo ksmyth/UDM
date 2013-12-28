@@ -1,6 +1,6 @@
 include Makefile.OSX.incl
 
-SUBDIRS = src lib bin
+SUBDIRS = src lib bin judm
 
 all:	env	
 	@for dir in $(SUBDIRS);\
@@ -18,10 +18,13 @@ clean:
 	rm -f set-env.sh
 
 
+
 env:
 	rm -f set-env.sh
 	echo "export PCRE_LIBS="$(PCRE)"/.libs/" >>set-env.sh 
 	echo "export SWIG_LIB="$(SWIGLIB) >> set-env.sh
 	echo "export DYLD_LIBRARY_PATH="$(UDMHOME)"/lib:"$(XERCESCROOT)"/lib:"$(XALANCROOT)"/lib:"$(PCRE)"/.libs" >>set-env.sh
+	echo "export JVMD32="$(JVMD32) >>set-env.sh
+	echo "export UDM_PATH="$(UDMHOME) >>set-env.sh
 	chmod +x set-env.sh
 
