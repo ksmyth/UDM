@@ -1,6 +1,6 @@
 include Makefile.OSX.incl
 
-SUBDIRS = src lib bin judm
+SUBDIRS = src lib bin judm samples
 
 all:	env	
 	@for dir in $(SUBDIRS);\
