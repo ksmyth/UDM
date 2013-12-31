@@ -781,7 +781,7 @@
 		<condition property="javaversion" value="-d32">
 			<isset property="isMac"/>
 		</condition>
-		<condition property="javaversion" value="-d64">
+		<condition property="javaversion" value="">
 				<not>
 					<isset property="isMac"/>
 				</not>
