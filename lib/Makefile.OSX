@@ -20,7 +20,7 @@ libUdm:
 	-lz -lxerces-c -lstdc++ -L $(XERCESCROOT)/lib
 
 libUdmSwig:
-	$(CC) -dynamiclib -arch $(ARCH) -o libUdmSwig.dylib ../src/UdmSwig/UdmSwigMain.o ../src/UdmSwig/UdmSwig_wrap.o -lUdm -L .
+	$(CC) -dynamiclib -arch $(ARCH) -o libUdmSwig.dylib ../src/UdmSwig/UdmSwigMain.o ../src/UdmSwig/UdmSwig_wrap_sed.o -lUdm -L .
 	
 
 clean:

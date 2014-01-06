@@ -1,8 +1,6 @@
 #CC=gcc
 CC=g++
 
-# ANT build tool is already on MAC OS X with XCODE
-ANT=ant
 
 #Xerces binary was available only for i386
 #Xerces source does not compile in MACOSX with --arch x86_64
@@ -22,6 +20,8 @@ JDK_INCLUDE=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform
 #section to be configured by the user
 #################################################
 UDMHOME=~/trunk
+ANT=~/devtools/apache-ant-1.9.3/bin/ant
+JUNITDIR=~/devtools/junit
 MINIZIP=~/devtools
 BOOST=~/devtools/boost_1_55_0
 ANTLR=~/devtools/pccts/bin/antlr
@@ -30,13 +30,17 @@ SWIGDIR=~/devtools/swig-2.0.11
 PCRE=~/devtools/pcre-8.33
 XERCESCROOT=~/devtools/xerces-c_2_8_0-x86-macosx-gcc_4_0
 XALANCROOT=~/devtools/xalan-c-1.11/c
+CPPUNIT=~/devtools/cppunit-1.12.1
 #JAVA 1.6.0 is needed in order to have a JVM which is capable to load 32bit shared libraries (UdmSwig) (-d32 flag)
 #UdmSwig is a shared library compiled with i386
 JVMD32=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/java
 ###################################
 #end of section configured by user#
 ###################################
-
+#.jar and -javadoc.jar extensions will be added by judm/Makefile
+JUNIT=junit-4.11
+CPPUNITLIBS=$(CPPUNIT)/src/cppunit/.libs
+DYLDLIBRARYPATH=$(UDMHOME)/lib:$(XERCESCROOT)/lib:$(XALANCROOT)/lib:$(PCRE)/.libs:$(CPPUNITLIBS)
 SWIGLIB=$(SWIGDIR)/lib
 SWIG=$(SWIGDIR)/swig
 INCLUDE=-I $(UDMHOME)/include -I $(UDMHOME)/src -I $(UDMHOME)/src/UdmOclPat/GOCL/Include/ -I $(MINIZIP) -I $(XERCES)/include -I $(BOOST) -I $(PYTHON) -I $(XERCESCROOT)/include -I $(XALANCROOT)/src -I $(XALANCROOT)/nls/include
