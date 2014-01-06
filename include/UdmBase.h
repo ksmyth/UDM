@@ -919,8 +919,9 @@ namespace UDM_NAMESPACE
 			while (array.size() <=index)
 				array.push_back(bool());
 
-			std::_Bit_reference i = (std::_Bit_reference)array.at(index);
-			i = a;
+			//std::_Bit_reference i = (std::_Bit_reference)array.at(index);
+			//i = a;
+			array.at(index)= a;
 			set();
 			return *this;
 		};

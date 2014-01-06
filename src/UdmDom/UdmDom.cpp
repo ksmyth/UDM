@@ -190,6 +190,7 @@ this software.
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
+#include <unistd.h>
 
 
 #include "Uml.h"
