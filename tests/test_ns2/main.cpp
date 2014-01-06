@@ -47,17 +47,29 @@ void readTest(const std::string& fname)
 int main()
 {
 	try
-	{
-		std::string fn = "test1.mga";
+	{	
+		std::string fn;
+#ifdef _WIN32
+		fn = "test1.mga";
 		writeTest(fn);
 		readTest(fn);
+#endif
+		fn = "test1.mem";
+		writeTest(fn);
+		readTest(fn);
+
+		fn = "test1.xml";
+		writeTest(fn);
+		readTest(fn);
+		
+		
 	}
 	catch(udm_exception& e)
 	{
 	    std::cout << e.what();
 	    return 1;
 	}
-
+		cout << "OK!" << endl;
 	return 0;
 }
 
