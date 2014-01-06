@@ -190,7 +190,11 @@ this software.
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
+#if (defined(__MACH__) || defined(__APPLE__) )
+// Since Apple LLVM version 5.0 this has to be included explicitly
+// it is needed for access().
 #include <unistd.h>
+#endif
 
 
 #include "Uml.h"
