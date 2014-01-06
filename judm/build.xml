@@ -97,7 +97,10 @@
 		<echo> "Linux platform" </echo>
 	</target>
 	<target name="setenvmac" if="isMac">
-		<echo> "MAC OS X platform" </echo>
+		<echo> MAC OS X platform </echo>
+        <echo> Junit DIRectory: ${junit.dir} </echo>
+        <echo> Junit JAR :${junit.jar.file} </echo>
+        <echo> Junit APIDOC JAR: ${junit.apidoc.jar.file} </echo>
 	</target>
 
 	<!-- Get the environment variables of UDM from UNIX systems -->
@@ -110,9 +113,57 @@
 	<condition property="build.dir" value="build/build_linux"><isset property="isLinux"/></condition>
 	<condition property="build.dir" value="build/build_macosx"><isset property="isMac"/></condition>
 	<property name="srcdir" location="${basedir}" />
+    <!-- 
+     property junit.dir 
+     
+     by default it is /usr/share/java/
+     if /usr/share/java/junit does not exists than use environment variable JUNITDIR
+     
+     -->
+    
 	<condition property="junit.dir" value="/usr/share/java/">
 		<available file="/usr/share/java/junit.jar"/>
 	</condition>
+    
+    <condition property="junit.dir" value="${env.JUNITDIR}">
+        <and>
+            <not>
+                <available file="/usr/share/java/junit.jar"/>
+            </not>
+            <not>
+                <isset property="isWindows"/>
+            </not>
+        </and>
+	</condition>
+    <!--
+     property junit.jar.file
+     
+     JUNITDIR/JUNIT.jar if exists otherwise by default is junit.jar
+     
+    -->
+    
+    <condition property="junit.jar.file" value="${env.JUNIT}.jar">
+        <available file = "${env.JUNITDIR}/${env.JUNIT}.jar"/>
+    </condition>
+	
+    <condition property="junit.jar.file" value="junit.jar">
+        <not>
+            <available file = "${env.JUNITDIR}/${env.JUNIT}.jar"/>
+        </not>
+    </condition>
+    
+	<condition property="junit.apidoc.jar.file" value="${env.JUNIT}-javadoc.jar">
+        <available file = "${env.JUNITDIR}/${env.JUNIT}-javadoc.jar"/>
+    </condition>
+	
+    <condition property="junit.apidoc.jar.file" value="junit-javadoc.jar">
+        <not>
+            <available file = "${env.JUNITDIR}/${env.JUNIT}-javadoc.jar"/>
+        </not>
+    </condition>
+    
+    
+    
 	<condition property="jvm32d" value="${env.JVMD32}">
 		<and>
 			<available file="${env.JVMD32}"/>
@@ -128,8 +179,9 @@
 		<pathelement location="${judm.classes.dir}" />
 		<pathelement location="${judmhelper.classes.dir}" />
 		<fileset dir="${junit.dir}">
-			<include name="junit.jar" />
-		</fileset>
+            <include name ="${junit.jar.file}" />
+			<include name ="${junit.apidoc.jar.file}" />
+        </fileset>
 	</path>
 
 	<!-- Initialize directories and properties of the build -->

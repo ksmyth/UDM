@@ -1,22 +1,10 @@
 include ../Makefile.OSX.incl
 
 all:	
-	rm -f build_judm.sh
-	echo "#!/bin/bash"> build_judm.sh
-	echo "source ../set-env.sh" >> build_judm.sh
-	echo $(ANT) >> build_judm.sh
-	chmod +x build_judm.sh
-	./build_judm.sh
+	DYLD_LIBRARY_PATH=$(DYLDLIBRARYPATH) JUNIT=$(JUNIT) JUNITDIR=$(JUNITDIR) $(ANT) 
 	
 test:
-	rm -f test_judm.sh
-	echo "#!/bin/bash"> test_judm.sh
-	echo "source ../set-env.sh" >> test_judm.sh
-	echo $(ANT) " test" >> test_judm.sh
-	chmod +x test_judm.sh
-	./test_judm.sh
+	DYLD_LIBRARY_PATH=$(DYLDLIBRARYPATH) JUNIT=$(JUNIT) JUNITDIR=$(JUNITDIR) JVMD32=$(JVMD32) $(ANT) test
 
 clean:
-	$(ANT) clean
-	rm -f build_judm.sh
-	rm -f test_judm.sh
+	DYLD_LIBRARY_PATH=$(DYLDLIBRARYPATH) $(ANT) clean
