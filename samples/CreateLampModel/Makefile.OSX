@@ -6,11 +6,11 @@ OBJECTS=$(SOURCES:.cpp=.o)
 all: $(SOURCES) $(OBJECTS) CreateLampModel
 
 LampDiagram.cpp:../LampDiagram_udm.xml ../../bin/Udm
-	../../bin/Udm $< -v -d ../../etc -T
+	DYLD_LIBRARY_PATH=$(DYLDLIBRARYPATH) ../../bin/Udm $< -v -d ../../etc -T
 .cpp.o:
 	$(CC) $(CFLAGS) $(INCLUDE) $< -o $@
 
 CreateLampModel: CreateLampModel.o LampDiagram.o
 	$(CC) $(BCFLAGS) CreateLampModel.o LampDiagram.o  -o CreateLampModel -lUdm -L../../lib
 clean: 
-	rm -f *.o CreateLampModel LampDiagram.cpp LampDiagram.h LampDiagram.xst *.mem *.xml
+	rm -f *.o CreateLampModel LampDiagram.cpp LampDiagram.h LampDiagram.xsd *.mem *.xml

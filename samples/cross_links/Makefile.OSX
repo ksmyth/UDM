@@ -9,7 +9,7 @@ OBJECTS=$(SOURCES:.cpp=.o)
 all: $(SOURCES) $(OBJECTS) cross_links 
 
 $(BUILT_SOURCES):../CL_udm.udm ../../bin/Udm
-	../../bin/Udm $< -v -d ../../etc -T
+	DYLD_LIBRARY_PATH=$(DYLDLIBRARYPATH) ../../bin/Udm $< -v -d ../../etc -T
 
 .cpp.o:
 	$(CC) $(CFLAGS) $(INCLUDE) $< -o $@
