@@ -33,6 +33,7 @@ env:
 	echo "export UDM_PATH="$(UDMHOME) >>set-env.sh
 	echo "export JUNIT="$(JUNIT) >> set-env.sh
 	echo "export JUNITDIR="$(JUNITDIR) >> set-env.sh
+	echo "export VERSIONER_PYTHON_PREFER_32_BIT="$(VERSIONER_PYTHON_PREFER_32_BIT) >> set-env.sh
 
 	chmod +x set-env.sh
 

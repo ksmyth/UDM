@@ -9,10 +9,11 @@ ARCH=i386
 #ARCH=x86_64
 CFLAGS=-c -arch $(ARCH)
 BCFLAGS=-arch $(ARCH)
-
+# we need to run Python in 32bit mode as well
+VERSIONER_PYTHON_PREFER_32_BIT=yes
 
 #already on a Mac with XCode
-PYTHON=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/
+PYTHON=/System/Library/Frameworks/Python.framework/Versions/2.7
 JDK_INCLUDE=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers/
 
 #################################################
@@ -40,7 +41,9 @@ JVMD32=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/java
 #.jar and -javadoc.jar extensions will be added by judm/Makefile
 JUNIT=junit-4.11
 CPPUNITLIBS=$(CPPUNIT)/src/cppunit/.libs
-DYLDLIBRARYPATH=$(UDMHOME)/lib:$(XERCESCROOT)/lib:$(XALANCROOT)/lib:$(PCRE)/.libs:$(CPPUNITLIBS)
+LIBBOOST_PYTHON_DIR=$(BOOST)/bin.v2/libs/python/build/darwin-4.2.1/release/threading-multi
+LIBBOOST_PYTHON=$(LIBBOOST_PYTHON_DIR)/libboost_python.dylib
+DYLDLIBRARYPATH=$(UDMHOME)/lib:$(XERCESCROOT)/lib:$(XALANCROOT)/lib:$(PCRE)/.libs:$(CPPUNITLIBS):$(LIBBOOST_PYTHON_DIR)
 SWIGLIB=$(SWIGDIR)/lib
 SWIG=$(SWIGDIR)/swig
-INCLUDE=-I $(UDMHOME)/include -I $(UDMHOME)/src -I $(UDMHOME)/src/UdmOclPat/GOCL/Include/ -I $(MINIZIP) -I $(XERCES)/include -I $(BOOST) -I $(PYTHON) -I $(XERCESCROOT)/include -I $(XALANCROOT)/src -I $(XALANCROOT)/nls/include
+INCLUDE=-I $(UDMHOME)/include -I $(UDMHOME)/src -I $(UDMHOME)/src/UdmOclPat/GOCL/Include/ -I $(MINIZIP) -I $(XERCES)/include -I $(BOOST) -I $(XERCESCROOT)/include -I $(XALANCROOT)/src -I $(XALANCROOT)/nls/include

@@ -1,6 +1,6 @@
 include ../Makefile.OSX.incl
 
-all:libUdm libUdmSwig
+all:libUdm libUdmSwig udm.so
 
 libUdm:
 	$(CC) -dynamiclib  -arch $(ARCH) -o libUdm.dylib \
@@ -21,7 +21,11 @@ libUdm:
 
 libUdmSwig:
 	$(CC) -dynamiclib -arch $(ARCH) -o libUdmSwig.dylib ../src/UdmSwig/UdmSwigMain.o ../src/UdmSwig/UdmSwig_wrap_sed.o -lUdm -L .
+
+udm.so:../src/UdmPython/UdmPython.o
+	$(CC) -dynamiclib -arch $(ARCH) -install_name $@ -L$(PYTHON)/lib -L$(PYTHON)/lib/python2.7/config -o $@ $<  $(LIBBOOST_PYTHON)  -lpython2.7 -lUdm -L .    -headerpad_max_install_names 
+
 	
 
 clean:
-	rm -f libUdm.dylib libUdmSwig.dylib
+	rm -f libUdm.dylib libUdmSwig.dylib udm.so
