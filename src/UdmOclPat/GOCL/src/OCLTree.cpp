@@ -2900,7 +2900,8 @@ namespace OclTree
 
 	OclMeta::Object TextNode::Evaluate( ObjectContext& context )
 	{
-		if ( PatHelper::f_pat_output == NULL || *(PatHelper::f_pat_output) == NULL || !PatHelper::f_pat_output->is_open() ) {
+        //std::ofstream has operator!(). 
+		if ( PatHelper::f_pat_output == NULL ||  !(*PatHelper::f_pat_output) /*== NULL*/ || !PatHelper::f_pat_output->is_open() ) {
 			fprintf(stdout, "%s", m_strValue.c_str());
 		} else {
 			*(PatHelper::f_pat_output) << m_strValue.c_str();
