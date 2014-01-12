@@ -3,11 +3,27 @@ import os
 import os.path
 import unittest
 
-sys.path.append(r"C:\Program Files\ISIS\Udm\bin")
-if os.environ.has_key("UDM_PATH"):
-    sys.path.append(os.path.join(os.environ["UDM_PATH"], "bin"))
+from sys import platform as _platform
+if _platform == "linux" or _platform == "linux2":
+	#linux
+	if os.environ.has_key("UDM_PATH"):
+    		sys.path.append(os.path.join(os.environ["UDM_PATH"], "bin"))
+	else:
+		
+		sys.path.append(os.path.join(os.path.dirname(__file__), "../../bin/"))
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../../bin/"))
+elif _platform == "darwin":
+	#darwin
+	if os.environ.has_key("UDM_PATH"):
+    		sys.path.append(os.path.join(os.environ["UDM_PATH"], "lib"))
+	else:
+		
+		sys.path.append(os.path.join(os.path.dirname(__file__), "../../lib/"))
+elif _platform == "win32":
+	# Windows...
+	sys.path.append(r"C:\Program Files\ISIS\Udm\bin")
+
+print sys.path
 import udm
 # import udmd as udm
 
