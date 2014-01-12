@@ -12,6 +12,7 @@ if _platform == "linux" or _platform == "linux2":
 		
 		sys.path.append(os.path.join(os.path.dirname(__file__), "../../bin/"))
 
+
 elif _platform == "darwin":
 	#darwin
 	if os.environ.has_key("UDM_PATH"):
@@ -45,7 +46,10 @@ class TestUdmPython(unittest.TestCase):
         test_meta = udm.map_uml_names(test_meta_dn.root)
 
         dn = udm.SmartDataNetwork(test_meta_dn.root)
-        dn.open(r"UdmPythonTestModel.mga", "")
+	if _platform == "linux" or _platform == "linux2" or _platform == "darwin":
+        	dn.open(r"UdmPythonTest.xml", "")
+	else:
+        	dn.open(r"UdmPythonTestModel.mga", "")
 
         container = dn.root.children()[0]
         self.assertTrue(container)

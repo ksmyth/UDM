@@ -1,5 +1,4 @@
-#SUBDIRS =test_UdmPython 
-SUBDIRS =test_generic test_generic2 test_libs test_simpleudmops testGetAdjacentObjects testOCL test_childrenorder testUdmCint test_cintstring  test_crosslinks test_ns test_ns2 test_refports test_domstringdn
+SUBDIRS =test_generic test_generic2 test_libs test_simpleudmops testGetAdjacentObjects testOCL test_childrenorder testUdmCint test_cintstring  test_crosslinks test_ns test_ns2 test_refports test_domstringdn test_UdmPython
 
 
 all:
