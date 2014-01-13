@@ -71,5 +71,5 @@ udm.so:udm.$(VERSION).so
 
 clean:
 	rm -f libUdm.dylib libUdm.$(MAJOR_VERSION).dylib libUdm.$(COMPAT_VERSION).dylib libUdm.$(VERSION).dylib \
-	libUdmSwig.dylib libUdm.$(MAJOR_VERSION).dylib libUdm.$(COMPAT_VERSION).dylib libUdm.$(VERSION).dylib \
+	libUdmSwig.dylib libUdmSwig.$(MAJOR_VERSION).dylib libUdmSwig.$(COMPAT_VERSION).dylib libUdmSwig.$(VERSION).dylib \
 	udm.so udm.$(COMPAT_VERSION).so udm.$(MAJOR_VERSION).so udm.$(VERSION).so
