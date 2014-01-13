@@ -47,8 +47,9 @@ void PythonAPIGen::generate()
 
   /*CREATE IMPORT*/
   m_output << "import sys" << endl;
+  m_output << "import udm" << endl;
   m_output << "import Uml" << endl;
-  m_output << "from UdmPython import *" << endl << endl;
+  //m_output << "from UdmPython import *" << endl << endl;
 
 
   /*GENERATE PYTHON CLASSES*/
@@ -107,8 +108,9 @@ void PythonAPIGen::open()
 
 void PythonAPIGen::generateClass(::Uml::Class &cls)
 {
-	m_output << "class " << cls.name() << "(UdmPython):" << endl;
-	m_output << "\t\"\"\"Generated\"\"\"" << endl;
+	//m_output << "class " << cls.name() << "(UdmPython):" << endl;
+	m_output << "class " << cls.name() << "(udm.Object):" << endl;
+    m_output << "\t\"\"\"Generated\"\"\"" << endl;
 
 	generateAttributes(cls);
 	

@@ -43,6 +43,7 @@ static const char* udm_usage =
 "  [default] Generate C++\n"
 //"  -s Generate C#\n"
 "  -j Generate Java\n"
+"  -p Generate Python\n"
 "  --leesa Generate C++ with support for generic programming\n"
 "\n"
 "  -t generate DTD\n"
