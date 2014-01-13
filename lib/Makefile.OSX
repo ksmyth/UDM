@@ -56,16 +56,15 @@ udm.$(VERSION).so:../src/UdmPython/UdmPython.o
 	$(CC) -dynamiclib -arch $(ARCH) -install_name udm.$(MAJOR_VERSION).so -L$(PYTHON)/lib -L$(PYTHON)/lib/python2.7/config -o $@ $<  $(LIBBOOST_PYTHON)  -lpython2.7 -lUdm -L .    -headerpad_max_install_names 
 
 udm.$(COMPAT_VERSION).so:udm.$(VERSION).so
-
-	rm -rf udm.so
+	rm -rf $@
 	ln -s $< $@
 
 udm.$(MAJOR_VERSION).so:udm.$(VERSION).so
-	rm -rf udm.so
+	rm -rf $@
 	ln -s $< $@
 
 udm.so:udm.$(VERSION).so
-	rm -rf udm.so
+	rm -rf $@
 	ln -s $< $@
 
 
