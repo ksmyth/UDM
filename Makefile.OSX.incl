@@ -1,7 +1,16 @@
-#CC=gcc
+##############################################
+#		VERSIONING of UDM	     #
+#	<DON'T EDIT THIS SECTION>	     #
+##############################################
+MAJOR_VERSION=3
+MINOR_VERSION=2.12
+VERSION=$(MAJOR_VERSION).$(MINOR_VERSION)
+COMPAT_VERSION=$(MAJOR_VERSION).2
+##############################################
+#		COMPILER FLAGS		     #
+#	<DON'T EDIT THIS SECTION>	     #
+##############################################
 CC=g++
-
-
 #Xerces binary was available only for i386
 #Xerces source does not compile in MACOSX with --arch x86_64
 #Therefore the whole package is compiled for i386
@@ -12,13 +21,17 @@ BCFLAGS=-arch $(ARCH)
 # we need to run Python in 32bit mode as well
 VERSIONER_PYTHON_PREFER_32_BIT=yes
 
+##############################################
+# 3rd Party tools expected to be installed   #
+#	<DON'T EDIT THIS SECTION>	     #
+##############################################
 #already on a Mac with XCode
 PYTHON=/System/Library/Frameworks/Python.framework/Versions/2.7
 JDK_INCLUDE=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers/
 
 #################################################
 #packages that are downloaded/installed manually#
-#section to be configured by the user
+#     SECTION TO BE CONFIGURED BY THE USER	#
 #################################################
 UDMHOME=~/trunk
 ANT=~/devtools/apache-ant-1.9.3/bin/ant
@@ -35,9 +48,13 @@ CPPUNIT=~/devtools/cppunit-1.12.1
 #JAVA 1.6.0 is needed in order to have a JVM which is capable to load 32bit shared libraries (UdmSwig) (-d32 flag)
 #UdmSwig is a shared library compiled with i386
 JVMD32=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/java
-###################################
-#end of section configured by user#
-###################################
+
+#####################################################
+# variables and paths needed by the build process   #
+#		<DON'T EDIT THIS SECTION>	    #
+#####################################################
+
+
 #.jar and -javadoc.jar extensions will be added by judm/Makefile
 JUNIT=junit-4.11
 CPPUNITLIBS=$(CPPUNIT)/src/cppunit/.libs
