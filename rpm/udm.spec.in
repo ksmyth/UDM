@@ -1,5 +1,6 @@
 %define swig @swig@
 %define antlr @antlr@
+%define _unpackaged_files_terminate_build 0
 
 Name: udm
 Summary: The UDM (Universal Data Model) framework
