@@ -572,11 +572,21 @@ namespace {
 				// FIXME: does this leak?
 				return __Create(meta, parent, role, archetype, subtype);
 		}
+		static Udm::ObjectImpl* Cast(const Udm::Object &a, const Uml::Class & meta)
+		{
+			return __Cast(a, meta);
+		
+		}
 	};
 }
 
 Udm::Object Object_create(Udm::Object& meta, Udm::Object& parent /*,Udm::Object& role, Udm::Object& archetype, bool is_subtype*/) {
 	return Object_access::Create(Uml::Class::Cast(meta), parent, Udm::NULLCHILDROLE);
+}
+
+Udm::Object Object_cast(Udm::Object& o, Udm::Object& meta)
+{
+	return Object_access::Cast(o, Uml::Class::Cast(meta));
 }
 
 extern "C" {
@@ -606,6 +616,8 @@ BOOST_PYTHON_MODULE(udm)
 		.add_property("id", &Udm::Object::uniqueId)
 		.add_property("parent", &Udm::Object::GetParent, &Object_SetParent)
 		.def("create", Object_create)
+		.def("__cast", Object_cast)
+		.staticmethod("__cast")
 		.def("delete", &Udm::Object::DeleteObject)
 		.def("_children", Object_children)
 		.def("_adjacent", Object_adjacent)

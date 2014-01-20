@@ -14,6 +14,8 @@ LampDiagram.py:../../samples/LampDiagram_udm.xml
 Lamp:../../samples/CreateLampModel/CreateLampModel
 	DYLD_LIBRARY_PATH=$(DYLDLIBRARYPATH) $< $@.mem $@.xml
 
+test:test.py Uml.py LampDiagram.py ../../lib/udm.so
+	DYLD_LIBRARY_PATH=$(DYLDLIBRARYPATH) VERSIONER_PYTHON_PREFER_32_BIT=$(VERSIONER_PYTHON_PREFER_32_BIT) python test.py
 
 
 
