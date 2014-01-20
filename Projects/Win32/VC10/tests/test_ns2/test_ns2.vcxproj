@@ -134,7 +134,8 @@ exit 0
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>cd "$(OutDir)Gen\tests\test_ns2"
+      <Command>set PATH=%PATH%;%UDM_PATH%\tests\test_ns2
+cd "$(OutDir)Gen\tests\test_ns2"
 "$(TargetPath)"
 </Command>
     </CustomBuildStep>
@@ -176,7 +177,8 @@ exit 0
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>cd "$(OutDir)Gen\tests\test_ns2"
+      <Command>set PATH=%PATH%;%UDM_PATH%\tests\test_ns2
+cd "$(OutDir)Gen\tests\test_ns2"
 "$(TargetPath)"
 </Command>
     </CustomBuildStep>
@@ -219,7 +221,8 @@ exit 0
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>cd "$(OutDir)Gen\tests\test_ns2"
+      <Command>set PATH=%PATH%;%UDM_PATH%\tests\test_ns2
+cd "$(OutDir)Gen\tests\test_ns2"
 "$(TargetPath)"
 </Command>
     </CustomBuildStep>
@@ -261,7 +264,8 @@ exit 0
       </Command>
     </PostBuildEvent>
     <CustomBuildStep>
-      <Command>cd "$(OutDir)Gen\tests\test_ns2"
+      <Command>set PATH=%PATH%;%UDM_PATH%\tests\test_ns2
+cd "$(OutDir)Gen\tests\test_ns2"
 "$(TargetPath)"
 </Command>
     </CustomBuildStep>

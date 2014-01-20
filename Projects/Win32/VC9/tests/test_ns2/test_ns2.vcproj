@@ -32,7 +32,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Running $(ProjectName)"
-				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_ns2&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine="set PATH=%PATH%;%UDM_PATH%\tests\test_ns2&#x0D;&#x0A;cd &quot;$(OutDir)\Gen\tests\test_ns2&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
 				Outputs="NONE"
 			/>
 			<Tool
@@ -119,7 +119,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Running $(ProjectName)"
-				CommandLine="cd &quot;$(OutDir)\Gen\tests\test_ns2&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
+				CommandLine="set PATH=%PATH%;%UDM_PATH%\tests\test_ns2&#x0D;&#x0A;cd &quot;$(OutDir)\Gen\tests\test_ns2&quot;&#x0D;&#x0A;&quot;$(TargetPath)&quot;&#x0D;&#x0A;"
 				Outputs="NONE"
 			/>
 			<Tool
