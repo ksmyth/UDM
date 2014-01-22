@@ -120,9 +120,6 @@
       <Component>
         <File Source="..\bin\Python26\__init__.py" />
       </Component>
-      <Component>
-        <File Source="..\bin\Python26\boost_python-vc100-mt-1_44.dll" />
-      </Component>
 
     </DirectoryRef>
     <DirectoryRef Id="Python27">
@@ -131,9 +128,6 @@
       </Component>
       <Component>
         <File Source="..\bin\Python27\__init__.py" Id="initpy27"/>
-      </Component>
-      <Component>
-        <File Source="..\bin\Python27\boost_python-vc100-mt-1_44.dll" Id="boost_python_vc100_mt_1_44.dll27"/>
       </Component>
     </DirectoryRef>
     <?endif?>

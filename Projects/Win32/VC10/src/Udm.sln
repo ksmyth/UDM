@@ -59,6 +59,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UdmWiX", "..\..\..\..\WiX\U
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PythonAPIGen", "Udm\PythonAPIGen\PythonAPIGen.vcxproj", "{F264EC86-7AE6-4A51-A35C-CB4947E57F28}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{62FDD9CD-BBFF-4268-A27F-9FCBEA4B8F70}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BootUdmCompile Debug|Win32 = BootUdmCompile Debug|Win32
