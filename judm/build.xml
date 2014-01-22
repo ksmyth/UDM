@@ -830,16 +830,16 @@
 				</not>
 		</condition>
 		<!--use the -d32 flag on mac and -d64 flag on other--> 
-		<condition property="javaversion" value="-d32">
+		<condition property="javaplatformflags" value="-d32">
 			<isset property="isMac"/>
 		</condition>
-		<condition property="javaversion" value="">
+		<condition property="javaplatformflags" value="-Djava.library.path=${judm.dir}${path.separator}${judm.dir}/bin${path.separator}${udm.bin.dir}/../lib/.libs">
 				<not>
 					<isset property="isMac"/>
 				</not>
 		</condition>
 
-		<echo> Using ${javacall} ${javaversion} for Java Virtual Machine </echo>
+		<echo> Using ${javacall} ${javaplatformflags} for Java Virtual Machine </echo>
 
 		
 
@@ -854,13 +854,8 @@
 		<!-- Run junit tests -->
 		<junit fork="yes" dir="${build.dir}/${dspackage}" jvm="${javacall}">
 			<!-- This is necessary for System.load("UdmSwig") to succeed -->
-			<jvmarg value="${javaversion}"/>
-			<!-- 
-			The classpath should be sufficient. 
-			This line broke the tests on Mac OS X.
-			I checked the below directories and none of them exists, at least while running ant test on Mac OSx
-			<jvmarg value="-Djava.library.path=${judm.dir}${path.separator}${judm.dir}/bin${path.separator}${udm.bin.dir}/../lib/.libs" />
-			-->
+			<jvmarg value="${javaplatformflags}"/>
+
 			<jvmarg value="-Djava.util.logging.config.file=${udmswiglight.src.dir}/debug-logging.properties" />
             <!-- We need to add the dir containing the DLLs that UdmSwig depends on
              to the PATH rather than java.library.path.  -->
