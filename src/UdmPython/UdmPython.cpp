@@ -180,13 +180,11 @@ Uml::Attribute getAttribute(Udm::Object& self, std::string& name) {
 	return Uml::Attribute();
 }
 
-object Object_attr(Udm::Object& self, str _name) {
-	std::string name = extract<std::string>(_name);
+object Object_attr_by_uml_attr(Udm::Object& self, Uml::Attribute attr)
+{
+	if (!attr)
+		throw std::runtime_error(std::string("Uml::Attribute is null in Object_attr_by_uml_attr(Udm::Object& self, Uml::Attribute attr) "));
 
-	Uml::Attribute attr = getAttribute(self, name);
-	if (!attr) {
-		throw std::runtime_error(std::string("Unknown attribute '") + name + "' for class '" + static_cast<string>(self.type().name()) + "'");
-	}
 	if (static_cast<string>(attr.type()) == "Integer") {
 		return object(self.getIntegerAttr(attr));
 	}
@@ -201,6 +199,26 @@ object Object_attr(Udm::Object& self, str _name) {
 	}
 	throw std::runtime_error(std::string("Unsupported attribute type '") + static_cast<string>(attr.type()) + "' for class '" + static_cast<string>(self.type().name()) + "'");
 }
+
+
+object Object_attr(Udm::Object& self, str _name) {
+	std::string name = extract<std::string>(_name);
+
+	Uml::Attribute attr = getAttribute(self, name);
+	if (!attr) {
+		throw std::runtime_error(std::string("Unknown attribute '") + name + "' for class '" + static_cast<string>(self.type().name()) + "'");
+	}
+	return Object_attr_by_uml_attr(self, attr);
+}
+
+object Object_attr_by_uml_attr_as_udm_object(Udm::Object& self, Udm::Object& attr)
+{
+	if (!attr)
+		throw std::runtime_error(std::string("Uml::Attribute is null in Object_attr_by_uml_attr_as_udm_object(Udm::Object& self, Udm::Object&  attr) "));
+
+	return Object_attr_by_uml_attr(self, Uml::Attribute::Cast(attr));
+	
+} 
 
 object Object_set_attr(Udm::Object& self, str _name, object value) {
 	std::string name = extract<std::string>(_name);
@@ -621,6 +639,7 @@ BOOST_PYTHON_MODULE(udm)
 		.def("delete", &Udm::Object::DeleteObject)
 		.def("_children", Object_children)
 		.def("_adjacent", Object_adjacent)
+		.def("get_attribute",&Object_attr_by_uml_attr_as_udm_object)
 		.def("attr", &Object_attr)
 		.def("set_attr", &Object_set_attr)
 		.def("__getattr__", &Object___getattr__)

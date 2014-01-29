@@ -121,10 +121,11 @@ void PythonAPIGen::generateClass(::Uml::Class &cls)
 	m_output << "\t" << endl;
 
 	//type method
-	m_output << "\tdef type(self):"<< endl;
-	m_output << "\t\t\"\"\"returning the type of object (Uml.Class)\"\"\"" << endl;
-	m_output << "\t\treturn " << "Uml.Class.cast(self.meta)" << endl;
-	m_output << "\t" << endl;
+	// we have this at UdmPython level
+	//m_output << "\tdef type(self):"<< endl;
+	//m_output << "\t\t\"\"\"returning the type of object (Uml.Class)\"\"\"" << endl;
+	//m_output << "\t\treturn " << "Uml.Class.cast(self.meta)" << endl;
+	//m_output << "\t" << endl;
 
 	generateChildrenAccess(cls);
 	generateAssociations(cls);
