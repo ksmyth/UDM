@@ -45,7 +45,8 @@ def walk_hierarchy_udmp(obj, indent_tabs = 0):
 
 pdn = udm.SmartDataNetwork(udm.uml_diagram())
 pdn.open(r"../../samples/LampDiagram_udm.xml","")
-LampDiagram.initialize(udm.map_uml_names(pdn.root), udm.map_uml_names(udm.uml_diagram()))
+LampDiagram.initialize(pdn.root)  #for the moment, this takes as argument and Udm.Object and not Uml.Diagram
+
 
 
 dn = udm.SmartDataNetwork(pdn.root)
@@ -77,6 +78,8 @@ lamp_1.ModelName = "test_python"
 print lamp_1.ModelName
 print lamp_1.meta.name
 
+print LampDiagram.Lamp.meta_ModelName
+print Uml.Class.meta_name
 
 dn.close_no_update()
 pdn.close_no_update()

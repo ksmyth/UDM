@@ -37,6 +37,9 @@ class UdmPython:
 		self.__dict__['indent'] = i
 
 	def __str__(self):
+		import udm	
+		if self.impl == udm.null:
+			 return self.impl.__str__()
 		import Uml
 		line = str()
 		cl = Uml.Class(self.impl.type)
@@ -170,3 +173,20 @@ class BooleanArrayAttr(ArrayAttr):
 		return value.lower()=="true" 
 			
 		
+def GetUmlAttributeByName(cl, name):
+	import udm
+	import Uml
+	attrs = cl.getAttributeChildren()
+	for attr in attrs:
+		if attr.name == name:
+			return attr
+	return Uml.Attribute(udm.null)
+
+def GetUmlClassByName(dgr, name):
+	import udm
+	import Uml
+	classes = dgr.getClassChildren()
+	for cl in classes:
+		if cl.name == name:
+			return cl
+	return Uml.Class(udm.null)	

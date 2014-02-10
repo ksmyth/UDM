@@ -73,19 +73,39 @@ void PythonAPIGen::generate()
 	   set<Uml::Class> bases = currCls .baseTypes();
 	  m_output << "\t" << currCls.name() << ".meta = meta_map." << currCls.name() << endl;
   }
+  
+    m_output << endl;
+    m_output << "def init_classes(diagram):" << endl;
+    for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
+    {
+        m_output << "\t" << uc_i->name() << ".Meta = GetUmlClassByName(diagram,\"" << uc_i->name()   << "\")"<< endl;
+    }
+
+  m_output << endl;
+  m_output << "def init_attributes():" << endl;
+    for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
+    {
+        set< ::Uml::Attribute> attrs = uc_i->attributes();
+        for( set< ::Uml::Attribute>::iterator attrs_i = attrs.begin(); attrs_i != attrs.end(); attrs_i++)
+                m_output << "\t" << uc_i->name() << ".meta_" << attrs_i->name() << " = GetUmlAttributeByName(Uml.Class(" << uc_i->name() << ".meta), \"" << attrs_i->name() << "\")"<< endl;
+    }
+		
 
   m_output << endl << endl;
 
   /*INITIALIZE THE META STATIC VARIABLE*/
 
-  m_output << "def initialize(meta_map, uml_meta_map):" << endl;
+  m_output << "def initialize(diagram):" << endl;
   m_output << "\t" << "try:" << endl;
   m_output << "\t\t" << "module_initialized" << endl;
   m_output << "\t" << "except NameError:" << endl;
-  m_output << "\t\t" << "init_meta(meta_map)" << endl;
-  m_output << "\t\t" << "module_initialized = True" << endl;
   m_output << "\t\t" << "if sys.modules[__name__] != Uml:" << endl;
-  m_output << "\t\t\t" << "Uml.initialize(uml_meta_map, uml_meta_map)" << endl;
+  m_output << "\t\t\t" << "Uml.initialize(udm.uml_diagram())" << endl;
+  m_output << "\t\t" << "meta_map = udm.map_uml_names(diagram)" << endl;
+  m_output << "\t\t" << "init_meta(meta_map)" << endl;
+  m_output << "\t\t" << "init_classes(Uml.Diagram(diagram))" << endl;
+  m_output << "\t\t" << "init_attributes()" << endl;
+  m_output << "\t\t" << "module_initialized = True" << endl;
   m_output << endl;
 	
 
