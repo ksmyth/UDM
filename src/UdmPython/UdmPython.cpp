@@ -200,6 +200,31 @@ object Object_attr_by_uml_attr(Udm::Object& self, Uml::Attribute attr)
 	throw std::runtime_error(std::string("Unsupported attribute type '") + static_cast<string>(attr.type()) + "' for class '" + static_cast<string>(self.type().name()) + "'");
 }
 
+object Object_set_attr_by_uml_attr(Udm::Object& self, Uml::Attribute attr, object value)
+{
+	if (!attr)
+		throw std::runtime_error(std::string("Uml::Attribute is null in Object_set_attr_by_uml_attr(Udm::Object& self, Uml::Attribute attr) "));
+
+    if (static_cast<string>(attr.type()) == "Integer") {
+		self.setIntegerAttr(attr, extract<__int64>(value));
+		return object();
+	}
+	if (static_cast<string>(attr.type()) == "String" || static_cast<string>(attr.type()) == "Text") {
+		self.setStringAttr(attr, stringtoutf8(value));
+		return object();
+	}
+	if (static_cast<string>(attr.type()) == "Real") {
+		self.setRealAttr(attr, extract<double>(value));
+		return object();
+	}
+	if (static_cast<string>(attr.type()) == "Boolean") {
+		self.setBooleanAttr(attr, extract<bool>(value));
+		return object();
+	}
+	throw std::runtime_error(std::string("Unsupported attribute type '") + static_cast<string>(attr.type()) + "' for class '" + static_cast<string>(self.type().name()) + "'");
+
+    
+}
 
 object Object_attr(Udm::Object& self, str _name) {
 	std::string name = extract<std::string>(_name);
@@ -220,6 +245,14 @@ object Object_attr_by_uml_attr_as_udm_object(Udm::Object& self, Udm::Object& att
 	
 } 
 
+object Object_set_attr_by_uml_attr_as_udm_object(Udm::Object& self, Udm::Object& attr, object value)
+{
+	if (!attr)
+		throw std::runtime_error(std::string("Uml::Attribute is null in Object_attr_by_uml_attr_as_udm_object(Udm::Object& self, Udm::Object&  attr) "));
+    
+	return Object_set_attr_by_uml_attr(self, Uml::Attribute::Cast(attr), value);
+	
+}
 object Object_set_attr(Udm::Object& self, str _name, object value) {
 	std::string name = extract<std::string>(_name);
 
@@ -227,23 +260,8 @@ object Object_set_attr(Udm::Object& self, str _name, object value) {
 	if (!attr) {
 		throw std::runtime_error(std::string("Unknown attribute '") + name + "' for class '" + static_cast<string>(self.type().name()) + "'");
 	}
-	if (static_cast<string>(attr.type()) == "Integer") {
-		self.setIntegerAttr(attr, extract<__int64>(value));
-		return object();
-	}
-	if (static_cast<string>(attr.type()) == "String" || static_cast<string>(attr.type()) == "Text") {
-		self.setStringAttr(attr, stringtoutf8(value));
-		return object();
-	}
-	if (static_cast<string>(attr.type()) == "Real") {
-		self.setRealAttr(attr, extract<double>(value));
-		return object();
-	}
-	if (static_cast<string>(attr.type()) == "Boolean") {
-		self.setBooleanAttr(attr, extract<bool>(value));
-		return object();
-	}
-	throw std::runtime_error(std::string("Unsupported attribute type '") + static_cast<string>(attr.type()) + "' for class '" + static_cast<string>(self.type().name()) + "'");
+    return Object_set_attr_by_uml_attr(self, attr, value);
+
 }
 
 object Object_children(Udm::Object& self, object child_role, object parent_role, object _child_type) {
@@ -640,6 +658,7 @@ BOOST_PYTHON_MODULE(udm)
 		.def("_children", Object_children)
 		.def("_adjacent", Object_adjacent)
 		.def("get_attribute",&Object_attr_by_uml_attr_as_udm_object)
+		.def("set_attribute",&Object_set_attr_by_uml_attr_as_udm_object)
 		.def("attr", &Object_attr)
 		.def("set_attr", &Object_set_attr)
 		.def("__getattr__", &Object___getattr__)

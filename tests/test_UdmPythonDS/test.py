@@ -76,10 +76,34 @@ lamp_1 = l_children[0]
 print lamp_1.ModelName
 lamp_1.ModelName = "test_python"
 print lamp_1.ModelName
-print lamp_1.meta.name
+print lamp_1.Meta.name
 
 print LampDiagram.Lamp.meta_ModelName
 print Uml.Class.meta_name
+
+o = lamp_1.ArrayStr()
+print o
+print o[2]
+o[2] = "hello python"
+print o
+print o[2]
+print lamp_1.ArrayStr()[3]
+
+print o.array
+
+o.array = ["alma", "korte", "szilva"]
+print o.array
+print len(o.array)
+print o[2]
+
+rf = lamp_1.parent
+print isinstance(rf, LampDiagram.RootFolder)
+#lamp_1.parent = rf
+
+#print lamp1.parent == rf
+
+
+
 
 dn.close_no_update()
 pdn.close_no_update()

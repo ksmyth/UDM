@@ -64,15 +64,6 @@ void PythonAPIGen::generate()
 
   /*INITIALIZE THE META STATIC VARIABLES*/
   
-  m_output << endl;
-  m_output << "def init_meta(meta_map):" << endl;
-  
-  for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
-  {
-	  ::Uml::Class currCls = *uc_i;
-	   set<Uml::Class> bases = currCls .baseTypes();
-	  m_output << "\t" << currCls.name() << ".meta = meta_map." << currCls.name() << endl;
-  }
   
     m_output << endl;
     m_output << "def init_classes(diagram):" << endl;
@@ -87,7 +78,7 @@ void PythonAPIGen::generate()
     {
         set< ::Uml::Attribute> attrs = uc_i->attributes();
         for( set< ::Uml::Attribute>::iterator attrs_i = attrs.begin(); attrs_i != attrs.end(); attrs_i++)
-                m_output << "\t" << uc_i->name() << ".meta_" << attrs_i->name() << " = GetUmlAttributeByName(Uml.Class(" << uc_i->name() << ".meta), \"" << attrs_i->name() << "\")"<< endl;
+                m_output << "\t" << uc_i->name() << ".meta_" << attrs_i->name() << " = GetUmlAttributeByName(" << uc_i->name() << ".Meta, \"" << attrs_i->name() << "\")"<< endl;
     }
 		
 
@@ -101,8 +92,10 @@ void PythonAPIGen::generate()
   m_output << "\t" << "except NameError:" << endl;
   m_output << "\t\t" << "if sys.modules[__name__] != Uml:" << endl;
   m_output << "\t\t\t" << "Uml.initialize(udm.uml_diagram())" << endl;
-  m_output << "\t\t" << "meta_map = udm.map_uml_names(diagram)" << endl;
-  m_output << "\t\t" << "init_meta(meta_map)" << endl;
+  m_output << "\t\t" << "if sys.modules[__name__] == Uml:" << endl;
+  m_output << "\t\t\t" << "meta_map = udm.map_uml_names(diagram)" << endl;
+  m_output << "\t\t\t" << "#the only meta-object needed to bootstrap" << endl;
+  m_output << "\t\t\t" << "Class.Meta = meta_map.Class" << endl;
   m_output << "\t\t" << "init_classes(Uml.Diagram(diagram))" << endl;
   m_output << "\t\t" << "init_attributes()" << endl;
   m_output << "\t\t" << "module_initialized = True" << endl;
@@ -130,6 +123,10 @@ void PythonAPIGen::generateClass(::Uml::Class &cls)
 {
 	m_output << "class " << cls.name() << "(UdmPython):" << endl;
    	m_output << "\t\"\"\"Generated\"\"\"" << endl;
+    m_output << "\t@property" << endl;
+    m_output << "\tdef parent(self):" << endl;
+    m_output << "\t\tparent_o = super(" << cls.name() << ", self).parent" << endl;
+    m_output << "\t\treturn globals()[parent_o._type().name](parent_o) " << endl;
 
 	generateAttributes(cls);
 	
@@ -158,10 +155,20 @@ void PythonAPIGen::generateAttributes(::Uml::Class &cls)
 	for ( set< ::Uml::Attribute>::iterator atts_i = atts.begin(); atts_i != atts.end(); atts_i++ )
 	{
 		string att_name = atts_i->name();
-
-		// name of the attribute
-		m_output << "\t#" << att_name << " = \"" << att_name << "\";" << endl;
-		m_output << endl;
+        if ((atts_i->max() > 1) || (atts_i->max() == -1) )
+		{
+            m_output << "\tdef " << att_name << "(self):" << endl;
+            
+            if (atts_i->type() == "String" )
+                m_output << "\t\t return StrArrayAttr(self, " << cls.name() << ".meta_" <<  atts_i->name() << ")"<< endl;
+            if (atts_i->type() == "Real" )
+                m_output << "\t\t return RealArrayAttr(self, " << cls.name() << ".meta_" <<  atts_i->name() <<")"<<  endl;
+            if (atts_i->type() == "Boolean" )
+                m_output << "\t\t return BooleanArrayAttr(self, " << cls.name() << ".meta_" <<  atts_i->name() <<")"<<  endl;
+            if (atts_i->type() == "Integer" )
+                m_output << "\t\t return IntArrayAttr(self, " << cls.name() << ".meta_" <<  atts_i->name() << ")"<< endl;
+            m_output << endl;
+        }
 	}
 }
 
@@ -203,7 +210,7 @@ void PythonAPIGen::generateChildrenAccess(::Uml::Class &cls)
 		  m_output << "\t\t@return  The children in a lisst" << endl;
 		  m_output << "\t\t\"\"\"" << endl;
 
-		  m_output << "\t\tchilds = self.impl.children(child_type=" << c_i_name << ".meta)" << endl;
+		  m_output << "\t\tchilds = self.children(child_type=" << c_i_name << ".Meta)" << endl;
 		  m_output << "\t\tlist = []" << endl;
 		  m_output << "\t\t" << "for i in childs:" << endl;
 		  m_output << "\t\t\t" << "list.append(" << c_i_name << "(i))" << endl;
