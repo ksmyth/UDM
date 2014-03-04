@@ -54,8 +54,7 @@ static void comthrow(HRESULT res, char *e, int l)
 #define testself (self ? self : (throw udm_exception("Invalid method on folders"), NULL))
 #define NAMEGET(x) (((string)((x).name())).c_str())
 
-
-static string getClassPath(const Uml::Class& c)
+static string getShortClassPath(const Uml::Class& c)
 {
 	if (!c)
 		return "";
@@ -71,10 +70,12 @@ static string getClassPath(const Uml::Class& c)
 		else if (type == Uml::Namespace::meta)
 		{
 			ret = static_cast<std::string>(Uml::Namespace::Cast(o).name()) + std::string("::") + ret;
+			return ret;
 		} 
 		else if (type == Uml::Diagram::meta)
 		{
 			ret = static_cast<std::string>(Uml::Diagram::Cast(o).name()) + std::string("::") + ret;
+			return ret;
 		} 
 		o = o.GetParent();
 	}
@@ -82,6 +83,7 @@ static string getClassPath(const Uml::Class& c)
     return ret;
 }
 
-#define PATHGET(x) (getClassPath(x).c_str())
+
+#define PATHGET(x) (getShortClassPath(x).c_str())
 #define foldiffold (folderself ? folderself : self)
 #endif

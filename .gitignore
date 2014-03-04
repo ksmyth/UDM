@@ -77,6 +77,16 @@ tests/test_ns2/CHost_B.xsd
 tests/test_ns2/CHost_C.xsd
 tests/test_ns2/CHost_udm.xml
 tests/test_ns2/CHost_uml.mga
+tests/test_ns_nested/MetaLevel3.cpp
+tests/test_ns_nested/MetaLevel3.h
+tests/test_ns_nested/MetaLevel3.mta
+tests/test_ns_nested/MetaLevel3.xmp
+tests/test_ns_nested/MetaLevel3.xmp.log
+tests/test_ns_nested/MetaLevel3.xsd
+tests/test_ns_nested/MetaLevel3_NS_Level2.xsd
+tests/test_ns_nested/MetaLevel3_NS_Level2_NS_Level1.xsd
+tests/test_ns_nested/MetaLevel3_udm.xml
+tests/test_ns_nested/test_level3.mga
 tests/test_refports/RefPort.cpp
 tests/test_refports/RefPort.h
 tests/test_refports/RefPort.xsd
