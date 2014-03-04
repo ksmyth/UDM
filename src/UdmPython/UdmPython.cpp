@@ -308,6 +308,29 @@ void Object_set_adjacent_helper(Udm::Object& self, object _targets, object srcro
 	set< ::Uml::Class> ::iterator ancestorClassesIt = ancestorClasses.begin();
 
 	for(; ancestorClassesIt != ancestorClasses.end(); ancestorClassesIt++) {
+		::Uml::Association association = static_cast< ::Uml::Association>(ancestorClassesIt->association());
+		if (association && dstrolename != object()) {
+			std::set< ::Uml::AssociationRole> roles = association.AssociationRole_kind_children();
+			for (std::set< ::Uml::AssociationRole> ::iterator roleIt = roles.begin(); roleIt != roles.end(); roleIt++) {
+				::Uml::AssociationRole role = *roleIt;
+				if (static_cast<std::string>(role.name()) == 
+						static_cast<const char*>(extract<const char*>(dstrolename))) {
+					using namespace Udm;
+					std::vector<Udm::ObjectImpl*> targets_impl;
+					extract<Udm::Object&> singleton(_targets);
+					if (singleton.check()) {
+						Udm::Object& o = static_cast<Udm::Object&>(singleton);
+						if (o) {
+							targets_impl.push_back(o.__impl());
+						}
+					}
+					else
+						throw udm_exception("setattr with connection: value should be Udm::Object");
+					self.__impl()->setAssociation(role, targets_impl, Udm::TARGETFROMCLASS);
+					foundApplicableAssociation = true;
+				}
+			}
+		}
 		// Getting the association roles and iterating through them
 		set< ::Uml::AssociationRole> assocRoles = ancestorClassesIt->associationRoles();
 		set< ::Uml::AssociationRole> ::iterator assocRolesIt = assocRoles.begin();
@@ -419,9 +442,16 @@ object Object_adjacent_helper(Udm::Object& self, object srcrolename, object dstr
 						static_cast<const char*>(extract<const char*>(dstrolename))) {
 					using namespace Udm;
 					vector<ObjectImpl*> dstPeers = self.__impl()->getAssociation(role, Udm::TARGETFROMCLASS);
-					vector<ObjectImpl*> ::iterator dstPeersIt = dstPeers.begin();
 					foundApplicableAssociation = true;
-					return object(Udm::Object(*dstPeersIt));
+					if (dstPeers.size())
+					{
+						vector<ObjectImpl*> ::iterator dstPeersIt = dstPeers.begin();
+						return object(Udm::Object(*dstPeersIt));
+					}
+					else
+					{
+						return object(Udm::null);
+					}
 				}
 			}
 		}
