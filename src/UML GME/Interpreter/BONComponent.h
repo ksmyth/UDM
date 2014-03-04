@@ -109,7 +109,7 @@ CHANGELOG
     	static CComponent *theInstance;
     public:
     
-  		int  GatherPackageFolders(CBuilderFolder *folder,CPackageBuilderList &packages);
+		int GatherPackageFolders(CBuilderFolder *folder,CPackageBuilderList &packages);
 		::Uml::Diagram& GetCrossUmlDiagram() { return cross_uml_dgr; };
 
 	protected:
@@ -347,6 +347,7 @@ CHANGELOG
 		::Uml::Association cross_uml_ass;
 		void _BuildUML(::Uml::Association &ass, bool is_cross);
     public:
+		CString path;
     	bool IsEquivalent(CAssociationBase *ass);
     	bool IsCrossPackage();
     	virtual void SetSourceAndDestination(CCompositeClass *s,CCompositeClass *d) = 0;

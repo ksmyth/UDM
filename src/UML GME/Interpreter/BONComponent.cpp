@@ -1058,6 +1058,10 @@ void CCompositeClass::RegisterAssociation(CAssociationBase *assoc,CCompositeClas
 	else
 	{
         CPackageBuilder *ass_package = assoc->GetPackage();
+		if (!ass_package)
+		{
+			throw int_exception(assoc->path + " must be contained in a Namespace or Package");
+		}
 		ass_package->AddAssociation(assoc);
 	}
 }
@@ -1459,6 +1463,7 @@ void CDirectAssociationBuilder::Initialize()
 
 void CDirectAssociationBuilder::SetSourceAndDestination(CCompositeClass *s,CCompositeClass *d)
 {
+	GetExtendedName(path, "/", true);
 	source.cls = s;
 	dest.cls = d;
 	associationClass = 0;
@@ -1496,9 +1501,22 @@ void CAssociationBuilder::SetSourceAndDestination(CCompositeClass *s,CCompositeC
 	if(assClasses.GetCount() > 1)
 		AfxMessageBox("Multiple association classes defined for association!");
 	else if(!assClasses.IsEmpty()) {
-		CClassBase *cls = dynamic_cast<CClassBase *>(assClasses.GetHead());
+		CBuilderObject* assClass = assClasses.GetHead();
+		CClassBase *cls = dynamic_cast<CClassBase *>(assClass);
+		if (!cls)
+		{
+			CString path;
+			assClass->GetExtendedName(path, "/", true);
+			throw int_exception(path + " must be an association class");
+		}
 		ASSERT(cls);
 		associationClass = cls->GetComposite();
+		if (!associationClass)
+		{
+			CString path;
+			assClass->GetExtendedName(path, "/", true);
+			throw int_exception(path + " must be an association class"); // FIXME this error message is wrong
+		}
 		associationClass->SetAssociation(this);
 		association = associationClass->GetName();
 	}
