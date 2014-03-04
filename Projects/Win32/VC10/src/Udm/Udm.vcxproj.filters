@@ -32,6 +32,9 @@
     <ClCompile Include="..\..\..\..\..\src\Udm\UdmUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\src\UdmBase\DTDGen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\src\Udm\Udm.h">

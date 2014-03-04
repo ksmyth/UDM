@@ -14,6 +14,11 @@ this software.
 #ifndef MOBIES_ERRHAND_H
 #define MOBIES_ERRHAND_H
 
+// static libs are no longer distributed, so default to UDM_DYNAMIC_LINKING for VS2010 and later
+#if _MSC_VER >= 1600 && !defined(UDM_NO_DYNAMIC_LINKING) && !defined(UDM_DLL_EXPORT)
+#define UDM_DYNAMIC_LINKING 1
+#endif
+
 #ifndef UDM_DYNAMIC_LINKING
 #define UDM_DLL 
 #else
@@ -56,6 +61,7 @@ namespace Udm = UDM_NAMESPACE;
 #define UDM_PLATFORM "Win32"
 #endif
 #define UDM_DLL_LIB "UdmDll_" UDM_PLATFORM_TOOLSET "_" UDM_PLATFORM UDM_DEBUG ".lib"
+#define UDM_RVALUE
 #elif (_MSC_VER == 1600) /* VS2010 */
 #define UDM_NAMESPACE Udm_VS10
 namespace UDM_NAMESPACE {};
@@ -89,6 +95,18 @@ namespace Udm = UDM_NAMESPACE;
 #else
 #define UDM_NAMESPACE Udm
 #endif /* _WIN32 */
+
+#if (_MSC_VER == 1600 || _MSC_VER == 1700) && !defined(UDM_NO_ITERATOR_DEBUG_LEVEL_CHECK)
+# ifdef _DEBUG
+#  define UDM_ITERATOR_DEBUG_LEVEL 2
+# else
+#  define UDM_ITERATOR_DEBUG_LEVEL 0
+# endif
+# if _ITERATOR_DEBUG_LEVEL != UDM_ITERATOR_DEBUG_LEVEL
+#  error _ITERATOR_DEBUG_LEVEL must be the default value
+# endif
+#endif
+
 
 #ifdef __GXX_EXPERIMENTAL_CXX0X__
 #define UDM_RVALUE

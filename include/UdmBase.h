@@ -199,6 +199,7 @@ this software.
 #define MOBIES_UDMBASE_H
 
 #ifdef _WIN32
+#pragma once
 //stupid win32 warnings
 #pragma warning ( disable : 4786 )
 #pragma warning( disable : 4290 ) //C++ Exception Specification Ignored warning

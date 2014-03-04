@@ -116,7 +116,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>xerces-c_2.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -163,7 +163,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>xerces-c_2_x64.lib;zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(UDM_3RDPARTY_PATH)\zlib-1.2.5\contrib\vstudio\vc10\x64\ZlibDllRelease;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -209,7 +209,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>xerces-c_2.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -254,7 +254,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>xerces-c_2_x64.lib;zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlibwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(UDM_3RDPARTY_PATH)\zlib-1.2.5\contrib\vstudio\vc10\x64\ZlibDllRelease;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -267,6 +267,7 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\src\UdmBase\DTDGen.cpp" />
     <ClCompile Include="..\..\..\..\..\src\Udm\ClassGen.cpp" />
     <ClCompile Include="..\..\..\..\..\src\Udm\DiagramGen.cpp" />
     <ClCompile Include="..\..\..\..\..\src\Udm\NamespaceGen.cpp" />
@@ -309,25 +310,8 @@
     <ClInclude Include="..\..\..\..\..\src\Udm\Udm.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\UdmBase\UdmBase.vcxproj">
-      <Project>{30c55da9-9cba-4d6c-bbbd-c7e8823a027d}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\UdmDom\UdmDom.vcxproj">
-      <Project>{9a094c52-e029-4333-ac60-580b9b928e4e}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\UdmGme\UdmGme.vcxproj">
-      <Project>{0763153d-e646-403a-93b7-6033b1d13a0c}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\UdmUtil\UdmUtil.vcxproj">
-      <Project>{e663042b-f135-4502-b7a1-d62f21126e3b}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="..\Uml\Uml.vcxproj">
-      <Project>{6a53e343-14c2-4463-a9c8-332dae560eaf}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    <ProjectReference Include="..\UdmDll\UdmDll.vcxproj">
+      <Project>{3cae3dee-065e-426c-9c3c-f1f59217c00b}</Project>
     </ProjectReference>
     <ProjectReference Include="File2Code\File2Code.vcxproj">
       <Project>{51a35fc8-1d28-4b8a-9592-ce334ffa7539}</Project>
