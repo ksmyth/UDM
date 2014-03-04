@@ -129,7 +129,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -184,7 +184,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <ImportLibrary>$(OutDir)GmeOclExprCheckerD.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -241,7 +241,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -297,7 +297,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <ImportLibrary>$(OutDir)GmeOclExprChecker.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>

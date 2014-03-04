@@ -129,7 +129,7 @@
       <AdditionalDependencies>xerces-c_2.lib;Xalan-C_1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -171,7 +171,7 @@
       </DataExecutionPrevention>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -217,7 +217,7 @@
       <AdditionalDependencies>xerces-c_2.lib;Xalan-C_1.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -261,7 +261,7 @@
       </DataExecutionPrevention>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

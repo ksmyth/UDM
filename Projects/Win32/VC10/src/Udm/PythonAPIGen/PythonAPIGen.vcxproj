@@ -88,9 +88,6 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Lib />
-    <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\lib</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -106,9 +103,6 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Lib />
-    <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\lib</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -122,9 +116,6 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Lib />
-    <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\lib</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -138,9 +129,6 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Lib />
-    <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\lib</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\src\Udm\PythonAPIGen\PythonAPIGen.cpp" />

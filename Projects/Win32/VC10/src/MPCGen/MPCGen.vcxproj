@@ -96,7 +96,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\etc</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\etc</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,7 +120,7 @@
       </DataExecutionPrevention>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\etc</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\etc</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -145,7 +145,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\etc</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\etc</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -169,7 +169,7 @@
       </DataExecutionPrevention>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\etc</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\etc</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

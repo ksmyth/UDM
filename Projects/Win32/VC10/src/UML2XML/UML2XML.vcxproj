@@ -144,7 +144,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
     <PreBuildEvent />
   </ItemDefinitionGroup>
@@ -199,7 +199,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <ImportLibrary>$(OutDir)UML2XML.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -259,7 +259,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -318,7 +318,7 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
+      <Command>xcopy /Y/D/F "$(TargetPath)" "$(UDM_PATH)"\bin</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
