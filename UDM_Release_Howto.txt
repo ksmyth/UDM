@@ -86,22 +86,24 @@ set PATH=%PATH%;%userprofile%\bin
 # GME Release
 Release notes: Doc/README_in.txt
 Version number: Doc/index.md
+curl -s -S http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/lastBuild/consoleText | grep Finding\ ID
+curl -s -S http://build.isis.vanderbilt.edu/job/GME_x64/lastBuild/label=build-slave6/consoleText | grep Finding\ ID
 ssh kms1 'cd symbolstmp && python ~/bin/pdb_promote.py 0000007606 0000007607' x2 "Finding ID"
 ssh kms1 rsync -avP symbols /media/7ce1528b-2101-4764-81e3-aed9112e3ad8/214/
 export PATH=$PATH:/c/cygwin/bin
-curl -o GME_x64-13.10.8.msi http://build.isis.vanderbilt.edu/job/GME_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/Install/GME_x64.msi && \
-curl -o GME-13.10.8.msi http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/lastSuccessfulBuild/artifact/trunk/Install/GME.msi && \
+curl -o GME_x64-13.11.14.msi http://build.isis.vanderbilt.edu/job/GME_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/Install/GME_x64.msi && \
+curl -o GME-13.11.14.msi http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/lastSuccessfulBuild/artifact/trunk/Install/GME.msi && \
 curl -o README.txt http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/ws/trunk/Doc/README.txt
 
 for file in http://build.isis.vanderbilt.edu/job/GME_x64/lastSuccessfulBuild/label=build-slave6/artifact/trunk/Install/GME_bin_x64.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_bin.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_paradigms.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_SDK.msm; do curl -O $file; done
 
-svn cp -m 'Tag Release 13.10.8' https://svn.isis.vanderbilt.edu/GMESRC/trunk https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_13.10.8
-svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_13.10.8 GME-13.10.8_src && \
-'/c/Program Files/7-Zip/7z.exe' a -r GME-13.10.8_src.zip GME-13.10.8_src/
+svn cp -m 'Tag Release 13.11.14' https://svn.isis.vanderbilt.edu/GMESRC/trunk https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_13.11.14
+svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_13.11.14 GME-13.11.14_src && \
+'/c/Program Files/7-Zip/7z.exe' a -r GME-13.11.14_src.zip GME-13.11.14_src/
 
-ssh repo@repo.isis.vanderbilt.edu mkdir GME/13.10.8/ && \
-scp README.txt GME-13.10.8.msi GME_x64-13.10.8.msi GME-13.10.8_src.zip repo@repo.isis.vanderbilt.edu:GME/13.10.8/ && \
-ssh repo@repo.isis.vanderbilt.edu chmod -R a+r GME/13.10.8/
+ssh repo@repo.isis.vanderbilt.edu mkdir GME/13.11.14/ && \
+scp README.txt GME-13.11.14.msi GME_x64-13.11.14.msi GME-13.11.14_src.zip repo@repo.isis.vanderbilt.edu:GME/13.11.14/ && \
+ssh repo@repo.isis.vanderbilt.edu chmod -R a+r GME/13.11.14/
 
 
 # Update online documentation:
