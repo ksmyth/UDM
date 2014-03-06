@@ -61,6 +61,11 @@
     <Exec Command="call scripts\run-ant-on-judm.bat VC9 Release generate test" WorkingDirectory="$(MSBuildThisFileDirectory)"/>
   </Target>
 
+  <Target Name="TestPython">
+    <MSBuild Projects="tests\test_UdmPython\test_UdmPython_models.sln" Targets="Build" Properties="Configuration=Release" />
+    <Exec Command="udm_python_test.py" WorkingDirectory="tests\test_UdmPython"/>
+  </Target>
+  
   <Target Name="Installer" DependsOnTargets="BuildVS9;BuildVS10;BuildVS10_x64;judm">
     <!-- Must build MetaGME2UML before this -->
     <!-- TODO: Exec build_msi.py -->
