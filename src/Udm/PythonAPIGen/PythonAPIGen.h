@@ -7,6 +7,15 @@
 
 using namespace std;
 
+class PythonAPIGen;
+
+class PythonInheritanceSolver : public ::UdmCPPGen::InheritanceSolver
+{
+    friend class PythonAPIGen;
+public:
+    PythonInheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by_namespace = false);
+    virtual string getAncestorList(const ::Uml::Class &cl) const;
+};
 class PythonAPIGen
 {
   public:
@@ -23,7 +32,7 @@ class PythonAPIGen
 
   private:  
     void open();
-	void generateClass(::Uml::Class &cls);
+	void generateClass(::Uml::Class &cls, const PythonInheritanceSolver &is);
 	void generateAttributes(::Uml::Class &cls);
 	void generateChildrenAccess(::Uml::Class &cls);
 	void generateAssociations(::Uml::Class &cls);

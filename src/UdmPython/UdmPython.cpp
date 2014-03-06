@@ -150,6 +150,35 @@ Udm::Object Uml_Diagram() {
 	return (Udm::Object) Uml::Class::meta.parent();
 }
 
+Udm::Object InitChildRole(Udm::Object& c, Udm::Object &p, str _crole, str _prole)
+{
+    
+    std::string crole = extract<std::string>(_crole);
+    std::string prole = extract<std::string>(_prole);
+    
+    Uml::Composition comp = matchChildToParent(Uml::Class::Cast(c), Uml::Class::Cast(p), crole.empty() ? NULL : crole.c_str(), prole.empty() ? NULL : prole.c_str());
+    
+    if (!comp)
+        throw std::runtime_error(std::string("Insufficient information to initialize Uml::CompositionChildRole in InitChildRole"));
+    
+    return (Udm::Object) (comp.childRole()) ;
+}
+
+Udm::Object InitParentRole(Udm::Object& c, Udm::Object &p, str _crole, str _prole)
+{
+    
+    std::string crole = extract<std::string>(_crole);
+    std::string prole = extract<std::string>(_prole);
+    
+    Uml::Composition comp = matchChildToParent(Uml::Class::Cast(c), Uml::Class::Cast(p), crole.empty() ? NULL : crole.c_str(), prole.empty() ? NULL : prole.c_str());
+    
+    if (!comp)
+        throw std::runtime_error(std::string("Insufficient information to initialize Uml::CompositionParentRole in InitParentRole"));
+    
+    return (Udm::Object) (comp.parentRole());
+}
+
+
 template<typename colT>
 boost::python::list toList(colT collection) {
 	boost::python::list ret;
@@ -264,12 +293,17 @@ object Object_set_attr(Udm::Object& self, str _name, object value) {
 
 }
 
-object Object_children(Udm::Object& self, object child_role, object parent_role, object _child_type) {
-	bool roles_none = true;
+object Object_children(Udm::Object& self, object child_role, object parent_role, object _child_type)
+{
+    //To be removed and use only getChildren below.
+	
+    bool roles_none = true;
 	Uml::Class child_type;
-	if (_child_type != object()) {
+	if (_child_type != object())
+    {
 		child_type = Uml::Class::Cast(extract<Udm::Object&>(_child_type));
 	}
+    
 	Udm::Object::CompositionInfo comp_info;
 	if (child_role != object()) {
 		comp_info.strChildRoleName = extract<const char*>(child_role);
@@ -279,15 +313,49 @@ object Object_children(Udm::Object& self, object child_role, object parent_role,
 		comp_info.strParentRoleName = extract<const char*>(parent_role);
 		roles_none = false;
 	}
-	if (!roles_none) {
+    
+	if (!roles_none)
+    {
 		// FIXME: might need to be a singleton if child_role is specified
 		return toList(self.GetChildObjects(comp_info, child_type));
-	} else if (child_type) {
+	}
+    else if (child_type)
+    {
 		return toList(self.GetChildObjects(child_type));
-	} else {
+	}
+    else
+    {
 		return toList(self.GetChildObjects());
 	}
 }
+
+object Object_getChildren(Udm::Object& self, object _ccrole, object _kind)
+{
+    //this function works in exactly the same way as ObjectImpl::getChildren()
+    // if role is given, return only those children that have that role (ignore kind)
+    // else if kind is not null, return all children which are compatible with kind
+    // else if kind is null, return all children
+
+    if (!self) throw std::runtime_error(std::string("Object is null in getChildren()"));
+    
+    Uml::CompositionChildRole ccrole;
+    if (_ccrole != object())
+        ccrole = Uml::CompositionChildRole::Cast(extract<Udm::Object&>(_ccrole));
+    
+    Uml::Class kind;
+    if (_kind != object())
+        kind = Uml::Class::Cast(extract<Udm::Object&>(_kind));
+    
+    vector< ::Udm::ObjectImpl*> children = self.__impl()->getChildren(ccrole, kind);
+
+    set< ::Udm::Object> ret;
+    for (vector< ::Udm::ObjectImpl*>::iterator child = children.begin(); child!=children.end(); child++)
+        ret.insert(*child);
+    
+    return toList(ret);
+    
+}
+
 
 Udm::Object Object_type(Udm::Object& self) {
 	return Udm::Object(self.type());
@@ -686,6 +754,7 @@ BOOST_PYTHON_MODULE(udm)
 		.staticmethod("__cast")
 		.def("delete", &Udm::Object::DeleteObject)
 		.def("_children", Object_children)
+        .def("getChildren", Object_getChildren)
 		.def("_adjacent", Object_adjacent)
 		.def("get_attribute",&Object_attr_by_uml_attr_as_udm_object)
 		.def("set_attribute",&Object_set_attr_by_uml_attr_as_udm_object)
@@ -727,6 +796,8 @@ BOOST_PYTHON_MODULE(udm)
 	def("uml_diagram", Uml_Diagram);
 
 	def("CopyObjectHierarchy", &CopyObjectHierarchy_);
+    def("InitChildRole",&InitChildRole);
+    def("InitParentRole", &InitParentRole);
 
 
 	class_<Udm::SmartDataNetwork>("SmartDataNetwork", no_init) //, init<const Udm::UdmDiagram &>())

@@ -22,12 +22,7 @@ this software.
 
 namespace UdmCPPGen {
 
-template<class T>
-struct name_less : binary_function <T, T, bool> {
-	bool operator() (const T& x, const T& y) const {
-		return static_cast<const std::string>(x.name()) < static_cast<const std::string>(y.name());
-	}
-};
+
 
 
 

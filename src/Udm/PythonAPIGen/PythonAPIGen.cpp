@@ -1,6 +1,38 @@
+#include "../Udm.h"
 #include "PythonAPIGen.h"
 
 #include <iterator>
+
+
+PythonInheritanceSolver::PythonInheritanceSolver(const Uml::Diagram &diagram, bool sort_by_namespace) : ::UdmCPPGen::InheritanceSolver(diagram, sort_by_namespace) {};
+string PythonInheritanceSolver::getAncestorList(const ::Uml::Class &cl ) const
+{
+    string ret;
+	typedef set< ::Uml::Class, ::UdmCPPGen::name_less<Uml::Class> > SortedClasses;
+	::UdmCPPGen::name_less< ::Uml::Class> sort;
+	SortedClasses bases = cl.baseTypes_sorted< ::UdmCPPGen::name_less<Uml::Class> >(sort);
+	if( bases.size() == 0)
+        ret += "(UdmPython)";
+	else
+	{
+        ret += "(";
+		string sep = "";
+		SortedClasses::iterator h;
+		for(h = bases.begin(); h != bases.end(); h++)
+		{
+			if(*h != cl)
+			{
+				ret += sep;
+				ret += h->name();
+				sep = ", ";
+			}
+		}
+        ret += ")";
+	}
+    
+	return ret;
+
+}
 
 void GeneratePythonClass(const ::Uml::Class &cl, const string & pckg_hierarcy, const string& diagName);
 
@@ -52,15 +84,13 @@ void PythonAPIGen::generate()
   m_output << "from UdmPython import *" << endl << endl;
 
 
-  /*GENERATE PYTHON CLASSES*/
-  set< ::Uml::Class> uml_classes = m_diagram.classes();
-  for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
-  {
-
-	  ::Uml::Class currCls = *uc_i;
-	  generateClass(currCls);  
-	  
-  }
+    /*GENERATE PYTHON CLASSES*/
+    set< ::Uml::Class> uml_classes = m_diagram.classes();
+    PythonInheritanceSolver is(m_diagram);
+    for ( vector < ::Uml::Class>::iterator gio_i = is.good_inheritence_order.begin(); gio_i != is.good_inheritence_order.end(); gio_i++)
+        generateClass(*gio_i,is );
+    
+   
 
   /*INITIALIZE THE META STATIC VARIABLES*/
   
@@ -72,34 +102,85 @@ void PythonAPIGen::generate()
         m_output << "\t" << uc_i->name() << ".Meta = GetUmlClassByName(diagram,\"" << uc_i->name()   << "\")"<< endl;
     }
 
-  m_output << endl;
-  m_output << "def init_attributes():" << endl;
+    m_output << endl;
+    m_output << "def init_attributes():" << endl;
     for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
     {
         set< ::Uml::Attribute> attrs = uc_i->attributes();
         for( set< ::Uml::Attribute>::iterator attrs_i = attrs.begin(); attrs_i != attrs.end(); attrs_i++)
                 m_output << "\t" << uc_i->name() << ".meta_" << attrs_i->name() << " = GetUmlAttributeByName(" << uc_i->name() << ".Meta, \"" << attrs_i->name() << "\")"<< endl;
     }
+    m_output << endl;
+    m_output << "def init_childroles():" << endl;
+    for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
+    {
+        ::Uml::Class c = *uc_i;
+        string cl_name = c.name();
+        
+        set< ::Uml::Class> childrenkinds;
+        set< ::Uml::CompositionParentRole> children = c.parentRoles();
+        
+        for( set< ::Uml::CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++)
+        {
+            ::Uml::CompositionChildRole the_other = Uml::theOther(*i);
+            
+            ::Uml::Class thischildkind = (::Uml::Class)the_other.target();
+            //childrenkinds.insert(thischildkind);
+            
+            string rel_name = ::Uml::MakeRoleName(the_other);
+            
+            m_output << "\t" << cl_name << ".meta_" << rel_name << " = GetUmlChildRoleByTypesAndRolenames(" << thischildkind.name() << ".Meta," << cl_name << ".Meta, \"" << the_other.name() <<  "\", \"" << i->name() << "\")" << endl;
+
+        }
+        
+    }
+    
+    m_output << endl;
+    m_output << "def init_parentroles():" << endl;
+    for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
+    {
+        ::Uml::Class c = *uc_i;
+        string cl_name = c.name();
+        
+        set< ::Uml::Class> parentkinds;
+        set< ::Uml::CompositionChildRole> parents = c.childRoles();
+        
+        for( set< ::Uml::CompositionChildRole>::iterator i = parents.begin(); i != parents.end(); i++)
+        {
+            ::Uml::CompositionParentRole the_other = Uml::theOther(*i);
+            
+            ::Uml::Class thisparentkind = (::Uml::Class)the_other.target();
+            //parentkinds.insert(thischildkind);
+            
+            string rel_name = ::Uml::MakeRoleName(the_other);
+            
+            m_output << "\t" << cl_name << ".meta_" << rel_name << " = GetUmlParentRoleByTypesAndRolenames(" << cl_name << ".Meta," << thisparentkind.name() << ".Meta, \"" << i->name() <<  "\", \"" << the_other.name() << "\")" << endl;
+        }
+        
+    }
+    
 		
 
   m_output << endl << endl;
 
   /*INITIALIZE THE META STATIC VARIABLE*/
 
-  m_output << "def initialize(diagram):" << endl;
-  m_output << "\t" << "try:" << endl;
-  m_output << "\t\t" << "module_initialized" << endl;
-  m_output << "\t" << "except NameError:" << endl;
-  m_output << "\t\t" << "if sys.modules[__name__] != Uml:" << endl;
-  m_output << "\t\t\t" << "Uml.initialize(udm.uml_diagram())" << endl;
-  m_output << "\t\t" << "if sys.modules[__name__] == Uml:" << endl;
-  m_output << "\t\t\t" << "meta_map = udm.map_uml_names(diagram)" << endl;
-  m_output << "\t\t\t" << "#the only meta-object needed to bootstrap" << endl;
-  m_output << "\t\t\t" << "Class.Meta = meta_map.Class" << endl;
-  m_output << "\t\t" << "init_classes(Uml.Diagram(diagram))" << endl;
-  m_output << "\t\t" << "init_attributes()" << endl;
-  m_output << "\t\t" << "module_initialized = True" << endl;
-  m_output << endl;
+    m_output << "def initialize(diagram):" << endl;
+    m_output << "\t" << "try:" << endl;
+    m_output << "\t\t" << "module_initialized" << endl;
+    m_output << "\t" << "except NameError:" << endl;
+    m_output << "\t\t" << "if sys.modules[__name__] != Uml:" << endl;
+    m_output << "\t\t\t" << "Uml.initialize(udm.uml_diagram())" << endl;
+    m_output << "\t\t" << "if sys.modules[__name__] == Uml:" << endl;
+    m_output << "\t\t\t" << "meta_map = udm.map_uml_names(diagram)" << endl;
+    m_output << "\t\t\t" << "#the only meta-object needed to bootstrap" << endl;
+    m_output << "\t\t\t" << "Class.Meta = meta_map.Class" << endl;
+    m_output << "\t\t" << "init_classes(Uml.Diagram(diagram))" << endl;
+    m_output << "\t\t" << "init_childroles()" << endl;
+    m_output << "\t\t" << "init_parentroles()" << endl;
+    m_output << "\t\t" << "init_attributes()" << endl;
+    m_output << "\t\t" << "module_initialized = True" << endl;
+    m_output << endl;
 	
 
   
@@ -119,9 +200,10 @@ void PythonAPIGen::open()
 		throw udm_exception( "Error opening for write "+fname );
 }
 
-void PythonAPIGen::generateClass(::Uml::Class &cls)
+void PythonAPIGen::generateClass(::Uml::Class &cls, const PythonInheritanceSolver &is)
 {
-	m_output << "class " << cls.name() << "(UdmPython):" << endl;
+
+	m_output << "class " << cls.name() << is.getAncestorList(cls) <<  ":" << endl;
    	m_output << "\t\"\"\"Generated\"\"\"" << endl;
     m_output << "\t@property" << endl;
     m_output << "\tdef parent(self):" << endl;
@@ -137,13 +219,7 @@ void PythonAPIGen::generateClass(::Uml::Class &cls)
 	m_output << "\t\treturn " << cls.name() << "(obj)" << endl;
 	m_output << "\t" << endl;
 
-	//type method
-	// we have this at UdmPython level
-	//m_output << "\tdef type(self):"<< endl;
-	//m_output << "\t\t\"\"\"returning the type of object (Uml.Class)\"\"\"" << endl;
-	//m_output << "\t\treturn " << "Uml.Class.cast(self.meta)" << endl;
-	//m_output << "\t" << endl;
-
+	
 	generateChildrenAccess(cls);
 	generateAssociations(cls);
 }
@@ -174,175 +250,77 @@ void PythonAPIGen::generateAttributes(::Uml::Class &cls)
 
 void PythonAPIGen::generateChildrenAccess(::Uml::Class &cls)
 {
-  //childrens ---------------------------------------------------
-  set<Uml::Class> allContainedClasses;
-
-  // set of contained classes
-  set< ::Uml::Class> conts = Uml::ContainedClasses( cls );
-  for ( set< ::Uml::Class>::iterator c_i = conts.begin(); c_i != conts.end(); c_i++ )
-  {
-	// the descendants of the contained class
-	set < ::Uml::Class> conts_der = Uml::DescendantClasses( *c_i );
-	std::copy(conts_der.begin(), conts_der.end(), std::inserter(allContainedClasses, allContainedClasses.begin()));
-  }
-
-  {
-	for ( set< ::Uml::Class>::iterator c_d_i = allContainedClasses.begin(); c_d_i != allContainedClasses.end(); c_d_i++ )
+    
+    string cl_name = cls.name();
+    
+	set< ::Uml::Class> childrenkinds;
+	set< ::Uml::CompositionParentRole> children = cls.parentRoles();
+    
+    for( set< ::Uml::CompositionParentRole>::iterator i = children.begin(); i != children.end(); i++)
 	{
-	  if ( c_d_i->isAbstract() )
-		continue; 
-
-	  ::Uml::Composition comp = Uml::matchChildToParent( *c_d_i, cls );
-	  string c_i_name = (*c_d_i).name();
-	  string pkg_name = "";
-
-	  // without child role
-	  if ( comp )
-	  {
-		::Uml::CompositionChildRole ccr = comp.childRole();
-		string ccr_name = ccr.name();
-
-		if ( (ccr.max() == -1) || (ccr.max() > 1) )
-		{
-		  m_output << "\tdef " << "get" << c_i_name << "Children(self):" << endl;
-		  m_output << "\t\t\"\"\"" << endl;
-		  m_output << "\t\tReturns all the children of type <code>" << c_i_name << "<code> of this container. " << endl;
-		  m_output << "\t\t@return  The children in a lisst" << endl;
-		  m_output << "\t\t\"\"\"" << endl;
-
-		  m_output << "\t\tchilds = self.children(child_type=" << c_i_name << ".Meta)" << endl;
-		  m_output << "\t\tlist = []" << endl;
-		  m_output << "\t\t" << "for i in childs:" << endl;
-		  m_output << "\t\t\t" << "list.append(" << c_i_name << "(i))" << endl;
-		  m_output << "\t\treturn list" << endl;
-		  m_output << endl;
-		  
-		}
-		else
-		{
-		  m_output << "\tdef " << "get" << c_i_name << "Child(self): " << endl;
-		  m_output << "\t\t\"\"\"" << endl;
-		  m_output << "\t\tReturn the child of type <code>" << c_i_name << "<code> of this container. " << endl;
-		  m_output << "\t\t@return  The child" << endl;
-		  m_output << "\t\t\"\"\"" << endl;
-		  m_output << "\t\tchilds = self.impl.children(child_type=" << c_i_name << ".meta)" << endl;
-		  m_output << "\t\t" << "if len(childs) > 0:" << endl;
-		  m_output << "\t\t\t" << "return " << c_i_name << "(childs[0])" << endl;
-		  m_output << "\t\t" << "else: " << endl;
-		  m_output << "\t\t\t" << "return None" << endl;
-		  m_output << "\t" << endl;
+        ::Uml::CompositionChildRole the_other = Uml::theOther(*i);
+        
+		::Uml::Class thischildkind = (::Uml::Class)the_other.target();
+		childrenkinds.insert(thischildkind);
+        
+		string rel_name = ::Uml::MakeRoleName(the_other);
 		
-		  /*
-		  if ( strcmp(ccr_name.c_str(), "") == 0 )
-		  {
-			m_output << "\t\t'''UdmPseudoObjectContainer container = getChildren(null, " ;
-			m_output << pkg_name << c_i_name << ".META_TYPE, " << pkg_name << c_i_name << ".META_TYPE_NS); " << endl;
-		  }
-		  else
-		  {
-			m_output << "\t\tUdmPseudoObjectContainer container = getChildren(\"" << ccr_name << "\",";
-			m_output << pkg_name << c_i_name << ".META_TYPE, " << pkg_name << c_i_name << ".META_TYPE_NS); " << endl;
-		  }
-		  */
-		  
-		  //m_output << "\t\tif (container.getLength() > 0)" << endl << endl;
-		  //m_output << "\t\t\treturn (" << pkg_name << c_i_name << ")" << pkg_name << "Utils.wrapWithSubclass(container.getAt(0), metaDiagram);" << endl;
-		  //m_output << "\t\treturn null;'''" << endl << endl;
-		  //m_output << "\t" << endl << endl;
-		}
-	  }
-	  // with child role
-	  else
-	  {
-		//generate a common getter function for these types of children
-		/*
-		m_output << "\t'''" << endl;
-		m_output << "\t * Returns all the children of type <code>" << c_i_name << "<code> of this container. " << endl;
-		m_output << "\t * @return  The children in a list" << endl;
-		m_output << "\t ''' " << endl;
-		
-		m_output << "\tdef " << "get" << c_i_name << "Children(self):" << endl;
-		m_output << "\t" << endl;
-		m_output << "\t\t'''UdmPseudoObjectContainer container = getChildren(null," ;
-		m_output << pkg_name << c_i_name << ".META_TYPE, " << pkg_name << c_i_name << ".META_TYPE_NS);" << endl;
-		m_output << "\t\t" << pkg_name << c_i_name << "[] array = new " << pkg_name << c_i_name << "[container.getLength()];" << endl;
-		m_output << "\t\tfor (int i = 0; i < container.getLength(); i++) " << endl;
-		m_output << "\t\t{" << endl;
-		m_output << "\t\t\tarray[i] = (" << pkg_name << c_i_name << ")" << pkg_name << "Utils.wrapWithSubclass(container.getAt(i), metaDiagram);" << endl;
-		m_output << "\t\t}" << endl;
-		m_output << "\t\treturn array;'''" << endl;
-		m_output << "\t" << endl;
-		*/
-		//end of common getter function generation
-
-		set < ::Uml::CompositionChildRole> ccrs = ::Uml::CompositionPeerChildRoles( cls );
-		for ( set< ::Uml::CompositionChildRole>::iterator ccrs_i = ccrs.begin(); ccrs_i != ccrs.end(); ccrs_i++ )
+        if (the_other.isNavigable())
+        {
+            m_output << "\tdef " << rel_name << "(self):" <<endl;
+            
+            if(the_other.max() == 1)
+            {
+                m_output << "\t\t# return the single child contained via rolename: " << the_other.name() << ", rel_name: " << rel_name << endl;
+                m_output << "\t\tchilds = self.children(child_role=" << cl_name << ".meta_" << rel_name <<")" << endl;
+                m_output << "\t\t" << "if len(childs) > 0:" << endl;
+                m_output << "\t\t\t" << "return globals()[childs[0]._type().name](childs[0])" << endl;
+                m_output << "\t\t" << "else: " << endl;
+                m_output << "\t\t\t" << "return None" << endl;
+                
+            }
+            else
+            {
+                m_output << "\t\t# return the children contained via rolename: " << the_other.name() << ", rel_name: " << rel_name << endl;
+                m_output << "\t\tchilds = self.children(child_role=" << cl_name << ".meta_" << rel_name <<")" << endl;
+                m_output << "\t\tlist = []" << endl;
+                m_output << "\t\t" << "for i in childs:" << endl;
+                m_output << "\t\t\t" << "list.append(globals()[i._type().name](i))"  << endl;
+                m_output << "\t\treturn list" << endl;
+                
+            }
+        }
+        else m_output << "\t# access method for non-navigable association " << rel_name << " omitted";
+    }
+    
+    
+    ::Uml::Diagram dgr = ::Uml::GetDiagram(cls);
+	::Uml::DiagramClasses allclasses = ::Uml::DiagramClasses(dgr);
+    
+	for (::Uml::DiagramClasses::iterator j = allclasses.begin(); j != allclasses.end(); j++)
+	{
+		for (set< ::Uml::Class>::iterator k = childrenkinds.begin(); k != childrenkinds.end(); k++)
 		{
-		  ::Uml::Class parent = Uml::theOther(*ccrs_i).target();
-		  ::Uml::Class child = ccrs_i->target();
-		  string child_name = string(child.name());
-		  
-		  ::Uml::Composition comp = Uml::matchChildToParent( child, parent );
-
-		  if ( !comp )
-		  {
-			//will reach here only if more than one composition is possible
-
-			//string child role name
-			string ccr_name = ccrs_i->name();
-			m_output << "\t'''" << endl;
-			m_output << "\t *  Composition role name <code>" << ccr_name << "</code>." << endl;
-			m_output << "\t '''" << endl;
-			
-			m_output << endl << endl;
-
-			//getRoleName
-			if ( (ccrs_i->max() == -1) || (ccrs_i->max() > 1) )
+			if (Uml::IsDerivedFrom(*j, *k) || Uml::IsDerivedFrom(*k, *j))
 			{
-			  m_output << "\t'''" << endl;
-			  m_output << "\t * Returns the children <code>" << child_name << "<code> of this container. " << endl;
-			  m_output << "\t * which have role <code>" << ccr_name << "<code>." << endl;
-			  m_output << "\t * @return  The children in an array" << endl;
-			  m_output << "\t ''' " << endl;
-			  
-			  m_output << "\tdef " << "get" << ccr_name << "Children(self):" << endl;
-			  
-			  m_output << "\t" << endl;
-			  m_output << "\t\t'''UdmPseudoObjectContainer container = getChildren(";
-			  
-			  m_output << "\t\t" << pkg_name << child_name << "[] array = new " << pkg_name << child_name << "[container.getLength()];" << endl;
-			  m_output << "\t\tfor (int i = 0; i < container.getLength(); i++) " << endl;
-			  m_output << "\t\t{" << endl;
-			  m_output << "\t\t\tarray[i] = (" << pkg_name << child_name << ")" << pkg_name << "Utils.wrapWithSubclass(container.getAt(i), metaDiagram);" << endl;
-			  m_output << "\t\t}" << endl;
-			  m_output << "\t\treturn array;'''" << endl;
-			  m_output << "\t" << endl;
+				string kind_children_name = j->name();
+				
+                
+                m_output << "\tdef " << kind_children_name << "_kind_children(self):" << endl;
+                m_output << "\t\t# return the children of type: "  << kind_children_name << endl;
+                m_output << "\t\tchilds = self.children(child_type=" << kind_children_name << ".Meta)" << endl;
+                m_output << "\t\tlist = []" << endl;
+                m_output << "\t\t" << "for i in childs:" << endl;
+                m_output << "\t\t\t" << "list.append(globals()[i._type().name](i))"  << endl;
+                m_output << "\t\treturn list" << endl;
+
+
+				break;
 			}
-			else
-			{
-			  /*
-			  m_output << "\t'''" << endl;
-			  m_output << "\t * Returns the child <code>" << child_name << "<code> of this container. " << endl;
-			  m_output << "\t * which has role <code>" << ccr_name << "<code>." << endl;
-			  m_output << "\t * @return  The children in a list" << endl;
-			  m_output << "\t ''' " << endl;
-			  
-			  m_output << "\tdef " << " get" << ccr_name << "Child(self):" << endl;
-			  m_output << "\t" << endl;
-			  m_output << "\t\t'''UdmPseudoObjectContainer container = getChildren(" ;
-			  //m_output << Utils::getCCRString(*ccrs_i) << "," << pkg_name << child_name << ".META_TYPE, " << pkg_name << child_name << ".META_TYPE_NS);" << endl;
-			  m_output << "\t\tif (container.getLength() > 0)" << endl << endl;
-			  m_output << "\t\t\t return (" << pkg_name << child_name << ")" << pkg_name << "Utils.wrapWithSubclass(container.getAt(0), metaDiagram);" << endl;
-			  m_output << "\t\treturn null;'''" << endl << endl;
-			  m_output << "\t" << endl;
-			  */
-			}
-		  } 
-		} 
-	  }
+		}
 	}
-  }
-  //childrens end ----------------------------------------------------------------
+    
+     //childrens end ----------------------------------------------------------------
 }
 
 void PythonAPIGen::generateAssociations(::Uml::Class &cls)

@@ -17,7 +17,7 @@ this software.
 
 #include <UdmXmi.h>
 #include <fstream>
-
+#include "Udm.h"
 #include "./JavaAPIGen/JavaAPIGen.h"
 #include "./PythonAPIGen/PythonAPIGen.h"
 
@@ -30,7 +30,7 @@ this software.
 #include <minizip/unzip.h>
 #endif
 
-#include "Udm.h"
+
 
 static const char* udm_usage = 
 "Usage: udm <diagramfilename> [<genfilesnamebase>] [-d <Uml.XSD searchpath>] \

@@ -60,13 +60,14 @@ rf =LampDiagram.RootFolder(dn.root)
 walk_hierarchy_udmp(rf)
 
 
-l_children = rf.getLampChildren()
+l_children = rf.Lamp_kind_children()
 
 if l_children:
     print "I have found the following lamps: "
     for lamp in l_children:
         print lamp.ModelName
         print lamp.name
+        print type(lamp)
 
 
 

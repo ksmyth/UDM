@@ -20,6 +20,7 @@ this software.
 #include <UdmDom.h>
 #include <UmlExt.h>
 
+
 using namespace std;
 
 struct UdmOpts {
@@ -97,7 +98,15 @@ void GenerateDSD(const ::Uml::Namespace &ns, const UdmOpts &opts, bool qualified
 void GenerateDSD(const ::Uml::Diagram &dgr, const string &fname, const UdmOpts &opts, bool qualified_attrs_ns);
 
 
-namespace UdmCPPGen {
+namespace UdmCPPGen
+{
+    
+    template<class T>
+    struct name_less : binary_function <T, T, bool> {
+        bool operator() (const T& x, const T& y) const {
+            return static_cast<const std::string>(x.name()) < static_cast<const std::string>(y.name());
+        }
+    };
 
 void OutFmts(ostream &out, const string &idt, const vector<boost::format> &v, bool semicolon = true);
 void OutVecFmts(ostream &out, const string &idt, const vector< vector<boost::format> > &v, const string &label = "");
@@ -112,8 +121,7 @@ class InheritanceSolver {
 	cltoclsmap explicitinits;
 	cltoboolmap objectneeded_map;
 	set< ::Uml::Class> virtualbaseclasses;
-	vector< ::Uml::Class> good_inheritence_order;
-
+	
 	struct sortByActiveNamespace : public binary_function< ::Uml::Class, ::Uml::Class, bool>
 	{
 	private:
@@ -123,11 +131,14 @@ class InheritanceSolver {
 		bool operator()(const ::Uml::Class &a, const ::Uml::Class &b) const;
 	};
 
-	friend class DiagramGen;
+    protected:
+    vector< ::Uml::Class> good_inheritence_order;
 
+	friend class DiagramGen;
+    
 public:
 	InheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by_namespace = false);
-	string getAncestorList(const ::Uml::Class &cl) const;
+	virtual string getAncestorList(const ::Uml::Class &cl) const;
 	string getInitializers(const ::Uml::Class &cl, const string &argument) const;
 };
 

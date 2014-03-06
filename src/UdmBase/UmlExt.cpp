@@ -565,21 +565,31 @@ namespace Uml
 		return attributes;
 	}
 
-	UDM_DLL Composition matchChildToParent(Class c, Class p) 
+	UDM_DLL Composition matchChildToParent(Class c, Class p, const char * crole, const char * prole)
 	{
 		Composition comp;
 		set<Class> pancs = AncestorClasses(p);
 		set<Class> cancs = AncestorClasses(c);
-		for(set<Class>::iterator j = cancs.begin(); j != cancs.end(); j++) {
+		for(set<Class>::iterator j = cancs.begin(); j != cancs.end(); j++)
+        {
 			set<CompositionChildRole> cr = (*j).childRoles();
-			for(set<CompositionChildRole>::iterator i = cr.begin(); i != cr.end(); i++) {
-				if(pancs.find(theOther(*i).target()) != pancs.end()) {
-					if(comp) {
-						return NULL;
-					}
-					comp = (*i).parent();
-				}
-			}
+            for(set<CompositionChildRole>::iterator i = cr.begin(); i != cr.end(); i++)
+            {
+                if (crole == NULL  || i->name() == string(crole))
+                {
+                    if (prole == NULL || theOther((*i)).name() == string(prole))
+                    {
+                        if(pancs.find(theOther(*i).target()) != pancs.end())
+                        {
+                            if(comp)
+                            {
+                                return NULL;
+                            }
+                            comp = (*i).parent();
+                        }
+                    }
+                }
+            }
 		}
 		return comp;
 	}

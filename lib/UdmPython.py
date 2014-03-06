@@ -30,17 +30,31 @@ class UdmPython(object):
 		import Uml
 		return Uml.Class.cast(self.impl.type)
 
-	def children(self,child_role=None, parent_role=None, child_type=None):
-		#child_type could be either Udm.Object or UdmPython (or descendants)
+	def children(self,child_role=None, child_type=None):
+		#child_type could be either Udm.Object or UdmPython (or descendants: it is expected to be Uml.Class)
+		#child_role could be either Udm.Object or UdmPython (or descendants: it is expected to be Uml.CompositionChildRole)
+		#if role is given, return only those children that have that role (ignore kind)
+		#else if kind is not null, return all children which are compatible with kind
+		#else if kind is null, return all children
+
+
 		ret = []
+		child_type_impl = None
+		child_role_impl = None
+		
 		if isinstance(child_type, UdmPython):
-			for child in self.impl.children(child_role, parent_role, child_type.impl):
-				ret.append(UdmPython(child))
-			return ret
+			child_type_impl = child_type.impl
 		else:
-			for child in self.impl.children(child_role, parent_role, child_type):
-				ret.append(UdmPython(child))
-			return ret
+			child_type_impl = child_type;
+
+		if isinstance(child_role, UdmPython):
+			child_role_impl = child_role.impl
+		else:
+			child_role_impl = child_role;
+
+		for child in self.impl.getChildren(child_role_impl, child_type_impl):
+			ret.append(UdmPython(child))
+		return ret
 
 	def __eq__(self, other):
 		return self.__dict__['impl'] == other.__dict__['impl']
@@ -62,7 +76,8 @@ class UdmPython(object):
 		line = indent(indent_tabs) + "--------------------------------------------------------------------" + "\n"
 		line += indent(indent_tabs) + "Object's type:"  + cl.name + "\n"
 		line += indent(indent_tabs) + self.impl.__repr__() + "\n"
-		attrs= cl.getAttributeChildren()
+		#attrs= cl.getAttributeChildren()
+		attrs= cl.attributes()
 		for attr in attrs:
 			attr_value = self.impl.get_attribute(attr.impl)
 			if attr.max == 1 or attr.max == 0:
@@ -262,7 +277,8 @@ class BooleanArrayAttr(ArrayAttr):
 def GetUmlAttributeByName(cl, name):
 	import udm
 	import Uml
-	attrs = cl.getAttributeChildren()
+	#attrs = cl.getAttributeChildren()
+	attrs = cl.attributes()
 	for attr in attrs:
 		if attr.name == name:
 			return attr
@@ -271,8 +287,29 @@ def GetUmlAttributeByName(cl, name):
 def GetUmlClassByName(dgr, name):
 	import udm
 	import Uml
-	classes = dgr.getClassChildren()
+	#classes = dgr.getClassChildren()
+	classes = dgr.Class_kind_children()
 	for cl in classes:
 		if cl.name == name:
 			return cl
 	return Uml.Class(udm.null)	
+
+def GetUmlChildRoleByTypesAndRolenames(child_type, parent_type, crole_name, prole_name):
+	import udm
+	import Uml
+	#child_type is expected to be Uml.Class
+	#parent_type is expected to be Uml.Class
+	#crole_name and prole_name are expected to be strings
+
+	return Uml.CompositionChildRole(udm.InitChildRole(child_type.impl, parent_type.impl, crole_name, prole_name))
+
+def GetUmlParentRoleByTypesAndRolenames(child_type, parent_type, crole_name, prole_name):
+	import udm
+	import Uml
+	#child_type is expected to be Uml.Class
+	#parent_type is expected to be Uml.Class
+	#crole_name and prole_name are expected to be strings
+
+	return Uml.CompositionParentRole(udm.InitParentRole(child_type.impl, parent_type.impl, crole_name, prole_name))
+	
+
