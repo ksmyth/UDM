@@ -209,3 +209,5 @@ lib/UdmDll_v100_x64.lib
 lib/UdmDll_v100_x64D.lib
 samples/Java/
 NuGetPackages/
+tests/test_UdmPython/UdmDll_VS10.lib.exports  
+ tests/test_UdmPython/UdmPythonTestMeta.xmp.log 

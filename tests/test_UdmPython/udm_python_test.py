@@ -5,28 +5,32 @@ import unittest
 
 from sys import platform as _platform
 if _platform == "linux" or _platform == "linux2":
-	#linux
-	if os.environ.has_key("UDM_PATH"):
-    		sys.path.append(os.path.join(os.environ["UDM_PATH"], "bin"))
-	else:
-		
-		sys.path.append(os.path.join(os.path.dirname(__file__), "../../bin/"))
+    #linux
+    if os.environ.has_key("UDM_PATH"):
+        sys.path.append(os.path.join(os.environ["UDM_PATH"], "bin"))
+    else:
+        sys.path.append(os.path.join(os.path.dirname(__file__), "../../bin/"))
 
 
 elif _platform == "darwin":
-	#darwin
-	if os.environ.has_key("UDM_PATH"):
-    		sys.path.append(os.path.join(os.environ["UDM_PATH"], "lib"))
-	else:
-		
-		sys.path.append(os.path.join(os.path.dirname(__file__), "../../lib/"))
+    #darwin
+    if os.environ.has_key("UDM_PATH"):
+        sys.path.append(os.path.join(os.environ["UDM_PATH"], "lib"))
+    else:
+        sys.path.append(os.path.join(os.path.dirname(__file__), "../../lib/"))
 elif _platform == "win32":
-	# Windows...
-	sys.path.append(r"C:\Program Files\ISIS\Udm\bin")
+    # Windows...
+    sys.path.append(r"C:\Program Files\ISIS\Udm\bin")
+    if os.environ.has_key("UDM_PATH"):
+        sys.path.append(os.path.join(os.environ["UDM_PATH"], "bin"))
 
-print sys.path
-import udm
-# import udmd as udm
+try:
+    import udm
+    # import udmd as udm
+except ImportError:
+    sys.stderr.write("Could not find udm Python module in " + repr(sys.path))
+    raise
+#print udm.__file__
 
 def get_names(col):
     names = map(lambda x: x.name, col)
@@ -46,10 +50,10 @@ class TestUdmPython(unittest.TestCase):
         test_meta = udm.map_uml_names(test_meta_dn.root)
 
         dn = udm.SmartDataNetwork(test_meta_dn.root)
-	if _platform == "linux" or _platform == "linux2" or _platform == "darwin":
-        	dn.open(r"UdmPythonTest.xml", "")
-	else:
-        	dn.open(r"UdmPythonTestModel.mga", "")
+        if _platform == "linux" or _platform == "linux2" or _platform == "darwin":
+            dn.open(r"UdmPythonTest.xml", "")
+        else:
+            dn.open(r"UdmPythonTestModel.mga", "")
 
         container = dn.root.children()[0]
         self.assertTrue(container)
@@ -122,8 +126,32 @@ class TestUdmPython(unittest.TestCase):
         dn.close_no_update()
         test_meta_dn.close_no_update()
 
+class TestUdmBackwardsCompat(unittest.TestCase):
+    def testUdmDll(self):
+        if _platform != "win32":
+            return
+        import subprocess
+        import os.path
+        this_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        with open(os.path.join(this_dir, 'UdmDll_VS10.lib.exports'), 'wb') as out_file:
+            env = dict(os.environ)
+            env['PATH'] += r';c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE'
+            subprocess.check_call([r'c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\dumpbin.exe', '/EXPORTS',
+                os.path.join(this_dir, r'..\..\build\Win32\v100\Release\UdmDll_VS10.lib')], stdout=out_file, env=env)
+        
+        new_exports = {}
+        with open(os.path.join(this_dir, 'UdmDll_VS10.lib.exports'), 'rb') as out_file:
+            for line in out_file:
+                new_exports[line.rstrip('\r\n')] = 1
+                
+        with open(os.path.join(this_dir, 'UdmDll_VS10.lib.3.2.12.exports'), 'rb') as existing_file:
+            for lineno, existing_line in enumerate(existing_file):
+                existing_line = existing_line.rstrip('\r\n')
+                self.assertTrue(existing_line in new_exports, existing_line + " doesnt exist anymore. Line " + str(lineno))
+                
 
 
 if __name__ == '__main__':
     runner = unittest.TextTestRunner()
-    runner.run(TestUdmPython("testudmpython"))
+    runner.run(unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromModule(sys.modules['__main__'])]))
