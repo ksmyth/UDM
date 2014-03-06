@@ -6,4 +6,4 @@ Udm is a metaprogrammable tool for providing uniform access to data structures t
 http://repo.isis.vanderbilt.edu/tools/get_tool?UDM
 '''
 
-from udm import *
+from .udm import *

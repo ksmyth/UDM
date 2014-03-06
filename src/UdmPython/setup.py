@@ -4,8 +4,10 @@ import sys
 import os
 import os.path
 import platform
-from distutils.core import setup, Extension
-from distutils.command.build_ext import build_ext
+#from distutils.core import setup, Extension
+#from distutils.command.build_ext import build_ext
+from setuptools import setup, Extension
+from setuptools.command.build_ext import build_ext
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,7 +24,7 @@ setup_args = dict(
 )
 
 setup_args['ext_modules'] = [
-  Extension('udm',
+  Extension('udm.udm',
     ['UdmPython.cpp'],
     libraries=['boost_python', 'udm'], # TODO: udm?
     library_dirs = [os.path.join(this_dir, '../../lib/.libs')],
