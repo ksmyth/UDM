@@ -565,6 +565,11 @@ namespace Uml
 		return attributes;
 	}
 
+	UDM_DLL Composition matchChildToParent(Class c, Class p)
+	{
+		return matchChildToParent(c, p, NULL);
+	}
+
 	UDM_DLL Composition matchChildToParent(Class c, Class p, const char * crole, const char * prole)
 	{
 		Composition comp;

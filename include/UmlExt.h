@@ -184,8 +184,11 @@ namespace Uml
 	UDM_DLL set<Attribute> AncestorAttributes(const Class &c);
 
 // find the single way a class can be contained by another, return NULL none or if multiple roles are found
-// addtionally, names of the child and parent roles can be provided to constraint the possible compositions.
-	UDM_DLL Composition matchChildToParent(Class c, Class p, const char * crole = NULL, const char * prole = NULL);
+	UDM_DLL Composition matchChildToParent(Class c, Class p);
+
+	// find the single way a class can be contained by another, return NULL none or if multiple roles are found
+	// addtionally, names of the child and parent roles can be provided to constraint the possible compositions.
+	UDM_DLL Composition matchChildToParent(Class c, Class p, const char * crole, const char * prole = NULL);
 
     // returns true if derived = base
 	UDM_DLL bool IsDerivedFrom(const Class &derived, const Class &base);
