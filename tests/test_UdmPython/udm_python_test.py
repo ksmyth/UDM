@@ -21,7 +21,7 @@ elif _platform == "darwin":
 elif _platform == "win32":
     # Windows...
     sys.path.append(r"C:\Program Files\ISIS\Udm\bin")
-    if os.environ.has_key("UDM_PATH"):
+    if "UDM_PATH" in os.environ:
         sys.path.append(os.path.join(os.environ["UDM_PATH"], "bin"))
 
 try:
@@ -34,7 +34,7 @@ except ImportError:
 
 def get_names(col):
     names = map(lambda x: x.name, col)
-    names.sort()
+    names = sorted(names)
     return names
 
 
@@ -64,14 +64,15 @@ class TestUdmPython(unittest.TestCase):
         self.assertEquals(container.children(child_role="cmproleA"), container.cmproleA_role_children)
         self.assertEquals(get_names(container.cmproleB_role_children), [ "cmproleB1"] )
         self.assertEquals(container.type, test_meta.Container)
-        cmproleA1 = filter(lambda x: x.name =="cmproleA1", container.children())[0]
-        cmproleA2 = filter(lambda x: x.name =="cmproleA2", container.children())[0]
+        def first(container): return next(container.__iter__())
+        cmproleA1 = first(filter(lambda x: x.name =="cmproleA1", container.children()))
+        cmproleA2 = first(filter(lambda x: x.name =="cmproleA2", container.children()))
         self.assertEquals(cmproleA1.dstConnection, [cmproleA2])
         self.assertEquals(cmproleA1.adjacent(dst_role="dstConnection"), [cmproleA2])
         self.assertEquals(cmproleA1.adjacent(src_role="srcConnection"), [cmproleA2])
         self.assertEquals(cmproleA2.adjacent(dst_role="dstConnection"), [])
         self.assertEquals(cmproleA2.adjacent(src_role="srcConnection"), [])
-        AtomA1 = filter(lambda x: x.name =="AtomA1", container.children())[0]
+        AtomA1 = first(filter(lambda x: x.name =="AtomA1", container.children()))
         self.assertEquals(AtomA1.boolattr, True)
         self.assertEquals(AtomA1.stringattr, "teststring")
         self.assertEquals(AtomA1.intattr, 42)
@@ -79,12 +80,15 @@ class TestUdmPython(unittest.TestCase):
         self.assertEquals(AtomA1.intattr, 60)
         AtomA1.stringattr = "test123"
         self.assertEquals(AtomA1.stringattr, "test123")
+        unicode_teststring = u'\xc1rv\xedzt\u0171r\u0151 t\xfck\xf6rf\xfar\xf3g\xe9p\U0001d11e\u0393\u03b1\u03b6\u03ad\u03b5\u03c2 \u03ba\u03b1\u1f76 \u03bc\u03c5\u03c1\u03c4\u03b9\u1f72\u03c2 \u03b4\u1f72\u03bd \u03b8\u1f70 \u03b2\u03c1\u1ff6 \u03c0\u03b9\u1f70 \u03c3\u03c4\u1f78 \u03c7\u03c1\u03c5\u03c3\u03b1\u03c6\u1f76 \u03be\u03ad\u03c6\u03c9\u03c4\u03bf\u0ca0_\u0ca0\u30a6\u30f0\u30ce\u30aa\u30af\u30e4\u30de \u30b1\u30d5\u30b3\u30a8\u30c6 \u30a2\u30b5\u30ad\u30e6\u30e1\u30df\u30b7 \u30f1\u30d2\u30e2\u30bb\u30b9\u30f3\u0421\u044a\u0435\u0448\u044c \u0436\u0435 \u0435\u0449\u0451 \u044d\u0442\u0438\u0445 \u043c\u044f\u0433\u043a\u0438\u0445 \u0444\u0440\u0430\u043d\u0446\u0443\u0437\u0441\u043a\u0438\u0445 \u0431\u0443\u043b\u043e\u043a \u0434\u0430 \u0432\u044b\u043f\u0435\u0439 \u0447\u0430\u044e'
+        AtomA1.stringattr = unicode_teststring
+        self.assertEquals(AtomA1.stringattr, unicode_teststring)
         
         
         # trying to access nonexistant attribute raises an exception
         try:
             self.assertFalse(container.nonexistantattribute)
-        except RuntimeError, e:
+        except RuntimeError as e:
             # the error message should include the type's name and attribute name
             self.assertTrue(str(e).find("Container") != -1)
             self.assertTrue(str(e).find("nonexistantattribute") != -1)
@@ -141,11 +145,11 @@ class TestUdmBackwardsCompat(unittest.TestCase):
                 os.path.join(this_dir, r'..\..\build\Win32\v100\Release\UdmDll_VS10.lib')], stdout=out_file, env=env)
         
         new_exports = {}
-        with open(os.path.join(this_dir, 'UdmDll_VS10.lib.exports'), 'rb') as out_file:
+        with open(os.path.join(this_dir, 'UdmDll_VS10.lib.exports'), 'r') as out_file:
             for line in out_file:
                 new_exports[line.rstrip('\r\n')] = 1
                 
-        with open(os.path.join(this_dir, 'UdmDll_VS10.lib.3.2.12.exports'), 'rb') as existing_file:
+        with open(os.path.join(this_dir, 'UdmDll_VS10.lib.3.2.12.exports'), 'r') as existing_file:
             for lineno, existing_line in enumerate(existing_file):
                 existing_line = existing_line.rstrip('\r\n')
                 self.assertTrue(existing_line in new_exports, existing_line + " doesnt exist anymore. Line " + str(lineno))

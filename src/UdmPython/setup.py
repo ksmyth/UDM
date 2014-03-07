@@ -39,7 +39,7 @@ if platform.system() == 'Windows':
             import os.path
             try:
                 os.makedirs(os.path.dirname(self.get_ext_fullpath(ext.name)))
-            except WindowsError, e:
+            except WindowsError as e:
                 if e.winerror != 183: # already exists
                     raise
 

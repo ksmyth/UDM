@@ -17,6 +17,14 @@
       <Configuration>Release27</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release33|Win32">
+      <Configuration>Release33</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release33|x64">
+      <Configuration>Release33</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -61,6 +69,16 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release33|x64'">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release33|Win32'">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -94,6 +112,14 @@
     <Import Project="..\Udm.props" />
     <Import Project="..\Python26.props" />
   </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release33|Win32'">
+    <Import Project="..\Python33.props" />
+    <Import Project="..\Udm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release33|x64'">
+    <Import Project="..\Python33.props" />
+    <Import Project="..\Udm.props" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
@@ -115,6 +141,11 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release33|Win32'">udm</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release33|Win32'">.pyd</TargetExt>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release33|x64'">udm</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release33|x64'">.pyd</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release33|Win32'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\bin\Python$(PYTHON_VERSION)))\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <CustomBuildStep />
@@ -248,6 +279,34 @@
       <AdditionalOptions>/verbose:lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release33|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>UDM_DYNAMIC_LINKING;UDM_PY_MODULE_NAME=$(TargetName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\$(Platform)\$(PlatformToolset)\Release\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd$(PYTHON_VERSION).pdb</ProgramDatabaseFile>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release33|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>UDM_DYNAMIC_LINKING;UDM_PY_MODULE_NAME=$(TargetName);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\$(Platform)\$(PlatformToolset)\Release\));%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(TargetDir)$(TargetName)_pyd$(PYTHON_VERSION).pdb</ProgramDatabaseFile>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\src\UdmPython\UdmPython.cpp" />

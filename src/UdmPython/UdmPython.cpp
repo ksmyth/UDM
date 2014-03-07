@@ -11,6 +11,10 @@
 #include "boost/python/slice.hpp"
 #include "boost/python/operators.hpp"
 
+#if PY_MAJOR_VERSION >= 3
+#define PY3K
+#endif
+
 #undef min
 #undef max
 
@@ -31,15 +35,24 @@ std::string stringtoutf8(object& string)
 {
 	if (PyUnicode_Check(string.ptr()))
 	{
-		object encoded(handle<>(PyUnicode_AsEncodedString(string.ptr(), "UTF-8", "replace")));
 #ifdef PY3K
-		return PyBytes_AS_STRING(encoded.ptr());
+#if PY_MINOR_VERSION >= 3
+		return PyUnicode_AsUTF8(string.ptr());
 #else
+		object encoded(handle<>(PyUnicode_AsEncodedString(string.ptr(), "UTF-8", "replace")));
+		return PyBytes_AS_STRING(encoded.ptr());
+#endif
+#else
+		object encoded(handle<>(PyUnicode_AsEncodedString(string.ptr(), "UTF-8", "replace")));
 		return PyString_AS_STRING(encoded.ptr());
 #endif
 	}
 	else
+#ifdef PY3K
+		throw udm_exception("Not a unicode object");
+#else
 		return PyString_AsString(string.ptr());
+#endif
 }
 
 #ifdef _WIN32
@@ -97,7 +110,11 @@ Udm::Object SDN_Gme2Udm(Udm::SmartDataNetwork& self, object o) {
 #endif
 
 void SDN_OpenExisting(Udm::SmartDataNetwork& self, object systemname, const string& metalocator) {
+#ifdef PY3K
+	if (PyUnicode_Check(systemname.ptr()))
+#else
 	if (PyString_Check(systemname.ptr()) || PyUnicode_Check(systemname.ptr()))
+#endif
 	{
 		std::string string_systemname = stringtoutf8(systemname);
 		self.OpenExisting(string_systemname, metalocator, Udm::CHANGES_LOST_DEFAULT);
@@ -819,13 +836,16 @@ BOOST_PYTHON_MODULE(udm)
 "def map_uml_names(diagram):\n"
 "    import sys\n"
 "    udm = sys.modules['udm']\n"
-"    class_meta = filter(lambda class_: class_.name == 'Class', udm.uml_diagram().children())[0]\n"
-"    namespace_meta = filter(lambda class_: class_.name == 'Namespace', udm.uml_diagram().children())[0]\n"
+"    class_meta = next(filter(lambda class_: class_.name == 'Class', udm.uml_diagram().children()).__iter__())\n"
+"    namespace_meta = next(filter(lambda class_: class_.name == 'Namespace', udm.uml_diagram().children()).__iter__())\n"
 "    class ClassMap(object):\n"
 "        def __init__(self, d):\n"
 "            self.__dict__.update(d)\n"
 "    def map_classes(container):\n"
 "        ret = map(lambda class_: (class_.name, class_), container.children(child_type=class_meta))\n"
+#ifdef PY3K
+"        ret = list(ret)\n"
+#endif
 "        ret.extend(map(lambda namespace: (namespace.name, map_classes(namespace)), container.children(child_type=namespace_meta)))\n"
 "        return ClassMap(ret)\n"
 "    return map_classes(diagram)\n",
