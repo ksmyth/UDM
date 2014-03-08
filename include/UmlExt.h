@@ -184,8 +184,11 @@ namespace Uml
 	UDM_DLL set<Attribute> AncestorAttributes(const Class &c);
 
 // find the single way a class can be contained by another, return NULL none or if multiple roles are found
-// addtionally, names of the child and parent roles can be provided to constraint the possible compositions.
-	UDM_DLL Composition matchChildToParent(Class c, Class p, const char * crole = NULL, const char * prole = NULL);
+    
+	UDM_DLL Composition matchChildToParent(Class c, Class p);
+    
+    // addtionally, names of the child and parent roles can be provided to constraint the possible compositions.
+	UDM_DLL Composition matchChildToParent(Class c, Class p, const char * crole, const char * prole = NULL);
     
     //finds the only suitable AssociationRole to reach 'target_class' or 'assoc_cls' from c for the association with which has the name 'rolename' on C's side
     //if target_aclass is provided than peer_type is ignored, and only those assoc. roles are considered which are in an assoc. cls. based assoc.
