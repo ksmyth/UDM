@@ -196,6 +196,50 @@ Udm::Object InitParentRole(Udm::Object& c, Udm::Object &p, str _crole, str _prol
 }
 
 
+Udm::Object GetUmlAssocRoleByPeerAndRole(Udm::Object& my_type, Udm::Object& peer_type, str _arole)
+{
+    ::Uml::Class c  = ::Uml::Class::Cast(my_type);
+    if (!c) throw std::runtime_error (std::string("my_type is null, can not identify associationroles for a NULL class in GetUmlAssocRoleByPeerAndRole"));
+    
+    ::Uml::Class target_class = ::Uml::Class::Cast(peer_type);
+    if (!target_class) throw std::runtime_error (std::string("peer type is null, can not identify associationroles to a NULL class in GetUmlAssocRoleByPeerAndRole"));
+    
+    std::string arole = extract<std::string>(_arole);
+    
+    std::string err_string = std::string("GetUmlPeerAssocRoleByPeerAndRole(") + (std::string)c.name() + "," + (std::string)target_class.name() + std::string(",") + (arole.empty() ? std::string("NULL") : arole) + std::string(")");
+    
+    ::Uml::AssociationRole found = matchPeerToPeer(c, target_class, ::Uml::Class(), (arole.empty() ? NULL : arole.c_str()) );
+    
+    if (!found)
+        throw std::runtime_error (std::string ("No associations found: ") + err_string);
+
+    return (Udm::Object) (found);
+}
+
+Udm::Object GetUmlAssocRoleByAClass(Udm::Object& my_type, Udm::Object& aclass_type, str _arole)
+{
+    ::Uml::Class c  = ::Uml::Class::Cast(my_type);
+    if (!c) throw std::runtime_error (std::string("my_type is null, can not identify associationroles for a NULL class in GetUmlClassAssocRoleByAClass"));
+    
+    ::Uml::Class target_aclass = ::Uml::Class::Cast(aclass_type);
+    if (!target_aclass) throw std::runtime_error (std::string("association class is null, can not identify associationroles to a NULL class in GetUmlClassAssocRoleByAClass"));
+    std::string arole = extract<std::string>(_arole);
+    
+    std::string err_string = std::string("GetUmlClassAssocRoleByAClass(") + (std::string)c.name() + std::string(",") + (std::string)target_aclass.name() + std::string(",") + (arole.empty() ? std::string("NULL") : arole) + std::string(")") ;
+    
+    
+    ::Uml::AssociationRole found = matchPeerToPeer(c, ::Uml::Class(), target_aclass, (arole.empty() ? NULL : arole.c_str()));
+    
+    if (!found)
+        throw std::runtime_error (std::string ("No associations found: ") + err_string);
+    
+    return (Udm::Object) (found);
+
+    
+}
+
+
+
 template<typename colT>
 boost::python::list toList(colT collection) {
 	boost::python::list ret;
@@ -371,6 +415,25 @@ object Object_getChildren(Udm::Object& self, object _ccrole, object _kind)
     
     return toList(ret);
     
+}
+
+object Object_getAssociation(Udm::Object& self, Udm::Object& arole, object _mode)
+{
+    // arole must be non-null.
+    // Associations with names on both sides are navigable from both directions.
+    if (!self) throw std::runtime_error(std::string("Object is null in get_Association()"));
+    if (!arole) throw std::runtime_error(std::string("AssociationRole is null in get_Association()"));
+    
+    int mode;
+    if (_mode != object())
+        mode = extract<int>(_mode);
+    else
+        mode = Udm::TARGETFROMPEER;
+
+    if ( (mode != Udm::TARGETFROMPEER) && (mode != Udm::TARGETFROMCLASS) && (mode != Udm::CLASSFROMTARGET) )
+        throw std::runtime_error(std::string("Invalid mode in get_Association()"));
+        
+    return toList(self.getAssociation(::Uml::AssociationRole::Cast(arole), mode));
 }
 
 
@@ -772,6 +835,7 @@ BOOST_PYTHON_MODULE(udm)
 		.def("delete", &Udm::Object::DeleteObject)
 		.def("_children", Object_children)
         .def("getChildren", Object_getChildren)
+        .def("getAssociation", Object_getAssociation)
 		.def("_adjacent", Object_adjacent)
 		.def("get_attribute",&Object_attr_by_uml_attr_as_udm_object)
 		.def("set_attribute",&Object_set_attr_by_uml_attr_as_udm_object)
@@ -803,6 +867,10 @@ BOOST_PYTHON_MODULE(udm)
 	scope().attr("Object").attr("__nonzero__") = eval("lambda self: self.id != 0");
 
 	scope().attr("null") = Udm::null;
+    scope().attr("TARGETFROMPEER") = Udm::TARGETFROMPEER;
+    scope().attr("TARGETFROMCLASS") = Udm::TARGETFROMCLASS;
+    scope().attr("CLASSFROMTARGET") = Udm::CLASSFROMTARGET;
+    
 
 	class_<Uml::Diagram>("_UmlDiagram")
 		;
@@ -815,6 +883,8 @@ BOOST_PYTHON_MODULE(udm)
 	def("CopyObjectHierarchy", &CopyObjectHierarchy_);
     def("InitChildRole",&InitChildRole);
     def("InitParentRole", &InitParentRole);
+    def("GetUmlAssocRoleByPeerAndRole", &GetUmlAssocRoleByPeerAndRole);
+    def("GetUmlAssocRoleByAClass", &GetUmlAssocRoleByAClass);
 
 
 	class_<Udm::SmartDataNetwork>("SmartDataNetwork", no_init) //, init<const Udm::UdmDiagram &>())

@@ -1145,6 +1145,10 @@ int main(int argc, char* argv[])
 	if (a == b) cout << " a equals to b " << endl;
 	if (a == c) cout << " a equals to c " << endl;
 
+	cout << "Meta test: " << endl;
+	cout << " Switch::meta_src:" << Switch::meta_src.name() << endl;
+	cout << " Bulb::meta_dst:" << Bulb::meta_dst.name() << endl;
+	
 	return 0;
 }
 

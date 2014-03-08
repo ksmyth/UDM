@@ -56,6 +56,18 @@ class UdmPython(object):
 			ret.append(UdmPython(child))
 		return ret
 
+	def _get_associations(self, assoc_role, mode):
+		#assoc_role could be either Udm.Object or UdmPython (or descendants)
+		ret = []
+		assoc_role_impl = None
+		if isinstance(assoc_role, UdmPython):
+			assoc_role_impl = assoc_role.impl
+		else:
+			assoc_role_impl = assoc_role
+		for peer in self.impl.getAssociation(assoc_role_impl, mode):
+			ret.append(UdmPython(peer))
+		return ret
+
 	def __eq__(self, other):
 		return self.__dict__['impl'] == other.__dict__['impl']
 	def __ne__(self, other):
@@ -312,4 +324,23 @@ def GetUmlParentRoleByTypesAndRolenames(child_type, parent_type, crole_name, pro
 
 	return Uml.CompositionParentRole(udm.InitParentRole(child_type.impl, parent_type.impl, crole_name, prole_name))
 	
+def GetUmlAssocRoleByPeerAndRole(my_type, peer_type, arole_name):
+	import udm
+	import Uml
+	#my_type is expected to be Uml.Class
+	#peer_type is expected to be Uml.Class
+	#arole_name is expected to be string
+
+	return Uml.AssociationRole(udm.GetUmlAssocRoleByPeerAndRole(my_type.impl, peer_type.impl, arole_name))
+
+def GetUmlAssocRoleByAClassAndRole(my_type, aclass_type, arole_name):
+	import udm
+	import Uml
+	#my_type is expected to be Uml.Class
+	#aclass_type is expected to be Uml.Class
+	#arole_name is string
+
+	return Uml.AssociationRole(udm.GetUmlAssocRoleByAClass(my_type.impl, aclass_type.impl, arole_name))
+
+
 

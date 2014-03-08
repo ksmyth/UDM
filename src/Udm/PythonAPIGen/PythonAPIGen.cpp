@@ -110,6 +110,7 @@ void PythonAPIGen::generate()
         for( set< ::Uml::Attribute>::iterator attrs_i = attrs.begin(); attrs_i != attrs.end(); attrs_i++)
                 m_output << "\t" << uc_i->name() << ".meta_" << attrs_i->name() << " = GetUmlAttributeByName(" << uc_i->name() << ".Meta, \"" << attrs_i->name() << "\")"<< endl;
     }
+    m_output << "\tpass" << endl;
     m_output << endl;
     m_output << "def init_childroles():" << endl;
     for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
@@ -132,9 +133,8 @@ void PythonAPIGen::generate()
             m_output << "\t" << cl_name << ".meta_" << rel_name << " = GetUmlChildRoleByTypesAndRolenames(" << thischildkind.name() << ".Meta," << cl_name << ".Meta, \"" << the_other.name() <<  "\", \"" << i->name() << "\")" << endl;
 
         }
-        
     }
-    
+    m_output << "\tpass" << endl;
     m_output << endl;
     m_output << "def init_parentroles():" << endl;
     for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
@@ -159,8 +159,60 @@ void PythonAPIGen::generate()
         
     }
     
+    m_output << "\tpass" << endl;
+    m_output << endl;
+    m_output << "def init_peer_associationroles():" << endl;
+    for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
+    {
+        ::Uml::Class c = *uc_i;
+        string cl_name = c.name();
+        set< ::Uml::AssociationRole> assocs = c.associationRoles();
+        for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++) 
+	    {
+	        ::Uml::Association pp = (*i).parent();
+            ::Uml::Class aclass = pp.assocClass();
+            ::Uml::AssociationRole the_other = Uml::theOther(*i);
+            string rel_name = ::Uml::MakeRoleName(the_other);
+            ::Uml::Class oclass = the_other.target();
+            if (!aclass)
+                m_output << "\t" << cl_name << ".meta_" << rel_name << " = GetUmlAssocRoleByPeerAndRole(" << cl_name << ".Meta," << oclass.name() << ".Meta, \"" << i->name() << "\")" << endl;
+            else
+                m_output << "\t" << cl_name << ".meta_" << rel_name << " = GetUmlAssocRoleByAClassAndRole(" << cl_name << ".Meta,"  << aclass.name() << ".Meta,\"" << i->name() << "\")" << endl;
+            
+        }
+    
+    }
+    m_output << "\tpass" << endl;
+    m_output << endl;
+    m_output << "def init_class_associationroles():" << endl;
+    for( set< ::Uml::Class>::iterator uc_i = uml_classes.begin(); uc_i != uml_classes.end(); uc_i++ )
+    {
+        ::Uml::Class c = *uc_i;
+        string cl_name = c.name();
+        ::Uml::Association assoc = c.association();
+        if (assoc)
+        {
+            set< ::Uml::AssociationRole> assocs = assoc.roles();
+            for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++)
+            {
+                string rel_name = ::Uml::MakeRoleName(*i);
+                UDM_ASSERT(rel_name.size() > 0);
+                
+                ::Uml::AssociationRole the_other = ::Uml::theOther(*i);
+                string orel_name = ::Uml::MakeRoleName(the_other);
+                string otclass_name = ((::Uml::Class)(the_other.target())).name();
+                
+                ::Uml::Class tclass = (::Uml::Class)(*i).target();
+                string tclass_name = tclass.name();
+                
+				m_output << "\t" << cl_name << ".meta_" << orel_name << "_end_ = " << otclass_name << ".meta_" << rel_name << "_rev = " << tclass_name << ".meta_" << orel_name << endl;
+            }
+        }
+    }
+    
+    
 		
-
+  m_output << "\tpass" << endl;
   m_output << endl << endl;
 
   /*INITIALIZE THE META STATIC VARIABLE*/
@@ -179,6 +231,8 @@ void PythonAPIGen::generate()
     m_output << "\t\t" << "init_childroles()" << endl;
     m_output << "\t\t" << "init_parentroles()" << endl;
     m_output << "\t\t" << "init_attributes()" << endl;
+    m_output << "\t\t" << "init_peer_associationroles()" << endl;
+    m_output << "\t\t" << "init_class_associationroles()" << endl;
     m_output << "\t\t" << "module_initialized = True" << endl;
     m_output << endl;
 	
@@ -290,7 +344,7 @@ void PythonAPIGen::generateChildrenAccess(::Uml::Class &cls)
                 
             }
         }
-        else m_output << "\t# access method for non-navigable association " << rel_name << " omitted";
+        else m_output << "\t# access method for non-navigable children " << rel_name << " omitted";
     }
     
     
@@ -323,157 +377,79 @@ void PythonAPIGen::generateChildrenAccess(::Uml::Class &cls)
      //childrens end ----------------------------------------------------------------
 }
 
-void PythonAPIGen::generateAssociations(::Uml::Class &cls)
+void PythonAPIGen::generateAssociations(::Uml::Class &c)
 {
-
-  m_output << "\t# Associations " << endl << endl;
-
-  // association classes
-  ::Uml::Association ass = Uml::GetAncestorAssociation( cls );
-
-  if ( ass )
-  {
-	// set of association roles
-	set < ::Uml::AssociationRole> ass_roles = ass.roles();
-	for( set< ::Uml::AssociationRole>::iterator a_r_i = ass_roles.begin(); a_r_i != ass_roles.end(); a_r_i++ )
+    string cl_name = c.name();
+	set< ::Uml::AssociationRole> assocs = c.associationRoles();
+    
+    
+	for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++)
 	{
-	  ::Uml::Class target_cl = a_r_i->target();
-
-	  string tname = target_cl.name();
-	  string ar_name = a_r_i->name();
-
-	  string pkg_name = "";//Utils::getPackageSignature(target_cl, m_ns_path, m_package_name);
-
-	  m_output << "\t\"\"\"" << endl;
-	  m_output << "\t Association with role name <code>" << ar_name << "</code>." << endl;
-	  m_output << "\t\"\"\"" << endl;
-
-	  // setter for the association
-	  
-	  //tname 
-	  m_output << "\tdef set" << ar_name << "(self, a):" << endl;
-	  m_output << "\t\t\"\"\"" << endl;
-	  m_output << "\t\tSets the end of the association with role name <code>" << ar_name << "</code>." << endl;
-	  m_output << "\t\t@param a The end of the association'''" << endl;
-	  m_output << "\t\t\"\"\"" << endl;
-	  
-	  //m_output << "\t\t#UdmPseudoObjectContainer container = new UdmPseudoObjectContainer(1);" << endl;
-	  //m_output << "\t\t#container.setAt(0, (UdmPseudoObject)a);" << endl;
-	  //m_output << "\t\t#setAssociation(\"" << ar_name << "\", container, UdmHelper.TARGET_FROM_CLASS);" << endl;
-	  m_output << "\t\tpass" << endl;
-
-	  
-	  // getter for the association
-	  m_output << "\tdef " << "get" << ar_name << "(self):" << endl;
-	  m_output << "\t\t\"\"\"" << endl;
-	  m_output << "\t\tReturns the end of the association with role name <code>" << ar_name << "</code>." << endl;
-	  m_output << "\t\t@return The end of the association" << endl;
-	  m_output << "\t\t\"\"\"" << endl;
-	  m_output << "\t\treturn " << tname << ".cast(self.impl.ar_name)" << endl;
-	  //m_ioutput << "\tpublic " << pkg_name << tname << " get" << ar_name << "() throws UdmException;" << endl;
-	  //m_output << "\t\tUdmPseudoObjectContainer container = getAssociation(\"" << ar_name << "\", UdmHelper.TARGET_FROM_CLASS);" << endl;
-	  //m_output << "\t\tif (container.getLength() > 0)" << endl << endl;
-	  //m_output << "\t\t\treturn (" << pkg_name << tname << ") " << pkg_name << "Utils.wrapWithSubclass(container.getAt(0), metaDiagram);" << endl;
-	  //m_output << "\t\treturn null;" << endl << endl;
-	  //m_output << "\t}" << endl;
-	  m_output << "\t" << endl;
-	} 
-  }
-
-	// associations
-  // set of associations
-  set < ::Uml::AssociationRole> assroles = cls.associationRoles();
-
-  if ( assroles.size() )
+		::Uml::Association pp = (*i).parent();
+		::Uml::Class aclass = pp.assocClass();
+        
+		::Uml::AssociationRole the_other = Uml::theOther(*i);
+        
+		string rel_name = ::Uml::MakeRoleName(the_other);
+		::Uml::Class oclass = the_other.target();
+        if (the_other.isNavigable())
+        {
+            m_output << "\tdef " << rel_name << "(self):" << endl;
+            int max = the_other.max();
+            m_output << "\t\t#return the " << ( max == 1 ?"only peer" : "peers") << " via role_name: " << i->name() << endl;
+            m_output << "\t\tpeers = self._get_associations(" << cl_name << ".meta_" << rel_name << ", udm." << (aclass ? "CLASSFROMTARGET" : "TARGETFROMPEER") << ")" << endl;
+            
+            
+            if (max != 1)
+            {
+                m_output << "\t\tlist=[]" << endl;
+                m_output << "\t\t" << "for i in peers:" << endl;
+                m_output << "\t\t\t" << "list.append(globals()[i._type().name](i))"  << endl;
+                m_output << "\t\treturn list" << endl;
+                    
+            }
+            else
+            {
+                
+                m_output << "\t\tif len(peers) > 0:" << endl;
+                m_output << "\t\t\t" << "return globals()[peers[0]._type().name](peers[0])"  << endl;
+                m_output << "\t\telse:" << endl;
+                m_output << "\t\t\t" << "return None" << endl;
+            
+            }
+        }
+        else m_output << "\t# access method for non-navigable associationrole " << rel_name << " omitted";
+        
+        
+    }
+    
+    ::Uml::Association assoc = c.association();
+	if(assoc)
 	{
-	for( set< ::Uml::AssociationRole>::iterator ar_i = assroles.begin(); ar_i != assroles.end(); ar_i++ )
-	{
-	  string asr_name = ar_i->name();
-	  string to_asr_name = (string)Uml::theOther(*ar_i).name();
+		set< ::Uml::AssociationRole> assocs = assoc.roles();
+        for( set< ::Uml::AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++)
+		{
+			string rel_name = ::Uml::MakeRoleName(*i);
+			UDM_ASSERT(rel_name.size() > 0);
+            
+			::Uml::AssociationRole the_other = ::Uml::theOther(*i);
+			string orel_name = ::Uml::MakeRoleName(the_other);
+			string otclass_cpp_name = UmlClassCPPName(the_other.target());
+            
+			::Uml::Class tclass = (::Uml::Class)(*i).target();
+			string tclass_cpp_name = UmlClassCPPName(tclass);
+            
+            m_output << "\tdef " << rel_name << "_end(self):" << endl;
+            m_output << "\t\t#return the assoc class end via role name:" << i->name() << endl;
+            m_output << "\t\tpeers = self._get_associations(" << cl_name << ".meta_" << rel_name << "_end_ ,udm.TARGETFROMCLASS)" << endl;
+            m_output << "\t\tif len(peers) > 0:" << endl;
+            m_output << "\t\t\t" << "return globals()[peers[0]._type().name](peers[0])"  << endl;
+            m_output << "\t\telse:" << endl;
+            m_output << "\t\t\t" << "return None" << endl;
 
-	  ::Uml::Class to_class = (::Uml::Class)((Uml::theOther(*ar_i)).target());
-	  string helper_mode = "TARGET_FROM_PEER";
-	  ::Uml::Association ass = ar_i->parent();
-	  ::Uml::Class ass_class = ass.assocClass();
-
-	  if ( ass_class )
-	  {
-		  to_class = ass_class;
-		  helper_mode = "CLASS_FROM_TARGET";
-	  }
-
-	  string tname = to_class.name();
-
-	  m_output << "\t\"\"\"" << endl;
-	  m_output << "\t Association with role name <code>" << to_asr_name << "</code>." << endl;
-	  m_output << "\t\"\"\"" << endl;
-	  m_output << endl;
-
-	  // the canonical form of the to_class
-	  string pckg_signature = "";//Utils::getPackageSignature(to_class, m_ns_path, m_package_name);
-
-	  if ( (Uml::theOther(*ar_i).max() == 0) || (Uml::theOther(*ar_i).max() == 1) )
-	  {
-		//single cardinality
-		//method signature
-		m_output << "\tdef " << "set" << to_asr_name << "(self," << " a): " << endl;//<< tname 
-		
-		//doc comment
-		m_output << "\t\t\"\"\"" << endl;
-		m_output << "\t\tSets the other end of the association with role name <code>" << to_asr_name << "</code>." << endl;
-		m_output << "\t\t@param a The other end of the association" << endl;
-		m_output << "\t\t\"\"\"" << endl;
-
-		
-		//m_output << "\t\t'''setAssociation(\"" << to_asr_name << "\", a, UdmHelper." << helper_mode << ");" << endl;
-		m_output << "\t\tpass" << endl;
-		m_output << endl;
-		
-		m_output << "\tdef " << to_asr_name << "(self):" << endl;
-
-		m_output << "\t\t\"\"\" Returns the other end of the association with role name <code>" << to_asr_name << "</code>." << endl;
-		m_output << "\t\t@return The other end of the association" << endl;
-		m_output << "\t\t\"\"\"" << endl;
-		//m_ioutput << "\tpublic " << pckg_signature << tname << " get" << to_asr_name << "() throws UdmException;" << endl;
-		m_output << "\t\treturn " << tname << ".cast(self.impl." << to_asr_name << ")" << endl;
-		/*
-		if (isInterfaceNeeded(to_class)) {
-			m_output << "\t\treturn (result == null) ? null : (" << pckg_signature << tname << ")Utils.wrapWithSubclass(new UdmPseudoObject(result, getDiagram()), getDiagram());" << endl;
-		} else {
-			m_output << "\t\treturn (result == null) ? null : new " << pckg_signature << tname << "(result, getDiagram());" << endl;
-		}
-		*/
-		m_output << "\t" << endl;
-		
-	  }
-	  else
-	  {
-		
-		m_output << "\tdef set" << to_asr_name << "(self," << " a): " << endl; //tname []<<
-		m_output << "\t\t\"\"\"" << endl;
-		m_output << "\t\tSets the other ends of the association with role name <code>" << to_asr_name << "</code>." << endl;
-		m_output << "\t\t@param a The other ends of the association" << endl;
-		m_output << "\t\t\"\"\"" << endl;
-		
-		//m_output << "\t\t#setAssociation(\"" << to_asr_name << "\", new UdmPseudoObjectContainer(a), UdmHelper." << helper_mode << ");" << endl;
-		m_output << "\t\tpass" << endl;
-		m_output << endl;
-
-		
-		m_output << "\tdef " << to_asr_name << "(self):" << endl;
-		m_output << "\t\t\"\"\"" << endl;
-		m_output << "\t\tReturns the other ends of the association with role name <code>" << to_asr_name << "</code>." << endl;
-		m_output << "\t\t@return The other ends of the association" << endl;
-		m_output << "\t\t\"\"\" " << endl;
-		//m_ioutput << "\tpublic " << pckg_signature << tname << "[] get" << to_asr_name << "() throws UdmException;" << endl;
-		m_output << "\t\t" << "list = []" << endl;
-		m_output << "\t\t" << "for i in self.impl." << to_asr_name << ":" << endl;
-		m_output << "\t\t\t" << "list.append(" << tname << ".cast(i))" << endl;			 
-		m_output << "\t\t" << "return list" << endl;
-		m_output << "\t" << endl;
-		m_output << endl;
-	  }
-	} 
-  }
-  
+            
+        }
+        
+    }
 }
+

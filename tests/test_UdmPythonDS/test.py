@@ -103,6 +103,49 @@ print isinstance(rf, LampDiagram.RootFolder)
 
 #print lamp1.parent == rf
 
+bulbs = lamp_1.Bulb_kind_children()
+for bulb in bulbs:
+    print "----------------------------"
+    print "Bulb :", type(bulb), bulb
+    cl = bulb.dst()
+    if len(cl):
+        print "Controllink", type(cl[0]), cl[0]
+        sw = cl[0].dst_end()
+        print "switch", type(sw), sw
+        cl1  = sw.src()
+        if len(cl1):
+        
+            print "Controllink1", type(cl1[0]), cl1[0]
+            print cl1[0] == cl[0]
+            bulb1 = cl1[0].src_end()
+            print "Bulb1", type(bulb1), bulb1
+            print bulb == bulb1
+
+
+
+print "Switch.meta_src: "  + LampDiagram.Switch.meta_src.name  #this should be src
+print "Bulb.meta_dst: "  + LampDiagram.Bulb.meta_dst.name      #this should be dst
+
+print "descendants of ElectricDevice are: "
+classes = LampDiagram.ElectricDevice.Meta.subTypes()
+for cl in classes:
+    print cl.name
+    print cl.baseTypes()[0] == LampDiagram.ElectricDevice.Meta
+
+
+
+controllinks = lamp_1.ControlLink_kind_children()
+for cl in controllinks:
+    print "Controllink :" + cl.name
+    bulb  = cl.src_end()
+    switch  = cl.dst_end()
+
+    print "this should be bulb!:"
+    print bulb
+
+    print "this should be switch!:"
+    print switch
+
 
 
 

@@ -599,6 +599,46 @@ namespace Uml
 		return comp;
 	}
 
+    
+    UDM_DLL AssociationRole matchPeerToPeer(Class c, Class target_class, Class target_aclass, const char * rolename)
+    {
+        
+        set<AssociationRole> assocs = c.associationRoles();
+        AssociationRole found;
+        
+        for( set<AssociationRole>::iterator i = assocs.begin(); i != assocs.end(); i++)
+        {
+            AssociationRole the_other = theOther(*i);
+            Class oclass = the_other.target();
+            
+            Association pp = (*i).parent();
+            Class aclass = pp.assocClass();
+            std::string thisrolename = i->name();
+            
+            if (  (!target_aclass && (target_class == oclass)) || ( target_aclass && (target_aclass == aclass)) )
+            {
+                
+                if (rolename != NULL)
+                {
+                    if (thisrolename.compare(rolename) == 0)
+                    {
+                        if (found) return Uml::AssociationRole();
+                        found = theOther(*i);
+                    }
+                    
+                }
+                else
+                {
+                    if (found) return Uml::AssociationRole();
+                    found = theOther(*i);
+                }
+                
+            }
+        }
+        
+        return found;
+    }
+    
 	UDM_DLL bool IsAssocClass(const Class &cl) 
 	{
 		return (Association)cl.association();
