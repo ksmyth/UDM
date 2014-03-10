@@ -36,7 +36,7 @@ class PythonAPIGen
 	void generateAttributes(::Uml::Class &cls);
 	void generateChildrenAccess(::Uml::Class &cls);
 	void generateAssociations(::Uml::Class &cls);
-
+    void generateParentAccess(::Uml::Class &cls);
   private:
     //! The UDM UML diagram.
     const ::Uml::Diagram & m_diagram;

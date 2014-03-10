@@ -5,9 +5,6 @@ def indent(indent_tabs=0):
 	return indent
 
 class UdmPython(object):
-	@property
-	def parent(self):
-		return UdmPython(self.impl.parent)
 
 	def __init__(self, impl):
 		if isinstance(impl, UdmPython):
@@ -29,8 +26,16 @@ class UdmPython(object):
 	def _type(self):
 		import Uml
 		return Uml.Class.cast(self.impl.type)
-
-	def children(self,child_role=None, child_type=None):
+	def _get_parent(self, parent_role=None):
+		#parent_role could be either Udm.Object or UdmPython (or descendants: it is expected to be Uml.CompositionChildRole)
+		parent_role_impl = None
+		if isinstance(parent_role, UdmPython):
+			parent_role_impl = parent_role.impl
+		else:
+			parent_role_impl = parent_role
+		return UdmPython(self.impl.getParent(parent_role_impl))
+		
+	def _get_children(self,child_role=None, child_type=None):
 		#child_type could be either Udm.Object or UdmPython (or descendants: it is expected to be Uml.Class)
 		#child_role could be either Udm.Object or UdmPython (or descendants: it is expected to be Uml.CompositionChildRole)
 		#if role is given, return only those children that have that role (ignore kind)

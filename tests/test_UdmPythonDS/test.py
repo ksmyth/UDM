@@ -5,6 +5,8 @@ import UdmPython    # python wrapper
 import Uml          # generated UML classes
 import LampDiagram  # generated Domain Specific API
 
+import unittest     # testing
+
 
 
 
@@ -33,7 +35,7 @@ def walk_hierarchy_udmp(obj, indent_tabs = 0):
         
         obj.setIndent(indent_tabs)
         print obj
-        generic_children = obj.children()
+        generic_children = obj._get_children()
         if generic_children:
             print UdmPython.indent(indent_tabs) + "I have found the following children at this level: %d" % (len(generic_children))
             for child in generic_children:

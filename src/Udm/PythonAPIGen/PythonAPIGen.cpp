@@ -259,10 +259,7 @@ void PythonAPIGen::generateClass(::Uml::Class &cls, const PythonInheritanceSolve
 
 	m_output << "class " << cls.name() << is.getAncestorList(cls) <<  ":" << endl;
    	m_output << "\t\"\"\"Generated\"\"\"" << endl;
-    m_output << "\t@property" << endl;
-    m_output << "\tdef parent(self):" << endl;
-    m_output << "\t\tparent_o = super(" << cls.name() << ", self).parent" << endl;
-    m_output << "\t\treturn globals()[parent_o._type().name](parent_o) " << endl;
+ 
 
 	generateAttributes(cls);
 	
@@ -276,6 +273,7 @@ void PythonAPIGen::generateClass(::Uml::Class &cls, const PythonInheritanceSolve
 	
 	generateChildrenAccess(cls);
 	generateAssociations(cls);
+    generateParentAccess(cls);
 }
 
 void PythonAPIGen::generateAttributes(::Uml::Class &cls)
@@ -302,6 +300,49 @@ void PythonAPIGen::generateAttributes(::Uml::Class &cls)
 	}
 }
 
+void PythonAPIGen::generateParentAccess(::Uml::Class &c)
+{
+    string cl_name = c.name();
+    set <  ::Uml::CompositionChildRole> parents = c.childRoles();
+    for( set< ::Uml::CompositionChildRole>::iterator i = parents.begin(); i != parents.end(); i++)
+	{
+		::Uml::CompositionParentRole the_other = Uml::theOther(*i);
+		::Uml::Class parent = the_other.target();
+        
+		string rel_name = ::Uml::MakeRoleName(the_other);
+		string parent_name = UmlClassCPPName(parent);
+        
+        if (the_other.isNavigable())
+		{
+            m_output << "\tdef " << rel_name << "(self):" <<endl;
+            m_output << "\t\t# return parent contained via rolename: " << the_other.name() << ", rel_name: " << rel_name << endl;
+            m_output << "\t\tparent = self._get_parent( "<< cl_name << ".meta_" << rel_name <<")" << endl;
+            m_output << "\t\t" << "return globals()[parent._type().name](parent)" << endl;
+            
+        }
+        bool parent_defined = false;
+        set< ::Uml::CompositionParentRole> parroles = Uml::AncestorCompositionPeerParentRoles(c);
+        for( set< ::Uml::CompositionParentRole>::iterator ri = parroles.begin(); ri != parroles.end(); ri++)
+        {
+            
+            if(string(ri->name()) == "parent")
+            {
+                parent_defined = true;
+                break;
+            }
+        }
+        
+        if (!parent_defined)
+        {
+            m_output << "\tdef parent(self):" <<endl;
+            m_output << "\t\t# return generic parent  "  << endl;
+            m_output << "\t\tparent = self._get_parent()" << endl;
+            m_output << "\t\t" << "return globals()[parent._type().name](parent)" << endl;
+        }
+    }
+    
+}
+
 void PythonAPIGen::generateChildrenAccess(::Uml::Class &cls)
 {
     
@@ -326,7 +367,7 @@ void PythonAPIGen::generateChildrenAccess(::Uml::Class &cls)
             if(the_other.max() == 1)
             {
                 m_output << "\t\t# return the single child contained via rolename: " << the_other.name() << ", rel_name: " << rel_name << endl;
-                m_output << "\t\tchilds = self.children(child_role=" << cl_name << ".meta_" << rel_name <<")" << endl;
+                m_output << "\t\tchilds = self._get_children(child_role=" << cl_name << ".meta_" << rel_name <<")" << endl;
                 m_output << "\t\t" << "if len(childs) > 0:" << endl;
                 m_output << "\t\t\t" << "return globals()[childs[0]._type().name](childs[0])" << endl;
                 m_output << "\t\t" << "else: " << endl;
@@ -336,7 +377,7 @@ void PythonAPIGen::generateChildrenAccess(::Uml::Class &cls)
             else
             {
                 m_output << "\t\t# return the children contained via rolename: " << the_other.name() << ", rel_name: " << rel_name << endl;
-                m_output << "\t\tchilds = self.children(child_role=" << cl_name << ".meta_" << rel_name <<")" << endl;
+                m_output << "\t\tchilds = self._get_children(child_role=" << cl_name << ".meta_" << rel_name <<")" << endl;
                 m_output << "\t\tlist = []" << endl;
                 m_output << "\t\t" << "for i in childs:" << endl;
                 m_output << "\t\t\t" << "list.append(globals()[i._type().name](i))"  << endl;
@@ -362,7 +403,7 @@ void PythonAPIGen::generateChildrenAccess(::Uml::Class &cls)
                 
                 m_output << "\tdef " << kind_children_name << "_kind_children(self):" << endl;
                 m_output << "\t\t# return the children of type: "  << kind_children_name << endl;
-                m_output << "\t\tchilds = self.children(child_type=" << kind_children_name << ".Meta)" << endl;
+                m_output << "\t\tchilds = self._get_children(child_type=" << kind_children_name << ".Meta)" << endl;
                 m_output << "\t\tlist = []" << endl;
                 m_output << "\t\t" << "for i in childs:" << endl;
                 m_output << "\t\t\t" << "list.append(globals()[i._type().name](i))"  << endl;

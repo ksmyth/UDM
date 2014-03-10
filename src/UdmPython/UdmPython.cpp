@@ -417,6 +417,19 @@ object Object_getChildren(Udm::Object& self, object _ccrole, object _kind)
     
 }
 
+
+Udm::Object Object_getParent(Udm::Object& self, Udm::Object& prole)
+{
+    // this functions works in exactly the same way as ObjectImpl::getParent()
+    // get the parent object or null if object has no parent
+    // if role is not NULLROLE, return parent only if the role actually applies
+    
+    if (!self) throw std::runtime_error(std::string("Object is null in getParent()"));
+    Udm::Object ret =self.__impl()->getParent(Uml::CompositionParentRole::Cast(prole));
+    return ret;
+    
+}
+
 object Object_getAssociation(Udm::Object& self, Udm::Object& arole, object _mode)
 {
     // arole must be non-null.
@@ -836,6 +849,7 @@ BOOST_PYTHON_MODULE(udm)
 		.def("_children", Object_children)
         .def("getChildren", Object_getChildren)
         .def("getAssociation", Object_getAssociation)
+        .def("getParent", Object_getParent)
 		.def("_adjacent", Object_adjacent)
 		.def("get_attribute",&Object_attr_by_uml_attr_as_udm_object)
 		.def("set_attribute",&Object_set_attr_by_uml_attr_as_udm_object)
