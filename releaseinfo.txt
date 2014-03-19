@@ -1,4 +1,4 @@
-Copyright (c) Vanderbilt University, 2001-2012
+Copyright (c) Vanderbilt University, 2001-2014
 ALL RIGHTS RESERVED
 
 ** UDM : Universal Data Model **
@@ -8,7 +8,7 @@ ALL RIGHTS RESERVED
 1. Windows Operating system (XP, Vista, 7)
 NOTE: Udm can also be used on Linux
 
-2. GME 12, r12.6.29 from: http://repo.isis.vanderbilt.edu/GME/
+2. GME 14, 14.3.5 from: http://repo.isis.vanderbilt.edu/GME/
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. To develop using UDM: Visual Studio 2008, 2010, or 2012
@@ -20,10 +20,12 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
-    - Next Release
+    - Release 3.2.13 (3/19/2014)
+        -   UdmDll is backwards compatible with previous 3.2 releases
         -   Udm.exe: allow Classes an association and a parent with an association. Fixes "Class Connection has multiple associations" error
         -   MetaGME2Uml: fix bug where some refport associations were mistakenly excluded
         -   Uml2XML: check that a Class has maximum 1 association, since Uml.xml defines a cardinality of 1. Fixes bug where an Association would have not Class linking to it
+        -   UdmDll: fix bug with nested GME namespaces
 
     - Release 3.2.12 (7/29/2013)
         -   Add Visual Studio 2012 (VC11) UdmDll
