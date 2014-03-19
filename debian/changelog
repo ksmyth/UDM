@@ -1,3 +1,9 @@
+udm (3.2.13-1ubuntu1) precise; urgency=low
+
+  * Udm 3.2.13
+
+ -- Kevin Smyth <ksmyth@isis.vanderbilt.edu>  Wed, 19 Mar 2014 10:58:21 -0500
+
 udm (3.2.11-1) lucid; urgency=low
 
   * Udm 3.2.12
