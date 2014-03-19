@@ -12,7 +12,7 @@ Update with new version, info:
  Projects/Win32/VC10/src/UdmCli/Properties/AssemblyInfo.cs
  configure.ac
  debian/changelog (`DEBEMAIL='ksmyth@isis.vanderbilt.edu' DEBFULLNAME='Kevin Smyth' dch -i`)
-ci -m 'Prepare for release 3.2.13'
+ci -m "Prepare for release 3.2.13"
 
 svn cp -m 'Tag release 3.2.13' https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.13
 
@@ -22,8 +22,8 @@ for url in http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSucce
 do
  curl -s "$url" | grep "Finding ID" | sed 's/Finding ID...  //' | sed 's/copy_pdbs.py: symstore://'
 done | xargs 
-For "Finding ID" in Udm (x3), Udm_x64 (x2): ssh kms1 cd symbolstmp python ./bin/pdb_promote.py 
-for file in 0000006636 0000006637 0000006632 0000006633 0000006631; do perl -pli -e 'foreach $f (qw/Udm.exe UdmSwig.dll MetaGME2UML.pdb MetaGME2Uml.dll Udmd.pdb UDMOclPat.exe UDMOclPat.pdb/) { s/$f/$f/ig; }' 000Admin/$file; done
+For "Finding ID" in Udm (x3), Udm_x64 (x2): ssh kms1 cd symbolstmp '&&' python \~/bin/pdb_promote.py 
+for file in 0000009647 0000009648 0000009642 0000009643 0000009644; do perl -pli -e 'foreach $f (qw/Udm.exe UdmSwig.dll MetaGME2UML.pdb MetaGME2Uml.dll Udmd.pdb UDMOclPat.exe UDMOclPat.pdb/) { s/$f/$f/ig; }' 000Admin/$file; done
 curl -o UDM_x64-3.2.13.msi http://build.isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi &&
 curl -o UDM-3.2.13.msi http://build.isis.vanderbilt.edu/job/UDM_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
 for file in http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do curl -O "$file"; done
@@ -39,7 +39,7 @@ curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/las
 curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm-dev_3.2.13-1_amd64.deb )
 
 svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.13 Udm_source_r3.2.13 && \
-PATH="$PATH":'/c/Program Files (x86)/7-Zip/':'/c/Program Files/7-Zip/' 7z.exe a -r Udm_source_r3.2.13.zip Udm_source_r3.2.13/ && \
+PATH="$PATH":'/cygdrive/c/Program Files/7-Zip/':'/c/Program Files/7-Zip/' 7z.exe a -r Udm_source_r3.2.13.zip Udm_source_r3.2.13/ && \
 cp Udm_source_r3.2.13/releaseinfo.txt UDM_Release_Notes.txt
 
 ssh repo@repo.isis.vanderbilt.edu mkdir -p UDM/3.2.13/ UDM/3.2.13/ubuntu10.04 UDM/3.2.13/ubuntu12.04 && \
@@ -117,3 +117,13 @@ Check for missing symbols
 set _NT_SYMBOL_PATH=C:\Windows\symbols\dll;C:\Windows\system32;srv*c:\symbols*http://symbols.isis.vanderbilt.edu/;srv*c:\symbols*http://msdl.microsoft.com/download/symbols
 "c:\Program Files (x86)\Debugging Tools for Windows (x86)\symchk.exe" /r "C:\Program Files\ISIS\Udm"
 "c:\Program Files (x86)\Debugging Tools for Windows (x86)\symchk.exe" /r "C:\Program Files (x86)\ISIS\Udm"
+"c:\Program Files (x86)\Debugging Tools for Windows (x86)\symchk.exe" c:\Windows\SysWOW64\UdmDll_3_2_VS10.dll
+"c:\Program Files (x86)\Debugging Tools for Windows (x86)\symchk.exe" c:\Windows\SysWOW64\UdmDll_3_2_v110_Win32.dll
+"c:\Program Files (x86)\Debugging Tools for Windows (x86)\symchk.exe" c:\Windows\SysWOW64\UdmDll_3_2.dll
+Normal:
+ SYMCHK: python27.dll         FAILED  - python27.pdb mismatched or not found
+ SYMCHK: UdmCliGen.exe        FAILED  - Built without debugging information.
+ Xalan
+ 
+start /wait msiexec /I UDM_x64-3.2.12.msi /qb /Lv* UDM_x64-3.2.12.log ALLUSERS=1
+start /wait msiexec /I UDM_x64-3.2.13.msi /qb /Lv* UDM_x64-3.2.13.log ALLUSERS=1
