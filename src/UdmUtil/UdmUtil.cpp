@@ -24,6 +24,12 @@
 #include <limits>
 #include <string.h>
 
+//boost is needed for handling json serialization
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/fusion/include/for_each.hpp>
+
 
 using namespace Uml;
 using namespace Udm;
@@ -89,36 +95,129 @@ namespace UdmUtil
 		false,	// is_dn_copy
 		false	// is_lib_part
 	};
+    
+    template <typename Variant>
+    struct to_string
+    {
+    private:
+        Variant data;
+   
+    public:
+        to_string(Variant &d) : data(d) {}
+        operator std::string() const
+        {
+            try
+            {
+                return boost::lexical_cast<std::string>(data);
+            }
+            catch (const boost::bad_lexical_cast &)
+            {
+                return std::string();
+            }
+        }
+        
+    };
+    
+    template <class Sequence>
+    vector<std::string> stringize(vector<Sequence>& seq)
+    {
+        vector<std::string> result;
+        typename vector< Sequence>::iterator i = seq.begin();
+        for (; i!= seq.end(); i++)
+        {
+            Sequence item = *i;
+            to_string<Sequence> data = to_string<Sequence>(item);
+            result.push_back((string)data);
+        }
+    
+        return result;
+    }
 
 	int reqCopyObjectHierarchy(ObjectImpl* p_srcRoot, ObjectImpl* p_dstRoot, DataNetwork* p_dstBackend, bool & finished, copy_assoc_map& cam );
 
 
-
+    
+    UDM_DLL string GetAttributeAsString( const ::Udm::ObjectImpl *impl, ::Uml::Attribute& attr, bool convert_any_type)
+    {
+        string ret;
+        if (!attr) throw udm_exception("GetAttributeAsString: Null Attribute object was provided");
+        
+        if  ( (impl == NULL) || (impl == &_null) ) throw udm_exception("GetAttributeAsString: Object handler is null");
+        
+        string result;
+        
+        if (convert_any_type && ( (attr.max()>1) || (attr.max() == -1) ) )
+            
+        {
+            vector<string> attr_val_as_str;
+            
+            if (attr.type() == "Integer")
+            {
+                vector<__int64> attr_val = impl->getIntegerAttrArr(attr);
+                attr_val_as_str = stringize(attr_val);
+            }
+            else if (attr.type() == "Boolean")
+            {
+                vector<bool> attr_val = impl->getBooleanAttrArr(attr);
+                attr_val_as_str = stringize(attr_val);
+                
+            } else if (attr.type() == "Real")
+            {
+                vector<double> attr_val = impl->getRealAttrArr(attr);
+                attr_val_as_str = stringize(attr_val);
+            } else if (attr.type() == "String")
+            {
+                attr_val_as_str = impl->getStringAttrArr(attr);
+                            }
+            
+            result = vector_to_string(attr_val_as_str,';');
+            
+        } else if  (convert_any_type && !(attr.type() == "String") )
+        {
+            
+            if (attr.type() == "Integer")
+            {
+                __int64 attr_val = impl->getIntegerAttr(attr);
+                result = to_string<__int64>(attr_val);
+                
+            }
+            else if (attr.type() == "Boolean")
+            {
+                bool attr_val = impl->getBooleanAttr(attr);
+                result = to_string<bool>(attr_val);
+                
+            } else if (attr.type() == "Real")
+            {
+                double attr_val = impl->getRealAttr(attr);
+                result  = to_string<double>(attr_val);
+            }
+            
+        } else if (attr.type() == "String") result = impl->getStringAttr(attr);
+            
+        return result;
+    }
+    
+    
 	UDM_DLL string ExtractName(const Udm::ObjectImpl *impl,  const string &att_name )
 	{
 		if (impl->type().__impl() == NULL)
 			return string("<not discoverable>");
-
+        
 		::Uml::Class cls = impl->type();
-		set< ::Uml::Attribute> attrs=cls.attributes();		
 		
-		// Adding parent attributes
-		set< ::Uml::Attribute> aattrs=::Uml::AncestorAttributes(cls);
-		attrs.insert(aattrs.begin(),aattrs.end());
-
+		set< ::Uml::Attribute> attrs=::Uml::AncestorAttributes(cls);
+		
 		for(set< ::Uml::Attribute>::iterator ai = attrs.begin();ai != attrs.end(); ai++) 
 		{
-			if(string(ai->type())=="String")
-			{
-				string str=ai->name();
-				if(str==att_name)
-				{
-					
-					string value=impl->getStringAttr(*ai);
-					if(value.empty())value="<empty string>";
-					return value;
-				}			
-			}				
+            string str=ai->name();
+            if(str==att_name)
+            {
+                Uml::Attribute att = *ai;
+                string value =  GetAttributeAsString(impl, att, false);
+                    
+                if(value.empty())value="<empty string>";
+                return value;
+            }
 		}
 		
 		return string("<no name specified>");
@@ -1139,4 +1238,68 @@ namespace UdmUtil
 
 		return trace;
 	};
+    
+    
+    UDM_DLL boost::property_tree::ptree DiagramToPtree( const ::Udm::Object& obj, bool child_attr_subtree = false);
+    UDM_DLL boost::property_tree::ptree DiagramToPtree( const ::Udm::Object& obj, bool child_attr_subtree)
+    {
+        boost::property_tree::ptree pt, pt_attributes, pt_children;
+        const Udm::ObjectImpl * obj_impl = obj.__impl();
+        
+       
+        ::Udm::ObjectImpl::uniqueId_type id = obj_impl->uniqueId();
+        to_string< ::Udm::ObjectImpl::uniqueId_type> key = to_string< ::Udm::ObjectImpl::uniqueId_type>(id);
+        
+        pt.push_back(boost::property_tree::ptree::value_type("_id", boost::property_tree::ptree(key)));
+
+        
+        set < ::Uml::Attribute> attributes = AncestorAttributes(obj.type());
+        
+        if (attributes.size()>0)
+        {
+            set < ::Uml::Attribute>::iterator attr_i = attributes.begin();
+
+            for(; attr_i != attributes.end(); attr_i ++)
+            {
+                ::Uml::Attribute attr = *attr_i;
+                
+                if(child_attr_subtree)
+                    pt_attributes.push_back(boost::property_tree::ptree::value_type(attr.name(), boost::property_tree::ptree(GetAttributeAsString(obj_impl, attr, true))));
+                else
+                    pt.push_back(boost::property_tree::ptree::value_type(attr.name(), boost::property_tree::ptree(GetAttributeAsString(obj_impl, attr, true))));
+
+            }
+
+            if (child_attr_subtree) pt.push_back(boost::property_tree::ptree::value_type("_attributes", pt_attributes));
+        }
+        
+        set<Object> children = obj.GetChildObjects();
+        if (children.size() > 0)
+        {
+            for (set<Object>::iterator child_i = children.begin(); child_i != children.end(); child_i++)
+            {
+                ::Udm::ObjectImpl::uniqueId_type child_id = child_i->__impl()->uniqueId();
+                to_string< ::Udm::ObjectImpl::uniqueId_type> child_key = to_string< ::Udm::ObjectImpl::uniqueId_type>(child_id);
+
+                if (child_attr_subtree)
+                    pt_children.push_back(boost::property_tree::ptree::value_type(child_key, DiagramToPtree(*child_i)));
+                else
+                    pt.push_back(boost::property_tree::ptree::value_type(child_key, DiagramToPtree(*child_i)));
+            }
+            if (child_attr_subtree)
+                pt.push_back(boost::property_tree::ptree::value_type("_children", pt_children));
+
+        }
+        
+    
+        return pt;
+
+    };
+    
+    UDM_DLL void write_json(const ::Udm::Object& obj, const string & FileName, bool child_attr_subtree)
+    {
+        boost::property_tree::json_parser::write_json(FileName, DiagramToPtree(obj,child_attr_subtree));
+    }
+    
 };
+

@@ -1,4 +1,4 @@
-SUBDIRS = MPCGen StrResGen Udm UdmBackendDump UdmBase UdmCopy UdmDom UdmOcl UdmOclPat UdmPOI UdmPython UdmSwig UdmToXmi UdmUtil UdmViz UdmXmi Uml XmiToUdm
+SUBDIRS = MPCGen StrResGen Udm UdmBackendDump UdmBase UdmCopy UdmDom UdmOcl UdmOclPat UdmPOI UdmPython UdmSwig UdmToXmi UdmUtil UdmViz UdmXmi Uml XmiToUdm UdmJson
 
 all:
 	@for dir in $(SUBDIRS);\

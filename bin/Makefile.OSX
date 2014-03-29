@@ -1,6 +1,6 @@
 include ../Makefile.OSX.incl
 
-all: Udm UdmCopy UdmViz UdmBackendDump UdmOclPat UdmToXmi XmiToUdm
+all: Udm UdmCopy UdmViz UdmBackendDump UdmOclPat UdmToXmi XmiToUdm UdmJson
 
 Udm:
 	$(CC) $(BCFLAGS) ../src/Udm/Udm.o -o Udm -lUdm -L../lib
@@ -18,6 +18,10 @@ UdmToXmi:
 XmiToUdm:
 	$(CC) $(BCFLAGS) ../src/XmiToUdm/XmiToUdm.o ../src/UdmXmi/XSLT.o ../src/UdmXmi/Transform.o -o XmiToUdm -lUdm -L../lib -lxalan-c -L $(XALANCROOT)/lib -lxerces-c -L $(XERCESCROOT)/lib
 
+UdmJson:
+	$(CC) $(BCFLAGS) ../src/UdmJson/UdmJson.o -o UdmJson -lUdm -L../lib -lxalan-c -L $(XALANCROOT)/lib -lxerces-c -L $(XERCESCROOT)/lib
+	
+
 
 clean:
-	rm -f Udm UdmCopy UdmViz UdmBackendDump UdmOclPat UdmToXmi XmiToUdm
+	rm -f Udm UdmCopy UdmViz UdmBackendDump UdmOclPat UdmToXmi XmiToUdm UdmJson

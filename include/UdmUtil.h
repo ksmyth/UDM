@@ -41,6 +41,7 @@ namespace UdmUtil
 		bool is_lib_part;
 	};
 	extern UDM_DLL const CopyOpts DefCopyOpts;
+    
 
 	//utility which copies a subtree from a data network to another
 	//consistent (same) meta is assumed.
@@ -66,6 +67,12 @@ namespace UdmUtil
 		std::transform(c.begin(), c.end(), back_inserter(ret), std::ptr_fun(SimpleExtractName));
 		return ret;
 	}
+    
+    //get any UDM attribute as string
+    // if convert_any_type is true, any kind of attribute, even arrays, will be converted to string
+    
+    UDM_DLL string GetAttributeAsString( const ::Udm::ObjectImpl *impl, ::Uml::Attribute& attr, bool convert_any_type = false);
+
 
 	//note: escape_char is not escaped unless it is contained in to_escape_chars
 	UDM_DLL string escape_chars(const string &src, const char escape_char, const string &to_escape_chars);
@@ -81,7 +88,12 @@ namespace UdmUtil
 	UDM_DLL string doubleToString(double val, int minimum_precision = 2);
 	// returns false if parsing failed
 	UDM_DLL bool stringToDouble(const char* val, double& out);
-	UDM_DLL string stacktrace();	
+	UDM_DLL string stacktrace();
+    
+    //json stuff
+    UDM_DLL void write_json(const ::Udm::Object& obj, const string & FileName, bool child_attr_subtree = false);
+    
+    
 };
 
 #endif //MOBIES_UDMUTIL_H

@@ -1,6 +1,6 @@
 
 #ifndef MOBIES_UDM_XMI_H
-#define MOBIEX_UDM_XMI_H
+#define MOBIES_UDM_XMI_H
 
 #include "ErrHand.h"
 
