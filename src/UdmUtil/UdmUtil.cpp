@@ -1250,7 +1250,8 @@ namespace UdmUtil
         ::Udm::ObjectImpl::uniqueId_type id = obj_impl->uniqueId();
         to_string< ::Udm::ObjectImpl::uniqueId_type> key = to_string< ::Udm::ObjectImpl::uniqueId_type>(id);
         
-        pt.push_back(boost::property_tree::ptree::value_type("_id", boost::property_tree::ptree(key)));
+        pt.push_back(boost::property_tree::ptree::value_type( "_id:", boost::property_tree::ptree(key)));
+        pt.push_back(boost::property_tree::ptree::value_type( "_type:", boost::property_tree::ptree((string)(obj.__impl()->type().name() ))));
 
         
         set < ::Uml::Attribute> attributes = AncestorAttributes(obj.type());
@@ -1273,24 +1274,35 @@ namespace UdmUtil
             if (child_attr_subtree) pt.push_back(boost::property_tree::ptree::value_type("_attributes", pt_attributes));
         }
         
-        set<Object> children = obj.GetChildObjects();
-        if (children.size() > 0)
-        {
-            for (set<Object>::iterator child_i = children.begin(); child_i != children.end(); child_i++)
-            {
-                ::Udm::ObjectImpl::uniqueId_type child_id = child_i->__impl()->uniqueId();
-                to_string< ::Udm::ObjectImpl::uniqueId_type> child_key = to_string< ::Udm::ObjectImpl::uniqueId_type>(child_id);
-
-                if (child_attr_subtree)
-                    pt_children.push_back(boost::property_tree::ptree::value_type(child_key, DiagramToPtree(*child_i)));
-                else
-                    pt.push_back(boost::property_tree::ptree::value_type(child_key, DiagramToPtree(*child_i)));
-            }
-            if (child_attr_subtree)
-                pt.push_back(boost::property_tree::ptree::value_type("_children", pt_children));
-
-        }
         
+        
+         set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(obj.__impl()->type());
+         for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); p_currClass!=ancestorClasses.end(); p_currClass++)
+         {
+            set< ::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
+            for(set< ::Uml::CompositionParentRole>::iterator p_currRole=compParentRoles.begin(); p_currRole!=compParentRoles.end(); p_currRole++)
+            {
+                ::Uml::CompositionChildRole o_role = theOther(*p_currRole);
+                ::Uml::Class childClass = o_role.target();
+         
+                vector<ObjectImpl*>children= obj.__impl()->getChildren(o_role,childClass);
+                for(vector<ObjectImpl*>::iterator p_currImpl=children.begin(); p_currImpl!=children.end();p_currImpl++)
+                {
+                    Object child= *p_currImpl;				//source child
+         
+                    if (child_attr_subtree)
+                        pt_children.push_back(boost::property_tree::ptree::value_type((string)(o_role.name()), DiagramToPtree(child)));
+                    else
+                        pt.push_back(boost::property_tree::ptree::value_type((string)(o_role.name()), DiagramToPtree(child)));
+         
+                }
+                
+                if (child_attr_subtree)
+                    pt.push_back(boost::property_tree::ptree::value_type("_children", pt_children));
+
+            }
+         }
+         
     
         return pt;
 
