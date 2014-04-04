@@ -22,15 +22,13 @@
 #endif
 
 #include <sstream>
+#include <fstream>
 #include <limits>
 #include <string.h>
 
-//boost is needed for handling json serialization
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/fusion/include/for_each.hpp>
 
+#include <boost/lexical_cast.hpp>
+#include <json_spirit_writer_template.h>
 
 using namespace Uml;
 using namespace Udm;
@@ -1240,19 +1238,91 @@ namespace UdmUtil
 		return trace;
 	};
     
-    
-    UDM_DLL boost::property_tree::ptree DiagramToPtree( const ::Udm::Object& obj, bool child_attr_subtree = false);
-    UDM_DLL boost::property_tree::ptree DiagramToPtree( const ::Udm::Object& obj, bool child_attr_subtree)
+	UDM_DLL json_spirit::Pair AttrToJSPair(const ::Udm::Object& obj, ::Uml::Attribute & attr)
+	{
+		const string key = attr.name(); 
+		const ObjectImpl * impl = obj.__impl();
+		if (attr.max() == 1 || attr.max() == 0)
+		{
+			if (attr.type()=="Integer") 
+			{
+				__int64 intval = impl->getIntegerAttr(attr);
+				json_spirit::Pair retval(key, intval); 
+				return retval;
+			}
+			else if (attr.type()=="Real")
+			{	
+				double realval = impl->getRealAttr(attr);
+				json_spirit::Pair retval(key, realval); 
+				return retval;
+
+			}
+			else if (attr.type()=="Boolean")
+			{	
+				bool boolval = impl->getBooleanAttr(attr);
+				json_spirit::Pair retval(key, boolval); 
+				return retval;
+
+			}
+			else if (attr.type()=="String")
+			{	
+				string strval = impl->getStringAttr(attr);
+				json_spirit::Pair retval(key, strval); 
+				return retval;
+
+			}
+			else throw udm_exception ("UdmUtil::AttrToJSPair: Unknown attribute type");
+		}else
+		{
+			json_spirit::Array arr; 
+
+			if (attr.type()=="Integer") 
+			{
+				vector<__int64> intval = impl->getIntegerAttrArr(attr);
+				arr = json_spirit::Array(intval.begin(), intval.end());
+			}
+			else if (attr.type()=="Real")
+			{	
+				vector<double> realval = impl->getRealAttrArr(attr);
+				arr = json_spirit::Array(realval.begin(), realval.end());
+				
+			}
+			else if (attr.type()=="Boolean")
+			{	
+				vector<bool> boolval = impl->getBooleanAttrArr(attr);
+//				arr = json_spirit::Array(boolval.begin(), boolval.end());
+//				for some reason, this did not compile, so...:
+
+				for (vector<bool>::iterator i=boolval.begin(); i != boolval.end(); i++) 
+					arr.push_back( (bool) *i);
+				
+			}
+			else if (attr.type()=="String")
+			{	
+				vector<string> strval = impl->getStringAttrArr(attr);
+				arr = json_spirit::Array(strval.begin(), strval.end());
+				
+			}
+			else throw udm_exception ("UdmUtil::AttrToJSPair: Unknown attribute type");
+
+			json_spirit::Pair retval(key, arr); 
+			return retval;
+		}
+		 
+	}
+
+    UDM_DLL json_spirit::Object DiagramToPtree( const ::Udm::Object& obj, bool child_attr_subtree = false);
+    UDM_DLL json_spirit::Object DiagramToPtree( const ::Udm::Object& obj, bool child_attr_subtree)
     {
-        boost::property_tree::ptree pt, pt_attributes, pt_children;
+		json_spirit::Object pt, pt_attributes, pt_children;
         const Udm::ObjectImpl * obj_impl = obj.__impl();
         
        
         ::Udm::ObjectImpl::uniqueId_type id = obj_impl->uniqueId();
         to_string< ::Udm::ObjectImpl::uniqueId_type> key = to_string< ::Udm::ObjectImpl::uniqueId_type>(id);
         
-        pt.push_back(boost::property_tree::ptree::value_type( "_id:", boost::property_tree::ptree(key)));
-        pt.push_back(boost::property_tree::ptree::value_type( "_type:", boost::property_tree::ptree((string)(obj.__impl()->type().name() ))));
+        pt.push_back(json_spirit::Pair ( "_id:",  id));
+		pt.push_back(json_spirit::Pair( "_type:", (string)(obj.__impl()->type().name() )));
 
         
         set < ::Uml::Attribute> attributes = AncestorAttributes(obj.type());
@@ -1266,13 +1336,13 @@ namespace UdmUtil
                 ::Uml::Attribute attr = *attr_i;
                 
                 if(child_attr_subtree)
-                    pt_attributes.push_back(boost::property_tree::ptree::value_type(attr.name(), boost::property_tree::ptree(GetAttributeAsString(obj_impl, attr, true))));
+                    pt_attributes.push_back( AttrToJSPair(obj, attr)); 
                 else
-                    pt.push_back(boost::property_tree::ptree::value_type(attr.name(), boost::property_tree::ptree(GetAttributeAsString(obj_impl, attr, true))));
+                    pt.push_back(AttrToJSPair(obj, attr));
 
             }
 
-            if (child_attr_subtree) pt.push_back(boost::property_tree::ptree::value_type("_attributes", pt_attributes));
+            if (child_attr_subtree) pt.push_back(json_spirit::Pair("_attributes", pt_attributes));
         }
         
         
@@ -1292,14 +1362,14 @@ namespace UdmUtil
                     Object child= *p_currImpl;				//source child
          
                     if (child_attr_subtree)
-                        pt_children.push_back(boost::property_tree::ptree::value_type((string)(o_role.name()), DiagramToPtree(child)));
+                        pt_children.push_back(json_spirit::Pair((string)(o_role.name()), DiagramToPtree(child)));
                     else
-                        pt.push_back(boost::property_tree::ptree::value_type((string)(o_role.name()), DiagramToPtree(child)));
+                        pt.push_back(json_spirit::Pair((string)(o_role.name()), DiagramToPtree(child)));
          
                 }
                 
                 if (child_attr_subtree)
-                    pt.push_back(boost::property_tree::ptree::value_type("_children", pt_children));
+                    pt.push_back(json_spirit::Pair("_children", pt_children));
 
             }
          }
@@ -1311,7 +1381,10 @@ namespace UdmUtil
     
     UDM_DLL void write_json(const ::Udm::Object& obj, const string & FileName, bool child_attr_subtree)
     {
-        boost::property_tree::json_parser::write_json(FileName, DiagramToPtree(obj,child_attr_subtree));
+		unsigned int options = json_spirit::pretty_print | json_spirit::remove_trailing_zeros | json_spirit::single_line_arrays;
+	
+		ofstream os(FileName.c_str());
+		json_spirit::write_stream( json_spirit::Value(DiagramToPtree(obj,child_attr_subtree)) , os, options);
     }
     
 };
