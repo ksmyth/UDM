@@ -23,15 +23,6 @@ UDM_USE_MGA
 #include <cstdlib>
 #include <string.h>
 
-/*
-static Diagram linkdiag;
-static Class linkpar;
-static Attribute link;
-
-void copy(ObjectImpl *from, ObjectImpl *to);
-void assoccopy(ObjectImpl *from, ObjectImpl *to);
-*/
-
 void dummy(void) {; }
 
 class UdmCopy
