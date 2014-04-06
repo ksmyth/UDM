@@ -1311,18 +1311,19 @@ namespace UdmUtil
 		 
 	}
 
-    UDM_DLL json_spirit::Object DiagramToPtree( const ::Udm::Object& obj, bool child_attr_subtree = false);
-    UDM_DLL json_spirit::Object DiagramToPtree( const ::Udm::Object& obj, bool child_attr_subtree)
+    UDM_DLL json_spirit::Object DiagramToPtree( const ::Udm::Object& obj, const ::Uml::CompositionChildRole& contained_via_role = &Udm::_null );
+
+    UDM_DLL json_spirit::Object DiagramToPtree( const ::Udm::Object& obj, const ::Uml::CompositionChildRole& contained_via_role)
     {
-		json_spirit::Object pt, pt_attributes, pt_children;
+		json_spirit::Object pt;
         const Udm::ObjectImpl * obj_impl = obj.__impl();
         
        
         ::Udm::ObjectImpl::uniqueId_type id = obj_impl->uniqueId();
         to_string< ::Udm::ObjectImpl::uniqueId_type> key = to_string< ::Udm::ObjectImpl::uniqueId_type>(id);
         
-        pt.push_back(json_spirit::Pair ( "_id:",  id));
-		pt.push_back(json_spirit::Pair( "_type:", (string)(obj.__impl()->type().name() )));
+        pt.push_back(json_spirit::Pair ( "_id:",  (__int64 ) id));
+		if (contained_via_role) pt.push_back(json_spirit::Pair( "_childrole:", (string)(contained_via_role.name() )));
 
         
         set < ::Uml::Attribute> attributes = AncestorAttributes(obj.type());
@@ -1335,14 +1336,10 @@ namespace UdmUtil
             {
                 ::Uml::Attribute attr = *attr_i;
                 
-                if(child_attr_subtree)
-                    pt_attributes.push_back( AttrToJSPair(obj, attr)); 
-                else
-                    pt.push_back(AttrToJSPair(obj, attr));
+                pt.push_back(AttrToJSPair(obj, attr));
 
             }
 
-            if (child_attr_subtree) pt.push_back(json_spirit::Pair("_attributes", pt_attributes));
         }
         
         
@@ -1360,17 +1357,11 @@ namespace UdmUtil
                 for(vector<ObjectImpl*>::iterator p_currImpl=children.begin(); p_currImpl!=children.end();p_currImpl++)
                 {
                     Object child= *p_currImpl;				//source child
-         
-                    if (child_attr_subtree)
-                        pt_children.push_back(json_spirit::Pair((string)(o_role.name()), DiagramToPtree(child)));
-                    else
-                        pt.push_back(json_spirit::Pair((string)(o_role.name()), DiagramToPtree(child)));
+                    pt.push_back(json_spirit::Pair((string)(child.__impl()->type().name()), DiagramToPtree(child, o_role)));
          
                 }
                 
-                if (child_attr_subtree)
-                    pt.push_back(json_spirit::Pair("_children", pt_children));
-
+                
             }
          }
          
@@ -1384,7 +1375,7 @@ namespace UdmUtil
 		unsigned int options = json_spirit::pretty_print | json_spirit::remove_trailing_zeros | json_spirit::single_line_arrays;
 	
 		ofstream os(FileName.c_str());
-		json_spirit::write_stream( json_spirit::Value(DiagramToPtree(obj,child_attr_subtree)) , os, options);
+		json_spirit::write_stream( json_spirit::Value(DiagramToPtree(obj)) , os, options);
     }
     
 };

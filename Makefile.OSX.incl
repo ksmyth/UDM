@@ -48,6 +48,7 @@ CPPUNIT=~/devtools/cppunit-1.12.1
 #JAVA 1.6.0 is needed in order to have a JVM which is capable to load 32bit shared libraries (UdmSwig) (-d32 flag)
 #UdmSwig is a shared library compiled with i386
 JVMD32=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/bin/java
+JSON_SPIRIT=~/devtools/json_spirit_v4.06/json_spirit
 
 #####################################################
 # variables and paths needed by the build process   #
@@ -63,4 +64,4 @@ LIBBOOST_PYTHON=$(LIBBOOST_PYTHON_DIR)/libboost_python.dylib
 DYLDLIBRARYPATH=$(UDMHOME)/lib:$(XERCESCROOT)/lib:$(XALANCROOT)/lib:$(PCRE)/.libs:$(CPPUNITLIBS):$(LIBBOOST_PYTHON_DIR)
 SWIGLIB=$(SWIGDIR)/lib
 SWIG=$(SWIGDIR)/swig
-INCLUDE=-I $(UDMHOME)/include -I $(UDMHOME)/src -I $(UDMHOME)/src/UdmOclPat/GOCL/Include/ -I $(MINIZIP) -I $(XERCES)/include -I $(BOOST) -I $(XERCESCROOT)/include -I $(XALANCROOT)/src -I $(XALANCROOT)/nls/include
+INCLUDE=-I $(UDMHOME)/include -I $(UDMHOME)/src -I $(UDMHOME)/src/UdmOclPat/GOCL/Include/ -I $(MINIZIP) -I $(XERCES)/include -I $(BOOST) -I $(XERCESCROOT)/include -I $(XALANCROOT)/src -I $(XALANCROOT)/nls/include -I $(JSON_SPIRIT)
