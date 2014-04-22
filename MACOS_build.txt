@@ -76,7 +76,7 @@ BOOST
 		./build.sh cc
 	3.2 build boost (will be needed for UdmPython). If the Python wrapper for UDM will not be used, you can skip this section
 		cd boost_1_55_0/
-		/tools/build/v2/engine/bin.macosxx86/bjam -sBUILD=release cxxflags="-g -O2 -arch i386" cflags="-g -O2 -arch i386" linkflags="-arch i386"
+		tools/build/v2/engine/bin.macosxx86/bjam -sBUILD=release cxxflags="-g -O2 -arch i386" cflags="-g -O2 -arch i386" linkflags="-arch i386"
 
 
 4. If build.sh will report 'operation not permitted', than the file was quarantined by Mac OS because it was downloaded from the internet. You can solve this by issuing xattr -dr com.apple.quarantine . in that directory.

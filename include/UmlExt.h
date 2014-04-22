@@ -190,6 +190,9 @@ namespace Uml
     // addtionally, names of the child and parent roles can be provided to constraint the possible compositions.
 	UDM_DLL Composition matchChildToParent(Class c, Class p, const char * crole, const char * prole = NULL);
     
+    // addtionally, return all the possible Compositions names of the child and parent roles can be provided to constraint the possible compositions.
+	UDM_DLL set<Composition> compositionsChildToParent(Class c, Class p, const char * crole, const char * prole = NULL);
+    
     //finds the only suitable AssociationRole to reach 'target_class' or 'assoc_cls' from c for the association with which has the name 'rolename' on C's side
     //if target_aclass is provided than peer_type is ignored, and only those assoc. roles are considered which are in an assoc. cls. based assoc.
     //rolename can be NULL. if not null, the results will be filtered against the rolename as well
@@ -217,6 +220,16 @@ namespace Uml
 
 	// get the corresponding class from the cross diagram
 	UDM_DLL Class GetClassFromCrossDgr(const Diagram &cross_dgr, const Class &cl);
+    //determines whether a class is the child end of a composition with the parent end in other namespace
+    UDM_DLL bool IsCrossNSCompositionChildEnd(const ::Uml::Class &c);
+    //return the classes that are
+    //not contained
+    //or it's only container is itself or an abstract superclass
+    // or it's the child end of a composition with the parent end in other namespace
+
+    UDM_DLL vector< ::Uml::Class> findNonContainedClasses(const ::Uml::Diagram & dgr);
+    
+
 
 	UDM_DLL Diagram GetDiagram(const Class &c);
 	UDM_DLL Diagram GetDiagram(const Association &assoc);

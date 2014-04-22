@@ -91,8 +91,8 @@ namespace UdmUtil
 	UDM_DLL string stacktrace();
     
     //json stuff
-    UDM_DLL void write_json(const ::Udm::Object& obj, const string & FileName, bool child_attr_subtree = false);
-    
+    UDM_DLL void write_json(const ::Udm::Object& obj, const string & FileName, unsigned int options = 0);
+    UDM_DLL void write_json(const ::Uml::Diagram& dgr, const string & FileName, unsigned int options = 0);
     
 };
 

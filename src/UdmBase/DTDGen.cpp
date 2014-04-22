@@ -1128,6 +1128,7 @@ static set< ::Uml::Namespace> XMLNamespacesToImport(const ::Uml::Diagram &dgr, c
 	return ret;
 }
 
+    /*
 static bool IsCrossNSCompositionChildEnd(const ::Uml::Class &c)
 {
 	::Uml::Namespace ns = c.parent_ns();
@@ -1150,7 +1151,7 @@ static bool IsCrossNSCompositionChildEnd(const ::Uml::Class &c)
 
 	return false;
 }
-
+*/
 static void GenerateXMLSchemaForClasses(const ::Uml::Diagram &dgr,
 			      ostream &output,
 			      const set< ::Uml::Class> &classes,
@@ -1191,13 +1192,15 @@ static void GenerateXMLSchemaForClasses(const ::Uml::Diagram &dgr,
 	set< ::Uml::Class>::const_iterator i = classes.begin();
 	while( i != classes.end() )
 	{
-		if(uxsdi || !(bool)i->isAbstract() )
-		{
+        // in these two ifs the behaviour is not affected by the value of uxsdi and of the ifs can be eliminated
+		//if(uxsdi || !(bool)i->isAbstract() )
+        // TODO: Use Uml::findNonContainedClasses instead of this.
+		//{
 			bool is_not_contained = false;
 
 			// XSD elements can't be of abstract types,
 			// don't make them globals
-			if (!uxsdi || !(bool)i->isAbstract()) {
+			if (/*!uxsdi || */!(bool)i->isAbstract()) {
 				set< ::Uml::Class> p_c = Uml::AncestorContainerClasses(*i);		//all possible containers
 				
 				//the condition: It's not contained
@@ -1210,13 +1213,13 @@ static void GenerateXMLSchemaForClasses(const ::Uml::Diagram &dgr,
 						(anc == *i || (::Uml::IsDerivedFrom(*i, anc) && anc.isAbstract()))))
 					is_not_contained = true;
 
-				if (is_not_contained || IsCrossNSCompositionChildEnd(*i))
+				if (is_not_contained || ::Uml::IsCrossNSCompositionChildEnd(*i))
 					globalElements.push_back(*i);
 			}
 
 			GenerateXMLSchemaElement(*i,  output, ns_ignore_set, uxsdi, xsd_el_ta, is_not_contained);
 
-		}
+		//}
 		++i;
 	}
 

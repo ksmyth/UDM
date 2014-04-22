@@ -572,6 +572,7 @@ namespace Uml
 
 	UDM_DLL Composition matchChildToParent(Class c, Class p, const char * crole, const char * prole)
 	{
+        /*
 		Composition comp;
 		set<Class> pancs = AncestorClasses(p);
 		set<Class> cancs = AncestorClasses(c);
@@ -597,7 +598,34 @@ namespace Uml
             }
 		}
 		return comp;
+         */
+        set<Composition> comps =compositionsChildToParent(c,p,crole, prole);
+        if (comps.size() != 1) return NULL;
+        else return *(comps.begin());
 	}
+
+    UDM_DLL set<Composition> compositionsChildToParent(Class c, Class p, const char * crole, const char * prole)
+	{
+		set<Composition> comp;
+		set<Class> pancs = AncestorClasses(p);
+		set<Class> cancs = AncestorClasses(c);
+		for(set<Class>::iterator j = cancs.begin(); j != cancs.end(); j++)
+        {
+			set<CompositionChildRole> cr = (*j).childRoles();
+            for(set<CompositionChildRole>::iterator i = cr.begin(); i != cr.end(); i++)
+            {
+                if (crole == NULL  || i->name() == string(crole))
+                {
+                    if (prole == NULL || theOther((*i)).name() == string(prole))
+                    {
+                        if(pancs.find(theOther(*i).target()) != pancs.end()) comp.insert((*i).parent());
+                    }
+                }
+            }
+		}
+		return comp;
+	}
+    
 
     
     UDM_DLL AssociationRole matchPeerToPeer(Class c, Class target_class, Class target_aclass, const char * rolename)
@@ -877,11 +905,68 @@ namespace Uml
 	};
 
 	// get the corresponding class from the cross diagram
-	UDM_DLL Class GetClassFromCrossDgr(const Diagram &cross_dgr, const Class &cl) {
+	UDM_DLL Class GetClassFromCrossDgr(const Diagram &cross_dgr, const Class &cl)
+    {
 		//The classname in cross diagram is: classname + cross_delimiter + diagramname ( + cross_delimiter + namespacename )*
 		string cross_cl_name = string(cl.name()) + string(Udm::cross_delimiter) + cl.GetParent().getPath2(Udm::cross_delimiter);
 		return classByName(cross_dgr, cross_cl_name);
 	}
+    
+    bool IsCrossNSCompositionChildEnd(const ::Uml::Class &c)
+    {
+        ::Uml::Namespace ns = c.parent_ns();
+        
+        set< ::Uml::CompositionParentRole> comps_c = ::Uml::AncestorCompositionPeerParentRoles(c);
+        for (set< ::Uml::CompositionParentRole>::iterator j = comps_c.begin(); j != comps_c.end(); j++)
+        {
+            ::Uml::Class theother = j->target();
+            
+            set< ::Uml::Class> desc = ::Uml::DescendantClasses(theother);
+            for (set< ::Uml::Class>::iterator jd = desc.begin(); jd != desc.end(); jd++)
+            {
+                ::Uml::Class cc = *jd;
+                
+                ::Uml::Namespace theother_ns = (::Uml::Namespace) cc.parent_ns();
+                if (ns != theother_ns)
+                    return true;
+            }
+        }
+        
+        return false;
+    };
+
+
+    UDM_DLL vector< ::Uml::Class> findNonContainedClasses(const ::Uml::Diagram & dgr)
+    {
+        vector< ::Uml::Class> globalElements;
+        set< ::Uml::Class> classes = dgr.classes();
+        set< ::Uml::Class>::const_iterator i = classes.begin();
+        while( i != classes.end() )
+        {
+            if (!(bool)i->isAbstract())
+            {
+                bool is_not_contained = false;
+                
+                // XSD elements can't be of abstract types,
+                // don't make them globals
+                set< ::Uml::Class> p_c = Uml::AncestorContainerClasses(*i);		//all possible containers
+                
+                //the condition: It's not contained
+                //				 or it's only container is itself or an abstract superclass
+                //				 or it's the child end of a composition with the parent end in other namespace
+                ::Uml::Class anc;
+                if ((p_c.size() == 0) || (p_c.size() == 1 && (anc = *(p_c.begin())) && (anc == *i || (::Uml::IsDerivedFrom(*i, anc) && anc.isAbstract()))))
+                    is_not_contained = true;
+                
+                if (is_not_contained || ::Uml::IsCrossNSCompositionChildEnd(*i))
+                    globalElements.push_back(*i);
+                
+                
+            }
+            ++i;
+        }
+        return globalElements;
+    };
 
 	// find a class by name
 	UDM_DLL Class classByName(const Diagram &d, const string &ns_path, const string &name, const string &delim)
