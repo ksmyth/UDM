@@ -1238,6 +1238,46 @@ namespace UdmUtil
 		return trace;
 	};
     
+    UDM_DLL json_spirit::Pair AttrToSchema(const Uml::Attribute& attr)
+    {
+        json_spirit::Object js_obj;
+        
+        map <string, string> udm_to_json_type_conversion;
+        
+        udm_to_json_type_conversion.insert(pair<string,string>("Integer","integer"));
+        udm_to_json_type_conversion.insert(pair<string,string>("Boolean","boolean"));
+        udm_to_json_type_conversion.insert(pair<string,string>("Real","number"));
+        udm_to_json_type_conversion.insert(pair<string,string>("String","string"));
+                                           
+        
+        map<string,string>::iterator i =udm_to_json_type_conversion.find((string)(attr.type()));
+        
+        if ( i ==  udm_to_json_type_conversion.end() )
+            throw udm_exception ("UdmUtil::AttrToJSPair: Unknown attribute type");
+        
+        string json_type = i->second;
+        js_obj.push_back(json_spirit::Pair("type", json_type));
+        
+        if (attr.max() == 1 || attr.max() == 0)
+		{
+            
+            return json_spirit::Pair(attr.name(), js_obj);
+            
+		}else
+		{
+            json_spirit::Object array_obj;
+            
+            array_obj.push_back(json_spirit::Pair("type", "array"));
+            if (attr.min() > 0 ) array_obj.push_back(json_spirit::Pair("minItems", (int)attr.min())); // could be 0; if so do not specify
+            if (attr.max() > 0 ) array_obj.push_back(json_spirit::Pair("maxItems", (int)attr.max())); // could be 0 or -1; if so do not specify
+            array_obj.push_back(json_spirit::Pair("items", js_obj));
+            
+            return json_spirit::Pair(attr.name(), array_obj);
+		}
+
+
+        
+    };
 	UDM_DLL json_spirit::Pair AttrToJSPair(const ::Udm::Object& obj, ::Uml::Attribute & attr)
 	{
 		const string key = attr.name(); 
@@ -1310,20 +1350,177 @@ namespace UdmUtil
 		}
 		 
 	}
+    
+    struct composition_info
+    {
+        const Uml::Class child_kind;
+        const Uml::Class parent_kind;
+        composition_info( const Uml::Class &c, const Uml::Class &p) : child_kind(c), parent_kind(p) {};
+        composition_info( const composition_info& ci) : child_kind(ci.child_kind), parent_kind(ci.parent_kind) {};
+        
+    };
+    
+    bool operator < (const composition_info&  l, const composition_info& r)
+    {
+        
+        if (l.child_kind < r.child_kind)  return true;
+        if (l.child_kind > r.child_kind)  return false;
+        // Otherwise a are equal
+        
+        
+        if (l.parent_kind < r.parent_kind)  return true;
+        if (l.parent_kind > r.parent_kind)  return false;
+        // Otherwise both are equal
+        return false;
+    }
+    struct track_classes
+    {
+        //we need this to handle loops in containment chain. Otherwise this recursion would never end
+        //in case of diagrams containing looped containment chains
+        //a composition already written to a JSON scheme will be tracked and if it is needed once more, only the $ref to it's path will be used
+        // we need to track composition and not classes alone because the _childrole property might differ depending on the composition
+        std::map< composition_info, string> classes;
+    public:
+        
+        void track( const ::Uml::Class &c, const ::Uml::Class &p, const string& ref_path)
+        {
+        
+            classes.insert( std::pair< composition_info, string>(composition_info(c,p), ref_path));
+            
+        };
+        bool find( const ::Uml::Class &c, const ::Uml::Class &p, string& ref_path)
+        {
+            
+            std::map< composition_info, string>::iterator c_i = classes.find(composition_info(c,p));
+            if (c_i != classes.end())
+            {
+                
+                ref_path = c_i->second;
+                return true;
+            }
+            
+            return false;
+        };
+        
+    };
+    
+    UDM_DLL json_spirit::Object ClassToPtree ( const ::Uml::Class &c, const ::Uml::Class &p, track_classes& tc, string ref_path = string("#"));
+    UDM_DLL json_spirit::Object ClassToPtree ( const ::Uml::Class &c,  const ::Uml::Class &p, track_classes& tc, string ref_path)
+    {
+        json_spirit::Object o;
+        string found_refpath;
+        
+        
+       if(!tc.find(c, p, found_refpath))
+       {
+            if (!c.isAbstract() && p)
+            {
+                
+                ref_path += "/properties/";
+                ref_path += c.name();
+                tc.track(c, p, ref_path);
+            }
+            
+            o.push_back(json_spirit::Pair("type","object"));
+            o.push_back(json_spirit::Pair("additionalProperties", false));
+            
+        
+            json_spirit::Object properties, _id, _childrole;
+            
+            _id.push_back(json_spirit::Pair("type", "integer"));
+            properties.push_back(json_spirit::Pair("_id", _id));
+            if (p)
+            {
+                set< ::Uml::Composition> comps = compositionsChildToParent(c,p,NULL);
+                if (comps.size() >1 )
+                {
+                    vector<string> ccr_names;
+                    for (set< ::Uml::Composition>::iterator comps_i = comps.begin(); comps_i != comps.end(); comps_i++)
+                    {
+                        ::Uml::CompositionChildRole ccr = comps_i->childRole();
+                        
+                        ccr_names.push_back(ccr.name());
+                    }
+                    
+                    json_spirit::Array arr = json_spirit::Array(ccr_names.begin(), ccr_names.end());
+                    
+                    _childrole.push_back(json_spirit::Pair("enum", arr));
+                    properties.push_back(json_spirit::Pair("_childrole", _childrole));
+                }
+                
+            }
+            set < ::Uml::Attribute> attrs = AncestorAttributes(c);
+            for (set < ::Uml::Attribute>::iterator attrs_i = attrs.begin(); attrs_i != attrs.end(); attrs_i++)
+                properties.push_back(AttrToSchema(*attrs_i));
+            
+        
+        
+            
+            set<Class>  child_kind_descs = ::Uml::AncestorContainedDescendantClasses(c);
+        
+            
+                for ( set< ::Uml::Class>::iterator child_kind_descs_i = child_kind_descs.begin(); child_kind_descs_i!=child_kind_descs.end(); child_kind_descs_i++)
+                {
+                    if (child_kind_descs_i->isAbstract())
+                        ClassToPtree(*child_kind_descs_i, c, tc, ref_path);
+                    else
+                            
+                        properties.push_back(json_spirit::Pair((string)child_kind_descs_i->name(),  ClassToPtree(*child_kind_descs_i, c, tc, ref_path)));
+                }
+           
+             o.push_back(json_spirit::Pair("properties", properties));
+        }
+        else
+           o.push_back(json_spirit::Pair("$ref",found_refpath));
+        
+        return o;
+        
+    };
+    
+    
+    UDM_DLL json_spirit::Object ClassDiagramToPtree( const ::Uml::Diagram& dgr )
+    {
+        json_spirit::Object o;
+        track_classes tc;
+        
+        vector< ::Uml::Class> rootClasses =  Uml::findNonContainedClasses(dgr);
+        /*for (vector< ::Uml::Class>::iterator rc_i = rootClasses.begin(); rc_i != rootClasses.end(); rc_i++)
+            o.push_back(json_spirit::Pair ( (string)rc_i->name(), ClassToPtree(*rc_i, &Udm::_null, tc) ));
+        */
+        
+        if (rootClasses.size() > 1) throw udm_exception ("JSON SCHEMA writer: For the moment only class diagram with single possible root class are supported");
+    
+        return ClassToPtree(*(rootClasses.begin()), &Udm::_null, tc);
+        
+        
+    };
 
+    
     UDM_DLL json_spirit::Object DiagramToPtree( const ::Udm::Object& obj, const ::Uml::CompositionChildRole& contained_via_role = &Udm::_null );
 
     UDM_DLL json_spirit::Object DiagramToPtree( const ::Udm::Object& obj, const ::Uml::CompositionChildRole& contained_via_role)
     {
 		json_spirit::Object pt;
         const Udm::ObjectImpl * obj_impl = obj.__impl();
+        Udm::Object parent_o;
         
+        ::Uml::Class c = obj_impl->type(); //mytype
+        ::Uml::Class p;                   //parent's type
+        if ((parent_o = obj.GetParent()))
+            p = parent_o.type();//parent's type
+        
+        ::Uml::Composition comp;
+        if (p)
+            comp = ::Uml::matchChildToParent(c, p); //if multiple compositions possible, this will be NULL.
+    
        
         ::Udm::ObjectImpl::uniqueId_type id = obj_impl->uniqueId();
         to_string< ::Udm::ObjectImpl::uniqueId_type> key = to_string< ::Udm::ObjectImpl::uniqueId_type>(id);
         
-        pt.push_back(json_spirit::Pair ( "_id:",  (__int64 ) id));
-		if (contained_via_role) pt.push_back(json_spirit::Pair( "_childrole:", (string)(contained_via_role.name() )));
+        pt.push_back(json_spirit::Pair ( "_id",  (__int64 ) id));
+		if (!comp && contained_via_role) //specify _chilrole only if there can be more than one possible containment
+            
+            pt.push_back(json_spirit::Pair( "_childrole", (string)(contained_via_role.name() )));
 
         
         set < ::Uml::Attribute> attributes = AncestorAttributes(obj.type());
@@ -1343,8 +1540,8 @@ namespace UdmUtil
         }
         
         
-        
-         set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(obj.__impl()->type());
+         //TODO: USE set<CompositionChildRole> Uml::AncestorCompositionPeerChildRoles instead !
+         set< ::Uml::Class> ancestorClasses=::Uml::AncestorClasses(c);
          for(set< ::Uml::Class>::iterator p_currClass=ancestorClasses.begin(); p_currClass!=ancestorClasses.end(); p_currClass++)
          {
             set< ::Uml::CompositionParentRole> compParentRoles=p_currClass->parentRoles();
@@ -1370,13 +1567,18 @@ namespace UdmUtil
 
     };
     
-    UDM_DLL void write_json(const ::Udm::Object& obj, const string & FileName, bool child_attr_subtree)
+    UDM_DLL void write_json(const ::Udm::Object& obj, const string & FileName, unsigned int options)
     {
-		unsigned int options = json_spirit::pretty_print | json_spirit::remove_trailing_zeros | json_spirit::single_line_arrays;
-	
+		
 		ofstream os(FileName.c_str());
 		json_spirit::write_stream( json_spirit::Value(DiagramToPtree(obj)) , os, options);
     }
-    
+   
+    UDM_DLL void write_json(const ::Uml::Diagram& dgr, const string & FileName, unsigned int options)
+    {
+        
+        ofstream os(FileName.c_str());
+        json_spirit::write_stream( json_spirit::Value(ClassDiagramToPtree(dgr)) , os, options);
+    }
 };
 
