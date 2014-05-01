@@ -1319,7 +1319,8 @@ namespace UdmUtil
 			if (attr.type()=="Integer") 
 			{
 				vector<__int64> intval = impl->getIntegerAttrArr(attr);
-				arr = json_spirit::Array(intval.begin(), intval.end());
+				for (vector<__int64>::iterator i = intval.begin(); i != intval.end(); ++i) 
+					arr.push_back((boost::int64_t)*i);
 			}
 			else if (attr.type()=="Real")
 			{	
@@ -1517,7 +1518,7 @@ namespace UdmUtil
         ::Udm::ObjectImpl::uniqueId_type id = obj_impl->uniqueId();
         to_string< ::Udm::ObjectImpl::uniqueId_type> key = to_string< ::Udm::ObjectImpl::uniqueId_type>(id);
         
-        pt.push_back(json_spirit::Pair ( "_id",  (__int64 ) id));
+        pt.push_back(json_spirit::Pair ( "_id",  (boost::int64_t) id));
 		if (!comp && contained_via_role) //specify _chilrole only if there can be more than one possible containment
             
             pt.push_back(json_spirit::Pair( "_childrole", (string)(contained_via_role.name() )));
