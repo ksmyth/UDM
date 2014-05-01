@@ -1286,7 +1286,7 @@ namespace UdmUtil
 		{
 			if (attr.type()=="Integer") 
 			{
-				__int64 intval = impl->getIntegerAttr(attr);
+				boost::int64_t intval = impl->getIntegerAttr(attr);
 				json_spirit::Pair retval(key, intval); 
 				return retval;
 			}
