@@ -77,7 +77,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="UmlD.lib GOCLd.lib UdmOcld.lib jvm.lib jawt.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib zlibd.lib"
+				AdditionalDependencies="UmlD.lib GOCLd.lib UdmOcld.lib jvm.lib jawt.lib UdmPOID.lib Xalan-C_1d.lib xerces-c_2.lib UdmBaseD.lib UdmDomD.lib UdmUtilD.lib zlibd.lib pccts_debug.lib"
 				OutputFile="$(OutDir)\UdmSwigD.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -176,7 +176,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Uml.lib GOCL.lib UdmOcl.lib jvm.lib jawt.lib UdmPOI.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmUtil.lib zlib.lib"
+				AdditionalDependencies="Uml.lib GOCL.lib UdmOcl.lib jvm.lib jawt.lib UdmPOI.lib xerces-c_2.lib UdmBase.lib UdmDom.lib UdmUtil.lib zlib.lib pccts_release.lib"
 				OutputFile="$(OutDir)\UdmSwig.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

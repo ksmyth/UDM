@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\src\ANTLRBase,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\Include"
+				AdditionalIncludeDirectories="&quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;;..\..\..\..\..\..\..\src\UdmOclPat\GOCL\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;OCL_USING_STL_NAMESPACE;_AFX_NOFORCE_LIBS;_CRT_SECURE_NO_WARNINGS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -119,7 +119,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\src\ANTLRBase,..\..\..\..\..\..\..\src\UdmOclPat\GOCL\Include"
+				AdditionalIncludeDirectories="&quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;;..\..\..\..\..\..\..\src\UdmOclPat\GOCL\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;OCL_USING_STL_NAMESPACE;_AFX_NOFORCE_LIBS;_CRT_SECURE_NO_WARNINGS"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -176,81 +176,6 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\..\..\..\..\..\..\src\UdmOclPat\GOCL\src\ANTLRBase\AParser.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\..\src\UdmOclPat\GOCL\src\ANTLRBase\ATokenBuffer.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\..\..\src\UdmOclPat\GOCL\src\ANTLRBase\DLexerBase.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						BasicRuntimeChecks="3"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\..\..\..\..\Build\Win32\VC9\Gen\src\UdmOclPat\GOCL\src\ocl.cpp"
 				>
 				<FileConfiguration
@@ -283,7 +208,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; .&#x0D;&#x0A;&quot;$(InputDir)\ANTLRBase\antlr&quot; -CC -ft OCLTokens.h -fl OCLParser.dlg -mrhoist off &quot;$(InputFileName)&quot;&#x0D;&#x0A;&quot;$(InputDir)\ANTLRBase\dlg&quot; -C2 -i -CC -cl OCLLexer OCLParser.dlg&#x0D;&#x0A;"
+						CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; .&#x0D;&#x0A;&quot;$(UDM_3RDPARTY_PATH)\pccts\bin\Antlr&quot; -CC -ft OCLTokens.h -fl OCLParser.dlg -mrhoist off &quot;$(InputFileName)&quot;&#x0D;&#x0A;&quot;$(UDM_3RDPARTY_PATH)\pccts\bin\Dlg&quot; -C2 -i -CC -cl OCLLexer OCLParser.dlg&#x0D;&#x0A;"
 						Outputs="$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\ocl.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLTokens.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.dlg"
 					/>
 				</FileConfiguration>
@@ -292,7 +217,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; .&#x0D;&#x0A;&quot;$(InputDir)\ANTLRBase\antlr&quot; -CC -ft OCLTokens.h -fl OCLParser.dlg -mrhoist off &quot;$(InputFileName)&quot;&#x0D;&#x0A;&quot;$(InputDir)\ANTLRBase\dlg&quot; -C2 -i -CC -cl OCLLexer OCLParser.dlg&#x0D;&#x0A;"
+						CommandLine="mkdir &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;&#x0D;&#x0A;cd &quot;$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src&quot;&#x0D;&#x0A;copy /y &quot;$(InputPath)&quot; .&#x0D;&#x0A;&quot;$(UDM_3RDPARTY_PATH)\pccts\bin\Antlr&quot; -CC -ft OCLTokens.h -fl OCLParser.dlg -mrhoist off &quot;$(InputFileName)&quot;&#x0D;&#x0A;&quot;$(UDM_3RDPARTY_PATH)\pccts\bin\Dlg&quot; -C2 -i -CC -cl OCLLexer OCLParser.dlg&#x0D;&#x0A;"
 						Outputs="$(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLLexer.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\ocl.cpp; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLTokens.h; $(OutDir)\..\Gen\src\UdmOclPat\GOCL\src\OCLParser.dlg"
 					/>
 				</FileConfiguration>
