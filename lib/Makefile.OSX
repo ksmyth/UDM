@@ -19,7 +19,9 @@ libUdm.$(VERSION).dylib:
 	../src/UdmOclPat/GOCL/src/OCLContext.o ../src/UdmOclPat/GOCL/src/OCLFeatureImplementation.o ../src/UdmOclPat/GOCL/src/OCLRefCount.o ../src/UdmOclPat/GOCL/src/OCLTypeExBasic.o \
 	../src/UdmOclPat/GOCL/src/OCLException.o ../src/UdmOclPat/GOCL/src/OCLObject.o ../src/UdmOclPat/GOCL/src/OCLSignature.o \
 	../src/UdmOclPat/GOCL/src/generated/OCLLexer.o	../src/UdmOclPat/GOCL/src/generated/OCLParser.o	../src/UdmOclPat/GOCL/src/generated/ocl.o \
-	../src/UdmOclPat/GOCL/src/ANTLRBase/AParser.o ../src/UdmOclPat/GOCL/src/ANTLRBase/ATokenBuffer.o ../src/UdmOclPat/GOCL/src/ANTLRBase/DLexerBase.o \
+	../src/UdmOclPat/GOCL/src/AParser.o ../src/UdmOclPat/GOCL/src/ASTBase.o ../src/UdmOclPat/GOCL/src/ATokenBuffer.o \
+	../src/UdmOclPat/GOCL/src/BufFileInput.o ../src/UdmOclPat/GOCL/src/DLexerBase.o ../src/UdmOclPat/GOCL/src/PCCTAST.o ../src/UdmOclPat/GOCL/src/slist.o\
+	
 	$(MINIZIP)/minizip/libminizip.a \
 	-lz -lxerces-c -lstdc++ -L $(XERCESCROOT)/lib
 

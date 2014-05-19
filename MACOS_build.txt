@@ -88,3 +88,39 @@ JSON_SPIRIT
 1. Download Json Spirit from: http://www.codeproject.com/Articles/20027/JSON-Spirit-A-C-JSON-Parser-Generator-Implemented
 2. copy the directory json_spirit_v4.06 to a directory where developer tools are (for instance ~/devtools)
 3. set/change the value of JSON_SPIRIT to the directory of json_spirit_v4.06/json_spirit in Makefile.OSX.incl located in top directory of UDM (example: ~/devtools/json_spirit_v4.06/json_spirit)
+
+
+MINIZIP
+=======
+
+1. Download Minizip from http://www.winimage.com/zLibDll/unzip101h.zip
+2. Unzip it to a directory where developer tools are (for instance: ~/devtools/minizip)
+3. Replace minizip/Makefile with the following:
+
+-----------8><--------------------------------
+CC=cc
+CFLAGS=$(OPT) -I../.. -Dunix -fPIC -arch i386
+
+.c.o:
+        $(CC) -c $(CFLAGS) $*.c
+
+all: libminizip
+
+libminizip: unzip.o zip.o ioapi.o
+        ar rcs libminizip.a unzip.o zip.o ioapi.o
+
+clean:
+        /bin/rm -f *.o *~ minizip miniunz *.so *.a
+---------8><-----------------------------------
+4. cd minizip; make 
+
+PCCTS
+=====
+
+1. Download PCCTS 1.33 MR from http://www.polhode.com/pccts133mr.zip
+2. Unzip it to a directory where developer tools are (like ~/devtools/pccts)
+3. Add -D PCCTS_USE_STDARG to CFLAGS in sorcerer/lib/makefile:
+	CFLAGS=$(COPT) -I../../h -I../h -D PCCTS_USE_STDARG
+4. cd pccts; make
+5. set/change the value of PCCTS to the directory of pccts in Makefile.OSX.incl located in top directory of UDM (example: ~/devtools/pccts)
+
