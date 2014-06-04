@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <Target Name="BuildVS9">
-    <MSBuild Projects="Projects\Win32\VC9\src\Udm.sln" Targets="Build" Properties="Configuration=Debug" />
-    <MSBuild Projects="Projects\Win32\VC9\src\Udm.sln" Targets="Build" Properties="Configuration=Release" />
+    <MSBuild Projects="Projects\Win32\VC9\src\Udm.sln" Targets="UdmDll" Properties="Configuration=Debug" />
+    <MSBuild Projects="Projects\Win32\VC9\src\Udm.sln" Targets="UdmDll" Properties="Configuration=Release" />
   </Target>
 
   <Target Name="TestVS9">
