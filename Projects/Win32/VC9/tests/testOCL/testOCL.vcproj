@@ -286,7 +286,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="Udm.exe $(InputName)"
-					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\testOCL&quot; &quot;$(InputPath)&quot; -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g&#x0D;&#x0A;"
+					CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\testOCL&quot; &quot;$(InputPath)&quot; -t -v -u math=http://www.w3.org/1998/Math/MathML -u sbml=http://www.sbml.org/sbml/level2 -g&#x0D;&#x0A;"
 					Outputs="$(OutDir)\Gen\tests\testOCL\SBML2.cpp; $(OutDir)\Gen\tests\testOCL\SBML2.h; $(OutDir)\Gen\tests\testOCL\SBML2.dtd; $(OutDir)\Gen\tests\testOCL\SBML2.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_xsd.h; $(OutDir)\Gen\tests\testOCL\SBML2_math.dtd; $(OutDir)\Gen\tests\testOCL\SBML2_math.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_math_xsd.h; $(OutDir)\Gen\tests\testOCL\SBML2_sbml.dtd; $(OutDir)\Gen\tests\testOCL\SBML2_sbml.xsd; $(OutDir)\Gen\tests\testOCL\SBML2_sbml_xsd.h"
 				/>
 			</FileConfiguration>

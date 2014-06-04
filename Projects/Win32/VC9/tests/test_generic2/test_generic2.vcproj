@@ -360,7 +360,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="LampDiagram_udm.xml -&gt; C++ API"
-						CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_generic2&quot; &quot;$(InputPath)&quot; -v --leesa&#x0D;&#x0A;"
+						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_generic2&quot; &quot;$(InputPath)&quot; -v --leesa&#x0D;&#x0A;"
 						Outputs="$(OutDir)\Gen\tests\test_generic2\LampDiagram.xsd; $(OutDir)\Gen\tests\test_generic2\LampDiagram.cpp; $(OutDir)\Gen\tests\test_generic2\LampDiagram.h"
 					/>
 				</FileConfiguration>

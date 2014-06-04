@@ -361,7 +361,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating UDM API files from $(InputPath)"
-						CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_crosslinks&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_crosslinks&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\Gen\tests\test_crosslinks\Package1.h; $(OutDir)\Gen\tests\test_crosslinks\Package1.cpp; $(OutDir)\Gen\tests\test_crosslinks\Package1.xsd; $(OutDir)\Gen\tests\test_crosslinks\Package2.h; $(OutDir)\Gen\tests\test_crosslinks\Package2.cpp; $(OutDir)\Gen\tests\test_crosslinks\Package2.xsd"
 					/>
 				</FileConfiguration>

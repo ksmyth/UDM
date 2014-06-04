@@ -430,7 +430,7 @@
 				<Tool
 					Name="VCCustomBuildTool"
 					Description="SignaFlow_udm.xml -&gt; C++ API"
-					CommandLine="&quot;$(OutDir)\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_assocInheritanceMGA&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.h; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.cpp; $(OutDir)\Gen\tests\test_assocInheritanceMGA\SignalFlow.xsd"
 				/>
 			</FileConfiguration>
