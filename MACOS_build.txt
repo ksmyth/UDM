@@ -117,10 +117,29 @@ clean:
 PCCTS
 =====
 
+PCCTS (= ANTLR 1) is used to generate c++ parser files from the OCL grammar. Thatis needed to parse and evaluate UDM constraints
+
 1. Download PCCTS 1.33 MR from http://www.polhode.com/pccts133mr.zip
 2. Unzip it to a directory where developer tools are (like ~/devtools/pccts)
 3. Add -D PCCTS_USE_STDARG to CFLAGS in sorcerer/lib/makefile:
 	CFLAGS=$(COPT) -I../../h -I../h -D PCCTS_USE_STDARG
 4. cd pccts; make
 5. set/change the value of PCCTS to the directory of pccts in Makefile.OSX.incl located in top directory of UDM (example: ~/devtools/pccts)
+
+PCRE
+====
+
+PCRE is needed to run SWIG. 
+SWIG is needed to generate the UDM Java wrapper. 
+
+1. Download pcre-8.33.tar.gz from ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
+2. untar to a directory where developer tools are (like ~/devtools/pcre-8.33)
+3. 
+	cd pcre-8.33
+	./configure
+ 	make 
+4. set/change the value of PCRE to the directory of PCRE in Makefile.OSX.incl located in top directory of UDM (example: ~/devtools/pcre-8.33)
+
+SWIG
+====
 
