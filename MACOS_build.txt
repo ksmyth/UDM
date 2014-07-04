@@ -39,6 +39,8 @@ There are a bunch of 3rd Party software tools needed to compile UDM.
 There are two ways of getting these
 
 	- obtain from ISIS an archive containing all the necessary software to compile UDM: udm_macosx_devtools-1.00.tar.gz
+	 https://svn.isis.vanderbilt.edu/isis-common/trunk/3rdparty/OSX/udm_macosx_devtools-1.00.tar.gz
+
  	In this archive there are already compiled binaries of the necessary 3rdParty software, set up to work on Mac OSx for compiling UDM. Untar it to a directory (like ~/devtools). 
 	- obtain&compile each necessary software item, as described below in chapter 5.
 
