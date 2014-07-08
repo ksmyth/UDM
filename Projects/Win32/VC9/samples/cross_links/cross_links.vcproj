@@ -546,7 +546,7 @@
 				>
 				<Tool
 					Name="VCCustomBuildTool"
-					CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+					CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(GenPath)&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 					Outputs="$(GenPath)\CD1.cpp; $(GenPath)\CD2.cpp; $(GenPath)\CD3.cpp; $(GenPath)\CL.cpp; $(GenPath)\CD1.h; $(GenPath)\CD2.h; $(GenPath)\CD3.h; $(GenPath)\CL.h; $(GenPath)\CD1.xsd; $(GenPath)\CD2.xsd; $(GenPath)\CD3.xsd; $(GenPath)\CL.xsd"
 				/>
 			</FileConfiguration>

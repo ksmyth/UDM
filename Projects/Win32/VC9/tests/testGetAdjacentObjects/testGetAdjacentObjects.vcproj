@@ -468,7 +468,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating UDM API files..."
-						CommandLine="&quot;$(OutDir)\udmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\testGetAdjacentObjects&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\testGetAdjacentObjects&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\Gen\tests\testGetAdjacentObjects\PackageA.cpp; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageA.h; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageA.xsd; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageB.cpp; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageB.h; $(OutDir)\Gen\tests\testGetAdjacentObjects\PackageB.xsd; $(OutDir)\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.cpp; $(OutDir)\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.h; $(OutDir)\Gen\tests\testGetAdjacentObjects\testAssociationScenarios.xsd"
 					/>
 				</FileConfiguration>

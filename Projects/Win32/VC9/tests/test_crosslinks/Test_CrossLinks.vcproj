@@ -375,7 +375,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating UDM API files from $(InputPath)"
-						CommandLine="&quot;$(OutDir)\UdmD.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_crosslinks&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(UDM_PATH)\bin\Udm.exe&quot; -o &quot;$(OutDir)\Gen\tests\test_crosslinks&quot; &quot;$(InputPath)&quot; -d &quot;%UDM_PATH%\etc&quot;&#x0D;&#x0A;"
 						Outputs="$(OutDir)\Gen\tests\test_crosslinks\Package1.h; $(OutDir)\Gen\tests\test_crosslinks\Package1.cpp; $(OutDir)\Gen\tests\test_crosslinks\Package1.xsd; $(OutDir)\Gen\tests\test_crosslinks\Package2.h; $(OutDir)\Gen\tests\test_crosslinks\Package2.cpp; $(OutDir)\Gen\tests\test_crosslinks\Package2.xsd; $(OutDir)\Gen\tests\test_crosslinks\CL.cpp; $(OutDir)\Gen\tests\test_crosslinks\CL.h; $(OutDir)\Gen\tests\test_crosslinks\CL.xsd; $(OutDir)\Gen\tests\test_crosslinks\CLPackage.cpp; $(OutDir)\Gen\tests\test_crosslinks\CLPackage.h; $(OutDir)\Gen\tests\test_crosslinks\CLPackage.xsd; $(OutDir)\Gen\tests\test_crosslinks\Package2_NSp.xsd; $(OutDir)\Gen\tests\test_crosslinks\Package2_NSp_NSc.xsd"
 					/>
 				</FileConfiguration>
