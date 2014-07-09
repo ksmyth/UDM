@@ -137,11 +137,12 @@ class TestUdmBackwardsCompat(unittest.TestCase):
         import subprocess
         import os.path
         this_dir = os.path.dirname(os.path.abspath(__file__))
+        pf86 = os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles'))
         
         with open(os.path.join(this_dir, 'UdmDll_VS10.lib.exports'), 'wb') as out_file:
             env = dict(os.environ)
-            env['PATH'] += r';c:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE'
-            subprocess.check_call([r'c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\dumpbin.exe', '/EXPORTS',
+            env['PATH'] += r';' + pf86 + r'\Microsoft Visual Studio 10.0\Common7\IDE'
+            subprocess.check_call([pf86 + r'\Microsoft Visual Studio 10.0\VC\bin\dumpbin.exe', '/EXPORTS',
                 os.path.join(this_dir, r'..\..\build\Win32\v100\Release\UdmDll_VS10.lib')], stdout=out_file, env=env)
         
         new_exports = {}
