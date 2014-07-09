@@ -20,6 +20,9 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+    - Next Release
+        -   UdmSwig.dll is compiled with Visual Studio 2010
+
     - Release 3.2.13 (3/19/2014)
         -   UdmDll is backwards compatible with previous 3.2 releases
         -   Udm.exe: allow Classes an association and a parent with an association. Fixes "Class Connection has multiple associations" error

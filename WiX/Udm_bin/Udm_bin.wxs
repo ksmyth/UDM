@@ -86,7 +86,7 @@
         <File Source="..\Build\Win32\VC10\Release\UdmToXmi.exe" />
       </Component>
       <Component>
-        <File Source="..\Build\Win32\VC9\Release\UdmSwig.dll" />
+        <File Source="..\Build\Win32\VC10\Release\UdmSwig.dll" />
       </Component>
       <Component>
         <File Source="..\judm\build\build_win\judm\judm.jar" />
