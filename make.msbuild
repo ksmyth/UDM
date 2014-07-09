@@ -58,7 +58,7 @@
   </Target>
   
   <Target Name="judm" DependsOnTargets="CheckEnv">
-    <Exec Command="call scripts\run-ant-on-judm.bat VC9 Release generate test" WorkingDirectory="$(MSBuildThisFileDirectory)"/>
+    <Exec Command="call scripts\run-ant-on-judm.bat VC10 Release generate test" WorkingDirectory="$(MSBuildThisFileDirectory)"/>
   </Target>
 
   <Target Name="TestPython">
