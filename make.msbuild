@@ -7,8 +7,6 @@
 
   <Target Name="CheckEnv" DependsOnTargets="CheckEnvGme;CheckEnvUdm">
     <Error Text="UDM_3RDPARTY_PATH='$(UDM_3RDPARTY_PATH)' doesn't exist" Condition="!Exists('$(UDM_3RDPARTY_PATH)')"/>
-    <Error Text="JAVA_HOME='$(JAVA_HOME)' doesn't exist" Condition="!Exists('$(JAVA_HOME)')"/>
-    <Error Text="JAVA_HOME='$(JAVA_HOME)' doesn't point to a JDK" Condition="!Exists('$(JAVA_HOME)\include\jni.h')"/>
   </Target>
 
   <ItemGroup>
@@ -27,6 +25,8 @@
   </Target>
 
   <Target Name="BuildVS10" DependsOnTargets="CheckEnv">
+    <Error Text="JAVA_HOME='$(JAVA_HOME)' doesn't exist" Condition="!Exists('$(JAVA_HOME)')"/>
+    <Error Text="JAVA_HOME='$(JAVA_HOME)' doesn't point to a JDK" Condition="!Exists('$(JAVA_HOME)\include\jni.h')"/>
     <MSBuild Projects="Projects\Win32\VC10\src\Udm.sln" Targets="UdmDll" Properties="Configuration=Debug" />
     <MSBuild Projects="Projects\Win32\VC10\src\Udm.sln" Targets="Build" Properties="Configuration=Release" />
     <MSBuild Projects="Projects\Win32\VC10\src\UdmCli.sln" Targets="Build" Properties="Configuration=Release" />
@@ -51,6 +51,15 @@
   <Target Name="BuildVS11_x64" DependsOnTargets="CheckEnv">
     <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="VisualStudioVersion=11.0;PlatformToolset=v110;Configuration=Debug;Platform=x64" />
     <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="VisualStudioVersion=11.0;PlatformToolset=v110;Configuration=Release;Platform=x64" />
+  </Target>
+  <Target Name="BuildVS12" DependsOnTargets="CheckEnv">
+    <!-- invoke: msbuild make.msbuild  /t:BuildVS12;BuildVS12_x64 /p:"VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120" -->
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v120;Configuration=Debug" />
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v120;Configuration=Release" />
+  </Target>
+  <Target Name="BuildVS12_x64" DependsOnTargets="CheckEnv">
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v120;Configuration=Debug;Platform=x64" />
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v120;Configuration=Release;Platform=x64" />
   </Target>
 
   <Target Name="UdmCliGen" DependsOnTargets="CheckEnv">

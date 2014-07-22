@@ -45,11 +45,17 @@ this software.
 #ifndef _DLL
 #pragma message("Warning: Udm clients should be compiled under /MD or /MDd")
 #endif
-#if (_MSC_VER == 1700) /* VS2012 VC11 */
+#if (_MSC_VER == 1800) /* VS2013 VC12 */
+#define UDM_NAMESPACE Udm_VC12
+#define UDM_PLATFORM_TOOLSET "v120"
+#elif (_MSC_VER == 1700) /* VS2012 VC11 */
 #define UDM_NAMESPACE Udm_VC11
+#define UDM_PLATFORM_TOOLSET "v110"
+#endif
+
+#if (_MSC_VER == 1700) /* VS2012 VC11 */ || (_MSC_VER == 1800) /* VS2013 VC12 */
 namespace UDM_NAMESPACE {};
 namespace Udm = UDM_NAMESPACE;
-#define UDM_PLATFORM_TOOLSET "v110"
 #ifdef _DEBUG
 #define UDM_DEBUG "D"
 #else
