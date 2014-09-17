@@ -153,7 +153,12 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project, IMgaFCO *currentobj,
 #endif
 		try
 		{
-			ccpProject->BeginTransactionInNewTerr(TRANSACTION_NON_NESTED); // could also be TRANSACTION_GENERAL
+			bool invokeExStartedATransaction = false;
+			if (!(ccpProject->ProjectStatus & 8))
+			{
+				terr = ccpProject->BeginTransactionInNewTerr(TRANSACTION_NON_NESTED); // could also use TRANSACTION_GENERAL
+				invokeExStartedATransaction = true;
+			}
 			try
 			{
 				// Opening backend
@@ -186,11 +191,13 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project, IMgaFCO *currentobj,
 				CUdmApp::UdmMain(&dngBackend,currentObject,selectedObjects,param);
 				// Closing backend
 				dngBackend.CloseWithUpdate();
-				ccpProject->CommitTransaction();
+				if (invokeExStartedATransaction)
+					ccpProject->CommitTransaction();
 			}
 			catch (...)
 			{
-				ccpProject->raw_AbortTransaction();
+				if (invokeExStartedATransaction)
+					ccpProject->raw_AbortTransaction();
 				throw;
 			}
 		}
