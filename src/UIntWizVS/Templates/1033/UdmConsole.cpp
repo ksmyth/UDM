@@ -84,7 +84,7 @@ namespace GMEConsole
 				break;
 			}
 		} else {
-			if(S_OK != gmeoleapp->ConsoleMessage(CComBSTR(message.length(), message.c_str()), type))
+			if(S_OK != gmeoleapp->ConsoleMessage(CComBSTR((int)message.length(), message.c_str()), type))
 				throw udm_exception("Could not write to GME console.");
 		}
 	}
@@ -103,7 +103,7 @@ namespace GMEConsole
 				break;
 			}
 		} else {
-			if(S_OK != gmeoleapp->ConsoleMessage(CComBSTR(message.length(), message.c_str()), type))
+			if(S_OK != gmeoleapp->ConsoleMessage(CComBSTR((int)message.length(), message.c_str()), type))
 				throw udm_exception("Could not write to GME console.");
 		}
 	}
@@ -111,13 +111,13 @@ namespace GMEConsole
 	void Console::setContents(const std::string& contents)
 	{
 		if (gmeoleapp != 0)
-			if(S_OK != gmeoleapp->put_ConsoleContents( CComBSTR(contents.length(),contents.c_str()) ))
+			if(S_OK != gmeoleapp->put_ConsoleContents( CComBSTR((int)contents.length(),contents.c_str()) ))
 				throw udm_exception("Could not set the contents of GME console.");
 	}
 	void Console::setContents(const std::wstring& contents)
 	{
 		if (gmeoleapp != 0)
-			if(S_OK != gmeoleapp->put_ConsoleContents( CComBSTR(contents.length(),contents.c_str()) ))
+			if(S_OK != gmeoleapp->put_ConsoleContents( CComBSTR((int)contents.length(),contents.c_str()) ))
 				throw udm_exception("Could not set the contents of GME console.");
 	}
 
