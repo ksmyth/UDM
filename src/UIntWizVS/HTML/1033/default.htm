@@ -22,13 +22,11 @@
 
     <!--  UDM Settings -->
     <SYMBOL NAME='UDM_LINKING_DYNAMIC' TYPE=checkbox VALUE=true></SYMBOL>
-    <SYMBOL NAME='UDM_LINKING_STATIC' TYPE=checkbox VALUE=false></SYMBOL>
 	
     <SYMBOL NAME='META_LOADING_STATIC' TYPE=checkbox VALUE=true></SYMBOL>
 	<SYMBOL NAME='META_LOADING_DYNAMIC' TYPE=checkbox VALUE=false></SYMBOL>
 
     <SYMBOL NAME='DIRECT_MGA_ACCESS' TYPE=checkbox VALUE=true></SYMBOL>
-	<SYMBOL NAME='STATIC_UDM_ACCESS' TYPE=checkbox VALUE=false></SYMBOL>
 	
 	<SYMBOL NAME='USE_CONSOLE' TYPE=checkbox VALUE=true></SYMBOL>
 	
@@ -443,12 +441,8 @@ function InitDocument(document)
 	
 		
 	var udmLinkageDynamic = window.external.FindSymbol('UDM_LINKING_DYNAMIC');
-	var udmLinkageStatic = window.external.FindSymbol('UDM_LINKING_STATIC');
 	if (udmLinkageDynamic) {
 	    LINKING_SUMMARY.innerHTML = "Linking UDM Libraries <B>dynamically</B>."
-	}
-	else if (udmLinkageStatic) {
-	    LINKING_SUMMARY.innerHTML = "Linking UDM Libraries <B>statically</B>."
 	}
 	else {
 	    LINKING_SUMMARY.innerHTML = "<B>Unkown</B> UDM linkage, please check UDM Settings page!"
@@ -469,12 +463,8 @@ function InitDocument(document)
 
 
 	var directMGAAccess = window.external.FindSymbol('DIRECT_MGA_ACCESS');
-	var staticUDMAccess = window.external.FindSymbol('STATIC_UDM_ACCESS');
 	if (directMGAAccess) {
 	    ACCESS_SUMMARY.innerHTML = "Access method: <B>Direct MGA Access</B>."
-	}
-	else if (staticUDMAccess) {
-	    ACCESS_SUMMARY.innerHTML = "Access method: <B>Cached UDM Access</B> (Read only)."
 	}
 	else {
 	    ACCESS_SUMMARY.innerHTML = "<B>Unkown</B> access method, please check UDM Settings page!"

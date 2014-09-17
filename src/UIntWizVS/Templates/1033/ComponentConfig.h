@@ -66,14 +66,10 @@
 // not defined: #define BON_ICON_SUPPORT
 [!endif]
 
-[!if BON_CUSTOM_TRANSACTIONS]
-#define BON_CUSTOM_TRANSACTIONS
-[!else]
-// not defined: #define BON_CUSTOM_TRANSACTIONS
-[!endif]
-
 [!if REGISTER_SYSTEMWIDE]
 #define REGISTER_SYSTEMWIDE
 [!else]
 // not defined: #define REGISTER_SYSTEMWIDE
 [!endif]
+
+#define GME_COMPONENT_ISUPPORTERRORINFO

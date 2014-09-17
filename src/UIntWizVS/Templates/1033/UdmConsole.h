@@ -6,10 +6,6 @@
 #include <string>
 #include "GMEVersion.h"
 
-#if GME_VERSION_MAJOR >= 11
-#include "Gme.h"
-#endif
-
 namespace GMEConsole
 {
 	CComBSTR BSTRFromUTF8(const std::string & utf8);
@@ -36,43 +32,9 @@ namespace GMEConsole
 		}
 		static void SetupConsole(CComPtr<IMgaProject> project) { setupConsole(project); }
 
-		static void writeLine(const std::string& message, msgtype_enum type)
-		{
-			if (gmeoleapp == 0) {
-				switch (type) {
-				case MSG_NORMAL:
-				case MSG_INFO:
-				case MSG_WARNING:
-					printf("%s", message.c_str());
-					break;
-				case MSG_ERROR:
-					fprintf(stderr, "%s", message.c_str());
-					break;
-				}
-			} else {
-				if(S_OK != gmeoleapp->ConsoleMessage(CComBSTR(message.length(), message.c_str()), type))
-					throw udm_exception("Could not write to GME console.");
-			}
-		}
+		static void writeLine(const std::string& message, msgtype_enum type);
 
-		static void writeLine(const std::wstring& message, msgtype_enum type)
-		{
-			if (gmeoleapp == 0) {
-				switch (type) {
-				case MSG_NORMAL:
-				case MSG_INFO:
-				case MSG_WARNING:
-					wprintf(L"%s", message.c_str());
-					break;
-				case MSG_ERROR:
-					fwprintf(stderr, L"%s", message.c_str());
-					break;
-				}
-			} else {
-				if(S_OK != gmeoleapp->ConsoleMessage(CComBSTR(message.length(), message.c_str()), type))
-					throw udm_exception("Could not write to GME console.");
-			}
-		}
+		static void writeLine(const std::wstring& message, msgtype_enum type);
 
 		static void clear()
 		{
@@ -80,18 +42,8 @@ namespace GMEConsole
 				gmeoleapp->put_ConsoleContents(NULL);
 		}
 
-		static void setContents(const std::string& contents)
-		{
-			if (gmeoleapp != 0)
-				if(S_OK != gmeoleapp->put_ConsoleContents( CComBSTR(contents.length(),contents.c_str()) ))
-					throw udm_exception("Could not set the contents of GME console.");
-		}
-		static void setContents(const std::wstring& contents)
-		{
-			if (gmeoleapp != 0)
-				if(S_OK != gmeoleapp->put_ConsoleContents( CComBSTR(contents.length(),contents.c_str()) ))
-					throw udm_exception("Could not set the contents of GME console.");
-		}
+		static void setContents(const std::string& contents);
+		static void setContents(const std::wstring& contents);
 
 		class Error
 		{

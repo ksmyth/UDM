@@ -21,10 +21,6 @@
 #define META_PATH "[!output VALID_META_PATH]"
 [!endif]
 
-[!if STATIC_UDM_ACCESS]
-	#define _ACCESS_MEMORY
-[!endif]
-
 [!if VALID_HEADER_TO_INCLUDE]
 #include "[!output HEADER_TO_INCLUDE]"
  

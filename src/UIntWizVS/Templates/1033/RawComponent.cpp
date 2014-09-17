@@ -9,13 +9,30 @@
 #include <ComHelp.h>
 #include <GMECOM.h>
 #include "ComponentConfig.h"
+#ifndef __INTELLISENSE__
+#import "progid:Mga.MgaMetaFolder" no_implementation auto_search no_namespace no_search_namespace
+#import "progid:Mga.MgaFolders" no_implementation auto_search no_namespace no_search_namespace
+#import "progid:Mga.MgaMetaFolder" implementation_only auto_search no_namespace no_search_namespace
+#import "progid:Mga.MgaFolders" implementation_only auto_search no_namespace no_search_namespace
+#import "libid:0ADEEC71-D83A-11D3-B36B-005004CC8592" no_implementation auto_search no_namespace no_search_namespace
+#import "libid:0ADEEC71-D83A-11D3-B36B-005004CC8592" implementation_only auto_search no_namespace no_search_namespace
+#else
+// IntelliSense has a known issue with the above lines.
+//	http://connect.microsoft.com/VisualStudio/feedback/details/533526/vc-2010-intellisense-import-directive-using-libid-does-not-work
+#ifdef _DEBUG
+// If IntelliSense reports "Cannot open source file", compile then reopen the project
+#include "Debug\Meta.tlh"
+#include "Debug\Mga.tlh"
+#else
+#include "Release\Meta.tlh"
+#include "Release\Mga.tlh"
+#endif
+#endif
+
 #include "RawComponent.h"
 
-[!if USE_CONSOLE]
 // Console
 #include "UdmConsole.h"
-[!endif]
-
 
 // Udm includes
 #include "UdmBase.h"
@@ -35,6 +52,8 @@ using namespace std;
 #include "UdmApp.h"
 #include "UdmConfig.h"
 
+__declspec(noreturn) void ThrowComError(HRESULT hr, LPOLESTR err); // from ComHelp.cpp
+
 // this method is called after all the generic initialization is done
 // this should be empty, unless application-specific initialization is needed
 STDMETHODIMP RawComponent::Initialize(struct IMgaProject *) {
@@ -50,7 +69,7 @@ STDMETHODIMP RawComponent::Invoke(IMgaProject* gme, IMgaFCOs *models, long param
 	return InvokeEx(gme, focus, selected, parvar);
 #else
 	if(interactive) {
-		AfxMessageBox("This component does not support the obsolete invoke mechanism");
+		AfxMessageBox(_T("This component does not support the obsolete invoke mechanism"));
 	}
 	return E_MGA_NOT_SUPPORTED;
 #endif
@@ -63,8 +82,8 @@ STDMETHODIMP RawComponent::Invoke(IMgaProject* gme, IMgaFCOs *models, long param
 
 // This is the main component method for interpereters and plugins. 
 // May als be used in case of invokeable addons
-STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,  
-									IMgaFCOs *selectedobjs,  long param) 
+STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project, IMgaFCO *currentobj,  
+									IMgaFCOs *selectedobjs, long param) 
 {
 	// Calling the user's initialization function
 	if(CUdmApp::Initialize())
@@ -81,18 +100,15 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 		GMEConsole::Console::SetupConsole(ccpProject);
 [!endif]
 
-	  if(interactive)
-	  {
 		CComBSTR projname;
 		CComBSTR focusname = "<nothing>";
 		CComPtr<IMgaTerritory> terr;
-		COMTHROW(ccpProject->CreateTerritory(NULL, &terr));
 
 		// Setting up Udm
 #ifdef _DYNAMIC_META
 	#ifdef _DYNAMIC_META_DOM
 			// Loading the meta for the project
-			UdmDom::DomDataNetwork  ddnMeta(Uml::diagram);
+			UdmDom::DomDataNetwork ddnMeta(Uml::diagram);
 			Uml::Diagram theUmlDiagram;
 
 			// Opening the XML meta of the project
@@ -137,153 +153,88 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 #endif
 		try
 		{
-			// Opening backend
-			dngBackend.OpenExisting(ccpProject, Udm::CHANGES_LOST_DEFAULT);
-
-
-			CComPtr<IMgaFCO> ccpFocus(currentobj);
-			Udm::Object currentObject;
-			if(ccpFocus)
+			ccpProject->BeginTransactionInNewTerr(TRANSACTION_NON_NESTED); // could also be TRANSACTION_GENERAL
+			try
 			{
-				currentObject=dngBackend.Gme2Udm(ccpFocus);
-			}
+				// Opening backend
+				dngBackend.OpenExisting(ccpProject, Udm::CHANGES_LOST_DEFAULT, true);
 
-			std::set<Udm::Object> selectedObjects;
 
-			CComPtr<IMgaFCOs> ccpSelObject(selectedobjs);
-
-			MGACOLL_ITERATE(IMgaFCO,ccpSelObject){
-				Udm::Object currObj;
-				if(MGACOLL_ITER)
+				CComPtr<IMgaFCO> ccpFocus(currentobj);
+				Udm::Object currentObject;
+				if(ccpFocus)
 				{
-					currObj=dngBackend.Gme2Udm(MGACOLL_ITER);
+					currentObject=dngBackend.Gme2Udm(ccpFocus);
 				}
-			 selectedObjects.insert(currObj);
-			}MGACOLL_ITERATE_END;
 
-#ifdef _ACCESS_MEMORY
-			// Creating Cache
-	#ifdef _DYNAMIC_META
-			Udm::SmartDataNetwork dnsCacheBackend(udmDataDiagram);
-	#else
-			Udm::SmartDataNetwork dnsCacheBackend(META_NAMESPACE::diagram);
-	#endif
+				std::set<Udm::Object> selectedObjects;
 
-			const Uml::Class & safeType = Uml::SafeTypeContainer::GetSafeType(dngBackend.GetRootObject().type());
+				if (selectedobjs) {
+					CComPtr<IMgaFCOs> ccpSelObject(selectedobjs);
 
-			dnsCacheBackend.CreateNew("tmp.mem","",safeType, Udm::CHANGES_LOST_DEFAULT);
-
-			Udm::Object nullObject(&Udm::_null);
-			UdmUtil::copy_assoc_map copyAssocMap;
-			copyAssocMap[currentObject]=nullObject; // currentObject may be null object
-
-			std::set<Udm::Object>::iterator p_CurrSelObject;
-			for(p_CurrSelObject=selectedObjects.begin();
-				p_CurrSelObject!=selectedObjects.end();p_CurrSelObject++)
-			{
-					std::pair<Udm::Object const, Udm::Object> item(*p_CurrSelObject, nullObject);
-
-					std::pair<UdmUtil::copy_assoc_map::iterator, bool> insRes = copyAssocMap.insert(item);
-
-					if (!insRes.second)
-					{
-						assert(false);
-					}
-
-			}
-
-			// Copying from GME to memory
-			UdmUtil::CopyObjectHierarchy(
-				dngBackend.GetRootObject().__impl(),
-				dnsCacheBackend.GetRootObject().__impl(),
-				&dnsCacheBackend,
-				copyAssocMap);
-
-			// Searching for focus object
-			Udm::Object currentObjectCache;
-			UdmUtil::copy_assoc_map::iterator currObject = copyAssocMap.find(currentObject);
-			if (currObject != copyAssocMap.end()) // It is in the map
-			{
-				currentObjectCache=currObject->second;
-			}
-
-
-			// Searching for selected objects
-			std::set<Udm::Object> selectedObjectsCache;
-
-			for( p_CurrSelObject=selectedObjects.begin();
-				p_CurrSelObject!=selectedObjects.end();p_CurrSelObject++)
-			{
-				Udm::Object object;
-				UdmUtil::copy_assoc_map::iterator currSelObjectIt = copyAssocMap.find(*p_CurrSelObject);
-				if (currSelObjectIt != copyAssocMap.end()) // It is in the map
-				{
-					object=currSelObjectIt->second;
-					selectedObjectsCache.insert(object);
+					MGACOLL_ITERATE(IMgaFCO,ccpSelObject){
+						Udm::Object currObj;
+						if(MGACOLL_ITER)
+						{
+							currObj=dngBackend.Gme2Udm(MGACOLL_ITER);
+						}
+					 selectedObjects.insert(currObj);
+					}MGACOLL_ITERATE_END;
 				}
+
+				// Calling the main entry point
+				CUdmApp::UdmMain(&dngBackend,currentObject,selectedObjects,param);
+				// Closing backend
+				dngBackend.CloseWithUpdate();
+				ccpProject->CommitTransaction();
 			}
-
-
-			// Closing GME backend
-			dngBackend.CloseNoUpdate();
-
-			// Calling the main entry point
-			CUdmApp::UdmMain(&dnsCacheBackend,currentObjectCache,selectedObjectsCache,param);
-			// Close cache backend
-			dnsCacheBackend.CloseNoUpdate();
-
-#else
-			// Calling the main entry point
-			CUdmApp::UdmMain(&dngBackend,currentObject,selectedObjects,param);
-			// Closing backend
-			dngBackend.CloseWithUpdate();
-#endif
-
+			catch (...)
+			{
+				ccpProject->raw_AbortTransaction();
+				throw;
+			}
 		}
 		catch(udm_exception &exc)
 		{
-#ifdef _META_ACCESS_MEMORY
-			dnCacheBackend.CloseNoUpdate();
-#endif
 			// Close GME Backend (we may close it twice, but GmeDataNetwork handles it)
 			dngBackend.CloseNoUpdate();
 
-[!if USE_CONSOLE]
-			GMEConsole::Console::Error::writeLine(exc.what());
-[!else]
-			AfxMessageBox(exc.what());
-[!endif]
-			return S_FALSE;
+			ThrowComError(E_FAIL, GMEConsole::BSTRFromUTF8(exc.what()));
 		}
-	  }
 	}
 	catch (udm_exception& e)
 	{
-		ccpProject->AbortTransaction();
+[!if USE_CONSOLE]
 		GMEConsole::Console::gmeoleapp = 0;
-		std::string msg = "Udm exception: ";
-		msg += e.what();
-		AfxMessageBox(msg.c_str());
-		return E_FAIL;
+[!endif]
+		ThrowComError(E_FAIL, GMEConsole::BSTRFromUTF8(e.what()));
+	}
+	catch (_com_error& e)
+	{
+[!if USE_CONSOLE]
+		GMEConsole::Console::gmeoleapp = 0;
+[!endif]
+		throw;
 	}
 	catch(...)
 	{
-		ccpProject->AbortTransaction();
+[!if USE_CONSOLE]
 		GMEConsole::Console::gmeoleapp = 0;
-		// This can be a problem with the GME Console, so we display it in a message box
-		AfxMessageBox("An unexpected error has occurred during the interpretation process.");
-		return E_FAIL;
+[!endif]
+		ThrowComError(E_FAIL, _bstr_t(L"An unexpected error has occurred during the interpretation process."));
 	}
+[!if USE_CONSOLE]
 	GMEConsole::Console::gmeoleapp = 0;
+[!endif]
 	return S_OK;
 
 }
 
 // GME currently does not use this function
 // you only need to implement it if other invokation mechanisms are used
-STDMETHODIMP RawComponent::ObjectsInvokeEx( IMgaProject *project,  IMgaObject *currentobj,  IMgaObjects *selectedobjs,  long param) {
+STDMETHODIMP RawComponent::ObjectsInvokeEx( IMgaProject *project,  IMgaObject *currentobj,	IMgaObjects *selectedobjs,	long param) {
 	if(interactive) {
-		AfxMessageBox("Tho ObjectsInvoke method is not implemented");
+		AfxMessageBox(_T("The ObjectsInvoke method is not implemented"));
 	}
 	return E_MGA_NOT_SUPPORTED;
 }
@@ -304,16 +255,14 @@ STDMETHODIMP RawComponent::put_ComponentParameter(BSTR name, VARIANT newVal) {
 // these two functions are the main 
 STDMETHODIMP RawComponent::GlobalEvent(globalevent_enum event) { 
 	if(event == GLOBALEVENT_UNDO) {
-		AfxMessageBox("UNDO!!");
+		AfxMessageBox(_T("Undo"));
 	}
 	return S_OK; 
 }
 
 STDMETHODIMP RawComponent::ObjectEvent(IMgaObject * obj, unsigned long eventmask, VARIANT v) {
 	if(eventmask & OBJEVENT_CREATED) {
-		CComBSTR objID;
-		COMTHROW(obj->get_ID(&objID));
-		AfxMessageBox( "Object created! ObjID: " + CString(objID)); 
+		AfxMessageBox(_T("Object created: ObjID=") + obj->ID); 
 	}		
 	return S_OK;
 }

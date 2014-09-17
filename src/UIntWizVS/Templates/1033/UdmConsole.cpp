@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Gme.h"
 #include "UdmConsole.h"
 #include "UdmBase.h"
 
@@ -68,4 +69,56 @@ namespace GMEConsole
 			}
 		}
 	}
+
+	void Console::writeLine(const std::string& message, msgtype_enum type)
+	{
+		if (gmeoleapp == 0) {
+			switch (type) {
+			case MSG_NORMAL:
+			case MSG_INFO:
+			case MSG_WARNING:
+				printf("%s", message.c_str());
+				break;
+			case MSG_ERROR:
+				fprintf(stderr, "%s", message.c_str());
+				break;
+			}
+		} else {
+			if(S_OK != gmeoleapp->ConsoleMessage(CComBSTR(message.length(), message.c_str()), type))
+				throw udm_exception("Could not write to GME console.");
+		}
+	}
+
+	void Console::writeLine(const std::wstring& message, msgtype_enum type)
+	{
+		if (gmeoleapp == 0) {
+			switch (type) {
+			case MSG_NORMAL:
+			case MSG_INFO:
+			case MSG_WARNING:
+				wprintf(L"%s", message.c_str());
+				break;
+			case MSG_ERROR:
+				fwprintf(stderr, L"%s", message.c_str());
+				break;
+			}
+		} else {
+			if(S_OK != gmeoleapp->ConsoleMessage(CComBSTR(message.length(), message.c_str()), type))
+				throw udm_exception("Could not write to GME console.");
+		}
+	}
+
+	void Console::setContents(const std::string& contents)
+	{
+		if (gmeoleapp != 0)
+			if(S_OK != gmeoleapp->put_ConsoleContents( CComBSTR(contents.length(),contents.c_str()) ))
+				throw udm_exception("Could not set the contents of GME console.");
+	}
+	void Console::setContents(const std::wstring& contents)
+	{
+		if (gmeoleapp != 0)
+			if(S_OK != gmeoleapp->put_ConsoleContents( CComBSTR(contents.length(),contents.c_str()) ))
+				throw udm_exception("Could not set the contents of GME console.");
+	}
+
 }
