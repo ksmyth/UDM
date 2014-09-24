@@ -303,10 +303,13 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 	{
 		std::string err = e.what();
 		//do we have stg to say?
-		if (!(param & GME_SILENT_MODE))
-			AfxMessageBox(err.c_str());
-		else
-			std::cerr << err << std::endl;
+		if (err != "")
+		{
+			if (!(param & GME_SILENT_MODE))
+				AfxMessageBox(err.c_str());
+			else
+				std::cerr << err << std::endl;
+		}
 	}
 	catch (udm_exception &e)
 	{
