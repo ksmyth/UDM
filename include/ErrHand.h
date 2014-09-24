@@ -15,7 +15,7 @@ this software.
 #define MOBIES_ERRHAND_H
 
 // static libs are no longer distributed, so default to UDM_DYNAMIC_LINKING for VS2010 and later
-#if _MSC_VER >= 1600 && !defined(UDM_NO_DYNAMIC_LINKING) && !defined(UDM_DLL_EXPORT)
+#if _MSC_VER >= 1600 && !defined(UDM_NO_DYNAMIC_LINKING) && !defined(UDM_DLL_EXPORT) && !defined(UDM_DYNAMIC_LINKING)
 #define UDM_DYNAMIC_LINKING 1
 #endif
 
