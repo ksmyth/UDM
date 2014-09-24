@@ -2162,8 +2162,13 @@ bbreak:			;
 			
 			
 
-			IMgaMetaRolePtr real_role;			
+			IMgaMetaRolePtr real_role;
 			COMTHROW (self->get_MetaRole(&real_role));
+			if (real_role == NULL)
+			{
+				return &Udm::_null;
+				//throw udm_exception("Object " + this->getPath() + " has a Folder parent, and thus no composition role");
+			}
 			::Uml::CompositionChildRole ccr = Uml::theOther(role);
 			
 			//in most cases, the role name matches
