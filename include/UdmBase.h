@@ -1926,6 +1926,29 @@ namespace UDM_NAMESPACE
 
 
 	};
+
+	
+	template<class CLASS>
+	struct AttrPointer
+	{
+		CLASS parent;
+		AttrPointer(CLASS parent)
+#ifdef UDM_RVALUE
+			: parent(std::move(parent)) { }
+#else
+			: parent(parent) { }
+#endif
+		CLASS *operator*()
+		{
+			return &parent;
+		}
+
+		CLASS *operator->()
+		{
+			return &parent;
+		}
+	};
+	
 // --------------------------- CrossAssocAttr
 	template<class CLASS, class Pred = less<CLASS> >
 	class CrossAssocAttr
@@ -2054,6 +2077,17 @@ namespace UDM_NAMESPACE
 			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
 		}
+
+		AttrPointer<CLASS> operator->() const 
+		{
+			return AttrPointer<CLASS>(static_cast<CLASS>(*this));
+		}
+
+		CLASS operator*() const
+		{
+			return static_cast<CLASS>(*this);
+		}
+
 	};
 
 
@@ -2098,6 +2132,17 @@ namespace UDM_NAMESPACE
 			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
 		}
+
+		AttrPointer<CLASS> operator->() const 
+		{
+			return AttrPointer<CLASS>(static_cast<CLASS>(*this));
+		}
+
+		CLASS operator*() const
+		{
+			return static_cast<CLASS>(*this);
+		}
+
 	};
 
 // --------------------------- CrossAssocEndAttr
@@ -2122,6 +2167,17 @@ namespace UDM_NAMESPACE
 			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
 		}
+
+		AttrPointer<CLASS> operator->() const 
+		{
+			return AttrPointer<CLASS>(static_cast<CLASS>(*this));
+		}
+
+		CLASS operator*() const
+		{
+			return static_cast<CLASS>(*this);
+		}
+
 	};
 
 
@@ -2166,6 +2222,15 @@ namespace UDM_NAMESPACE
 			return operator =( (CLASS) a );
 		}
 
+		AttrPointer<CLASS> operator->() const 
+		{
+			return AttrPointer<CLASS>(static_cast<CLASS>(*this));
+		}
+
+		CLASS operator*() const
+		{
+			return static_cast<CLASS>(*this);
+		}
 	};
 
 // --------------------------- AClassCrossPointerAttr
@@ -2190,6 +2255,16 @@ namespace UDM_NAMESPACE
 		{
 			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
+		}
+
+		AttrPointer<CLASS> operator->() const 
+		{
+			return AttrPointer<CLASS>(static_cast<CLASS>(*this));
+		}
+
+		CLASS operator*() const
+		{
+			return static_cast<CLASS>(*this);
 		}
 
 	};
@@ -2233,6 +2308,16 @@ namespace UDM_NAMESPACE
 		{
 			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
+		}
+
+		AttrPointer<CLASS> operator->() const 
+		{
+			return AttrPointer<CLASS>(static_cast<CLASS>(*this));
+		}
+
+		CLASS operator*() const
+		{
+			return static_cast<CLASS>(*this);
 		}
 
 		CLASS SetLink(TARGETCLASS peer, Object parent, 
@@ -2496,6 +2581,16 @@ namespace UDM_NAMESPACE
 		{
 			return operator =( (CLASS) a);
 		}
+
+		AttrPointer<CLASS> operator->() const 
+		{
+			return AttrPointer<CLASS>(static_cast<CLASS>(*this));
+		}
+
+		CLASS operator*() const
+		{
+			return static_cast<CLASS>(*this);
+		}
 	};
 
 // --------------------------- ParentAttr
@@ -2531,6 +2626,16 @@ namespace UDM_NAMESPACE
 		{
 			// FIXME: (CLASS) a is destructed then returned by reference. return *this instead
 			return operator =( (CLASS) a );
+		}
+
+		AttrPointer<CLASS> operator->() const 
+		{
+			return AttrPointer<CLASS>(static_cast<CLASS>(*this));
+		}
+
+		CLASS operator*() const
+		{
+			return static_cast<CLASS>(*this);
 		}
 	};
 // -----------------------------Typed set<> container
