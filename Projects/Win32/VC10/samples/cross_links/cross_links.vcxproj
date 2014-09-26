@@ -27,6 +27,8 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\udm.props" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmudm.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
@@ -46,6 +48,11 @@
     <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">*.obj;*.ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath);*.xsd;*.xml</ExtensionsToDeleteOnClean>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectName)</TargetName>
+    <CustomBuildBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ClCompile</CustomBuildBeforeTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mga2udmudm</udm_RuleAfterTargets>
+    <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mga2udmudm</udm_RuleAfterTargets>
+    <mga2udmudm_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">udm</mga2udmudm_RuleBeforeTargets>
+    <mga2udmudm_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">udm</mga2udmudm_RuleBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -61,7 +68,7 @@ exit 0
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(UDM_PATH)\samples\cross_links;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -73,17 +80,12 @@ exit 0
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>UmlD.lib;UdmBaseD.lib;UdmDomD.lib;UdmUtilD.lib;xerces-c_2.lib;zlibD.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)cross_linksD.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -95,21 +97,6 @@ exit 0
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <CustomBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </CustomBuild>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
@@ -126,7 +113,7 @@ exit 0
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(UDM_PATH)\samples\cross_links;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -138,17 +125,12 @@ exit 0
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>Default</CompileAs>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Uml.lib;UdmBase.lib;UdmDom.lib;UdmUtil.lib;xerces-c_2.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)cross_links.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -159,67 +141,12 @@ exit 0
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <CustomBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </CustomBuild>
-    <CustomBuild>
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </CustomBuild>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="$(ReleaseGenPath)\CD1.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="$(DebugGenPath)\CD1.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
-    </ClCompile>
-    <ClCompile Include="$(ReleaseGenPath)\CD2.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="$(DebugGenPath)\CD2.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
-    </ClCompile>
-    <ClCompile Include="$(DebugGenPath)\CD3.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
-    </ClCompile>
-    <ClCompile Include="$(ReleaseGenPath)\CD3.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="$(ReleaseGenPath)\CL.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ClCompile Include="$(DebugGenPath)\CL.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
-    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\samples\cross_links\CD1.cpp" />
+    <ClCompile Include="..\..\..\..\..\samples\cross_links\CD2.cpp" />
+    <ClCompile Include="..\..\..\..\..\samples\cross_links\CD3.cpp" />
+    <ClCompile Include="..\..\..\..\..\samples\cross_links\CL.cpp" />
     <ClCompile Include="..\..\..\..\..\samples\cross_links\cross_links.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -231,18 +158,7 @@ exit 0
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="$(ReleaseGenPath)\CD1.h" />
-    <CustomBuild Include="$(DebugGenPath)\CD1.h" />
-    <CustomBuild Include="$(ReleaseGenPath)\CD2.h" />
-    <CustomBuild Include="$(DebugGenPath)\CD2.h" />
-    <CustomBuild Include="$(ReleaseGenPath)\CD3.h" />
-    <CustomBuild Include="$(DebugGenPath)\CD3.h" />
-    <CustomBuild Include="$(ReleaseGenPath)\CL.h" />
-    <CustomBuild Include="$(DebugGenPath)\CL.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\..\..\..\samples\cross_links\CL.xme">
-      <FileType>Document</FileType>
+    <mga2udmudm Include="..\..\..\..\..\samples\cross_links\CL.xme">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(GenPath)"
 "$(UDM_PATH)\etc\xme2udmxml" "%(FullPath)" "%(FileName).mga"
 </Command>
@@ -251,22 +167,33 @@ exit 0
 "$(UDM_PATH)\etc\xme2udmxml" "%(FullPath)" "%(FileName).mga"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenPath)\%(FileName).mga;$(GenPath)\CL_udm.udm;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="$(DebugGenPath)\CL_udm.udm">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(OutDir)UdmD.exe" -o "$(GenPath)" "%(FullPath)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GenPath)\CD1.cpp;$(GenPath)\CD2.cpp;$(GenPath)\CD3.cpp;$(GenPath)\CL.cpp;$(GenPath)\CD1.h;$(GenPath)\CD2.h;$(GenPath)\CD3.h;$(GenPath)\CL.h;$(GenPath)\CD1.xsd;$(GenPath)\CD2.xsd;$(GenPath)\CD3.xsd;$(GenPath)\CL.xsd;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="$(ReleaseGenPath)\CL_udm.udm">
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CL</MetaName>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CL</MetaName>
+    </mga2udmudm>
+  </ItemGroup>
+  <ItemGroup>
+    <udm Include="..\..\..\..\..\samples\cross_links\CL_udm.udm">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(OutDir)Udm.exe" -o "$(GenPath)" "%(FullPath)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GenPath)\CD1.cpp;$(GenPath)\CD2.cpp;$(GenPath)\CD3.cpp;$(GenPath)\CL.cpp;$(GenPath)\CD1.h;$(GenPath)\CD2.h;$(GenPath)\CD3.h;$(GenPath)\CL.h;$(GenPath)\CD1.xsd;$(GenPath)\CD2.xsd;$(GenPath)\CD3.xsd;$(GenPath)\CL.xsd;%(Outputs)</Outputs>
-    </CustomBuild>
-    <None Include="..\..\..\..\..\samples\cross_links\ReadMe.txt" />
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CL</MetaName>
+      <IntegrateXSD Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</IntegrateXSD>
+      <MetaName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CL</MetaName>
+      <IntegrateXSD Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</IntegrateXSD>
+    </udm>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD1.h" />
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD1_xsd.h" />
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD2.h" />
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD2_xsd.h" />
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD3.h" />
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD3_xsd.h" />
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CL.h" />
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CL_xsd.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\udm.targets" />
+    <Import Project="..\..\..\..\..\common-scripts\build_customization\mga2udmudm.targets" />
   </ImportGroup>
 </Project>

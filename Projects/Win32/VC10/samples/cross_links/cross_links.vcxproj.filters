@@ -18,61 +18,49 @@
     <ClCompile Include="..\..\..\..\..\samples\cross_links\cross_links.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="$(ReleaseGenPath)\CD1.cpp">
+    <ClCompile Include="..\..\..\..\..\samples\cross_links\CD1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="$(DebugGenPath)\CD1.cpp">
+    <ClCompile Include="..\..\..\..\..\samples\cross_links\CD2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="$(ReleaseGenPath)\CD2.cpp">
+    <ClCompile Include="..\..\..\..\..\samples\cross_links\CD3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="$(DebugGenPath)\CD2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="$(DebugGenPath)\CD3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="$(ReleaseGenPath)\CD3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="$(ReleaseGenPath)\CL.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="$(DebugGenPath)\CL.cpp">
+    <ClCompile Include="..\..\..\..\..\samples\cross_links\CL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\samples\cross_links\ReadMe.txt" />
+    <mga2udmudm Include="..\..\..\..\..\samples\cross_links\CL.xme" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="$(DebugGenPath)\CD1.h">
+    <udm Include="..\..\..\..\..\samples\cross_links\CL_udm.udm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD1.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="$(DebugGenPath)\CD2.h">
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD1_xsd.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="$(DebugGenPath)\CD3.h">
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD2.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="$(DebugGenPath)\CL.h">
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD2_xsd.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="$(DebugGenPath)\CL_udm.udm" />
-    <CustomBuild Include="$(ReleaseGenPath)\CD1.h">
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD3.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="$(ReleaseGenPath)\CD2.h">
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CD3_xsd.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="$(ReleaseGenPath)\CD3.h">
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CL.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="$(ReleaseGenPath)\CL.h">
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\samples\cross_links\CL_xsd.h">
       <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="$(ReleaseGenPath)\CL_udm.udm" />
-    <CustomBuild Include="..\..\..\..\..\samples\cross_links\CL.xme" />
+    </ClInclude>
   </ItemGroup>
 </Project>

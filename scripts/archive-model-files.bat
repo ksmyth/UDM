@@ -1,11 +1,11 @@
-@echo off
+@echo on
 
-if /i not "%1"=="VC7.1" if /i not "%1"=="VC8" if /i not "%1"=="VC9" goto :usage
+if /i not "%1"=="VC10" if /i not "%1"=="VC8" if /i not "%1"=="VC9" goto :usage
 if /i not "%2"=="Debug" if /i not "%2"=="Release" goto :usage
 
 cmd /c "call "%~dp0_%~nx0" %*"
 
-exit /b
+exit /b %ERRORLEVEL%
 
 :usage
 echo zips model files necessary for Linux build.

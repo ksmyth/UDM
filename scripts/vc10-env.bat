@@ -1,4 +1,4 @@
-@echo off
+@echo on
 
 : Read UDM_3RDPARTY_PATH and JAVA_HOME from script with local settings
 if exist "%~dp0"vc10-env-local.bat call "%~dp0"vc10-env-local.bat
