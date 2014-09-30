@@ -3,20 +3,13 @@
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' RequiredVersion='3.0.4813.0'>
 
   <?include ..\Udm_inc.wxi?>
+  <Fragment>
+    <DirectoryRef Id='$(var.SystemFolderNative)'/>
 
-  <Module Id='UdmDll_VS10' Language='1033' Codepage='1252' Version='$(var.VERSIONSTR)'>
-
-    <Package Id='$(var.xerces_c_Package_Id)' Manufacturer='Vanderbilt University, ISIS'
-        InstallerVersion='300' Languages='1033' SummaryCodepage='1252'
-        InstallPrivileges='elevated' InstallScope='perMachine'/>
-
-    <Directory Id='TARGETDIR' Name='SourceDir'>
-      <Directory Id='$(var.SystemFolderNative)' Name='$(var.SystemFolderNative)'>
-        <Component>
-          <File Source='..\bin\$(var.XercesC)' />
-        </Component>
-      </Directory>
-    </Directory>
-
-  </Module>
+    <ComponentGroup Id='xerces_c$(sys.BUILDARCH)'>
+      <Component Directory='$(var.SystemFolderNative)'>
+        <File Source='..\bin\$(var.XercesC)' />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
 </Wix>

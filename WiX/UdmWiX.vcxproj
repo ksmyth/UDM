@@ -61,14 +61,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="Udm.wxs" />
+    <None Include="UdmDll\UdmDll.wxs" />
+    <None Include="UdmDll_VC11\UdmDll_VC11.wxs" />
     <None Include="UdmDll_VS10\UdmDll_VS10.wxs">
       <SubType>Designer</SubType>
     </None>
+    <None Include="UdmSDK_VC11\UdmSDK_VC11.wxs" />
+    <None Include="Udm_bin\MetaGME2Uml.wxi" />
     <None Include="Udm_bin\Udm_bin.wxs" />
+    <None Include="Udm_bin\UML2XML.wxi" />
+    <None Include="Udm_bin\UMLOCLExpressionChecker.wxi" />
     <None Include="Udm_inc.wxi">
       <SubType>Designer</SubType>
     </None>
     <None Include="Udm_SDK\Udm_SDK.wxs" />
+    <None Include="xerces_c\xerces_c.wxs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

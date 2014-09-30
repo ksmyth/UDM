@@ -4,21 +4,16 @@
 
   <?include ..\Udm_inc.wxi?>
 
-  <Module Id='UdmDll' Language='1033' Codepage='1252' Version='$(var.VERSIONSTR)'>
+  <Fragment>
+    <DirectoryRef Id='$(var.SystemFolderNative)'/>
 
-    <Package Id='35DC72B5-A81C-4190-ACE7-9D10CE1DA1A1' Manufacturer='Vanderbilt University, ISIS'
-        InstallerVersion='300' Languages='1033' SummaryCodepage='1252'
-        InstallPrivileges='elevated' InstallScope='perMachine'/>
-
-    <Directory Id='TARGETDIR' Name='SourceDir'>
-      <Directory Id='$(var.SystemFolderNative)' Name='$(var.SystemFolderNative)'>
+    <ComponentGroup Id='UdmDll$(sys.BUILDARCH)'>
       <?if $(sys.BUILDARCH)=x86?>
-        <Component>
-          <File Source='$(var.Build)VC9\Release\UdmDll_3_2.dll' />
-        </Component>
+      <Component Directory='$(var.SystemFolderNative)'>
+        <File Source='$(var.Build)VC9\Release\UdmDll_3_2.dll' />
+      </Component>
       <?endif?>
-      </Directory>
-    </Directory>
+    </ComponentGroup>
 
-  </Module>
+  </Fragment>
 </Wix>

@@ -2,12 +2,12 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 <?include ..\Udm_inc.wxi ?>
 <Fragment>
-  <DirectoryRef Id="bin" />
+  <DirectoryRef Id="bin$(sys.BUILDARCH)" />
 </Fragment>
 <Fragment>
-<ComponentGroup Id="UML2XML">
-  <Component Id="UML2XML.dll" Directory="bin">
-    <File Source="$(var.Build)VC10\Release\UML2XML.dll">
+<ComponentGroup Id="UML2XML$(sys.BUILDARCH)">
+  <Component Id="UML2XML.dll$(sys.BUILDARCH)" Directory="bin$(sys.BUILDARCH)">
+    <File Source="$(var.Build)VC10\Release\UML2XML.dll" Id="UML2XML.dll$(sys.BUILDARCH)">
       <TypeLib Id="F3F6FC1C-D175-47D1-AC14-7EF210CC818F" Description="MGA Interpreter TypeLibrary (UML2XML)" Language="0" MajorVersion="1" MinorVersion="0">
         <Class Id="{B05E71F0-2A71-4646-92E9-317507B32844}" Context="InprocServer32" Description="MGA.Interpreter.UML2XML">
           <ProgId Id="MGA.Interpreter.UML2XML" Description="MGA.Interpreter.UML2XML" />

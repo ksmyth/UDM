@@ -3,152 +3,128 @@
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' RequiredVersion='3.0.4813.0'>
 
   <?include ..\Udm_inc.wxi ?>
-  <Module Id='Udm_SDK' Language='1033' Codepage='1252' Version='$(var.VERSIONSTR)'>
+  <Fragment>
 
-    <Package Id='$(var.Udm_SDK_Package_Id)'
-        Manufacturer='Vanderbilt University, ISIS'
-        InstallerVersion='300' Languages='1033' SummaryCodepage='1252'
-        InstallPrivileges='elevated' InstallScope='perMachine'/>
-
-    <!-- =========================================================== -->
-    <!-- DIRECTORY STRUCTURE -->
-    <!-- =========================================================== -->
-    <Directory Id='TARGETDIR' Name='SourceDir'>
-      <Directory Id='ProgramFilesFolder'>
-        <Directory Id='ISIS' Name='ISIS'>
-          <Directory Id='INSTALLDIR' Name='Udm'>
-            <Directory Id='bin' Name='bin'/>
-            <Directory Id='etc' Name='etc'>
-              <Directory Id='etc_Java' Name='Java'/>
-            </Directory>
-            <Directory Id='lib' Name='lib'/>
-            <Directory Id='doc' Name='doc'/>
-            <Directory Id='include' Name='include'/>
-            <Directory Id='UIntWizVS' Name='UdmIntWizard'/>
-            <Directory Id='Samples' Name='Samples'>
-              <Directory Id='Samples_Python' Name='Python'>
-                <Directory Id='test_UdmPython'/>
-              </Directory>
-              <Directory Id='GeneTF' Name='GeneTF'/>
-              <Directory Id='GeneTRE' Name='GeneTRE'/>
-              <Directory Id='SBML2Ex' Name='SBML2Ex'/>
-            </Directory>
-          </Directory>
-        </Directory>
-      </Directory>
-    </Directory>
+    <DirectoryRef Id="lib$(sys.BUILDARCH)"/>
+    <DirectoryRef Id="INSTALLDIR"/>
 
     <?if $(sys.BUILDARCH)=x86 ?>
-    <ComponentGroupRef Id="include" />
-    <ComponentGroupRef Id="UIntWizVS" />
-    <ComponentGroupRef Id="test_UdmPython"/>
-    <ComponentGroupRef Id="GeneTF"/>
-    <ComponentGroupRef Id="GeneTRE"/>
-    <ComponentGroupRef Id="SBML2Ex"/>
+    <DirectoryRef Id="include"/>
+    <DirectoryRef Id='etc'/>
+    <DirectoryRef Id='doc'/>
+    <DirectoryRef Id='UIntWizVS'/>
+    <DirectoryRef Id='Samples'/>
+    <DirectoryRef Id='Samples_Python'/>
+    <DirectoryRef Id='test_UdmPython'/>
+    <DirectoryRef Id='GeneTF'/>
+    <DirectoryRef Id='GeneTRE'/>
+    <DirectoryRef Id='SBML2Ex'/>
+    <?endif?>
 
-    <DirectoryRef Id="INSTALLDIR">
-      <Component>
+    <ComponentGroup Id='Udm_SDK$(sys.BUILDARCH)'>
+
+      <?if $(sys.BUILDARCH)=x86 ?>
+      <ComponentGroupRef Id="include" />
+      <ComponentGroupRef Id="UIntWizVS" />
+      <ComponentGroupRef Id="test_UdmPython"/>
+      <ComponentGroupRef Id="GeneTF"/>
+      <ComponentGroupRef Id="GeneTRE"/>
+      <ComponentGroupRef Id="SBML2Ex"/>
+
+      <Component Directory="INSTALLDIR">
         <File Source="..\releaseinfo.txt" />
       </Component>
-      <Component>
+      <Component Directory="INSTALLDIR">
         <File Source="..\license.txt" />
       </Component>
-    </DirectoryRef>
 
-    <DirectoryRef Id="doc">
-      <Component>
+      <Component Directory="doc">
         <File Source="..\doc\UDMAPI.pdf" />
       </Component>
-      <Component>
+      <Component Directory="doc">
         <File Source="..\doc\UdmInterpreterWizard.pdf" />
       </Component>
       <!-- TODO: javadoc judm\build\build_win\judm\apidoc -->
-    </DirectoryRef>
 
-    <DirectoryRef Id="etc">
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\CreateUdmXml.vbs" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\compileUdmAPI.bat" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\CreateMGA.vbs" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\CreateXmp.vbs" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\Uml.xsd" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\UdmProject.xme" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\UdmProject_udm.xml" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\UdmProject.xsd" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\Uml.xml" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\Xme2UdmXml.bat" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\UmlInUml.xme" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\etc\UmlMeta.xme" />
       </Component>
-      <Component>
+      <Component Directory="etc">
         <File Source="..\Build\Win32\VC10\Release\StrResGen.exe" />
       </Component>
-    </DirectoryRef>
 
-    <DirectoryRef Id="etc_Java">
-      <Component>
+      <Component Directory="etc_Java">
         <File Source="..\etc\JAVA\judmAPI.bat" />
       </Component>
-      <Component>
+      <Component Directory="etc_Java">
         <File Source="..\etc\JAVA\.classpath" />
       </Component>
-      <Component>
+      <Component Directory="etc_Java">
         <File Source="..\etc\JAVA\.project" />
       </Component>
-      <Component>
+      <Component Directory="etc_Java">
         <File Source="..\etc\JAVA\build.xml" />
       </Component>
-      <Component>
+      <Component Directory="etc_Java">
         <File Source="..\etc\JAVA\eclipseAPI.bat" />
       </Component>
-    </DirectoryRef>
-    <?endif?>
+      <?endif?>
 
-    <DirectoryRef Id="lib">
       <?if $(sys.BUILDARCH)=x86 ?>
-      <Component>
+      <Component Directory="lib$(sys.BUILDARCH)">
         <File Source="..\Build\Win32\VC9\Release\UdmDll.lib" />
       </Component>
-      <Component>
+      <Component Directory="lib$(sys.BUILDARCH)">
         <File Source="..\Build\Win32\VC9\Debug\UdmDllD.lib" />
       </Component>
-      <Component>
+      <Component Directory="lib$(sys.BUILDARCH)">
         <File Source="..\Build\Win32\v100\Release\UdmDll_VS10.lib" />
       </Component>
-      <Component>
+      <Component Directory="lib$(sys.BUILDARCH)">
         <File Source="..\Build\Win32\v100\Debug\UdmDll_VS10D.lib" />
       </Component>
       <?else?>
-      <Component>
+      <Component Directory="libx86" Win64='no'>
         <File Source="..\Build\x64\v100\Release\UdmDll_v100_x64.lib" />
       </Component>
-      <Component>
+      <Component Directory="libx86" Win64='no'>
         <File Source="..\Build\x64\v100\Debug\UdmDll_v100_x64D.lib" />
       </Component>
       <?endif?>
-    </DirectoryRef>
 
-  </Module>
+    </ComponentGroup>
+  </Fragment>
 </Wix>

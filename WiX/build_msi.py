@@ -73,13 +73,19 @@ def build(sourcedir, arch, msi=False):
     if msi:
         print 'Building msi ' + arch
         msi_names = {'x86': 'Udm.msi', 'x64': 'Udm_x64.msi'}
-        system(['light', '-nologo', '-sw1055', '-sice:ICE82', '-ext', 'WixNetFxExtension', '-ext', 'WixUIExtension', '-ext', 'WixUtilExtension', '-o', msi_names[arch] ] + [ get_wixobj(file) for file in sources ])
-    else:
-        mm_name = [ os.path.splitext(source)[0] for source in sources if source.find('.wxs') != -1 ][0]
+        dirs = [os.path.basename(d) for d in glob.glob(sourcedir + '*') if os.path.isdir(d) and os.path.basename(d) not in ('Release', 'Debug', '.svn')]
+        wixlibs = [os.path.join(d, d + '.wixlib') for d in dirs]
         if arch == 'x64':
-            mm_name = mm_name + '_x64'
-        mm_name = mm_name + '.msm'
-        system(['light', '-nologo', '-ext', 'WixUtilExtension', '-o', mm_name] + [ get_wixobj(file) for file in sources ])
+            wixlibs += [os.path.join(d, d + '_x64.wixlib') for d in dirs]
+        system(['light', '-nologo', '-sw1055', '-sice:ICE82', '-ext', 'WixNetFxExtension', '-ext', 'WixUIExtension', '-ext', 'WixUtilExtension', '-o', msi_names[arch] ] +
+            [get_wixobj(file) for file in sources ] + wixlibs)
+    else:
+        wixlib_name = [ os.path.splitext(source)[0] for source in sources if source.find('.wxs') != -1 ][0]
+        if arch == 'x64':
+            wixlib_name = wixlib_name + '_x64'
+            sources = [s for s in sources if os.path.basename(s) not in ('include.wxi', 'UIntWizVS.wxi', 'test_UdmPython.wxi', 'GeneTF.wxi', 'GeneTRE.wxi', 'SBML2Ex.wxi')]
+        wixlib_name = wixlib_name + '.wixlib'
+        system(['lit', '-nologo', '-bf', '-ext', 'WixUtilExtension', '-o', wixlib_name] + [ get_wixobj(file) for file in sources ])
 
 if __name__=='__main__':
     from optparse import OptionParser
