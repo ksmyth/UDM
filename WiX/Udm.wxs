@@ -133,7 +133,7 @@
       <ComponentGroupRef Id='xerces_cx64'/>
       <ComponentGroupRef Id='Udm_binx64' />
       <ComponentGroupRef Id='Udm_SDKx64' />
-      <ComponentGroupRef Id='UdmDllx64' />
+      <!-- UdmDllx64 intentionally omitted: no VC9 build for UdmDll -->
       <ComponentGroupRef Id='UdmDll_VS10x64' />
       <ComponentGroupRef Id='UdmDll_VC11x64' />
       <ComponentGroupRef Id='UdmSDK_VC11x64' />

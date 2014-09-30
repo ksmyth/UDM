@@ -77,9 +77,7 @@ def build(sourcedir, arch, msi=False):
         wixlibs = [os.path.join(d, d + '.wixlib') for d in dirs]
         if arch == 'x64':
             wixlibs += [os.path.join(d, d + '_x64.wixlib') for d in dirs]
-            print repr(wixlibs)
             wixlibs = [lib for lib in wixlibs if os.path.basename(lib) != 'UdmDll_x64.wixlib']
-            print repr(wixlibs)
         system(['light', '-nologo', '-sw1055', '-sice:ICE82', '-ext', 'WixNetFxExtension', '-ext', 'WixUIExtension', '-ext', 'WixUtilExtension', '-o', msi_names[arch] ] +
             [get_wixobj(file) for file in sources ] + wixlibs)
     else:
