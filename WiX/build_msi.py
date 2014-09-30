@@ -83,7 +83,7 @@ def build(sourcedir, arch, msi=False):
         wixlib_name = [ os.path.splitext(source)[0] for source in sources if source.find('.wxs') != -1 ][0]
         if arch == 'x64':
             wixlib_name = wixlib_name + '_x64'
-            sources = [s for s in sources if os.path.basename(s) not in ('include.wxi', 'UIntWizVS.wxi', 'test_UdmPython.wxi', 'GeneTF.wxi', 'GeneTRE.wxi', 'SBML2Ex.wxi')]
+            sources = [s for s in sources if os.path.basename(s) not in ('include.wxi', 'UIntWizVS.wxi', 'test_UdmPython.wxi', 'GeneTF.wxi', 'GeneTRE.wxi', 'SBML2Ex.wxi', 'GmeOclExprChecker.wxi')]
         wixlib_name = wixlib_name + '.wixlib'
         system(['lit', '-nologo', '-bf', '-ext', 'WixUtilExtension', '-o', wixlib_name] + [ get_wixobj(file) for file in sources ])
 
