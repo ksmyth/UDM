@@ -11,7 +11,7 @@ os.environ['PATH'] = os.environ['PATH'].replace('"', '')
 
 def add_wix_to_path():
     import _winreg
-    for wix_ver in ('3.5', '3.6'):
+    for wix_ver in ('3.5', '3.6', '3.7', '3.8'):
         try:
             with _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE\\Microsoft\\Windows Installer XML\\' + wix_ver) as wixkey:
                 os.environ['PATH'] = _winreg.QueryValueEx(wixkey, 'InstallRoot')[0] + ';' + os.environ['PATH']
