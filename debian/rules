@@ -57,7 +57,7 @@ build-stamp:  config.status
 	# Add here commands to compile the package.
 	cd debian/zlib-1.2.3.3.dfsg/contrib/minizip && make libminizip
 	#cp -a ../model-files.zip .
-	wget -O model-files.zip http://build.isis.vanderbilt.edu/job/UDM/label=build-slave8/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip
+	wget -O model-files.zip http://build.isis.vanderbilt.edu/job/UDM/label=build-slave9/lastSuccessfulBuild/artifact/trunk/model-files-VC10-Release.zip
 	$(MAKE)
 
 	touch $@
