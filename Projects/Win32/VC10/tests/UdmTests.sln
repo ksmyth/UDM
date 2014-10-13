@@ -40,6 +40,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_ns_nested", "test_ns_n
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cross_links", "..\samples\cross_links\cross_links.vcxproj", "{4CA139A6-D338-4C6D-B9AD-86B65B8E5129}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test_CrossLinks", "test_crosslinks\Test_CrossLinks.vcxproj", "{4AB81545-A658-4D58-AF09-C060DBCB4F7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -200,6 +202,12 @@ Global
 		{4CA139A6-D338-4C6D-B9AD-86B65B8E5129}.Release|Win32.ActiveCfg = Release|Win32
 		{4CA139A6-D338-4C6D-B9AD-86B65B8E5129}.Release|Win32.Build.0 = Release|Win32
 		{4CA139A6-D338-4C6D-B9AD-86B65B8E5129}.Release|x64.ActiveCfg = Release|Win32
+		{4AB81545-A658-4D58-AF09-C060DBCB4F7F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4AB81545-A658-4D58-AF09-C060DBCB4F7F}.Debug|Win32.Build.0 = Debug|Win32
+		{4AB81545-A658-4D58-AF09-C060DBCB4F7F}.Debug|x64.ActiveCfg = Debug|Win32
+		{4AB81545-A658-4D58-AF09-C060DBCB4F7F}.Release|Win32.ActiveCfg = Release|Win32
+		{4AB81545-A658-4D58-AF09-C060DBCB4F7F}.Release|Win32.Build.0 = Release|Win32
+		{4AB81545-A658-4D58-AF09-C060DBCB4F7F}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
