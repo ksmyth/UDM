@@ -227,12 +227,11 @@ namespace UdmDom
 			what += ", in File: ";\
 			what += e.getSrcFile();\
 			what += ", in Line: ";\
-			char * line_str = new char[20];/*should be enough for 32 bit integers */\
+			char line_str[20] = {};/*should be enough for 32 bit integers */\
 			if (line_str)\
 			{\
-				sprintf(line_str, "%d", e.getSrcLine());\
+				sprintf(line_str, "%ud", (unsigned int)e.getSrcLine());\
 				what += line_str;\
-				delete [] line_str;\
 			}\
 			what += where;\
 			throw udm_exception(what);\

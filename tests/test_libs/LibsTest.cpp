@@ -5,6 +5,10 @@ UDM_USE_MGA
 #endif
 UDM_USE_DOM
 
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
 #include "LibsTest.h"
 
 #include <cppunit/CompilerOutputter.h>

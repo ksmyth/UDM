@@ -183,6 +183,7 @@ this software.
 // Use POSIX strncasecamp on other platforms
 #ifndef WIN32
 #include <strings.h>
+#include <unistd.h>
 
 #define strnicmp(a, b, n) strncasecmp(a,b,n)
 #endif
