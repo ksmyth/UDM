@@ -44,11 +44,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\..\..\Build\Win32\VC9\Debug\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)obj\tests\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\$(Platform)\$(PlatformToolset)\$(Configuration)\))</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\$(Platform)\$(PlatformToolset)\$(Configuration)\obj\tests\$(ProjectName)\))</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\..\..\Build\Win32\VC9\Release\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)obj\tests\$(ProjectName)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\$(Platform)\$(PlatformToolset)\$(Configuration)\))</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$([System.IO.Path]::GetFullPath($(UDM_PATH)\Build\$(Platform)\$(PlatformToolset)\$(Configuration)\obj\tests\$(ProjectName)\))</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <mga2udmudm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">xme2mga</mga2udmudm_RuleAfterTargets>
     <xme2mga_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mga2udmudm</xme2mga_RuleBeforeTargets>
