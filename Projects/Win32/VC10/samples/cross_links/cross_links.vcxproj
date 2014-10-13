@@ -53,6 +53,7 @@
     <udm_RuleAfterTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">mga2udmudm</udm_RuleAfterTargets>
     <mga2udmudm_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">udm</mga2udmudm_RuleBeforeTargets>
     <mga2udmudm_RuleBeforeTargets Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">udm</mga2udmudm_RuleBeforeTargets>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)D</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -86,7 +87,6 @@ exit 0
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <OutputFile>$(OutDir)cross_linksD.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
