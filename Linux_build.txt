@@ -67,7 +67,7 @@ From scratch:
  - Copy the archive model-files-*.zip and rename it to model-files.zip.
 
 From build.isis:
-wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
+wget 'http://build.isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/artifact/trunk/model-files-VC10-Release.zip' -O model-files.zip
 
 Building:
 ---------------------
@@ -93,7 +93,7 @@ sudo apt-get install debhelper build-essential autoconf libtool ccache libcppuni
 sudo update-alternatives --set java /usr/lib/jvm/java-6-sun/jre/bin/java
 sudo update-java-alternatives -s java-6-sun
 # Obtain model-files.zip as above or:
-wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
+wget 'http://build.isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/artifact/trunk/model-files-VC10-Release.zip' -O model-files.zip
 # Build binary debs
 fakeroot debian/rules binary
 
@@ -101,7 +101,7 @@ Building on Ubuntu 12.04 (Precise):
 ----------------------------------------------
 sudo apt-get install -y fakeroot debhelper build-essential autoconf libtool libxerces-c2-dev autotools-dev ccache libcppunit-dev libxalan110-dev ant junit ant-optional pccts libboost-dev zlib1g-dev swig openjdk-6-jdk libboost-python-dev
 # Obtain model-files.zip as above or:
-wget 'http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip' -O model-files.zip
+wget 'http://build.isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/artifact/trunk/model-files-VC10-Release.zip' -O model-files.zip
 # Build binary debs
 fakeroot debian/rules binary
 
@@ -116,6 +116,6 @@ Building (CentOS)
   yum -y groupinstall 'Development Libraries' 'Development Tools' 'Java Development'
   yum -y install ccache cppunit-devel xerces-c-devel swig ant-junit boost-devel antlr
   setenforce permissive
-  wget -O model-files.zip http://build.isis.vanderbilt.edu/job/UDM/label=build-slave3/lastSuccessfulBuild/artifact/trunk/model-files-VC9-Release.zip
+  wget -O model-files.zip http://build.isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/artifact/trunk/model-files-VC10-Release.zip
   autoreconf -i
   cd rpmbuild_CentOS && bash make.sh

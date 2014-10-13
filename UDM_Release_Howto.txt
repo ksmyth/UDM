@@ -18,7 +18,7 @@ svn cp -m 'Tag release 3.2.13' https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/
 
 
 
-for url in http://build.isis.vanderbilt.edu/job/UDM/label=build-slave9/lastSuccessfulBuild/console http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/console http://build.isis.vanderbilt.edu/job/UDM_vc11/label=build-slave11/lastBuild/console;
+for url in http://build.isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/console http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/console http://build.isis.vanderbilt.edu/job/UDM_vc11/label=build-slave11/lastBuild/console;
 do
  curl -s "$url" | grep "Finding ID" | sed 's/Finding ID...  //' | sed 's/copy_pdbs.py: symstore://'
 done | xargs 
@@ -26,7 +26,7 @@ For "Finding ID" in Udm (x3), Udm_x64 (x2): ssh kms1 cd symbolstmp '&&' python \
 for file in 0000009647 0000009648 0000009642 0000009643 0000009644; do perl -pli -e 'foreach $f (qw/Udm.exe UdmSwig.dll MetaGME2UML.pdb MetaGME2Uml.dll Udmd.pdb UDMOclPat.exe UDMOclPat.pdb/) { s/$f/$f/ig; }' 000Admin/$file; done
 curl -o UDM_x64-3.2.13.msi http://build.isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi &&
 curl -o UDM-3.2.13.msi http://build.isis.vanderbilt.edu/job/UDM_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
-for file in http://build.isis.vanderbilt.edu/job/UDM/label=build-slave9/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do curl -O "$file"; done
+for file in http://build.isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do curl -O "$file"; done
 (mkdir -p ubuntu10.04 && cd ubuntu10.04 &&
 curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04/lastSuccessfulBuild/artifact/udm_3.2.13-1_i386.deb &&
 curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04/lastSuccessfulBuild/artifact/udm-dev_3.2.13-1_i386.deb
@@ -75,43 +75,9 @@ ssh ksmyth@repo.isis.vanderbilt.edu chmod -R a+r /project/www/Download/GReAT/1.7
 # For Udm and GReAT
 # JIRA: make release
 # email announcement
-# change http://kms1/svn/installs/install.py sync to installs/install.exe, https://svn.isis.vanderbilt.edu/isis-common/trunk/common-scripts/install.exe
-# upgrade on build machines
-
-
-# GME Release
-Release notes: Doc/README_in.txt
-Version number: Doc/index.md
-curl -s -S http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/lastBuild/consoleText | grep Finding\ ID
-curl -s -S http://build.isis.vanderbilt.edu/job/GME_x64/lastBuild/label=build-slave6/consoleText | grep Finding\ ID
-ssh kms1 'cd symbolstmp && python ~/bin/pdb_promote.py 0000009304  0000009305' # x2 "Finding ID"
-ssh kms1 rsync -avP symbols /media/7ce1528b-2101-4764-81e3-aed9112e3ad8/214/
-export PATH=$PATH:/c/cygwin/bin:"/c/Program Files/7-Zip/:/cygdrive/c/Program Files/7-Zip/"
-curl -o GME_x64-14.2.24.msi http://build.isis.vanderbilt.edu/job/GME_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/Install/GME_x64.msi && \
-curl -o GME-14.2.24.msi http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/lastSuccessfulBuild/artifact/trunk/Install/GME.msi && \
-curl -o README.txt http://build.isis.vanderbilt.edu/job/GME/label=build-slave9/ws/trunk/Doc/README.txt
-
-for file in http://build.isis.vanderbilt.edu/job/GME_x64/lastSuccessfulBuild/label=build-slave6/artifact/trunk/Install/GME_bin_x64.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_bin.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_paradigms.msm http://build.isis.vanderbilt.edu/job/GME/lastSuccessfulBuild/label=build-slave9/artifact/trunk/Install/GME_SDK.msm; do curl -O $file; done
-
-svn cp -m 'Tag Release 14.2.24' https://svn.isis.vanderbilt.edu/GMESRC/trunk https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_14.2.24
-svn export https://svn.isis.vanderbilt.edu/GMESRC/tags/Release_14.2.24 GME-14.2.24_src && \
-7z.exe a GME-14.2.24_src.zip GME-14.2.24_src/
-
-ssh repo@repo.isis.vanderbilt.edu mkdir GME/14.2.24/ && \
-scp README.txt GME-14.2.24.msi GME_x64-14.2.24.msi GME-14.2.24_src.zip repo@repo.isis.vanderbilt.edu:GME/14.2.24/ && \
-ssh repo@repo.isis.vanderbilt.edu chmod -R a+r GME/14.2.24/
-
-
-# Update online documentation:
-cd Doc
-C:\Users\kevin\Downloads\markdown\Scripts\python -m markdown index.md > index.html
-ssh kms1 sudo mount -t davfs -o uid=1000 https://forge.isis.vanderbilt.edu/gme/dav/ gmedav
-rsync --chmod=ugo+xr,u+w,o-w --perms --delete --delete-excluded -avP . --include=/Tutorial** --include google3a6cca9137b58176.html --include=index.html --include=markdown.css --include='*/' --include='**GME Manual and User Guide.pdf' --exclude=*  kms1:gmedav/www/
-
-
-# JIRA: make release
-# update https://svn.isis.vanderbilt.edu/isis-common/installs/install.py
+# change https://svn.isis.vanderbilt.edu/isis-common/installs/install.py sync to installs/install.exe, https://svn.isis.vanderbilt.edu/isis-common/trunk/common-scripts/install.exe
 #  c:\Python27\python.exe install_setup.py py2exe && move /y dist\install.exe .\install.exe
+# upgrade on build machines
 
 Check for missing symbols
 set _NT_SYMBOL_PATH=C:\Windows\symbols\dll;C:\Windows\system32;srv*c:\symbols*http://symbols.isis.vanderbilt.edu/;srv*c:\symbols*http://msdl.microsoft.com/download/symbols
