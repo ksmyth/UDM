@@ -10,6 +10,13 @@ sudo docker run -d --name udm-12.04 udm-12.04-build
 sudo docker run -d --name udm-12.04-x86 udm-12.04-x86-build
 sudo docker run -d --name udm-14.04-x86 udm-14.04-x86-build
 
+After a host reboot:
+sudo docker start udm-14.04
+sudo docker start udm-12.04
+sudo docker start udm-12.04-x86
+sudo docker start udm-14.04-x86
+
+
 # HOWTO: create x86 docker ubuntu image
 wget https://github.com/docker/docker/raw/master/contrib/mkimage-debootstrap.sh
 sudo apt-get install debootstrap
