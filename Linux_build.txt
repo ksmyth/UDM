@@ -99,7 +99,7 @@ fakeroot debian/rules binary
 
 Building on Ubuntu 12.04 (Precise):
 ----------------------------------------------
-sudo apt-get install -y fakeroot debhelper build-essential autoconf libtool libxerces-c2-dev autotools-dev ccache libcppunit-dev libxalan110-dev ant junit ant-optional pccts libboost-dev zlib1g-dev swig openjdk-6-jdk libboost-python-dev
+sudo apt-get install -y fakeroot debhelper build-essential autoconf libtool libxerces-c2-dev autotools-dev ccache libcppunit-dev libxalan110-dev ant junit ant-optional pccts libboost-dev zlib1g-dev swig openjdk-6-jdk libboost-python-dev libjson-spirit-dev
 # Obtain model-files.zip as above or:
 wget 'http://build.isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/artifact/trunk/model-files-VC10-Release.zip' -O model-files.zip
 # Build binary debs
@@ -107,7 +107,7 @@ fakeroot debian/rules binary
 
 Building on Ubuntu 14.04 (Trusty):
 ----------------------------------------------
-sudo apt-get install -y libjson-spirit-dev wget unzip fakeroot debhelper build-essential autoconf libtool libxalan-c-dev libxerces-c-dev autotools-dev ccache libcppunit-dev ant junit ant-optional pccts libboost-dev zlib1g-dev swig openjdk-6-jdk libboost-python-dev
+sudo apt-get install -y libjson-spirit-dev wget unzip fakeroot debhelper build-essential autoconf libtool libxalan-c-dev libxerces-c-dev autotools-dev ccache libcppunit-dev ant junit ant-optional pccts libboost-dev zlib1g-dev swig openjdk-6-jdk libboost-python-dev libjson-spirit-dev
 fakeroot debian/rules binary
 
 Building (CentOS)
