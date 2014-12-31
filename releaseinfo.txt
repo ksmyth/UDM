@@ -21,6 +21,8 @@ PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
     - Next Release
+        -   UdmDll is backwards compatible with previous 3.2 releases
+        -   UdmGme: fix getParent with role parameter: check for Folder parent
         -   UdmSwig.dll is compiled with Visual Studio 2010
 
     - Release 3.2.13 (3/19/2014)
