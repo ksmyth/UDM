@@ -16,6 +16,8 @@
   <?define UdmDllVC10=UdmDll_3_2_v100_x64.dll?>
   <?define UdmDllVC11=UdmDll_3_2_v110_x64.dll?>
   <?define UdmDllVC11_Guid='6D4CBBFD-64C3-4E60-AFA6-357B08EFFC17'?>
+  <?define UdmDllVC12=UdmDll_3_2_v120_x64.dll?>
+  <?define UdmDllVC12_Guid='2F2E2D5B-E926-452E-B57C-8ACDED7452F2'?>
   <?define XercesC=xerces-c_2_8_x64.dll?>
   <?define Great_bin=$(var.GREAT_PATH)\bin\x64?>
   <?else ?>
@@ -32,6 +34,8 @@
   <?define UdmDllVC10=UdmDll_3_2_VS10.dll?>
   <?define UdmDllVC11=UdmDll_3_2_v110_Win32.dll?>
   <?define UdmDllVC11_Guid='F5C3661A-80D5-4888-8BAD-F25F8D3A5125'?>
+  <?define UdmDllVC12=UdmDll_3_2_v120_Win32.dll?>
+  <?define UdmDllVC12_Guid='649B8429-62C0-416C-B932-0211592A1572'?>
   <?define XercesC=xerces-c_2_8.dll?>
   <?define Great_bin=$(var.GREAT_PATH)\bin?>
   <?endif ?>
