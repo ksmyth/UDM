@@ -22,7 +22,7 @@
       <?if $(sys.BUILDARCH)=x64?>
       <Component Directory="bin$(sys.BUILDARCH)">
         <File Source="..\Build\x64\v100\Debug\UdmDll_3_2_v100_x64D.dll" />
-        <Environment Id="PATH" Action="set" System="yes" Name="PATH" Value="[bin]" Part="last" />
+        <Environment Id="PATH$(sys.BUILDARCH)" Action="set" System="yes" Name="PATH" Value="[bin$(sys.BUILDARCH)]" Part="last" />
       </Component>
       <?endif?>
       <?if $(sys.BUILDARCH)=x86 ?>
@@ -47,7 +47,7 @@
       <Component Directory="bin$(sys.BUILDARCH)">
         <File Source="..\Build\Win32\VC10\Release\Udm.exe" Id="Udm.exe$(sys.BUILDARCH)"/>
         <Environment Id="UDM_PATH$(sys.BUILDARCH)" Action="set" System="yes" Name="UDM_PATH" Value="[INSTALLDIR]" />
-        <Environment Id="PATH$(sys.BUILDARCH)" Action="set" System="yes" Name="PATH" Value="[bin]" Part="last" />
+        <Environment Id="PATH$(sys.BUILDARCH)" Action="set" System="yes" Name="PATH" Value="[bin$(sys.BUILDARCH)]" Part="last" />
       </Component>
       <Component Directory="bin$(sys.BUILDARCH)">
         <File Source="..\Build\Win32\VC10\Release\UdmCopy.exe" />
