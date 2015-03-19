@@ -6,6 +6,10 @@ function OnFinish(selProj, selObj)
             // reuse OnFinish100 function
 		    OnFinish100(selProj, selObj);
 		}
+		else if (dte.Version == '11.0') {
+			// reuse OnFinish100 function
+		    OnFinish100(selProj, selObj);
+		}
         else if (dte.Version == '10.0') {
 		    OnFinish100(selProj, selObj);
 		}
