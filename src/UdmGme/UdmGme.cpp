@@ -625,16 +625,20 @@ namespace UdmGme
 			IMgaFCOsPtr references;
 
 			SmartBSTR src_role_name = conn->RegistryValue[L"sRefParent"];
-			HRESULT (__stdcall IMgaSimpleConnection::*fn)(IMgaFCOs**);
-			if (!src_role_name) {
+			HRESULT (__stdcall IMgaSimpleConnection::*fn)(IMgaFCOs**) = NULL;
+
+			if (!!src_role_name && role_name.compare(src_role_name) == 0) {
+				fn = &IMgaSimpleConnection::get_SrcReferences;
+			}
+			if (!fn) {
 				SmartBSTR dst_role_name = conn->RegistryValue[L"dRefParent"];
-				if (!dst_role_name)
+				if (!!dst_role_name && role_name.compare(dst_role_name) == 0)
 				{
-					return;
+					fn = &IMgaSimpleConnection::get_DstReferences;
 				}
-				fn = role_name.compare(dst_role_name) == 0 ? &IMgaSimpleConnection::get_DstReferences : &IMgaSimpleConnection::get_SrcReferences;
-			} else {
-				fn = role_name.compare(src_role_name) == 0 ? &IMgaSimpleConnection::get_SrcReferences : &IMgaSimpleConnection::get_DstReferences;
+			}
+			if (!fn) {
+				return;
 			}
 			{
 				struct IMgaFCOs * _result = 0;

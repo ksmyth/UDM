@@ -148,10 +148,14 @@ void UdmTests::refPortsTest::testRefPorts(const string &file)
 	CPPUNIT_ASSERT_EQUAL((size_t)1, conns.size());
 	CPPUNIT_ASSERT_EQUAL(c, *conns.begin());
 
+	std::set<C2> conns2;
 	BRef bref1_ = BRef::Cast(c.b_end__rp_container());
 	conns = bref1_.b_end__rp_container_rev();
 	CPPUNIT_ASSERT_EQUAL((size_t)1, conns.size());
 	CPPUNIT_ASSERT_EQUAL(c, *conns.begin());
+	conns2 = bref1_.dstC2_refport_parent_rev();
+	CPPUNIT_ASSERT_EQUAL((size_t)0, conns2.size());
+
 
 #if 0
 	// what should happen when the reference port is connected and the
