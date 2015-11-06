@@ -149,6 +149,13 @@ void ClassGen::Basic(const InheritanceSolver &is)
 	// C& C::operator=(C &&a) { ::Udm::Object::operator =(std::move(a)); return *this; }
 	meth_rvalue_defs.push_back( boost::format("%1%& %1%::operator=(%1% &&a) { ::Udm::Object::operator =(std::move(a)); return *this; }") % cl_name );
 
+	// "A implicitly-declared copy assignment operator for class T is defined as deleted if any of the following is true:
+	// ... T has a user-declared move assignment operator"
+	// C& operator=(const C &a)
+	meth_rvalue_decls.push_back(boost::format("%1%& operator=(const %1% &a)") % cl_name);
+	// C& C::operator=(const C &a) { ::Udm::Object::operator =(std::move(a)); return *this; }
+	meth_rvalue_defs.push_back(boost::format("%1%& %1%::operator=(const %1% &a) { ::Udm::Object::operator =(a); return *this; }") % cl_name);
+
 	// static C Cast(const ::Udm::Object &a)
 	meth_decls.push_back( boost::format("static %1% Cast(const ::Udm::Object &a)") % cl_name );
 	// static C C::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }

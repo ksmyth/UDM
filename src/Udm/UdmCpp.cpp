@@ -307,7 +307,8 @@ vector<boost::format> UdmGen::HPreamble(const string &fname) const
 
 	vector<boost::format> r;
 
-	r.push_back( boost::format("#ifndef %1%\n\
+    r.push_back( boost::format("#pragma once\n\
+#ifndef %1%\n\
 #define %1%\n\
 \n\
 // header file %2%.h generated from diagram %3%\n\
