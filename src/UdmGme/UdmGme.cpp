@@ -2805,7 +2805,7 @@ bbreak:			;
 
 	string UdmId2GmeId(uniqueId_type udmId) {
 		char buffer[24];
-		sprintf_s(buffer, "id-%04x-%08x", udmId / 100000000 + 100, udmId % 100000000);
+		sprintf_s(buffer, "id-%04x-%08x", (unsigned int)(udmId / 100000000 + 100), (unsigned int)(udmId % 100000000));
 		return string(buffer);
 	}
 
@@ -4057,7 +4057,7 @@ bbreak:			;
 			int kindcode = id/100000000;
 			if(kindcode < OBJTYPE_MODEL || kindcode  > OBJTYPE_FOLDER)
 				return NULL;
-			sprintf(buf, "id-%04lx-%08lx", kindcode + 100 ,  id%100000000);
+			sprintf(buf, "id-%04lx-%08lx", kindcode + 100, (unsigned int)(id % 100000000));
 			
 			IMgaObjectPtr obj;
 			/*
