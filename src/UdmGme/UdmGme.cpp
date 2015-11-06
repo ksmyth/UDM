@@ -3867,27 +3867,6 @@ bbreak:			;
 		return ret;
 	}
 
-		void CheckVersion(IMgaProject *p) {
-		// IGMEVersionInfo and IMgaVersionInfo have the same GUID and vtable definition, so this works across versions
-#ifdef GME_VS10
-		MGACoreLib::IGMEVersionInfoPtr vi = p;
-		MGACoreLib::GMEInterfaceVersion_enum v = MGACoreLib::GMEInterfaceVersion_None;
-		if (vi) COMTHROW(vi->get_version(&v));
-		MGACoreLib::GMEInterfaceVersion_enum current = MGACoreLib::GMEInterfaceVersion_Current;
-#else
-		GmeLib::IMgaVersionInfoPtr vi=p;
-		GmeLib::MgaInterfaceVersion_enum v = GmeLib::MgaInterfaceVersion_None;
-		if(vi) COMTHROW(vi->get_Version(&v));
-		GmeLib::MgaInterfaceVersion_enum current = GmeLib::MgaInterfaceVersion_Current;
-#endif
-		if (v != current) {
-			char buf[200]; 
-			sprintf(buf, "Incompatible GME version GME:%X UDM:%X", v, current);
-			throw udm_exception(buf);
-		}
-	}
-	
-	
 	SmartBSTR createGMEconnstr(string sn) {
 		if(!_strnicmp(sn.c_str(),"GME:", 4))	sn.erase(0,4);
 		if(sn[3] != '=' && !_strnicmp(sn.c_str() + sn.size() - 4 , ".mga",4)) {
@@ -3949,7 +3928,6 @@ bbreak:			;
 		semantics = sem;
 		IMgaProjectPtr  &project = priv.project;
 		COMTHROW(project.CreateInstance(OLESTR("Mga.MgaProject"), 0, CLSCTX_INPROC));
-		CheckVersion(project);
 		VARIANT_BOOL ro;
 		try {
 			COMTHROW(project->Open( createGMEconnstr(systemname), &ro));
@@ -3985,7 +3963,6 @@ bbreak:			;
 		semantics = sem;
 		IMgaProjectPtr  &project = priv.project;
 		COMTHROW(project.CreateInstance(OLESTR("MGA.MgaProject"), 0, CLSCTX_INPROC));
-		CheckVersion(project);
 		try {
 			COMTHROW(project->Create( createGMEconnstr(systemname), SmartBSTR(metalocator.c_str())));
 		} catch (udm_exception e) {
