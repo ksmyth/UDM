@@ -1,17 +1,18 @@
+#pragma once
 #ifndef MOBIES_UDMPROJECT_H
 #define MOBIES_UDMPROJECT_H
 
 // header file UdmProject.h generated from diagram UdmProject
-// generated with Udm version 3.29 on Mon Nov 21 10:43:35 2011
+// generated with Udm version 3.33 on Thu Nov 05 17:19:40 2015
 
 #include <UdmBase.h>
 
 #if !defined(UDM_VERSION_MAJOR) || !defined(UDM_VERSION_MINOR)
 #    error "Udm headers too old, they do not define UDM_VERSION"
 #elif UDM_VERSION_MAJOR < 3
-#    error "Udm headers too old, minimum version required 3.29"
-#elif UDM_VERSION_MAJOR == 3 && UDM_VERSION_MINOR < 29
-#    error "Udm headers too old, minimum version required 3.29"
+#    error "Udm headers too old, minimum version required 3.33"
+#elif UDM_VERSION_MAJOR == 3 && UDM_VERSION_MINOR < 33
+#    error "Udm headers too old, minimum version required 3.33"
 #endif
 
 #include <Uml.h>
@@ -46,6 +47,7 @@ namespace UdmProject {
 
 		static Datanetwork Cast(::Udm::Object &&a);
 		Datanetwork& operator=(Datanetwork &&a);
+		Datanetwork& operator=(const Datanetwork &a);
 
 #endif
 		static Datanetwork Cast(const ::Udm::Object &a);
@@ -86,6 +88,7 @@ namespace UdmProject {
 
 		static Project Cast(::Udm::Object &&a);
 		Project& operator=(Project &&a);
+		Project& operator=(const Project &a);
 
 #endif
 		static Project Cast(const ::Udm::Object &a);

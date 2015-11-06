@@ -1,6 +1,6 @@
 // cpp (meta datanetwork format) source file Uml.cpp
 // generated from diagram Uml
-// generated on Mon Nov 21 10:42:57 2011
+// generated on Thu Nov 05 17:19:40 2015
 
 #include "Uml.h"
 #include <UmlExt.h>
@@ -21,6 +21,7 @@ namespace Uml {
 
 	CompositionChildRole CompositionChildRole::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	CompositionChildRole& CompositionChildRole::operator=(CompositionChildRole &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	CompositionChildRole& CompositionChildRole::operator=(const CompositionChildRole &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	CompositionChildRole CompositionChildRole::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -50,6 +51,7 @@ namespace Uml {
 
 	GenericRole GenericRole::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	GenericRole& GenericRole::operator=(GenericRole &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	GenericRole& GenericRole::operator=(const GenericRole &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	GenericRole GenericRole::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -76,6 +78,7 @@ namespace Uml {
 
 	CompositionParentRole CompositionParentRole::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	CompositionParentRole& CompositionParentRole::operator=(CompositionParentRole &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	CompositionParentRole& CompositionParentRole::operator=(const CompositionParentRole &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	CompositionParentRole CompositionParentRole::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -101,6 +104,7 @@ namespace Uml {
 
 	AssociationRole AssociationRole::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	AssociationRole& AssociationRole::operator=(AssociationRole &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	AssociationRole& AssociationRole::operator=(const AssociationRole &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	AssociationRole AssociationRole::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -136,6 +140,7 @@ namespace Uml {
 
 	Class Class::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	Class& Class::operator=(Class &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	Class& Class::operator=(const Class &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	Class Class::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -193,6 +198,7 @@ namespace Uml {
 
 	Diagram Diagram::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	Diagram& Diagram::operator=(Diagram &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	Diagram& Diagram::operator=(const Diagram &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	Diagram Diagram::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -231,6 +237,7 @@ namespace Uml {
 
 	Association Association::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	Association& Association::operator=(Association &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	Association& Association::operator=(const Association &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	Association Association::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -269,6 +276,7 @@ namespace Uml {
 
 	Composition Composition::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	Composition& Composition::operator=(Composition &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	Composition& Composition::operator=(const Composition &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	Composition Composition::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -305,6 +313,7 @@ namespace Uml {
 
 	Namespace Namespace::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	Namespace& Namespace::operator=(Namespace &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	Namespace& Namespace::operator=(const Namespace &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	Namespace Namespace::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -344,6 +353,7 @@ namespace Uml {
 
 	TaggedValue TaggedValue::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	TaggedValue& TaggedValue::operator=(TaggedValue &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	TaggedValue& TaggedValue::operator=(const TaggedValue &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	TaggedValue TaggedValue::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -374,6 +384,7 @@ namespace Uml {
 
 	ConstraintDefinition ConstraintDefinition::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	ConstraintDefinition& ConstraintDefinition::operator=(ConstraintDefinition &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	ConstraintDefinition& ConstraintDefinition::operator=(const ConstraintDefinition &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	ConstraintDefinition ConstraintDefinition::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -407,6 +418,7 @@ namespace Uml {
 
 	Attribute Attribute::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	Attribute& Attribute::operator=(Attribute &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	Attribute& Attribute::operator=(const Attribute &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	Attribute Attribute::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -448,6 +460,7 @@ namespace Uml {
 
 	Constraint Constraint::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	Constraint& Constraint::operator=(Constraint &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	Constraint& Constraint::operator=(const Constraint &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	Constraint Constraint::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }

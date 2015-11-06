@@ -3,7 +3,7 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
  elementFormDefault="qualified" 
 >
-<!-- generated on Mon Nov 21 10:42:57 2011 -->
+<!-- generated on Thu Nov 05 17:19:40 2015 -->
 
 
 	<xsd:complexType name="CompositionChildRoleType">
@@ -12,6 +12,18 @@
 		<xsd:attribute name="isNavigable" type="xsd:boolean" default="true"/>
 		<xsd:attribute name="name" type="xsd:string"/>
 		<xsd:attribute name="target" type="xsd:IDREF" use="required"/>
+		<xsd:attribute name="_id" type="xsd:ID"/>
+		<xsd:attribute name="_archetype" type="xsd:IDREF"/>
+		<xsd:attribute name="_derived" type="xsd:IDREFS"/>
+		<xsd:attribute name="_instances" type="xsd:IDREFS"/>
+		<xsd:attribute name="_desynched_atts" type="xsd:string"/>
+		<xsd:attribute name="_real_archetype" type="xsd:boolean"/>
+		<xsd:attribute name="_subtype" type="xsd:boolean"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="GenericRoleType">
+		<xsd:attribute name="isNavigable" type="xsd:boolean" default="true"/>
+		<xsd:attribute name="name" type="xsd:string"/>
 		<xsd:attribute name="_id" type="xsd:ID"/>
 		<xsd:attribute name="_archetype" type="xsd:IDREF"/>
 		<xsd:attribute name="_derived" type="xsd:IDREFS"/>

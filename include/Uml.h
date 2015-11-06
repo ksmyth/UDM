@@ -1,17 +1,18 @@
+#pragma once
 #ifndef MOBIES_UML_H
 #define MOBIES_UML_H
 
 // header file Uml.h generated from diagram Uml
-// generated with Udm version 3.29 on Mon Nov 21 10:42:57 2011
+// generated with Udm version 3.33 on Thu Nov 05 17:19:40 2015
 
 #include <UdmBase.h>
 
 #if !defined(UDM_VERSION_MAJOR) || !defined(UDM_VERSION_MINOR)
 #    error "Udm headers too old, they do not define UDM_VERSION"
 #elif UDM_VERSION_MAJOR < 3
-#    error "Udm headers too old, minimum version required 3.29"
-#elif UDM_VERSION_MAJOR == 3 && UDM_VERSION_MINOR < 29
-#    error "Udm headers too old, minimum version required 3.29"
+#    error "Udm headers too old, minimum version required 3.33"
+#elif UDM_VERSION_MAJOR == 3 && UDM_VERSION_MINOR < 33
+#    error "Udm headers too old, minimum version required 3.33"
 #endif
 
 #include <Uml.h>
@@ -59,6 +60,7 @@ namespace Uml {
 
 		static GenericRole Cast(::Udm::Object &&a);
 		GenericRole& operator=(GenericRole &&a);
+		GenericRole& operator=(const GenericRole &a);
 
 #endif
 		static GenericRole Cast(const ::Udm::Object &a);
@@ -91,6 +93,7 @@ namespace Uml {
 
 		static CompositionChildRole Cast(::Udm::Object &&a);
 		CompositionChildRole& operator=(CompositionChildRole &&a);
+		CompositionChildRole& operator=(const CompositionChildRole &a);
 
 #endif
 		static CompositionChildRole Cast(const ::Udm::Object &a);
@@ -126,6 +129,7 @@ namespace Uml {
 
 		static CompositionParentRole Cast(::Udm::Object &&a);
 		CompositionParentRole& operator=(CompositionParentRole &&a);
+		CompositionParentRole& operator=(const CompositionParentRole &a);
 
 #endif
 		static CompositionParentRole Cast(const ::Udm::Object &a);
@@ -157,6 +161,7 @@ namespace Uml {
 
 		static AssociationRole Cast(::Udm::Object &&a);
 		AssociationRole& operator=(AssociationRole &&a);
+		AssociationRole& operator=(const AssociationRole &a);
 
 #endif
 		static AssociationRole Cast(const ::Udm::Object &a);
@@ -198,6 +203,7 @@ namespace Uml {
 
 		static Class Cast(::Udm::Object &&a);
 		Class& operator=(Class &&a);
+		Class& operator=(const Class &a);
 
 #endif
 		static Class Cast(const ::Udm::Object &a);
@@ -274,6 +280,7 @@ namespace Uml {
 
 		static Diagram Cast(::Udm::Object &&a);
 		Diagram& operator=(Diagram &&a);
+		Diagram& operator=(const Diagram &a);
 
 #endif
 		static Diagram Cast(const ::Udm::Object &a);
@@ -326,6 +333,7 @@ namespace Uml {
 
 		static Association Cast(::Udm::Object &&a);
 		Association& operator=(Association &&a);
+		Association& operator=(const Association &a);
 
 #endif
 		static Association Cast(const ::Udm::Object &a);
@@ -375,6 +383,7 @@ namespace Uml {
 
 		static Composition Cast(::Udm::Object &&a);
 		Composition& operator=(Composition &&a);
+		Composition& operator=(const Composition &a);
 
 #endif
 		static Composition Cast(const ::Udm::Object &a);
@@ -420,6 +429,7 @@ namespace Uml {
 
 		static Namespace Cast(::Udm::Object &&a);
 		Namespace& operator=(Namespace &&a);
+		Namespace& operator=(const Namespace &a);
 
 #endif
 		static Namespace Cast(const ::Udm::Object &a);
@@ -473,6 +483,7 @@ namespace Uml {
 
 		static TaggedValue Cast(::Udm::Object &&a);
 		TaggedValue& operator=(TaggedValue &&a);
+		TaggedValue& operator=(const TaggedValue &a);
 
 #endif
 		static TaggedValue Cast(const ::Udm::Object &a);
@@ -509,6 +520,7 @@ namespace Uml {
 
 		static ConstraintDefinition Cast(::Udm::Object &&a);
 		ConstraintDefinition& operator=(ConstraintDefinition &&a);
+		ConstraintDefinition& operator=(const ConstraintDefinition &a);
 
 #endif
 		static ConstraintDefinition Cast(const ::Udm::Object &a);
@@ -548,6 +560,7 @@ namespace Uml {
 
 		static Attribute Cast(::Udm::Object &&a);
 		Attribute& operator=(Attribute &&a);
+		Attribute& operator=(const Attribute &a);
 
 #endif
 		static Attribute Cast(const ::Udm::Object &a);
@@ -595,6 +608,7 @@ namespace Uml {
 
 		static Constraint Cast(::Udm::Object &&a);
 		Constraint& operator=(Constraint &&a);
+		Constraint& operator=(const Constraint &a);
 
 #endif
 		static Constraint Cast(const ::Udm::Object &a);

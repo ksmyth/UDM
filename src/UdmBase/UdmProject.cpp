@@ -1,6 +1,6 @@
 // cpp (meta datanetwork format) source file UdmProject.cpp
 // generated from diagram UdmProject
-// generated on Mon Nov 21 10:43:35 2011
+// generated on Thu Nov 05 17:19:40 2015
 
 #include "UdmProject.h"
 #include <UmlExt.h>
@@ -21,6 +21,7 @@ namespace UdmProject {
 
 	Datanetwork Datanetwork::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	Datanetwork& Datanetwork::operator=(Datanetwork &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	Datanetwork& Datanetwork::operator=(const Datanetwork &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	Datanetwork Datanetwork::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
@@ -55,6 +56,7 @@ namespace UdmProject {
 
 	Project Project::Cast(::Udm::Object &&a) { return __Cast(std::move(a), meta); };
 	Project& Project::operator=(Project &&a) { ::Udm::Object::operator =(std::move(a)); return *this; };
+	Project& Project::operator=(const Project &a) { ::Udm::Object::operator =(a); return *this; };
 
 #endif
 	Project Project::Cast(const ::Udm::Object &a) { return __Cast(a, meta); }
