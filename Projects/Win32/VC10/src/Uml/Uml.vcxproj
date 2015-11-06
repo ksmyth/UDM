@@ -350,7 +350,7 @@ move Uml_xsd.h ..\..\..\..\..\..\src\Uml
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|Win32'">$(OutDir)..\Gen\src\$(ProjectName)\Uml.cpp;$(OutDir)..\Gen\src\$(ProjectName)\Uml.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml_export.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml.xsd;$(OutDir)..\Gen\src\$(ProjectName)\Uml_xsd.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Debug|x64'">$(OutDir)..\Gen\src\$(ProjectName)\Uml.cpp;$(OutDir)..\Gen\src\$(ProjectName)\Uml.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml_export.h;$(OutDir)..\Gen\src\$(ProjectName)\Uml.xsd;$(OutDir)..\Gen\src\$(ProjectName)\Uml_xsd.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">"$(OutDir)..\Release\Udm.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m  -l UDM_DLL
+      <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|Win32'">"%UDM_PATH%\bin\Udm.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m  -l UDM_DLL
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='BootUdmCompile Release|x64'">"$(OutDir)..\Release\Udm.exe" -o "$(OutDir)..\Gen\src\$(ProjectName)" "%(FullPath)" -g -m  -l UDM_DLL
 </Command>
