@@ -32,7 +32,7 @@
 
 //so-called error handling 
 
-void comthrow(HRESULT res, char *e, int l);
+void comthrow(HRESULT res, const char *e, int l);
 #define COMTHROW(expr) comthrow(expr, #expr, __LINE__)
 
 class gme_exc : public udm_exception 
@@ -43,7 +43,7 @@ public:
 };
 
 
-static void comthrow(HRESULT res, char *e, int l) 
+static void comthrow(HRESULT res, const char *e, int l) 
 {
 	if (FAILED(res))
 		UdmGme::com_exception(res, NULL);
