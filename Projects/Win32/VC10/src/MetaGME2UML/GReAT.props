@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <GREAT_BIN>$(GREAT_PATH)\bin</GREAT_BIN>
+    <GREAT_LIB>$(GREAT_PATH)\lib</GREAT_LIB>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="GREAT_BIN">
+      <Value>$(GREAT_BIN)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GREAT_LIB">
+      <Value>$(GREAT_LIB)</Value>
+    </BuildMacro>
+  </ItemGroup>
+  <ItemDefinitionGroup>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(GREAT_PATH)\etc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

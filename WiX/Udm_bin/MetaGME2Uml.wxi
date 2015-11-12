@@ -7,7 +7,7 @@
 <Fragment>
 <ComponentGroup Id="MetaGME2Uml$(sys.BUILDARCH)">
   <Component Id="MetaGME2Uml.dll$(sys.BUILDARCH)" Directory="bin$(sys.BUILDARCH)">
-    <File Source="$(var.Great_bin)\MetaGME2Uml.dll" Id="MetaGME2Uml.dll$(sys.BUILDARCH)">
+    <File Source="..\Projects\Win32\VC10\src\MetaGME2UML\$(sys.BUILDARCH)\Release\MetaGME2Uml.dll" Id="MetaGME2Uml.dll$(sys.BUILDARCH)">
       <TypeLib Id="18213F2B-8BA4-451D-831C-C3FAB10AA4B7" Description="MGA Interpreter TypeLibrary (MetaGME2Uml)" Language="0" MajorVersion="1" MinorVersion="0">
         <Class Id="{2FB04482-C9BC-4574-B933-51A007FFB07C}" Context="InprocServer32" Description="MGA.Interpreter.MetaGME2Uml">
           <ProgId Id="MGA.Interpreter.MetaGME2Uml" Description="MGA.Interpreter.MetaGME2Uml" />

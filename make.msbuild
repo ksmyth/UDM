@@ -31,6 +31,7 @@
     <MSBuild Projects="Projects\Win32\VC10\src\Udm.sln" Targets="Build" Properties="Configuration=Release" />
     <MSBuild Projects="Projects\Win32\VC10\src\UdmCli.sln" Targets="Build" Properties="Configuration=Release" />
     <MSBuild Projects="Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj" Targets="Build" Properties="Configuration=Release27" />
+    <MSBuild Projects="Projects\Win32\VC10\src\MetaGME2UML\MetaGME2UML_interpreterVS2010.sln" Targets="Build" Properties="Configuration=Release" />
   </Target>
   <Target Name="TestVS10">
     <MSBuild Projects="Projects\Win32\VC10\tests\UdmTests.sln" Targets="Build" Properties="Configuration=Debug" />
@@ -39,6 +40,7 @@
   <Target Name="BuildVS10_x64" DependsOnTargets="CheckEnv">
     <MSBuild Projects="Projects\Win32\VC10\src\Udm.sln" Targets="Build" Properties="Configuration=Debug;Platform=x64" />
     <MSBuild Projects="Projects\Win32\VC10\src\Udm.sln" Targets="Build" Properties="Configuration=Release;Platform=x64" />
+    <MSBuild Projects="Projects\Win32\VC10\src\MetaGME2UML\MetaGME2UML_interpreterVS2010.sln" Targets="Build" Properties="Configuration=Release;Platform=x64" />
   </Target>
   <Target Name="TestVS10_x64" DependsOnTargets="CheckEnv">
     <MSBuild Projects="Projects\Win32\VC10\tests\UdmTests.sln" Targets="Build" Properties="Configuration=Debug;Platform=x64" />
