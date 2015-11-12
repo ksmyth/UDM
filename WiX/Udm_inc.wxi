@@ -21,7 +21,6 @@
   <?define UdmDllVC14=UdmDll_3_2_v140_x64.dll?>
   <?define UdmDllVC14_Guid='9587AC49-4C39-4673-A6C2-E2FBDD201136'?>
   <?define XercesC=xerces-c_2_8_x64.dll?>
-  <?define Great_bin=$(var.GREAT_PATH)\bin\x64?>
   <?else ?>
   <?define UpgradeCode='D656A56A-F239-4B35-865C-840B1EA235E0'?>
   <?define xerces_c_Package_Id='0CF60AD2-F0AD-456A-8B93-05FA971AC640'?>
@@ -41,6 +40,5 @@
   <?define UdmDllVC14=UdmDll_3_2_v140_Win32.dll?>
   <?define UdmDllVC14_Guid='BBEE6C4F-971E-49A5-A36F-41D7AA191BD9'?>
   <?define XercesC=xerces-c_2_8.dll?>
-  <?define Great_bin=$(var.GREAT_PATH)\bin?>
   <?endif ?>
 </Include>

@@ -62,7 +62,7 @@ def build(sourcedir, arch, msi=False):
     if len(sources) == 0:
         raise Exception("0 sources found in " + sourcedir)
 
-    defines = [('GREAT_PATH', os.environ.get('GREAT_PATH', 'GREAT_PATH'))]
+    defines = []
 
     for source in sources:
         #arch = [ '-arch', ('x86' if source.find('x64') == -1 else 'x64') ]
