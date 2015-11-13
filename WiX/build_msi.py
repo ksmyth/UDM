@@ -3,7 +3,6 @@
 import sys
 import os
 import os.path
-import win32com.client
 
 prefs = { 'verbose': True }
 
@@ -11,9 +10,9 @@ os.environ['PATH'] = os.environ['PATH'].replace('"', '')
 
 def add_wix_to_path():
     import _winreg
-    for wix_ver in ('3.5', '3.6', '3.7', '3.8'):
+    for wix_ver in ('3.5', '3.6', '3.7', '3.8', '3.9', '3.10'):
         try:
-            with _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE\\Microsoft\\Windows Installer XML\\' + wix_ver) as wixkey:
+            with _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, 'SOFTWARE\\Microsoft\\Windows Installer XML\\' + wix_ver, 0, _winreg.KEY_READ | _winreg.KEY_WOW64_32KEY) as wixkey:
                 os.environ['PATH'] = _winreg.QueryValueEx(wixkey, 'InstallRoot')[0] + ';' + os.environ['PATH']
         except Exception as e:
             pass
@@ -63,7 +62,7 @@ def build(sourcedir, arch, msi=False):
     if len(sources) == 0:
         raise Exception("0 sources found in " + sourcedir)
 
-    defines = [('GREAT_PATH',  os.environ['GREAT_PATH'])]
+    defines = [('GREAT_PATH', os.environ.get('GREAT_PATH', 'GREAT_PATH'))]
 
     for source in sources:
         #arch = [ '-arch', ('x86' if source.find('x64') == -1 else 'x64') ]

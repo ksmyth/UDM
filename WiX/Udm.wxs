@@ -129,8 +129,10 @@
       <ComponentGroupRef Id='UdmDll_VS10x86' />
       <ComponentGroupRef Id='UdmDll_VC11x86' />
       <ComponentGroupRef Id='UdmDll_VC12x86' />
+      <ComponentGroupRef Id='UdmDll_VC14x86' />
       <ComponentGroupRef Id='UdmSDK_VC11x86' />
       <ComponentGroupRef Id='UdmSDK_VC12x86' />
+      <ComponentGroupRef Id='UdmSDK_VC14x86' />
       <?if $(sys.BUILDARCH)=x64 ?>
       <ComponentGroupRef Id='xerces_cx64'/>
       <ComponentGroupRef Id='Udm_binx64' />
@@ -139,8 +141,10 @@
       <ComponentGroupRef Id='UdmDll_VS10x64' />
       <ComponentGroupRef Id='UdmDll_VC11x64' />
       <ComponentGroupRef Id='UdmDll_VC12x64' />
+      <ComponentGroupRef Id='UdmDll_VC14x64' />
       <ComponentGroupRef Id='UdmSDK_VC11x64' />
       <ComponentGroupRef Id='UdmSDK_VC12x64' />
+      <ComponentGroupRef Id='UdmSDK_VC14x64' />
       <MergeRef Id='CRT100_x86' />
       <MergeRef Id='MFC100_x86' />
       <MergeRef Id='ATL100_x86' />

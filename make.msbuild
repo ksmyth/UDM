@@ -53,7 +53,7 @@
     <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="VisualStudioVersion=11.0;PlatformToolset=v110;Configuration=Release;Platform=x64" />
   </Target>
   <Target Name="BuildVS12" DependsOnTargets="CheckEnv">
-    <!-- invoke: msbuild make.msbuild  /t:BuildVS12;BuildVS12_x64 /p:"VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120" -->
+    <!-- invoke: msbuild make.msbuild  /t:BuildVS12;BuildVS12_x64 /p:"VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120"; -->
     <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v120;Configuration=Debug" />
     <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v120;Configuration=Release" />
   </Target>
@@ -62,7 +62,7 @@
     <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v120;Configuration=Release;Platform=x64" />
   </Target>
   <Target Name="BuildVC14" DependsOnTargets="CheckEnv">
-    <!-- invoke: msbuild make.msbuild /m /t:BuildVC14;BuildVC14_x64 /p:"VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140" -->
+    <!-- invoke: msbuild make.msbuild /m /t:BuildVC14;BuildVC14_x64 /p:"VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140";PlatformToolset=v140 -->
     <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v140;Configuration=Debug" />
     <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v140;Configuration=Release" />
   </Target>

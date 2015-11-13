@@ -11,7 +11,7 @@ NOTE: Udm can also be used on Linux
 2. GME 14, 14.3.5 from: http://repo.isis.vanderbilt.edu/GME/
 NOTE: You need to have administrative privileges to install GME correctly.
 
-3. To develop using UDM: Visual Studio 2008, 2010, or 2012
+3. To develop using UDM: Visual Studio 2008, 2010, 2012, or 2015
    (The UDM library can also be used with Visual Studio 2008 Express Edition or Visual C++ 2010 Express.
     Note that you cannot make GME interpreters with the Express Editions, as they do not include MFC or ATL.
     Please visit http://www.microsoft.com/eXPress/download/#webInstall
