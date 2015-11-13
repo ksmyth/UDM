@@ -359,7 +359,7 @@ void ClassGen::CG<OS_I>::accessChildren( )
         if ( (ccr.max() == -1) || (ccr.max() > 1) )
         {
           m_output << "\t/**" << endl;
-          m_output << "\t * Returns all the children of type <code>" << c_i_name << "<code> of this container. " << endl;
+          m_output << "\t * Returns all the children of type <code>" << c_i_name << "</code> of this container. " << endl;
           m_output << "\t * @return  The children in an array" << endl;
           m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
           m_output << "\t */ " << endl;
@@ -389,7 +389,7 @@ void ClassGen::CG<OS_I>::accessChildren( )
         else
         {
           m_output << "\t/**" << endl;
-          m_output << "\t * Return the child of type <code>" << c_i_name << "<code> of this container. " << endl;
+          m_output << "\t * Return the child of type <code>" << c_i_name << "</code> of this container. " << endl;
           m_output << "\t * @return  The child" << endl;
           m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
           m_output << "\t */ " << endl;
@@ -419,7 +419,7 @@ void ClassGen::CG<OS_I>::accessChildren( )
       {
         //generate a common getter function for these types of children
         m_output << "\t/**" << endl;
-        m_output << "\t * Returns all the children of type <code>" << c_i_name << "<code> of this container. " << endl;
+        m_output << "\t * Returns all the children of type <code>" << c_i_name << "</code> of this container. " << endl;
         m_output << "\t * @return  The children in an array" << endl;
         m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
         m_output << "\t */ " << endl;
@@ -462,8 +462,8 @@ void ClassGen::CG<OS_I>::accessChildren( )
             if ( (ccrs_i->max() == -1) || (ccrs_i->max() > 1) )
             {
               m_output << "\t/**" << endl;
-              m_output << "\t * Returns the children <code>" << child_name << "<code> of this container. " << endl;
-              m_output << "\t * which have role <code>" << ccr_name << "<code>." << endl;
+              m_output << "\t * Returns the children <code>" << child_name << "</code> of this container. " << endl;
+              m_output << "\t * which have role <code>" << ccr_name << "</code>." << endl;
               m_output << "\t * @return  The children in an array" << endl;
               m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
               m_output << "\t */ " << endl;
@@ -485,8 +485,8 @@ void ClassGen::CG<OS_I>::accessChildren( )
             else
             {
               m_output << "\t/**" << endl;
-              m_output << "\t * Returns the child <code>" << child_name << "<code> of this container. " << endl;
-              m_output << "\t * which has role <code>" << ccr_name << "<code>." << endl;
+              m_output << "\t * Returns the child <code>" << child_name << "</code> of this container. " << endl;
+              m_output << "\t * which has role <code>" << ccr_name << "</code>." << endl;
               m_output << "\t * @return  The children in an array" << endl;
               m_output << "\t * @throws  UdmException If any Udm related exception occurred" << endl;
               m_output << "\t */ " << endl;

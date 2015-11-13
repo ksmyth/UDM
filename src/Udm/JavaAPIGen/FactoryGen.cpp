@@ -194,7 +194,7 @@ void FactoryGen::generateExampleString( )
   m_example_output << "\t */" << endl;
   m_example_output << "\tpublic void testOpenFromString_" << m_root_name << "_" << containerDescriptionFunc( ) << "() \n\t\tthrows UdmException " << endl;
   m_example_output << "\t{" << endl; 
-  m_example_output << "\t\tjava.lang.String xmlString = \"<...>\";" << endl;
+  m_example_output << "\t\tjava.lang.String xmlString = \"...\";" << endl;
   m_example_output << "\t\t// open the data network" << endl;
   m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "." << m_root_name << "StringFactory gtf \n\t\t\t= FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << "StringFactory();" << endl;
   m_example_output << "\t\t" << Utils::toPackageName( m_package_name ) << "."  << m_root_name << " root \n\t\t\t= gtf.open(xmlString);" << endl;
@@ -334,7 +334,7 @@ void FactoryGen::classJavadocString( )
   m_output << " * where the type of the root object is <code>"<< m_root_name << "</code>." << endl;
   m_output << " * <blockquote><pre>" << endl;
   m_output << " *         ....;" << endl;
-  m_output << " *         String xmlString = \"<...>\";" << endl;
+  m_output << " *         String xmlString = \"...\";" << endl;
   m_output << " *        // open the data network" << endl;
   m_output << " *        " << m_root_name << "StringFactory gtf = FactoryRepository.get" << namespaceOrDiagramName( ) << m_root_name << "StringFactory();" << endl;
   m_output << " *        " << m_root_name << " root = gtf.open(xmlString);" << endl;
