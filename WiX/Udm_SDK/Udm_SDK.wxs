@@ -105,12 +105,6 @@
 
       <?if $(sys.BUILDARCH)=x86 ?>
       <Component Directory="lib$(sys.BUILDARCH)">
-        <File Source="..\Build\Win32\VC9\Release\UdmDll.lib" />
-      </Component>
-      <Component Directory="lib$(sys.BUILDARCH)">
-        <File Source="..\Build\Win32\VC9\Debug\UdmDllD.lib" />
-      </Component>
-      <Component Directory="lib$(sys.BUILDARCH)">
         <File Source="..\Build\Win32\v100\Release\UdmDll_VS10.lib" />
       </Component>
       <Component Directory="lib$(sys.BUILDARCH)">

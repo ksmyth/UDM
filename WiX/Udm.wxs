@@ -130,6 +130,7 @@
       <ComponentGroupRef Id='UdmDll_VC11x86' />
       <ComponentGroupRef Id='UdmDll_VC12x86' />
       <ComponentGroupRef Id='UdmDll_VC14x86' />
+      <ComponentGroupRef Id='UdmSDK_VC9x86' />
       <ComponentGroupRef Id='UdmSDK_VC11x86' />
       <ComponentGroupRef Id='UdmSDK_VC12x86' />
       <ComponentGroupRef Id='UdmSDK_VC14x86' />

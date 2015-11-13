@@ -39,9 +39,6 @@
         <File Source="..\bin\XalanMessages_1_11D.dll" />
       </Component>
       <Component Directory="bin$(sys.BUILDARCH)">
-        <File Source="..\Build\Win32\VC9\Debug\UdmDll_3_2D.dll" />
-      </Component>
-      <Component Directory="bin$(sys.BUILDARCH)">
         <File Source="..\Build\Win32\v100\Debug\UdmDll_3_2_VS10D.dll" />
       </Component>
       <Component Directory="bin$(sys.BUILDARCH)">
