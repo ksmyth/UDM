@@ -22,7 +22,9 @@ PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 ** Changelog **
     - Next Release
         -   UdmDll is backwards compatible with previous 3.2 releases
-        -   UdmGme: fix getParent with role parameter: check for Folder parent
+        -   UdmDll: Visual Studio 2012 and 2015 support
+        -   UdmGme: fix getParent with role parameter: check for Folder parent to prevent crash
+        -   UdmGme: fix bug where refport connections of the wrong Connection type were returned
         -   UdmSwig.dll is compiled with Visual Studio 2010
 
     - Release 3.2.13 (3/19/2014)
