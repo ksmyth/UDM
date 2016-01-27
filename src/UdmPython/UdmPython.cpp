@@ -73,10 +73,7 @@ IUnknown* object2IUnknown(object o) {
 
 // PythonCOM.h: PYCOM_EXPORT PyObject *PyCom_PyObjectFromIUnknown(IUnknown *punk, REFIID riid, BOOL bAddRef = FALSE);
 typedef PyObject *(*PyCom_PyObjectFromIUnknown_t)(IUnknown *punk, REFIID riid, BOOL bAddRef);
-object SDN_Udm2Gme(Udm::SmartDataNetwork& self, const Udm::Object o) {
-	if (o == Udm::null)
-		return object();
-	UdmGme::GmeDataNetwork* gmedn = dynamic_cast<UdmGme::GmeDataNetwork*>(self.testdn());
+object GmeDN_Udm2Gme(UdmGme::GmeDataNetwork* gmedn, const Udm::Object o) {
 	if (!gmedn)
 		throw std::runtime_error("self is not a GmeDataNetwork");
 	object win32comclient = import("win32com.client"); // also loads pythoncomxx.dll
@@ -100,12 +97,30 @@ object SDN_Udm2Gme(Udm::SmartDataNetwork& self, const Udm::Object o) {
 	return win32comclient.attr("Dispatch")(pyidispatch);
 }
 
+object SDN_Udm2Gme(Udm::SmartDataNetwork& self, const Udm::Object o) {
+	if (o == Udm::null)
+		return object();
+	UdmGme::GmeDataNetwork* gmedn = dynamic_cast<UdmGme::GmeDataNetwork*>(self.testdn());
+	return GmeDN_Udm2Gme(gmedn, o);
+}
+
+
 Udm::Object SDN_Gme2Udm(Udm::SmartDataNetwork& self, object o) {
 	IUnknown* punk = object2IUnknown(o);
 	UdmGme::GmeDataNetwork* gmedn = dynamic_cast<UdmGme::GmeDataNetwork*>(self.testdn());
 	if (!gmedn)
 		throw std::runtime_error("self is not a GmeDataNetwork");
 	return gmedn->Gme2Udm(punk);
+}
+
+object Object_Udm2Gme(object self) {
+	extract<Udm::Object&> self_extract(self);
+	if (self_extract.check()) {
+		Udm::Object& self_object = self_extract;
+		UdmGme::GmeDataNetwork* dn = dynamic_cast<UdmGme::GmeDataNetwork*>(self_object.__impl()->__getdn());
+		return GmeDN_Udm2Gme(dn, self_object);
+	}
+	return object();
 }
 #endif
 
@@ -356,8 +371,6 @@ object Object_set_attr(Udm::Object& self, str _name, object value) {
 
 object Object_children(Udm::Object& self, object child_role, object parent_role, object _child_type)
 {
-    //To be removed and use only getChildren below.
-	
     bool roles_none = true;
 	Uml::Class child_type;
 	if (_child_type != object())
@@ -397,7 +410,8 @@ object Object_getChildren(Udm::Object& self, object _ccrole, object _kind)
     // else if kind is not null, return all children which are compatible with kind
     // else if kind is null, return all children
 
-    if (!self) throw std::runtime_error(std::string("Object is null in getChildren()"));
+    if (!self)
+		throw std::runtime_error(std::string("Object is null in getChildren()"));
     
     Uml::CompositionChildRole ccrole;
     if (_ccrole != object())
@@ -424,7 +438,8 @@ Udm::Object Object_getParent(Udm::Object& self, Udm::Object& prole)
     // get the parent object or null if object has no parent
     // if role is not NULLROLE, return parent only if the role actually applies
     
-    if (!self) throw std::runtime_error(std::string("Object is null in getParent()"));
+    if (!self)
+		throw std::runtime_error(std::string("Object is null in getParent()"));
     Udm::Object ret =self.__impl()->getParent(Uml::CompositionParentRole::Cast(prole));
     return ret;
     
@@ -434,8 +449,10 @@ object Object_getAssociation(Udm::Object& self, Udm::Object& arole, object _mode
 {
     // arole must be non-null.
     // Associations with names on both sides are navigable from both directions.
-    if (!self) throw std::runtime_error(std::string("Object is null in get_Association()"));
-    if (!arole) throw std::runtime_error(std::string("AssociationRole is null in get_Association()"));
+    if (!self)
+		throw std::runtime_error(std::string("Object is null in get_Association()"));
+    if (!arole)
+		throw std::runtime_error(std::string("AssociationRole is null in get_Association()"));
     
     int mode;
     if (_mode != object())
@@ -843,16 +860,16 @@ BOOST_PYTHON_MODULE(udm)
 		.add_property("id", &Udm::Object::uniqueId)
 		.add_property("parent", &Udm::Object::GetParent, &Object_SetParent)
 		.def("create", Object_create)
-		.def("__cast", Object_cast)
-		.staticmethod("__cast")
+//		.def("__cast", Object_cast)
+//		.staticmethod("__cast")
 		.def("delete", &Udm::Object::DeleteObject)
 		.def("_children", Object_children)
-        .def("getChildren", Object_getChildren)
-        .def("getAssociation", Object_getAssociation)
-        .def("getParent", Object_getParent)
+//        .def("getChildren", Object_getChildren)
+//        .def("getAssociation", Object_getAssociation)
+//        .def("getParent", Object_getParent)
 		.def("_adjacent", Object_adjacent)
-		.def("get_attribute",&Object_attr_by_uml_attr_as_udm_object)
-		.def("set_attribute",&Object_set_attr_by_uml_attr_as_udm_object)
+//		.def("get_attribute",&Object_attr_by_uml_attr_as_udm_object)
+//		.def("set_attribute",&Object_set_attr_by_uml_attr_as_udm_object)
 		.def("attr", &Object_attr)
 		.def("set_attr", &Object_set_attr)
 		.def("__getattr__", &Object___getattr__)
@@ -873,6 +890,9 @@ BOOST_PYTHON_MODULE(udm)
 		.add_property("is_lib_object", &Udm::Object::isLibObject)
 		.add_property("is_lib_root", &Udm::Object::isLibRoot)
 		.add_property("library_name", &Object_getLibraryName)
+#ifdef _WIN32
+		.def("convert_udm2gme", &Object_Udm2Gme)
+#endif
 		;
 	scope().attr("Object").attr("adjacent") = eval("lambda self, src_role=None, dst_role=None, association_class=None: self._adjacent(src_role, dst_role, association_class)");
 	scope().attr("Object").attr("children") = eval("lambda self, child_role=None, parent_role=None, child_type=None: self._children(child_role, parent_role, child_type)");
@@ -881,9 +901,9 @@ BOOST_PYTHON_MODULE(udm)
 	scope().attr("Object").attr("__nonzero__") = eval("lambda self: self.id != 0");
 
 	scope().attr("null") = Udm::null;
-    scope().attr("TARGETFROMPEER") = Udm::TARGETFROMPEER;
-    scope().attr("TARGETFROMCLASS") = Udm::TARGETFROMCLASS;
-    scope().attr("CLASSFROMTARGET") = Udm::CLASSFROMTARGET;
+//    scope().attr("TARGETFROMPEER") = Udm::TARGETFROMPEER;
+//    scope().attr("TARGETFROMCLASS") = Udm::TARGETFROMCLASS;
+//    scope().attr("CLASSFROMTARGET") = Udm::CLASSFROMTARGET;
     
 
 	class_<Uml::Diagram>("_UmlDiagram")
