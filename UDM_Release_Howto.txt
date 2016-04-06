@@ -11,42 +11,44 @@ Update with new version, info:
  releaseinfo.txt (+GME version)
  Projects/Win32/VC10/src/UdmCli/Properties/AssemblyInfo.cs
  configure.ac
- debian/changelog (`DEBEMAIL='ksmyth@isis.vanderbilt.edu' DEBFULLNAME='Kevin Smyth' dch -i`)
-ci -m "Prepare for release 3.2.13"
+ debian/changelog (`DEBEMAIL='kevin.m.smyth@gmail.com' DEBFULLNAME='Kevin Smyth' dch --release-heuristic log -v 3.2.14-ubuntu1`)
+ci -m "Prepare for release 3.2.14"
 
-svn cp -m 'Tag release 3.2.13' https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.13
+svn cp -m 'Tag release 3.2.14' https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.14
 
+export build_isis=http://build.isis
+# export build_isis="-u user:pass https://build.isis"
 
-
-for url in http://build.isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/console http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/console http://build.isis.vanderbilt.edu/job/UDM_vc11/label=build-slave11/lastBuild/console;
+IDs=$(for url in "$build_isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/consoleText" "$build_isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/consoleText" "$build_isis.vanderbilt.edu/job/UDM_vc11/label=build-slave11/lastBuild/consoleText" \
+  "$build_isis.vanderbilt.edu/job/UDM_vc12/label=build-slave11/lastSuccessfulBuild/consoleText" "$build_isis.vanderbilt.edu/job/UDM_vc14/label=build-slave9/lastSuccessfulBuild/consoleText"
 do
- curl -s "$url" | grep "Finding ID" | sed 's/Finding ID...  //' | sed 's/copy_pdbs.py: symstore://'
-done | xargs 
-For "Finding ID" in Udm (x3), Udm_x64 (x2): ssh kms1 cd symbolstmp '&&' python \~/bin/pdb_promote.py 
-for file in 0000009647 0000009648 0000009642 0000009643 0000009644; do perl -pli -e 'foreach $f (qw/Udm.exe UdmSwig.dll MetaGME2UML.pdb MetaGME2Uml.dll Udmd.pdb UDMOclPat.exe UDMOclPat.pdb/) { s/$f/$f/ig; }' 000Admin/$file; done
-curl -o UDM_x64-3.2.13.msi http://build.isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi &&
-curl -o UDM-3.2.13.msi http://build.isis.vanderbilt.edu/job/UDM_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
-for file in http://build.isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} http://build.isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do curl -O "$file"; done
+ curl -s $url | grep "Finding ID" | sed 's/.*Finding ID.....//; s/'$'\r'//
+done)
+ssh kms1 cd symbolstmp '&&' python \~/bin/pdb_promote.py $IDs
+for file in $IDs; do echo ssh kms1 'perl -pli -e '"'"'foreach $f (qw/Udm.exe UdmSwig.dll MetaGME2UML.pdb MetaGME2Uml.dll Udmd.pdb UDMOclPat.exe UDMOclPat.pdb/) { s/$f/$f/ig; }'"'"' 000Admin/'$file; done
+curl -o UDM_x64-3.2.14.msi $build_isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi &&
+curl -o UDM-3.2.14.msi $build_isis.vanderbilt.edu/job/UDM_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
+for file in $build_isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} $build_isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do curl -O "$file"; done
 (mkdir -p ubuntu10.04 && cd ubuntu10.04 &&
-curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04/lastSuccessfulBuild/artifact/udm_3.2.13-1_i386.deb &&
-curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04/lastSuccessfulBuild/artifact/udm-dev_3.2.13-1_i386.deb
-curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04_x64/lastSuccessfulBuild/artifact/udm_3.2.13-1_amd64.deb &&
-curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04_x64/lastSuccessfulBuild/artifact/udm-dev_3.2.13-1_amd64.deb )
+curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04/lastSuccessfulBuild/artifact/udm_3.2.14-1_i386.deb &&
+curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04/lastSuccessfulBuild/artifact/udm-dev_3.2.14-1_i386.deb
+curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04_x64/lastSuccessfulBuild/artifact/udm_3.2.14-1_amd64.deb &&
+curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04_x64/lastSuccessfulBuild/artifact/udm-dev_3.2.14-1_amd64.deb )
 (mkdir ubuntu12.04 && cd ubuntu12.04 &&
-curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04/lastSuccessfulBuild/artifact/udm_3.2.13-1_i386.deb &&
-curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04/lastSuccessfulBuild/artifact/udm-dev_3.2.13-1_i386.deb
-curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm_3.2.13-1_amd64.deb &&
-curl -O http://build.isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm-dev_3.2.13-1_amd64.deb )
+curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04/lastSuccessfulBuild/artifact/udm_3.2.14-1_i386.deb &&
+curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04/lastSuccessfulBuild/artifact/udm-dev_3.2.14-1_i386.deb
+curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm_3.2.14-1_amd64.deb &&
+curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm-dev_3.2.14-1_amd64.deb )
 
-svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.13 Udm_source_r3.2.13 && \
-PATH="$PATH":'/cygdrive/c/Program Files/7-Zip/':'/c/Program Files/7-Zip/' 7z.exe a -r Udm_source_r3.2.13.zip Udm_source_r3.2.13/ && \
-cp Udm_source_r3.2.13/releaseinfo.txt UDM_Release_Notes.txt
+svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.14 Udm_source_r3.2.14 && \
+PATH="$PATH":'/cygdrive/c/Program Files/7-Zip/':'/c/Program Files/7-Zip/' 7z.exe a -r Udm_source_r3.2.14.zip Udm_source_r3.2.14/ && \
+cp Udm_source_r3.2.14/releaseinfo.txt UDM_Release_Notes.txt
 
-ssh repo@repo.isis.vanderbilt.edu mkdir -p UDM/3.2.13/ UDM/3.2.13/ubuntu10.04 UDM/3.2.13/ubuntu12.04 && \
-scp UDM_Release_Notes.txt UDM-3.2.13.msi UDM_x64-3.2.13.msi Udm_source_r3.2.13.zip repo@repo.isis.vanderbilt.edu:UDM/3.2.13/ && \
-scp ubuntu10.04/* repo@repo.isis.vanderbilt.edu:UDM/3.2.13/ubuntu10.04 && \
-scp ubuntu12.04/* repo@repo.isis.vanderbilt.edu:UDM/3.2.13/ubuntu12.04 && \
-ssh repo@repo.isis.vanderbilt.edu chmod -R a+r UDM/3.2.13/
+ssh repo@repo.isis.vanderbilt.edu mkdir -p UDM/3.2.14/ UDM/3.2.14/ubuntu10.04 UDM/3.2.14/ubuntu12.04 && \
+scp UDM_Release_Notes.txt UDM-3.2.14.msi UDM_x64-3.2.14.msi Udm_source_r3.2.14.zip repo@repo.isis.vanderbilt.edu:UDM/3.2.14/ && \
+scp ubuntu10.04/* repo@repo.isis.vanderbilt.edu:UDM/3.2.14/ubuntu10.04 && \
+scp ubuntu12.04/* repo@repo.isis.vanderbilt.edu:UDM/3.2.14/ubuntu12.04 && \
+ssh repo@repo.isis.vanderbilt.edu chmod -R a+r UDM/3.2.14/
 
 
 # For GReAT release:
@@ -60,12 +62,12 @@ svn ci -m 'Prepare for release 1.7.8'
 svn cp -m 'Tag release 1.7.8' https://svn.isis.vanderbilt.edu/MoBIES/GReAT/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/GReAT/tags/1.7.8
 
 
-curl -s -S http://build.isis.vanderbilt.edu/job/GReAT/label=build-slave9/lastBuild/consoleText | grep Finding\ ID
+curl -s -S $build_isis.vanderbilt.edu/job/GReAT/label=build-slave9/lastBuild/consoleText | grep Finding\ ID
 
 perl -pli -e 's/grcc.pdb/GRCC.pdb/g; s/metagme2uml.pdb/MetaGME2UML.pdb/g; s/codegenerator.pdb/CodeGenerator.pdb/g; s/grd_interpreter.pdb/GRD_interpreter.pdb/g; s/generatecfgmodel.pdb/GenerateCfgModel.pdb/g; s/generateconfig.pdb/GenerateConfig.pdb/g; s/generategr.pdb/GenerateGR.pdb/g; s/generategrc.pdb/GenerateGRC.pdb/g; s/great master interpreter.pdb/GReAT Master Interpreter.pdb/g; s/libraryupdate.pdb/LibraryUpdate.pdb/g; s/umtdecorator.pdb/UMTDecorator.pdb/g; s/umthelper.pdb/UMTHelper.pdb/g; s/legacyupdate.pdb/LegacyUpdate.pdb/g; s/blockify.pdb/Blockify.pdb/g; s/createrule.pdb/CreateRule.pdb/g; '  symbolstmp/000Admin/0000011732
 ssh kms1 'cd symbolstmp && python ~/bin/pdb_promote.py 0000011732' # "Finding ID"
 
-wget -O GReAT-1.7.8.exe http://build.isis.vanderbilt.edu/job/GReAT/label=build-slave9/lastSuccessfulBuild/artifact/trunk/InnoSetup/GReAT_setup.exe
+wget -O GReAT-1.7.8.exe $build_isis.vanderbilt.edu/job/GReAT/label=build-slave9/lastSuccessfulBuild/artifact/trunk/InnoSetup/GReAT_setup.exe
 
 svn export https://svn.isis.vanderbilt.edu/MoBIES/GReAT/tags/1.7.8 GReAT_source_r1.7.8 && \
 /cygdrive/c/Program\ Files/7-Zip/7z.exe a -r GReAT_source_r1.7.8{.zip,} && \
@@ -93,5 +95,4 @@ Normal:
  SYMCHK: UdmCliGen.exe        FAILED  - Built without debugging information.
  Xalan
  
-start /wait msiexec /I UDM_x64-3.2.12.msi /qb /Lv* UDM_x64-3.2.12.log ALLUSERS=1
-start /wait msiexec /I UDM_x64-3.2.13.msi /qb /Lv* UDM_x64-3.2.13.log ALLUSERS=1
+start /wait msiexec /I UDM_x64-3.2.14.msi /qb /Lv* UDM_x64-3.2.14.log ALLUSERS=1

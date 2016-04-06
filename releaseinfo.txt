@@ -1,14 +1,14 @@
-Copyright (c) Vanderbilt University, 2001-2014
+Copyright (c) Vanderbilt University, 2001-2016
 ALL RIGHTS RESERVED
 
 ** UDM : Universal Data Model **
 
 ** Software Requirements **
 
-1. Windows Operating system (XP, Vista, 7)
+1. Windows Operating system (XP or later)
 NOTE: Udm can also be used on Linux
 
-2. GME 14, 14.3.5 from: http://repo.isis.vanderbilt.edu/GME/
+2. GME, 16.3.23 from: http://repo.isis.vanderbilt.edu/GME/
 NOTE: You need to have administrative privileges to install GME correctly.
 
 3. To develop using UDM: Visual Studio 2008, 2010, 2012, or 2015
@@ -20,7 +20,7 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
-    - Next Release
+    - Release 3.2.14 (4/6/2016)
         -   UdmDll is backwards compatible with previous 3.2 releases
         -   UdmDll: Visual Studio 2012 and 2015 support
         -   UdmGme: fix getParent with role parameter: check for Folder parent to prevent crash

@@ -1,3 +1,9 @@
+udm (3.2.14-ubuntu1) trusty; urgency=medium
+
+  * Udm 3.2.14
+
+ -- Kevin Smyth <kevin.m.smyth@gmail.com>  Tue, 05 Apr 2016 14:12:01 -0500
+
 udm (3.2.13-1ubuntu1) precise; urgency=low
 
   * Udm 3.2.13
