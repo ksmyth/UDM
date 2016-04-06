@@ -1,5 +1,5 @@
 HOWTO make a Windows Udm release (for Udm maintainers only)
-Currently only Kevin Smyth <ksmyth@isis.vanderbilt.edu> makes Udm releases
+Currently only Kevin Smyth <kevin.m.smyth@gmail.com> makes Udm releases
 First see UDM_compile_guideVS2008.txt
 
 Update with new version, info:
@@ -14,6 +14,9 @@ Update with new version, info:
  debian/changelog (`DEBEMAIL='kevin.m.smyth@gmail.com' DEBFULLNAME='Kevin Smyth' dch --release-heuristic log -v 3.2.14-ubuntu1`)
 ci -m "Prepare for release 3.2.14"
 
+# wait for jenkins build to complete
+
+#!/bin/bash
 svn cp -m 'Tag release 3.2.14' https://svn.isis.vanderbilt.edu/MoBIES/UDM/trunk/ https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.14
 
 export build_isis=http://build.isis
@@ -24,31 +27,26 @@ IDs=$(for url in "$build_isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfu
 do
  curl -s $url | grep "Finding ID" | sed 's/.*Finding ID.....//; s/'$'\r'//
 done)
-ssh kms1 cd symbolstmp '&&' python \~/bin/pdb_promote.py $IDs
-for file in $IDs; do echo ssh kms1 'perl -pli -e '"'"'foreach $f (qw/Udm.exe UdmSwig.dll MetaGME2UML.pdb MetaGME2Uml.dll Udmd.pdb UDMOclPat.exe UDMOclPat.pdb/) { s/$f/$f/ig; }'"'"' 000Admin/'$file; done
-curl -o UDM_x64-3.2.14.msi $build_isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi &&
-curl -o UDM-3.2.14.msi $build_isis.vanderbilt.edu/job/UDM_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
+for file in $IDs; do ssh build@kms1.isis.vanderbilt.edu 'perl -pli -e '"'"'foreach $f (qw/Udm.exe UdmSwig.dll MetaGME2UML.pdb MetaGME2Uml.dll Udmd.pdb UDMOclPat.exe UDMOclPat.pdb Test_CrossLinksD.exe/) { s/$f/$f/ig; }'"'"' symbolstmp/000Admin/'$file; done
+ssh build@kms1.isis.vanderbilt.edu cd symbolstmp '&&' python \~/bin/pdb_promote.py $IDs
+curl -sS -o UDM_x64-3.2.14.msi $build_isis.vanderbilt.edu/job/UDM_x64_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm_x64.msi &&
+curl -sS -o UDM-3.2.14.msi $build_isis.vanderbilt.edu/job/UDM_msi/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/Udm.msi
 for file in $build_isis.vanderbilt.edu/job/UDM/label=UDM_x86/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin.msm,Udm_SDK/Udm_SDK.msm,UdmDll/UdmDll.msm,UdmDll_VS10/UdmDll_VS10.msm,xerces_c/xerces_c.msm} $build_isis.vanderbilt.edu/job/UDM_x64/label=build-slave6/lastSuccessfulBuild/artifact/trunk/WiX/{Udm_bin/Udm_bin_x64.msm,Udm_SDK/Udm_SDK_x64.msm,UdmDll_VS10/UdmDll_VS10_x64.msm,xerces_c/xerces_c_x64.msm}; do curl -O "$file"; done
-(mkdir -p ubuntu10.04 && cd ubuntu10.04 &&
-curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04/lastSuccessfulBuild/artifact/udm_3.2.14-1_i386.deb &&
-curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04/lastSuccessfulBuild/artifact/udm-dev_3.2.14-1_i386.deb
-curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04_x64/lastSuccessfulBuild/artifact/udm_3.2.14-1_amd64.deb &&
-curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu10.04_x64/lastSuccessfulBuild/artifact/udm-dev_3.2.14-1_amd64.deb )
 (mkdir ubuntu12.04 && cd ubuntu12.04 &&
-curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04/lastSuccessfulBuild/artifact/udm_3.2.14-1_i386.deb &&
-curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04/lastSuccessfulBuild/artifact/udm-dev_3.2.14-1_i386.deb
-curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm_3.2.14-1_amd64.deb &&
-curl -O $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm-dev_3.2.14-1_amd64.deb )
+curl -O -sS $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04/lastSuccessfulBuild/artifact/udm_3.2.14-1_i386.deb &&
+curl -O -sS $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04/lastSuccessfulBuild/artifact/udm-dev_3.2.14-1_i386.deb
+curl -O -sS $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm_3.2.14-1_amd64.deb &&
+curl -O -sS $build_isis.vanderbilt.edu/job/Udm_Linux/label=ubuntu12.04_x64/lastSuccessfulBuild/artifact/udm-dev_3.2.14-1_amd64.deb )
 
 svn export https://svn.isis.vanderbilt.edu/MoBIES/UDM/tags/3.2.14 Udm_source_r3.2.14 && \
-PATH="$PATH":'/cygdrive/c/Program Files/7-Zip/':'/c/Program Files/7-Zip/' 7z.exe a -r Udm_source_r3.2.14.zip Udm_source_r3.2.14/ && \
+PATH="$PATH":'/cygdrive/c/Program Files/7-Zip/':'/c/Program Files/7-Zip/' 7z a Udm_source_r3.2.14.zip Udm_source_r3.2.14/ && \
 cp Udm_source_r3.2.14/releaseinfo.txt UDM_Release_Notes.txt
 
-ssh repo@repo.isis.vanderbilt.edu mkdir -p UDM/3.2.14/ UDM/3.2.14/ubuntu10.04 UDM/3.2.14/ubuntu12.04 && \
-scp UDM_Release_Notes.txt UDM-3.2.14.msi UDM_x64-3.2.14.msi Udm_source_r3.2.14.zip repo@repo.isis.vanderbilt.edu:UDM/3.2.14/ && \
-scp ubuntu10.04/* repo@repo.isis.vanderbilt.edu:UDM/3.2.14/ubuntu10.04 && \
-scp ubuntu12.04/* repo@repo.isis.vanderbilt.edu:UDM/3.2.14/ubuntu12.04 && \
+ssh repo@repo.isis.vanderbilt.edu mkdir -p UDM/3.2.14/ && \
+ssh -A build@kms1.isis.vanderbilt.edu scp UDM_Release_Notes.txt UDM-3.2.14.msi UDM_x64-3.2.14.msi Udm_source_r3.2.14.zip repo@repo.isis.vanderbilt.edu:UDM/3.2.14/ && \
 ssh repo@repo.isis.vanderbilt.edu chmod -R a+r UDM/3.2.14/
+
+scp ubuntu12.04/* repo@repo.isis.vanderbilt.edu:UDM/3.2.14/ubuntu12.04
 
 
 # For GReAT release:
@@ -83,7 +81,24 @@ ssh repo@repo.isis.vanderbilt.edu chmod -R a+r GReAT/1.7.8
 #  c:\Python27\python.exe install_setup.py py2exe && move /y dist\install.exe .\install.exe
 # upgrade on build machines
 
-Check for missing symbols
+Check for missing symbols:
+Method 1: use 7zip to extract files from msi
+
+SetLocal EnableDelayedExpansion
+cd %userprofile%\Downloads
+curl -sS -O http://repo.isis.vanderbilt.edu/UDM/3.2.14/UDM_x64-3.2.14.msi || exit /b !ERRORLEVEL!
+set _NT_SYMBOL_PATH=srv*%userprofile%\Downloads\UDM_3.2.14_symbols*http://symbols.isis.vanderbilt.edu/
+"C:\Program Files\7-Zip\7z.exe" x UDM_x64-3.2.14.msi -oUDM_x64-3.2.14 || exit /b !ERRORLEVEL!
+del UDM_x64-3.2.14\fil* UDM_x64-3.2.14\F_CENTRAL*
+"c:\Program Files (x86)\Debugging Tools for Windows (x86)\symchk.exe" /r "%userprofile%\Downloads\UDM_x64-3.2.14"
+@rem pause
+"C:\Program Files\7-Zip\7z.exe" a UDM_3.2.14_symbols.7z UDM_3.2.14_symbols || exit /b !ERRORLEVEL!
+"C:\Program Files\7-Zip\7z.exe" l UDM_3.2.14_symbols.7z
+scp -v UDM_3.2.14_symbols.7z repo@repo.isis.vanderbilt.edu:UDM/3.2.14/
+ssh repo@repo.isis.vanderbilt.edu chmod -R a+r UDM/3.2.14/
+
+Method 2: install Udm_x64.msi:
+start /wait msiexec /I UDM_x64-3.2.14.msi /qb /Lv* UDM_x64-3.2.14.log ALLUSERS=1
 set _NT_SYMBOL_PATH=C:\Windows\symbols\dll;C:\Windows\system32;srv*c:\symbols*http://symbols.isis.vanderbilt.edu/;srv*c:\symbols*http://msdl.microsoft.com/download/symbols
 "c:\Program Files (x86)\Debugging Tools for Windows (x86)\symchk.exe" /r "C:\Program Files\ISIS\Udm"
 "c:\Program Files (x86)\Debugging Tools for Windows (x86)\symchk.exe" /r "C:\Program Files (x86)\ISIS\Udm"
@@ -94,5 +109,3 @@ Normal:
  SYMCHK: python27.dll         FAILED  - python27.pdb mismatched or not found
  SYMCHK: UdmCliGen.exe        FAILED  - Built without debugging information.
  Xalan
- 
-start /wait msiexec /I UDM_x64-3.2.14.msi /qb /Lv* UDM_x64-3.2.14.log ALLUSERS=1
