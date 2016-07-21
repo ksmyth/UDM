@@ -30,7 +30,7 @@ namespace GMEConsole
 				gmeoleapp = 0;
 			}
 		}
-		static void SetupConsole(CComPtr<IMgaProject> project) { setupConsole(project); }
+		static void SetupConsole(::ATL::CComPtr<::IMgaProject> project);
 
 		static void writeLine(const std::string& message, msgtype_enum type);
 

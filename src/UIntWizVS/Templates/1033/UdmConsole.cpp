@@ -121,4 +121,8 @@ namespace GMEConsole
 				throw udm_exception("Could not set the contents of GME console.");
 	}
 
+	void Console::SetupConsole(::ATL::CComPtr<IMgaProject> project)
+	{
+		Console::setupConsole(project);
+	}
 }

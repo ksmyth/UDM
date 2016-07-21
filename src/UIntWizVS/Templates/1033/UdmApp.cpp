@@ -6,6 +6,8 @@
 [!if META_LOADING_DYNAMIC && DYNAMIC_META_USER_SELECT]
 #include <afxdlgs.h> // For CFileDialog
 [!endif]
+#include "Gme.h"
+#include "UdmConsole.h"
 
 using namespace std;
 
@@ -56,7 +58,11 @@ int CUdmApp::Initialize()
 	return 0;
 }
 
-
+#ifdef _UNICODE
+void AfxMessageBox(const char* text) {
+	AfxMessageBox(GMEConsole::BSTRFromUTF8(text));
+}
+#endif
 
 /* 
 Remarks to CUdmApp::UdmMain(...):

@@ -2,19 +2,11 @@ function OnFinish(selProj, selObj)
 {
     try
     {
-        if (dte.Version == '12.0') {
-            // reuse OnFinish100 function
-		    OnFinish100(selProj, selObj);
-		}
-		else if (dte.Version == '11.0') {
-			// reuse OnFinish100 function
-		    OnFinish100(selProj, selObj);
-		}
-        else if (dte.Version == '10.0') {
-		    OnFinish100(selProj, selObj);
+        if (dte.Version == '9.0') {
+		    OnFinish90(selProj, selObj);
 		}
 		else {
-		    OnFinish90(selProj, selObj);
+		    OnFinish100(selProj, selObj);
 		}
     }
     catch(e)
@@ -247,7 +239,7 @@ function AddConfig90(proj, strProjectName)
 		    var config = proj.Object.Configurations('Debug');
 		    config.ConfigurationType = ConfigurationTypes.typeDynamicLibrary;
             config.useOfMfc = useOfMfc.useMfcDynamic;
-            config.CharacterSet = charSet.charSetMBCS;
+            config.CharacterSet = charSet.charSetUnicode;
 		    if (dte.Version == '10.0' || dte.Version == '12.0') {
 		    	var rule = config.Rules.Item("ConfigurationGeneral");
 		    	rule.SetPropertyValue("TargetName", "$(ProjectName)D");
@@ -259,7 +251,7 @@ function AddConfig90(proj, strProjectName)
 		    MIDLTool.MkTypLibCompatible="false";
 		    MIDLTool.ValidateParameters="true";
 		    MIDLTool.TypeLibraryName = ".\\ComponentLib.tlb";
-		    if (dte.Version == '10.0' || dte.Version == '12.0')
+		    if (dte.Version != '9.0')
 		    	MIDLTool.HeaderFileName = "%(Filename).h";
 		    else
 		    	MIDLTool.HeaderFileName = "$(InputName).h";
@@ -290,7 +282,7 @@ function AddConfig90(proj, strProjectName)
 		    LinkTool.SubSystem = subSystemOption.subSystemWindows;
 		    LinkTool.ModuleDefinitionFile = 'Component.def';
 			LinkTool.RegisterOutput = true;
-		    if (dte.Version != '10.0' && dte.Version != '12.0')
+		    if (dte.Version == '9.0')
 		    	LinkTool.OutputFile = "$(OutDir)/$(ProjectName)D.dll"
             LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)\\lib";
 
@@ -311,7 +303,7 @@ function AddConfig90(proj, strProjectName)
 		    config = proj.Object.Configurations('Release');
 	        config.ConfigurationType = ConfigurationTypes.typeDynamicLibrary;
 	        config.useOfMfc  = useOfMfc.useMfcDynamic;
-	        config.CharacterSet = charSet.charSetMBCS;
+	        config.CharacterSet = charSet.charSetUnicode;
     	    
             // RELEASE MIDL SETTINGS
             var MIDLTool = config.Tools('VCMIDLTool');
@@ -319,7 +311,7 @@ function AddConfig90(proj, strProjectName)
 		    MIDLTool.MkTypLibCompatible = "false";
 		    MIDLTool.ValidateParameters = "true";
 		    MIDLTool.TypeLibraryName = ".\\ComponentLib.tlb";
-		    if (dte.Version == '10.0' || dte.Version == '12.0')
+		    if (dte.Version != '9.0')
 		    	MIDLTool.HeaderFileName = "%(Filename).h";
 		    else
 		    	MIDLTool.HeaderFileName = "$(InputName).h";
@@ -350,7 +342,7 @@ function AddConfig90(proj, strProjectName)
 		    LinkTool.SubSystem = subSystemOption.subSystemWindows;
 		    LinkTool.ModuleDefinitionFile = 'Component.def';
 			LinkTool.RegisterOutput = true;
-		    if (dte.Version != '10.0' && dte.Version != '12.0')
+		    if (dte.Version == '9.0')
 		    	LinkTool.OutputFile = "$(OutDir)/$(ProjectName).dll"
             LinkTool.AdditionalLibraryDirectories = ".;$(UDM_PATH)\\lib";
 
@@ -529,7 +521,7 @@ function AddCommonFilesToCustomProj(proj, InfFile)
 				var strFile = '$(GME_ROOT)\\SDK\\BON\\Common\\' + strTpl;
 				vcfile = proj.Object.AddFile(strFile);
 				
-				if (dte.Version != '10.0' && dte.Version != '12.0') {
+				if (dte.Version == '9.0') {
 				    // This is needed to remove the '.' from the beginning of the relative path (added by default)
 				    vcfile.RelativePath = '$(GME_ROOT)\\SDK\\BON\\Common\\' + strTpl;
 				}

@@ -19,7 +19,7 @@
 #define TYPELIB_UUID "[!output TYPELIB_UUID]"
 #define TYPELIB_NAME "[!output TYPELIB_NAME]"
 #define COCLASS_UUID "[!output COCLASS_UUID]"
-#define COCLASS_NAME "[!output COCLASS_NAME]"
+#define COCLASS_NAME L"[!output COCLASS_NAME]"
 #define COCLASS_PROGID "[!output COCLASS_PROGID]"
 
 #define COCLASS_UUID_EXPLODED1  [!output COCLASS_UUID_EXPLODED1]

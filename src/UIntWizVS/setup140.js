@@ -11,12 +11,12 @@
 // the terms of this license. You must not remove this notice, or
 // any other, from this software.
 
-// Setup program for the UDM Interpreter Wizard for VC++ 12.0 (Visual Studio 2013)
+// Setup program for the UDM Interpreter Wizard for VC++ 14.0 (Visual Studio 2015)
 
 
-main();
+main("14.0", "Visual Studio 2015");
 
-function main()
+function main(vc_ver, vs_ver)
 {
 	// Decode command line arguments
 	var bDebug = false;
@@ -74,26 +74,26 @@ function main()
 
 	try
 	{
-		var strVCKey = "HKLM\\Software\\Microsoft\\VisualStudio\\12.0\\Setup\\VC\\ProductDir";
+		var strVCKey = "HKLM\\Software\\Microsoft\\VisualStudio\\" + vc_ver + "\\Setup\\VC\\ProductDir";
 		strValue = WSShell.RegRead(strVCKey);
 	}
 	catch(e)
 	{
 		try
 		{
-			var strVCKey_x64 = "HKLM\\Software\\Wow6432Node\\Microsoft\\VisualStudio\\12.0\\Setup\\VC\\ProductDir";
+			var strVCKey_x64 = "HKLM\\Software\\Wow6432Node\\Microsoft\\VisualStudio\\" + vc_ver + "\\Setup\\VC\\ProductDir";
 			strValue = WSShell.RegRead(strVCKey_x64);
 		}
 		catch(e)
 		{
 			try
 			{
-				var strVCExKey = "HKLM\\Software\\Microsoft\\VCExpress\\12.0\\Setup\\VC\\ProductDir";
+				var strVCExKey = "HKLM\\Software\\Microsoft\\VCExpress\\" + vc_ver + "\\Setup\\VC\\ProductDir";
 				strValue = WSShell.RegRead(strVCExKey);
 			}
 			catch(e)
 			{
-				WScript.Echo("Cannot find where Visual Studio 2013 is installed. UdmInterpreter wizard will be unavailable.");
+				WScript.Echo("Cannot find where " + vs_ver + " is installed. UdmInterpreter wizard will be unavailable.");
 				return;
 			}
 			WScript.Echo("Visual Studio Express doesn't support Wizards. UdmInterpreter Wizard will be unavailable.");
@@ -156,9 +156,9 @@ function main()
 		{
 			var strLine = fileSrc.ReadLine();
 			if(strLine.indexOf("Wizard=VsWizard.VsWizardEngine") != -1)
-				strLine = "Wizard=VsWizard.VsWizardEngine.12.0";
+				strLine = "Wizard=VsWizard.VsWizardEngine." + vc_ver;
 			else if(strLine.indexOf("WIZARD_VERSION") != -1)
-				strLine = "Param=\"WIZARD_VERSION = 12.0\"";
+				strLine = "Param=\"WIZARD_VERSION = " + vc_ver + "\"";
 			else if(strLine.indexOf("ABSOLUTE_PATH") != -1)
 				strLine = "Param=\"ABSOLUTE_PATH = " + strSourceFolder + "\"";
 			fileDest.WriteLine(strLine);
