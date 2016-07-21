@@ -31,7 +31,6 @@
 
 #include "RawComponent.h"
 
-// Console
 #include "UdmConsole.h"
 
 // Udm includes
@@ -91,14 +90,13 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project, IMgaFCO *currentobj,
 		return S_FALSE;
 	}
 
+    COMTRY {
 	CComPtr<IMgaProject>ccpProject(project);
 	
 	try
 	{
-[!if USE_CONSOLE]	  
 		// Setting up the console
 		GMEConsole::Console::SetupConsole(ccpProject);
-[!endif]
 
 		CComBSTR projname;
 		CComBSTR focusname = "<nothing>";
@@ -211,28 +209,20 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project, IMgaFCO *currentobj,
 	}
 	catch (udm_exception& e)
 	{
-[!if USE_CONSOLE]
 		GMEConsole::Console::gmeoleapp = 0;
-[!endif]
 		ThrowComError(E_FAIL, GMEConsole::BSTRFromUTF8(e.what()));
 	}
 	catch (_com_error& e)
 	{
-[!if USE_CONSOLE]
 		GMEConsole::Console::gmeoleapp = 0;
-[!endif]
 		throw;
 	}
 	catch(...)
 	{
-[!if USE_CONSOLE]
 		GMEConsole::Console::gmeoleapp = 0;
-[!endif]
 		ThrowComError(E_FAIL, _bstr_t(L"An unexpected error has occurred during the interpretation process."));
 	}
-[!if USE_CONSOLE]
-	GMEConsole::Console::gmeoleapp = 0;
-[!endif]
+	} COMCATCH(GMEConsole::Console::gmeoleapp = 0;)
 	return S_OK;
 
 }

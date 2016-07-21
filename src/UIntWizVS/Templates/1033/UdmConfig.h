@@ -3,13 +3,6 @@
 
 #include <string> // STL
 
-
-[!if USE_CONSOLE]
-#define _USE_CONSOLE
-[!endif]
-
-
-
 [!if META_LOADING_DYNAMIC && DYNAMIC_META_XML_BACKEND]
 #define _DYNAMIC_META
 #define _DYNAMIC_META_DOM
