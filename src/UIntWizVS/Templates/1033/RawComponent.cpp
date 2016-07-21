@@ -18,7 +18,7 @@
 #import "libid:0ADEEC71-D83A-11D3-B36B-005004CC8592" implementation_only auto_search no_namespace no_search_namespace
 #else
 // IntelliSense has a known issue with the above lines.
-//	http://connect.microsoft.com/VisualStudio/feedback/details/533526/vc-2010-intellisense-import-directive-using-libid-does-not-work
+//  http://connect.microsoft.com/VisualStudio/feedback/details/533526/vc-2010-intellisense-import-directive-using-libid-does-not-work
 #ifdef _DEBUG
 // If IntelliSense reports "Cannot open source file", compile then reopen the project
 #include "Debug\Meta.tlh"
@@ -79,10 +79,10 @@ STDMETHODIMP RawComponent::Invoke(IMgaProject* gme, IMgaFCOs *models, long param
 #endif
 
 
-// This is the main component method for interpereters and plugins. 
+// This is the main component method for interpereters and plugins.
 // May als be used in case of invokeable addons
-STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project, IMgaFCO *currentobj,  
-									IMgaFCOs *selectedobjs, long param) 
+STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project, IMgaFCO *currentobj,
+									IMgaFCOs *selectedobjs, long param)
 {
 	// Calling the user's initialization function
 	if(CUdmApp::Initialize())
@@ -90,138 +90,138 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project, IMgaFCO *currentobj,
 		return S_FALSE;
 	}
 
-    COMTRY {
-	CComPtr<IMgaProject>ccpProject(project);
-	
-	try
-	{
-		// Setting up the console
-		GMEConsole::Console::SetupConsole(ccpProject);
+	COMTRY {
+		CComPtr<IMgaProject>ccpProject(project);
 
-		CComBSTR projname;
-		CComBSTR focusname = "<nothing>";
-		CComPtr<IMgaTerritory> terr;
-
-		// Setting up Udm
-#ifdef _DYNAMIC_META
-	#ifdef _DYNAMIC_META_DOM
-			// Loading the meta for the project
-			UdmDom::DomDataNetwork ddnMeta(Uml::diagram);
-			Uml::Diagram theUmlDiagram;
-
-			// Opening the XML meta of the project
-			ddnMeta.OpenExisting(META_PATH,"uml.dtd", Udm::CHANGES_LOST_DEFAULT);
-
-			// Casting the DataNetwork to diagram
-			theUmlDiagram = Uml::Diagram::Cast(ddnMeta.GetRootObject());
-
-			// Creating the UDM diagram
-			Udm::UdmDiagram udmDataDiagram;
-			udmDataDiagram.dgr = &theUmlDiagram;
-			udmDataDiagram.init = dummy;
-
-	#elif defined _DYNAMIC_META_STATIC
-			// Loading the meta for the project
-			Udm::SmartDataNetwork  dnsMeta(Uml::diagram);
-			Uml::Diagram theUmlDiagram;
-
-			// Opening the static meta of the project
-			dnsMeta.OpenExisting(META_PATH, "", Udm::CHANGES_LOST_DEFAULT);
-
-			// Casting the DataNetwork to diagram
-			theUmlDiagram = Uml::Diagram::Cast(dnsMeta.GetRootObject());
-
-			// Creating the UDM diagram
-			Udm::UdmDiagram udmDataDiagram;
-			udmDataDiagram.dgr = &theUmlDiagram;
-			udmDataDiagram.init = dummy;
-
-	#else
-			#error "Neither _DYNAMIC_META_DOM or _DYNAMIC_META_STATIC defined for dynamic loading"
-	#endif
-			// Loading the project
-			UdmGme::GmeDataNetwork dngBackend(udmDataDiagram);
-
-#else
-		using namespace META_NAMESPACE;
-
-		// Loading the project
-		UdmGme::GmeDataNetwork dngBackend(META_NAMESPACE::diagram);
-
-#endif
 		try
 		{
-			bool invokeExStartedATransaction = false;
-			if (!(ccpProject->ProjectStatus & 8))
-			{
-				terr = ccpProject->BeginTransactionInNewTerr(TRANSACTION_NON_NESTED); // could also use TRANSACTION_GENERAL
-				invokeExStartedATransaction = true;
-			}
+			// Setting up the console
+			GMEConsole::Console::SetupConsole(ccpProject);
+
+			CComBSTR projname;
+			CComBSTR focusname = "<nothing>";
+			CComPtr<IMgaTerritory> terr;
+
+			// Setting up Udm
+	#ifdef _DYNAMIC_META
+		#ifdef _DYNAMIC_META_DOM
+				// Loading the meta for the project
+				UdmDom::DomDataNetwork ddnMeta(Uml::diagram);
+				Uml::Diagram theUmlDiagram;
+
+				// Opening the XML meta of the project
+				ddnMeta.OpenExisting(META_PATH,"uml.dtd", Udm::CHANGES_LOST_DEFAULT);
+
+				// Casting the DataNetwork to diagram
+				theUmlDiagram = Uml::Diagram::Cast(ddnMeta.GetRootObject());
+
+				// Creating the UDM diagram
+				Udm::UdmDiagram udmDataDiagram;
+				udmDataDiagram.dgr = &theUmlDiagram;
+				udmDataDiagram.init = dummy;
+
+		#elif defined _DYNAMIC_META_STATIC
+				// Loading the meta for the project
+				Udm::SmartDataNetwork  dnsMeta(Uml::diagram);
+				Uml::Diagram theUmlDiagram;
+
+				// Opening the static meta of the project
+				dnsMeta.OpenExisting(META_PATH, "", Udm::CHANGES_LOST_DEFAULT);
+
+				// Casting the DataNetwork to diagram
+				theUmlDiagram = Uml::Diagram::Cast(dnsMeta.GetRootObject());
+
+				// Creating the UDM diagram
+				Udm::UdmDiagram udmDataDiagram;
+				udmDataDiagram.dgr = &theUmlDiagram;
+				udmDataDiagram.init = dummy;
+
+		#else
+				#error "Neither _DYNAMIC_META_DOM or _DYNAMIC_META_STATIC defined for dynamic loading"
+		#endif
+				// Loading the project
+				UdmGme::GmeDataNetwork dngBackend(udmDataDiagram);
+
+	#else
+			using namespace META_NAMESPACE;
+
+			// Loading the project
+			UdmGme::GmeDataNetwork dngBackend(META_NAMESPACE::diagram);
+
+	#endif
 			try
 			{
-				// Opening backend
-				dngBackend.OpenExisting(ccpProject, Udm::CHANGES_LOST_DEFAULT, true);
-
-
-				CComPtr<IMgaFCO> ccpFocus(currentobj);
-				Udm::Object currentObject;
-				if(ccpFocus)
+				bool invokeExStartedATransaction = false;
+				if (!(ccpProject->ProjectStatus & 8))
 				{
-					currentObject=dngBackend.Gme2Udm(ccpFocus);
+					terr = ccpProject->BeginTransactionInNewTerr(TRANSACTION_NON_NESTED); // could also use TRANSACTION_GENERAL
+					invokeExStartedATransaction = true;
 				}
+				try
+				{
+					// Opening backend
+					dngBackend.OpenExisting(ccpProject, Udm::CHANGES_LOST_DEFAULT, true);
 
-				std::set<Udm::Object> selectedObjects;
 
-				if (selectedobjs) {
-					CComPtr<IMgaFCOs> ccpSelObject(selectedobjs);
+					CComPtr<IMgaFCO> ccpFocus(currentobj);
+					Udm::Object currentObject;
+					if(ccpFocus)
+					{
+						currentObject=dngBackend.Gme2Udm(ccpFocus);
+					}
 
-					MGACOLL_ITERATE(IMgaFCO,ccpSelObject){
-						Udm::Object currObj;
-						if(MGACOLL_ITER)
-						{
-							currObj=dngBackend.Gme2Udm(MGACOLL_ITER);
-						}
-					 selectedObjects.insert(currObj);
-					}MGACOLL_ITERATE_END;
+					std::set<Udm::Object> selectedObjects;
+
+					if (selectedobjs) {
+						CComPtr<IMgaFCOs> ccpSelObject(selectedobjs);
+
+						MGACOLL_ITERATE(IMgaFCO,ccpSelObject){
+							Udm::Object currObj;
+							if(MGACOLL_ITER)
+							{
+								currObj=dngBackend.Gme2Udm(MGACOLL_ITER);
+							}
+						 selectedObjects.insert(currObj);
+						}MGACOLL_ITERATE_END;
+					}
+
+					// Calling the main entry point
+					CUdmApp::UdmMain(&dngBackend,currentObject,selectedObjects,param);
+					// Closing backend
+					dngBackend.CloseWithUpdate();
+					if (invokeExStartedATransaction)
+						ccpProject->CommitTransaction();
 				}
-
-				// Calling the main entry point
-				CUdmApp::UdmMain(&dngBackend,currentObject,selectedObjects,param);
-				// Closing backend
-				dngBackend.CloseWithUpdate();
-				if (invokeExStartedATransaction)
-					ccpProject->CommitTransaction();
+				catch (...)
+				{
+					if (invokeExStartedATransaction)
+						ccpProject->raw_AbortTransaction();
+					throw;
+				}
 			}
-			catch (...)
+			catch(udm_exception &exc)
 			{
-				if (invokeExStartedATransaction)
-					ccpProject->raw_AbortTransaction();
-				throw;
+				// Close GME Backend (we may close it twice, but GmeDataNetwork handles it)
+				dngBackend.CloseNoUpdate();
+
+				ThrowComError(E_FAIL, GMEConsole::BSTRFromUTF8(exc.what()));
 			}
 		}
-		catch(udm_exception &exc)
+		catch (udm_exception& e)
 		{
-			// Close GME Backend (we may close it twice, but GmeDataNetwork handles it)
-			dngBackend.CloseNoUpdate();
-
-			ThrowComError(E_FAIL, GMEConsole::BSTRFromUTF8(exc.what()));
+			GMEConsole::Console::gmeoleapp = 0;
+			ThrowComError(E_FAIL, GMEConsole::BSTRFromUTF8(e.what()));
 		}
-	}
-	catch (udm_exception& e)
-	{
-		GMEConsole::Console::gmeoleapp = 0;
-		ThrowComError(E_FAIL, GMEConsole::BSTRFromUTF8(e.what()));
-	}
-	catch (_com_error& e)
-	{
-		GMEConsole::Console::gmeoleapp = 0;
-		throw;
-	}
-	catch(...)
-	{
-		GMEConsole::Console::gmeoleapp = 0;
-		ThrowComError(E_FAIL, _bstr_t(L"An unexpected error has occurred during the interpretation process."));
-	}
+		catch (_com_error& e)
+		{
+			GMEConsole::Console::gmeoleapp = 0;
+			throw;
+		}
+		catch(...)
+		{
+			GMEConsole::Console::gmeoleapp = 0;
+			ThrowComError(E_FAIL, _bstr_t(L"An unexpected error has occurred during the interpretation process."));
+		}
 	} COMCATCH(GMEConsole::Console::gmeoleapp = 0;)
 	return S_OK;
 
@@ -229,7 +229,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project, IMgaFCO *currentobj,
 
 // GME currently does not use this function
 // you only need to implement it if other invokation mechanisms are used
-STDMETHODIMP RawComponent::ObjectsInvokeEx( IMgaProject *project,  IMgaObject *currentobj,	IMgaObjects *selectedobjs,	long param) {
+STDMETHODIMP RawComponent::ObjectsInvokeEx(IMgaProject *project,  IMgaObject *currentobj, IMgaObjects *selectedobjs, long param) {
 	if(interactive) {
 		AfxMessageBox(_T("The ObjectsInvoke method is not implemented"));
 	}
@@ -249,18 +249,18 @@ STDMETHODIMP RawComponent::put_ComponentParameter(BSTR name, VARIANT newVal) {
 
 #ifdef GME_ADDON
 
-// these two functions are the main 
-STDMETHODIMP RawComponent::GlobalEvent(globalevent_enum event) { 
+// these two functions are the main
+STDMETHODIMP RawComponent::GlobalEvent(globalevent_enum event) {
 	if(event == GLOBALEVENT_UNDO) {
 		AfxMessageBox(_T("Undo"));
 	}
-	return S_OK; 
+	return S_OK;
 }
 
 STDMETHODIMP RawComponent::ObjectEvent(IMgaObject * obj, unsigned long eventmask, VARIANT v) {
 	if(eventmask & OBJEVENT_CREATED) {
-		AfxMessageBox(_T("Object created: ObjID=") + obj->ID); 
-	}		
+		AfxMessageBox(_T("Object created: ObjID=") + obj->ID);
+	}
 	return S_OK;
 }
 
