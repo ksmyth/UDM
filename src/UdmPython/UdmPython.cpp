@@ -153,6 +153,11 @@ void SDN_OpenExisting(Udm::SmartDataNetwork& self, object systemname, const stri
 	throw runtime_error("Unrecognized type for systemname");
 }
 
+void SDN_OpenExisting_2(Udm::SmartDataNetwork& self, object systemname) {
+    std::string metalocator = "";
+    SDN_OpenExisting(self, systemname, metalocator);
+}
+
 void SDN_CreateNew(Udm::SmartDataNetwork& self, const string &systemname, const string& metalocator, const Udm::Object rootclass) {
 	const Uml::Class& root = Uml::SafeTypeContainer::GetSafeType(Uml::Class::Cast(rootclass));
 	self.CreateNew(systemname, metalocator, root, Udm::CHANGES_LOST_DEFAULT);
@@ -925,7 +930,9 @@ BOOST_PYTHON_MODULE(udm)
 		.def("__new__", SDN_New, with_custodian_and_ward_postcall<2, 0>())
 		.staticmethod("__new__")
 		.def("open", SDN_OpenExisting)
+		.def("open", SDN_OpenExisting_2)
 		.def("create", SDN_CreateNew)
+		.def("get_object_by_id", &Udm::SmartDataNetwork::ObjectById)
 		.def("close_with_update", &Udm::SmartDataNetwork::CloseWithUpdate)
 		.def("close_no_update", &Udm::SmartDataNetwork::CloseNoUpdate)
 		.def("save_as", &Udm::SmartDataNetwork::SaveAs)
