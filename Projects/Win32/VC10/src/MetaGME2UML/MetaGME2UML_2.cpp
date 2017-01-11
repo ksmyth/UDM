@@ -223,7 +223,11 @@ void MetaGME2UML::CreateSetMembershipAssociation(MetaGME::ParadigmSheet ps, UmlG
 			string error = "Error: Set:"+(string)contain.name()+ " in ParadigmSheet:" + (string)ps.name() + " Doesnt have any members defined";
 			throw udm_exception(error);
 		}*/
-		if(setmembers.size() == 0) { return; } // if empty, simply return
+		if (setmembers.size() == 0)
+		{
+			// if empty, simply continue with next set
+			continue;
+		}
 		if(setmembers.size()==1)
 		{	MetaGME::SetMembership rt = *setmembers.begin();
 			MetaGME::BaseSet setb   = rt.dstSets_end();
