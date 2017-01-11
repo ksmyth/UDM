@@ -288,6 +288,8 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
     <ClCompile Include="$(GME_ROOT)\SDK\BON\Common\ComponentObj.cpp" />
     <ClCompile Include="$(GME_ROOT)\SDK\BON\Common\Console.cpp" />
     <ClCompile Include="$(GME_ROOT)\Sdk\Bon\Common\Exceptions.cpp" />
+    <ClCompile Include="..\MetaGME\MetaGME.cpp" />
+    <ClCompile Include="..\MetaGME\UmlGME.cpp" />
     <ClCompile Include="MetaGME2UML.cpp" />
     <ClCompile Include="MetaGME2UML_2.cpp" />
     <ClCompile Include="RawComponent.cpp">
@@ -355,6 +357,8 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(GME_ROOT)\Sdk\Bon\Common\ComHelp.h" />
+    <ClInclude Include="..\MetaGME\MetaGME.h" />
+    <ClInclude Include="..\MetaGME\UmlGME.h" />
     <ClInclude Include="ComponentConfig.h" />
     <ClInclude Include="$(GME_ROOT)\Sdk\Bon\Common\ComponentDll.h" />
     <ClInclude Include="$(GME_ROOT)\Sdk\Bon\Common\ComponentObj.h" />

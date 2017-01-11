@@ -18,8 +18,11 @@
  *  LAST UPDATE: 
  */
 
-//#include "stdafx.h"
+#include "stdafx.h"
 //#include <afxdlgs.h> // For CFileDialog
+
+#include "Mga.h"
+#include "GME.h"
 
 #include "MetaGME2UML.h"
 #include "algorithm"
