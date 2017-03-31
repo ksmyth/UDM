@@ -86,7 +86,7 @@ namespace $namespace
             get
             {
                 $impl_namespace${root.name}Initialize.castDelegate<Udm.Native.UdmCliObject> cast;
-                if ($impl_namespace${root.name}Initialize.downcasts.TryGetValue(type, out cast))
+                if ($impl_namespace${root.name}Initialize.downcasts.TryGetValue(((IUdmObject)this).type, out cast))
                 {
                     return (${fq_iname($c)})cast(this);
                 }
