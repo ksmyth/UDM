@@ -212,7 +212,6 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -261,7 +260,6 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -283,11 +281,10 @@ echo regsvr32 exec. time &gt; "$(IntDir)regsvr32.trg"
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="$(GME_ROOT)\Sdk\Bon\Common\ComHelp.cpp" />
-    <ClCompile Include="$(GME_ROOT)\Sdk\Bon\Common\ComponentDll.cpp">
-    </ClCompile>
+    <ClCompile Include="$(GME_ROOT)\Sdk\Bon\Common\ComponentDll.cpp"/>
     <ClCompile Include="$(GME_ROOT)\SDK\BON\Common\ComponentObj.cpp" />
-    <ClCompile Include="$(GME_ROOT)\SDK\BON\Common\Console.cpp" />
     <ClCompile Include="$(GME_ROOT)\Sdk\Bon\Common\Exceptions.cpp" />
+    <ClCompile Include="UdmConsole.cpp" />
     <ClCompile Include="..\MetaGME\MetaGME.cpp" />
     <ClCompile Include="..\MetaGME\UmlGME.cpp" />
     <ClCompile Include="MetaGME2UML.cpp" />

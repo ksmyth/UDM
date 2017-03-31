@@ -28,7 +28,7 @@
 #define MESSAGE_OUT(STR) if(param != GME_SILENT_MODE) AfxMessageBox(STR); else cout << STR << endl
 #include "UdmConsole.h"
 static void ConsoleMessage(const std::string& msg) {
-	GMEConsole::Console::Out::WriteLine(msg);
+	GMEConsole::Console::Out::writeLine(msg);
 }
 #else
 #include <string>
