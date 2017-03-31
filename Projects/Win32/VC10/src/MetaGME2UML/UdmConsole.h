@@ -34,9 +34,6 @@ namespace GMEConsole
 
 		static void writeLine(const std::string& message, msgtype_enum type);
 
-		static void WriteLine(const std::string& message, msgtype_enum type);
-
-
 		static void writeLine(const std::wstring& message, msgtype_enum type);
 
 		static void clear()
@@ -64,10 +61,6 @@ namespace GMEConsole
 		{
 		public:
 			static void writeLine(const std::string& message)
-			{
-				Console::writeLine(message, MSG_NORMAL);
-			}
-			static void WriteLine(const std::string& message)
 			{
 				Console::writeLine(message, MSG_NORMAL);
 			}

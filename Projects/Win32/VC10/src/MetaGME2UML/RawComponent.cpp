@@ -11,7 +11,6 @@
 #include "ComponentConfig.h"
 #include "UdmConfig.h"
 #include "RawComponent.h"
-#include "Console.h"
 
 // Udm includes
 #include "UdmBase.h"
@@ -24,8 +23,11 @@
 
 #include "UdmApp.h"
 
-#include "MetaGME.cpp"
-#include "UmlGME.cpp"
+#include "Gme.h"
+#include "UdmConsole.h"
+
+// #include "MetaGME.cpp"
+// #include "UmlGME.cpp"
 
 // Global config object
 _config config;
@@ -143,7 +145,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 
 			if (interactive)
 				AfxMessageBox(exc.what());
-			GMEConsole::Console::Error::WriteLine(exc.what());
+			GMEConsole::Console::Error::writeLine(exc.what());
 			return E_FAIL;
 		}
 	}
@@ -151,7 +153,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 	{	
 		if (interactive)
 			AfxMessageBox(exc.what());
-		GMEConsole::Console::Error::WriteLine(exc.what());
+		GMEConsole::Console::Error::writeLine(exc.what());
 		return E_FAIL;
 	}			 
 	catch(...) 
@@ -159,7 +161,7 @@ STDMETHODIMP RawComponent::InvokeEx( IMgaProject *project,  IMgaFCO *currentobj,
 		ccpProject->AbortTransaction();
 		if (interactive)
 			AfxMessageBox("An unexpected error has occured during the interpretation process.");
-		GMEConsole::Console::Error::WriteLine("An unexpected error has occured during the interpretation process.");
+		GMEConsole::Console::Error::writeLine("An unexpected error has occured during the interpretation process.");
 		return E_UNEXPECTED;
 	}
 	return S_OK;
