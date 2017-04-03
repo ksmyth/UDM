@@ -78,29 +78,13 @@
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
 del /q "$(CliBridgeCsDir)\%(Filename)\*"
-"$(SWIG_EXE)" ^
--csharp ^
--namespace "Udm.Native" ^
--dllimport "$(UdmCliBridgeDll)" ^
--outdir "$(CliBridgeCsDir)\%(Filename)"  ^
--I"$(UDM_PATH)"\include ^
--c++ ^
--o "%(Filename)"_wrap.cpp ^
-"%(FullPath)"
+"$(SWIG_EXE)" -csharp -namespace "Udm.Native" -dllimport "$(UdmCliBridgeDll)" -outdir "$(CliBridgeCsDir)\%(Filename)"  -I"$(UDM_PATH)\include" -c++ -o "%(Filename)"_wrap.cpp "%(FullPath)"
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
 del /q "$(CliBridgeCsDir)\%(Filename)\*"
-"$(SWIG_EXE)" ^
--csharp ^
--namespace "Udm.Native" ^
--dllimport "$(UdmCliBridgeDll)" ^
--outdir "$(CliBridgeCsDir)\%(Filename)"  ^
--I"$(UDM_PATH)"\include ^
--c++ ^
--o "%(Filename)"_wrap.cpp ^
-"%(FullPath)"
+"$(SWIG_EXE)" -csharp -namespace "Udm.Native" -dllimport "$(UdmCliBridgeDll)" -outdir "$(CliBridgeCsDir)\%(Filename)"  -I"$(UDM_PATH)\include" -c++ -o "%(Filename)"_wrap.cpp "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
@@ -118,29 +102,13 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
 del /q "$(CliBridgeCsDir)\%(Filename)\*"
-"$(SWIG_EXE)" ^
--csharp ^
--namespace "Udm.Native.%(Filename)" ^
--dllimport "$(UdmCliBridgeDll)" ^
--outdir "$(CliBridgeCsDir)\%(Filename)"  ^
--I"$(UDM_PATH)"\include ^
--c++ ^
--o "%(Filename)"_wrap.cpp ^
-"%(FullPath)"
+"$(SWIG_EXE)" -csharp -namespace "Udm.Native.%(Filename)" -dllimport "$(UdmCliBridgeDll)" -outdir "$(CliBridgeCsDir)\%(Filename)"  -I"$(UDM_PATH)\include" -c++ -o "%(Filename)"_wrap.cpp "%(FullPath)"
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
 del /q "$(CliBridgeCsDir)\%(Filename)\*"
-"$(SWIG_EXE)" ^
--csharp ^
--namespace "Udm.Native.%(Filename)" ^
--dllimport "$(UdmCliBridgeDll)" ^
--outdir "$(CliBridgeCsDir)\%(Filename)"  ^
--I"$(UDM_PATH)"\include ^
--c++ ^
--o "%(Filename)"_wrap.cpp ^
-"%(FullPath)"
+"$(SWIG_EXE)" -csharp -namespace "Udm.Native.%(Filename)" -dllimport "$(UdmCliBridgeDll)" -outdir "$(CliBridgeCsDir)\%(Filename)"  -I"$(UDM_PATH)\include" -c++ -o "%(Filename)"_wrap.cpp "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
@@ -153,29 +121,13 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
 del /q "$(CliBridgeCsDir)\%(Filename)\*"
-"$(SWIG_EXE)" ^
--csharp ^
--namespace "Udm.Native.%(Filename)" ^
--dllimport "$(UdmCliBridgeDll)" ^
--outdir "$(CliBridgeCsDir)\%(Filename)"  ^
--I"$(UDM_PATH)"\include ^
--c++ ^
--o "%(Filename)"_wrap.cpp ^
-"%(FullPath)"
+"$(SWIG_EXE)" -csharp -namespace "Udm.Native.%(Filename)" -dllimport "$(UdmCliBridgeDll)" -outdir "$(CliBridgeCsDir)\%(Filename)"  -I"$(UDM_PATH)\include" -c++ -o "%(Filename)"_wrap.cpp "%(FullPath)"
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
 del /q "$(CliBridgeCsDir)\%(Filename)\*"
-"$(SWIG_EXE)" ^
--csharp ^
--namespace "Udm.Native.%(Filename)" ^
--dllimport "$(UdmCliBridgeDll)" ^
--outdir "$(CliBridgeCsDir)\%(Filename)"  ^
--I"$(UDM_PATH)"\include ^
--c++ ^
--o "%(Filename)"_wrap.cpp ^
-"%(FullPath)"
+"$(SWIG_EXE)" -csharp -namespace "Udm.Native.%(Filename)" -dllimport "$(UdmCliBridgeDll)" -outdir "$(CliBridgeCsDir)\%(Filename)"  -I"$(UDM_PATH)\include" -c++ -o "%(Filename)"_wrap.cpp "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
@@ -187,29 +139,13 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
 del /q "$(CliBridgeCsDir)\%(Filename)\*"
-"$(SWIG_EXE)" ^
--csharp ^
--namespace "Udm.Native.%(Filename)" ^
--dllimport "$(UdmCliBridgeDll)" ^
--outdir "$(CliBridgeCsDir)\%(Filename)"  ^
--I"$(UDM_PATH)"\include ^
--c++ ^
--o "%(Filename)"_wrap.cpp ^
-"%(FullPath)"
+"$(SWIG_EXE)" -csharp -namespace "Udm.Native.%(Filename)" -dllimport "$(UdmCliBridgeDll)" -outdir "$(CliBridgeCsDir)\%(Filename)"  -I"$(UDM_PATH)\include" -c++ -o "%(Filename)"_wrap.cpp "%(FullPath)"
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
 del /q "$(CliBridgeCsDir)\%(Filename)\*"
-"$(SWIG_EXE)" ^
--csharp ^
--namespace "Udm.Native.%(Filename)" ^
--dllimport "$(UdmCliBridgeDll)" ^
--outdir "$(CliBridgeCsDir)\%(Filename)"  ^
--I"$(UDM_PATH)"\include ^
--c++ ^
--o "%(Filename)"_wrap.cpp ^
-"%(FullPath)"
+"$(SWIG_EXE)" -csharp -namespace "Udm.Native.%(Filename)" -dllimport "$(UdmCliBridgeDll)" -outdir "$(CliBridgeCsDir)\%(Filename)"  -I"$(UDM_PATH)\include" -c++ -o "%(Filename)"_wrap.cpp "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
@@ -221,29 +157,13 @@ del /q "$(CliBridgeCsDir)\%(Filename)\*"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
 del /q "$(CliBridgeCsDir)\%(Filename)\*"
-"$(SWIG_EXE)" ^
--csharp ^
--namespace "Udm.Native.%(Filename)" ^
--dllimport "$(UdmCliBridgeDll)" ^
--outdir "$(CliBridgeCsDir)\%(Filename)"  ^
--I"$(UDM_PATH)"\include ^
--c++ ^
--o "%(Filename)"_wrap.cpp ^
-"%(FullPath)"
+"$(SWIG_EXE)" -csharp -namespace "Udm.Native.%(Filename)" -dllimport "$(UdmCliBridgeDll)" -outdir "$(CliBridgeCsDir)\%(Filename)"  -I"$(UDM_PATH)\include" -c++ -o "%(Filename)"_wrap.cpp "%(FullPath)"
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">mkdir "$(CliBridgeCppDir)"
 cd  "$(CliBridgeCppDir)"
 mkdir "$(CliBridgeCsDir)\%(Filename)"
 del /q "$(CliBridgeCsDir)\%(Filename)\*"
-"$(SWIG_EXE)" ^
--csharp ^
--namespace "Udm.Native.%(Filename)" ^
--dllimport "$(UdmCliBridgeDll)" ^
--outdir "$(CliBridgeCsDir)\%(Filename)"  ^
--I"$(UDM_PATH)"\include ^
--c++ ^
--o "%(Filename)"_wrap.cpp ^
-"%(FullPath)"
+"$(SWIG_EXE)" -csharp -namespace "Udm.Native.%(Filename)" -dllimport "$(UdmCliBridgeDll)" -outdir "$(CliBridgeCsDir)\%(Filename)"  -I"$(UDM_PATH)\include" -c++ -o "%(Filename)"_wrap.cpp "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CliBridgeCppDir)\%(Filename)_wrap.cpp;%(Outputs)</Outputs>
