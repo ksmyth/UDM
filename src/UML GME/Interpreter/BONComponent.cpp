@@ -307,8 +307,10 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		{
 			if (!(param & GME_SILENT_MODE))
 				AfxMessageBox(err.c_str());
-			else
+			else {
 				std::cerr << err << std::endl;
+				throw (HRESULT)E_FAIL;
+			}
 		}
 	}
 	catch (udm_exception &e)
@@ -316,9 +318,11 @@ void CComponent::InvokeEx(CBuilder &builder,CBuilderObject *focus, CBuilderObjec
 		std::string err = std::string("Caught udm_exception in UML2XML: \"") + e.what() + "\"";
 		GMEConsole::Console::SetupConsole(builder.GetProject());
 		GMEConsole::Console::Error::WriteLine(err.c_str());
+		GMEConsole::Console::ReleaseConsole();
 		if (!(param & GME_SILENT_MODE))
 			AfxMessageBox(err.c_str());
-		GMEConsole::Console::ReleaseConsole();
+		else
+			throw (HRESULT)E_FAIL;
 	}
 }
 
