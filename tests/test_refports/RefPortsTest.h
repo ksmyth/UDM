@@ -3,6 +3,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 #include <string>
+#include "UdmTest.h"
 
 using namespace std;
 
@@ -22,6 +23,10 @@ namespace UdmTests
 		void testRefPorts(const string &file);
 		void testDOM();
 		void testMEM();
+		virtual void setUp()
+		{
+			chdir_udm_test("test_refports");
+		};
 #ifdef _WIN32
 		void testMGA();
 #endif
