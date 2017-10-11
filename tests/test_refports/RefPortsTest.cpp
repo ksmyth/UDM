@@ -34,10 +34,10 @@ void UdmTests::refPortsTest::testMGA()
 void UdmTests::refPortsTest::testRefPorts(const string &file)
 {
 	Udm::SmartDataNetwork dn(RefPort::diagram);
-	dn.CreateNew(file, "RefPort", RootFolder::meta, Udm::CHANGES_LOST_DEFAULT);
+	dn.CreateNew(file, "RefPort", RefPort::RootFolder::meta, Udm::CHANGES_LOST_DEFAULT);
 
 	//creating root folder
-	RootFolder rf = RootFolder::Cast(dn.GetRootObject());
+	RefPort::RootFolder rf = RefPort::RootFolder::Cast(dn.GetRootObject());
 	rf.name() = "RootFolder";
 
 	//creating root models

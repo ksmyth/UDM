@@ -6,6 +6,7 @@
 
 #include <string>
 #include <cppunit/extensions/HelperMacros.h>
+#include "UdmTest.h"
 
 using namespace std;
 
@@ -17,6 +18,10 @@ class TestNSTest : public CPPUNIT_NS::TestFixture
 	void writeTest(const std::string& fname);
 	void readTest(const std::string& fname);
 public:
+	virtual void setUp()
+	{
+		chdir_udm_test("test_ns");
+	};
 	void test_ns();
 };
 
