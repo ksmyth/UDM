@@ -923,7 +923,7 @@ namespace UdmDom
 				*(target + startIndex) = chNull;
 			else
 				// +1 for the end of string
-				XMLString::moveChars(target + startIndex, target + startIndex + count, XMLString::stringLen(target) - startIndex - count + 1);
+				XMLString::moveChars(target + startIndex, target + startIndex + count, length - startIndex - count + 1);
 		}
 
 		const XMLCh* GetID() 
@@ -2809,6 +2809,7 @@ namespace UdmDom
 									currentpeer->setAttribute(tname_buf, cpa_new);
 								else
 									currentpeer->removeAttribute(tname_buf);
+								XMLString::release(&cpa_new);
 							}
 							else
 								currentpeer->removeAttribute(tname_buf);

@@ -1712,20 +1712,22 @@ namespace UDM_NAMESPACE
 		{
 			UDM_ASSERT(refs.size());
 
-			ObjectImpl* ref = refs.back();
+			Object ref = refs.back()->clone();
 
 			// exit loop when reaching the parent of the reference port
-			const ObjectImpl *target_parent = target->getParent(NULLPARENTROLE);
+			ObjectImpl *target_parent = target->getParent(NULLPARENTROLE);
 
-			while (ref != &_null) {
+			while (ref.__impl() != &_null) {
 
-				Object referred = Object(ref->clone()).getReferencedObject();
+				Object referred = Object(ref.__impl()->clone()).getReferencedObject();
 				if (referred.uniqueId() == target_parent->uniqueId())
 					break;
 
 				ref = referred.__impl()->clone();
 			}
 
+			if (target_parent != &_null)
+				target_parent->release();
 			return ref != &_null;
 		}
 
@@ -1738,8 +1740,9 @@ namespace UDM_NAMESPACE
 			ObjectImpl* rp_helper_ref = &_null;
 			if (rp_helper) {
 				vector<ObjectImpl*> v = getAssociation(rp_helper);
-				if (v.size())
+				if (v.size()) {
 					rp_helper_ref = v.front();
+				}
 			}
 
 			if (refs.size()) {
@@ -1751,6 +1754,7 @@ namespace UDM_NAMESPACE
 					vector<ObjectImpl*> v;
 					v.push_back(refs.front());
 					setAssociation(rp_helper, v);
+					rp_helper_ref->release();
 				}
 			} else {
 				if (rp_helper_ref != &_null) {
@@ -1758,25 +1762,35 @@ namespace UDM_NAMESPACE
 					// is there a reference port helper set for this connection?
 					vector<ObjectImpl*> v;
 					v.push_back(rp_helper_ref);
-					if (!canCompleteRefsChain(target, v))
+					if (!canCompleteRefsChain(target, v)) {
+						rp_helper_ref->release();
 						throw udm_exception("Could not reach target " + UdmUtil::ExtractName(target) + " starting with the reference port helper set in the model");
+					}
+					rp_helper_ref->release();
 				} else {
-					ObjectImpl* parent = getParent(NULLPARENTROLE);
-					if (parent != target->getParent(NULLPARENTROLE)) {
-						vector<ObjectImpl*> children = parent->getChildren(NULL, NULL);
+					Object parent = getParent(NULLPARENTROLE);
+					Object parent_target = target->getParent(NULLPARENTROLE);
+					if (parent.__impl() != parent_target.__impl()) {
+						vector<ObjectImpl*> children = parent.__impl()->getChildren(NULL, NULL);
 						vector<ObjectImpl*>::const_iterator i = children.begin();
 						for (; i != children.end(); i++) {
-							ObjectImpl *child = *i;
+							ObjectImpl* child = *i;
 							vector<ObjectImpl*> v;
 							v.push_back(child);
 							if (child->type().stereotype() == "Reference" && canCompleteRefsChain(target, v)) {
 								// found a child that can be used to reach the target
 								setAssociation(rp_helper, v);
+								//(*i)->release();
 								break;
+							} else {
+								(*i)->release();
 							}
 						}
 						if (i == children.end())
 							throw udm_exception("Could not reach target " + UdmUtil::ExtractName(target) + " from any reference found in the parent of connection");
+						for (; i != children.end(); i++) {
+							(*i)->release();
+						}
 					}
 				}
 			}
@@ -1847,13 +1861,13 @@ namespace UDM_NAMESPACE
 				ObjectImpl* ref = v[0];
 
 				// exit loop when reaching the parent of the reference port
-				const ObjectImpl *target_parent = target->getParent(NULLPARENTROLE);
+				Object target_parent = target->getParent(NULLPARENTROLE);
 
 				do {
 					ret.push_back(ref);
 
 					Object referred = Object(ref->clone()).getReferencedObject();
-					if (referred.uniqueId() == target_parent->uniqueId())
+					if (referred.uniqueId() == target_parent.__impl()->uniqueId())
 						break;
 
 					ref = referred.__impl()->clone();
