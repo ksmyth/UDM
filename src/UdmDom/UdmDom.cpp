@@ -1362,7 +1362,9 @@ namespace UdmDom
 			{
 				XMLString::release(&a_buf);
 				throw udm_exception("Attr is of non-float format");
+
 			}
+			XMLString::release(&a_buf);
 			return d;
 		}
 

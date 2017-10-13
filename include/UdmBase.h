@@ -3592,6 +3592,10 @@ public:
 		testdn()->resetStaticUdmProject();
 	};
 
+	virtual void release()
+	{
+		dn = NULL;
+	};
 
 	//string support
 	virtual	void CreateNewToString(const string &metalocator, const ::Uml::Class &rootclass, 

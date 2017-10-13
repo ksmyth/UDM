@@ -632,7 +632,8 @@ namespace UDM_NAMESPACE
 			
 			datanetworks.insert(pair<string, Udm::DataNetwork*>(i->filename(), dn->testdn()));
 			rev_datanetworks.insert(pair<Udm::DataNetwork*, string>(dn->testdn(), i->filename()));
-			
+			dn->release();
+			delete dn;
 			
 			::UdmProject::Datanetwork _udm_pr_dn = ::UdmProject::Datanetwork::Create(_project,::UdmProject::Project::meta_instances);
 			_udm_pr_dn.metalocator() = i->metalocator();
@@ -825,7 +826,7 @@ namespace UDM_NAMESPACE
 
 			map<string, Udm::DataNetwork*>::iterator rev_i = datanetworks.find(ph_sys_name);
 			if (rev_i == datanetworks.end())
-				throw udm_exception(string("Datanetwork with systemname ") + ph_sys_name + string(" was not found in the reverse map!"));
+				throw udm_exception(string("Datanetwork with systemname '") + ph_sys_name + string("' was not found in the reverse map!"));
 
 			if (rev_i->second == o.__impl()->__getdn())
 			{
