@@ -54,6 +54,7 @@ if platform.system() == 'Windows':
             # \PC
 
             import subprocess
+            subprocess.check_call([r'..\..\Projects\Win32\VC10\src\.nuget\NuGet.exe', 'restore', r'..\..\Projects\Win32\VC10\src\UdmPython\packages.config'])
             subprocess.check_call([os.path.join(os.environ['VS100COMNTOOLS'], '..', '..', 'VC', 'vcvarsall.bat'), ('AMD64' if struct.calcsize("P") == 8 else 'x86')] +
                 ['&&'] +
                 [r'msbuild', r'..\..\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj', '/t:Rebuild', '/fl',
