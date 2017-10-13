@@ -1,7 +1,9 @@
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
+#if _MSC_VER < 1800
 #include <xdebug>
+#endif
 
 #include "Windows.h"
 

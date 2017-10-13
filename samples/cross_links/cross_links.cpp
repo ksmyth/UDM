@@ -11,6 +11,7 @@
 #include "CD3.h"
 #include "CL.h"
 #include <UmlExt.h>
+#include <functional>
 
 UDM_USE_DOM
 
