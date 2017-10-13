@@ -737,7 +737,12 @@ namespace UdmDom
 		const DataNetwork * mydn;
 	
 		
-	public:	
+	public:
+#if _MSC_VER >= 1800
+        DomObject(const DomObject&) = delete;
+        DomObject& operator=(const DomObject&) = delete;
+#endif
+
 		DOMElement *dom_element;
 		
 		
@@ -2371,7 +2376,7 @@ namespace UdmDom
 					//DOMString oname = subtype ? "derived" : "instances";
 					const XMLCh *oname = subtype ? gXML__derived : gXML__instances;
 
-					DomObject peer = *const_cast<DomObject *>((const DomObject*)archetype);
+					DomObject& peer = *const_cast<DomObject *>((const DomObject*)archetype);
 					const XMLCh *peerid = peer.GetID();
 
 
@@ -2774,7 +2779,7 @@ namespace UdmDom
 			{
 				UDM_ASSERT(dynamic_cast<DomObject*>(*i));
 				UDM_ASSERT(static_cast<DomObject *>(*i)->__getdn() == __getdn());
-				DomObject peer = *static_cast<DomObject *>(*i);
+				DomObject& peer = *static_cast<DomObject *>(*i);
 
 				const XMLCh *peerid = peer.GetID();
 				if(aa != NULL) 
@@ -2927,7 +2932,7 @@ namespace UdmDom
 					set<Object> new_vect;		//this will contain the vector of corresponding objects
 					for(vector<ObjectImpl* >::const_iterator k = nvect.begin(); k != nvect.end(); k++) 
 					{
-						DomObject peer = *static_cast<DomObject *>(*k);
+						DomObject& peer = *static_cast<DomObject *>(*k);
 						Udm::Object peer_o_inst = peer.findInstanceIn((DomObject*)(*oset_i));
 						if (peer_o_inst) new_vect.insert(peer_o_inst);
 					}
@@ -2988,7 +2993,7 @@ namespace UdmDom
 					set<Object> new_vect;		//this will contain the vector of corresponding objects
 					for(vector<ObjectImpl* >::const_iterator k = nvect.begin(); k != nvect.end(); k++) 
 					{
-						DomObject peer = *static_cast<DomObject *>(*k);
+						DomObject& peer = *static_cast<DomObject *>(*k);
 						Udm::Object peer_o_inst = peer.findInstanceIn((DomObject*)(*oset_i));
 						if (peer_o_inst)new_vect.insert(peer_o_inst);
 					}
