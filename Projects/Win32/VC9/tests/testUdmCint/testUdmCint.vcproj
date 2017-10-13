@@ -22,8 +22,6 @@
 			IntermediateDirectory="$(OutDir)\obj\tests\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="..\UdmTests.vsprops"
-			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
 			>
 			<Tool
@@ -118,8 +116,6 @@
 			IntermediateDirectory="$(OutDir)\obj\tests\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="..\UdmTests.vsprops"
-			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
 			>
 			<Tool

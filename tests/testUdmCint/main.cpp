@@ -1,7 +1,4 @@
 #include "Test.h"
-#ifdef _WIN32
-#include <afx.h>
-#endif
 #include <stdexcept>
 #include <sstream>
 #include <UdmBase.h>
