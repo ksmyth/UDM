@@ -851,7 +851,7 @@ namespace UDM_NAMESPACE
 
 		virtual bool operator==(const ArrAttrItem<CLASS>& a)
 		{
-			if (array != a.array)
+			if (&array != &a.array)
 				throw udm_exception("Comparision of two unrelated iterators!");
 			
 			return (index == a.index);
@@ -940,7 +940,7 @@ namespace UDM_NAMESPACE
 
 		virtual bool operator==(const ArrAttrItem<bool>& a)
 		{
-			if (array != a.array)
+			if (&array != &a.array)
 				throw udm_exception("Comparision of two unrelated iterators!");
 			
 			return (index == a.index);
