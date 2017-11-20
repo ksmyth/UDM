@@ -37,14 +37,14 @@ build_script:
 
   - msbuild Projects\Win32\VC10\src\Udm.sln /p:Configuration=Release;Platform=Win32 /fl /m /t:UdmDll
 
-  - pushd src\UdmPython
+  - cd src\UdmPython
   - c:\Python27\python -m pip install wheel
   - c:\Python27\python setup.py bdist_wheel
   - c:\Python35\python -m pip install wheel
   - c:\Python35\python setup.py bdist_wheel
   - c:\Python36\python -m pip install wheel
   - c:\Python36\python setup.py bdist_wheel
-  - popd
+  - cd ..\..
  
   - ps: 'Import-Module CoApp; Write-NuGetPackage .\Udm.autopkg'
   - ps: 'Import-Module CoApp; Write-NuGetPackage .\Udm-vc140.autopkg'
