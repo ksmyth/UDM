@@ -151,7 +151,7 @@ public:
 	const udm_exception &operator =(const udm_exception &a) throw()
 	{
 #ifdef _MSC_VER
-		*((::std::exception*)this) = a;
+		*(static_cast<::std::exception*>(this)) = a;
 #endif
 		description = a.description; stacktrace = get_stacktrace(); _init(); return *this;
 	}

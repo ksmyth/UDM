@@ -4217,7 +4217,10 @@ inline UDM_DLL std::ostream & operator<< (ostream &o, __int64 i) { char k[30];sp
 #endif
 
 
-inline UDM_DLL std::ostream & operator<< (std::ostream &o, Udm::StringAttr c) { o << (std::string)c; return o; };
+inline UDM_DLL std::ostream & operator<< (std::ostream &o, Udm::StringAttr c) {
+	o << static_cast<std::string>(c);
+	return o;
+}
 
 //defines for using backends
 #ifdef _WIN32
