@@ -70,6 +70,15 @@
     <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v140;Configuration=Debug;Platform=x64" />
     <MSBuild Projects="Projects\Win32\VC10\src\Udmv110.sln" Targets="Build" Properties="PlatformToolset=v140;Configuration=Release;Platform=x64" />
   </Target>
+  <Target Name="BuildVC15" DependsOnTargets="CheckEnv">
+    <!-- invoke: "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe" make.msbuild /m /t:BuildVC15;BuildVC15_x64 /p:"VCTargetsPath=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets";PlatformToolset=v141 -->
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv141.sln" Targets="Build" Properties="PlatformToolset=v141;Configuration=Debug" />
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv141.sln" Targets="Build" Properties="PlatformToolset=v141;Configuration=Release" />
+  </Target>
+  <Target Name="BuildVC15_x64" DependsOnTargets="CheckEnv">
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv141.sln" Targets="Build" Properties="PlatformToolset=v141;Configuration=Debug;Platform=x64" />
+    <MSBuild Projects="Projects\Win32\VC10\src\Udmv141.sln" Targets="Build" Properties="PlatformToolset=v141;Configuration=Release;Platform=x64" />
+  </Target>
 
   <Target Name="UdmCliGen" DependsOnTargets="CheckEnv">
     <MSBuild Projects="src\UdmCliGen\make.msbuild"/>
