@@ -12,6 +12,7 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(this_dir)
 
 setup_args = dict(
     name='Udm',
@@ -50,7 +51,7 @@ if platform.system() == 'Windows':
             # If building against Python source, may also need:
             # \PCbuild\$(PlatformShortName)
             # \PCbuild
-            os.environ['INCLUDE'] = os.path.join(pythonbase, 'include') + ';' + os.path.join(os.path.dirname(os.path.abspath(__file__)), 'windows_compat')
+            os.environ['INCLUDE'] = os.path.join(pythonbase, 'include') + ';' + os.path.join(this_dir, 'windows_compat')
             # \PC
 
             import subprocess

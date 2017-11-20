@@ -3,6 +3,9 @@ import os
 import os.path
 import unittest
 
+this_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(this_dir)
+
 from sys import platform as _platform
 if _platform == "linux" or _platform == "linux2":
     #linux
@@ -136,7 +139,6 @@ class TestUdmBackwardsCompat(unittest.TestCase):
             return
         import subprocess
         import os.path
-        this_dir = os.path.dirname(os.path.abspath(__file__))
         pf86 = os.environ.get('ProgramFiles(x86)', os.environ.get('ProgramFiles'))
         
         with open(os.path.join(this_dir, 'UdmDll_VS10.lib.exports'), 'wb') as out_file:
