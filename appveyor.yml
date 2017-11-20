@@ -20,6 +20,10 @@ install:
   - type GME_install.log
 #  - ps: (new-object net.webclient).DownloadFile('https://github.com/ksmyth/pywin32/releases/download/b219/pywin32-219.win32-py2.7.exe', 'c:\pywin32-219.win32-py2.7.exe')
 #  - python -m easy_install c:\pywin32-219.win32-py2.7.exe
+  - ps: (new-object net.webclient).DownloadFile('https://nuget-packages.metamorphsoftware.com/CoApp.Tools.Powershell.msi', 'C:\CoApp.Tools.Powershell.msi')
+  - ps: Start-Process -FilePath msiexec -ArgumentList /i, 'C:\CoApp.Tools.Powershell.msi', /quiet -Wait
+  - ps: $env:PSModulePath = $env:PSModulePath + ';C:\Program Files (x86)\Outercurve Foundation\Modules'
+  - ps: Import-Module CoApp
 
 build_script:
   - msbuild make.msbuild /fl /m /t:BuildVS9
@@ -33,14 +37,21 @@ build_script:
 
   - msbuild Projects\Win32\VC10\src\Udm.sln /p:Configuration=Release;Platform=Win32 /fl /m /t:UdmDll
 
-  - cd src\UdmPython
+  - pushed src\UdmPython
   - c:\Python27\python -m pip install wheel
   - c:\Python27\python setup.py bdist_wheel
   - c:\Python35\python -m pip install wheel
   - c:\Python35\python setup.py bdist_wheel
   - c:\Python36\python -m pip install wheel
   - c:\Python36\python setup.py bdist_wheel
+  - popd
  
+  - ps: 'Import-Module CoApp; Write-NuGetPackage .\Udm.autopkg'
+  - ps: 'Import-Module CoApp; Write-NuGetPackage .\Udm-vc140.autopkg'
+  # need "image: Visual Studio 2017"
+  # - '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe" make.msbuild /m /t:BuildVC15;BuildVC15_x64 /p:"VCTargetsPath=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets";PlatformToolset=v141'
+  # - ps: 'Import-Module CoApp; Write-NuGetPackage .\Udm-vc141.autopkg'
+
 artifacts:
   - path: "*.log"
   - path: "WiX/*/*.wixlib"
