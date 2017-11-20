@@ -12,7 +12,7 @@ install:
 #  - dir /b/s \ | %windir%\system32\find "WiX Toolset"
 #  - dir /b/s C:\MinGW
   - reg query "HKLM\SOFTWARE\Microsoft\Windows Installer XML" /reg:32
-  - reg query "HKLM\SOFTWARE\Microsoft\Windows Installer XML\3.10" /reg:32
+  - reg query "HKLM\SOFTWARE\Microsoft\Windows Installer XML\3.11" /reg:32
   - ps: (new-object net.webclient).DownloadFile('https://github.com/ksmyth/UDM/tarball/3rdparty', 'c:\3rdparty.tar.gz')
   - mkdir c:\projects\UDM-3rdparty && C:\MinGW\msys\1.0\bin\tar.exe xzf /c/3rdparty.tar.gz -C /c/projects/UDM-3rdparty --strip-components=1
   - dir c:\projects\UDM-3rdparty\GME_x64-15.5.8.msi
