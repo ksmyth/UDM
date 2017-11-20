@@ -154,11 +154,11 @@
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.pyd</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.pyd</TargetExt>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">udm</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">udm_x64</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">udm</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release27|Win32'">udm</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='ReleaseEnv|Win32'">udm</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release27|x64'">udm_x64</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='ReleaseEnv|x64'">udm_x64</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release27|x64'">udm</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='ReleaseEnv|x64'">udm</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.pyd</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.pyd</TargetExt>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release27|Win32'">.pyd</TargetExt>
