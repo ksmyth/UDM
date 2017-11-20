@@ -832,8 +832,8 @@ namespace UDM_NAMESPACE
 			while (array.size() <=index)
 				array.push_back(CLASS());
 
-			CLASS & i = (CLASS&)array.at(index);
-			i = a;
+			array.at(index) = a;
+
 			set();
 			return *this;
 		};
