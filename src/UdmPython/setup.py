@@ -34,7 +34,7 @@ setup_args['ext_modules'] = [
 if platform.system() == 'Windows':
     class my_build_ext(build_ext):
         def build_extension(self, ext):
-            ''' Copies the already-compiled pyd
+            ''' Compiles the .pyd with msbuild
             '''
             import shutil
             import os.path

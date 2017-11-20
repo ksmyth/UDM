@@ -553,9 +553,9 @@ void Object_set_adjacent_helper(Udm::Object& self, object _targets, object srcro
 				}
 			} else {
 				// FIXME: should work with _targets.__iter__() instead
-				int len_targets = boost::python::len(_targets);
+				size_t len_targets = boost::python::len(_targets);
 				targets_impl.reserve(len_targets);
-				for (int i = 0; i < len_targets; i++) {
+				for (size_t i = 0; i < len_targets; i++) {
 					Udm::Object& o = extract<Udm::Object&>(_targets[i]);
 					targets_impl.push_back(o.__impl());
 					if (o.__impl()->__getdn()->uniqueId() != self.__impl()->__getdn()->uniqueId()) {
