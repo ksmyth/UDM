@@ -37,7 +37,7 @@ build_script:
 
   - msbuild Projects\Win32\VC10\src\Udm.sln /p:Configuration=Release;Platform=Win32 /fl /m /t:UdmDll
 
-  - pushed src\UdmPython
+  - pushd src\UdmPython
   - c:\Python27\python -m pip install wheel
   - c:\Python27\python setup.py bdist_wheel
   - c:\Python35\python -m pip install wheel
