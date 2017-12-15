@@ -15,8 +15,8 @@ install:
   - reg query "HKLM\SOFTWARE\Microsoft\Windows Installer XML\3.11" /reg:32
   - ps: (new-object net.webclient).DownloadFile('https://github.com/ksmyth/UDM/tarball/3rdparty', 'c:\3rdparty.tar.gz')
   - mkdir c:\projects\UDM-3rdparty && C:\MinGW\msys\1.0\bin\tar.exe xzf /c/3rdparty.tar.gz -C /c/projects/UDM-3rdparty --strip-components=1
-  - dir c:\projects\UDM-3rdparty\GME_x64-15.5.8.msi
-  - msiexec /i c:\projects\UDM-3rdparty\GME_x64-15.5.8.msi /quiet /qn /norestart /log GME_install.log
+  - dir c:\projects\UDM-3rdparty\GME_x64-17.12.6.msi
+  - msiexec /i c:\projects\UDM-3rdparty\GME_x64-17.12.6.msi /quiet /qn /norestart /log GME_install.log
   - type GME_install.log
 #  - ps: (new-object net.webclient).DownloadFile('https://github.com/ksmyth/pywin32/releases/download/b219/pywin32-219.win32-py2.7.exe', 'c:\pywin32-219.win32-py2.7.exe')
 #  - python -m easy_install c:\pywin32-219.win32-py2.7.exe
