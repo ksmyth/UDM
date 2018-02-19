@@ -18,6 +18,9 @@
             <Component Directory="UIntWizVS" Guid="*" Id="cmpD221EA092661DEFB0997244281E27599">
                 <File Id="fil435BFE537115BF49C3354ED84F142666" KeyPath="yes" Source="$(var.UIntWizVS)\setup100.js" />
             </Component>
+            <Component Directory="UIntWizVS" Guid="*" Id="setup150">
+                <File Id="setup150" KeyPath="yes" Source="$(var.UIntWizVS)\setup150.js" />
+            </Component>
             <Component Directory="UIntWizVS" Guid="*" Id="cmp142F705866E119EC6441C7CF1F6B23A7">
                 <File Id="fil7D13611CF9E23B3F08C21E73361A3BE2" KeyPath="yes" Source="$(var.UIntWizVS)\setup120.js" />
             </Component>
