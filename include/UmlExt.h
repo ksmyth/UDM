@@ -351,34 +351,35 @@ namespace Uml
 		GetItems m_items_getter;
 	};
 
+	// n.b. _kind_children is more performant with Dom backend
 	class UDM_DLL DiagramAssociations : public ElemCollection<Diagram, Association> {
 	public:
-		DiagramAssociations(const Diagram &diagram) : ElemCollection<Diagram, Association>(diagram, &Diagram::associations, &Namespace::associations) {}
+		DiagramAssociations(const Diagram &diagram) : ElemCollection<Diagram, Association>(diagram, &Diagram::Association_kind_children, &Namespace::Association_kind_children) {}
 	};
 
 	class UDM_DLL DiagramClasses : public ElemCollection<Diagram, Class> {
 	public:
-		DiagramClasses(const Diagram &diagram) : ElemCollection<Diagram, Class>(diagram, &Diagram::classes, &Namespace::classes) {}
+		DiagramClasses(const Diagram &diagram) : ElemCollection<Diagram, Class>(diagram, &Diagram::Class_kind_children, &Namespace::Class_kind_children) {}
 	};
 
 	class UDM_DLL DiagramCompositions : public ElemCollection<Diagram, Composition> {
 	public:
-		DiagramCompositions(const Diagram &diagram) : ElemCollection<Diagram, Composition>(diagram, &Diagram::compositions, &Namespace::compositions) {}
+		DiagramCompositions(const Diagram &diagram) : ElemCollection<Diagram, Composition>(diagram, &Diagram::Composition_kind_children, &Namespace::Composition_kind_children) {}
 	};
 
 	class UDM_DLL NamespaceAssociations : public ElemCollection<Namespace, Association> {
 	public:
-		NamespaceAssociations(const Namespace &ns) : ElemCollection<Namespace, Association>(ns, &Namespace::associations, &Namespace::associations) {}
+		NamespaceAssociations(const Namespace &ns) : ElemCollection<Namespace, Association>(ns, &Namespace::Association_kind_children, &Namespace::Association_kind_children) {}
 	};
 
 	class UDM_DLL NamespaceClasses : public ElemCollection<Namespace, Class> {
 	public:
-		NamespaceClasses(const Namespace &ns) : ElemCollection<Namespace, Class>(ns, &Namespace::classes, &Namespace::classes) {}
+		NamespaceClasses(const Namespace &ns) : ElemCollection<Namespace, Class>(ns, &Namespace::Class_kind_children, &Namespace::Class_kind_children) {}
 	};
 
 	class UDM_DLL NamespaceCompositions : public ElemCollection<Namespace, Composition> {
 	public:
-		NamespaceCompositions(const Namespace &ns) : ElemCollection<Namespace, Composition>(ns, &Namespace::compositions, &Namespace::compositions) {}
+		NamespaceCompositions(const Namespace &ns) : ElemCollection<Namespace, Composition>(ns, &Namespace::Composition_kind_children, &Namespace::Composition_kind_children) {}
 	};
 
 	template<class CONTAINER>

@@ -13,7 +13,7 @@ class PythonInheritanceSolver : public ::UdmCPPGen::InheritanceSolver
 {
     friend class PythonAPIGen;
 public:
-    PythonInheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by_namespace = false);
+    PythonInheritanceSolver(const ::Uml::Diagram &diagram, const ::UdmCPPGen::UdmGen& gen, bool sort_by_namespace = false);
     virtual string getAncestorList(const ::Uml::Class &cl) const;
 };
 class PythonAPIGen

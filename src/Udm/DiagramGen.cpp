@@ -412,7 +412,7 @@ void DiagramGen::OutH(ostream &out)
 		CLGEN_MAP::const_iterator i = all_clgen_map.find(cl_path);
 		if (i == all_clgen_map.end()) throw udm_exception("all_clgen_map does not contain a mapping for the class " + cl_path);
 
-		ClassGen cgen = i->second;
+		const ClassGen& cgen = i->second;
 		cgen.OutDecls(out);
 	}
 

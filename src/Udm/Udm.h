@@ -20,6 +20,8 @@ this software.
 #include <UdmDom.h>
 #include <UmlExt.h>
 
+#include <unordered_set>
+
 
 using namespace std;
 
@@ -112,6 +114,7 @@ void OutFmts(ostream &out, const string &idt, const vector<boost::format> &v, bo
 void OutVecFmts(ostream &out, const string &idt, const vector< vector<boost::format> > &v, const string &label = "");
 
 class DiagramGen;
+class UdmGen;
 
 class InheritanceSolver {
 	typedef map< ::Uml::Class, set< ::Uml::Class> > cltoclsmap;
@@ -135,15 +138,16 @@ class InheritanceSolver {
     vector< ::Uml::Class> good_inheritence_order;
 
 	friend class DiagramGen;
+	const UdmGen& gen;
     
 public:
-	InheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by_namespace = false);
+	InheritanceSolver(const ::Uml::Diagram &diagram, const UdmGen& gen, bool sort_by_namespace = false);
 	virtual string getAncestorList(const ::Uml::Class &cl) const;
 	string getInitializers(const ::Uml::Class &cl, const string &argument) const;
 };
 
 
-class UdmGen {
+class UdmGen : boost::noncopyable {
 	// maximum size of Boost MPL sequences created
 	static int mpl_seq_max_size;
 
@@ -151,7 +155,36 @@ public:
 	::Uml::Diagram diagram;
 	UdmOpts opts;
 
-	UdmGen(const ::Uml::Diagram &p_diagram, const UdmOpts &p_opts) : diagram(p_diagram), opts(p_opts) { }
+	std::vector< ::Uml::Class> DiagramClasses;
+
+	struct unique_hash { //: public unary_function<_Kty, size_t>  {
+		size_t operator()(const std::pair< Udm::ObjectImpl::uniqueId_type, Udm::ObjectImpl::uniqueId_type>& key) const {
+			return key.first + key.second * 32;
+		}
+	};
+
+	std::unordered_set < std::pair< Udm::ObjectImpl::uniqueId_type, Udm::ObjectImpl::uniqueId_type>, unique_hash> IsDerivedFrom;
+
+	UdmGen(const ::Uml::Diagram &p_diagram, const UdmOpts &p_opts) : diagram(p_diagram), opts(p_opts) {
+		::Uml::DiagramClasses allclasses = ::Uml::DiagramClasses(diagram);
+		for (::Uml::DiagramClasses::iterator i = allclasses.begin(); i != allclasses.end(); ++i) {
+			DiagramClasses.push_back(*i);
+		}
+		for (std::vector< ::Uml::Class>::const_iterator i = DiagramClasses.begin(); i != DiagramClasses.end(); i++)
+		{
+			for (std::vector< ::Uml::Class>::const_iterator j = DiagramClasses.begin(); j != DiagramClasses.end(); j++)
+			{
+				if (Uml::IsDerivedFrom(*i, *j))
+				{
+					IsDerivedFrom.emplace(std::make_pair< Udm::ObjectImpl::uniqueId_type, Udm::ObjectImpl::uniqueId_type>(i->uniqueId(), j->uniqueId()));
+				}
+			}
+		}
+	}
+
+	bool isDerivedFrom(const ::Uml::Class &a, const ::Uml::Class &b) const {
+		return IsDerivedFrom.find(std::make_pair< Udm::ObjectImpl::uniqueId_type, Udm::ObjectImpl::uniqueId_type>(a.uniqueId(), b.uniqueId())) != IsDerivedFrom.end();
+	}
 
 	void Generate(const ::Uml::Diagram &cross_dgr, const string &filename);
 	vector<boost::format> HPreamble(const string &fname) const;
@@ -243,7 +276,7 @@ protected:
 
 	::Uml::Class c;
 
-	UdmGen gen;
+	const UdmGen& gen;
 	string idt;	// indentation to use
 
 	// store typedefs and typenames to create typelists
@@ -275,13 +308,13 @@ public:
 	ClassGen(const ::Uml::Class &p_c, const UdmGen &p_gen) : c(p_c), gen(p_gen) {}
 
 	void Process(const ::Uml::Diagram &cross_diagram, const InheritanceSolver &is);
-	void OutDecls(ostream &out);
-	void OutDefs(ostream &out);
-	void OutMetaCreate(ostream &out);
-	void OutMetaInit(ostream &out);
-	void OutMetaInitLinks(ostream &out);
-	void OutMetaInit2(ostream &out);
-	void OutMetaInitLinks2(ostream &out);
+	void OutDecls(ostream &out) const;
+	void OutDefs(ostream &out) const;
+	void OutMetaCreate(ostream &out) const;
+	void OutMetaInit(ostream &out) const;
+	void OutMetaInitLinks(ostream &out) const;
+	void OutMetaInit2(ostream &out) const;
+	void OutMetaInitLinks2(ostream &out) const;
 
 protected:
 	void Basic(const InheritanceSolver &is);
@@ -414,7 +447,7 @@ protected:
 					// NamespaceGen object, or NULL if
 					// this is a DiagramGen
 
-	UdmGen gen;
+	const UdmGen& gen;
 	string idt;	// indentation to use
 
 	virtual void CustomProcess(const ::Uml::Diagram &cross_diagram, const InheritanceSolver &is);
@@ -448,10 +481,10 @@ public:
 			{
 				fwd_decls.push_back( boost::format("class %1%%2%") % gen.opts.macro % (string)i->name() );
 
-				ClassGen cgen(*i, gen);
-				cgen.Process(cross_diagram, is);
+				// clgen_map.emplace(piecewise_construct, make_tuple(), make_tuple());
+				ClassGen& cgen = clgen_map.insert(make_pair(i->getPath2("::", false), ClassGen(*i, gen))).first->second;
 
-				clgen_map.insert(make_pair(i->getPath2("::", false), cgen));
+				cgen.Process(cross_diagram, is);
 			}
 
 			set< ::Uml::Association> associations = c.associations();
@@ -661,7 +694,7 @@ public:
 			i->second.CollectMaps(p_nsgen_map, p_clgen_map);
 	}
 
-	void BeginNS(ostream &out, bool parents_too = true)
+	void BeginNS(ostream &out, bool parents_too = true) const
 	{
 		if (parents_too)
 			for (vector<boost::format>::const_iterator i = begin_ns.begin(); i != begin_ns.end(); i++)
@@ -672,7 +705,7 @@ public:
 		out << endl;
 	}
 
-	void EndNS(ostream &out, bool parents_too = true)
+	void EndNS(ostream &out, bool parents_too = true) const
 	{
 		if (parents_too)
 			for (vector<boost::format>::const_iterator i = end_ns.begin(); i != end_ns.end(); i++)
@@ -683,7 +716,7 @@ public:
 		out << endl;
 	}
 
-	void OutDecls(ostream &out)
+	void OutDecls(ostream &out) const
 	{
 		string lidt = idt + "\t";
 
@@ -699,7 +732,7 @@ public:
 		OutFmts(out, lidt, other_decls);
 	}
 
-	void OutMetaCreate(ostream &out)
+	void OutMetaCreate(ostream &out) const
 	{
 		string lidt = idt + "\t";
 
@@ -719,7 +752,7 @@ public:
 		}
 	}
 
-	void OutMetaInit(ostream &out)
+	void OutMetaInit(ostream &out) const
 	{
 		string lidt = idt + "\t";
 
@@ -739,7 +772,7 @@ public:
 		}
 	}
 
-	void OutMetaInitLinks(ostream &out)
+	void OutMetaInitLinks(ostream &out) const
 	{
 		string lidt = idt + "\t";
 
@@ -759,17 +792,17 @@ public:
 		}
 	}
 
-	void OutMetaInit2(ostream &out)
+	void OutMetaInit2(ostream &out) const
 	{
 		OutFmts(out, idt + "\t", meta_init2);
 	}
 
-	void OutMetaInitLinks2(ostream &out)
+	void OutMetaInitLinks2(ostream &out) const
 	{
 		OutFmts(out, idt + "\t", meta_init_links2);
 	}
 
-	void OutMetaCreateAssocs(ostream &out)
+	void OutMetaCreateAssocs(ostream &out) const
 	{
 		string lidt = idt + "\t\t";
 
@@ -789,7 +822,7 @@ public:
 		}
 	}
 
-	void OutMetaCreateComps(ostream &out)
+	void OutMetaCreateComps(ostream &out) const
 	{
 		string lidt = idt + "\t\t";
 
@@ -809,19 +842,19 @@ public:
 		}
 	}
 
-	void OutMetaInitAssocs(ostream &out)
+	void OutMetaInitAssocs(ostream &out) const
 	{
 		if (gen.opts.meta_init == UdmOpts::DYNAMIC_INIT)
 			OutVecFmts(out, idt + "\t\t", meta_init_assocs, "associations");
 	}
 
-	void OutMetaInitComps(ostream &out)
+	void OutMetaInitComps(ostream &out) const
 	{
 		if (gen.opts.meta_init == UdmOpts::DYNAMIC_INIT)
 			OutVecFmts(out, idt + "\t\t", meta_init_comps, "compositions");
 	}
 
-	void OutMetaInitLinksAssocs(ostream &out)
+	void OutMetaInitLinksAssocs(ostream &out) const
 	{
 		string lidt = idt + "\t\t";
 
@@ -840,7 +873,7 @@ public:
 		}
 	}
 
-	void OutMetaInitLinksComps(ostream &out)
+	void OutMetaInitLinksComps(ostream &out) const
 	{
 		string lidt = idt + "\t\t";
 
@@ -859,7 +892,7 @@ public:
 		}
 	}
 
-	void OutDefs(ostream &out)
+	void OutDefs(ostream &out) const
 	{
 		if (meta_def.size())
 			out << idt << "\t" << meta_def << ";" << endl << endl;
@@ -872,7 +905,7 @@ public:
 		if (clgen_map.size())
 		{
 			out << lidt << "\t// classes, with attributes, constraints and constraint definitions" << endl;
-			for (CLGEN_MAP::iterator i = clgen_map.begin(); i != clgen_map.end(); i++)
+			for (CLGEN_MAP::const_iterator i = clgen_map.begin(); i != clgen_map.end(); i++)
 				i->second.OutMetaCreate(out);
 		}
 
@@ -882,7 +915,7 @@ public:
 		if (nsgen_map.size())
 		{
 			out << lidt << "\t// namespaces" << endl;
-			for (NSGEN_MAP::iterator i = nsgen_map.begin(); i != nsgen_map.end(); i++)
+			for (NSGEN_MAP::const_iterator i = nsgen_map.begin(); i != nsgen_map.end(); i++)
 				i->second.OutMetaCreate(out);
 		}
 
@@ -895,7 +928,7 @@ public:
 		if (clgen_map.size())
 		{
 			out << lidt << "\t// classes, with attributes, constraints and constraint definitions" << endl;
-			for (CLGEN_MAP::iterator i = clgen_map.begin(); i != clgen_map.end(); i++)
+			for (CLGEN_MAP::const_iterator i = clgen_map.begin(); i != clgen_map.end(); i++)
 				i->second.OutMetaInit(out);
 		}
 
@@ -905,7 +938,7 @@ public:
 		if (nsgen_map.size())
 		{
 			out << lidt << "\t// namespaces" << endl;
-			for (NSGEN_MAP::iterator i = nsgen_map.begin(); i != nsgen_map.end(); i++)
+			for (NSGEN_MAP::const_iterator i = nsgen_map.begin(); i != nsgen_map.end(); i++)
 				i->second.OutMetaInit(out);
 		}
 
@@ -916,7 +949,7 @@ public:
 		out << lidt << begin_meta_init_links << endl;
 
 		if (clgen_map.size())
-			for (CLGEN_MAP::iterator i = clgen_map.begin(); i != clgen_map.end(); i++)
+			for (CLGEN_MAP::const_iterator i = clgen_map.begin(); i != clgen_map.end(); i++)
 				i->second.OutMetaInitLinks(out);
 
 		OutMetaInitLinksAssocs(out);
@@ -925,7 +958,7 @@ public:
 		if (nsgen_map.size())
 		{
 			out << lidt << "\t// namespaces" << endl;
-			for (NSGEN_MAP::iterator i = nsgen_map.begin(); i != nsgen_map.end(); i++)
+			for (NSGEN_MAP::const_iterator i = nsgen_map.begin(); i != nsgen_map.end(); i++)
 				i->second.OutMetaInitLinks(out);
 		}
 
@@ -941,14 +974,14 @@ public:
 			if (clgen_map.size())
 			{
 				out << lidt << "\t// classes, with attributes, constraints and constraint definitions" << endl;
-				for (CLGEN_MAP::iterator i = clgen_map.begin(); i != clgen_map.end(); i++)
+				for (CLGEN_MAP::const_iterator i = clgen_map.begin(); i != clgen_map.end(); i++)
 					i->second.OutMetaInit2(out);
 			}
 
 			if (nsgen_map.size())
 			{
 				out << lidt << "\t// namespaces" << endl;
-				for (NSGEN_MAP::iterator i = nsgen_map.begin(); i != nsgen_map.end(); i++)
+				for (NSGEN_MAP::const_iterator i = nsgen_map.begin(); i != nsgen_map.end(); i++)
 					i->second.OutMetaInit2(out);
 			}
 
@@ -961,14 +994,14 @@ public:
 			if (clgen_map.size())
 			{
 				out << lidt << "\t// classes" << endl;
-				for (CLGEN_MAP::iterator i = clgen_map.begin(); i != clgen_map.end(); i++)
+				for (CLGEN_MAP::const_iterator i = clgen_map.begin(); i != clgen_map.end(); i++)
 					i->second.OutMetaInitLinks2(out);
 			}
 
 			if (nsgen_map.size())
 			{
 				out << lidt << "\t// namespaces" << endl;
-				for (NSGEN_MAP::iterator i = nsgen_map.begin(); i != nsgen_map.end(); i++)
+				for (NSGEN_MAP::const_iterator i = nsgen_map.begin(); i != nsgen_map.end(); i++)
 					i->second.OutMetaInitLinks2(out);
 			}
 
@@ -991,7 +1024,7 @@ public:
 			out << endl;
 	}
 
-	void OutCPP(ostream &out)
+	void OutCPP(ostream &out) const
 	{
 		BeginNS(out, false);
 
@@ -1002,7 +1035,7 @@ public:
 			NSGEN_MAP::const_iterator i = nsgen_map.find(ns_path);
 			if (i == nsgen_map.end()) throw udm_exception("nsgen_map does not contain a mapping for the namespace " + ns_path);
 
-			CGen< ::Uml::Namespace> ngen = i->second;
+			const CGen< ::Uml::Namespace>& ngen = i->second;
 			ngen.OutCPP(out);
 		}
 
@@ -1013,7 +1046,7 @@ public:
 			CLGEN_MAP::const_iterator i = clgen_map.find(cl_path);
 			if (i == clgen_map.end()) throw udm_exception("clgen_map does not contain a mapping for the class " + cl_path);
 
-			ClassGen cgen = i->second;
+			const ClassGen& cgen = i->second;
 			cgen.OutDefs(out);
 		}
 
@@ -1048,7 +1081,7 @@ protected:
 	void CustomProcess(const ::Uml::Diagram &cross_diagram, const InheritanceSolver &p_is);
 
 public:
-	DiagramGen(const ::Uml::Diagram &p_c, const UdmGen &p_gen) : CGen< ::Uml::Diagram>(p_c, p_gen), is(p_c, p_gen.opts.cxx_source_unit == UdmOpts::UNIT_NAMESPACE) { }
+	DiagramGen(const ::Uml::Diagram &p_c, const UdmGen &p_gen) : CGen< ::Uml::Diagram>(p_c, p_gen), is(p_c, p_gen, p_gen.opts.cxx_source_unit == UdmOpts::UNIT_NAMESPACE) { }
 
 	void Process(const ::Uml::Diagram &cross_diagram, bool recursively = true)
 	{

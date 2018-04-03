@@ -814,11 +814,11 @@ void ClassGen::Children()
 	::Uml::Namespace ns = c.parent_ns();
 	::Uml::DiagramClasses allclasses = ::Uml::DiagramClasses(dgr);
 
-	for (::Uml::DiagramClasses::iterator j = allclasses.begin(); j != allclasses.end(); j++) 
+	for (std::vector< ::Uml::Class>::const_iterator j = this->gen.DiagramClasses.begin(); j != this->gen.DiagramClasses.end(); j++)
 	{
 		for (set< ::Uml::Class>::iterator k = childrenkinds.begin(); k != childrenkinds.end(); k++) 
 		{
-			if (Uml::IsDerivedFrom(*j, *k) || Uml::IsDerivedFrom(*k, *j)) 
+			if (gen.isDerivedFrom(*j, *k) || gen.isDerivedFrom(*k, *j))
 			{
 				string kind_children_name;
 				if (ns != j->parent_ns())
@@ -1301,7 +1301,7 @@ void ClassGen::BuildTL(const TLHelper &hlp, const string &tl_single_name, const 
 	}
 }
 
-void ClassGen::OutDecls(ostream &out)
+void ClassGen::OutDecls(ostream &out) const
 {
 	string lidt = idt.substr(1);
 
@@ -1349,7 +1349,7 @@ void ClassGen::OutDecls(ostream &out)
 	out << lidt << "};" << endl << endl;
 }
 
-void ClassGen::OutDefs(ostream &out)
+void ClassGen::OutDefs(ostream &out) const
 {
 	string lidt = idt.substr(1);
 
@@ -1377,7 +1377,7 @@ void ClassGen::OutDefs(ostream &out)
 	}
 }
 
-void ClassGen::OutMetaCreate(ostream &out)
+void ClassGen::OutMetaCreate(ostream &out) const
 {
 	switch (gen.opts.meta_init)
 	{
@@ -1395,7 +1395,7 @@ void ClassGen::OutMetaCreate(ostream &out)
 	}
 }
 
-void ClassGen::OutMetaInit(ostream &out)
+void ClassGen::OutMetaInit(ostream &out) const
 {
 	switch (gen.opts.meta_init)
 	{
@@ -1413,7 +1413,7 @@ void ClassGen::OutMetaInit(ostream &out)
 	}
 }
 
-void ClassGen::OutMetaInitLinks(ostream &out)
+void ClassGen::OutMetaInitLinks(ostream &out) const
 {
 	switch (gen.opts.meta_init)
 	{
@@ -1431,12 +1431,12 @@ void ClassGen::OutMetaInitLinks(ostream &out)
 	}
 }
 
-void ClassGen::OutMetaInit2(ostream &out)
+void ClassGen::OutMetaInit2(ostream &out) const
 {
 	OutFmts(out, idt, meta_init2);
 }
 
-void ClassGen::OutMetaInitLinks2(ostream &out)
+void ClassGen::OutMetaInitLinks2(ostream &out) const
 {
 	OutFmts(out, idt, meta_init_links2);
 }

@@ -26,12 +26,12 @@ namespace UdmCPPGen {
 
 
 
-InheritanceSolver::InheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by_namespace)
+InheritanceSolver::InheritanceSolver(const ::Uml::Diagram &diagram, const UdmGen& gen, bool sort_by_namespace) : gen(gen)
 {
-	::Uml::DiagramClasses all_classes(diagram);
 	vector< ::Uml::Class> classes;
-	for (::Uml::DiagramClasses::iterator i = all_classes.begin(); i != all_classes.end(); i++) {
-		classes.push_back(*i);
+	for (vector< ::Uml::Class>::const_iterator it = gen.DiagramClasses.begin(); it != gen.DiagramClasses.end(); it++)
+	{
+		classes.push_back(*it);
 	}
 
 	bool has_namespaces = ((set< ::Uml::Namespace>)diagram.namespaces()).size() > 0;
@@ -40,7 +40,7 @@ InheritanceSolver::InheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by
 	{
 		::Uml::Class cl;
 		set< ::Uml::Class> bases;
-		vector< ::Uml::Class>::iterator c;
+		vector< ::Uml::Class>::const_iterator c;
 		for( c = classes.begin(); c != classes.end(); c++ )	
 		{
 			cl = *c;
@@ -86,7 +86,7 @@ InheritanceSolver::InheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by
 				{
 					for(set< ::Uml::Class>::iterator j = dirancs.begin(); j != dirancs.end(); j++) 
 					{
-						if(!Uml::IsDerivedFrom(*j, cl)) 
+						if (!gen.isDerivedFrom(*j, cl))
 						{
 							virtualbaseclasses.insert(cl);
 							break;
@@ -118,7 +118,7 @@ InheritanceSolver::InheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by
 					{
 						for(set< ::Uml::Class>::iterator j = dirancs.begin(); j != dirancs.end(); j++) 
 						{
-							if(!Uml::IsDerivedFrom(*j, cl) && Uml::IsDerivedFrom(*j, *h)) 
+							if (!gen.isDerivedFrom(*j, cl) && gen.isDerivedFrom(*j, *h))
 							{
 									actmapi->second.insert(cl);
 							}
@@ -159,7 +159,7 @@ InheritanceSolver::InheritanceSolver(const ::Uml::Diagram &diagram, bool sort_by
 			int found_inset = 0, found_notinset = 0;
 			for(set< ::Uml::Class>::iterator p = subtypes.begin(); p != subtypes.end(); p++) 
 			{
-				if(!Uml::IsDerivedFrom(cl, *p)) continue;
+				if(!gen.isDerivedFrom(cl, *p)) continue;
 				if(actmapi->second.find(*p) != actmapi->second.end()) found_inset++;
 				else found_notinset++;
 			}

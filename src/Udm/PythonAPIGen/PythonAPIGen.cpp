@@ -4,7 +4,7 @@
 #include <iterator>
 
 
-PythonInheritanceSolver::PythonInheritanceSolver(const Uml::Diagram &diagram, bool sort_by_namespace) : ::UdmCPPGen::InheritanceSolver(diagram, sort_by_namespace) {};
+PythonInheritanceSolver::PythonInheritanceSolver(const Uml::Diagram &diagram, const ::UdmCPPGen::UdmGen& gen, bool sort_by_namespace) : ::UdmCPPGen::InheritanceSolver(diagram, gen, sort_by_namespace) {};
 string PythonInheritanceSolver::getAncestorList(const ::Uml::Class &cl ) const
 {
     string ret;
@@ -86,7 +86,10 @@ void PythonAPIGen::generate()
 
     /*GENERATE PYTHON CLASSES*/
     set< ::Uml::Class> uml_classes = m_diagram.classes();
-    PythonInheritanceSolver is(m_diagram);
+    UdmOpts opts;
+    ::UdmCPPGen::UdmGen gen(m_diagram, opts);
+    PythonInheritanceSolver is(m_diagram, gen);
+
     for ( vector < ::Uml::Class>::iterator gio_i = is.good_inheritence_order.begin(); gio_i != is.good_inheritence_order.end(); gio_i++)
         generateClass(*gio_i,is );
     
