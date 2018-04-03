@@ -233,10 +233,14 @@ function AddConfig90(proj, strProjectName)
 {
 	try
 	{
+    var configs = proj.Object.Configurations;
+    for (var n = 1; n <= configs.Count; n++) {
+        var config = configs(n);
+
+        if (config.ConfigurationName === "Debug") {
 	    // --------------------------- DEBUG SETTINGS --------------------------- //
     	
 	        // DEBUG GENERAL SETTINGS
-		    var config = proj.Object.Configurations('Debug');
 		    config.ConfigurationType = ConfigurationTypes.typeDynamicLibrary;
             config.useOfMfc = useOfMfc.useMfcDynamic;
             config.CharacterSet = charSet.charSetUnicode;
@@ -296,11 +300,11 @@ function AddConfig90(proj, strProjectName)
                 CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING";
             }	    
 
+        } else if (config.ConfigurationName === "Release") {
     		
 	    // --------------------------- RELEASE SETTINGS --------------------------- //
             
             // RELEASE GENERAL SETTINGS
-		    config = proj.Object.Configurations('Release');
 	        config.ConfigurationType = ConfigurationTypes.typeDynamicLibrary;
 	        config.useOfMfc  = useOfMfc.useMfcDynamic;
 	        config.CharacterSet = charSet.charSetUnicode;
@@ -356,7 +360,8 @@ function AddConfig90(proj, strProjectName)
                 CLTool.PreprocessorDefinitions += ";UDM_DYNAMIC_LINKING";
             }	    
  
-
+        }
+    }
 	}
 	catch(e)
 	{
