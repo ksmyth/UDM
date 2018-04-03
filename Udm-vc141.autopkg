@@ -4,7 +4,7 @@ configurations
     Toolset 
     {
         key : "PlatformToolset"; // this is CoApp pre-defined key
-        choices: { v141, v120, v110, v100 };
+        choices: { v141, v140, v120, v110, v100 };
     };
 //    Linkage {
 //        choices: { dynamic };
