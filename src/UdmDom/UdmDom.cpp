@@ -1562,6 +1562,20 @@ namespace UdmDom
 
 			TRY_XML_EXCEPTION
 
+
+			//if this datanetwork is part of a project,
+			//I might have a placeholder object,
+			//which also should be deleted
+			Udm::UdmProject * pr = NULL;
+			if (__getdn())
+				pr = __getdn()->GetProject();
+			if (pr)
+			{
+				Object po = pr->GetPlaceHolder(clone(), false);
+				if (po)
+					po.DeleteObject();
+			}
+
 			// delete associations the element is involved in
 
 			const XMLCh *myid = dom_element->getAttribute(gXML__id);
@@ -1854,17 +1868,6 @@ namespace UdmDom
 				if(parent && parent != &Udm::_null) 
 				{  //delete parent
 
-
-					//if this datanetwork is part of a project,
-					//I might have a placeholder object,
-					//which also should be deleted
-					Udm::UdmProject * pr = NULL;
-					if (__getdn()) pr = __getdn()->GetProject();
-					if (pr)
-					{
-						Object po = pr->GetPlaceHolder(clone(), false);
-						if (po) po.DeleteObject();
-					}
 
 					{
 						//unlink all derived objects
