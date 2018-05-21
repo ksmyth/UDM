@@ -20,6 +20,16 @@ NOTE: You need to have administrative privileges to install GME correctly.
 PLEASE DOWNLOAD AND INSTALL 2 and 3 before proceeding.
 
 ** Changelog **
+    - Release 3.2.15 (5/21/2018)
+        -   UdmDll is backwards compatible with previous 3.2 releases
+        -   Udm interpreter wizard: Visual Studio 2015 support
+        -   UdmDom: fix bug where crosslinks (e.g. from GReAT) can point to deleted objects
+        -   Fix memory leaks
+        -   Udm.exe performance improvements
+        -   Fix ArrAttrItem::operator==
+        -   MetaGME2Uml: return FAILED HRESULT under silent mode
+        -   UdmCli: fix compile error if model has 'type' attribute
+
     - Release 3.2.14 (4/6/2016)
         -   UdmDll is backwards compatible with previous 3.2 releases
         -   UdmDll: Visual Studio 2012 and 2015 support
