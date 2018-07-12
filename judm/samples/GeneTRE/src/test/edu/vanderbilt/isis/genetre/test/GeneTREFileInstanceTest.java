@@ -212,6 +212,11 @@ public class GeneTREFileInstanceTest extends TestCase {
         ContainerFileFactory gtf = FactoryRepository.getgenetreContainerFileFactory();
         Container con = gtf.open(NEW_INSTANCE_FILE);
 
+        // be sure we can open two files at the same time (not the case before 7/2018)
+        ContainerFileFactory gtf2 = FactoryRepository.getgenetreContainerFileFactory();
+        Container con2 = gtf2.open(NEW_INSTANCE_FILE);
+        gtf2.close();
+
         InputStream a = gtf.saveAsStream();
         System.out.println("\ntestOpenExistingFromFileSaveToStream():\n" + a);
         printInputStream(a);

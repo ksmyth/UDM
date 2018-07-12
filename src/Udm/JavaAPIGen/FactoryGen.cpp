@@ -360,7 +360,8 @@ void FactoryGen::constructor( )
   m_output << "{" << endl;
   m_output << "\t// resource information" << endl;
   m_output << "\tprivate static final java.lang.String packagePath = \"/edu/vanderbilt/isis/meta/\";" << endl;
-  m_output << "\tprivate static final java.lang.String xmlMetaFile =\"" << m_inputfile << "\";" << endl;
+  m_output << "\tprivate final java.lang.String xmlMetaFile;" << endl;
+  m_output << "\tprivate static final java.util.concurrent.atomic.AtomicInteger xmlMetaFileCounter = new java.util.concurrent.atomic.AtomicInteger(1);" << endl;
   m_output << "\tprivate static final java.lang.String xsdMetaFile =\"" << containerDescriptionFunc( ) << ".xsd\";" << endl;
   m_output << "\tprivate static final java.lang.String metaName =\"" << m_diag_name << "\";" << endl;
   m_output << "\t// the wrapped " << Utils::toLower( m_type ) << " factory instance" << endl;
@@ -374,6 +375,7 @@ void FactoryGen::constructor( )
   m_output << "\t */ " << endl;
   m_output << "\tpublic " << m_root_name << m_type << "Factory()\n\t\t throws UdmException " << endl;
   m_output << "\t{" << endl;
+  m_output << "\t\txmlMetaFile =\"" << m_inputfile << "\" + this.getClass().getName() + xmlMetaFileCounter.incrementAndGet();" << endl;
   m_output << "\t\tfactory = new Udm" << m_type << "Factory(xmlMetaFile, xsdMetaFile, metaName, packagePath){" << endl;
   m_output << "\t\t\tprotected void loadDiagram() throws UdmException {" << endl;
   m_output << "\t\t\t\tmetaDiagram =" << endl;
@@ -614,6 +616,7 @@ void FactoryGen::saveDNFile( )
   m_output << "\t\tfactory.closeWithUpdate();" << endl;
   m_output << "\t\tUdmHelper.ClearXsdStorage();" << endl;
   m_output << "\t\tfactory.unloadDiagram();" << endl;
+  m_output << "\t\tfactory = null;" << endl;
   m_output << "\t}" << endl;
   m_output << endl;
 
@@ -630,6 +633,7 @@ void FactoryGen::saveDNFile( )
   m_output << "\t\tfactory.saveAs(instanceFileName);" << endl;
   m_output << "\t\tUdmHelper.ClearXsdStorage();" << endl;
   m_output << "\t\tfactory.unloadDiagram();" << endl;
+  m_output << "\t\tfactory = null;" << endl;
   m_output << "\t}" << endl;
   m_output << endl;
 }
@@ -646,10 +650,11 @@ void FactoryGen::saveDNString( )
   // function signature
   m_output << "\tpublic java.lang.String save() \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
-  m_output << "\t\tfactory.closeWithUpdate();" << endl;
   m_output << "\t\tjava.lang.String result = factory.saveAs();" << endl;
+  m_output << "\t\tfactory.closeWithUpdate();" << endl;
   m_output << "\t\tUdmHelper.ClearXsdStorage();" << endl;
   m_output << "\t\tfactory.unloadDiagram();" << endl;
+  m_output << "\t\tfactory = null;" << endl;
   m_output << "\t\treturn result;" << endl;
   m_output << "\t}" << endl;
   m_output << endl;
@@ -668,10 +673,11 @@ void FactoryGen::saveAsStream( )
   // function signature
   m_output << "\tpublic java.io.InputStream saveAsStream() \n\t\t throws UdmException" << endl;
   m_output << "\t{" << endl;
-  m_output << "\t\tfactory.closeWithUpdate();" << endl;
   m_output << "\t\tjava.io.InputStream result = factory.saveAsStream();" << endl;
+  m_output << "\t\tfactory.closeWithUpdate();" << endl;
   m_output << "\t\tUdmHelper.ClearXsdStorage();" << endl;
   m_output << "\t\tfactory.unloadDiagram();" << endl;
+  m_output << "\t\tfactory = null;" << endl;
   m_output << "\t\treturn result;" << endl;
   m_output << "\t}" << endl;
   m_output << endl;
@@ -708,6 +714,7 @@ void FactoryGen::closeDN( )
   m_output << "\t\tfactory.closeNoUpdate();" << endl;
   m_output << "\t\tUdmHelper.ClearXsdStorage();" << endl;
   m_output << "\t\tfactory.unloadDiagram();" << endl;
+  m_output << "\t\tfactory = null;" << endl;
   m_output << "\t}" << endl;
 }
 

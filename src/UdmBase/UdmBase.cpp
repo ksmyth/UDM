@@ -352,7 +352,8 @@ namespace UDM_NAMESPACE
 
 	UDM_DLL DataNetwork::~DataNetwork()
 	{
-		_UdmStaticData.dntab.erase(dn_id);
+		size_t removed = _UdmStaticData.dntab.erase(dn_id);
+		UDM_ASSERT(removed == 1);
 
 		if (rootobject) throw udm_exception("Dirty abort!");
 	}

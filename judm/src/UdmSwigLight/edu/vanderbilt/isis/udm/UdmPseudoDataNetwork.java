@@ -99,12 +99,16 @@ public class UdmPseudoDataNetwork {
         log.finer("UdmPseudoDataNetwork.CloseWithUpdate();");
         boolean success = swigDN.CloseWithUpdate();
         UdmHelper.checkError(success, "Call to UDM method UdmPseudoDataNetwork::CloseWithUpdate() failed");
+        swigDN.delete();
+        swigDN = null;
     }
 
     public void closeNoUpdate() throws UdmException {
         log.finer("UdmPseudoDataNetwork.CloseNoUpdate();");
         boolean success = swigDN.CloseNoUpdate();
         UdmHelper.checkError(success, "Call to UDM method UdmPseudoDataNetwork::CloseNoUpdate() failed");
+        swigDN.delete();
+        swigDN = null;
     }
 
     public void saveAs(String systemName) throws UdmException {
@@ -117,7 +121,7 @@ public class UdmPseudoDataNetwork {
         log.finer("UdmPseudoDataNetwork.saveAsString();");
         cint_string res = new cint_string("");
         boolean success = swigDN.SaveAsString(res);
-        UdmHelper.checkError(success, "Call to UDM method UdmPseudoDataNetwork::CloseAs() failed");
+        UdmHelper.checkError(success, "Call to UDM method UdmPseudoDataNetwork::SaveAsString() failed");
         return res.buffer();
     }
 
@@ -125,6 +129,8 @@ public class UdmPseudoDataNetwork {
         log.finer("UdmPseudoDataNetwork.CloseAs(\"" + systemName + "\");");
         boolean success = swigDN.CloseAs(systemName);
         UdmHelper.checkError(success, "Call to UDM method UdmPseudoDataNetwork::CloseAs() failed");
+        swigDN.delete();
+        swigDN = null;
     }
 
     public boolean isOpen() throws UdmException {

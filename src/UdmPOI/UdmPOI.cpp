@@ -1714,7 +1714,8 @@ class UPO_metainfo
 	::Uml::Diagram * udgr;
 	Udm::UdmDiagram * dgr;
 public:
-	UPO_metainfo(Udm::DataNetwork *_dn, ::Uml::Diagram * _udgr, Udm::UdmDiagram * _dgr) : dn(_dn), udgr(_udgr), dgr(_dgr) {} ;
+	UPO_metainfo(Udm::DataNetwork *_dn, ::Uml::Diagram * _udgr, Udm::UdmDiagram * _dgr) : dn(_dn), udgr(_udgr), dgr(_dgr) {
+	}
 	~UPO_metainfo()
 	{
 		Udm::MetaDepository::RemoveDiagram(METADEPOSITORY_KEY(udgr->name()));
