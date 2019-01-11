@@ -17,6 +17,7 @@ import java.util.StringTokenizer;
 * @author Himanshu Neema
 */
 public abstract class UdmFactory {
+    public static boolean udmSwigLoaded = false;
     private static String SWIG_LIB_PATH = null;
     //private static final String udmPackagePath = "/edu/vanderbilt/isis/udm/";
     //private static final String umlXsdFile = "Uml.xsd";
@@ -69,10 +70,10 @@ public abstract class UdmFactory {
         }
     }
 
-    protected UdmFactory(
-        String xmlMetaFile, String xsdMetaFile, String metaName, String packagePath)
-        throws UdmException {
-    	
+    protected void loadUdmSwig() {
+        if (udmSwigLoaded) {
+            return;
+        }
     	String err = new String("");
     	boolean success = true;
         try
@@ -130,6 +131,13 @@ public abstract class UdmFactory {
         
         if (!success)
           throw new UnsatisfiedLinkError(err);
+    }
+
+    protected UdmFactory(
+        String xmlMetaFile, String xsdMetaFile, String metaName, String packagePath)
+        throws UdmException {
+
+        loadUdmSwig();
         // store the Uml.xsd file
         //UdmHelper.StoreXsd(umlXsdFile, Uml_xsd.getString());
         this.xmlMetaFile = xmlMetaFile;

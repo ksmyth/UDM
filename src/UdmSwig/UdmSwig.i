@@ -30,6 +30,27 @@
 %{
 
 #include "UdmCintSwig.h"
+
+JNIEXPORT jint JNICALL
+JNI_OnLoad(JavaVM *vm, void *reserved) {
+	JNIEnv *env;
+	vm->GetEnv((void **)&env, JNI_VERSION_1_4);
+
+
+	jclass clazz = env->FindClass("edu/vanderbilt/isis/udm/UdmFactory");
+	if (clazz) {
+		jfieldID fid = env->GetStaticFieldID(clazz, "udmSwigLoaded", "Z");
+		if (fid) {
+			jboolean init = true;
+			env->SetStaticBooleanField(clazz, fid, init);
+		}
+		else {
+			// old judm.jar doesn't have this field
+			env->ExceptionClear();
+		}
+	}
+	return JNI_VERSION_1_4;
+}
 %}
 
 /* Template magic */
