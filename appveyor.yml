@@ -44,6 +44,10 @@ build_script:
   - c:\Python35\python setup.py bdist_wheel
   - c:\Python36\python -m pip install wheel
   - c:\Python36\python setup.py bdist_wheel
+  - c:\Python37\python -m pip install wheel
+  - c:\Python37\python setup.py bdist_wheel
+  - c:\Python38\python -m pip install wheel
+  - c:\Python38\python setup.py bdist_wheel
   - cd ..\..
  
   - ps: 'Import-Module CoApp; Write-NuGetPackage .\Udm.autopkg'
