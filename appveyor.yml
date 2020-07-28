@@ -49,14 +49,17 @@ build_script:
   - c:\Python38\python -m pip install wheel
   - c:\Python38\python setup.py bdist_wheel
   - cd ..\..
+  - sha1sum src/UdmPython/dist/*.whl
  
   - ps: 'Import-Module CoApp; Write-NuGetPackage .\Udm.autopkg'
   - ps: 'Import-Module CoApp; Write-NuGetPackage .\Udm-vc140.autopkg'
+  - sha1sum *nupkg
   # need "image: Visual Studio 2017"
   # - '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe" make.msbuild /m /t:BuildVC15;BuildVC15_x64 /p:"VCTargetsPath=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets";PlatformToolset=v141'
   # - ps: 'Import-Module CoApp; Write-NuGetPackage .\Udm-vc141.autopkg'
 
 artifacts:
   - path: "*.log"
+  - path: "*.nupkg"
   - path: "WiX/*/*.wixlib"
   - path: src/UdmPython/dist/*.whl

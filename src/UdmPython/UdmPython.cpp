@@ -168,10 +168,7 @@ Udm::SmartDataNetwork* SDN_NewHelper(Uml::Diagram* umldiag, Udm::UdmDiagram* udm
 	return (Udm::SmartDataNetwork*)Udm::CreateSmartDataNetwork(*udmdiag);
 }
 
-object SDN_NewHelper_ = make_function(SDN_NewHelper,	with_custodian_and_ward_postcall<0, 1,
-														with_custodian_and_ward_postcall<0, 2,
-														return_value_policy<manage_new_object> > >());
-
+object* SDN_NewHelper_ = NULL;
 static void dummy(void) {}
 
 object SDN_New(object class_, Udm::Object& udmodiagram) {
@@ -179,7 +176,14 @@ object SDN_New(object class_, Udm::Object& udmodiagram) {
 	Udm::UdmDiagram* udmdiag = new Udm::UdmDiagram();
 	udmdiag->dgr = umldiag;
 	udmdiag->init = &dummy;
-	return SDN_NewHelper_(umldiag, udmdiag);
+	if (SDN_NewHelper_ == NULL) {
+		// SDN_NewHelper_ must not be initialized statically; we don't hold the GIL under Python38 during DllMain
+		SDN_NewHelper_ = new object(make_function(SDN_NewHelper, with_custodian_and_ward_postcall<0, 1,
+			with_custodian_and_ward_postcall<0, 2,
+			return_value_policy<manage_new_object> > >()));
+		// FIXME if boost-python implements uninitializing, we need to delete SDN_NewHelper_
+	}
+	return (*SDN_NewHelper_)(umldiag, udmdiag);
 }
 
 Udm::Object Uml_Diagram() {

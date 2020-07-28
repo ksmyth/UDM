@@ -54,11 +54,22 @@ if platform.system() == 'Windows':
             os.environ['INCLUDE'] = os.path.join(pythonbase, 'include') + ';' + os.path.join(this_dir, 'windows_compat')
             # \PC
 
+            if sys.version_info[0:2] >= (3, 5):
+                src_dir = 'UdmPython38'
+                varsall_key = 'VS140COMNTOOLS'
+                args = ['8.1', '&&'] + \
+                    [r'msbuild', r'..\..\Projects\Win32\VC10\src\UdmPython38\UdmPython38.vcxproj']
+            else:
+                src_dir = 'UdmPython'
+                # n.b. recommended to use VC9 for 2.7, but we don't do that
+                varsall_key = 'VS100COMNTOOLS'
+                args = ['&&'] + \
+                    [r'msbuild', r'..\..\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj']
             import subprocess
-            subprocess.check_call([r'..\..\Projects\Win32\VC10\src\.nuget\NuGet.exe', 'restore', r'..\..\Projects\Win32\VC10\src\UdmPython\packages.config'])
-            subprocess.check_call([os.path.join(os.environ['VS100COMNTOOLS'], '..', '..', 'VC', 'vcvarsall.bat'), ('AMD64' if struct.calcsize("P") == 8 else 'x86')] +
-                ['&&'] +
-                [r'msbuild', r'..\..\Projects\Win32\VC10\src\UdmPython\UdmPython.vcxproj', '/t:Rebuild', '/fl',
+            subprocess.check_call([r'..\..\Projects\Win32\VC10\src\.nuget\NuGet.exe', 'restore', r'..\..\Projects\Win32\VC10\src\{}\packages.config'.format(src_dir)])
+            subprocess.check_call([os.path.join(os.environ[varsall_key], '..', '..', 'VC', 'vcvarsall.bat'), ('AMD64' if struct.calcsize("P") == 8 else 'x86')] +
+                args +
+                ['/t:Rebuild', '/fl',
                 '/p:Configuration=ReleaseEnv;Platform={0};UseEnv=true;PYTHON_VERSION={1[0]}{1[1]}'.format(('x64' if struct.calcsize("P") == 8 else 'win32'), sys.version_info[0:2])],
                 shell=True)
             shutil.copyfile(os.path.join(this_dir, r'..\..\bin\Python%d%d\udm.pyd' % sys.version_info[0:2]), self.get_ext_fullpath(ext.name))
