@@ -16,7 +16,7 @@ os.chdir(this_dir)
 
 setup_args = dict(
     name='Udm',
-    version='3.2.2',
+    version='3.2.3',
     description='Universal Data Model',
     long_description='Universal Data Model',
     author='Kevin Smyth',
