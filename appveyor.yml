@@ -1,3 +1,8 @@
+image:
+  - Visual Studio 2015
+  - Visual Studio 2017
+
+
 clone_folder: c:\projects\UDM
 environment:
   UDM_PATH: c:\projects\UDM
@@ -14,7 +19,7 @@ install:
   - reg query "HKLM\SOFTWARE\Microsoft\Windows Installer XML" /reg:32
   - reg query "HKLM\SOFTWARE\Microsoft\Windows Installer XML\3.11" /reg:32
   - ps: (new-object net.webclient).DownloadFile('https://github.com/ksmyth/UDM/tarball/3rdparty', 'c:\3rdparty.tar.gz')
-  - mkdir c:\projects\UDM-3rdparty && C:\MinGW\msys\1.0\bin\tar.exe xzf /c/3rdparty.tar.gz -C /c/projects/UDM-3rdparty --strip-components=1
+  - mkdir c:\projects\UDM-3rdparty && "C:\Program Files\Git\usr\bin\tar.exe" xzf /c/3rdparty.tar.gz -C /c/projects/UDM-3rdparty --strip-components=1
   - dir c:\projects\UDM-3rdparty\GME_x64-17.12.6.msi
   - msiexec /i c:\projects\UDM-3rdparty\GME_x64-17.12.6.msi /quiet /qn /norestart /log GME_install.log
   - type GME_install.log
@@ -25,7 +30,33 @@ install:
   - ps: $env:PSModulePath = $env:PSModulePath + ';C:\Program Files (x86)\Outercurve Foundation\Modules'
   - ps: Import-Module CoApp
 
-build_script:
+
+for:
+-
+  matrix:
+    only:
+      - image: Visual Studio 2017
+
+  build_script:
+  - ps: (new-object net.webclient).DownloadFile('https://www.python.org/ftp/python/3.9.2/python-3.9.2.exe', 'C:\python-3.9.2.exe')
+  - start /wait c:\python-3.9.2.exe /quiet InstallAllUsers=1 TargetDir=C:\Python39 DefaultAllUsersTargetDir=C:\Python39 Include_test=0
+  - ps: (new-object net.webclient).DownloadFile('https://www.python.org/ftp/python/3.9.2/python-3.9.2-amd64.exe', 'C:\python-3.9.2-amd64.exe')
+  - start /wait c:\python-3.9.2-amd64.exe /quiet InstallAllUsers=1 TargetDir=C:\Python39-x64 DefaultAllUsersTargetDir=C:\Python39-x64 Include_test=0
+
+  - msbuild make.msbuild /fl /m /t:BuildVC14;BuildVC14_x64 /p:"VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140";PlatformToolset=v140
+  - cd src\UdmPython
+  - c:\Python39\python -m pip install wheel
+  - c:\Python39\python setup.py bdist_wheel
+  - c:\Python39-x64\python -m pip install wheel
+  - c:\Python39-x64\python setup.py bdist_wheel
+  - cd ..\..
+  - sha1sum src/UdmPython/dist/*.whl
+
+-
+  matrix:
+    only:
+      - image: Visual Studio 2015
+  build_script:
   - msbuild make.msbuild /fl /m /t:BuildVS9
   - pushd WiX && python build_msi.py -a x86 UdmDll UdmSDK_VC9 && popd
   - msbuild make.msbuild /fl /m /t:BuildVS11;BuildVS11_x64 /p:"VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V110";PlatformToolset=v110
