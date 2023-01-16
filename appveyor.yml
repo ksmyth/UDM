@@ -38,10 +38,14 @@ for:
       - image: Visual Studio 2017
 
   build_script:
-  - ps: (new-object net.webclient).DownloadFile('https://www.python.org/ftp/python/3.9.2/python-3.9.2.exe', 'C:\python-3.9.2.exe')
-  - start /wait c:\python-3.9.2.exe /quiet InstallAllUsers=1 TargetDir=C:\Python39 DefaultAllUsersTargetDir=C:\Python39 Include_test=0
-  - ps: (new-object net.webclient).DownloadFile('https://www.python.org/ftp/python/3.9.2/python-3.9.2-amd64.exe', 'C:\python-3.9.2-amd64.exe')
-  - start /wait c:\python-3.9.2-amd64.exe /quiet InstallAllUsers=1 TargetDir=C:\Python39-x64 DefaultAllUsersTargetDir=C:\Python39-x64 Include_test=0
+  - ps: (new-object net.webclient).DownloadFile('https://www.python.org/ftp/python/3.9.10/python-3.9.10.exe', 'C:\python-3.9.10.exe')
+  - start /wait c:\python-3.9.10.exe /quiet InstallAllUsers=1 TargetDir=C:\Python39 DefaultAllUsersTargetDir=C:\Python39 Include_test=0
+  - ps: (new-object net.webclient).DownloadFile('https://www.python.org/ftp/python/3.9.10/python-3.9.10-amd64.exe', 'C:\python-3.9.10-amd64.exe')
+  - start /wait c:\python-3.9.10-amd64.exe /quiet InstallAllUsers=1 TargetDir=C:\Python39-x64 DefaultAllUsersTargetDir=C:\Python39-x64 Include_test=0
+  - ps: (new-object net.webclient).DownloadFile('https://www.python.org/ftp/python/3.10.2/python-3.10.2.exe', 'C:\python-3.10.2.exe')
+  - start /wait c:\python-3.10.2.exe /quiet InstallAllUsers=1 TargetDir=C:\Python310 DefaultAllUsersTargetDir=C:\Python310 Include_test=0
+  - ps: (new-object net.webclient).DownloadFile('https://www.python.org/ftp/python/3.10.2/python-3.10.2-amd64.exe', 'C:\python-3.10.2-amd64.exe')
+  - start /wait c:\python-3.10.2-amd64.exe /quiet InstallAllUsers=1 TargetDir=C:\Python310-x64 DefaultAllUsersTargetDir=C:\Python310-x64 Include_test=0
 
   - msbuild make.msbuild /fl /m /t:BuildVC14;BuildVC14_x64 /p:"VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140";PlatformToolset=v140
   - cd src\UdmPython
@@ -49,6 +53,10 @@ for:
   - c:\Python39\python setup.py bdist_wheel
   - c:\Python39-x64\python -m pip install wheel
   - c:\Python39-x64\python setup.py bdist_wheel
+  - c:\Python310\python -m pip install wheel
+  - c:\Python310\python setup.py bdist_wheel
+  - c:\Python310-x64\python -m pip install wheel
+  - c:\Python310-x64\python setup.py bdist_wheel
   - cd ..\..
   - sha1sum src/UdmPython/dist/*.whl
 

@@ -1,3 +1,4 @@
+#define PY_SSIZE_T_CLEAN
 
 #include "UdmBase.h"
 #include "Uml.h"
@@ -10,9 +11,16 @@
 #include "boost/python.hpp"
 #include "boost/python/slice.hpp"
 #include "boost/python/operators.hpp"
+#include "boost/python/object/function_object.hpp"
 
 #if PY_MAJOR_VERSION >= 3
 #define PY3K
+#endif
+
+#ifdef PY3K
+	static const char* py_builtin_name = "builtins";
+#else
+	static const char* py_builtin_name = "__builtin__";
 #endif
 
 #undef min
@@ -66,8 +74,8 @@ IUnknown* object2IUnknown(object o) {
 		oleobj = o.attr("_oleobj_");
 	else
 		oleobj = o;
-	object addr = import("__builtin__").attr("repr")(oleobj).attr("split")()[-1].slice(2, -1);
-	object val = import("__builtin__").attr("int")(addr, 16);
+	object addr = import(py_builtin_name).attr("repr")(oleobj).attr("split")()[-1].slice(2, -1);
+	object val = import(py_builtin_name).attr("int")(addr, 16);
 	return (IUnknown*)(void*)static_cast<const size_t>(extract<size_t>(val));
 }
 
@@ -178,10 +186,11 @@ object SDN_New(object class_, Udm::Object& udmodiagram) {
 	udmdiag->init = &dummy;
 	if (SDN_NewHelper_ == NULL) {
 		// SDN_NewHelper_ must not be initialized statically; we don't hold the GIL under Python38 during DllMain
+    //  ref https://github.com/python/cpython/commit/4860f01ac0f07cdc8fc0cc27c33f5a64e5cfec9f#diff-fa4616621faa1cbc0e83ef8930bb3202R303
 		SDN_NewHelper_ = new object(make_function(SDN_NewHelper, with_custodian_and_ward_postcall<0, 1,
 			with_custodian_and_ward_postcall<0, 2,
 			return_value_policy<manage_new_object> > >()));
-		// FIXME if boost-python implements uninitializing, we need to delete SDN_NewHelper_
+		// FIXME when boost-python implements uninitializing, we need to delete SDN_NewHelper_
 	}
 	return (*SDN_NewHelper_)(umldiag, udmdiag);
 }
