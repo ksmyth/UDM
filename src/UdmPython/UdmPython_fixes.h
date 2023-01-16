@@ -1,5 +1,7 @@
 #pragma once
 
+#define HAVE_SNPRINTF 1
+
 #include "boost/python.hpp"
 
 #if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 10

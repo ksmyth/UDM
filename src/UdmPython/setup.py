@@ -54,7 +54,12 @@ if platform.system() == 'Windows':
             os.environ['INCLUDE'] = os.path.join(pythonbase, 'include') + ';' + os.path.join(this_dir, 'windows_compat')
             # \PC
 
-            if sys.version_info[0:2] >= (3, 5):
+            if sys.version_info[0:2] >= (3, 11):
+                src_dir = 'UdmPython311'
+                varsall_key = 'VS140COMNTOOLS'
+                args = ['8.1', '&&'] + \
+                    [r'msbuild', r'..\..\Projects\Win32\VC10\src\UdmPython311\UdmPython311.vcxproj']
+            elif sys.version_info[0:2] >= (3, 5):
                 src_dir = 'UdmPython38'
                 varsall_key = 'VS140COMNTOOLS'
                 args = ['8.1', '&&'] + \
